@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- BASE:START (managed by Coding Agent — do not edit) -->
+<base href="/aera-shop/account/">
+<!-- BASE:END -->
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+
+<meta name="robots" content="noindex">
+<link rel="icon" href="https://resource.aeramealprep.net/assets/images/logo.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+
+
+
+
+<!-- SEO Meta Tags -->
+<title>My Account — AERA Meal Prep</title>
+<meta name="description" content="Sign in to AERA Meal Prep to see your orders, AERA Points, saved addresses and meal preferences." />
+<meta property="og:title" content="My Account — AERA Meal Prep" />
+<meta property="og:description" content="Sign in to AERA Meal Prep to see your orders, AERA Points, saved addresses and meal preferences." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="My Account — AERA Meal Prep" />
+<meta name="twitter:description" content="Sign in to AERA Meal Prep to see your orders, AERA Points, saved addresses and meal preferences." />
+<!-- End SEO Meta Tags -->
+<script data-lp-token-hydrate>
+(function(){try{
+  var slug="lp-mtr969n5-yb68x";
+  var SITEK="";
+  var SK='lp_access_'+slug;
+  var map={access_token:'lp_pw_',allowlist_access_token:'lp_al_',pin_access_token:'lp_pin_',paywall_access_token:'lp_paid_'};
+  function siteTok(){try{return SITEK?localStorage.getItem(SITEK):null;}catch(e){return null;}}
+  var u=new URL(location.href);var found=null;var changed=false;
+  var PINP=true;
+  if(!PINP){try{localStorage.removeItem('lp_pin_'+slug);if(SITEK)localStorage.removeItem(SITEK);}catch(e){}}
+  Object.keys(map).forEach(function(p){var v=u.searchParams.get(p);if(v){found=v;try{if(PINP||p!=='pin_access_token'){localStorage.setItem(map[p]+slug,v);if(SITEK&&p==='pin_access_token')localStorage.setItem(SITEK,v);}}catch(e){}if(p==='pin_access_token'){try{sessionStorage.setItem('lp_fresh_'+slug,'1');}catch(e){}}u.searchParams.delete(p);changed=true;}});
+  if(found){try{sessionStorage.setItem(SK,found);}catch(e){}}
+  else{try{if(!sessionStorage.getItem(SK)){var t=localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();if(t)sessionStorage.setItem(SK,t);}}catch(e){}}
+  if(changed){try{history.replaceState(null,'',u.toString());}catch(e){}}
+  function getTok(){try{return sessionStorage.getItem(SK)||localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();}catch(e){return null;}}
+  function needsToken(url,method){if(!url)return false;var s=String(url);var m=(method||'GET').toUpperCase();var isSheetWrite=(m==='POST'||m==='PATCH'||m==='PUT'||m==='DELETE')&&/\/sheet-rows(\/|$|\?)/.test(s);var isSheetRead=/\/sheet-data(\/|$|\?)/.test(s);var isLlm=/\/api\/landing-pages\/public\/[^/]+\/(llm|llm-config)(\/|$|\?)/.test(s);return isSheetWrite||isSheetRead||isLlm;}
+  if(window.fetch){var _f=window.fetch;window.fetch=function(input,init){try{var url=typeof input==='string'?input:(input&&input.url)||'';var method=(init&&init.method)||(input&&input.method)||'GET';if(needsToken(url,method)){var tok=getTok();if(tok){init=init||{};var h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});if(!h.has('X-Landing-Page-Token'))h.set('X-Landing-Page-Token',tok);init.headers=h;}}}catch(e){}return _f.call(this,input,init);};}
+  if(window.XMLHttpRequest){var _o=XMLHttpRequest.prototype.open;var _s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__lpM=m;this.__lpU=u;return _o.apply(this,arguments);};XMLHttpRequest.prototype.send=function(){try{if(needsToken(this.__lpU,this.__lpM)){var tok=getTok();if(tok)this.setRequestHeader('X-Landing-Page-Token',tok);}}catch(e){}return _s.apply(this,arguments);};}
+}catch(e){}})();
+</script>
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://my.chatbees.io/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=6932');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='dtTMaV';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    var phone=findPhone();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    var __pLoc=(document.documentElement.lang||navigator.language||'en');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,phone:phone||'',amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,locale:__pLoc,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var sidP=urlParams.get('session_id');
+      if(sidP){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidP})}).catch(function(){});}catch(e){}}
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-cart>
+(function(){
+  var slug='dtTMaV';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findCartEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realCart=function(arg){
+    var items, email='', customerName='', successUrl, cancelUrl, currency;
+    if(Array.isArray(arg)){items=arg;}
+    else if(arg&&typeof arg==='object'){
+      items=arg.items;email=arg.email||'';customerName=arg.name||arg.customerName||'';
+      successUrl=arg.successUrl;cancelUrl=arg.cancelUrl;currency=arg.currency;
+    }
+    if(!Array.isArray(items)||items.length===0){alert('No items in cart.');return Promise.reject('no_items');}
+    var cleanItems=[];var totalCents=0;
+    for(var i=0;i<items.length;i++){
+      var it=items[i];if(!it||typeof it!=='object'){alert('Invalid item at position '+i);return Promise.reject('bad_item');}
+      var nm=typeof it.name==='string'?it.name.trim():'';
+      if(!nm){alert('Item '+(i+1)+' is missing a name.');return Promise.reject('no_name');}
+      var amt=typeof it.amountCents==='number'?it.amountCents:(typeof it.amount==='number'?Math.round(it.amount*100):NaN);
+      if(!isFinite(amt)||amt<1){alert('Item "'+nm+'" needs a valid amount in cents.');return Promise.reject('bad_amount');}
+      var qty=(typeof it.quantity==='number'&&it.quantity>0)?Math.floor(it.quantity):1;
+      cleanItems.push({name:nm,description:it.description||'',amountCents:amt,quantity:qty});
+      totalCents+=amt*qty;
+    }
+    if(totalCents<50){alert('Cart total must be at least $0.50');return Promise.reject('total_too_low');}
+    if(!email)email=findCartEmail();
+    if(!customerName)customerName=findCartName();
+    var cartPhone=findCartPhone();
+    if(!email){var p=window.prompt('Enter your email for the receipt:','');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert('An email address is required to complete checkout.');return Promise.reject('no_email');}}
+    var successBase=window.location.href.split('?')[0];
+    var body={email:email,name:customerName,items:cleanItems,locale:(document.documentElement.lang||navigator.language||'en')};
+    if(currency)body.currency=currency;
+    if(cartPhone)body.phone=cartPhone;
+    body.successUrl=successUrl||(successBase+'?cart=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}');
+    body.cancelUrl=cancelUrl||(successBase+'?cart=cancelled');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/cart/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process checkout');throw new Error(d.error);}
+    });
+  };
+  try{Object.defineProperty(window,'__processCart',{value:__realCart,writable:false,configurable:false});}catch(e){window.__processCart=__realCart;}
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('cart')==='success'){
+      var sidC=urlParams.get('session_id');
+      if(sidC){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidC})}).catch(function(){});}catch(e){}}
+      if(document.getElementById('payment-success-overlay')||document.getElementById('donation-success-overlay')||document.getElementById('cart-success-overlay'))return;
+      var overlay=document.createElement('div');overlay.id='cart-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||'Thank you for your order.';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var cBtn=document.getElementById('lp-cart-success-btn');
+      if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a href="https://my.chatbees.io/p/ZQr9fS2jA9" aria-label="AERA Meal Prep"><img src="https://aeramealprep.net/logo/logo_yellow_with_white_text.svg" alt="AERA Meal Prep"></a>
+  <div style="display:flex;gap:14px;align-items:center"><a class="homebtn" href="https://my.chatbees.io/p/ZQr9fS2jA9" aria-label="Return to Homepage"><span aria-hidden="true">←</span><span class="hbfull">Return to Homepage</span><span class="hbshort">Home</span></a><button type="button" class="langsw" id="langSw" onclick="aeraLang()" aria-label="Language"><span class="l1">EN</span><span class="l2">中文</span></button><span class="shopwrap"><button type="button" class="cartbtn" aria-haspopup="true" aria-expanded="false" onclick="shopMenu(event)">Shop ▾</button><div class="shopmenu"><a href="https://my.chatbees.io/p/D2pz8bZ#bundles">Meal Bundles</a><a href="https://my.chatbees.io/p/D2pz8bZ#fat">Fat Loss Meals</a><a href="https://my.chatbees.io/p/D2pz8bZ#mass">Mass Gain Meals</a><a href="https://my.chatbees.io/p/D2pz8bZ#all">All Meals</a><a href="https://my.chatbees.io/p/D2pz8bZ#alacarte">À la Carte</a><div class="sep"></div><a href="https://my.chatbees.io/p/VMrvEw">Merchandise</a><a href="https://my.chatbees.io/p/VMrvEw#vouchers">Free Delivery Vouchers</a></div></span></div>
+</div></nav>
+
+<main class="wrap" id="main">
+  <div id="setup" class="card auth" style="display:none"><h2>Accounts Are Almost Ready</h2><p style="color:var(--ink2)">Customer accounts are being switched on. You can still order without an account — your AERA Points are tracked by email.</p><a class="btn btn-y" href="https://my.chatbees.io/p/D2pz8bZ">Order Now</a></div>
+
+  <section id="authView" class="auth" style="display:none">
+    <span class="eyebrow">AERA Meal Prep</span>
+    <h1 style="margin:6px 0 14px">My Account</h1>
+    <div class="tabs" role="tablist"><button class="tab on" data-a="login">Sign In</button><button class="tab" data-a="signup">Create Account</button><button class="tab" data-a="forgot">Forgot Password</button></div>
+    <div class="card">
+      <form id="fLogin" onsubmit="return doLogin(event)">
+        <label class="lb">Email</label><input type="email" id="lEmail" autocomplete="email" required placeholder="you@example.com">
+        <label class="lb">Password</label><input type="password" id="lPass" autocomplete="current-password" required placeholder="Your password">
+        <button class="btn btn-y" style="width:100%;margin-top:16px;padding:13px" id="lBtn">Sign In</button>
+        <div class="hint" style="text-align:center">New here? <button type="button" class="linkbtn" onclick="setAuth('signup')">Create an account</button>. It takes 30 seconds.</div>
+      </form>
+      <form id="fSignup" style="display:none" onsubmit="return doSignup(event)">
+        <label class="lb" id="sNameLb">Your Name</label><input type="text" id="sName" autocomplete="name" required placeholder="Full Name">
+        <div class="f2"><div><label class="lb">Email</label><input type="email" id="sEmail" autocomplete="email" required placeholder="you@example.com"></div><div><label class="lb">Mobile</label><input type="tel" id="sPhone" autocomplete="tel" placeholder="01x-xxx xxxx"></div></div>
+        <label class="lb">Password</label><input type="password" id="sPass" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters">
+        <div class="hint" id="sHint">Use the same Email you Order with. Your AERA Points from earlier Orders are linked automatically.</div>
+<label class="aera-mkt" style="display:flex;gap:8px;align-items:flex-start;margin:14px 0 0;font-size:13px;line-height:1.45;color:#374151;cursor:pointer;font-weight:400"><input type="checkbox" id="sMkt" style="width:auto;flex:none;margin:2px 0 0;accent-color:#1F2937"><span>Send me New Menus, Offers and News by Email or WhatsApp. You can stop anytime.</span></label>
+        <button class="btn btn-y" style="width:100%;margin-top:16px;padding:13px" id="sBtn">Create Account</button><p class="aeralegalnote" style="margin:10px 0 0;font-size:12px;line-height:1.5;color:#6B7280;text-align:center">By creating an Account you agree to our <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a> and have read our <a href="https://my.chatbees.io/p/xXH4dXALg" target="_blank" rel="noopener">Privacy Notice</a>.</p>
+      </form>
+      <form id="fForgot" style="display:none" onsubmit="return doForgot(event)">
+        <label class="lb">Email</label><input type="email" id="fEmail" autocomplete="email" required placeholder="you@example.com">
+        <div class="hint">We'll email you a link to set a New Password.</div>
+        <button class="btn btn-k" style="width:100%;margin-top:16px;padding:13px" id="fBtn">Send Reset Link</button>
+      </form>
+      <form id="fReset" style="display:none" onsubmit="return doReset(event)">
+        <h3>Set a New Password</h3>
+        <label class="lb">New Password</label><input type="password" id="rPass" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters">
+        <button class="btn btn-y" style="width:100%;margin-top:16px;padding:13px" id="rBtn">Save Password</button>
+      </form>
+      <div id="legacyNote"></div>
+      <div id="authMsg"></div>
+    </div>
+  </section>
+
+  <section id="acctView" class="grid2" style="display:none">
+    <aside class="card side">
+      <span class="eyebrow">Signed in</span>
+      <div class="who" id="who"></div><div class="email" id="whoEmail"></div>
+      <div class="menu">
+        <button class="on" data-t="orders" onclick="setTab('orders')">Orders</button>
+        <button data-t="plans" onclick="setTab('plans')">My Meal Plans</button>
+        <button data-t="favs" onclick="setTab('favs')">My Favourite Meal Plans</button>
+        <button data-t="home" onclick="setTab('home')">My Home-Sourced Meals</button>
+        <button data-t="points" onclick="setTab('points')">AERA Points</button>
+        <button data-t="refs" onclick="setTab('refs')">Referrals</button>
+        <button data-t="details" onclick="setTab('details')">Settings</button>
+        <button data-t="address" onclick="setTab('address')">Addresses</button>
+        <button data-t="prefs" onclick="setTab('prefs')">Meal Preferences</button>
+          <button data-t="body" onclick="setTab('body')">Weight Control</button>
+      </div>
+      <button class="btn btn-o s" style="margin-top:16px" onclick="doLogout()">Sign Out</button>
+    </aside>
+    <div>
+      <div id="welcomeBack"></div>
+    <div id="tOrders" class="card" style="display:none"><h2>Your Orders</h2><div id="ordersList"><div class="empty">Loading…</div></div></div>
+      <div id="tFavs" class="card" style="display:none"><h2>My Favourite Meal Plans</h2><div id="favList"></div></div>
+      <div id="tHome" class="card" style="display:none"><h2>My Home-Sourced Meals</h2><p class="hint" style="margin-top:2px">Everything you have keyed in on the Home-Sourced Meals Page. Add them to a plan from the “Your Week” step.</p><div id="homeLib" style="margin-top:10px"></div><div style="margin-top:14px"><a class="btn btn-y" href="https://my.chatbees.io/p/8kZjg8U5XD">Add a Home-Sourced Meal →</a></div></div>
+      <div id="tPlans" class="card" style="display:none"><h2>Your Personalised Meal Plans</h2><div id="plansList"><div class="empty">Loading…</div></div><div style="margin-top:14px"><a class="btn btn-y" href="https://my.chatbees.io/p/SrQzC5m2">Build a New Plan →</a></div></div>
+      <div id="tPoints" class="card" style="display:none"><h2>AERA Points</h2><div id="pointsBox"><div class="empty">Loading…</div></div></div>
+      <div id="tRefs" class="card" style="display:none"><h2>Referrals</h2><div id="refsBox"><div class="empty">Loading…</div></div></div>
+      <div id="tDetails" class="card" style="display:none">
+        <h2>Settings</h2>
+        <form onsubmit="return saveProfile(event)">
+          <div class="f2"><div><label class="lb">Your Name</label><input type="text" id="pName" autocomplete="name"></div><div></div></div>
+          <div class="f2"><div><label class="lb">Date Of Birth</label><input type="hidden" id="pDob"><div class="hint">For your Birthday Treat and your Personalised Meal Plan.</div></div><div></div></div>
+          <label class="lb">Preferred Packaging</label>
+          <select id="pPack"><option value="bento">MAP Bento Box</option><option value="vacuum">Vacuum Bag</option></select>
+          <button class="btn btn-k" style="margin-top:14px" id="pBtn">Save Details</button><span id="pMsg"></span>
+        </form>
+        <div id="phoneBox" style="margin-top:20px;border-top:1px solid var(--line);padding-top:16px"></div>
+      </div>
+      <div id="tAddress" class="card" style="display:none">
+        <h2>Addresses</h2>
+        <p class="hint" style="margin-top:2px">Saved addresses appear at Checkout, so you can pick one instead of typing it again.</p>
+        <div id="addrList"></div>
+        <div style="margin-top:14px;border-top:1px dashed var(--line);padding-top:12px">
+          <label class="lb">Add an Address</label>
+          <div class="acwrap"><input type="text" id="aAddr" placeholder="Start typing your address…" autocomplete="off" oninput="acInput()" onkeydown="acKey(event)" onblur="setTimeout(acHide,200)"><div class="ac" id="acList"></div></div>
+          <div class="f2" style="margin-top:8px"><div><input type="text" id="aLabel" placeholder="Label, e.g. Home / Office"></div><div><input type="text" id="aNotes" placeholder="Unit / floor / guard house ( Optional )"></div></div>
+          <button class="btn btn-o" style="margin-top:10px" onclick="addAddress()" type="button">Save Address</button><span id="aMsg"></span>
+        </div>
+      </div>
+      <div id="tBody" class="card" style="display:none">
+      <h2>Weight Control</h2>
+      <div id="bodyWrap"><div class="empty">Loading…</div></div>
+    </div>
+
+    <div id="tPrefs" class="card" style="display:none">
+        <h2>Meal Preferences</h2>
+        <p class="hint">Saved on your Profile and sent to the Kitchen with every Order.</p>
+        <form onsubmit="return savePrefs(event)">
+          <label class="lb">Seasoning</label>
+          <select id="qSeason"><option value="normal">Normal Salt</option><option value="less_salt">Less Salt</option><option value="no_salt">No Salt</option></select>
+          <label class="lb">Spice</label>
+          <select id="qSpice"><option value="normal">Normal Spice</option><option value="less_spicy">Less Spicy</option><option value="no_spice">No Spice</option></select>
+          <label class="lb">Allergies</label><input type="text" id="qAllergens" placeholder="e.g. prawn, peanut, dairy">
+          <label class="lb">Dislikes / Notes for the Kitchen</label><textarea id="qDislikes" placeholder="e.g. no coriander, sauce on the side"></textarea>
+          <button class="btn btn-k" style="margin-top:14px" id="qBtn">Save Preferences</button><span id="qMsg"></span>
+        </form>
+        <div class="aera-mkt-box" style="margin-top:20px;padding-top:14px;border-top:1px solid var(--line,#E5E7EB)"><h2 style="font-size:16px;margin:0 0 4px">News &amp; Offers</h2><p class="hint" style="margin:0">Changes save straight away.</p><label class="aera-mkt" style="display:flex;gap:8px;align-items:flex-start;margin:14px 0 0;font-size:13px;line-height:1.45;color:#374151;cursor:pointer;font-weight:400"><input type="checkbox" id="pMkt" onchange="aeraMktSet(this.checked)" style="width:auto;flex:none;margin:2px 0 0;accent-color:#1F2937"><span>Send me New Menus, Offers and News by Email or WhatsApp. You can stop anytime.</span></label><div id="pMktMsg" style="margin-top:6px"></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ===== Settings (edit here) ===== */
+var SB={url:'https://swpprjvubgcdsojapaad.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0'}; // Supabase → Project Settings → API (the anon/publishable key is safe to publish)
+var AP={perRM:5,rmPer100:1,capPct:10,expiryMonths:6};
+var KITCHEN={lat:2.9976100,lng:101.6742575},ROAD_FACTOR=1.25;
+var BDAY={used:null,pct:null,loaded:false};
+function dobPicker(hiddenId,minAge,maxAge){var hid=$('#'+hiddenId);var wrap=document.createElement('div');wrap.className='dobpick';var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];var now=new Date();var yMax=now.getFullYear()-(minAge||0),yMin=now.getFullYear()-(maxAge||100);
+ function sel(name,opts,ph){var s=document.createElement('select');s.setAttribute('aria-label',ph);s.innerHTML='<option value="">'+ph+'</option>'+opts.map(function(o){return'<option value="'+o[0]+'">'+o[1]+'</option>'}).join('');return s}
+ var dd=sel('d',Array.from({length:31},function(_,i){return[String(i+1).padStart(2,'0'),String(i+1)]}),'Day'),mm=sel('m',MONTHS.map(function(n,i){return[String(i+1).padStart(2,'0'),n]}),'Month'),yy=sel('y',Array.from({length:yMax-yMin+1},function(_,i){var y=yMax-i;return[String(y),String(y)]}),'Year');
+ wrap.appendChild(dd);wrap.appendChild(mm);wrap.appendChild(yy);hid.parentNode.insertBefore(wrap,hid);
+ function daysIn(y,m){return y&&m?new Date(+y,+m,0).getDate():31}
+ function sync(){var y=yy.value,m=mm.value,d=dd.value;var max=daysIn(y,m);[].slice.call(dd.options).forEach(function(o){if(o.value)o.disabled=+o.value>max});if(d&&+d>max){dd.value='';d=''}var v=(y&&m&&d)?y+'-'+m+'-'+d:'';if(hid.value!==v){hid.value=v;hid.dispatchEvent(new Event('input',{bubbles:true}))}}
+ [dd,mm,yy].forEach(function(s){s.addEventListener('change',sync)});
+ return{set:function(v){v=String(v||'');if(/^\d{4}-\d{2}-\d{2}$/.test(v)){yy.value=v.slice(0,4);mm.value=v.slice(5,7);dd.value=v.slice(8,10);if(yy.value!==v.slice(0,4))yy.value=''}else{yy.value='';mm.value='';dd.value=''}hid.value=(yy.value&&mm.value&&dd.value)?v:''}}}
+var SHOP_URL='https://my.chatbees.io/p/D2pz8bZ',TRACK_URL='https://my.chatbees.io/p/8s4Xd6h',PLAN_URL='https://my.chatbees.io/p/SrQzC5m2';
+var HOME_URL='https://my.chatbees.io/p/ZQr9fS2jA9';
+/* Set when a sign-in is meant to end at the homepage but the five-numbers prompt is in
+   the way; obLater() carries on to it once the prompt is answered. */
+var GOHOME='';
+var STATUS={new:['Preparing','cat'],in_kitchen:['In the kitchen','warn'],packed:['Packed · rider booked','warn'],out_for_delivery:['On the way','warn'],delivered:['Delivered','ok'],cancelled:['Cancelled','bad']};
+/* ===== Helpers ===== */
+function $(s){return document.querySelector(s)}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function rm(v){return 'RM '+(Math.round((+v||0)*100)/100).toFixed(2)}
+function fmtDate(d){if(!d)return '';var x=new Date(String(d).slice(0,10)+'T00:00:00');if(isNaN(x))return String(d);
+ var n=x.getDate(),t=(n%100>=11&&n%100<=13)?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th');
+ return ['SUN','MON','TUE','WED','THU','FRI','SAT'][x.getDay()]+', '+n+t+' '+
+  ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][x.getMonth()]+' '+x.getFullYear()}
+/* 19th SEP 2026, 12:05 AM : when the order was paid for. */
+function fmtWhen(v){var x=new Date(v);if(isNaN(x))return '';
+ var n=x.getDate(),t=(n%100>=11&&n%100<=13)?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th');
+ var h=x.getHours(),ap=h<12?'AM':'PM';h=h%12;if(!h)h=12;
+ return n+t+' '+['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][x.getMonth()]+' '+x.getFullYear()+
+  ', '+h+':'+('0'+x.getMinutes()).slice(-2)+' '+ap}
+function slotLabel(v){var m={'09:00-11:00':'9 AM - 11 AM','11:00-13:00':'11 AM - 1 PM','13:00-15:00':'1 PM - 3 PM','15:00-17:00':'3 PM - 5 PM'};return m[v]||v||''}
+function todayIso(){var d=new Date();d=new Date(d.getTime()+(d.getTimezoneOffset()+480)*60000);return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function addDaysIso(isoDate,k){var d=new Date(isoDate+'T00:00:00');d.setDate(d.getDate()+k);return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function apBalance(rows,today){var ev=rows.map(function(r){return{d:String(r.date||'').slice(0,10),e:+r.earned||0,r:+r.redeemed||0,exp:String(r.expires||'').slice(0,10)}}).sort(function(a,b){return a.d.localeCompare(b.d)});var batches=[],earned=0,redeemed=0;ev.forEach(function(x){if(x.e>0){batches.push({g:x.e,exp:x.exp});earned+=x.e}if(x.r>0){redeemed+=x.r;var left=x.r;batches.forEach(function(b){if(left<=0||b.g<=0)return;if(b.exp&&b.exp<x.d)return;var t=Math.min(b.g,left);b.g-=t;left-=t})}});var avail=0,expired=0,soon=0,soonDate='';var in30=addDaysIso(today,30);batches.forEach(function(b){if(b.g<=0)return;if(b.exp&&b.exp<today)expired+=b.g;else{avail+=b.g;if(b.exp&&b.exp<=in30){soon+=b.g;if(!soonDate||b.exp<soonDate)soonDate=b.exp}}});return{available:avail,expired:expired,earned:earned,redeemed:redeemed,expiringSoon:soon,expiringDate:soonDate}}
+function msg(id,html){$('#'+id).innerHTML=html}
+function busy(id,on,label){var b=$('#'+id);b.disabled=on;if(on){b.dataset.l=b.textContent;b.textContent=label||'Please wait…'}else if(b.dataset.l)b.textContent=b.dataset.l}
+function friendly(e){var m=(e&&e.message)||String(e||'');if(/Invalid login credentials/i.test(m))return 'Email or password is incorrect.';if(/Email not confirmed/i.test(m))return 'Please confirm your email first — check your inbox for our message.';if(/already registered|already exists/i.test(m))return 'That email already has an account — sign in instead, or use Forgot Password.';if(/Password should be/i.test(m))return 'Password must be at least 8 characters.';if(/rate limit/i.test(m))return 'Too many attempts — please wait a minute and try again.';return m||'Something went wrong. Please try again.'}
+/* ===== Supabase ===== */
+var sb=null,USER=null,PROFILE=null,ADDRS=[],TAB='orders',ORDERCOUNT=null;
+function configured(){return SB.url.indexOf('YOUR_PROJECT')<0&&SB.key.indexOf('YOUR_SUPABASE')<0&&typeof supabase!=='undefined'}
+function init(){if(!configured()){$('#setup').style.display='block';return}
+ sb=supabase.createClient(SB.url,SB.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ sb.auth.onAuthStateChange(function(ev,session){if(ev==='PASSWORD_RECOVERY'){showAuth();setAuth('reset');return}USER=session?session.user:null;if(USER&&!SU.done){var ok=false;try{ok=suFromLink()}catch(e){}
+  if(ok){try{suConfirmedScreen();return}catch(e){}}}if(USER)showAccount();else showAuth()});
+ if((location.hash||'').toLowerCase().indexOf('logout')>=0){doLogout(true);return}
+ sb.auth.getSession().then(function(r){USER=r.data.session?r.data.session.user:null;if(location.hash.indexOf('type=recovery')>=0){showAuth();setAuth('reset');return}if(USER){var ok2=false;try{ok2=suFromLink()}catch(e){}
+  if(ok2){try{suConfirmedScreen();return}catch(e){}}}if(USER)showAccount();else showAuth()})}
+function showAuth(){$('#acctView').style.display='none';$('#authView').style.display='block';try{localStorage.removeItem('aera.account')}catch(e){}
+ var hh=(location.hash||'').replace('#','').toLowerCase();if(hh==='signup-fridge'||hh==='fridge'){setAuth('signup');gymMode()}else if(hh==='signup'||hh==='register')setAuth('signup');else if(hh==='login'||hh==='signin')setAuth('login')}
+/* A gym signing up for a fridge is not a person ordering dinner : the account is the
+   studio's, the name on it is the studio's, and AERA Points are beside the point. */
+function gymMode(){var l=$('#sNameLb');if(l)l.textContent='Your Gym OR Fitness Studio Name';
+ var n=$('#sName');if(n){n.placeholder='e.g. The Grey Cloud Fitness Studio';n.setAttribute('autocomplete','organization')}
+ var t=$('#sHint');if(t)t.innerHTML='Use the email you want your fridge under \u2014 it is the one that opens the merchant portal. Tell us the address once the account is made and we will put it on your fridge.';
+ var tab=document.querySelector('#authView .tab[data-a="signup"]');if(tab)tab.textContent='Create Account';}
+function setAuth(a){['login','signup','forgot','reset'].forEach(function(k){var f=$('#f'+k.charAt(0).toUpperCase()+k.slice(1));if(f)f.style.display=k===a?'block':'none'});document.querySelectorAll('#authView .tab').forEach(function(t){t.classList.toggle('on',t.dataset.a===a)});msg('authMsg','')}
+document.querySelectorAll('#authView .tab').forEach(function(t){t.addEventListener('click',function(){setAuth(t.dataset.a)})});
+async function doLogin(e){e.preventDefault();busy('lBtn',true,'Signing in…');msg('authMsg','');/* A sign-in from here belongs on the homepage, not on this page. The flag is set before
+ the call, not after: the auth event that loads the account can fire before this line would
+ otherwise be reached. It is taken back off again if the sign-in fails. */
+ try{sessionStorage.setItem('aera.goHome','1')}catch(_){}
+ try{var r=await sb.auth.signInWithPassword({email:$('#lEmail').value.trim(),password:$('#lPass').value});if(r.error)throw r.error}catch(err){try{sessionStorage.removeItem('aera.goHome')}catch(_){}msg('authMsg','<div class="msg bad">'+esc(friendly(err))+'</div>')}busy('lBtn',false);return false}
+/* ===== Confirming on the phone, carrying on where you started =====
+   The letter almost always gets opened on a phone while this form sits waiting on a laptop.
+   So the form keeps the page it is on : it hands the sign-up a random token, then asks
+   signup_ready() every few seconds whether that token has been confirmed. The moment it has,
+   this browser signs itself in with the password already typed here and moves to the next step,
+   and the phone simply says it is done. Nobody has to retype anything anywhere. */
+var SU={token:'',pass:'',email:'',timer:null,tries:0,done:false,checking:false};
+function suFromLink(){
+ var h=String(window.__aeraHash||location.hash||''),q=String(window.__aeraSearch||location.search||'');
+ return /(^|[?&])confirm=1/.test(q)||h.indexOf('type=signup')>=0}
+function suToken(){
+ var a=new Uint8Array(16);
+ try{crypto.getRandomValues(a)}catch(e){for(var i=0;i<16;i++)a[i]=Math.floor(Math.random()*256)}
+ return Array.from(a).map(function(b){return ('0'+b.toString(16)).slice(-2)}).join('')}
+function suStop(){if(SU.timer){clearInterval(SU.timer);SU.timer=null}}
+function suWait(email,pass,token){
+ SU.email=email;SU.pass=pass;SU.token=token;SU.tries=0;SU.done=false;
+ suPaint(suWaitHtml(email));
+ suStop();
+ SU.timer=setInterval(suPoll,4000);
+ setTimeout(suPoll,1500);
+ setTimeout(function(){var i=document.getElementById('suCode');if(i)i.focus()},300)}
+/* The letter carries a six-digit code as well as a link. Whoever is sitting at a laptop reads
+   the code off their phone and types it here, and the phone never has to open a browser at all.
+   Tapping the link still works -- the poll below picks that up and carries on by itself. */
+function suWaitHtml(email){
+ return'<div class="suwait"><span class="suspin" aria-hidden="true"></span>'+
+  '<div style="flex:1"><b>Check your Email Inbox \u2014 We sent a Code to '+esc(email)+'</b>'+
+  '<div class="suhint">Type the Code from that Email to finish here. '+
+  'Tapping the link in the Email works too.</div>'+
+  '<div class="surow">'+
+   '<input id="suCode" class="sucode" type="text" inputmode="numeric" autocomplete="one-time-code" '+
+    'maxlength="10" placeholder="Code" oninput="suCodeIn(this)" '+
+    'onkeydown="if(event.key===\'Enter\'){event.preventDefault();suVerify()}">'+
+   '<button type="button" class="btn btn-y" id="suCodeBtn" onclick="suVerify()">Confirm</button>'+
+  '</div><div class="suhint" id="suCodeMsg"></div></div></div>'}
+function suCodeIn(el){
+ el.value=String(el.value||'').replace(/\D/g,'').slice(0,10);
+ var b=document.getElementById('suCodeBtn');
+ if(b&&!SU.checking)b.disabled=el.value.length<4;
+ var m=document.getElementById('suCodeMsg');if(m&&m.textContent)m.innerHTML=''}
+async function suVerify(){
+ var el=document.getElementById('suCode');if(!el)return;
+ var code=String(el.value||'').replace(/\D/g,'');
+ var m=document.getElementById('suCodeMsg');
+ if(code.length<4){if(m)m.innerHTML='Type the whole code from the email.';return}
+ if(SU.checking)return;
+ SU.checking=true;
+ var btn=document.getElementById('suCodeBtn');
+ if(btn){btn.disabled=true;btn.textContent='Checking\u2026'}
+ if(m)m.innerHTML='';
+ var ok=false,err='';
+ for(var i=0;i<2&&!ok;i++){
+  try{var r=await sb.auth.verifyOtp({email:SU.email,token:code,type:i?'email':'signup'});
+   if(!r.error){ok=true;break}
+   err=r.error.message||''}catch(e){err=(e&&e.message)||String(e)}}
+ SU.checking=false;
+ if(!ok){
+  if(btn){btn.disabled=false;btn.textContent='Confirm'}
+  if(m)m.innerHTML='<span style="color:var(--bad)">'+esc(err||'That code did not work. Check it, or press the link in the email instead.')+'</span>';
+  return}
+ SU.done=true;SU.pass='';suStop();
+ suPaint('<b>Confirmed \u2014 setting your account up\u2026</b>')}
+function suPaint(html){msg('authMsg','<div class="msg ok" id="suBox">'+html+'</div>')}
+async function suPoll(){
+ if(SU.done||!SU.token)return;
+ SU.tries++;
+ if(SU.tries>225){suStop();  /* a quarter of an hour of asking is enough */
+  suPaint('<b>Still waiting on that confirmation.</b><div class="suhint">Open the link when you can, '+
+   'then sign in below \u2014 your account is made, it just needs confirming.</div>');return}
+ try{
+  var r=await sb.rpc('signup_ready',{p_token:SU.token});
+  if(r.error||r.data!==true)return;
+ }catch(e){return}
+ SU.done=true;suStop();
+ suPaint('<b>Confirmed \u2014 signing you in\u2026</b>');
+ try{
+  var si=await sb.auth.signInWithPassword({email:SU.email,password:SU.pass});
+  SU.pass='';
+  if(si.error)throw si.error;
+  /* onAuthStateChange takes it from here : the account opens and the welcome gifts appear */
+ }catch(err){
+  suPaint('<b>Confirmed.</b><div class="suhint">Sign in below to pick up where you left off.</div>');
+  var le=$('#lEmail');if(le)le.value=SU.email;setAuth('login')}}
+/* The device that opened the letter. It has a session now, but it is almost never the device the
+   person was using, so it says so plainly instead of dragging them through sign-up on a phone. */
+function suConfirmedScreen(){
+ $('#acctView').style.display='none';
+ $('#authView').style.display='block';
+ ['login','signup','forgot','reset'].forEach(function(k){
+  var f=$('#f'+k.charAt(0).toUpperCase()+k.slice(1));if(f)f.style.display='none'});
+ var tabs=document.querySelectorAll('#authView .tab');
+ [].forEach.call(tabs,function(t){t.style.display='none'});
+ msg('authMsg','<div class="msg ok"><b>\u2713 Email confirmed</b>'+
+  '<div class="suhint">Your AERA account is ready. If you started signing up on another device, '+
+  'go back to it \u2014 it has already moved on to the next step.</div>'+
+  '<button type="button" class="btn btn-y" style="margin-top:12px" onclick="suHere()">Continue On This Device</button></div>')}
+function suHere(){
+ try{history.replaceState(null,'',location.pathname)}catch(e){}
+ try{window.__aeraSearch='';window.__aeraHash=''}catch(e){}
+ [].forEach.call(document.querySelectorAll('#authView .tab'),function(t){t.style.display=''});
+ msg('authMsg','');
+ if(USER)showAccount();else{setAuth('login');}}
+async function doSignup(e){e.preventDefault();busy('sBtn',true,'Creating…');msg('authMsg','');try{var email=$('#sEmail').value.trim().toLowerCase();
+ var ph=$('#sPhone').value.trim();
+ if(ph){if(!phoneOk(ph))throw new Error('That does not look like a Malaysian mobile number.');
+  var t=await sb.rpc('phone_taken',{p:ph});
+  if(!t.error&&t.data===true)throw new Error('That mobile number already has an AERA account. Sign in instead, or use Forgot Password.')}
+ var tok=suToken();
+ var r=await sb.auth.signUp({email:email,password:$('#sPass').value,options:{data:{name:$('#sName').value.trim(),phone:$('#sPhone').value.trim(),pending_token:tok,marketing_opt_in:!!(document.getElementById('sMkt')||{}).checked,marketing_opt_in_at:((document.getElementById('sMkt')||{}).checked?new Date().toISOString():null)},emailRedirectTo:location.origin+location.pathname+'?confirm=1'}});if(r.error)throw r.error;/* Supabase will not say out loud that an email is taken - anyone could use the form to
+   discover who has an account. It returns success with an empty identities array
+   instead, and sends no mail at all. Saying 'check your inbox' there sends people
+   looking for a letter that was never written. */
+ var su=r.data&&r.data.user;
+ if(su&&su.identities&&su.identities.length===0){setAuth('login');var le=$('#lEmail');if(le)le.value=email;msg('authMsg','<div class="msg bad">That email already has an AERA account, so no new confirmation was sent. Sign in below, or use Forgot Password if you cannot remember it.</div>')} else if(r.data&&r.data.session){/* signed in immediately */} else suWait(email,$('#sPass').value,tok)}catch(err){msg('authMsg','<div class="msg bad">'+esc(friendly(err))+'</div>')}busy('sBtn',false);return false}
+async function doForgot(e){e.preventDefault();busy('fBtn',true,'Sending…');msg('authMsg','');try{var r=await sb.auth.resetPasswordForEmail($('#fEmail').value.trim(),{redirectTo:location.origin+location.pathname});if(r.error)throw r.error;msg('authMsg','<div class="msg ok">If that email has an account, a reset link is on its way.</div>')}catch(err){msg('authMsg','<div class="msg bad">'+esc(friendly(err))+'</div>')}busy('fBtn',false);return false}
+async function doReset(e){e.preventDefault();busy('rBtn',true,'Saving…');msg('authMsg','');try{var r=await sb.auth.updateUser({password:$('#rPass').value});if(r.error)throw r.error;history.replaceState(null,'',location.pathname);msg('authMsg','<div class="msg ok">Password saved — you are signed in.</div>');var s=await sb.auth.getSession();USER=s.data.session?s.data.session.user:null;if(USER)showAccount()}catch(err){msg('authMsg','<div class="msg bad">'+esc(friendly(err))+'</div>')}busy('rBtn',false);return false}
+async function doLogout(back){try{await sb.auth.signOut()}catch(e){}
+ USER=null;PROFILE=null;ADDRS=[];
+ try{['aera.account','aera.refLock'].forEach(function(k){localStorage.removeItem(k)})}catch(e){}
+ if(back){location.replace('https://my.chatbees.io/p/ZQr9fS2jA9');return}
+ showAuth()}
+/* ===== Account ===== */
+var NEXT={plan:'https://my.chatbees.io/p/SrQzC5m2',shop:'https://my.chatbees.io/p/D2pz8bZ',checkout:'https://my.chatbees.io/p/D2pz8bZ'};
+function nextTarget(){try{var v=new URLSearchParams(location.search).get('next');return v?NEXT[String(v).toLowerCase()]||null:null}catch(e){return null}}
+/* ===== Customers coming across from the old aeramealprep.net site =====
+   Nothing is done to an account until its owner signs in and claims it themselves. */
+var AP_AVAIL=null;
+var LEG={checked:'',known:false};
+async function legacyCheck(email){var box=$('#legacyNote');if(!box||!sb)return;
+ email=String(email||'').trim().toLowerCase();
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){box.innerHTML='';LEG.known=false;LEG.checked='';return}
+ if(email===LEG.checked)return;LEG.checked=email;
+ try{var r=await sb.rpc('legacy_check',{p_email:email});
+  var d=r&&!r.error&&r.data&&r.data[0];
+  if(!d||!d.known){box.innerHTML='';LEG.known=false;return}
+  LEG.known=true;
+  var bits=[];if(d.has_points)bits.push('your AERA Points');if(d.has_order)bits.push('your order history');
+  box.innerHTML='<div class="msg ok"><b>Welcome back.</b> We know this email from our old site. '+
+   (d.claimed?'You have already set a password here — just sign in.'
+            :'Set a password here and '+(bits.length?bits.join(' and ')+' come with it.':'your details come with it.'))+
+   '<br><span class="hint">We could not move passwords across — they were never readable by anyone. This one is new.</span></div>'}
+ catch(e){}}
+document.addEventListener('input',function(e){
+ if(e.target&&(e.target.id==='sEmail'||e.target.id==='lEmail'||e.target.id==='fEmail'))legacyCheck(e.target.value)});
+async function legacyClaim(){if(!sb||!USER)return;
+ try{var r=await sb.rpc('legacy_claim');var d=r&&!r.error&&r.data&&r.data[0];
+  if(!d||!d.claimed)return;
+  var box=$('#welcomeBack');if(!box)return;
+  var bits=[];
+  if(+d.ap>0)bits.push('<b>'+(+d.ap).toLocaleString()+' AERA Points</b>');
+  if(d.last_order)bits.push('your last order ( <b>'+esc(d.last_order)+'</b> )');
+  box.innerHTML='<div class="card" style="border-left:4px solid var(--y)"><h2>Welcome Back</h2>'+
+   '<p style="margin-top:6px">Your details have come across from our old site'+
+   (bits.length?', including '+bits.join(' and '):'')+'. Nothing else has changed.</p>'+
+   (+d.ap>0?'<p class="hint" style="margin-top:8px">Carried-over points are good for the next six months and come off your bill automatically at checkout.</p>':'')+
+   '<button class="btn btn-o s" style="margin-top:12px" onclick="this.parentNode.remove()">Got It</button></div>';
+  try{await loadProfile()}catch(e){}
+  try{loadPoints()}catch(e){}}
+ catch(e){}}
+async function showAccount(){var nx=nextTarget();
+ /* read and clear in one go, so it fires for this sign-in and no later visit */
+ var goHome=false;
+ try{goHome=sessionStorage.getItem('aera.goHome')==='1';if(goHome)sessionStorage.removeItem('aera.goHome')}catch(e){}
+ $('#authView').style.display='none';$('#acctView').style.display=goHome?'none':'grid';
+ if(goHome)acctHold(true);
+ $('#whoEmail').textContent=USER.email;$('#who').textContent=(USER.user_metadata&&USER.user_metadata.name)||'Welcome';
+ await loadProfile();
+ try{var fm=await sb.rpc('am_i_a_merchant');FRIDGEOK=!!(fm&&!fm.error&&fm.data===true)}catch(e){FRIDGEOK=false}
+ await legacyClaim();
+ if(nx){try{await loadAddresses()}catch(e){}cacheAccount();location.replace(nx);return}
+ /* signed in and settled — ask for the five numbers if any are still missing */
+ try{setTimeout(function(){wgFirstThenNumbers()},400)}catch(e){}
+ TAB=hashTab()||'orders';
+ setTab(TAB);renderFavs();renderHome();
+ var jobs=[loadOrders(),loadPlans(),loadPoints(),loadAddresses(),loadRefs(),bodyLoad()];
+ if(!goHome)return;
+ /* Signing in ends at the homepage. We wait for all of the above to land first: the
+    homepage is drawn from the copy this page leaves in the browser, so leaving early
+    would hand them an empty dashboard. If the five-numbers prompt is open it gets
+    answered first — obLater() carries on home, while obSave() deliberately does not,
+    because the reading they just entered is worth seeing on the graph. */
+ try{await Promise.race([Promise.all(jobs),
+   new Promise(function(go){setTimeout(go,8000)})])}catch(e){}
+ try{cacheAccount()}catch(e){}
+ var ob=document.getElementById('obWrap');
+ if(ob&&ob.style.display!=='none'&&ob.innerHTML){GOHOME=HOME_URL;acctReveal();return}
+ location.replace(HOME_URL)}
+/* A sign-in bound for the homepage must never show this page on the way past — seeing My
+   Account appear and then disappear is worse than a short wait. So the account view stays
+   hidden behind this note until either the handover happens or something (the five-numbers
+   prompt) means we are staying here after all. */
+function acctHold(on){
+ var el=document.getElementById('acctHold');
+ if(!on){if(el&&el.parentNode)el.parentNode.removeChild(el);return}
+ if(el)return;
+ el=document.createElement('div');el.id='acctHold';
+ el.innerHTML='<div><i aria-hidden="true"></i><b>Signing you in</b>'+
+  '<span>Taking you to your homepage…</span></div>';
+ document.body.appendChild(el);
+ /* Nobody is ever left looking at this. If something below throws before the handover,
+    this goes anyway rather than holding a blank screen. */
+ setTimeout(function(){if(document.getElementById('acctHold'))location.replace(HOME_URL)},12000)}
+function acctReveal(){acctHold(false);var v=$('#acctView');if(v)v.style.display='grid'}
+function hashTab(){var hh=(location.hash||'').replace('#','').toLowerCase();
+ if(hh==='addresses')hh='address';if(hh==='settings')hh='details';if(hh==='referrals')hh='refs';
+ if(hh==='track'||hh==='tracking')hh='orders';
+ return ['orders','plans','favs','home','points','refs','details','address','prefs','body'].indexOf(hh)>=0?hh:''}
+window.addEventListener('hashchange',function(){
+ if(!USER)return;var t=hashTab();if(t&&t!==TAB)setTab(t);
+ try{obMaybeAsk()}catch(e){}});
+function setTab(t){TAB=t;if(t==='body')bodyLoad();if(t==='favs')favPics();['orders','plans','favs','home','points','refs','details','address','prefs','body'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===t)})}
+async function loadProfile(){var r=await sb.from('profiles').select('*').eq('id',USER.id).maybeSingle();PROFILE=r.data||{id:USER.id,email:USER.email};if(!r.data){var meta=USER.user_metadata||{};var seed={id:USER.id,email:USER.email.toLowerCase(),name:meta.name||null,phone:meta.phone||null};
+  var w=await sb.from('profiles').upsert(seed);
+  if(w.error&&/23505|duplicate|unique/i.test((w.error.message||'')+' '+(w.error.code||''))){delete seed.phone;await sb.from('profiles').upsert(seed)}
+  PROFILE=Object.assign({},seed,PROFILE)}
+ renderPhone();$('#who').textContent=PROFILE.name||(USER.user_metadata||{}).name||'Welcome';$('#pName').value=PROFILE.name||(USER.user_metadata||{}).name||'';if($('#pPhone'))$('#pPhone').value=PROFILE.phone||(USER.user_metadata||{}).phone||'';$('#pDob').value=PROFILE.birth_date?String(PROFILE.birth_date).slice(0,10):'';if(!window.DOBP)window.DOBP=dobPicker('pDob',14,100);DOBP.set($('#pDob').value);$('#pPack').value=PROFILE.packaging||'bento';$('#qSeason').value=PROFILE.seasoning||'normal';$('#qSpice').value=PROFILE.spice||'normal';$('#qAllergens').value=PROFILE.allergens||'';$('#qDislikes').value=PROFILE.dislikes||'';cacheAccount()}
+/* whether this account has an AERA Fridge on it : the Shop reads this from the cached copy */
+var FRIDGEOK=false;
+function cacheAccount(){/* small copy for the checkout page (same browser only) */try{var def=ADDRS.filter(function(a){return a.is_default})[0]||ADDRS[0]||null;localStorage.setItem('aera.account',JSON.stringify({email:USER.email.toLowerCase(),name:PROFILE.name||'',phone:PROFILE.phone||'',packaging:PROFILE.packaging||'bento',seasoning:PROFILE.seasoning||'normal',spice:PROFILE.spice||'normal',allergens:PROFILE.allergens||'',dislikes:PROFILE.dislikes||'',dob:PROFILE.birth_date?String(PROFILE.birth_date).slice(0,10):'',bdayUsed:BDAY.used,orders:(ORDERCOUNT==null?null:ORDERCOUNT),ap:(AP_AVAIL==null?null:AP_AVAIL),address:def?{address:def.address,lat:def.lat,lng:def.lng,km:def.km,notes:def.notes||''}:null,
+  addresses:ADDRS.map(function(a){return{id:a.id,label:a.label||'Address',address:a.address,lat:a.lat,lng:a.lng,km:a.km,notes:a.notes||'',def:!!a.is_default}}),
+  /* a summary for the Shop Landing, which has no sign-in of its own and reads this copy */
+  sum:acctSummary(),
+  welcome:!!(WG&&WG.claim),fridge:!!FRIDGEOK,
+  body:{gender:PROFILE.gender||'',dob:PROFILE.birth_date||'',height:+PROFILE.height_cm||0,
+   weight:+PROFILE.weight_kg||0,activity:+PROFILE.activity||0},
+  at:Date.now()}))}catch(e){}}
+/* Everything the Landing strip shows, worked out here because this is the only page that
+   holds all of it. Written whenever anything changes; every part is optional. */
+function acctSummary(){
+ var out={};
+ try{out.name=(PROFILE&&PROFILE.name)||''}catch(e){}
+ try{var oo=(typeof ovNextOrder==='function')?ovNextOrder():null;
+  if(oo&&oo.up)out.next={date:oo.up.date,slot:oo.up.slot||'',status:oo.up.status||'',no:oo.up.order_no||'',
+    pickup:oo.up.fulfil==='pickup'};
+  if(oo&&oo.last)out.last={date:oo.last.date,no:oo.last.order_no||''};
+  /* what was in the most recent box, so the homepage can show the meals themselves */
+  var src=(oo&&(oo.up||oo.last))||null;
+  if(src&&Array.isArray(src.items))out.items=src.items.filter(function(it){
+    return /^MEAL-/i.test(String((it&&(it.sku||it.code))||''))}).slice(0,12).map(function(it){
+    return{sku:String(it.sku||it.code||'').toUpperCase(),name:it.name||'',qty:+it.qty||1}});
+  if(src)out.pack=src.packaging||'';}catch(e){}
+ try{out.orders=(ORDERCOUNT==null?null:+ORDERCOUNT)}catch(e){}
+ /* the whole body log, trimmed to the numbers and shortened keys — the homepage draws
+    the same graph from this and never needs a database key of its own */
+ try{var rows=(BODY&&BODY.rows)||[];if(rows.length){
+  out.body=rows.slice(-160).map(function(r){return{d:String(r.logged_on).slice(0,10),
+    w:r.weight_kg==null?null:+r.weight_kg,fm:r.fat_mass_kg==null?null:+r.fat_mass_kg,
+    fp:r.fat_pct==null?null:+r.fat_pct,mu:r.muscle_kg==null?null:+r.muscle_kg,
+    vi:r.visceral==null?null:+r.visceral,bmi:r.bmi==null?null:+r.bmi}});
+  var l=rows[rows.length-1],pv=rows.length>1?rows[rows.length-2]:null;
+  out.weight={v:l.weight_kg==null?null:+l.weight_kg,at:l.logged_on,
+    d:(pv&&l.weight_kg!=null&&pv.weight_kg!=null)?Math.round((l.weight_kg-pv.weight_kg)*10)/10:null}}}catch(e){}
+ try{if(PLANS&&PLANS.length){var pl=PLANS[0];
+  out.plan={id:pl.id,days:+pl.days||0,mpd:+pl.meals_per_day||0,boxes:+pl.boxes||0,price:+pl.price||0,
+   targets:pl.targets||null,prefs:pl.prefs||null,
+   meals:(Array.isArray(pl.meals)?pl.meals:[]).map(function(m){
+     return{day:m.day||1,name:m.name||'',
+       comps:(m.comps||[]).map(function(c){return{name:c.name||'',grams:c.grams,code:c.code||''}})}})}}}catch(e){}
+ try{if(REFSUM&&REFSUM.isRef)out.cash={owed:+REFSUM.owed||0,code:REFSUM.code||'',
+   rate:+REFSUM.rate||0,life:+REFSUM.life||0}}catch(e){}
+ try{out.home=(loadHomeLib()||[]).length}catch(e){}
+ return out}
+/* ===== Mobile number: one account per number, confirmed by a code emailed to this account =====
+   The code is sent by Supabase to the address you are signed in with. It is a deliberate
+   confirmation step, not proof of the phone itself — only an SMS could prove that. What it does
+   guarantee is that a number cannot be moved onto a second account behind your back, and the
+   unique index in the database is what actually enforces one account per number. */
+var PV={stage:'idle',phone:'',busy:false,msg:'',bad:false};
+function normPhone(p){var x=String(p||'').replace(/[^0-9]/g,'');if(!x)return'';
+ if(x.indexOf('60')===0)return x;if(x.charAt(0)==='0')return '60'+x.slice(1);
+ if(x.length>=9&&x.length<=11)return '60'+x;return x}
+function phoneOk(p){return /^60[0-9]{8,10}$/.test(normPhone(p))}
+function phonePretty(p){var n=normPhone(p);if(!n)return '';return '+'+n}
+function pvMsg(t,bad){PV.msg=t||'';PV.bad=!!bad;renderPhone()}
+function renderPhone(){var el=$('#phoneBox');if(!el)return;
+ var saved=PROFILE.phone||'',verified=!!PROFILE.phone_verified_at;
+ var typed=PV.phone!==''?PV.phone:saved;
+ var same=normPhone(typed)&&normPhone(typed)===normPhone(saved);
+ var h='<label class="lb">Mobile ( Rider Contact )</label>'+
+  '<div class="f2"><div><input type="tel" id="pPhone" autocomplete="tel" placeholder="012-345 6789" value="'+esc(typed)+'" oninput="PV.phone=this.value;PV.stage=\'idle\';renderPhone()"'+(PV.stage==='sent'?' readonly':'')+'></div>'+
+  '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'+
+   (verified&&same?'<span class="chip ok">Verified</span><span class="hint" style="margin:0">'+esc(phonePretty(saved))+'</span>':
+    saved&&same?'<span class="chip">Not verified yet</span>':'')+
+  '</div></div>';
+ if(PV.stage==='sent'){
+  h+='<div class="f2" style="margin-top:10px"><div><label class="lb">8-Digit Code</label><input type="text" id="pCode" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="12345678"></div>'+
+     '<div style="display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap"><button class="btn btn-k" type="button" id="pvBtn" onclick="phoneVerify()">Confirm '+esc(phonePretty(PV.phone||saved))+'</button>'+
+     '<button class="btn btn-o" type="button" onclick="PV.stage=\'idle\';pvMsg(\'\')">Cancel</button></div></div>'+
+     '<div class="hint">We sent a code to '+esc(USER.email)+'. It is good for one hour.</div>';
+ }else if(!same||!verified){
+  var can=phoneOk(typed);
+  h+='<div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
+     '<button class="btn btn-k" type="button" id="pvBtn" onclick="phoneSend()"'+(can?'':' disabled')+'>Send Me A Code</button>'+
+     '<span class="hint" style="margin:0">'+(can?'We email a code to '+esc(USER.email)+' to confirm the change.':'Enter a Malaysian mobile number.')+'</span></div>';
+ }
+ h+='<div class="hint" style="margin-top:8px">A mobile number can belong to one AERA Account only. It is what our Riders call when they arrive.</div>';
+ if(PV.msg)h+='<div style="margin-top:8px"><span class="chip '+(PV.bad?'bad':'ok')+'">'+PV.msg+'</span></div>';
+ el.innerHTML=h}
+async function phoneSend(){var typed=PV.phone!==''?PV.phone:(PROFILE.phone||'');
+ if(!phoneOk(typed))return pvMsg('That does not look like a Malaysian mobile number.',true);
+ if(PV.busy)return;PV.busy=true;busy('pvBtn',true,'Sending…');
+ /* claim the number before spending an email on it */
+ var dup=await sb.rpc('phone_taken',{p:typed});
+ if(!dup.error&&dup.data===true){PV.busy=false;busy('pvBtn',false);return pvMsg('That mobile number is already on another AERA account.',true)}
+ var r=await sb.auth.signInWithOtp({email:USER.email,options:{shouldCreateUser:false}});
+ PV.busy=false;busy('pvBtn',false);
+ if(r.error)return pvMsg(friendly(r.error),true);
+ PV.phone=typed;PV.stage='sent';pvMsg('Code sent — check '+USER.email+'.');
+ setTimeout(function(){var c=$('#pCode');if(c)c.focus()},60)}
+async function phoneVerify(){var code=($('#pCode').value||'').replace(/[^0-9]/g,'');
+ if(code.length<6)return pvMsg('Enter the code from the email.',true);
+ if(PV.busy)return;PV.busy=true;busy('pvBtn',true,'Confirming…');
+ var v=await sb.auth.verifyOtp({email:USER.email,token:code,type:'email'});
+ if(v.error){PV.busy=false;busy('pvBtn',false);return pvMsg(/expired|invalid/i.test(v.error.message||'')?'That code is wrong or has expired — send a new one.':friendly(v.error),true)}
+ var up={id:USER.id,email:USER.email.toLowerCase(),phone:PV.phone,phone_verified_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+ var r=await sb.from('profiles').upsert(up);
+ PV.busy=false;busy('pvBtn',false);
+ if(r.error){var m=(r.error.message||'')+' '+(r.error.code||'');
+  return pvMsg(/23505|duplicate|unique/i.test(m)?'That mobile number is already on another AERA account.':friendly(r.error),true)}
+ Object.assign(PROFILE,up);PV.stage='idle';PV.phone='';cacheAccount();pvMsg('Mobile number confirmed.')}
+async function saveProfile(e){e.preventDefault();busy('pBtn',true,'Saving…');var up={id:USER.id,email:USER.email.toLowerCase(),name:$('#pName').value.trim(),birth_date:$('#pDob').value||null,packaging:$('#pPack').value,updated_at:new Date().toISOString()};var r=await sb.from('profiles').upsert(up);busy('pBtn',false);if(r.error){msg('pMsg',' <span class="chip bad">'+esc(friendly(r.error))+'</span>');return false}Object.assign(PROFILE,up);$('#who').textContent=PROFILE.name||'Welcome';cacheAccount();loadPoints();msg('pMsg',' <span class="chip ok">Saved</span>');return false}
+async function savePrefs(e){e.preventDefault();busy('qBtn',true,'Saving…');var up={id:USER.id,email:USER.email.toLowerCase(),seasoning:$('#qSeason').value,spice:$('#qSpice').value,allergens:$('#qAllergens').value.trim(),dislikes:$('#qDislikes').value.trim(),updated_at:new Date().toISOString()};var r=await sb.from('profiles').upsert(up);busy('qBtn',false);if(r.error){msg('qMsg',' <span class="chip bad">'+esc(friendly(r.error))+'</span>');return false}Object.assign(PROFILE,up);cacheAccount();msg('qMsg',' <span class="chip ok">Saved</span>');return false}
+/* ===== Favourite plans ( starred on this device ) ===== */
+function loadFavs(){try{return JSON.parse(localStorage.getItem('aera.favs')||'[]')}catch(e){return[]}}
+function saveFavs(f){try{localStorage.setItem('aera.favs',JSON.stringify(f))}catch(e){}}
+function loadHomeLib(){try{return JSON.parse(localStorage.getItem('aera.home')||'[]')}catch(e){return[]}}
+function renderHome(){renderOverview();var el=$('#homeLib');if(!el)return;var a=loadHomeLib();
+ el.innerHTML=a.length?a.map(function(h,i){return'<div class="line" style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)"><span><b>'+esc(h.n)+'</b><br><span class="hint">'+Math.round(h.k)+' KCALs · Protein '+(h.p||0)+' g · Carbs '+(h.c||0)+' g · Fat '+(h.f||0)+' g</span></span><button class="btn btn-o s" type="button" onclick="homeLibDel('+i+')">Remove</button></div>'}).join(''):
+  '<div class="empty">Nothing here yet. Look one up under Your Week on the plan page and it is kept for next time.</div>'}
+function homeLibDel(i){var a=loadHomeLib();a.splice(i,1);try{localStorage.setItem('aera.home',JSON.stringify(a))}catch(e){}renderHome()}
+/* A favourite keeps the whole plan, so the Meals can be drawn here exactly as the builder drew
+   them : the MAP bento tray with the real photo of each part. The catalogue is fetched only when
+   somebody actually opens this tab, and it is the same cached copy the builder keeps. */
+function favBentos(x){
+ if(!BYCODE)return '';
+ var meals=(x&&x.plan&&x.plan.meals)||[];if(!meals.length)return '';
+ var pics=meals.map(function(m){return planBento(m)}).filter(Boolean);
+ if(!pics.length)return '';
+ return '<div class="fstrip">'+pics.join('')+'</div>'}
+var FAVPICS=false;
+function favPics(){
+ if(FAVPICS)return;FAVPICS=true;
+ catLoad().then(function(){if(BYCODE&&Object.keys(BYCODE).length)try{renderFavs()}catch(e){}})}
+function renderFavs(){var el=$('#favList');if(!el)return;var f=loadFavs();
+ el.innerHTML=(f.length?f.map(function(x,i){
+  return'<div class="order"><div class="top"><span class="no">'+esc(x.name||'Personalised Plan')+'</span><span class="chip">'+(x.at?fmtDate(new Date(x.at).toISOString().slice(0,10)):'')+'</span></div>'+
+   '<div class="meta">'+(x.boxes||0)+' Boxes · '+rm(x.price||0)+((x.boxes)?' · ≈ '+rm(x.price/x.boxes)+' per Meal':'')+'</div>'+
+   favBentos(x)+
+   ((x.names&&x.names.length)?'<div class="hint" style="margin-top:6px">'+esc(x.names.join('  |  '))+((x.boxes>x.names.length)?'  |  …':'')+'</div>':'')+
+   '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-y" type="button" onclick="favOpen('+i+')">Repurchase</button><button class="btn btn-k" type="button" onclick="favCart('+i+')">Add To Cart</button><button class="btn btn-o" type="button" onclick="favRemove('+i+')">Remove</button></div></div>'}).join(''):
+  '<div class="empty">No favourites yet. Star a plan on the <a href="'+PLAN_URL+'">Personalised Meal Plan</a> page and it will appear here.</div>')}
+function favRemove(i){var f=loadFavs();f.splice(i,1);saveFavs(f);renderFavs()}
+function favOpen(i){var x=loadFavs()[i];if(!x||!x.plan)return;
+ try{localStorage.setItem('aera.planDraft',JSON.stringify({q:x.plan.q||{},plan:x.plan,step:4}))}catch(e){}
+ location.href=PLAN_URL+'#plan'}
+function favCart(i){var x=loadFavs()[i];if(!x)return;
+ try{localStorage.setItem('aera.plan',JSON.stringify({id:x.id,name:'Personalised Plan · '+(x.days||'?')+' Days x '+(x.mpd||'?')+' Meals',boxes:x.boxes,price:x.price,pl:x.pl||'',prefs:x.prefs||'normal/normal',at:Date.now()}));
+  var cart={};try{cart=JSON.parse(localStorage.getItem('aera.cart')||'{}')}catch(e){}
+  Object.keys(cart).forEach(function(k){if(k.indexOf('PLAN-')===0)delete cart[k]});cart['PLAN-'+x.id]=1;localStorage.setItem('aera.cart',JSON.stringify(cart))}catch(e){}
+ location.href=SHOP_URL}
+/* ===== Meal plans ===== */
+var PLANS=[];
+async function planOpen(i){var p=PLANS[i];if(!p)return;
+ var meals=(Array.isArray(p.meals)?p.meals:[]).map(function(m){return{day:+m.day||1,slot:+m.slot||1,comps:(m.comps||[]).map(function(c){return{r:c.code,g:+c.grams||0}}).filter(function(c){return c.r})}}).filter(function(m){return m.comps.length});
+ if(!meals.length)return alert('This saved plan has no items we can reopen.');
+ var pr=p.prefs||{};var q=pr.q||{goal:pr.goal,plan:pr.plan,body:pr.body,activity:pr.activity,dob:pr.dob,kcalEdit:pr.kcalEdit,seasoning:pr.seasoning,spice:pr.spice,avoid:pr.avoid||[],home:pr.home||[]};
+ q.days=+p.days||q.days||7;q.mpd=+p.meals_per_day||q.mpd||1;
+ var plan={id:p.id,days:q.days,mpd:q.mpd,meals:meals,targets:p.targets||{},q:q};
+ try{localStorage.setItem('aera.planDraft',JSON.stringify({q:q,plan:plan,step:4}))}catch(e){}
+ location.href=PLAN_URL+'#plan'}
+function sha256hex(str){var K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];var H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];var b=[];for(var i=0;i<str.length;i++){var c=str.charCodeAt(i);if(c<128)b.push(c);else if(c<2048)b.push(192|c>>6,128|c&63);else if(c<55296||c>=57344)b.push(224|c>>12,128|c>>6&63,128|c&63);else{i++;c=65536+((c&1023)<<10|str.charCodeAt(i)&1023);b.push(240|c>>18,128|c>>12&63,128|c>>6&63,128|c&63)}}var l=b.length*8;b.push(128);while(b.length%64!==56)b.push(0);for(var j=7;j>=0;j--)b.push(j>=4?0:(l/Math.pow(2,j*8))&255);var w=new Array(64);function R(x,n){return(x>>>n)|(x<<(32-n))}for(var p=0;p<b.length;p+=64){for(var t=0;t<16;t++)w[t]=(b[p+t*4]<<24)|(b[p+t*4+1]<<16)|(b[p+t*4+2]<<8)|b[p+t*4+3];for(t=16;t<64;t++){var s0=R(w[t-15],7)^R(w[t-15],18)^(w[t-15]>>>3),s1=R(w[t-2],17)^R(w[t-2],19)^(w[t-2]>>>10);w[t]=(w[t-16]+s0+w[t-7]+s1)|0}var a=H[0],bb=H[1],cc=H[2],d=H[3],e=H[4],f=H[5],g=H[6],h=H[7];for(t=0;t<64;t++){var S1=R(e,6)^R(e,11)^R(e,25),ch=(e&f)^(~e&g),t1=(h+S1+ch+K[t]+w[t])|0,S0=R(a,2)^R(a,13)^R(a,22),mj=(a&bb)^(a&cc)^(bb&cc),t2=(S0+mj)|0;h=g;g=f;f=e;e=(d+t1)|0;d=cc;cc=bb;bb=a;a=(t1+t2)|0}H[0]=(H[0]+a)|0;H[1]=(H[1]+bb)|0;H[2]=(H[2]+cc)|0;H[3]=(H[3]+d)|0;H[4]=(H[4]+e)|0;H[5]=(H[5]+f)|0;H[6]=(H[6]+g)|0;H[7]=(H[7]+h)|0}var out='';for(i=0;i<8;i++)out+=('00000000'+(H[i]>>>0).toString(16)).slice(-8);return out}
+
+function refKey(email){return sha256hex('aera-ref:'+String(email||'').trim().toLowerCase()).slice(0,24)}
+function refOwnerKey(email){return sha256hex('aera-ref-owner:'+String(email||'').trim().toLowerCase()).slice(0,24)}
+var REF_URL='/api/public/landing-pages/6947/sheet-data',REFLINK_URL='/api/public/landing-pages/6948/sheet-data',REFSTMT_URL='/api/public/landing-pages/6949/sheet-data';
+var REF_TIER={normal:'Referral Partner',gym:'Fitness Studio / Gym',influencer:'Fitness Influencer'};
+function refRows(j){var rows=[],hd=j&&Array.isArray(j.headers)?j.headers:null,raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];
+ raw.forEach(function(r){if(Array.isArray(r)&&hd){var o={};hd.forEach(function(k,i){o[k]=r[i]});rows.push(o)}else if(r&&typeof r==='object')rows.push(r)});return rows}
+function refGet(u){return fetch(u,{cache:'no-store'}).then(function(r){return r.json()}).then(refRows).catch(function(){return[]})}
+function monthName(m){var p=String(m||'').split('-');if(p.length<2)return String(m||'');
+ var d=new Date(+p[0],+p[1]-1,1);return isNaN(d)?String(m):d.toLocaleDateString('en-MY',{month:'long',year:'numeric'})}
+async function loadRefs(){var box=$('#refsBox');if(!box||!USER)return;
+ var res=await Promise.all([refGet(REF_URL),refGet(REFLINK_URL),refGet(REFSTMT_URL)]);
+ var refs=res[0],links=res[1],stmts=res[2];
+ var em=String(USER.email||'').toLowerCase();
+ var mine=null,ok=refOwnerKey(em);
+ refs.forEach(function(r){if(String(r.OwnerKey||'').trim()===ok)mine=r});
+ var lk=refKey(em),myLink='';
+ links.forEach(function(l){if(String(l.Key||'').trim()===lk)myLink=String(l.Code||'').trim().toUpperCase()});
+ var under=null;refs.forEach(function(r){if(String(r.Code||'').trim().toUpperCase()===myLink)under=r});
+ var h='';
+ /* Customer side */
+ h+='<div class="order"><div class="top"><span class="no">Your Referrer</span></div>';
+ if(under)h+='<div class="meta">You are registered under <b>'+esc(under.Name||myLink)+'</b> ( '+esc(myLink)+' ).</div><div class="hint" style="margin-top:6px">Every Order you place earns you an extra 3% of your Meal Subtotal in AERA Points, on top of the usual 5 AP per RM 1. A Referral Code stays with your Account and cannot be swapped for another one.</div>';
+ else if(myLink)h+='<div class="meta">You are registered under Code <b>'+esc(myLink)+'</b>.</div>';
+ else h+='<div class="empty" style="text-align:left">You are not registered under a Referrer yet. If a Gym, Studio or Coach gave you a Code, enter it at Checkout. Your first paid Order ties it to your Account and you start earning an extra 3% of your Meal Subtotal in AERA Points.</div>';
+ h+='</div>';
+ /* Referrer side */
+ if(mine){
+  var code=String(mine.Code||'').trim().toUpperCase(),rate=+mine.Rate||0,tier=String(mine.Tier||'normal').toLowerCase();
+  var rows=stmts.filter(function(x){return String(x.Code||'').trim().toUpperCase()===code})
+    .sort(function(a,b){return String(b.Month||'').localeCompare(String(a.Month||''))});
+  var owed=0,life=0;rows.forEach(function(r){life+=+r.Cashback||0;if(!/^(y|yes|true|1|paid)$/i.test(String(r.Paid||'')))owed+=+r.Cashback||0});
+  REFSUM={isRef:true,code:code,rate:rate,owed:owed,life:life};renderOverview();
+  var n=rows.length?rows[0]:null;
+  h+='<div class="order" style="margin-top:14px"><div class="top"><span class="no">'+esc(code)+'</span><span><span class="chip ok">'+esc(REF_TIER[tier]||REF_TIER.normal)+' · '+rate+'% Cash-Back</span></span></div>'+
+   '<div class="meta">'+esc(mine.Name||'')+' · Share this code and you earn '+rate+'% of the meal subtotal on every order placed with it.</div>'+
+   '<div class="tiles" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px">'+
+    '<div class="order" style="margin:0"><div class="hint" style="margin:0">This Month</div><div class="big">'+(n?rm(+n.Cashback||0):rm(0))+'</div><small>'+(n?esc(monthName(n.Month))+' · '+(+n.Orders||0)+' order'+((+n.Orders||0)===1?'':'s')+' · '+rm(+n.Sales||0)+' in sales':'No sales yet')+'</small></div>'+
+    (function(){var np=rows.filter(function(r){return !/^(y|yes|true|1|paid)$/i.test(String(r.Paid||''))}).length;
+     return'<div class="order" style="margin:0"><div class="hint" style="margin:0">Waiting To Be Paid</div><div class="big">'+rm(owed)+'</div><small>'+(np?'Across '+np+' month'+(np===1?'':'s'):'Nothing outstanding')+'</small></div>'})()+
+    '<div class="order" style="margin:0"><div class="hint" style="margin:0">Earned All Time</div><div class="big">'+rm(life)+'</div><small>Since you joined</small></div>'+
+   '</div>'+
+   (rows.length?'<table style="width:100%;margin-top:12px;font-size:13px;border-collapse:collapse"><thead><tr><th style="text-align:left">Month</th><th class="r">Orders</th><th class="r">Sales</th><th class="r">Cash-Back</th><th>Status</th></tr></thead><tbody>'+
+     rows.map(function(r){var paid=/^(y|yes|true|1|paid)$/i.test(String(r.Paid||''));
+      return'<tr><td>'+esc(monthName(r.Month))+'</td><td class="r">'+(+r.Orders||0)+'</td><td class="r">'+rm(+r.Sales||0)+'</td><td class="r"><b>'+rm(+r.Cashback||0)+'</b></td><td><span class="chip '+(paid?'ok':'')+'">'+(paid?'Paid'+(r.PaidAt?' · '+esc(String(r.PaidAt).slice(0,10)):''):'Pending')+'</span></td></tr>'}).join('')+
+     '</tbody></table>':'<div class="hint" style="margin-top:10px">Nothing yet. Statements appear here at the end of each month.</div>')+
+   '<div class="hint" style="margin-top:10px">Cash-back is worked out on the meal subtotal only — discounts, delivery and packaging fees are not counted. We settle by bank transfer after each month closes.</div>'+
+   '</div>'}
+ box.innerHTML=h}
+/* ===== what a Personalised Meal looks like =====
+   The plan builder draws every meal as a MAP bento box : the tray photographed once, with the
+   real picture of each part sitting in its own compartment. The same drawing belongs here, so a
+   saved plan looks like the thing that arrives. The ingredient catalogue it needs is fetched
+   only when somebody actually opens Show Meals, and it is the same cached copy the builder
+   keeps, so a customer who has used the builder pays nothing for it here. */
+var CAT_URL='https://my.chatbees.io/p/FaMS3PtRe',CAT_V='1';
+var TRAY='https://my.chatbees.io/objects/generated-images/1302/1788628096238-5f5755c542d808b9.png';
+var BYCODE=null,CATLOADING=null;
+function catUnpack(d){
+ var rows=d.r.map(function(v){var o={};for(var i=0;i<d.k.length;i++)o[d.k[i]]=v[i];return o});
+ rows.forEach(function(o){var im=d.i[o.img];o.img=im?d.p[im[0]]+im[1]+(im[2]||'.jpg'):'';
+  var nm=o.n[1];(d.t||[]).forEach(function(t){nm=nm.split(t[0]).join(t[1])});
+  o.n=d.n[o.n[0]]+nm;o.cat='pcvgs'.charAt(o.cat)});
+ var by={};rows.forEach(function(r){by[r.c]=r});return by}
+function catLoad(){
+ if(BYCODE)return Promise.resolve(BYCODE);
+ if(CATLOADING)return CATLOADING;
+ CATLOADING=(function(){
+  try{var raw=localStorage.getItem('aera.cat');
+   if(raw){var o=JSON.parse(raw);if(o&&o.v===CAT_V&&o.d){BYCODE=catUnpack(o.d);return Promise.resolve(BYCODE)}}}catch(e){}
+  return fetch(CAT_URL,{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){
+   var a=t.indexOf('/*CAT*/'),b=t.indexOf('/*ENDCAT*/');
+   if(a<0||b<a)throw new Error('no catalogue');
+   BYCODE=catUnpack(JSON.parse(t.slice(a+7,b)));return BYCODE})
+   .catch(function(){BYCODE={};return BYCODE})})();
+ return CATLOADING}
+/* one meal, drawn : two protein slots, one carbohydrate, two for vegetables and garnish */
+function planBento(m){
+ if(!BYCODE)return '';
+ var P=[],C=null,L=[];
+ (m.comps||[]).forEach(function(cp){var r=BYCODE[cp.code||cp.id||cp.r];if(!r)return;var x={r:r,g:cp.grams||cp.g};
+  if(r.cat==='p'){if(P.length<2)P.push(x)}
+  else if(r.cat==='c'){if(!C)C=x}
+  else if(r.cat==='v'||r.cat==='g'){if(L.length<2)L.push(x)}});
+ if(!P.length&&!C&&!L.length)return '';
+ var cell=function(x,cls){if(!x)return'<b class="'+cls+' empty"></b>';
+  return'<b class="'+cls+'" title="'+esc(x.r.n+' \u00b7 '+x.g+' g')+'"'+(x.r.img?' style="background-image:url('+esc(x.r.img)+')"':'')+'></b>'};
+ var inner=(P.length>1?cell(P[0],'pro h1')+cell(P[1],'pro h2'):cell(P[0],'pro'))+cell(C,'crb')+
+  (L.length>1?cell(L[0],'veg w1')+cell(L[1],'veg w2'):cell(L[0],'veg'));
+ return'<div class="bento" role="img" aria-label="'+esc(m.name||'Meal')+'" style="background-image:url('+TRAY+')">'+inner+'</div>'}
+/* Show Meals was opened : fetch the catalogue once, then draw the pictures in place */
+var PICSDONE=false;
+function planPics(el){
+ if(!el||!el.open||PICSDONE)return;
+ PICSDONE=true;
+ catLoad().then(function(){
+  if(!BYCODE||!Object.keys(BYCODE).length)return;
+  try{var op=[];document.querySelectorAll('#plansList details').forEach(function(x,i){if(x.open)op.push(i)});
+   renderPlans();
+   document.querySelectorAll('#plansList details').forEach(function(x,i){if(op.indexOf(i)>=0)x.open=true})}catch(e){}})}
+async function loadPlans(){var el=$('#plansList');var r=await sb.from('meal_plans').select('id,created_at,days,meals_per_day,targets,prefs,meals,price,boxes,status').order('created_at',{ascending:false}).limit(20);if(r.error){el.innerHTML='<div class="msg bad">'+esc(friendly(r.error))+'</div>';return}var rows=r.data||[];PLANS=rows;renderOverview();var ordered={};try{var ro=await sb.from('orders').select('order_no,items').limit(200);(ro.data||[]).forEach(function(o){var s=JSON.stringify(o.items||[]);rows.forEach(function(p){if(s.indexOf('PLAN-'+p.id)>=0)ordered[p.id]=o.order_no})})}catch(e){}
+ PLANORD=ordered;renderPlans();}
+var PLANORD={};
+function renderPlans(){var el=$('#plansList');if(!el)return;var rows=PLANS||[],ordered=PLANORD||{};
+ if(!rows.length){el.innerHTML='<div class="empty">No Personalised Plans yet. Answer a few questions and we design every Meal to your Calories and Macros.</div>';return}
+ var GOAL={fat_loss:'Fat Loss',lean_gain:'Lean Gain',mass_gain:'Mass Gain',healthy:'Healthy Eating',custom:'Custom Macros'};
+ el.innerHTML=rows.map(function(p,idx){var t=p.targets||{},pr=p.prefs||{},meals=Array.isArray(p.meals)?p.meals:[];var byDay={};meals.forEach(function(m){(byDay[m.day||1]=byDay[m.day||1]||[]).push(m)});
+  return'<div class="order"><div class="top"><span class="no">'+esc(String(p.id))+'</span><span><span class="chip '+(ordered[p.id]?'ok':'')+'">'+esc(ordered[p.id]?'Ordered · '+ordered[p.id]:'Saved, not ordered yet')+'</span></span></div>'+
+  '<div class="meta">'+esc(GOAL[pr.goal]||'')+(pr.goal?' · ':'')+(p.days||'?')+' Days x '+(p.meals_per_day||'?')+' Meal'+(p.meals_per_day===1?'':'s')+' a day · '+(p.boxes||meals.length)+' Boxes'+(p.created_at?' · '+fmtDate(String(p.created_at).slice(0,10)):'')+'</div>'+
+  (t.kcal?'<div class="hint" style="margin-top:6px">AERA Meals Target ≈ '+Math.round(t.kcal)+' KCALs · Protein '+Math.round(t.p||0)+' g · Carbs '+Math.round(t.c||0)+' g · Fat '+Math.round(t.f||0)+' g per Day</div>':'')+
+  '<details style="margin-top:8px" ontoggle="planPics(this)"><summary style="cursor:pointer;font-weight:600;font-size:13px">Show Meals</summary><div class="items" style="margin-top:6px">'+Object.keys(byDay).sort(function(a,b){return a-b}).map(function(d){return'<div class="daywrap"><b>Day '+d+'</b>'+byDay[d].map(function(m){return'<div class="mealrow">'+planBento(m)+'<span class="mtxt">'+esc(m.name||(m.comps||[]).map(function(c){return c.name}).join(' · '))+((m.comps||[]).length?'<br><span style="color:var(--mute)">'+esc((m.comps||[]).map(function(c){return c.name+' '+c.grams+' g'}).join(' · '))+'</span>':'')+'</span></div>'}).join('')+'</div>'}).join('')+'</div></details>'+
+  '<div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-y s" type="button" onclick="planOpen('+idx+')">Open &amp; Tune This Plan</button></div>'+
+  '<div style="margin-top:8px;max-width:360px"><div class="tot" style="font-weight:700"><span>Plan Price</span><b>'+rm(p.price)+'</b></div><div class="hint">≈ '+rm((+p.boxes||meals.length)?p.price/(+p.boxes||meals.length):0)+' per Meal · Packaging Included</div></div></div>'}).join('')}
+/* ===== Orders ===== */
+/* Where an order is right now. Signed in, a customer should never have to prove who they are a
+   second time to see this : the Kitchen Console sends the rider's link straight onto the order
+   and it shows up here. Before a rider is booked the box says so rather than sitting empty, and
+   a pick-up order has no rider at all, so it gets nothing. */
+var TRACK_WAIT={new:1,in_kitchen:1,packed:1};
+function trackBox(o){
+ if(o.fulfil==='pickup')return '';
+ if(o.tracking_link)
+  return '<div class="trackbox"><a class="btn btn-y s" href="'+esc(o.tracking_link)+'" target="_blank" rel="noopener">Track My Rider ↗</a>'+
+   (o.rider_note?'<span class="rnote"><b>Note given to the rider</b>'+esc(o.rider_note)+'</span>':'')+'</div>';
+ if(TRACK_WAIT[o.status])
+  return '<div class="trackbox wait">Your Rider’s Live Tracking Link appears here once the Kitchen books it.</div>';
+ return ''}
+async function loadOrders(){var r=await sb.from('orders').select('*').order('date',{ascending:false}).limit(100);var el=$('#ordersList');if(r.error){el.innerHTML='<div class="msg bad">'+esc(friendly(r.error))+'</div>';return}var rows=r.data||[];ORDERS=rows;ORDERCOUNT=rows.length;cacheAccount();renderOverview();
+ if(!rows.length){el.innerHTML='<div class="empty">No Orders yet under '+esc(USER.email)+'. <a href="'+SHOP_URL+'">Order your First Meals →</a></div>';return}
+ el.innerHTML=rows.map(function(o){var st=STATUS[o.status]||[o.status||'—',''];var items=Array.isArray(o.items)?o.items:[];return'<div class="order"><div class="top"><span class="no">'+esc(o.order_no)+'</span><span><span class="chip '+st[1]+'">'+esc(st[0])+'</span>'+'</span></div>'+
+ '<div class="meta">'+(o.fulfil==='pickup'?'Self Pick-Up':'Delivery'+(o.courier?' · '+esc(o.courier.charAt(0).toUpperCase()+o.courier.slice(1)):'')+(o.handover==='door'?' · Door-to-Door':o.handover==='drop'?' · Normal Delivery':''))+' · '+fmtDate(o.date)+(o.slot?' · '+esc(slotLabel(o.slot)):'')+(o.address?'<br>'+esc(o.address):'')+'</div>'+
+ trackBox(o)+
+ '<div class="items ipics">'+items.map(function(i){var u=mealPic(i);return'<span class="ipic">'+(u?'<img src="'+esc(u)+'" alt="" loading="lazy" onerror="this.remove()">':'')+esc((i.qty||1)+'× '+(i.name||i.sku||''))+'</span>'}).join('')+'</div>'+
+ '<div style="margin-top:8px;max-width:360px"><div class="tot"><span>Meals</span><b>'+rm(o.subtotal)+'</b></div>'+(+o.packaging_fee?'<div class="tot"><span>Packaging fee</span><b>'+rm(o.packaging_fee)+'</b></div>':'')+(+o.delivery_fee?'<div class="tot"><span>Delivery</span><b>'+rm(o.delivery_fee)+'</b></div>':'')+(+o.discount?'<div class="tot" style="color:var(--green)"><span>AERA Points Discount</span><b>− '+rm(o.discount)+'</b></div>':'')+'<div class="tot" style="font-weight:700;border-top:1px solid var(--line)"><span>Paid</span><b>'+rm(o.total)+'</b></div>'+(o.ap_earned?'<div class="hint">Earned '+o.ap_earned+' AP'+(o.ap_redeemed?' · used '+o.ap_redeemed+' AP':'')+'</div>':'')+'</div>'+
+ '<div class="hint">Placed '+(o.paid_at?fmtWhen(o.paid_at):'')+'</div></div>'}).join('')}
+/* ===== Points ===== */
+async function loadBirthday(){try{var y=new Date().getFullYear();var r=await sb.from('birthday_rewards').select('year,value,kind,order_no').eq('year',y).maybeSingle();BDAY.used=r.data?y:null;BDAY.row=r.data||null}catch(e){}try{var s=await fetch('https://my.chatbees.io/api/public/landing-pages/6938/sheet-data',{cache:'no-store'}).then(function(x){return x.json()});(s&&s.data||[]).forEach(function(x){if(String(x.Key).trim()==='birthday_pct')BDAY.pct=+x.Value||0})}catch(e){}BDAY.loaded=true;cacheAccount()}
+function birthdayNote(){var dob=PROFILE.birth_date?String(PROFILE.birth_date).slice(0,10):'';if(!BDAY.pct)return'';var months=['January','February','March','April','May','June','July','August','September','October','November','December'];if(!dob)return'<div class="msg" style="background:#FFF1CD;color:#6B4A00">🎂 Add your date of birth under Details &amp; Addresses to unlock a Birthday Treat : '+BDAY.pct+'% OFF Meals during your birthday month, once a year.</div>';var m=months[+dob.slice(5,7)-1];var now=new Date();var thisMonth=(+dob.slice(5,7))===now.getMonth()+1;if(BDAY.used)return'<div class="msg" style="background:#F2F6FB;color:var(--green)">🎂 Birthday Treat for '+now.getFullYear()+' used'+(BDAY.row&&BDAY.row.order_no?' on Order '+esc(BDAY.row.order_no):'')+' — see you next '+m+'!</div>';return'<div class="msg" style="background:#FFF1CD;color:#6B4A00">🎂 Birthday Treat : '+BDAY.pct+'% OFF Meals on one Order in '+m+(thisMonth?' — that is this month! It is applied automatically at Checkout while you are signed in.':', applied automatically at Checkout while you are signed in. Once a year.')+'</div>'}
+async function loadPoints(){var r=await sb.from('points_ledger').select('*').order('date',{ascending:false}).limit(200);var el=$('#pointsBox');if(r.error){el.innerHTML='<div class="msg bad">'+esc(friendly(r.error))+'</div>';return}var rows=r.data||[];var b=apBalance(rows,todayIso());AP_AVAIL=b.available;cacheAccount();renderOverview();if(!BDAY.loaded)await loadBirthday();
+ el.innerHTML='<div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-end"><div><div class="eyebrow">Available</div><div class="big">'+b.available.toLocaleString()+' AP</div><div class="hint">Worth RM '+(b.available/100*AP.rmPer100).toFixed(2)+' off your next Orders</div></div><div><div class="eyebrow">Earned</div><div style="font-weight:700;font-size:20px">'+b.earned.toLocaleString()+'</div></div><div><div class="eyebrow">Used</div><div style="font-weight:700;font-size:20px">'+b.redeemed.toLocaleString()+'</div></div><div><div class="eyebrow">Expired</div><div style="font-weight:700;font-size:20px">'+b.expired.toLocaleString()+'</div></div></div>'+
+ (b.expiringSoon?'<div class="msg warn">'+b.expiringSoon+' AP expire on '+esc(bmOrd(b.expiringDate))+' — use them at Checkout before then.</div>':'')+birthdayNote()+
+ '<p class="hint">'+AP.perRM+' AP for every RM 1 on Meals · 100 AP = RM '+AP.rmPer100.toFixed(2)+' · Up to '+AP.capPct+'% OFF an Order · Points expire '+AP.expiryMonths+' Months after earning. At Checkout your Points are applied automatically when you are signed in.</p>'+
+ (rows.length?'<table><thead><tr><th>Date</th><th>Details</th><th class="r">Earned</th><th class="r">Used</th><th>Expires</th></tr></thead><tbody>'+rows.map(function(x){var exp=x.earned&&x.expires&&String(x.expires)<todayIso();return'<tr'+(exp?' style="color:var(--mute)"':'')+'><td>'+esc(bmOrd(String(x.date).slice(0,10)))+'</td><td>'+esc(x.note||x.order_no||'')+'</td><td class="r">'+(x.earned?'+'+x.earned:'')+'</td><td class="r" style="color:var(--bad)">'+(x.redeemed?'−'+x.redeemed:'')+'</td><td>'+esc(x.expires?bmOrd(String(x.expires).slice(0,10)):'')+(exp?' <span class="chip">expired</span>':'')+'</td></tr>'}).join('')+'</tbody></table>':'<div class="empty">No points yet — they start with your first order.</div>')}
+/* ===== Addresses ===== */
+async function loadAddresses(){var r=await sb.from('addresses').select('*').order('created_at');ADDRS=r.data||[];renderAddrs();cacheAccount()}
+function renderAddrs(){var el=$('#addrList');el.innerHTML=ADDRS.length?ADDRS.map(function(a){return'<div class="addr'+(a.is_default?' def':'')+'"><div><b>'+esc(a.label||'Address')+'</b>'+(a.is_default?' <span class="chip ok">Default</span>':'')+'<div style="font-size:13px">'+esc(a.address)+'</div>'+(a.notes?'<div class="hint">'+esc(a.notes)+'</div>':'')+(a.km?'<div class="hint">About '+a.km+' km from our kitchen</div>':'')+'</div><div style="display:flex;gap:6px">'+(a.is_default?'':'<button class="btn btn-o s" type="button" onclick="setDefault(\''+a.id+'\')">Make Default</button>')+'<button class="btn btn-o s" type="button" onclick="delAddress(\''+a.id+'\')">Remove</button></div></div>'}).join(''):'<div class="hint">No saved addresses yet. Add one below and Checkout will use it automatically.</div>'}
+var NEWADDR=null;
+async function addAddress(){var addr=$('#aAddr').value.trim();if(addr.length<8){msg('aMsg',' <span class="chip bad">Pick an address from the suggestions</span>');return}var g=NEWADDR&&NEWADDR.full===addr?NEWADDR:null;
+ if(!g){try{var j=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=my&q='+encodeURIComponent(addr),{headers:{'Accept':'application/json'}}).then(function(r){return r.json()});if(j&&j[0])g={lat:+j[0].lat,lng:+j[0].lon,full:addr}}catch(e){}}
+ var km=g?Math.round(hav(KITCHEN,g)*ROAD_FACTOR*10)/10:null;
+ var row={user_id:USER.id,label:$('#aLabel').value.trim()||'Home',address:addr,lat:g?g.lat:null,lng:g?g.lng:null,km:km,notes:$('#aNotes').value.trim(),is_default:!ADDRS.length};
+ var r=await sb.from('addresses').insert(row);if(r.error){msg('aMsg',' <span class="chip bad">'+esc(friendly(r.error))+'</span>');return}$('#aAddr').value='';$('#aLabel').value='';$('#aNotes').value='';NEWADDR=null;msg('aMsg',' <span class="chip ok">Saved</span>');loadAddresses()}
+async function setDefault(id){await sb.from('addresses').update({is_default:false}).eq('user_id',USER.id);await sb.from('addresses').update({is_default:true}).eq('id',id);loadAddresses()}
+async function delAddress(id){await sb.from('addresses').delete().eq('id',id);loadAddresses()}
+function hav(a,b){var R=6371,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180,s=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);return 2*R*Math.asin(Math.sqrt(s))}
+/* address suggestions (OpenStreetMap / Photon) */
+var AC={items:[],sel:-1,timer:null,seq:0};
+function acHide(){var l=$('#acList');if(l)l.classList.remove('open');AC.sel=-1}
+function acRender(){var l=$('#acList');if(!AC.items.length){acHide();return}l.innerHTML=AC.items.map(function(it,i){return'<div class="'+(i===AC.sel?'sel':'')+'" onmousedown="acPick('+i+')"><b>'+esc(it.main)+'</b><small>'+esc(it.sub)+'</small></div>'}).join('');l.classList.add('open')}
+function acKey(e){if(!AC.items.length||!$('#acList').classList.contains('open'))return;if(e.key==='ArrowDown'){AC.sel=Math.min(AC.items.length-1,AC.sel+1);acRender();e.preventDefault()}else if(e.key==='ArrowUp'){AC.sel=Math.max(0,AC.sel-1);acRender();e.preventDefault()}else if(e.key==='Enter'){if(AC.sel>=0){acPick(AC.sel);e.preventDefault()}}else if(e.key==='Escape')acHide()}
+function acPick(i){var it=AC.items[i];if(!it)return;$('#aAddr').value=it.full;NEWADDR=it;acHide();AC.items=[]}
+function acInput(){var q=$('#aAddr').value.trim();NEWADDR=null;clearTimeout(AC.timer);if(q.length<3){AC.items=[];acHide();return}AC.timer=setTimeout(function(){acFetch(q)},280)}
+function acFetch(q){var seq=++AC.seq;fetch('https://photon.komoot.io/api/?q='+encodeURIComponent(q)+'&limit=6&lang=en&lat='+KITCHEN.lat+'&lon='+KITCHEN.lng).then(function(r){return r.json()}).then(function(j){if(seq!==AC.seq)return;var seen={};AC.items=((j&&j.features)||[]).filter(function(f){return f.properties&&(f.properties.countrycode||'').toUpperCase()==='MY'}).map(function(f){var p=f.properties;var main=[p.name,p.housenumber&&p.street?p.housenumber+' '+p.street:p.street].filter(Boolean).join(', ')||p.city||p.district||'';var sub=[p.district,p.city,p.postcode,p.state].filter(function(x){return x&&x!==main}).join(', ');var full=[main,sub].filter(Boolean).join(', ');return{main:main,sub:sub,full:full,lat:f.geometry.coordinates[1],lng:f.geometry.coordinates[0]}}).filter(function(it){if(!it.main||seen[it.full])return false;seen[it.full]=1;return true}).slice(0,6);AC.sel=-1;acRender()}).catch(function(){})}
+init();
+
+function shopAria(w){var b=w&&w.querySelector('.cartbtn');if(b)b.setAttribute('aria-expanded',w.classList.contains('open')?'true':'false')}
+function shopMenu(e){if(e)e.preventDefault();var w=document.querySelector('.shopwrap');if(!w)return;w.classList.toggle('open');shopAria(w)}
+document.addEventListener('click',function(e){var w=document.querySelector('.shopwrap');if(w&&!w.contains(e.target)){w.classList.remove('open');shopAria(w)}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){var w=document.querySelector('.shopwrap');if(w){w.classList.remove('open');shopAria(w)}}});
+
+/* ===== Weight Control =====
+   Body composition over time. Entries live in Supabase behind row-level security, so a
+   customer only ever sees their own; the date is stamped by the database on insert, so an
+   entry cannot be back-dated from here, and there is no update path — a saved entry is
+   locked and can only be removed and entered again.
+   The ranges below are ordinary published reference bands, not a medical assessment. */
+var BODY={rows:null,loading:false,loaded:false,metric:'weight_kg',view:'all',month:'',err:'',del:null};
+var BMETRICS=[
+ ['weight_kg'  ,'Body Weight'          ,'KG'    ,2],
+ ['fat_mass_kg','Body Fat Mass'        ,'KG'    ,2],
+ ['fat_pct'    ,'Body Fat'             ,'%'     ,1],
+ ['muscle_kg'  ,'Skeletal Muscle Mass' ,'KG'    ,2],
+ ['visceral'   ,'Visceral Fat'         ,'level' ,0],
+ ['bmi'        ,'BMI'                  ,'KG / m²' ,1],
+ ['height_cm'  ,'Height'               ,'cm'    ,1]
+];
+function bmLabel(k){for(var i=0;i<BMETRICS.length;i++)if(BMETRICS[i][0]===k)return BMETRICS[i][1];return k}
+function bmUnit(k){for(var i=0;i<BMETRICS.length;i++)if(BMETRICS[i][0]===k)return BMETRICS[i][2];return''}
+function bmDp(k){for(var i=0;i<BMETRICS.length;i++)if(BMETRICS[i][0]===k)return BMETRICS[i][3];return 1}
+function bmFem(){return String((PROFILE&&PROFILE.gender)||'m').toLowerCase().charAt(0)==='f'}
+function bmNum(v,dp){return v==null||v===''?'—':(+v).toFixed(dp==null?1:dp)}
+function bmDate(s){var p=String(s).split('-');return new Date(+p[0],+p[1]-1,+p[2],12,0,0,0)}
+function bmNice(s){return bmDate(s).toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric'})}
+function bmShort(s){return bmDate(s).toLocaleDateString('en-MY',{day:'numeric',month:'short'})}
+/* 18th SEP 2026 : the long way of writing a date, for the one line that reads like a sentence. */
+function bmOrd(s){var d=bmDate(s),n=d.getDate(),t=(n%100>=11&&n%100<=13)?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th');
+ var mo=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][d.getMonth()];
+ return n+t+' '+mo+' '+d.getFullYear()}
+
+/* ---- the reference bands ---- */
+function bmBand(key){
+ if(key==='bmi')return{lo:18.5,hi:23};
+ if(key==='fat_pct')return bmFem()?{lo:21,hi:33}:{lo:8,hi:20};
+ if(key==='visceral')return{lo:1,hi:10,note:'10 and over is usually flagged for attention.'};
+ if(key==='musclePct')return bmFem()?{lo:24,hi:31}:{lo:33,hi:40};
+ return null}
+function bmWhere(v,b){if(v==null||!b)return'';return v<b.lo?'low':(v>=b.hi?'high':'normal')}
+var BMWORD={low:'Low',normal:'Normal',high:'High'};
+var BMCOL={low:'var(--warn)',normal:'var(--green)',high:'var(--bad)'};
+/* Muscle is the one measurement where being above the band is not something to flag: the
+   reference range describes what is typical, not a ceiling. It gets its own wording and is
+   never painted as a warning. */
+var BMUP={word:'Above the typical range',col:'var(--navy)'};
+var BMSOFT={low:'var(--warn-soft)',normal:'var(--green-soft)',high:'var(--bad-soft)'};
+
+/* A bar with the three zones drawn to scale and the reading marked on it. The state is
+   spelled out in words beside it, so it never rests on colour alone. */
+function bmBar(title,v,b,unit,dp,upIsFine){
+ if(v==null||!b)return'';
+ var st=bmWhere(v,b),lo=b.lo,hi=b.hi;
+ var word=(st==='high'&&upIsFine)?BMUP.word:BMWORD[st];
+ var col=(st==='high'&&upIsFine)?BMUP.col:BMCOL[st];
+ var min=Math.min(lo*0.6,v*0.9),max=Math.max(hi*1.4,v*1.1);
+ function pc(x){return Math.max(0,Math.min(100,(x-min)/(max-min)*100))}
+ return'<div class="bmbar">'+
+  '<div class="bmbar-t"><span>'+esc(title)+'</span>'+
+   '<b style="color:'+col+'">'+bmNum(v,dp)+' '+esc(unit||'')+' · '+word+'</b></div>'+
+  '<div class="bmtrack">'+
+   '<i class="z lo" style="left:0;width:'+pc(lo)+'%"></i>'+
+   '<i class="z ok" style="left:'+pc(lo)+'%;width:'+(pc(hi)-pc(lo))+'%"></i>'+
+   '<i class="z hi'+(upIsFine?' fine':'')+'" style="left:'+pc(hi)+'%;width:'+(100-pc(hi))+'%"></i>'+
+   '<i class="pin" style="left:'+pc(v)+'%"></i></div>'+
+  '<div class="bmscale"><span>Low</span><span>Typical '+bmNum(lo,dp)+'–'+bmNum(hi,dp)+
+   '</span><span>'+(upIsFine?'Above':'High')+'</span></div>'+
+  (b.note?'<div class="hint">'+esc(b.note)+'</div>':'')+
+ '</div>'}
+
+/* ---- energy ---- */
+function bmAge(){var d=PROFILE&&PROFILE.birth_date;if(!d)return null;
+ var b=new Date(d),n=new Date(),a=n.getFullYear()-b.getFullYear(),m=n.getMonth()-b.getMonth();
+ if(m<0||(m===0&&n.getDate()<b.getDate()))a--;
+ return(a>0&&a<120)?a:null}
+/* Mifflin-St Jeor, the same figures the Personalised Meal Plan works from. */
+function bmBmr(w,h){var a=bmAge();if(!w||!h||!a)return null;
+ var base=10*w+6.25*h-5*a;return Math.round(bmFem()?base-161:base+5)}
+function bmAct(){var a=+(PROFILE&&PROFILE.activity)||0;return a>=1&&a<=2.5?a:0}
+function bmActWord(a){return a>=1.45?'Highly Active':a>=1.375?'Moderately Active':'Not Very Active'}
+
+function bodyMsg(t,bad){var el=$('#bodyMsg');if(el)el.innerHTML=t?'<div class="msg '+(bad?'bad':'ok')+'">'+esc(t)+'</div>':''}
+
+async function bodyLoad(force){
+ if(!sb||!USER)return;
+ if(BODY.loading||(BODY.loaded&&!force))return;
+ BODY.loading=true;
+ try{var r=await sb.from('body_logs').select('*').eq('user_id',USER.id).order('logged_on',{ascending:true});
+  if(r.error)throw r.error;
+  BODY.rows=r.data||[];BODY.err='';BODY.loaded=true}
+ catch(e){BODY.err=friendly(e);BODY.rows=[]}
+ BODY.loading=false;renderBody();renderOverview()}
+
+async function bodySave(e){
+ if(e&&e.preventDefault)e.preventDefault();
+ if(!sb||!USER)return false;
+ var row={user_id:USER.id},any=false;
+ BMETRICS.forEach(function(m){var el=$('#b_'+m[0]);if(!el)return;
+  var s=String(el.value).trim();if(s==='')return;
+  var n=+s;if(isNaN(n))return;row[m[0]]=n;any=true});
+ if(!any){bodyMsg('Fill in at least one measurement.',true);return false}
+ /* BMI is worked out when the scale did not report it */
+ if(row.bmi==null&&row.weight_kg&&row.height_cm)
+  row.bmi=Math.round(row.weight_kg/Math.pow(row.height_cm/100,2)*10)/10;
+ busy('bSaveBtn',true,'Saving…');
+ /* The reading written when the account was created is a starting point, not something the
+    customer typed. If today still holds that one, this completes it rather than turning them
+    away -- a reading they entered themselves stays locked for the day, as before. */
+ var r,auto=null;
+ try{var ex=await sb.from('body_logs').select('id,source,logged_on')
+   .eq('user_id',USER.id).order('logged_on',{ascending:false}).limit(1);
+  var top=(ex.data||[])[0];
+  if(top&&top.source==='signup'&&String(top.logged_on)===bodyToday())auto=top.id}catch(_){}
+ if(auto){row.source='manual';r=await sb.from('body_logs').update(row).eq('id',auto)}
+ else r=await sb.from('body_logs').insert(row);
+ busy('bSaveBtn',false);
+ if(r.error){var m=(r.error.message||'')+' '+(r.error.code||'');
+  bodyMsg(/23505|duplicate|unique/i.test(m)
+   ?'There is already an entry for today. An entry is locked once saved — remove today’s below if you need to put it in again.'
+   :friendly(r.error),true);return false}
+ /* height and weight are worth carrying back to the profile, where the plan reads them */
+ try{var up={id:USER.id,email:USER.email.toLowerCase(),updated_at:new Date().toISOString()};
+  if(row.height_cm)up.height_cm=row.height_cm;
+  if(row.weight_kg)up.weight_kg=row.weight_kg;
+  if(up.height_cm||up.weight_kg){await sb.from('profiles').upsert(up);Object.assign(PROFILE,up)}}catch(_){}
+ bodyMsg('Saved, and locked to today’s date.');
+ BMETRICS.forEach(function(m){var el=$('#b_'+m[0]);if(el&&m[0]!=='height_cm')el.value=''});
+ await bodyLoad(true);return false}
+
+/* the database stamps the day in Kuala Lumpur time, so compare against the same clock */
+function bodyToday(){try{return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kuala_Lumpur'}).format(new Date())}
+ catch(e){return new Date().toISOString().slice(0,10)}}
+function bodyAskDel(id){BODY.del=id;renderBody()}
+function bodyCancelDel(){BODY.del=null;renderBody()}
+async function bodyDel(id){
+ if(!sb||!USER)return;
+ var r=await sb.from('body_logs').delete().eq('id',id);
+ BODY.del=null;
+ if(r.error)return bodyMsg(friendly(r.error),true);
+ bodyMsg('Entry removed.');
+ await bodyLoad(true)}
+
+function bodySetMetric(k){BODY.metric=k;renderBody()}
+function bodySetView(v){BODY.view=v;renderBody()}
+function bodySetMonth(v){BODY.month=v;renderBody()}
+
+function bodyMonths(){var seen={},out=[];
+ (BODY.rows||[]).forEach(function(r){var m=String(r.logged_on).slice(0,7);if(!seen[m]){seen[m]=1;out.push(m)}});
+ return out.sort().reverse()}
+function bodyView(){
+ var rows=(BODY.rows||[]).filter(function(r){return r[BODY.metric]!=null});
+ if(BODY.view==='month'){var m=BODY.month||(bodyMonths()[0]||'');
+  rows=rows.filter(function(r){return String(r.logged_on).slice(0,7)===m})}
+ return rows}
+
+/* ---- the graph ----
+   One measurement at a time, so there is one line and no legend to read: the heading names
+   it. A crosshair follows the pointer and names the nearest reading. */
+function bodyChart(rows,key,pfx){
+ pfx=pfx||'bm';
+ var W=760,H=260,PL=52,PR=16,PT=18,PB=34;
+ if(!rows.length)return'<div class="empty">Nothing recorded for this view yet.</div>';
+ if(rows.length===1){var r0=rows[0];
+  return'<div class="bmone"><b>'+bmNum(r0[key],bmDp(key))+' '+esc(bmUnit(key))+'</b>'+
+   '<span>on '+esc(bmOrd(r0.logged_on))+'. You may now keep track of your Fitness Journey here.</span></div>'}
+ var xs=rows.map(function(r){return bmDate(r.logged_on).getTime()});
+ var ys=rows.map(function(r){return +r[key]});
+ var x0=Math.min.apply(null,xs),x1=Math.max.apply(null,xs);
+ var y0=Math.min.apply(null,ys),y1=Math.max.apply(null,ys);
+ var pad=(y1-y0)||Math.max(1,Math.abs(y1)*0.05);y0-=pad*0.25;y1+=pad*0.25;
+ function px(t){return x1===x0?PL+(W-PL-PR)/2:PL+(t-x0)/(x1-x0)*(W-PL-PR)}
+ function py(v){return PT+(1-(v-y0)/((y1-y0)||1))*(H-PT-PB)}
+ var ticks=[],STEPS=4;
+ for(var i=0;i<=STEPS;i++)ticks.push(y0+(y1-y0)*i/STEPS);
+ var grid=ticks.map(function(v){var y=py(v).toFixed(1);
+  return'<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+y+'" y2="'+y+'" stroke="var(--line)" stroke-width="1"/>'+
+   '<text x="'+(PL-8)+'" y="'+(+y+4)+'" text-anchor="end" class="bmax">'+
+    bmNum(v,Math.min(bmDp(key),1))+'</text>'}).join('');
+ var d=rows.map(function(r,i){return(i?'L':'M')+px(xs[i]).toFixed(1)+' '+py(ys[i]).toFixed(1)}).join(' ');
+ var dots=rows.map(function(r,i){
+  return'<circle cx="'+px(xs[i]).toFixed(1)+'" cy="'+py(ys[i]).toFixed(1)+'" r="4.5" '+
+   'fill="var(--navy)" stroke="var(--card)" stroke-width="2"/>'}).join('');
+ var pts=rows.map(function(r,i){return px(xs[i]).toFixed(1)+','+py(ys[i]).toFixed(1)+','+
+   (+r[key])+','+r.logged_on}).join(';');
+ var first=bmShort(rows[0].logged_on),last=bmShort(rows[rows.length-1].logged_on);
+ return'<div class="bmchart" id="'+pfx+'Chart" data-pts="'+esc(pts)+'" data-key="'+esc(key)+'">'+
+  '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" role="img" '+
+   'aria-label="'+esc(bmLabel(key)+' over time')+'">'+
+   grid+
+   '<path d="'+d+'" fill="none" stroke="var(--navy)" stroke-width="2" '+
+    'stroke-linejoin="round" stroke-linecap="round"/>'+dots+
+   '<line id="'+pfx+'Cross" x1="0" x2="0" y1="'+PT+'" y2="'+(H-PB)+'" stroke="var(--navy-line)" '+
+    'stroke-width="1" style="display:none"/>'+
+   '<text x="'+PL+'" y="'+(H-10)+'" class="bmax">'+esc(first)+'</text>'+
+   '<text x="'+(W-PR)+'" y="'+(H-10)+'" text-anchor="end" class="bmax">'+esc(last)+'</text>'+
+  '</svg><div class="bmtip" id="'+pfx+'Tip" hidden></div></div>'}
+
+/* The crosshair is wired after each render — the markup above is replaced wholesale. */
+function bodyWireChart(pfx){
+ pfx=pfx||'bm';
+ var box=document.getElementById(pfx+'Chart');if(!box)return;
+ var svg=box.querySelector('svg'),cross=document.getElementById(pfx+'Cross'),tip=document.getElementById(pfx+'Tip');
+ if(!svg||!cross||!tip)return;
+ var pts=(box.getAttribute('data-pts')||'').split(';').filter(Boolean).map(function(s){
+  var p=s.split(',');return{x:+p[0],y:+p[1],v:+p[2],d:p[3]}});
+ var key=box.getAttribute('data-key')||'';
+ if(!pts.length)return;
+ function move(ev){
+  var r=box.getBoundingClientRect();
+  var cx=(ev.clientX-r.left)/r.width*760;
+  var best=pts[0],bd=1e9;
+  pts.forEach(function(p){var dd=Math.abs(p.x-cx);if(dd<bd){bd=dd;best=p}});
+  cross.setAttribute('x1',best.x);cross.setAttribute('x2',best.x);cross.style.display='';
+  tip.hidden=false;
+  tip.innerHTML='<b>'+bmNum(best.v,bmDp(key))+' '+esc(bmUnit(key))+'</b><span>'+esc(bmNice(best.d))+'</span>';
+  var left=best.x/760*r.width;
+  tip.style.left=Math.max(4,Math.min(r.width-4,left))+'px'}
+ function out(){cross.style.display='none';tip.hidden=true}
+ box.addEventListener('mousemove',move);
+ box.addEventListener('mouseleave',out);
+ box.addEventListener('touchmove',function(e){if(e.touches[0])move(e.touches[0])},{passive:true});
+ box.addEventListener('touchend',out)}
+
+function renderBody(){
+ var wrap=$('#bodyWrap');if(!wrap)return;
+ if(!sb||!USER)return wrap.innerHTML='<div class="empty">Sign in to keep track of your measurements.</div>';
+ if(BODY.loading&&!BODY.rows)return wrap.innerHTML='<div class="empty">Loading…</div>';
+ var rows=BODY.rows||[],last=rows.length?rows[rows.length-1]:null,prev=rows.length>1?rows[rows.length-2]:null;
+ var months=bodyMonths();
+ if(BODY.view==='month'&&!BODY.month)BODY.month=months[0]||'';
+ var w=last&&last.weight_kg!=null?+last.weight_kg:(PROFILE&&+PROFILE.weight_kg)||null;
+ var h=last&&last.height_cm!=null?+last.height_cm:(PROFILE&&+PROFILE.height_cm)||null;
+ var bmr=bmBmr(w,h),act=bmAct(),tdee=bmr&&act?Math.round(bmr*act):null;
+ var musclePct=(last&&last.muscle_kg&&w)?Math.round(last.muscle_kg/w*1000)/10:null;
+
+ var form='<form onsubmit="return bodySave(event)" class="bmform">'+
+  '<div class="bmgrid">'+BMETRICS.map(function(m){
+   var pre=m[0]==='height_cm'&&h?' value="'+h+'"':'';
+   return'<div><label class="lb">'+esc(m[1])+' ( '+esc(m[2])+' )</label>'+
+    '<input type="number" step="any" min="0" id="b_'+m[0]+'" inputmode="decimal"'+pre+'></div>'}).join('')+
+  '</div>'+
+  '<div class="hint">Leave anything your scale does not report empty. BMI is worked out from your '+
+   'Weight and Height if you do not enter it.</div>'+
+  '<div class="row" style="margin-top:10px"><button class="btn btn-y" id="bSaveBtn" type="submit">'+
+   'Save Today’s Report</button></div>'+
+  '<div id="bodyMsg"></div></form>';
+
+ var bands='';
+ if(last){
+  bands=bmBar('BMI',last.bmi,bmBand('bmi'),'KG / m²',1)+
+   bmBar('Body Fat',last.fat_pct,bmBand('fat_pct'),'%',1)+
+   bmBar('Visceral Fat',last.visceral,bmBand('visceral'),'level',0)+
+   bmBar('Skeletal Muscle',musclePct,bmBand('musclePct'),'% of body weight',1,true)}
+
+ var energy='';
+ if(bmr){
+  energy='<div class="bmcards">'+
+   '<div class="bmcard"><span>Basal Metabolic Rate ( BMR )</span><b>'+bmr+'</b><i>KCAL a day at Rest</i></div>'+
+   (tdee?'<div class="bmcard"><span>Daily Caloric Intake</span><b>'+tdee+'</b><i>KCAL a day, '+
+     esc(bmActWord(act))+' ( BMR × '+act+' )</i></div>'
+    :'<div class="bmcard"><span>Daily Caloric Intake</span><b>—</b><i>set your activity level in '+
+     '<button type="button" class="linkbtn" onclick="setTab(\'details\')">Settings</button> and this fills in</i></div>')+
+   '</div>'}
+ else energy='<div class="msg warn">Add your date of birth and sex in <button type="button" class="linkbtn" onclick="setTab(\'details\')">Settings</button>, '+
+   'and enter a weight and height above — then your Basal Metabolic Rate and daily intake appear here.</div>';
+
+ var view=bodyView();
+ var chips=BMETRICS.filter(function(m){return m[0]!=='height_cm'}).map(function(m){
+  return'<button type="button" class="bmchip'+(BODY.metric===m[0]?' on':'')+'" '+
+   'onclick="bodySetMetric(\''+m[0]+'\')">'+esc(m[1])+'</button>'}).join('');
+ var viewBtns='<button type="button" class="bmchip'+(BODY.view==='all'?' on':'')+'" onclick="bodySetView(\'all\')">Overall</button>'+
+  '<button type="button" class="bmchip'+(BODY.view==='month'?' on':'')+'" onclick="bodySetView(\'month\')">Monthly</button>'+
+  (BODY.view==='month'&&months.length
+   ?' <select onchange="bodySetMonth(this.value)" class="bmsel">'+months.map(function(m){
+      var d=new Date(+m.slice(0,4),+m.slice(5,7)-1,1);
+      return'<option value="'+m+'"'+(m===BODY.month?' selected':'')+'>'+
+       d.toLocaleDateString('en-MY',{month:'long',year:'numeric'})+'</option>'}).join('')+'</select>':'');
+
+ var delta='';
+ if(last&&prev&&last[BODY.metric]!=null&&prev[BODY.metric]!=null){
+  var dv=+last[BODY.metric]-+prev[BODY.metric];
+  delta=' <span class="bmdelta">'+(dv>0?'▲ +':dv<0?'▼ ':'')+bmNum(Math.abs(dv),bmDp(BODY.metric))+
+   ' '+esc(bmUnit(BODY.metric))+' since '+esc(bmShort(prev.logged_on))+'</span>'}
+
+ var hist=rows.length?'<div class="bmhist"><h3>Every Reading</h3>'+
+  '<div class="bmtable"><table><thead><tr><th>Date</th>'+
+   BMETRICS.map(function(m){return'<th class="r">'+esc(m[1])+'</th>'}).join('')+'<th></th></tr></thead><tbody>'+
+  rows.slice().reverse().map(function(r){
+   return'<tr><td><b>'+esc(bmOrd(r.logged_on))+'</b></td>'+
+    BMETRICS.map(function(m){return'<td class="r">'+bmNum(r[m[0]],m[3])+'</td>'}).join('')+
+    '<td class="r">'+(BODY.del===r.id
+      ?'<button class="btn btn-o s" onclick="bodyDel(\''+r.id+'\')">Remove</button> '+
+       '<button class="btn btn-o s" onclick="bodyCancelDel()">Keep</button>'
+      :'<button class="btn btn-o s" onclick="bodyAskDel(\''+r.id+'\')">Remove</button>')+'</td></tr>'}).join('')+
+  '</tbody></table></div></div>':'';
+
+ wrap.innerHTML=
+  (BODY.err?'<div class="msg bad">'+esc(BODY.err)+'</div>':'')+
+  form+
+  (last?'<div class="bmlast"><h3>Your Latest Report <span>'+esc(bmOrd(last.logged_on))+'</span></h3>'+
+    bands+'</div>':'')+
+  energy+
+  '<div class="bmgraph"><h3>Overview'+delta+'</h3>'+
+   '<div class="bmrow">'+chips+'</div><div class="bmrow">'+viewBtns+'</div>'+
+   bodyChart(view,BODY.metric)+'</div>'+
+  hist;
+ bodyWireChart()}
+
+
+
+/* ===== The five numbers =====
+   Sex, date of birth, height, weight and activity level are what a Basal Metabolic Rate is
+   worked out from — the Personalised Meal Plan used to ask for them itself. They belong to the
+   person rather than to one plan, so they are asked once here, straight after signing in, and
+   every page reads them from the profile afterwards.
+   Answering is never forced: "Fill up later" puts it away for this visit and it is offered
+   again next time they sign in, until the profile is complete. */
+var /* Worded exactly as the Personalised Meal Plan questionnaire words them, so the same
+   question never reads two different ways. */
+OBACT=[['1.2','The Minimum Caloric Intake','Not Active — Lower Caloric needs ( BMR × 1.2 )'],
+ ['1.375','Moderate Caloric Intake','Moderately Active — Moderate Caloric needs ( BMR × 1.375 )'],
+ ['1.45','High Caloric Intake','Active — High Caloric needs ( BMR × 1.45 )']];
+function obMissing(){
+ var p=PROFILE||{};
+ var out=[];
+ if(!p.gender)out.push('sex');
+ if(!p.birth_date)out.push('date of birth');
+ if(!(+p.height_cm>0))out.push('height');
+ if(!(+p.weight_kg>0))out.push('weight');
+ if(!(+p.activity>0))out.push('activity level');
+ return out}
+function obSnoozedNow(){try{return sessionStorage.getItem('aera.bodyPrompt')==='later'}catch(e){return false}}
+/* ===== Welcome gifts =====
+   A brand-new account is met once, and only once, with the two things AERA gives away :
+   the First Order Voucher and 500 AERA Points. Both are only theirs when they press Accept.
+   The Points are written by claim_welcome_gift() in Supabase -- customers cannot write to the
+   ledger themselves -- and that function is safe to call twice, so a double tap costs nothing.
+   The voucher terms are read from the same settings sheet the Checkout reads, so the two can
+   never disagree about what it is worth. */
+var WG={claim:null,step:0,busy:false,fo:{mode:'pct',pct:10,rm:0,minRm:300,cap:0},loaded:false};
+var WG_SET_URL='/api/public/landing-pages/6938/sheet-data';
+async function wgSettings(){
+ if(WG.loaded)return WG.fo;
+ try{var r=await fetch(WG_SET_URL,{cache:'no-store'});var j=await r.json();
+  (j.rows||j.data||[]).forEach(function(row){
+   var k=String(row.Key||'').trim().toLowerCase(),v=row.Value;
+   if(k==='first_order_mode')WG.fo.mode=(+v||0)===1?'pct':'rm';
+   if(k==='first_order_pct')WG.fo.pct=Math.max(0,Math.min(100,+v||0));
+   if(k==='first_order_rm')WG.fo.rm=Math.max(0,+v||0);
+   if(k==='first_order_min_rm')WG.fo.minRm=Math.max(0,+v||0);
+   if(k==='first_order_max_rm')WG.fo.cap=Math.max(0,+v||0)})}catch(e){}
+ WG.loaded=true;return WG.fo}
+function wgHeadline(){var f=WG.fo;return f.mode==='pct'?(f.pct+'%'):('RM '+(+f.rm||0).toFixed(0))}
+function wgTerms(){var f=WG.fo,t=[];
+ if(f.minRm>0)t.push('On Meals of RM '+(+f.minRm).toFixed(0)+' or more');
+ if(f.mode==='pct'&&f.cap>0)t.push('Up to RM '+(+f.cap).toFixed(0)+' OFF');
+ t.push('First Order ONLY');
+ return t.join(' \u00b7 ')}
+async function wgCheck(){
+ if(!sb||!USER)return null;
+ try{var r=await sb.from('welcome_claims').select('email,ap,claimed_at').limit(1);
+  WG.claim=(r.data&&r.data.length)?r.data[0]:null}catch(e){WG.claim=null}
+ return WG.claim}
+/* The gifts are for signing up, not for handing over a weight and a height, so they come
+   first. If there is no gift to give ( already welcomed, or not a new customer ) we go straight
+   to the numbers, and if the customer closes the gifts the numbers follow a moment later. */
+async function wgFirstThenNumbers(){
+ var shown=false;
+ try{shown=await wgMaybe()}catch(e){shown=false}
+ if(!shown){try{obMaybeAsk()}catch(e){}}}
+function wgAfterClose(){try{setTimeout(function(){obMaybeAsk()},350)}catch(e){}}
+async function wgMaybe(){
+ if(!sb||!USER)return false;
+ await wgCheck();
+ if(WG.claim)return false;                  /* already welcomed */
+ if(ORDERCOUNT>0||(ORDERS&&ORDERS.length))return false; /* not a new customer */
+ await wgSettings();
+ WG.step=1;wgPaint();return true}
+function wgEl(){var el=document.getElementById('wgWrap');
+ if(!el){el=document.createElement('div');el.id='wgWrap';document.body.appendChild(el)}return el}
+function wgPaint(){
+ var el=wgEl();
+ if(!WG.step){el.classList.remove('on');el.innerHTML='';return}
+ el.classList.add('on');
+ el.innerHTML='<div class="wgveil"></div><div class="wgbox" role="dialog" aria-modal="true" aria-labelledby="wgTitle">'+
+  (WG.step===1?wgVoucher():wgPoints())+'</div>';
+ var b=el.querySelector('.wgbtn');if(b)b.focus()}
+function wgVoucher(){
+ var co=WG.fo.mode==='pct'?WG.fo.pct+'%':'RM '+(+WG.fo.rm||0).toFixed(0);
+ return '<div class="wgeyebrow">Welcome to AERA</div>'+
+  '<h3 id="wgTitle">Your First Order Voucher</h3>'+
+  '<p>A Gift for Signing-Up. '+co+' OFF your First Order of Meals.</p>'+
+  '<div class="tkt"><div class="tktin">'+
+   '<div class="tktl"><div class="k">First Order Voucher</div>'+
+    '<div class="n">AERA Meal Prep</div>'+
+    '<div class="s">Applied at Checkout. No Code to type.</div></div>'+
+   '<div class="tktr"><div class="tktbig">'+wgHeadline()+'</div><div class="tktoff">OFF</div></div>'+
+  '</div></div>'+
+  '<div class="wgterms">'+wgTerms()+'</div>'+
+  '<button type="button" class="wgbtn" onclick="wgAcceptVoucher()">Accept</button>'+
+  '<div class="wgstep">1 of 2</div>'}
+function wgPoints(){
+ return '<div class="wgeyebrow">And one more thing</div>'+
+  '<h3 id="wgTitle">500 AERA Points, on us</h3>'+
+  '<p>AERA Points buy Free Delivery Vouchers and AERA Kit. You earn 5 more AP for every RM 1 you spend on Meals.</p>'+
+  '<div class="apgift"><div class="apbig">500<span>AP</span></div>'+
+   '<div class="apsub">Welcoming Gift \u00b7 Valid for 6 Months</div></div>'+
+  '<div class="wgterms">They land in your Account the moment you accept.</div>'+
+  '<button type="button" class="wgbtn" id="wgGo" onclick="wgAcceptPoints()"'+(WG.busy?' disabled':'')+'>'+
+   (WG.busy?'Adding\u2026':'Accept')+'</button>'+
+  '<div class="wgmsg" id="wgMsg"></div>'+
+  '<div class="wgstep">2 of 2</div>'}
+function wgAcceptVoucher(){WG.step=2;wgPaint()}
+async function wgAcceptPoints(){
+ if(WG.busy)return;WG.busy=true;wgPaint();
+ var out=null,err='';
+ try{var r=await sb.rpc('claim_welcome_gift',{p_voucher:wgHeadline()+' off first order'});
+  if(r.error)throw r.error;out=r.data||{}}catch(e){err=(e&&e.message)||String(e)}
+ WG.busy=false;
+ if(err||!out||out.ok===false){
+  wgPaint();
+  var m=document.getElementById('wgMsg');
+  if(m)m.innerHTML='<span style="color:var(--bad)">That did not go through \u2014 '+esc(err||'please try again')+'</span>';
+  return}
+ WG.claim={email:(USER.email||'').toLowerCase(),ap:out.ap||500,claimed_at:new Date().toISOString()};
+ try{cacheAccount()}catch(e){}
+ wgDone(out.ap||500)}
+function wgDone(ap){
+ var el=wgEl();
+ el.innerHTML='<div class="wgveil"></div><div class="wgbox" role="dialog" aria-modal="true">'+
+  '<canvas id="wgFx"></canvas>'+
+  '<div class="wgeyebrow">Claimed</div>'+
+  '<h3>Both are YOURS</h3>'+
+  '<p>'+ap+' AERA Points are in your Account, and your First Order Voucher is waiting at Checkout.</p>'+
+  '<div class="apgift"><div class="apbig">'+ap+'<span>AP</span></div>'+
+   '<div class="apsub">'+wgHeadline()+' OFF for your First Order, too!</div></div>'+
+  '<button type="button" class="wgbtn" onclick="wgClose()">Start Ordering</button></div>';
+ wgFire();
+ try{loadPoints()}catch(e){}}
+function wgClose(){WG.step=0;wgPaint();try{if(WGFX)cancelAnimationFrame(WGFX)}catch(e){}
+ wgAfterClose()}
+/* Fireworks : a few bursts over the card, then it stops on its own. */
+var WGFX=null;
+function wgFire(){
+ var c=document.getElementById('wgFx');if(!c)return;
+ var box=c.parentNode,dpr=Math.min(2,window.devicePixelRatio||1);
+ function size(){c.width=box.clientWidth*dpr;c.height=box.clientHeight*dpr;
+  c.style.width=box.clientWidth+'px';c.style.height=box.clientHeight+'px'}
+ size();
+ var reduce=false;try{reduce=matchMedia('(prefers-reduced-motion:reduce)').matches}catch(e){}
+ if(reduce)return;
+ var g=c.getContext('2d'),P=[],t0=performance.now(),COL=['#FDB913','#FFCB4D','#16479E','#2F8F5B','#FFFFFF'];
+ function burst(x,y){
+  var n=34+Math.round(Math.random()*16),hue=COL[Math.floor(Math.random()*COL.length)];
+  for(var i=0;i<n;i++){var a=Math.PI*2*i/n,sp=(1.6+Math.random()*2.6)*dpr;
+   P.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1,c:hue,r:(1.4+Math.random()*1.8)*dpr})}}
+ var times=[0,260,520,900,1400],fired=0;
+ function frame(now){
+  var el=now-t0;
+  while(fired<times.length&&el>=times[fired]){
+   burst((0.18+Math.random()*0.64)*c.width,(0.16+Math.random()*0.46)*c.height);fired++}
+  g.clearRect(0,0,c.width,c.height);
+  for(var i=P.length-1;i>=0;i--){var p=P[i];
+   p.x+=p.vx;p.y+=p.vy;p.vy+=0.045*dpr;p.vx*=0.985;p.vy*=0.985;p.life-=0.013;
+   if(p.life<=0){P.splice(i,1);continue}
+   g.globalAlpha=Math.max(0,p.life);g.fillStyle=p.c;
+   g.beginPath();g.arc(p.x,p.y,p.r,0,6.283);g.fill()}
+  g.globalAlpha=1;
+  if(el<4200||P.length)WGFX=requestAnimationFrame(frame);else g.clearRect(0,0,c.width,c.height)}
+ WGFX=requestAnimationFrame(frame)}
+/* The five numbers are asked for only when the Customer presses the button : #calories */
+function obMaybeAsk(){
+ if(!sb||!USER||!PROFILE)return;
+ if(String(location.hash||'').toLowerCase().indexOf('calories')<0)return;
+ obOpen()}
+function obOpen(){
+ var p=PROFILE||{};
+ var el=document.getElementById('obWrap');
+ if(!el){el=document.createElement('div');el.id='obWrap';document.body.appendChild(el)}
+ el.innerHTML='<div class="obveil" onclick="obLater()"></div><div class="obbox" role="dialog" aria-modal="true" aria-labelledby="obTitle">'+
+  '<h3 id="obTitle">BMR and TDEE Calculator</h3>'+
+  '<p>Please fill up these infos for us to calculate your Daily Caloric Intake for you. '+
+  'Fill them in once and the Personalised Meal Plan starts from them. You will not be asked again.</p>'+
+  '<form onsubmit="return obSave(event)">'+
+   '<div class="obgrid">'+
+    '<div><label class="lb">Sex</label><select id="obSex">'+
+     '<option value="">Choose…</option>'+
+     '<option value="m"'+(p.gender==='m'?' selected':'')+'>Male</option>'+
+     '<option value="f"'+(p.gender==='f'?' selected':'')+'>Female</option></select>'+
+     '<div class="hint">Used only for the Calorie Formula.</div></div>'+
+    '<div><label class="lb">Date of Birth</label>'+
+     '<input type="hidden" id="obDob" value="'+esc(p.birth_date||'')+'">'+
+     '<div class="hint">DD / MM / YYYY</div></div>'+
+    '<div><label class="lb">Height ( cm )</label>'+
+     '<input type="number" step="any" min="80" max="250" id="obH" inputmode="decimal" value="'+esc(p.height_cm||'')+'"></div>'+
+    '<div><label class="lb">Body weight ( kg )</label>'+
+     '<input type="number" step="any" min="25" max="350" id="obW" inputmode="decimal" value="'+esc(p.weight_kg||'')+'"></div>'+
+   '</div>'+
+   '<label class="lb" style="margin-top:12px">Activity level in a week</label>'+
+   '<div class="obacts">'+OBACT.map(function(a){
+     return'<label class="obact"><input type="radio" name="obAct" value="'+a[0]+'"'+
+      (String(p.activity||'')===a[0]?' checked':'')+'><b>'+esc(a[1])+'</b><span>'+esc(a[2])+'</span></label>'}).join('')+
+   '</div>'+
+   '<div id="obMsg"></div>'+
+   '<div class="obrow">'+
+    '<button type="submit" class="btn btn-y" id="obSaveBtn">Fill in now</button>'+
+    '<button type="button" class="btn btn-o" onclick="obLater()">Fill up later</button>'+
+   '</div>'+
+   '<div class="hint">Nothing here is shared with anyone. You can change it any time under '+
+   '<b>Settings</b> and <b>Weight Control</b>.</div>'+
+  '</form></div>';
+ el.style.display='block';
+ /* the same day / month / year lists Settings uses, so the order is DD / MM / YYYY on every
+    device rather than whatever the browser's own date box decides */
+ try{OBDOB=dobPicker('obDob',14,100);OBDOB.set(p.birth_date||'')}catch(e){}}
+var OBDOB=null;
+function obClose(){var el=document.getElementById('obWrap');if(el)el.style.display='none';
+ try{if(String(location.hash||'').toLowerCase().indexOf('calories')>=0)
+  history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
+async function obLater(){
+ try{sessionStorage.setItem('aera.bodyPrompt','later')}catch(e){}
+ obClose();
+ /* recorded so it is known who put it off, and for how long */
+ try{if(sb&&USER)await sb.from('profiles').upsert({id:USER.id,email:USER.email.toLowerCase(),
+   body_prompt_snoozed_at:new Date().toISOString(),updated_at:new Date().toISOString()})}catch(e){}
+ if(GOHOME){var u=GOHOME;GOHOME='';location.replace(u)}}
+async function obSave(e){
+ if(e&&e.preventDefault)e.preventDefault();
+ var sex=$('#obSex').value,dob=$('#obDob').value,h=+$('#obH').value||0,w=+$('#obW').value||0;
+ var actEl=document.querySelector('input[name="obAct"]:checked'),act=actEl?+actEl.value:0;
+ var m=$('#obMsg');
+ if(!sex||!dob||!(h>=80&&h<=250)||!(w>=25&&w<=350)||!act){
+  m.innerHTML='<div class="msg warn">Please fill in all five — each one changes the result.</div>';return false}
+ var age=(function(){var b=new Date(dob),n=new Date(),a=n.getFullYear()-b.getFullYear(),
+   d=n.getMonth()-b.getMonth();if(d<0||(d===0&&n.getDate()<b.getDate()))a--;return a})();
+ if(!(age>=14&&age<=100)){
+  m.innerHTML='<div class="msg warn">Please check the date of birth.</div>';return false}
+ busy('obSaveBtn',true,'Saving…');
+ var up={id:USER.id,email:USER.email.toLowerCase(),gender:sex,birth_date:dob,
+  birth_year:+String(dob).slice(0,4),height_cm:h,weight_kg:w,activity:act,
+  updated_at:new Date().toISOString()};
+ var r=await sb.from('profiles').upsert(up);
+ busy('obSaveBtn',false);
+ if(r.error){m.innerHTML='<div class="msg bad">'+esc(friendly(r.error))+'</div>';return false}
+ Object.assign(PROFILE,up);
+ try{sessionStorage.setItem('aera.bodyPrompt','done')}catch(_){}
+ obClose();
+ GOHOME='';acctReveal();
+ if(typeof cacheAccount==='function')cacheAccount();
+ /* the first weight is worth keeping as the first point on the graph */
+ try{await sb.from('body_logs').insert({user_id:USER.id,weight_kg:w,height_cm:h,
+   bmi:Math.round(w/Math.pow(h/100,2)*10)/10,source:'signup'})}catch(_){}
+ BODY.loaded=false;
+ setTab('body');
+ bodyLoad(true);
+ return false}
+
+
+/* ===== What each meal looks like =====
+   The picture of a meal in its MAP bento box, keyed by the code the order carries. The list
+   is taken from the Checkout page's own menu, which is where the shop keeps it; a meal added
+   there without being added here simply shows no picture, which is why every use below is
+   written to cope with a miss. */
+var MEALPIC={"MEAL-10":"https://my.chatbees.io/objects/quick-uploads/1302/d228cac817165404.jpg","MEAL-23":"https://my.chatbees.io/objects/quick-uploads/1302/54ad5f5f99873bd6.jpg","MEAL-13":"https://my.chatbees.io/objects/quick-uploads/1302/7e20ca59b543daa7.jpg","MEAL-58":"https://my.chatbees.io/objects/quick-uploads/1302/e5889c544b7a47e8.jpg","MEAL-25":"https://my.chatbees.io/objects/quick-uploads/1302/40ba7660ea09bfc4.jpg","MEAL-27":"https://my.chatbees.io/objects/quick-uploads/1302/051b3233749d80a9.jpg","MEAL-59":"https://my.chatbees.io/objects/quick-uploads/1302/707b85bebe9ec81d.jpg","MEAL-15":"https://my.chatbees.io/objects/quick-uploads/1302/065eceba3b2ebcaf.jpg","MEAL-8":"https://my.chatbees.io/objects/quick-uploads/1302/cdd3eaa61bcef587.jpg","MEAL-19":"https://my.chatbees.io/objects/quick-uploads/1302/c5ac5dbd6b40f89e.jpg","MEAL-34":"https://my.chatbees.io/objects/quick-uploads/1302/e478eb3ebf3769cc.jpg","MEAL-30":"https://my.chatbees.io/objects/quick-uploads/1302/0c7c881b9c97ae2e.jpg","MEAL-14":"https://my.chatbees.io/objects/quick-uploads/1302/163c79a8c25dbc56.jpg","MEAL-21":"https://my.chatbees.io/objects/quick-uploads/1302/378629b116cf880d.jpg","MEAL-9":"https://my.chatbees.io/objects/quick-uploads/1302/f1f440404d9bdc9f.jpg","MEAL-16":"https://my.chatbees.io/objects/quick-uploads/1302/3d4dda127200808e.jpg","MEAL-22":"https://my.chatbees.io/objects/quick-uploads/1302/cb4b717d4f73a112.jpg","MEAL-33":"https://my.chatbees.io/objects/quick-uploads/1302/97d491c90d587bd7.jpg","MEAL-26":"https://my.chatbees.io/objects/quick-uploads/1302/2750fce3b4d73063.jpg","MEAL-24":"https://my.chatbees.io/objects/quick-uploads/1302/613bf3feec488d0b.jpg","MEAL-11":"https://my.chatbees.io/objects/quick-uploads/1302/fbd9528ea969604d.jpg","MEAL-18":"https://my.chatbees.io/objects/quick-uploads/1302/6cd842cd6fd9717c.jpg","MEAL-12":"https://my.chatbees.io/objects/quick-uploads/1302/d37d78c8c5bbcdae.jpg","MEAL-20":"https://my.chatbees.io/objects/quick-uploads/1302/4ecc1270ff70aa0f.jpg","MEAL-32":"https://my.chatbees.io/objects/quick-uploads/1302/65771ee44125250e.jpg","MEAL-17":"https://my.chatbees.io/objects/quick-uploads/1302/89b77953054ae8aa.jpg","MEAL-28":"https://my.chatbees.io/objects/quick-uploads/1302/4594c863149f5972.jpg","MEAL-36":"https://my.chatbees.io/objects/quick-uploads/1302/9be81a3880a5b89d.jpg","MEAL-31":"https://my.chatbees.io/objects/quick-uploads/1302/2cfeb4c55c209802.jpg"};
+function mealPic(it){var k=String((it&&(it.sku||it.code))||'').toUpperCase();return MEALPIC[k]||''}
+
+/* ===== Overview =====
+   What someone sees the moment they sign in. Not an introduction to AERA — they have already
+   bought from us — but the things that are theirs: the plan they built, the weight they are
+   tracking, what is on its way, and what they have saved. Each loader calls this when it
+   lands, so the page fills in rather than waiting on a spinner. */
+var ORDERS=[], ORDERCOUNT=0;
+var REFSUM={isRef:false,code:'',rate:0,owed:0,life:0};
+var OVPLAN=false;   /* is the meal plan row open */
+
+/* The picture on a plan meal : that box's dishes laid into the MAP bento tray, or flat in a
+   vacuum pouch when that is how their last Order was packed. Dish photos and categories come
+   from the Kitchen List, the same catalogue the Plan Builder reads. */
+var AE_TRAY='https://my.chatbees.io/objects/generated-images/1302/1788628096238-5f5755c542d808b9.png';
+var AE_CAT=null,AE_CATP=null;
+function aeUnpack(d){var rows=d.r.map(function(v){var o={};for(var i=0;i<d.k.length;i++)o[d.k[i]]=v[i];return o});
+ var by={};rows.forEach(function(o){var im=d.i[o.img];o.img=im?d.p[im[0]]+im[1]+(im[2]||'.jpg'):'';
+  o.cat='pcvgs'.charAt(o.cat);by[o.c]=o});return by}
+function aeCat(){if(AE_CATP)return AE_CATP;
+ AE_CATP=new Promise(function(res){
+  try{var raw=localStorage.getItem('aera.cat');if(raw){var o=JSON.parse(raw);if(o&&o.d){AE_CAT=aeUnpack(o.d);return res(AE_CAT)}}}catch(e){}
+  fetch('https://my.chatbees.io/p/FaMS3PtRe',{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){
+   var a=t.indexOf('/*CAT*/'),b=t.indexOf('/*ENDCAT*/');if(a<0||b<a)return res(null);
+   try{AE_CAT=aeUnpack(JSON.parse(t.slice(a+7,b)))}catch(e){}res(AE_CAT)}).catch(function(){res(null)})});
+ return AE_CATP}
+function aePack(){try{var oo=(typeof ovNextOrder==='function')?ovNextOrder():null;var src=oo&&(oo.up||oo.last);
+  if(src&&src.packaging)return src.packaging}catch(e){}
+ try{return (typeof PROFILE!=='undefined'&&PROFILE&&PROFILE.packaging)||''}catch(e){return ''}}
+function aeBox(m,pack){if(!AE_CAT)return '';
+ var P=[],C=null,V=[];
+ (m.comps||[]).forEach(function(c){var r=AE_CAT[String(c.code||'')];if(!r||!r.img)return;
+  if(r.cat==='p'){if(P.length<2)P.push(r)}
+  else if(r.cat==='c'){if(!C)C=r}
+  else if(r.cat==='v'||r.cat==='g'){if(V.length<2)V.push(r)}});
+ if(!P.length&&!C&&!V.length)return '';
+ var cell=function(r,cls){return r?'<b class="'+cls+'" style="background-image:url('+r.img+')"></b>':''};
+ var vac=String(pack||'').toLowerCase().indexOf('vac')===0;
+ var inner=vac?cell(P[0],'pro')+cell(C,'crb')+cell(V[0],'veg')
+  :((P.length>1?cell(P[0],'pro h1')+cell(P[1],'pro h2'):cell(P[0],'pro'))+cell(C,'crb')+
+    (V.length>1?cell(V[0],'veg w1')+cell(V[1],'veg w2'):cell(V[0],'veg')));
+ return '<div class="aebox'+(vac?' vac':'')+'"'+(vac?'':' style="background-image:url('+AE_TRAY+')"')+'>'+inner+'</div>'}
+try{aeCat().then(function(){try{if(typeof render==='function')render(true)}catch(e){}})}catch(e){}
+function ovToggle(){OVPLAN=!OVPLAN;renderOverview()}
+function ovBtn(tab,label,primary){
+ return'<button class="btn '+(primary?'btn-y':'btn-o')+' s" onclick="setTab(\''+tab+'\')">'+esc(label)+'</button>'}
+function ovLink(href,label){return'<a class="btn btn-y s" href="'+esc(href)+'">'+esc(label)+'</a>'}
+function ovCard(o){
+ return'<div class="ovcard">'+
+  '<div class="ovtop"><span class="ovlabel">'+esc(o.label)+'</span>'+
+   (o.chip?'<span class="chip '+(o.chipKind||'')+'">'+esc(o.chip)+'</span>':'')+'</div>'+
+  (o.big?'<div class="ovbig">'+o.big+'</div>':'')+
+  (o.line?'<div class="ovline">'+o.line+'</div>':'')+
+  (o.sub?'<div class="ovsub">'+o.sub+'</div>':'')+
+  '<div class="ovgo">'+o.action+'</div></div>'}
+
+function ovNextOrder(){
+ var t=todayIso(),up=null,last=null;
+ ORDERS.forEach(function(o){
+  if(o.status==='cancelled')return;
+  if(!last||String(o.date)>String(last.date))last=o;
+  if(String(o.date)>=t&&o.status!=='delivered'){if(!up||String(o.date)<String(up.date))up=o}});
+ return{up:up,last:last}}
+
+/* ---- the meal plan row, closed to one line and open to the whole plan ---- */
+function ovPlanRow(){
+ var p=(PLANS&&PLANS.length)?PLANS[0]:null;
+ if(!p)return'<div class="ovplan empty-plan"><div class="ovtop"><span class="ovlabel">My Meal Plan</span></div>'+
+  '<div class="ovbig"><span class="ovnone">None yet</span></div>'+
+  '<div class="ovsub">Build one around your Calories and Macros, or hand us a Plan your Coach wrote.</div>'+
+  '<div class="ovgo">'+ovLink(SHOP_URL,'Build a plan')+'</div></div>';
+ var t=p.targets||{},pr=p.prefs||{},meals=Array.isArray(p.meals)?p.meals:[];
+ var head='<button type="button" class="ovplanhead" onclick="ovToggle()" aria-expanded="'+(OVPLAN?'true':'false')+'">'+
+  '<span class="ovlabel">My Meal Plan</span>'+
+  '<span class="ovplanline"><b>'+(+p.days||0)+' Days x '+(+p.meals_per_day||0)+' Meals</b>'+
+   '<span>'+(+p.boxes||meals.length||0)+' Boxes'+(+p.price?' · '+rm(p.price):'')+'</span></span>'+
+  '<span class="ovcaret" aria-hidden="true">'+(OVPLAN?'▴':'▾')+'</span></button>';
+ if(!OVPLAN)return'<div class="ovplan">'+head+'</div>';
+ var byDay={};meals.forEach(function(m){(byDay[m.day||1]=byDay[m.day||1]||[]).push(m)});
+ var days=Object.keys(byDay).sort(function(a,b){return a-b});
+ var body='<div class="ovplanbody">'+
+  (t.kcal?'<div class="ovtargets"><b>'+Math.round(t.kcal)+'</b> kcal a day · P '+Math.round(t.p||0)+
+    ' g · C '+Math.round(t.c||0)+' g · F '+Math.round(t.f||0)+' g'+
+    (pr.goal&&typeof GOAL!=='undefined'&&GOAL[pr.goal]?' · '+esc(GOAL[pr.goal]):'')+'</div>':'')+
+  (days.length?'<div class="ovdays">'+days.map(function(d){
+    return'<div class="ovday"><b>Day '+esc(d)+'</b>'+byDay[d].map(function(m){
+      var comps=(m.comps||[]);
+      /* the meal's own name is the heading; what is actually in the box goes underneath it */
+      return'<div class="ovmeal">'+aeBox(m,aePack())+'<span class="ovmtxt"><i class="noi18n">'+esc(m.name||'Meal').split(' · ').join('<br>')+'</i>'+
+       (comps.length
+         ?comps.map(function(c){return'<span>'+esc(c.name||'')+
+            (c.grams!=null?' <em>'+esc(c.grams)+' g</em>':'')+'</span>'}).join('')
+         :'<span>'+esc(m.name||'')+'</span>')+'</span></div>'}).join('')+
+    '</div>'}).join('')+'</div>'
+   :'<div class="ovsub">This plan has no meals saved against it.</div>')+
+  '<div class="ovgo">'+ovBtn('plans','Open & tune this plan',true)+'</div></div>';
+ return'<div class="ovplan open">'+head+body+'</div>'}
+
+/* ---- the whole graph, the same one the Weight Control page draws ---- */
+function ovWeight(){
+ var rows=(BODY&&BODY.rows)||[];
+ if(!rows.length)return'<div class="ovwide"><div class="ovtop"><span class="ovlabel">Weight Control</span></div>'+
+  '<div class="ovbig"><span class="ovnone">Empty</span></div>'+
+  '<div class="ovsub">Put in your Weight and Body Composition and watch it move over time.</div>'+
+  '<div class="ovgo">'+ovBtn('body','Add your first Report',true)+'</div></div>';
+ var last=rows[rows.length-1],prev=rows.length>1?rows[rows.length-2]:null;
+ var d=null;
+ if(prev&&last[BODY.metric]!=null&&prev[BODY.metric]!=null)d=+last[BODY.metric]-+prev[BODY.metric];
+ var chips=BMETRICS.filter(function(m){return m[0]!=='height_cm'}).map(function(m){
+  return'<button type="button" class="bmchip'+(BODY.metric===m[0]?' on':'')+'" '+
+   'onclick="bodySetMetric(\''+m[0]+'\')">'+esc(m[1])+'</button>'}).join('');
+ var views='<button type="button" class="bmchip'+(BODY.view==='all'?' on':'')+'" onclick="bodySetView(\'all\')">Overall</button>'+
+  '<button type="button" class="bmchip'+(BODY.view==='month'?' on':'')+'" onclick="bodySetView(\'month\')">Monthly</button>';
+ return'<div class="ovwide">'+
+  '<div class="ovtop"><span class="ovlabel">Weight Control</span>'+
+   '<span class="ovwnow"><b>'+bmNum(last[BODY.metric],bmDp(BODY.metric))+'</b> '+esc(bmUnit(BODY.metric))+
+   (d===null?'':' <i>'+(d<0?'▼ ':d>0?'▲ +':'')+bmNum(Math.abs(d),bmDp(BODY.metric))+'</i>')+'</span></div>'+
+  '<div class="bmrow">'+chips+'</div><div class="bmrow">'+views+'</div>'+
+  bodyChart(bodyView(),BODY.metric,'ov')+
+  '<div class="ovgo">'+ovBtn('body','Report Today',true)+'</div></div>'}
+
+function renderOverview(){
+ try{cacheAccount()}catch(e){}
+ var el=$('#ovWrap');if(!el||!USER)return;
+ var name=(PROFILE&&PROFILE.name)||(USER.user_metadata&&USER.user_metadata.name)||'';
+ var ap=+AP_AVAIL||0;
+
+ var cards=[];
+ var oo=ovNextOrder();
+ if(oo.up){var stt=STATUS[oo.up.status]||[oo.up.status||'—',''];
+  cards.push(ovCard({label:'Next Delivery',chip:stt[0],chipKind:stt[1],
+   big:fmtDate(oo.up.date),
+   line:(oo.up.slot?esc(slotLabel(oo.up.slot)):'')+(oo.up.fulfil==='pickup'?' · Self Pick-Up':''),
+   sub:esc(oo.up.order_no)+(ORDERCOUNT>1?' · '+ORDERCOUNT+' Orders all together':''),
+   action:ovBtn('orders','Order History',true)}))}
+ else if(oo.last)cards.push(ovCard({label:'Order History',
+   big:ORDERCOUNT+' <span>'+(ORDERCOUNT===1?'order':'orders')+'</span>',
+   line:'Last on '+fmtDate(oo.last.date),sub:'Nothing on its way at the moment.',
+   action:ovBtn('orders','Order History')}));
+ else cards.push(ovCard({label:'Order History',big:'<span class="ovnone">No Orders yet</span>',
+   sub:'Everything you Order shows up here with its Delivery Day and Tracking.',
+   action:ovLink(SHOP_URL,'See the Menu')}));
+
+ var home=loadHomeLib();
+ cards.push(ovCard({label:'My Home-Sourced Meal',
+  big:home.length?home.length+' <span>'+(home.length===1?'item':'items')+'</span>':'<span class="ovnone">Nothing Saved</span>',
+  sub:home.length?'Counted into your plan alongside what our kitchen cooks.'
+                 :'Everything you have keyed in on the Home-Sourced Meals Page. Add them to a plan from the “Your Week” step.',
+  action:ovBtn('home',home.length?'Manage':'Add Something')}));
+
+ if(REFSUM.isRef)cards.push(ovCard({label:'Cash-Back',chip:REFSUM.code,chipKind:'ok',
+  big:rm(REFSUM.owed)+' <span>due</span>',
+  line:REFSUM.life?rm(REFSUM.life)+' earned all together':'',
+  sub:REFSUM.rate+'% of the meal subtotal on every order placed with your code.',
+  action:ovBtn('refs','Referral statements')}));
+
+ el.innerHTML='<div class="ovhead">'+
+   '<div><h2>'+(name?esc(String(name).split(' ')[0])+'’s AERA':'Your AERA')+'</h2>'+
+   '<p>Everything that belongs to you, in one place.</p></div>'+
+   '<button type="button" class="ovap" onclick="setTab(\'points\')" title="AERA Points">'+
+    '<b>'+ap.toLocaleString()+' AP</b><span>'+(ap?'worth '+rm(ap/100*AP.rmPer100):'earn '+AP.perRM+' per RM 1')+'</span>'+
+   '</button></div>'+
+  ovPlanRow()+ovWeight()+
+  '<div class="ovgrid">'+cards.join('')+'</div>';
+ bodyWireChart('ov')}
+
+
+</script>
+<p class="aeralegal">© 2026 AERA Meal Preparation SDN BHD · Seri Kembangan · <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a> · <a href="https://my.chatbees.io/p/xXH4dXALg" target="_blank" rel="noopener">Privacy Notice</a></p>
+<!-- AERA language switch : start -->
+
+
+
+
+
+
+
+
+
+<!-- AERA language switch : end -->
+
+
+
+  <script src="script.js"></script>
+</body>
+</html>
