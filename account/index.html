@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- AERA host redirect : start -->
+
+<!-- AERA host redirect : end -->
 
 
 <meta charset="utf-8">
@@ -649,7 +652,7 @@ async function doReset(e){e.preventDefault();busy('rBtn',true,'Saving…');msg('
 async function doLogout(back){try{await sb.auth.signOut()}catch(e){}
  USER=null;PROFILE=null;ADDRS=[];
  try{['aera.account','aera.refLock'].forEach(function(k){localStorage.removeItem(k)})}catch(e){}
- if(back){location.replace('https://my.chatbees.io/p/ZQr9fS2jA9');return}
+ if(back){location.replace(HOME_URL);return}
  showAuth()}
 /* ===== Account ===== */
 var NEXT={plan:'https://my.chatbees.io/p/SrQzC5m2',shop:'https://my.chatbees.io/p/D2pz8bZ',checkout:'https://my.chatbees.io/p/D2pz8bZ'};
