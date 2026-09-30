@@ -878,12 +878,16 @@ function favPics(){
  catLoad().then(function(){if(BYCODE&&Object.keys(BYCODE).length)try{renderFavs()}catch(e){}})}
 function renderFavs(){var el=$('#favList');if(!el)return;var f=loadFavs();
  el.innerHTML=(f.length?f.map(function(x,i){
-  return'<div class="order"><div class="top"><span class="no">'+esc(x.name||'Personalised Plan')+'</span><span class="chip">'+(x.at?fmtDate(new Date(x.at).toISOString().slice(0,10)):'')+'</span></div>'+
+  return'<div class="order"><div class="top"><span class="no" id="favName'+i+'">'+esc(x.name||'Personalised Plan')+'</span><span class="chip">'+(x.at?fmtDate(new Date(x.at).toISOString().slice(0,10)):'')+'</span></div>'+
    '<div class="meta">'+(x.boxes||0)+' Boxes · '+rm(x.price||0)+((x.boxes)?' · ≈ '+rm(x.price/x.boxes)+' per Meal':'')+'</div>'+
    favBentos(x)+
    ((x.names&&x.names.length)?'<div class="hint" style="margin-top:6px">'+esc(x.names.join('  |  '))+((x.boxes>x.names.length)?'  |  …':'')+'</div>':'')+
-   '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-y" type="button" onclick="favOpen('+i+')">Repurchase</button><button class="btn btn-k" type="button" onclick="favCart('+i+')">Add To Cart</button><button class="btn btn-o" type="button" onclick="favRemove('+i+')">Remove</button></div></div>'}).join(''):
+   '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-y" type="button" onclick="favOpen('+i+')">Repurchase</button><button class="btn btn-k" type="button" onclick="favCart('+i+')">Add To Cart</button><button class="btn btn-o" type="button" onclick="favRename('+i+')">Rename</button><button class="btn btn-o" type="button" onclick="favRemove('+i+')">Remove</button></div></div>'}).join(''):
   '<div class="empty">No favourites yet. Star a plan on the <a href="'+PLAN_URL+'">Personalised Meal Plan</a> page and it will appear here.</div>')}
+function favRename(i){var x=loadFavs()[i];var el=document.getElementById('favName'+i);if(!x||!el)return;
+ el.innerHTML='<input type="text" id="favNameIn'+i+'" maxlength="60" value="'+esc(x.name||'Personalised Plan')+'" style="width:260px;max-width:100%;padding:6px 10px;font:inherit;font-weight:700" onkeydown="if(event.key===\'Enter\')favRenameSave('+i+');if(event.key===\'Escape\')renderFavs()"> <button class="btn btn-y s" type="button" onclick="favRenameSave('+i+')">Save</button> <button class="btn btn-o s" type="button" onclick="renderFavs()">Cancel</button>';
+ var inp=document.getElementById('favNameIn'+i);if(inp){inp.focus();inp.select()}}
+function favRenameSave(i){var f=loadFavs();if(!f[i])return;var v=String((document.getElementById('favNameIn'+i)||{}).value||'').replace(/\s+/g,' ').trim().slice(0,60);if(v)f[i].name=v;saveFavs(f);renderFavs()}
 function favRemove(i){var f=loadFavs();f.splice(i,1);saveFavs(f);renderFavs()}
 function favOpen(i){var x=loadFavs()[i];if(!x||!x.plan)return;
  try{localStorage.setItem('aera.planDraft',JSON.stringify({q:x.plan.q||{},plan:x.plan,step:4}))}catch(e){}
