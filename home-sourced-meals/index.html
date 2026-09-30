@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- AERA host redirect : start -->
+
+<!-- AERA host redirect : end -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<meta name="description" content="Keep a list of what you eat outside AERA. We look up the Calories and Macros, you pick the portion, and your Personalised Meal Plan takes them off your Target.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="https://resource.aeramealprep.net/assets/images/logo.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap">
+
+
+
+<!-- SEO Meta Tags -->
+<title>Home-Sourced Meals — AERA Meal Prep</title>
+<meta property="og:title" content="Home-Sourced Meals — AERA Meal Prep" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Home-Sourced Meals — AERA Meal Prep" />
+<!-- End SEO Meta Tags -->
+<script data-lp-token-hydrate>
+(function(){try{
+  var slug="lp-mu7znchp-66vgi";
+  var SITEK="";
+  var SK='lp_access_'+slug;
+  var map={access_token:'lp_pw_',allowlist_access_token:'lp_al_',pin_access_token:'lp_pin_',paywall_access_token:'lp_paid_'};
+  function siteTok(){try{return SITEK?localStorage.getItem(SITEK):null;}catch(e){return null;}}
+  var u=new URL(location.href);var found=null;var changed=false;
+  var PINP=true;
+  if(!PINP){try{localStorage.removeItem('lp_pin_'+slug);if(SITEK)localStorage.removeItem(SITEK);}catch(e){}}
+  Object.keys(map).forEach(function(p){var v=u.searchParams.get(p);if(v){found=v;try{if(PINP||p!=='pin_access_token'){localStorage.setItem(map[p]+slug,v);if(SITEK&&p==='pin_access_token')localStorage.setItem(SITEK,v);}}catch(e){}if(p==='pin_access_token'){try{sessionStorage.setItem('lp_fresh_'+slug,'1');}catch(e){}}u.searchParams.delete(p);changed=true;}});
+  if(found){try{sessionStorage.setItem(SK,found);}catch(e){}}
+  else{try{if(!sessionStorage.getItem(SK)){var t=localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();if(t)sessionStorage.setItem(SK,t);}}catch(e){}}
+  if(changed){try{history.replaceState(null,'',u.toString());}catch(e){}}
+  function getTok(){try{return sessionStorage.getItem(SK)||localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();}catch(e){return null;}}
+  function needsToken(url,method){if(!url)return false;var s=String(url);var m=(method||'GET').toUpperCase();var isSheetWrite=(m==='POST'||m==='PATCH'||m==='PUT'||m==='DELETE')&&/\/sheet-rows(\/|$|\?)/.test(s);var isSheetRead=/\/sheet-data(\/|$|\?)/.test(s);var isLlm=/\/api\/landing-pages\/public\/[^/]+\/(llm|llm-config)(\/|$|\?)/.test(s);return isSheetWrite||isSheetRead||isLlm;}
+  if(window.fetch){var _f=window.fetch;window.fetch=function(input,init){try{var url=typeof input==='string'?input:(input&&input.url)||'';var method=(init&&init.method)||(input&&input.method)||'GET';if(needsToken(url,method)){var tok=getTok();if(tok){init=init||{};var h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});if(!h.has('X-Landing-Page-Token'))h.set('X-Landing-Page-Token',tok);init.headers=h;}}}catch(e){}return _f.call(this,input,init);};}
+  if(window.XMLHttpRequest){var _o=XMLHttpRequest.prototype.open;var _s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__lpM=m;this.__lpU=u;return _o.apply(this,arguments);};XMLHttpRequest.prototype.send=function(){try{if(needsToken(this.__lpU,this.__lpM)){var tok=getTok();if(tok)this.setRequestHeader('X-Landing-Page-Token',tok);}}catch(e){}return _s.apply(this,arguments);};}
+}catch(e){}})();
+</script>
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://my.chatbees.io/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=7217');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='8kZjg8U5XD';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    var phone=findPhone();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    var __pLoc=(document.documentElement.lang||navigator.language||'en');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,phone:phone||'',amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,locale:__pLoc,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var sidP=urlParams.get('session_id');
+      if(sidP){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidP})}).catch(function(){});}catch(e){}}
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-cart>
+(function(){
+  var slug='8kZjg8U5XD';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findCartEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realCart=function(arg){
+    var items, email='', customerName='', successUrl, cancelUrl, currency;
+    if(Array.isArray(arg)){items=arg;}
+    else if(arg&&typeof arg==='object'){
+      items=arg.items;email=arg.email||'';customerName=arg.name||arg.customerName||'';
+      successUrl=arg.successUrl;cancelUrl=arg.cancelUrl;currency=arg.currency;
+    }
+    if(!Array.isArray(items)||items.length===0){alert('No items in cart.');return Promise.reject('no_items');}
+    var cleanItems=[];var totalCents=0;
+    for(var i=0;i<items.length;i++){
+      var it=items[i];if(!it||typeof it!=='object'){alert('Invalid item at position '+i);return Promise.reject('bad_item');}
+      var nm=typeof it.name==='string'?it.name.trim():'';
+      if(!nm){alert('Item '+(i+1)+' is missing a name.');return Promise.reject('no_name');}
+      var amt=typeof it.amountCents==='number'?it.amountCents:(typeof it.amount==='number'?Math.round(it.amount*100):NaN);
+      if(!isFinite(amt)||amt<1){alert('Item "'+nm+'" needs a valid amount in cents.');return Promise.reject('bad_amount');}
+      var qty=(typeof it.quantity==='number'&&it.quantity>0)?Math.floor(it.quantity):1;
+      cleanItems.push({name:nm,description:it.description||'',amountCents:amt,quantity:qty});
+      totalCents+=amt*qty;
+    }
+    if(totalCents<50){alert('Cart total must be at least $0.50');return Promise.reject('total_too_low');}
+    if(!email)email=findCartEmail();
+    if(!customerName)customerName=findCartName();
+    var cartPhone=findCartPhone();
+    if(!email){var p=window.prompt('Enter your email for the receipt:','');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert('An email address is required to complete checkout.');return Promise.reject('no_email');}}
+    var successBase=window.location.href.split('?')[0];
+    var body={email:email,name:customerName,items:cleanItems,locale:(document.documentElement.lang||navigator.language||'en')};
+    if(currency)body.currency=currency;
+    if(cartPhone)body.phone=cartPhone;
+    body.successUrl=successUrl||(successBase+'?cart=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}');
+    body.cancelUrl=cancelUrl||(successBase+'?cart=cancelled');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/cart/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process checkout');throw new Error(d.error);}
+    });
+  };
+  try{Object.defineProperty(window,'__processCart',{value:__realCart,writable:false,configurable:false});}catch(e){window.__processCart=__realCart;}
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('cart')==='success'){
+      var sidC=urlParams.get('session_id');
+      if(sidC){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidC})}).catch(function(){});}catch(e){}}
+      if(document.getElementById('payment-success-overlay')||document.getElementById('donation-success-overlay')||document.getElementById('cart-success-overlay'))return;
+      var overlay=document.createElement('div');overlay.id='cart-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||'Thank you for your order.';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var cBtn=document.getElementById('lp-cart-success-btn');
+      if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav><div class="wrap">
+  <a href="https://my.chatbees.io/p/ZQr9fS2jA9" aria-label="AERA Meal Prep"><img src="https://aeramealprep.net/logo/logo_yellow_with_white_text.svg" alt="AERA Meal Prep"></a>
+  <a class="homebtn" href="https://my.chatbees.io/p/ZQr9fS2jA9" aria-label="Return to Homepage"><span aria-hidden="true">←</span><span class="hbfull">Return to Homepage</span><span class="hbshort">Home</span></a>
+</div></nav>
+<main class="wrap">
+  <h1>My Home-Sourced Meals</h1>
+  <p class="sub">Anything you eat that is not from us, a Shake, Breakfast, a Snack. We look up the Macros, you pick the portion, and your Personalised Meal Plan takes them off your Target so AERA Meals fill only what is left.</p>
+
+  <div class="card">
+    <h2>Add a Home-Sourced Meal</h2>
+    <p class="hint" style="margin-top:2px">Name it the way you would say it. Keep it simple and the look-up does better.</p>
+    <div class="hmrow" style="margin-top:12px">
+      <input type="text" id="hmName" placeholder="e.g. Nasi Lemak, 2 Boiled Eggs, Milo Ais" autocomplete="off">
+      <button class="btn btn-k" type="button" id="hmBtn" onclick="foodLookup()">Find the Macros</button>
+    </div>
+    <div id="hmMsg" class="hint" style="margin-top:8px"></div>
+    <div id="hmFound"></div>
+    <div class="hint" style="margin-top:10px" id="hmManualWrap"><a href="#" id="hmManualLink" onclick="hmManual(1);return false">Or enter the numbers myself →</a></div>
+    <div id="hmManualBox" style="display:none;margin-top:10px">
+      <div class="g4">
+        <div><label class="lb" style="margin-top:0">Calories ( KCAL )</label><input type="number" id="hmK" min="0" placeholder="0"></div>
+        <div><label class="lb" style="margin-top:0">Protein ( G )</label><input type="number" id="hmP" min="0" placeholder="0"></div>
+        <div><label class="lb" style="margin-top:0">Carbs ( G )</label><input type="number" id="hmC" min="0" placeholder="0"></div>
+        <div><label class="lb" style="margin-top:0">Fat ( G )</label><input type="number" id="hmF" min="0" placeholder="0"></div>
+      </div>
+      <div class="acts">
+        <button class="btn" type="button" onclick="addManual()">Save It</button>
+        <button class="btn btn-o" type="button" onclick="hmManual(0)">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Your List</h2>
+    <p class="hint" style="margin-top:2px">Kept on this device. Tick the ones you want counted, then send them to your Personalised Meal Plan.</p>
+    <div id="libList" style="margin-top:10px"></div>
+    <div class="acts">
+      <button class="btn" type="button" id="useBtn" onclick="useSelected()">Use in Personalised Meal Plan →</button>
+      <a class="btn btn-o" href="https://my.chatbees.io/p/dtTMaV#home">My Account</a>
+    </div>
+    <div id="useMsg" class="hint" style="margin-top:8px"></div>
+  </div>
+
+  <p class="foot">Estimated Figures. Adjust the Servings to match your portion.<br>AERA Meal Prep · <a href="mailto:aera.mealprep@gmail.com">aera.mealprep@gmail.com</a></p>
+</main>
+<script>
+var COACH_URL='https://my.chatbees.io/api/webhooks/flow/5507/ea7799f6789f3ea8762fe9814eeb2d8edfd82f94b81a92d911cc84c067973c9f',COACH_READ='https://my.chatbees.io/api/public/landing-pages/6940/sheet-data';
+var FOOD=null,FOODQ=1,FOOD_BUSY=false;
+function $(s){return document.querySelector(s)}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function r1(v){return Math.round(v*10)/10}
+/* A serving string comes from the food look-up, so it arrives in whatever case that service used.
+   Capitalise the words but leave the units alone : "1 cup (158 g)" must not become "1 Cup (158 G)". */
+var SERVUNIT={g:1,kg:1,mg:1,ml:1,l:1,cl:1,dl:1,oz:1,lb:1,lbs:1,tbsp:1,tsp:1,cm:1,mm:1,kcal:1,cal:1},
+    SERVSMALL={of:1,a:1,an:1,the:1,and:1,or:1,with:1,'in':1,per:1};
+function servCase(s){var first=true;
+ return String(s||'').replace(/[A-Za-z]+/g,function(w){var k=w.toLowerCase();
+  if(SERVUNIT[k])return k;
+  if(!first&&SERVSMALL[k])return k;
+  first=false;return w.charAt(0).toUpperCase()+w.slice(1)})}
+
+/* ===== the list, the same browser store the plan builder and My Account read ===== */
+function loadLib(){try{return JSON.parse(localStorage.getItem('aera.home')||'[]')}catch(e){return[]}}
+function writeLib(a){try{localStorage.setItem('aera.home',JSON.stringify(a.slice(0,40)))}catch(e){}}
+function saveLib(h){var a=loadLib();
+ a=a.filter(function(x){return String(x.n||'').toLowerCase()!==String(h.n||'').toLowerCase()});
+ a.unshift(h);writeLib(a);renderLib()}
+function libDel(i){var a=loadLib();a.splice(i,1);writeLib(a);renderLib()}
+/* Every item is ticked when it is first saved. The tick decides what goes into the plan, and the
+   running total below follows the ticks, so the figure always matches what you are about to send. */
+var PICKED={};
+function pickKey(h){return String(h&&h.n||'').toLowerCase()}
+function isPicked(h){var k=pickKey(h);return PICKED[k]!==false}
+function togglePick(i){var a=loadLib(),h=a[i];if(!h)return;PICKED[pickKey(h)]=!isPicked(h);renderLib()}
+function pickAll(on){loadLib().forEach(function(h){PICKED[pickKey(h)]=!!on});renderLib()}
+function renderLib(){var el=$('#libList');if(!el)return;var a=loadLib();
+ if(!a.length){el.innerHTML='<div class="empty">Nothing keyed in yet. Add your first one above and it will be listed here.</div>';
+  var ub=$('#useBtn');if(ub)ub.disabled=true;return}
+ var t={k:0,p:0,c:0,f:0},on=0;
+ a.forEach(function(h){if(!isPicked(h))return;on++;t.k+=+h.k||0;t.p+=+h.p||0;t.c+=+h.c||0;t.f+=+h.f||0});
+ el.innerHTML='<div class="selbar"><span>'+on+' of '+a.length+' ticked</span><a onclick="pickAll(1)">Tick All</a><a onclick="pickAll(0)">Tick None</a></div>'+
+  a.map(function(h,i){var p=isPicked(h);
+  return'<div class="line'+(p?'':' off')+'">'+
+   '<input type="checkbox"'+(p?' checked':'')+' onchange="togglePick('+i+')" aria-label="Use '+esc(h.n)+' in my plan">'+
+   '<span><b>'+esc(h.n)+'</b><br><span class="hint" style="margin:0">'+Math.round(h.k||0)+' KCALs · Protein '+(h.p||0)+' g · Carbs '+(h.c||0)+' g · Fat '+(h.f||0)+' g</span></span>'+
+   '<button class="btn btn-o s" type="button" onclick="libDel('+i+')">Remove</button></div>'}).join('')+
+  '<div class="tot"><span>'+on+' Ticked</span><b>'+Math.round(t.k)+' KCALs · Protein '+r1(t.p)+' g</b></div>';
+ var ub=$('#useBtn');if(ub)ub.disabled=!on;
+}
+/* Hand the ticked items to the plan builder. It picks them up at the Your Week step and clears
+   the hand-over, so nothing is counted twice if you come back here later. */
+function useSelected(){
+ var picked=loadLib().filter(isPicked);
+ var m=$('#useMsg');
+ if(!picked.length){if(m)m.innerHTML=warn('Tick at least one first.');return}
+ try{localStorage.setItem('aera.homePick',JSON.stringify(picked))}catch(e){
+  if(m)m.innerHTML=warn('This browser will not let us hand them over. Try it without Private Browsing.');return}
+ location.href='https://my.chatbees.io/p/SrQzC5m2';
+}
+
+/* ===== the look-up ===== */
+async function coachFetch(mode,payload){
+ var key='C'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+ var ctl=new AbortController();var to=setTimeout(function(){ctl.abort()},60000);
+ await fetch(COACH_URL,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctl.signal,
+  body:JSON.stringify({contactEmail:'sync-coach-'+key.toLowerCase()+'@aera-sync.invalid',data:{mode:mode,key:key,payload:JSON.stringify(payload)}})});
+ clearTimeout(to);
+ var row=null;
+ for(var i=0;i<8&&!row;i++){
+  if(i)await new Promise(function(r){setTimeout(r,1500)});
+  try{var j=await fetch(COACH_READ+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()});
+   (j&&j.data||[]).forEach(function(r){if(r.Key===key)row=r})}catch(e){}
+ }
+ if(!row)throw new Error('timeout');
+ var a=null;try{a=JSON.parse(row.Reply)}catch(e){a=null}
+ if(!a||a.error)throw new Error((a&&a.error)||'bad reply');
+ return a;
+}
+function warn(t){return'<span class="msg warn">'+esc(t)+'</span>'}
+function foodLookup(){
+ var name=($('#hmName').value||'').trim();var msg=$('#hmMsg'),btn=$('#hmBtn');
+ if(!name){msg.innerHTML=warn('Type what you eat first.');return}
+ if(FOOD_BUSY)return;FOOD_BUSY=true;btn.disabled=true;FOOD=null;$('#hmFound').innerHTML='';
+ msg.innerHTML='<span class="busy"><span class="spin"></span>Looking up the Macros…</span>';
+ coachFetch('food',{text:name}).then(function(a){
+  FOOD_BUSY=false;btn.disabled=false;
+  if(!a||!a.name||!(+a.kcal>0)){msg.innerHTML=warn((a&&a.note)||'We could not work that one out. Try naming it more simply, or enter the numbers yourself.');return}
+  msg.innerHTML='';FOOD={name:a.name,serving:a.serving||'1 serving',kcal:+a.kcal||0,p:+a.p||0,c:+a.c||0,f:+a.f||0,note:a.note||''};FOODQ=1;renderFound();
+ }).catch(function(){FOOD_BUSY=false;btn.disabled=false;msg.innerHTML=warn('We could not reach the look-up. Enter the numbers yourself below.')});
+}
+function foodQty(v){FOODQ=Math.max(0.25,Math.min(10,+v||1));renderFound()}
+function renderFound(){
+ var el=$('#hmFound');if(!el)return;if(!FOOD){el.innerHTML='';return}
+ var q=FOODQ,k=FOOD.kcal*q,pp=FOOD.p*q,cc=FOOD.c*q,ff=FOOD.f*q;
+ var opts=[[0.5,'Half'],[1,'1 Serving'],[1.5,'1½'],[2,'2 Servings'],[3,'3 Servings']];
+ el.innerHTML='<div class="found"><div class="nm">'+esc(FOOD.name)+'</div><div class="sv">Per Serving : '+esc(servCase(FOOD.serving))+' · '+Math.round(FOOD.kcal)+' KCALs · Protein '+r1(FOOD.p)+' g · Carbs '+r1(FOOD.c)+' g · Fat '+r1(FOOD.f)+' g</div>'+
+  '<label class="lb">How Much Do You Have?</label><div class="portion">'+
+  opts.map(function(o){return'<button type="button" class="tog'+(Math.abs(q-o[0])<0.001?' on':'')+'" onclick="foodQty('+o[0]+')">'+o[1]+'</button>'}).join('')+
+  '<input type="number" step="0.25" min="0.25" max="10" value="'+q+'" oninput="FOODQ=Math.max(0.25,Math.min(10,+this.value||1));renderFoundTotals()" aria-label="Servings"><span class="hint" style="margin:0">Servings</span></div>'+
+  '<div class="mac2" id="foundTotal">'+Math.round(k)+' KCALs<small>Protein '+r1(pp)+' g · Carbs '+r1(cc)+' g · Fat '+r1(ff)+' g</small></div>'+
+  (FOOD.note?'<div class="hint">'+esc(FOOD.note)+'</div>':'')+
+  '<div class="acts"><button class="btn" type="button" onclick="addFound()">Add to My List</button><button class="btn btn-o" type="button" onclick="FOOD=null;renderFound()">Cancel</button><span class="hint" style="margin:0">Estimated Figures. Adjust the Servings to match your portion.</span></div></div>';
+}
+function renderFoundTotals(){var e=$('#foundTotal');if(!e||!FOOD)return;var q=FOODQ;
+ [].slice.call(document.querySelectorAll('#hmFound .portion .tog')).forEach(function(b){var v=parseFloat((b.getAttribute('onclick')||'').replace(/[^0-9.]/g,''));b.classList.toggle('on',Math.abs(q-v)<0.001)});
+ e.innerHTML=Math.round(FOOD.kcal*q)+' KCALs<small>Protein '+r1(FOOD.p*q)+' g · Carbs '+r1(FOOD.c*q)+' g · Fat '+r1(FOOD.f*q)+' g</small>'}
+function addFound(){
+ if(!FOOD)return;var q=FOODQ;
+ var nm=FOOD.name+(Math.abs(q-1)<0.001?'':' × '+(q%1?q:q.toFixed(0)));
+ saveLib({n:nm,k:Math.round(FOOD.kcal*q),p:r1(FOOD.p*q),c:r1(FOOD.c*q),f:r1(FOOD.f*q)});
+ FOOD=null;$('#hmName').value='';renderFound();
+ $('#hmMsg').innerHTML='<span class="msg ok">Saved to your list.</span>';
+ setTimeout(function(){if($('#hmMsg'))$('#hmMsg').innerHTML=''},2600);
+ $('#hmName').focus()}
+function hmManual(on){
+ $('#hmManualBox').style.display=on?'block':'none';
+ $('#hmManualWrap').style.display=on?'none':'block';
+ if(on){FOOD=null;$('#hmFound').innerHTML='';$('#hmMsg').innerHTML='';var k=$('#hmK');if(k)k.focus()}}
+function addManual(){
+ var n=($('#hmName').value||'').trim();
+ if(!n){$('#hmMsg').innerHTML=warn('Type what you eat first, at the top.');$('#hmName').focus();return}
+ var k=+$('#hmK').value||0;
+ if(!k){$('#hmMsg').innerHTML=warn('Put the Calories in at least.');$('#hmK').focus();return}
+ saveLib({n:n,k:Math.round(k),p:r1(+$('#hmP').value||0),c:r1(+$('#hmC').value||0),f:r1(+$('#hmF').value||0)});
+ ['hmName','hmK','hmP','hmC','hmF'].forEach(function(i){$('#'+i).value=''});
+ hmManual(0);
+ $('#hmMsg').innerHTML='<span class="msg ok">Saved to your list.</span>';
+ setTimeout(function(){if($('#hmMsg'))$('#hmMsg').innerHTML=''},2600);
+ $('#hmName').focus()}
+$('#hmName').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();if($('#hmManualBox').style.display==='block')addManual();else foodLookup()}});
+renderLib();
+</script>
+<p class="aeralegal">© 2026 AERA Meal Preparation Sdn Bhd · <a href="https://aeramealprep.net/terms-and-conditions" target="_blank" rel="noopener">Terms &amp; Conditions</a></p>
+<!-- AERA host map : start -->
+
+<!-- AERA host map : end -->
+  <script src="script.js"></script>
+</body>
+</html>
