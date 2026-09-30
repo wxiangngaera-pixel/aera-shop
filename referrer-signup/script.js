@@ -1,30 +1,4 @@
-(function(){
-  if(window.__AERA_API) return; window.__AERA_API=1;
-  if(/my\.chatbees\.io$/i.test(location.hostname)) return;
-  var API="https://my.chatbees.io";
-  function conv(u){
-    try{
-      if(typeof u!=="string") return u;
-      if(u.indexOf("/api/")===0) return API+u;
-      if(u.indexOf(location.origin+"/api/")===0) return API+u.slice(location.origin.length);
-    }catch(e){}
-    return u;
-  }
-  var of=window.fetch;
-  if(of) window.fetch=function(i,o){
-    try{
-      if(typeof i==="string") i=conv(i);
-      else if(typeof Request!=="undefined" && i instanceof Request){
-        var n=conv(i.url); if(n!==i.url) i=new Request(n,i);
-      }
-    }catch(e){}
-    return of.call(this,i,o);
-  };
-  var XP=window.XMLHttpRequest && window.XMLHttpRequest.prototype;
-  var oo=XP && XP.open;
-  if(oo) XP.open=function(m,u){ var a=[].slice.call(arguments); try{a[1]=conv(u)}catch(e){} return oo.apply(this,a); };
-})();
-
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 window.AERA_I18N={};window.AERA_I18N_RE=[];
 (function(){
  var KEY='aera_lang',lang='en';
@@ -57,6 +31,7 @@ window.AERA_I18N={};window.AERA_I18N_RE=[];
  if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
 "Home":"首页","Referrer Portal":"推荐人专区","Order Now":"立即订购","Terms & Conditions":"条款与细则","Questions":"常见问题",
 "AERA Referral Programme":"AERA 推荐计划","Share Good Food.":"分享好食物。","Earn Every Month.":"每月都有收入。","Give your Members, Clients or Friends a Referral Code. Every time they Order, you earn a share of what they spend, paid to you in cash after each month closes. They get extra AERA Points for using it.":"把推荐码给您的会员、客户或朋友。他们每下一次单，您都能从消费金额中分得一份，每月结算后以现金支付给您。他们使用推荐码也能获得额外的 AERA 积分。","Normal Referrer":"一般推荐人","Anyone who wants to share AERA with Friends, Family or Colleagues.":"任何想把 AERA 分享给朋友、家人或同事的人。","Fitness Studio OR Gym":"健身工作室或健身房","Gyms, Studios and Training Floors putting AERA in front of their Members.":"把 AERA 推荐给会员的健身房、工作室与训练场地。","Fitness Influencer":"健身网红","Coaches and Creators with an audience who trust what they eat.":"拥有受众、且受众信任其饮食建议的教练与创作者。",
@@ -67,14 +42,17 @@ Object.assign(window.AERA_I18N,{
 });
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-LEGAL-ZH */
 Object.assign(window.AERA_I18N||{},{"Terms & Conditions":"条款与条件","Privacy Notice":"隐私声明"});
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-LEGAL-NOTE-ZH */
 Object.assign(window.AERA_I18N||{},{"By applying you agree to our":"提交申请即表示您同意我们的","and have read our":"并已阅读我们的"});
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){
   if(window.__AERA_HOSTMAP) return; window.__AERA_HOSTMAP=1;
   if(/my\.chatbees\.io$/i.test(location.hostname)) return;
