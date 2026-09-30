@@ -308,7 +308,7 @@ nav li.acct,.navr .acct{position:relative}
 @media(max-width:520px){.navpanel .wrap{grid-template-columns:1fr;grid-template-rows:auto;grid-auto-flow:row}}
 .navpanel span a{display:block;padding:9px 0;font-size:13.5px;font-weight:600;color:#fff;text-decoration:none;opacity:.92;border-bottom:1px solid rgba(255,255,255,.10)}
 .navpanel span a:hover{color:var(--y)}
-@media(max-width:1439px){nav ul{display:none}.navtoggle{display:block}}
+@media(max-width:1599px){nav ul{display:none}.navtoggle{display:block}}
 /* the row must never run into itself : the links give way before they can overlap, and the
    signed-out and signed-in sides of the bar are never both on screen. */
 nav .wrap ul{flex:0 1 auto;min-width:0}
