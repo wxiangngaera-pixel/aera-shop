@@ -10,17 +10,24 @@ function setL(l){if(!TX[l])l="en";
 
 (function(){
   if(window.__AERA_HOSTMAP) return; window.__AERA_HOSTMAP=1;
-  if(!/(^|\.)aeramealprep\.net$/i.test(location.hostname)) return;
+  if(/my\.chatbees\.io$/i.test(location.hostname)) return;
   var MAP={"ZQr9fS2jA9":"/","D2pz8bZ":"/checkout","dtTMaV":"/account","SrQzC5m2":"/meal-plan",
   "DSBcJ9bN4":"/bring-your-own-plan","8s4Xd6h":"/track","VMrvEw":"/merchandise","TVRk6bqam":"/corporate",
   "G7mXL4RMz2":"/terms","xXH4dXALg":"/privacy","B2WjrKhnz":"/contact","DiB2ZadptP":"/thank-you",
   "HkKJuxBS":"/referrer-portal","H9H32i9ShW":"/referrer-signup","ZmQYknnnM":"/points-checkout"};
+  function baseOf(){
+    var p=location.pathname.replace(/\/+$/,"");
+    for(var k in MAP){ var t=MAP[k];
+      if(t!=="/" && p.length>=t.length && p.slice(-t.length)===t) return p.slice(0,p.length-t.length); }
+    return p;
+  }
+  var BASE=baseOf();
   function conv(u){
     if(!u) return u;
     var m=String(u).match(/^(?:https?:\/\/my\.chatbees\.io)?\/p\/([A-Za-z0-9]+)\/?(\?[^#]*)?(#.*)?$/);
     if(!m) return u;
     var t=MAP[m[1]]; if(!t) return u;
-    return location.origin+(t==="/"?"/":t+"/")+(m[2]||"")+(m[3]||"");
+    return location.origin+BASE+(t==="/"?"/":t+"/")+(m[2]||"")+(m[3]||"");
   }
   function fix(root){
     if(!root||!root.querySelectorAll) return;
