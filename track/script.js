@@ -1,0 +1,154 @@
+/* The lookup runs in the database, not here. This page sends one Order Number
+   and receives that one Order's delivery status : no Name, no Email, no Phone,
+   no Address, no money. Nothing else is ever sent to this page, which is why it
+   no longer needs a Verification Code. */
+var SB={url:'https://swpprjvubgcdsojapaad.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0'};
+var sb=window.supabase.createClient(SB.url,SB.key,{auth:{persistSession:false}});
+function $(s){return document.querySelector(s)}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function msg(k,t){$('#msg').innerHTML=t?'<div class="msg '+k+'">'+t+'</div>':''}
+function fmtDate(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(d||''))return d||'';
+ var t=new Date(d+'T00:00:00');
+ return t.toLocaleDateString('en-MY',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+function chip(s){s=String(s||'');
+ var c=/deliver/i.test(s)?'ok':/booked|on the way|assigning|picked/i.test(s)?'ok':/cancel|fail/i.test(s)?'bad':'warn';
+ return '<span class="chip '+c+'">'+esc(s||'Preparing')+'</span>'}
+function card(o){
+ return '<div class="card">'+
+  '<div class="row"><div>'+
+   '<div class="ono">Order '+esc(o.order_no)+'</div>'+
+   '<div class="when">'+esc(fmtDate(o.delivery_date))+'</div>'+
+   (o.slot?'<div class="meta" style="margin:0 0 8px">Arriving '+esc(o.slot)+'</div>':'')+
+   chip(o.status)+(o.courier?' <span class="chip">'+esc(o.courier)+'</span>':'')+
+  '</div></div>'+
+  (o.tracking_link?'<a class="btn" href="'+esc(o.tracking_link)+'" target="_blank" rel="noopener">Track My Rider ↗</a>':'')+
+  (o.rider_note?'<div class="note"><b>Note given to the Rider</b>'+esc(o.rider_note)+'</div>':'')+
+  (o.updated_at?'<div class="meta">Updated '+esc(String(o.updated_at).replace('T',' ').slice(0,16))+'</div>':'')+
+ '</div>'}
+var BUSY=false;
+function look(e){
+ e.preventDefault();
+ if(BUSY)return false;
+ var v=($('#ono').value||'').trim();
+ $('#out').innerHTML='';
+ if(v.length<4){msg('warn','Please type your Order Number. It looks like AK-20260919-001.');$('#ono').focus();return false}
+ BUSY=true;$('#goBtn').disabled=true;
+ msg('','');
+ $('#out').innerHTML='<div class="card"><div class="empty"><span class="spin"></span>Looking for that Order…</div></div>';
+ sb.rpc('track_order',{p_order_no:v}).then(function(r){
+  BUSY=false;$('#goBtn').disabled=false;$('#out').innerHTML='';
+  if(r.error){msg('bad','We could not reach the Kitchen just now. Try again in a moment.');return}
+  var rows=r.data||[];
+  if(!rows.length){
+   /* Deliberately the same answer whether the Order does not exist, is older
+      than 90 Days, or was simply mistyped. */
+   msg('warn','<b>No Delivery found for that Order Number.</b> Check it against your Order Confirmation Email. Orders older than 90 Days are no longer tracked here — WhatsApp us and we will look it up.');
+   return}
+  $('#out').innerHTML=card(rows[0]);
+ },function(){
+  BUSY=false;$('#goBtn').disabled=false;$('#out').innerHTML='';
+  msg('bad','We could not reach the Kitchen just now. Try again in a moment.')});
+ return false}
+/* Arriving with ?order=AK-... , straight from a Confirmation Email, looks it up at once. */
+(function(){try{
+ var q=new URLSearchParams(location.search).get('order');
+ if(q){$('#ono').value=q.toUpperCase();look({preventDefault:function(){}})}
+}catch(e){}})();
+$('#ono').addEventListener('input',function(){this.value=this.value.toUpperCase()});
+
+window.AERA_I18N={};window.AERA_I18N_RE=[];
+(function(){
+ var KEY='aera_lang',lang='en';
+ try{lang=localStorage.getItem(KEY)||'en'}catch(e){}
+ window.aeraLang=function(){var n=(lang==='zh')?'en':'zh';try{localStorage.setItem(KEY,n)}catch(e){}location.reload()};
+ if(lang!=='zh')return;
+ document.documentElement.setAttribute('data-lang','zh');
+ var D=window.AERA_I18N,R=window.AERA_I18N_RE,done=new WeakSet();
+ function tr(s){var k=String(s).replace(/\s+/g,' ').trim();if(!k)return null;
+  if(Object.prototype.hasOwnProperty.call(D,k))return D[k];
+  for(var i=0;i<R.length;i++){if(R[i][0].test(k))return k.replace(R[i][0],R[i][1])}
+  return null}
+ var SKIP={SCRIPT:1,STYLE:1,NOSCRIPT:1,TEXTAREA:1};
+ function node(n){if(done.has(n))return;var p=n.parentElement;if(!p||SKIP[p.tagName])return;if(p.closest('#langSw'))return;
+  var t=tr(n.nodeValue);if(t===null)return;done.add(n);
+  n.nodeValue=n.nodeValue.replace(/^(\s*)[\s\S]*?(\s*)$/,'$1'+t.replace(/\$/g,'$$')+'$2')}
+ var ATTR=['placeholder','title','aria-label','alt','value'];
+ function attrs(el){if(!el.getAttribute)return;if(el.closest&&el.closest('#langSw'))return;
+  for(var i=0;i<ATTR.length;i++){var a=ATTR[i];if(!el.hasAttribute(a))continue;
+   if(a==='value'&&!/^(button|submit|reset)$/i.test(el.type||''))continue;
+   var t=tr(el.getAttribute(a));if(t!==null)el.setAttribute(a,t)}}
+ function walk(root){if(root.nodeType===3){node(root);return}if(root.nodeType!==1)return;
+  attrs(root);root.querySelectorAll('*').forEach(attrs);
+  var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),n;while(n=w.nextNode())node(n)}
+ var q=false;
+ function run(){q=false;walk(document.body);var t=tr(document.title);if(t!==null)document.title=t}
+ function queue(){if(q)return;q=true;requestAnimationFrame(run)}
+ window.aeraRetranslate=queue;
+ function boot(){run();new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){if(ms[i].addedNodes.length||ms[i].type==='characterData'){queue();return}}}).observe(document.body,{childList:true,subtree:true,characterData:true});setInterval(queue,1200)}
+ if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
+})();
+
+Object.assign(window.AERA_I18N,{
+"Return to Homepage":"返回首页","Home":"首页","Track My Order":"查询我的订单","Type your Order Number and we will show you where that delivery is. It is printed on your Order Confirmation Email and on the box.":"输入您的订单号码，我们就会显示这份配送到哪里了。号码印在订单确认电邮和餐盒上。","Track It":"查询","One Order at a time. We show the Delivery only — never your Name, Address or anything you paid.":"一次查询一笔订单。我们只显示配送状态 — 不会显示您的姓名、地址或付款资料。","Ordered while signed in?":"下单时已登录？","See every Order in My Account":"在「我的账户」查看所有订单","Questions? WhatsApp or email":"有疑问？可用 WhatsApp 或电邮联系","Back to the Shop":"返回商店","Terms & Conditions":"条款与细则","Track My Rider ↗":"追踪我的骑手 ↗","Note given to the Rider":"给骑手的备注","Looking for that Order…":"正在查找这笔订单…","No Delivery found for that Order Number.":"找不到这个订单号码的配送记录。","Please type your Order Number. It looks like AK-20260919-001.":"请输入您的订单号码，格式类似 AK-20260919-001。","We could not reach the Kitchen just now. Try again in a moment.":"目前无法连线到厨房，请稍后再试。","Track My Order · AERA Meal Prep":"查询我的订单 · AERA Meal Prep"
+});
+if(window.aeraRetranslate)window.aeraRetranslate();
+
+/* AERA-DATE-ZH : English dates -> Chinese, only when the page is in Chinese mode.
+   Dates come out of toLocaleDateString('en-MY',...) at render time, so they arrive
+   inside sentences the dictionary has already translated. This rewrites the date
+   wherever it sits in a text node and leaves the rest of the node alone. */
+(function(){
+ var M={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,sept:9,oct:10,nov:11,dec:12,
+  january:1,february:2,march:3,april:4,june:6,july:7,august:8,september:9,october:10,november:11,december:12};
+ var W={sun:'周日',mon:'周一',tue:'周二',tues:'周二',wed:'周三',thu:'周四',thur:'周四',thurs:'周四',fri:'周五',sat:'周六',
+  sunday:'星期日',monday:'星期一',tuesday:'星期二',wednesday:'星期三',thursday:'星期四',friday:'星期五',saturday:'星期六'};
+ function m(x){return M[String(x).toLowerCase()]}
+ function w(x){return W[String(x).toLowerCase()]}
+ var R=[
+  [/\b(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday), (\d{1,2}) (January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})\b/g,
+   function(_,a,d,mo,y){return y+'年'+m(mo)+'月'+d+'日 '+w(a)}],
+  [/\b(Sun|Mon|Tues|Tue|Thurs|Thur|Thu|Wed|Fri|Sat), (\d{1,2}) (Sept|Sep|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Nov|Dec) (\d{4})\b/g,
+   function(_,a,d,mo,y){return y+'年'+m(mo)+'月'+d+'日 '+w(a)}],
+  [/\b(Sun|Mon|Tues|Tue|Thurs|Thur|Thu|Wed|Fri|Sat), (\d{1,2}) (Sept|Sep|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Nov|Dec)\b/g,
+   function(_,a,d,mo){return m(mo)+'月'+d+'日 '+w(a)}],
+  [/\b(\d{1,2}) (January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})\b/g,
+   function(_,d,mo,y){return y+'年'+m(mo)+'月'+d+'日'}],
+  [/\b(\d{1,2}) (Sept|Sep|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Nov|Dec) (\d{4})\b/g,
+   function(_,d,mo,y){return y+'年'+m(mo)+'月'+d+'日'}],
+  [/\b(\d{1,2}) (January|February|March|April|May|June|July|August|September|October|November|December)\b/g,
+   function(_,d,mo){return m(mo)+'月'+d+'日'}],
+  [/\b(\d{1,2}) (Sept|Sep|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Nov|Dec)\b/g,
+   function(_,d,mo){return m(mo)+'月'+d+'日'}],
+  [/\b(January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})\b/g,
+   function(_,mo,y){return y+'年'+m(mo)+'月'}]
+ ];
+ var MO={jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',sept:'9月',oct:'10月',nov:'11月',dec:'12月',
+  january:'1月',february:'2月',march:'3月',april:'4月',june:'6月',july:'7月',august:'8月',september:'9月',october:'10月',november:'11月',december:'12月'};
+ function conv(s){var o=s;for(var i=0;i<R.length;i++)o=o.replace(R[i][0],R[i][1]);return o}
+ window.__aeraDateZh=conv;
+ if(document.documentElement.getAttribute('data-lang')!=='zh')return;
+ var SKIP={SCRIPT:1,STYLE:1,NOSCRIPT:1,TEXTAREA:1},seen=new WeakMap();
+ function pass(){
+  var tw=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null),n;
+  while(n=tw.nextNode()){
+   var p=n.parentElement;if(!p||SKIP[p.tagName])continue;
+   if(p.closest&&p.closest('#langSw'))continue;
+   var v=n.nodeValue;if(seen.get(n)===v)continue;
+   var k=v.trim(),z=k&&MO[k.toLowerCase()];
+   if(z){if(z!==k)n.nodeValue=v.replace(k,z);seen.set(n,n.nodeValue);continue}
+   if(!/\d/.test(v)){seen.set(n,v);continue}
+   var t=conv(v);if(t!==v)n.nodeValue=t;
+   seen.set(n,n.nodeValue)}}
+ var q=false;
+ function queue(){if(q)return;q=true;requestAnimationFrame(function(){q=false;pass()})}
+ function boot(){pass();
+  new MutationObserver(queue).observe(document.body,{childList:true,subtree:true,characterData:true});
+  setInterval(queue,1200);
+  var prev=window.aeraRetranslate;
+  window.aeraRetranslate=function(){if(prev)prev();queue()}}
+ if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
+})();
+
+/* AERA-LEGAL-ZH */
+Object.assign(window.AERA_I18N||{},{"Terms & Conditions":"条款与条件","Privacy Notice":"隐私声明"});
+if(window.aeraRetranslate)window.aeraRetranslate();
