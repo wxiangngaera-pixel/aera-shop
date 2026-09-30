@@ -295,6 +295,17 @@ if(window.aeraRetranslate)window.aeraRetranslate();
   try{ var la=Location.prototype.assign, lr=Location.prototype.replace;
     Location.prototype.assign=function(u){ return la.call(this,conv(u)) };
     Location.prototype.replace=function(u){ return lr.call(this,conv(u)) }; }catch(e){}
+  /* Chrome and Safari ignore the two lines above ( location.replace / .href cannot be re-wired ), so : */
+  window.aeraUrl=conv;
+  /* 1. re-point the page's own address settings ( HOME_URL, SHOP_URL, NEXT … ) at this site */
+  function sweep(){ try{ for(var k in window){ var v; try{ v=window[k] }catch(e){ continue }
+      if(typeof v==="string"){ var n=conv(v); if(n!==v) try{ window[k]=n }catch(e){} }
+      else if(v&&typeof v==="object"&&Object.getPrototypeOf(v)===Object.prototype){ for(var j in v){ if(typeof v[j]==="string"){ var n2=conv(v[j]); if(n2!==v[j]) try{ v[j]=n2 }catch(e){} } } } } }catch(e){} }
+  sweep(); document.addEventListener("DOMContentLoaded",sweep); window.addEventListener("load",sweep);
+  /* 2. last net : any jump to a my.chatbees.io page that has a home here lands here instead */
+  try{ if(window.navigation) navigation.addEventListener("navigate",function(e){
+      if(e.navigationType==="traverse"||!e.cancelable) return;
+      var u=e.destination&&e.destination.url, n=conv(u); if(u&&n!==u){ e.preventDefault(); location.href=n } }); }catch(e){}
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",function(){fix(document)});
   else fix(document);
   try{ new MutationObserver(function(ms){ for(var i=0;i<ms.length;i++){ var n=ms[i].addedNodes; for(var j=0;j<n.length;j++) if(n[j].nodeType===1) fix(n[j]); } })
