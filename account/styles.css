@@ -44,7 +44,7 @@ textarea{min-height:70px;resize:vertical}
 .bento b.veg.w1{width:20.08%;border-radius:2px}.bento b.veg.w2{left:59.61%;width:20.08%}
 .mealrow{display:flex;gap:10px;align-items:flex-start;margin:0 0 8px}
 .fstrip{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
-.fstrip .bento{width:104px}
+.fstrip .bento{width:104px}.bento{container-type:inline-size;background-size:100% 100%}.bento b{overflow:hidden;border-radius:2.2cqw}.bento b.pro.h1{border-radius:2.2cqw 2.2cqw .3cqw .3cqw}.bento b.pro.h2{border-radius:.3cqw .3cqw 2.2cqw 2.2cqw}.bento b.veg.w1{border-radius:2.2cqw .3cqw .3cqw 2.2cqw}.bento b.veg.w2{border-radius:.3cqw 2.2cqw 2.2cqw .3cqw}.pstrip{margin-top:10px}.pstrip .bento{width:120px}
 .fmore{font-size:12px;color:var(--mute);font-weight:700}
 .mealrow .mtxt{min-width:0;flex:1}
 .daywrap{margin-bottom:10px}
