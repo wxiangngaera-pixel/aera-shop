@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- BASE:START (managed by Coding Agent — do not edit) -->
+<base href="/aera-shop/bring-your-own-plan/">
+<!-- BASE:END -->
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+
+
+
+
+
+<!-- SEO Meta Tags -->
+<title>Bring Your Own Plan — AERA Meal Prep</title>
+<meta name="description" content="Already have a meal plan from your coach or dietitian? Hand it over and we will cook it." />
+<meta property="og:title" content="Bring Your Own Plan — AERA Meal Prep" />
+<meta property="og:description" content="Already have a meal plan from your coach or dietitian? Hand it over and we will cook it." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Bring Your Own Plan — AERA Meal Prep" />
+<meta name="twitter:description" content="Already have a meal plan from your coach or dietitian? Hand it over and we will cook it." />
+<!-- End SEO Meta Tags -->
+<script data-lp-token-hydrate>
+(function(){try{
+  var slug="lp-mu0w9chy-cl1rm";
+  var SITEK="";
+  var SK='lp_access_'+slug;
+  var map={access_token:'lp_pw_',allowlist_access_token:'lp_al_',pin_access_token:'lp_pin_',paywall_access_token:'lp_paid_'};
+  function siteTok(){try{return SITEK?localStorage.getItem(SITEK):null;}catch(e){return null;}}
+  var u=new URL(location.href);var found=null;var changed=false;
+  var PINP=true;
+  if(!PINP){try{localStorage.removeItem('lp_pin_'+slug);if(SITEK)localStorage.removeItem(SITEK);}catch(e){}}
+  Object.keys(map).forEach(function(p){var v=u.searchParams.get(p);if(v){found=v;try{if(PINP||p!=='pin_access_token'){localStorage.setItem(map[p]+slug,v);if(SITEK&&p==='pin_access_token')localStorage.setItem(SITEK,v);}}catch(e){}if(p==='pin_access_token'){try{sessionStorage.setItem('lp_fresh_'+slug,'1');}catch(e){}}u.searchParams.delete(p);changed=true;}});
+  if(found){try{sessionStorage.setItem(SK,found);}catch(e){}}
+  else{try{if(!sessionStorage.getItem(SK)){var t=localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();if(t)sessionStorage.setItem(SK,t);}}catch(e){}}
+  if(changed){try{history.replaceState(null,'',u.toString());}catch(e){}}
+  function getTok(){try{return sessionStorage.getItem(SK)||localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();}catch(e){return null;}}
+  function needsToken(url,method){if(!url)return false;var s=String(url);var m=(method||'GET').toUpperCase();var isSheetWrite=(m==='POST'||m==='PATCH'||m==='PUT'||m==='DELETE')&&/\/sheet-rows(\/|$|\?)/.test(s);var isSheetRead=/\/sheet-data(\/|$|\?)/.test(s);var isLlm=/\/api\/landing-pages\/public\/[^/]+\/(llm|llm-config)(\/|$|\?)/.test(s);return isSheetWrite||isSheetRead||isLlm;}
+  if(window.fetch){var _f=window.fetch;window.fetch=function(input,init){try{var url=typeof input==='string'?input:(input&&input.url)||'';var method=(init&&init.method)||(input&&input.method)||'GET';if(needsToken(url,method)){var tok=getTok();if(tok){init=init||{};var h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});if(!h.has('X-Landing-Page-Token'))h.set('X-Landing-Page-Token',tok);init.headers=h;}}}catch(e){}return _f.call(this,input,init);};}
+  if(window.XMLHttpRequest){var _o=XMLHttpRequest.prototype.open;var _s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__lpM=m;this.__lpU=u;return _o.apply(this,arguments);};XMLHttpRequest.prototype.send=function(){try{if(needsToken(this.__lpU,this.__lpM)){var tok=getTok();if(tok)this.setRequestHeader('X-Landing-Page-Token',tok);}}catch(e){}return _s.apply(this,arguments);};}
+}catch(e){}})();
+</script>
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://my.chatbees.io/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=7101');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='DSBcJ9bN4';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    var phone=findPhone();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    var __pLoc=(document.documentElement.lang||navigator.language||'en');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,phone:phone||'',amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,locale:__pLoc,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var sidP=urlParams.get('session_id');
+      if(sidP){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidP})}).catch(function(){});}catch(e){}}
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-cart>
+(function(){
+  var slug='DSBcJ9bN4';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findCartEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realCart=function(arg){
+    var items, email='', customerName='', successUrl, cancelUrl, currency;
+    if(Array.isArray(arg)){items=arg;}
+    else if(arg&&typeof arg==='object'){
+      items=arg.items;email=arg.email||'';customerName=arg.name||arg.customerName||'';
+      successUrl=arg.successUrl;cancelUrl=arg.cancelUrl;currency=arg.currency;
+    }
+    if(!Array.isArray(items)||items.length===0){alert('No items in cart.');return Promise.reject('no_items');}
+    var cleanItems=[];var totalCents=0;
+    for(var i=0;i<items.length;i++){
+      var it=items[i];if(!it||typeof it!=='object'){alert('Invalid item at position '+i);return Promise.reject('bad_item');}
+      var nm=typeof it.name==='string'?it.name.trim():'';
+      if(!nm){alert('Item '+(i+1)+' is missing a name.');return Promise.reject('no_name');}
+      var amt=typeof it.amountCents==='number'?it.amountCents:(typeof it.amount==='number'?Math.round(it.amount*100):NaN);
+      if(!isFinite(amt)||amt<1){alert('Item "'+nm+'" needs a valid amount in cents.');return Promise.reject('bad_amount');}
+      var qty=(typeof it.quantity==='number'&&it.quantity>0)?Math.floor(it.quantity):1;
+      cleanItems.push({name:nm,description:it.description||'',amountCents:amt,quantity:qty});
+      totalCents+=amt*qty;
+    }
+    if(totalCents<50){alert('Cart total must be at least $0.50');return Promise.reject('total_too_low');}
+    if(!email)email=findCartEmail();
+    if(!customerName)customerName=findCartName();
+    var cartPhone=findCartPhone();
+    if(!email){var p=window.prompt('Enter your email for the receipt:','');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert('An email address is required to complete checkout.');return Promise.reject('no_email');}}
+    var successBase=window.location.href.split('?')[0];
+    var body={email:email,name:customerName,items:cleanItems,locale:(document.documentElement.lang||navigator.language||'en')};
+    if(currency)body.currency=currency;
+    if(cartPhone)body.phone=cartPhone;
+    body.successUrl=successUrl||(successBase+'?cart=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}');
+    body.cancelUrl=cancelUrl||(successBase+'?cart=cancelled');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/cart/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process checkout');throw new Error(d.error);}
+    });
+  };
+  try{Object.defineProperty(window,'__processCart',{value:__realCart,writable:false,configurable:false});}catch(e){window.__processCart=__realCart;}
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('cart')==='success'){
+      var sidC=urlParams.get('session_id');
+      if(sidC){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidC})}).catch(function(){});}catch(e){}}
+      if(document.getElementById('payment-success-overlay')||document.getElementById('donation-success-overlay')||document.getElementById('cart-success-overlay'))return;
+      var overlay=document.createElement('div');overlay.id='cart-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||'Thank you for your order.';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var cBtn=document.getElementById('lp-cart-success-btn');
+      if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="top" data-section="header">
+ <div class="wrap">
+  <div class="brandrow">
+  <div class="brand">
+   <svg class="mark" viewBox="0 0 120 92" aria-hidden="true"><path d="M6 6l30 0 24 46 24-46 30 0-54 80z" fill="#FDB913"/></svg>
+   <div><b>AERA</b><small>Bring Your Own Plan</small></div>
+  </div>
+  <button type="button" class="langsw" id="langSw" onclick="aeraLang()" aria-label="Language"><span class="l1">EN</span><span class="l2">中文</span></button><a class="homebtn" href="https://my.chatbees.io/p/ZQr9fS2jA9" aria-label="Return to Homepage"><span aria-hidden="true">←</span><span class="hbfull">Return to Homepage</span><span class="hbshort">Home</span></a>
+  </div>
+  <h1>Already Have A Plan? We Will Cook It.</h1>
+<div class="byopbox"><img src="https://my.chatbees.io/objects/quick-uploads/1302/d228cac817165404.jpg" alt="A coach’s plan cooked into a MAP bento box" loading="lazy"><div><b>This is what it comes back as</b><span>Every meal on your plan is weighed to the gram and packed into a MAP bento box — protein, carbohydrate and vegetables in their own compartments, sealed and labelled with the calories and macros for that box.</span></div></div>
+  <p>Hand us the plan your coach, dietitian or clinic wrote for you. We read it, turn the
+   portions into the weights our kitchen works to, and show you exactly what we would make.</p>
+ </div>
+</header>
+
+<div class="wrap">
+
+ <div class="card" data-section="paste">
+  <h2><span class="step">1</span>Give Us The Plan</h2>
+  <div style="margin-bottom:14px">
+   <label class="lb">The weights in your plan are</label>
+   <div class="seg" id="basisSeg">
+    <button type="button" data-b="cooked" class="on">Cooked Weights</button>
+    <button type="button" data-b="raw">Raw Weights</button>
+   </div>
+   <p class="hint" style="margin:8px 0 0">Most coaches write cooked weights &mdash; what ends up on the plate.
+    Our kitchen weighs everything raw, so we convert it for you. If you are not sure, leave it on Cooked.</p>
+  </div>
+  <label class="lb" for="txt">Type it out, or paste it</label>
+  <textarea id="txt" placeholder="MONDAY&#10;Breakfast: 3 egg whites, 2 slices wholemeal toast&#10;Lunch: 150 g grilled chicken breast, 1 cup cooked brown rice, 100 g broccoli&#10;Dinner: 120 g salmon, 200 g sweet potato, salad&#10;&#10;TUESDAY&#10;..."></textarea>
+  <div style="margin-top:14px">
+   <label class="lb" for="pdf">Or take a photo of it, or load a PDF</label>
+   <input type="file" id="pdf" accept="image/*,application/pdf">
+   <p class="hint" style="margin:6px 0 0">Photograph the whole sheet straight on, in good light. We read it out into the
+    box above so you can check every line before anything is priced &mdash; a machine reading handwriting will
+    get some of it wrong, and it is much easier to fix here than after it is cooked.</p>
+  </div>
+  <div style="margin-top:16px"><button class="btn wide" id="read">Read My Plan</button></div>
+  <div id="readmsg"></div>
+ </div>
+
+ <div class="card" id="reviewCard" style="display:none" data-section="review">
+  <h2><span class="step">2</span>Check What We Read</h2>
+  <p class="hint" style="margin:-4px 0 14px">A machine read this, so check it against your own sheet before you send it.
+   The grey line under each item is your original wording. Change any weight that looks wrong &mdash; the raw
+   figure on the right updates as you type.</p>
+  <div id="review"></div>
+  <div class="tot" id="totals"></div>
+  <div id="flags"></div>
+ </div>
+
+ <div class="card" id="openCard" style="display:none" data-section="open">
+  <h2><span class="step">3</span>See It As A Plan</h2>
+  <p class="hint" style="margin:-4px 0 14px">This opens your plan in our plan editor, built from the
+   dishes matched above. Swap any dish, change any portion, and the calories, protein and price move
+   with it. Your own plan's totals become the target, so you can see where ours drifts from your
+   coach's sheet.</p>
+  <div id="openSum"></div>
+  <div style="margin-top:16px"><button class="btn wide" id="open">Open My Plan</button></div>
+  <div id="openmsg"></div>
+  <p class="hint" style="margin:14px 0 0">Would rather we just priced it by hand and came back to you?
+   <a href="#" id="askQuote">Send it to the kitchen instead</a>.</p>
+ </div>
+
+ <div class="card" id="sendCard" style="display:none" data-section="send">
+  <h2><span class="step">4</span>Send It To The Kitchen</h2>
+  <div class="f3">
+   <div><label class="lb" for="who">Your Name</label><input type="text" id="who" autocomplete="name"></div>
+   <div><label class="lb" for="email">Email</label><input type="email" id="email" autocomplete="email"></div>
+   <div><label class="lb" for="phone">Mobile</label><input type="tel" id="phone" autocomplete="tel" placeholder="01x-xxx xxxx"></div>
+  </div>
+  <div style="margin-top:10px"><label class="lb" for="coach">Who Wrote This Plan</label>
+   <input type="text" id="coach" maxlength="120" placeholder="Coach Hafiz, TNT Fitness — or leave blank if it is your own">
+   <div class="hint">If a coach, dietitian or clinic wrote it, their name goes on the plan when it reaches our kitchen. Leave it empty if the plan is your own.</div></div>
+  <div style="margin-top:10px"><label class="lb" for="note">Anything We Should Know</label>
+   <input type="text" id="note" placeholder="No prawns. Less salt on everything."></div>
+  <p class="hint" style="margin:12px 0 0">We will price it and come back to you before anything is cooked.
+   Nothing is charged at this point.</p>
+  <div style="margin-top:16px"><button class="btn wide" id="send">Send My Plan To AERA</button></div>
+  <div id="sendmsg"></div>
+ </div>
+
+ <p class="foot">AERA Meal Preparation SDN BHD &middot; Seri Kembangan<br>
+  Prefer us to build the plan instead? <a href="https://my.chatbees.io/p/SrQzC5m2">Use the Personalised Meal Plan builder</a>.</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+(function(){
+var READ_HOOK='https://my.chatbees.io/api/webhooks/flow/5768/13c4246e110aa6094e346ecce8276841399bab4eabf172b8c9be95e7f71d3de7';
+var SEND_HOOK='https://my.chatbees.io/api/webhooks/flow/5769/860eb2affebad7fbb92d8d46bf6bbc1f36b4f12d7c291af12f484840b6e42430';
+var PHOTO_HOOK='https://my.chatbees.io/api/webhooks/flow/5771/79e25062e05c3c399b8f303b4b9ef7134c21ca15d0ae1c9b3f1af7fc721c42b6';
+var FEED='/api/public/landing-pages/6940/sheet-data';
+var BASIS='cooked',PLAN=null;
+
+function $(s){return document.querySelector(s)}
+function esc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+ .replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function msg(sel,cls,html){var e=$(sel);if(!html){e.innerHTML='';return}
+ e.innerHTML='<div class="note '+cls+'">'+html+'</div>'}
+
+/* ---- the conversion, exactly as Peter measured it ----
+   The kitchen weighs RAW. Anything we have no factor for is NOT guessed at : it comes
+   back flagged so a person decides, rather than a cooked weight reaching the prep list
+   dressed up as a raw one. */
+var RICE={'basmati long rice':2.90,'basmati rice':2.90,'fragrant white rice':2.10,
+ 'brown rice':2.50,'pearl rice':2.00};
+var PROTEIN_F=1.5, VEG_ADD=25;
+function norm(s){return String(s==null?'':s).toLowerCase().replace(/\(.*?\)/g,' ')
+ .replace(/[^a-z ]/g,' ').replace(/\s+/g,' ').trim()}
+function riceFactor(name){var n=norm(name),best=null,len=-1;
+ if(/classic meal prep brown rice|spiced long rice/.test(n))return null;
+ for(var k in RICE){if(n.indexOf(k)>=0&&k.length>len){best=RICE[k];len=k.length}}
+ return best}
+function rawOf(g,name,cat){
+ g=+g||0;cat=String(cat||'').toLowerCase();
+ if(!g)return{g:0,rule:'q',why:'no weight given'};
+ if(BASIS==='raw')return{g:g,rule:'',why:'already raw'};
+ var rf=riceFactor(name);
+ if(rf)return{g:g/rf,rule:'',why:'rice, divided by '+rf.toFixed(2)};
+ if(cat==='protein')return{g:g*PROTEIN_F,rule:'',why:'protein, times 1.5'};
+ if(cat==='vegetable'){
+  if(/broccoli/.test(norm(name)))return{g:g,rule:'',why:'broccoli, no change'};
+  return{g:g+VEG_ADD,rule:'',why:'vegetable, plus 25 g'}}
+ return{g:g,rule:'n',why:'no conversion for this yet'}}
+function snap25(g){return Math.max(0,Math.round((+g||0)/25)*25)}
+/* What goes in the right-hand column. An item with no factor is NEVER shown snapped to
+   the 25 g grid — a rounded number reads as a converted one, and this is exactly the
+   case where nothing has been converted. It shows the weight as written and says so. */
+function rawCell(r,rec){
+ if(r.rule==='q')return '<div class="raw">&mdash;<small>no weight given</small></div>';
+ if(r.rule==='n')return '<div class="raw" style="color:var(--warn)">'+(+r.g||0)+
+  ' g<small>as written &mdash; we weigh it</small></div>';
+ var g=snap25(r.g),why=esc(r.why);
+ /* Once a dish is chosen, this column shows the portion the kitchen would actually weigh
+    out — the same figure the editor will show. Every dish has a smallest and largest
+    portion, so a plan asking for 400 g of rice cannot be taken literally, and the customer
+    should find that out here rather than be surprised by a different number one screen on. */
+ if(rec){var cg=clampG(rec,r.g);if(cg!==g){g=cg;why='nearest portion we cook'}}
+ return '<div class="raw">'+g+' g<small>'+why+'</small></div>'}
+
+/* ---- what we actually cook ----
+   We read the PLAN BUILDER's own catalogue, not the a la carte list, because everything we
+   match here is handed to that builder to edit. Borrowing its list means every code we pass
+   over is one it already knows, and we get the portion range and the macros with it. */
+var CAT_URL='https://my.chatbees.io/p/FaMS3PtRe';
+var PLAN_URL='https://my.chatbees.io/p/SrQzC5m2';
+var MENU=[],BYCODE={};
+fetch(CAT_URL,{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){
+ var a=t.indexOf('/*CAT*/'),b=t.indexOf('/*ENDCAT*/');if(a<0||b<a)return;
+ var d=JSON.parse(t.slice(a+7,b)),L='pcvgs';
+ MENU=(d.r||[]).map(function(v,i){var o={};(d.k||[]).forEach(function(k,j){o[k]=v[j]});
+  var nm=o.n[1];(d.t||[]).forEach(function(x){nm=nm.split(x[0]).join(x[1])});
+  return{code:o.c,name:(d.n[o.n[0]]||'')+nm,cat:L.charAt(o.cat),
+   sq:(d.q&&d.q[i])||100,kcal:+o.kcal||0,p:+o.p||0,c:+o.cb||0,f:+o.f||0,pr:+o.pr||0,
+   po:(d.o&&d.o[o.po])||[50,300,25]}});
+ BYCODE={};MENU.forEach(function(x){BYCODE[x.code]=x});
+ if(PLAN)paint()}).catch(function(){});
+/* Macros and price for g grams of one dish, and the kitchen's allowed portions for it. */
+function per(r,g){var k=(+g||0)/(r.sq||100);
+ return{kcal:r.kcal*k,p:r.p*k,c:r.c*k,f:r.f*k,price:r.pr*k}}
+function clampG(r,g){var st=r.po[2]||25;g=Math.round((+g||0)/st)*st;
+ return Math.max(r.po[0],Math.min(r.po[1],g))}
+function per2(r,g){return r.kcal*((+g||0)/(r.sq||100))}
+
+/* Three outcomes only, and the middle one matters most. A plan line either lands on one
+   recipe, lands on several and the customer chooses, or lands on nothing and we say so.
+   Choosing between twenty chicken recipes on somebody's behalf would be worse than asking:
+   "grilled chicken breast" is not a licence to send them teriyaki. */
+var CAT_OK={protein:['p','g'],carb:['c'],vegetable:['v','g'],sauce:['s'],
+ fat:[],fruit:[],dairy:[],other:[]};
+var CORE=[['chicken','chicken'],['beef','beef'],['salmon','salmon'],['prawn','prawn'],
+ ['barramundi','barramundi'],['toman','toman'],['halibut','halibut'],['fish','fish'],
+ ['rice','rice'],['quinoa','quinoa'],['pasta','pasta'],['fusilli','fusilli'],
+ ['fettuccine','fettuccine'],['spaghetti','pasta'],['potato','potato'],['toast','toast'],
+ ['broccoli','broccoli'],['cauliflower','cauliflower'],['carrot','carrot'],
+ ['bean','bean'],['pea','pea'],['kangkung','kangkung'],['eggplant','eggplant'],
+ ['asparagus','asperges'],['asperges','asperges'],['tofu','tofu'],['corn','corn'],
+ ['mushroom','mushroom'],['cabbage','cabbage'],['tomato','tomato']];
+function mnorm(s){return String(s==null?'':s).toLowerCase()
+ .replace(/&/g,' and ').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
+function mtoks(s){return mnorm(s).split(' ').filter(function(t){
+ return t&&['the','of','with','w','a','an','and','fresh','cooked','raw','plain'].indexOf(t)<0})}
+function mcore(s){var n=mnorm(s),out=[];
+ CORE.forEach(function(p){if(n.indexOf(p[0])>=0&&out.indexOf(p[1])<0)out.push(p[1])});return out}
+function mscore(q,cand){var a=mtoks(q),b=mtoks(cand);
+ if(!a.length||!b.length)return{s:0,tight:0};
+ if(mnorm(q)===mnorm(cand))return{s:100,tight:1};
+ var h=0;a.forEach(function(t){if(b.indexOf(t)>=0)h++});
+ if(!h)return{s:0,tight:0};
+ var cover=h/a.length,tight=h/b.length;
+ return{s:Math.round(cover*70+tight*30),tight:tight}}
+function matchOne(food,category){
+ var allow=CAT_OK[String(category||'').toLowerCase()];
+ if(!MENU.length)return{state:'wait'};
+ if(!allow||!allow.length)return{state:'none',why:'not something our kitchen cooks'};
+ var qc=mcore(food);
+ var pool=MENU.filter(function(it){
+  if(allow.indexOf(it.cat)<0)return false;
+  if(!qc.length)return true;
+  var c=mcore(it.name);
+  return qc.some(function(x){return c.indexOf(x)>=0})});
+ if(!pool.length)return{state:'none',why:'we do not make anything from this'};
+ var ranked=pool.map(function(it){var r=mscore(food,it.name);
+   return{code:it.code,name:it.name,s:r.s,tight:r.tight}})
+  .sort(function(a,b){return b.s-a.s});
+ if(!qc.length)ranked=ranked.filter(function(x){return x.s>0});
+ if(!ranked.length)return{state:'none',why:'nothing of ours is close enough'};
+ var top=ranked[0],second=ranked[1];
+ /* An exact name is an exact name — nothing else argues with it, however close it looks. */
+ if(top.s===100)return{state:'hit',code:top.code,name:top.name,options:ranked.slice(0,8)};
+ /* We did not recognise the food at all, so word overlap is all that is holding this
+    together, and two shared words is not enough. "Egg whites" shares "egg" with our
+    salted egg yolk chicken and means nothing of the kind. */
+ if(!qc.length){
+  if(top.s>=55)return{state:'pick',code:top.code,name:top.name,options:ranked.slice(0,8)};
+  return{state:'none',why:'nothing of ours is close enough'}}
+ /* Past here we already know it is the same food — the only question is which of ours.
+    A confident answer has to explain almost all of OUR name too, or "grilled chicken
+    breast" quietly becomes teriyaki and nobody notices until it is cooked. */
+ if(top.s>=90&&top.tight>=0.85&&(!second||top.s-second.s>=12))
+  return{state:'hit',code:top.code,name:top.name,options:ranked.slice(0,8)};
+ return{state:'pick',code:top.code,name:top.name,options:ranked.slice(0,8)}}
+
+/* The chosen recipe is remembered against the item, so re-painting — which happens every
+   time a weight changes or the cooked/raw switch moves — never throws away a choice. */
+function chosenOf(it,m){
+ if(it.pickCode==='-')return null;
+ if(it.pickCode){var f=(m.options||[]).filter(function(o){return o.code===it.pickCode})[0];
+  if(f)return f}
+ return m.state==='hit'?{code:m.code,name:m.name}:null}
+function matchRow(it,m,d,mi,ii){
+ if(m.state==='wait')return '<div class="mt"><em>Checking the menu…</em></div>';
+ var at='data-d="'+d+'" data-m="'+mi+'" data-i="'+ii+'"';
+ if(m.state==='none')
+  return '<div class="mt"><span class="tag x">You sort this yourself</span><em>'+esc(m.why)+'</em></div>';
+ if(m.state==='hit'&&!it.pickCode)
+  return '<div class="mt"><span class="tag y">We cook this</span><b>'+esc(m.name)+'</b></div>';
+ var cur=it.pickCode||(m.state==='hit'?m.code:'');
+ var opts='<option value=""'+(cur?'':' selected')+'>Choose one of ours…</option>'+
+  (m.options||[]).map(function(o){
+   return '<option value="'+esc(o.code)+'"'+(o.code===cur?' selected':'')+'>'+esc(o.name)+'</option>'}).join('')+
+  '<option value="-"'+(it.pickCode==='-'?' selected':'')+'>None of these — I will sort this myself</option>';
+ var tag=cur&&cur!=='-'?'<span class="tag y">We cook this</span>'
+  :it.pickCode==='-'?'<span class="tag x">You sort this yourself</span>'
+  :'<span class="tag c">Which of ours?</span>';
+ return '<div class="mt">'+tag+'<select class="mpick" '+at+' aria-label="Which of our recipes">'+opts+'</select></div>'}
+
+/* ---- why every call below invents a throwaway address ----
+   A webhook field only reaches the first step of a flow correctly the FIRST time a given
+   contact fires it. Fire the same flow again as the same contact and that first step reads
+   the value from the run before — proven here: the same contact sent a plan and got the
+   previous plan back, while a brand new contact got its own, every time. Left alone, two
+   people who both left the email box empty would have shared one contact and been shown
+   each other's meal plans, and anyone who read a plan twice would have got their first
+   reading back. Each call therefore arrives as a contact that has never been seen before.
+   The real email travels inside the payload, where the kitchen reads it. */
+function once(){return 'byop-'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)+
+ '@aeramealprep.invalid'}
+
+/* ---- step 1 ---- */
+$('#basisSeg').addEventListener('click',function(e){
+ var b=e.target.closest('button[data-b]');if(!b)return;
+ BASIS=b.dataset.b;
+ [].forEach.call(this.querySelectorAll('button'),function(x){x.classList.toggle('on',x===b)});
+ if(PLAN)paint()});
+
+/* A phone photo is several megabytes and mostly detail nobody needs to read words. It is
+   drawn down to fit inside 1400 px and re-encoded before it goes anywhere, which keeps the
+   post small enough to survive and costs nothing in legibility. */
+function shrink(file,maxPx,quality){
+ return new Promise(function(res,rej){
+  var fr=new FileReader();
+  fr.onerror=function(){rej(new Error('That picture could not be opened.'))};
+  fr.onload=function(){
+   var im=new Image();
+   im.onerror=function(){rej(new Error('That file is not a picture we can read.'))};
+   im.onload=function(){
+    var w=im.width,hh=im.height,s=Math.min(1,maxPx/Math.max(w,hh));
+    var c=document.createElement('canvas');
+    c.width=Math.max(1,Math.round(w*s));c.height=Math.max(1,Math.round(hh*s));
+    var x=c.getContext('2d');
+    x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);
+    x.drawImage(im,0,0,c.width,c.height);
+    res(c.toDataURL('image/jpeg',quality))};
+   im.src=fr.result};
+  fr.readAsDataURL(file)})}
+
+async function readPhoto(f){
+ msg('#readmsg','warn','<span class="spin"></span>Reading your photo. This takes about half a minute.');
+ var uri=await shrink(f,1400,0.72);
+ if(uri.length>1200000)uri=await shrink(f,1000,0.6);
+ if(uri.length>1600000)throw new Error('That picture is too big to send. Try photographing one page at a time.');
+ var key='BYOPIMG-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
+ var r=await fetch(PHOTO_HOOK,{method:'POST',headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({contactEmail:once(),
+   data:{key:key,img:uri}})});
+ if(!r.ok)throw new Error('We could not send that picture. Try a smaller one.');
+ var txt=await pollText(key);
+ if(/CANNOT READ THIS PICTURE/i.test(txt))
+  throw new Error('That picture is too blurred or too dark to read. Try again in better light, straight on — or type the plan out.');
+ if(!txt||txt.trim().length<12)throw new Error('Nothing readable came off that picture. Try typing the plan out.');
+ $('#txt').value=txt.trim();
+ var q=(txt.match(/\[\?\]/g)||[]).length;
+ msg('#readmsg', q?'warn':'ok',
+  q?('Read it, but '+q+' word'+(q===1?' was':'s were')+' unclear and marked [?]. Fix '+
+     (q===1?'it':'them')+' in the box above, then press Read My Plan.')
+   :'Read it. Check the text above against your own sheet, then press Read My Plan.')}
+
+$('#pdf').addEventListener('change',async function(){
+ var f=this.files&&this.files[0];if(!f)return;
+ if(/^image\//.test(f.type)){
+  try{await readPhoto(f)}catch(err){msg('#readmsg','bad',esc(err.message||String(err)))}
+  return}
+ msg('#readmsg','warn','<span class="spin"></span>Reading the PDF&hellip;');
+ try{
+  if(!window.pdfjsLib)throw new Error('The PDF reader did not load. Paste the text instead.');
+  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  var buf=await f.arrayBuffer();
+  var doc=await pdfjsLib.getDocument({data:buf}).promise;
+  var out=[];
+  for(var i=1;i<=Math.min(doc.numPages,12);i++){
+   var pg=await doc.getPage(i),tc=await pg.getTextContent();
+   var last=null,line='';
+   tc.items.forEach(function(it){
+    var y=Math.round(it.transform[5]);
+    if(last!==null&&Math.abs(y-last)>3){out.push(line.trim());line=''}
+    line+=it.str+' ';last=y});
+   if(line.trim())out.push(line.trim())}
+  var text=out.filter(Boolean).join('\n').trim();
+  if(!text)throw new Error('That PDF has no text in it — it is probably a scan. Type the plan out instead.');
+  $('#txt').value=text;
+  msg('#readmsg','ok','Loaded '+out.length+' lines from the PDF. Have a look, then press Read My Plan.')}
+ catch(err){msg('#readmsg','bad',esc(err.message||String(err)))}});
+
+$('#read').addEventListener('click',async function(){
+ var text=$('#txt').value.trim();
+ if(text.length<20){msg('#readmsg','bad','Put the plan in the box first — a line or two is not enough to read.');return}
+ var btn=this;btn.disabled=true;
+ /* Our coach's template starts with a "Weights: RAW" line. Reading it here rather than
+    leaving it to the AI means the single most damaging mistake on this page — a cooked plan
+    read as a raw one, or the reverse — is settled by a regular expression before anything
+    else happens, and the customer is told which way we took it. */
+ var dec=/^[ \t]*weights?[ \t]*[:\-][ \t]*(raw|cooked)\b/im.exec(text);
+ if(dec){var b=dec[1].toLowerCase();
+  if(b!==BASIS){BASIS=b;
+   [].forEach.call($('#basisSeg').querySelectorAll('button'),function(x){
+    x.classList.toggle('on',x.dataset.b===b)})}}
+ msg('#readmsg','warn','<span class="spin"></span>Reading your plan. This takes about half a minute.');
+ var key='BYOP-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
+ try{
+  var r=await fetch(READ_HOOK,{method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({contactEmail:once(),
+    data:{key:key,basis:BASIS,payload:JSON.stringify({basis:BASIS,text:text})}})});
+  if(!r.ok)throw new Error('We could not reach the kitchen just now. Try again in a moment.');
+  var reply=await poll(key);
+  if(reply.error)throw new Error(reply.error);
+  PLAN=reply;paint();
+  $('#reviewCard').style.display='block';$('#openCard').style.display='block';
+  msg('#readmsg','ok','Read it. Check it below.'+(dec?' Your plan says <b>'+BASIS+
+   ' weights</b> at the top, so that is how we have taken it.':''));
+  $('#reviewCard').scrollIntoView({behavior:'smooth',block:'start'})}
+ catch(err){msg('#readmsg','bad',esc(err.message||String(err)))}
+ btn.disabled=false});
+
+/* The photo flow answers with plain text rather than JSON, so it gets its own watcher. */
+async function pollText(key){
+ for(var i=0;i<40;i++){
+  await new Promise(function(r){setTimeout(r,2000)});
+  try{
+   var res=await fetch(FEED+'?t='+Date.now(),{cache:'no-store'});
+   var j=await res.json();var rows=(j&&(j.rows||j.data))||[];
+   for(var k=rows.length-1;k>=0;k--){
+    if(String(rows[k].Key||'').trim()===key)return String(rows[k].Reply||'')}}
+  catch(e){}}
+ throw new Error('Reading that picture took longer than expected. Try a smaller or clearer one.')}
+
+/* The reply lands in a sheet the flow writes to, so the page watches for its own key. */
+async function poll(key){
+ for(var i=0;i<40;i++){
+  await new Promise(function(r){setTimeout(r,2000)});
+  try{
+   var res=await fetch(FEED+'?t='+Date.now(),{cache:'no-store'});
+   var j=await res.json();var rows=(j&&(j.rows||j.data))||[];
+   for(var k=rows.length-1;k>=0;k--){
+    if(String(rows[k].Key||'').trim()===key){
+     try{return JSON.parse(rows[k].Reply)}catch(e){throw new Error('The reading came back garbled. Try again.')}}}}
+  catch(e){if(e&&e.message&&/garbled/.test(e.message))throw e}}
+ throw new Error('That took longer than expected. Your plan may be very long — try one week at a time.')}
+
+/* ---- step 2 ---- */
+function paint(){
+ var days=(PLAN&&PLAN.days)||[],html='',boxes=0,unknown=0,noweight=0,weCook=0,youSort=0,askYou=0,look=0;
+ days.forEach(function(d,di){
+  html+='<div class="daytitle">'+esc(d.day||('Day '+(di+1)))+'</div>';
+  (d.meals||[]).forEach(function(m,mi){
+   boxes++;
+   html+='<div class="mealtitle">'+esc(m.meal||('Meal '+(mi+1)))+'</div>';
+   (m.items||[]).forEach(function(it,ii){
+    var r=rawOf(it.grams,it.food,it.category);
+    if(r.rule==='n')unknown++;
+    if(r.rule==='q')noweight++;
+    var flag=r.rule==='n'?'<span class="flag n">no rule</span>'
+            :r.rule==='q'?'<span class="flag q">no weight</span>':'';
+    var mm=matchOne(it.food,it.category);
+    var ch=chosenOf(it,mm);
+    var rec=ch?BYCODE[ch.code]:null;
+    it.code=ch?ch.code:'';it.recipe=ch?ch.name:'';
+    /* Three states, and the middle one is not the last one. An item nobody has chosen yet is
+       NOT the customer's own food — saying so would quietly drop half their plan. */
+    it.mine=(mm.state==='none'||it.pickCode==='-');
+    if(mm.state!=='wait'){
+     if(ch)weCook++;
+     else if(mm.state==='none'||it.pickCode==='-')youSort++;
+     else askYou++}
+    /* One item counts once however many things are wrong with it — an undecided choice
+       on a weight we cannot convert is one line to look at, not two. */
+    var undecided=(mm.state!=='wait'&&mm.state!=='none'&&!ch&&it.pickCode!=='-');
+    if(undecided||r.rule)look++;
+    html+='<div class="it" data-d="'+di+'" data-m="'+mi+'" data-i="'+ii+'">'+
+     '<div class="nm">'+esc(it.food)+flag+
+      '<small>'+esc(it.asWritten||'')+'</small></div>'+
+     '<input type="number" min="0" step="5" value="'+(+it.grams||0)+'" aria-label="grams">'+
+     rawCell(r,rec)+
+     matchRow(it,mm,di,mi,ii)+
+     '</div>'})})});
+ $('#review').innerHTML=html||'<p class="hint">Nothing readable came back. Try pasting the plan as text.</p>';
+ $('#totals').innerHTML=
+  '<div><div class="l">Days</div><div class="v">'+days.length+'</div></div>'+
+  '<div><div class="l">We Cook</div><div class="v">'+weCook+'</div></div>'+
+  '<div><div class="l">Needs A Look</div><div class="v">'+look+'</div></div>';
+ var f='';
+ if(askYou)f+='<div class="note warn"><b>'+askYou+' item'+(askYou===1?'':'s')+
+  ' could be more than one of ours.</b> Pick the one you want from the list under each &mdash; '+
+  'we will not choose a flavour for you.</div>';
+ if(youSort)f+='<div class="note"><b>'+youSort+' item'+(youSort===1?' is':'s are')+
+  ' not on our menu.</b> Eggs, fruit, oats, yoghurt and the like are yours to sort out. '+
+  'We will still list '+(youSort===1?'it':'them')+' on your plan so nothing goes missing.</div>';
+ if(noweight)f+='<div class="note warn"><b>'+noweight+' item'+(noweight===1?' has':'s have')+
+  ' no weight.</b> Your plan did not give one. Put a number in, or leave it and we will ask you.</div>';
+ if(unknown)f+='<div class="note warn"><b>'+unknown+' item'+(unknown===1?'':'s')+
+  ' we cannot convert yet.</b> We will weigh '+(unknown===1?'it':'them')+' by hand rather than guess.</div>';
+ if((PLAN.unreadable||[]).filter(Boolean).length)f+='<div class="note bad"><b>We could not read these lines:</b> '+
+  esc(PLAN.unreadable.filter(Boolean).join(' · '))+'</div>';
+ if(PLAN.note)f+='<div class="note ok">'+esc(PLAN.note)+'</div>';
+ $('#flags').innerHTML=f;
+ if(document.getElementById('openSum'))paintOpen()}
+
+$('#review').addEventListener('input',function(e){
+ var box=e.target.closest('.it');if(!box)return;
+ var d=+box.dataset.d,m=+box.dataset.m,i=+box.dataset.i;
+ var it=PLAN.days[d].meals[m].items[i];
+ it.grams=Math.max(0,+e.target.value||0);
+ var r=rawOf(it.grams,it.food,it.category);
+ box.querySelector('.raw').outerHTML=rawCell(r,it.code?BYCODE[it.code]:null)});
+
+/* A choice repaints everything, because the counts at the bottom move with it. The
+   selected value is stored on the item first so the repaint puts it straight back. */
+$('#review').addEventListener('change',function(e){
+ var sel=e.target.closest('select.mpick');if(!sel)return;
+ var it=PLAN.days[+sel.dataset.d].meals[+sel.dataset.m].items[+sel.dataset.i];
+ it.pickCode=sel.value||'';
+ paint()});
+
+/* ---- step 3 : hand the plan over to the editor ----
+   The plan builder keeps its work in a draft in this browser and picks it up on load. We
+   write the same draft and send them there, so an uploaded plan lands in exactly the editor
+   a generated one does — same swaps, same portions, same prices, same way to checkout — and
+   there is one editor to look after rather than two.
+   Targets are the plan's OWN totals. We are not inventing a calorie goal for somebody whose
+   coach already set one: the target is what their sheet adds up to, so the bars read "on
+   point" to begin with and only move when they change something of ours. */
+function planDraft(){
+ var meals=[],off=[],day=0,mpd=0,waiting=0;
+ (PLAN.days||[]).forEach(function(d){
+  var pending=[];
+  (d.meals||[]).forEach(function(m){
+   var comps=[];
+   (m.items||[]).forEach(function(it){
+    var r=it.code&&BYCODE[it.code];
+    if(!r){if(it.mine){if(it.food)off.push({day:d.day||'',meal:m.meal||'',food:it.food,g:+it.grams||0})}
+     else waiting++;return}
+    var rw=rawOf(it.grams,it.food,it.category);
+    /* No weight on the sheet means we start at the kitchen's smallest portion and let them
+       set it, rather than putting a number in their mouth. */
+    comps.push({r:it.code,g:clampG(r,rw.rule==='q'?r.po[0]:rw.g)})});
+   if(comps.length)pending.push(comps)});
+  if(!pending.length)return;
+  day++;
+  pending.forEach(function(c,i){
+   /* What this meal came to on their own sheet, at the portions we would cook. The editor
+      measures the box against this rather than against an average, so a small breakfast is
+      not marked down for being a small breakfast. */
+   var t={kcal:0,p:0,c:0,f:0};
+   c.forEach(function(cp){var r=BYCODE[cp.r];if(!r)return;var x=per(r,cp.g);
+    t.kcal+=x.kcal;t.p+=Math.round(x.p*10)/10;t.c+=Math.round(x.c*10)/10;t.f+=Math.round(x.f*10)/10});
+   t.kcal=Math.round(t.kcal);t.p=Math.round(t.p);t.c=Math.round(t.c);t.f=Math.round(t.f);
+   meals.push({day:day,slot:i+1,comps:c,t:t})});
+  if(pending.length>mpd)mpd=pending.length});
+ if(!meals.length)return{off:off,waiting:waiting,plan:null};
+ var tot={kcal:0,p:0,c:0,f:0};
+ meals.forEach(function(m){m.comps.forEach(function(cp){var r=BYCODE[cp.r];if(!r)return;
+  var x=per(r,cp.g);tot.kcal+=x.kcal;tot.p+=x.p;tot.c+=x.c;tot.f+=x.f})});
+ var nd=Math.max(1,day);
+ return{off:off,waiting:waiting,plan:{
+  id:'PL-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase(),
+  days:nd,mpd:mpd,meals:meals,byop:1,
+  targets:{kcal:Math.round(tot.kcal/nd),p:Math.round(tot.p/nd),
+           c:Math.round(tot.c/nd),f:Math.round(tot.f/nd)},
+  q:{days:nd,mpd:mpd,total:mpd,plan:'macros'}}}}
+
+function paintOpen(){
+ var d=planDraft(),h='';
+ if(!d.plan){
+  h='<div class="note warn"><b>There is nothing here we can cook yet.</b> '+
+   (d.waiting?'Choose which of our dishes you want for the items above, and this will fill in.'
+             :'Everything on this plan is food you would buy yourself. Send it to the kitchen '+
+              'below if you would like us to look at it anyway.')+'</div>';
+  $('#openSum').innerHTML=h;$('#open').disabled=true;
+  if(!d.waiting)$('#sendCard').style.display='block';
+  return}
+ $('#open').disabled=false;
+ var boxes=d.plan.meals.length,T=d.plan.targets;
+ h+='<div class="tot"><div><div class="l">Boxes</div><div class="v">'+boxes+'</div></div>'+
+  '<div><div class="l">A Day</div><div class="v">'+Math.round(T.kcal)+' KCAL</div></div>'+
+  '<div><div class="l">Protein A Day</div><div class="v">'+T.p+' g</div></div></div>';
+ if(d.waiting)h+='<div class="note warn" style="margin-top:12px"><b>'+d.waiting+' item'+
+  (d.waiting===1?' is':'s are')+' still waiting on you.</b> Pick which of ours you want for '+
+  (d.waiting===1?'it':'them')+' above, or they will not be in the boxes.</div>';
+ /* The editor carries one daily target for the whole plan, so a plan with three meals on
+    Monday and two on Tuesday will read over on one day and under on the other. That is their
+    plan's own shape, not our portions drifting, and it is better said here than puzzled over
+    in the editor. */
+ var per={};d.plan.meals.forEach(function(m){var t=0;m.comps.forEach(function(cp){var r=BYCODE[cp.r];
+  if(r)t+=per2(r,cp.g)});per[m.day]=(per[m.day]||0)+t});
+ var vals=Object.keys(per).map(function(k){return per[k]});
+ if(vals.length>1){var lo=Math.min.apply(null,vals),hi=Math.max.apply(null,vals);
+  if(lo>0&&hi/lo>1.15)h+='<div class="note" style="margin-top:12px"><b>Your days are not even.</b> '+
+   'One day of your plan comes to about '+Math.round(hi)+' KCALs and another about '+Math.round(lo)+
+   '. The editor works to one daily figure, so expect the heavier day to read over it and the '+
+   'lighter day under. That is your plan\'s shape, not our portions.</div>'}
+ if(d.off.length){
+  var names=[];d.off.forEach(function(o){if(names.indexOf(o.food)<0)names.push(o.food)});
+  h+='<div class="note" style="margin-top:12px"><b>These stay yours:</b> '+
+   esc(names.join(' · '))+'. We do not cook them, so they are not in the boxes &mdash; they will '+
+   'be listed on your plan so nothing goes missing.</div>'}
+ $('#openSum').innerHTML=h}
+
+$('#open').addEventListener('click',function(){
+ var d=planDraft();
+ if(!d.plan){msg('#openmsg','bad','There is nothing on this plan we cook yet.');return}
+ try{
+  localStorage.setItem('aera.planDraft',JSON.stringify({q:d.plan.q,plan:d.plan,step:4}));
+  localStorage.setItem('aera.byop',JSON.stringify({off:d.off,basis:BASIS,at:Date.now()}))}
+ catch(e){msg('#openmsg','bad','This browser will not let us hand the plan over. '+
+  'Try again outside private browsing, or send it to the kitchen below.');
+  $('#sendCard').style.display='block';return}
+ location.href=PLAN_URL});
+
+$('#askQuote').addEventListener('click',function(e){e.preventDefault();
+ $('#sendCard').style.display='block';
+ $('#sendCard').scrollIntoView({behavior:'smooth',block:'start'})});
+
+/* ---- step 4 ---- */
+/* A Malaysian mobile typed as 0123456789 loses its leading zero the moment a spreadsheet
+   decides it is a number, and a number the kitchen cannot ring is no use to anybody. It
+   goes out in +60 form, which survives and is what the couriers want anyway. */
+function phoneOut(v){
+ var d=String(v||'').replace(/[^0-9+]/g,'');
+ if(!d)return '';
+ if(d.charAt(0)==='+')return d;
+ if(d.indexOf('60')===0&&d.length>=11)return '+'+d;
+ if(d.charAt(0)==='0')return '+60'+d.slice(1);
+ return '+60'+d}
+$('#send').addEventListener('click',async function(){
+ if(!PLAN)return;
+ var em=$('#email').value.trim();
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){msg('#sendmsg','bad','We need an email to come back to you on.');return}
+ var btn=this;btn.disabled=true;btn.textContent='Sending…';
+ var lines=[],unmatched=[],codes=[],offmenu=[];
+ (PLAN.days||[]).forEach(function(d){(d.meals||[]).forEach(function(m){(m.items||[]).forEach(function(it){
+  var r=rawOf(it.grams,it.food,it.category);
+  var shown=r.rule==='q'?'no weight given':r.rule==='n'?((+r.g||0)+'g as written, needs weighing')
+   :(snap25(r.g)+'g raw');
+  var cook=it.code?(it.recipe+' ['+it.code+']'):'NOT ON OUR MENU — customer sorts this';
+  lines.push([d.day,m.meal,it.food,it.category,(+it.grams||0)+'g '+BASIS,shown,cook].join(' | '));
+  if(it.code)codes.push(it.code+' x'+(r.rule==='q'?'?':snap25(r.g))+'g');
+  else offmenu.push(d.day+' '+m.meal+' '+it.food);
+  if(r.rule)unmatched.push(d.day+' '+m.meal+' '+it.food+' ('+r.why+')')})})});
+/* The kitchen tells a coach's plan from a customer's own by a leading "Coach: ..." line.
+   Nothing else in the submission carries that, so it is written here or not at all. */
+function planText(lines){
+ var el=document.getElementById('coach');
+ var c=String(el&&el.value||'').replace(/[\r\n|]+/g,' ').trim().slice(0,120);
+ return (c?'Coach: '+c+'\n':'')+lines.join('\n').slice(0,45000)}
+
+ try{
+  var r=await fetch(SEND_HOOK,{method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({contactEmail:once(),contactName:$('#who').value.trim(),contactPhone:phoneOut($('#phone').value),
+    data:{on_date:new Date().toISOString().slice(0,10),who:$('#who').value.trim(),email:em,
+     phone:phoneOut($('#phone').value),basis:BASIS,days:String((PLAN.days||[]).length),
+     boxes:String(lines.length),plan:planText(lines),
+     codes:codes.join(', ').slice(0,8000),offmenu:offmenu.join(' · ').slice(0,4000),
+     unmatched:unmatched.join(' · ').slice(0,4000),note:$('#note').value.trim()}})});
+  if(!r.ok)throw new Error('That did not send. Try again in a moment.');
+  $('#sendCard').innerHTML='<h2><span class="step">4</span>Sent</h2>'+
+   '<div class="note ok">Thank you — your plan is with the kitchen. We will price it and '+
+   'come back to you at '+esc(em)+' before anything is cooked.</div>';
+  $('#sendCard').scrollIntoView({behavior:'smooth',block:'center'})}
+ catch(err){msg('#sendmsg','bad',esc(err.message||String(err)));btn.disabled=false;btn.textContent='Send My Plan To AERA'}});
+})();
+
+/* ---- iPhone photos ----
+   An iPhone photographs in HEIC unless it has been told otherwise, and no browser except
+   Safari can decode one. Everybody else's phone sends a JPEG, so this went unnoticed: the
+   file arrived, the page could not turn it into a picture, and the customer was told their
+   photo was not one. It is converted here, on the phone, before anything else looks at it.
+   The converter is only fetched when a HEIC actually turns up. */
+(function(){
+ var inp=document.getElementById('pdf');if(!inp)return;
+ var passing=false;
+ function isHeic(f){return /heic|heif/i.test(f.type||'')||/\.(heic|heif)$/i.test(f.name||'')}
+ function note(cls,html){var m=document.getElementById('readmsg');
+  if(m)m.innerHTML='<div class="note '+cls+'">'+html+'</div>'}
+ function advice(){return 'On the phone open Settings, then Camera, then Formats, and choose '+
+  '<b>Most Compatible</b> before taking the photo again &mdash; or just send us a screenshot '+
+  'of it, which always works.'}
+ function loader(cb){
+  if(window.heic2any)return cb(true);
+  var el=document.createElement('script');
+  el.src='https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js';
+  el.onload=function(){cb(!!window.heic2any)};
+  el.onerror=function(){cb(false)};
+  document.head.appendChild(el)}
+ /* Caught on the way down, at the document, so it runs before the page's own handler and can
+    hold the event back while the picture is converted. */
+ document.addEventListener('change',function(e){
+  if(e.target!==inp||passing)return;
+  var f=inp.files&&inp.files[0];
+  if(!f||!isHeic(f))return;
+  e.stopPropagation();e.preventDefault();
+  note('warn','<span class="spin"></span>Converting your iPhone photo&hellip;');
+  loader(function(ok){
+   if(!ok)return note('bad','<b>We could not load what we need to read an iPhone photo.</b> '+advice());
+   window.heic2any({blob:f,toType:'image/jpeg',quality:0.92}).then(function(out){
+    var blob=Array.isArray(out)?out[0]:out;
+    var jpg=new File([blob],String(f.name||'photo').replace(/\.(heic|heif)$/i,'')+'.jpg',
+     {type:'image/jpeg'});
+    var dt=new DataTransfer();dt.items.add(jpg);
+    inp.files=dt.files;
+    passing=true;
+    inp.dispatchEvent(new Event('change',{bubbles:true}));
+    passing=false})
+   .catch(function(){note('bad','<b>That photo could not be converted.</b> '+advice())})})},true);
+})();
+</script>
+<p class="aeralegal">© 2026 AERA Meal Preparation SDN BHD · Seri Kembangan · <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a> · <a href="https://my.chatbees.io/p/xXH4dXALg" target="_blank" rel="noopener">Privacy Notice</a></p>
+<!-- AERA language switch : start -->
+
+
+
+
+<!-- AERA language switch : end -->
+  <script src="script.js"></script>
+</body>
+</html>
