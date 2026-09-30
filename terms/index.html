@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- BASE:START (managed by Coding Agent — do not edit) -->
+<base href="/aera-shop/terms/">
+<!-- BASE:END -->
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap">
+
+
+<!-- SEO Meta Tags -->
+<title>Terms &amp;amp; Conditions — AERA Meal Prep</title>
+<meta name="description" content="The terms that apply when you order from AERA Meal Prep." />
+<meta property="og:title" content="Terms &amp;amp; Conditions — AERA Meal Prep" />
+<meta property="og:description" content="The terms that apply when you order from AERA Meal Prep." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Terms &amp;amp; Conditions — AERA Meal Prep" />
+<meta name="twitter:description" content="The terms that apply when you order from AERA Meal Prep." />
+<!-- End SEO Meta Tags -->
+<script data-lp-token-hydrate>
+(function(){try{
+  var slug="lp-muansp2c-q0uz7";
+  var SITEK="";
+  var SK='lp_access_'+slug;
+  var map={access_token:'lp_pw_',allowlist_access_token:'lp_al_',pin_access_token:'lp_pin_',paywall_access_token:'lp_paid_'};
+  function siteTok(){try{return SITEK?localStorage.getItem(SITEK):null;}catch(e){return null;}}
+  var u=new URL(location.href);var found=null;var changed=false;
+  var PINP=true;
+  if(!PINP){try{localStorage.removeItem('lp_pin_'+slug);if(SITEK)localStorage.removeItem(SITEK);}catch(e){}}
+  Object.keys(map).forEach(function(p){var v=u.searchParams.get(p);if(v){found=v;try{if(PINP||p!=='pin_access_token'){localStorage.setItem(map[p]+slug,v);if(SITEK&&p==='pin_access_token')localStorage.setItem(SITEK,v);}}catch(e){}if(p==='pin_access_token'){try{sessionStorage.setItem('lp_fresh_'+slug,'1');}catch(e){}}u.searchParams.delete(p);changed=true;}});
+  if(found){try{sessionStorage.setItem(SK,found);}catch(e){}}
+  else{try{if(!sessionStorage.getItem(SK)){var t=localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();if(t)sessionStorage.setItem(SK,t);}}catch(e){}}
+  if(changed){try{history.replaceState(null,'',u.toString());}catch(e){}}
+  function getTok(){try{return sessionStorage.getItem(SK)||localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();}catch(e){return null;}}
+  function needsToken(url,method){if(!url)return false;var s=String(url);var m=(method||'GET').toUpperCase();var isSheetWrite=(m==='POST'||m==='PATCH'||m==='PUT'||m==='DELETE')&&/\/sheet-rows(\/|$|\?)/.test(s);var isSheetRead=/\/sheet-data(\/|$|\?)/.test(s);var isLlm=/\/api\/landing-pages\/public\/[^/]+\/(llm|llm-config)(\/|$|\?)/.test(s);return isSheetWrite||isSheetRead||isLlm;}
+  if(window.fetch){var _f=window.fetch;window.fetch=function(input,init){try{var url=typeof input==='string'?input:(input&&input.url)||'';var method=(init&&init.method)||(input&&input.method)||'GET';if(needsToken(url,method)){var tok=getTok();if(tok){init=init||{};var h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});if(!h.has('X-Landing-Page-Token'))h.set('X-Landing-Page-Token',tok);init.headers=h;}}}catch(e){}return _f.call(this,input,init);};}
+  if(window.XMLHttpRequest){var _o=XMLHttpRequest.prototype.open;var _s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__lpM=m;this.__lpU=u;return _o.apply(this,arguments);};XMLHttpRequest.prototype.send=function(){try{if(needsToken(this.__lpU,this.__lpM)){var tok=getTok();if(tok)this.setRequestHeader('X-Landing-Page-Token',tok);}}catch(e){}return _s.apply(this,arguments);};}
+}catch(e){}})();
+</script>
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://my.chatbees.io/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=7261');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='G7mXL4RMz2';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    var phone=findPhone();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    var __pLoc=(document.documentElement.lang||navigator.language||'en');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,phone:phone||'',amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,locale:__pLoc,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var sidP=urlParams.get('session_id');
+      if(sidP){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidP})}).catch(function(){});}catch(e){}}
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-cart>
+(function(){
+  var slug='G7mXL4RMz2';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findCartEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realCart=function(arg){
+    var items, email='', customerName='', successUrl, cancelUrl, currency;
+    if(Array.isArray(arg)){items=arg;}
+    else if(arg&&typeof arg==='object'){
+      items=arg.items;email=arg.email||'';customerName=arg.name||arg.customerName||'';
+      successUrl=arg.successUrl;cancelUrl=arg.cancelUrl;currency=arg.currency;
+    }
+    if(!Array.isArray(items)||items.length===0){alert('No items in cart.');return Promise.reject('no_items');}
+    var cleanItems=[];var totalCents=0;
+    for(var i=0;i<items.length;i++){
+      var it=items[i];if(!it||typeof it!=='object'){alert('Invalid item at position '+i);return Promise.reject('bad_item');}
+      var nm=typeof it.name==='string'?it.name.trim():'';
+      if(!nm){alert('Item '+(i+1)+' is missing a name.');return Promise.reject('no_name');}
+      var amt=typeof it.amountCents==='number'?it.amountCents:(typeof it.amount==='number'?Math.round(it.amount*100):NaN);
+      if(!isFinite(amt)||amt<1){alert('Item "'+nm+'" needs a valid amount in cents.');return Promise.reject('bad_amount');}
+      var qty=(typeof it.quantity==='number'&&it.quantity>0)?Math.floor(it.quantity):1;
+      cleanItems.push({name:nm,description:it.description||'',amountCents:amt,quantity:qty});
+      totalCents+=amt*qty;
+    }
+    if(totalCents<50){alert('Cart total must be at least $0.50');return Promise.reject('total_too_low');}
+    if(!email)email=findCartEmail();
+    if(!customerName)customerName=findCartName();
+    var cartPhone=findCartPhone();
+    if(!email){var p=window.prompt('Enter your email for the receipt:','');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert('An email address is required to complete checkout.');return Promise.reject('no_email');}}
+    var successBase=window.location.href.split('?')[0];
+    var body={email:email,name:customerName,items:cleanItems,locale:(document.documentElement.lang||navigator.language||'en')};
+    if(currency)body.currency=currency;
+    if(cartPhone)body.phone=cartPhone;
+    body.successUrl=successUrl||(successBase+'?cart=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}');
+    body.cancelUrl=cancelUrl||(successBase+'?cart=cancelled');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/cart/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process checkout');throw new Error(d.error);}
+    });
+  };
+  try{Object.defineProperty(window,'__processCart',{value:__realCart,writable:false,configurable:false});}catch(e){window.__processCart=__realCart;}
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('cart')==='success'){
+      var sidC=urlParams.get('session_id');
+      if(sidC){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidC})}).catch(function(){});}catch(e){}}
+      if(document.getElementById('payment-success-overlay')||document.getElementById('donation-success-overlay')||document.getElementById('cart-success-overlay'))return;
+      var overlay=document.createElement('div');overlay.id='cart-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||'Thank you for your order.';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var cBtn=document.getElementById('lp-cart-success-btn');
+      if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="top"><div class="in"><b>AERA</b><a href="https://my.chatbees.io/p/ZQr9fS2jA9">← Back to AERA Meal Prep</a></div></div>
+<div class="hero"><div class="in">
+ <h1 id="ttl">Terms &amp; Conditions</h1>
+ <p id="upd">Last updated 21 September 2026</p>
+ <div class="sw" aria-label="Language"><button type="button" id="bEN" class="on" onclick="setL('en')">English</button><button type="button" id="bZH" onclick="setL('zh')">中文</button></div>
+</div></div>
+
+
+<main>
+<article id="en" lang="en">
+<p>These terms apply whenever you order from AERA Meal Prep on our website and ordering pages, by WhatsApp, or through our customer support. Please read them before you pay. By placing an order you agree to them.</p>
+
+<nav class="toc"><b>Contents</b><ol>
+ <li><a href="#who">Who We Are</a></li>
+ <li><a href="#products">What We Sell</a></li>
+ <li><a href="#ordering">Ordering &amp; Prices</a></li>
+ <li><a href="#payment">Payment</a></li>
+ <li><a href="#delivery">Delivery &amp; Pick-Up</a></li>
+ <li><a href="#changes">Changing Or Cancelling An Order</a></li>
+ <li><a href="#problems">If Something Is Wrong</a></li>
+ <li><a href="#storage">Storing &amp; Eating Your Meals</a></li>
+ <li><a href="#allergens">Allergens &amp; Dietary Needs</a></li>
+ <li><a href="#nutrition">Nutrition &amp; Meal Plans</a></li>
+ <li><a href="#points">AERA Points, Vouchers &amp; Credit</a></li>
+ <li><a href="#referrals">Referral Codes</a></li>
+ <li><a href="#accounts">Your Account</a></li>
+ <li><a href="#subscriptions">Meal Plan Subscriptions</a></li>
+ <li><a href="#business">Business Customers</a></li>
+ <li><a href="#liability">Our Responsibility To You</a></li>
+ <li><a href="#privacy">Your Personal Data</a></li>
+ <li><a href="#general">General</a></li>
+</ol></nav>
+
+<section id="who"><h2>1. Who We Are</h2>
+<ol class="cl">
+ <li><span class="n">1.1</span>AERA Meal Prep is operated by <b>AERA Meal Preparation Sdn. Bhd.</b>, a company incorporated in Malaysia, Company No. 202001037122 ( 1393443-P ). "We", "us" and "AERA" mean that company. "You" means the person placing the order.</li>
+ <li><span class="n">1.2</span>You can reach us at:</li>
+</ol>
+<div class="box">
+ <p><b>Email</b> : <a href="mailto:aera.mealprep@gmail.com">aera.mealprep@gmail.com</a></p>
+ <p><b>Phone / WhatsApp</b> : <a href="tel:+60166630205">016-663 0205</a> · <a href="https://wa.me/60166630205" target="_blank" rel="noopener">WhatsApp us</a></p>
+ <p><b>Registered address, kitchen &amp; self pick-up point</b> : No. 35, Jalan Equine 9A, Taman Equine, 43300 Seri Kembangan, Selangor</p>
+</div>
+</section>
+
+<section id="products"><h2>2. What We Sell</h2>
+<ol class="cl">
+ <li><span class="n">2.1</span>We cook ready-to-eat, chilled meals to order. We sell Meal Bundles ( Fat Loss and Mass Gain ), individual Meals, À La Carte portions, Personalised Meal Plans and AERA merchandise.</li>
+ <li><span class="n">2.2</span>Each Meal is packed in a <b>MAP Bento Box</b> ( our standard ) or a <b>Vacuum Bag</b>, whichever you choose at checkout. À La Carte portions come in a Vacuum Bag only.</li>
+ <li><span class="n">2.3</span>Photos show a typical serving. Because every Meal is cooked by hand, how it looks and its exact weight can vary slightly from the picture.</li>
+ <li><span class="n">2.4</span>If a dish runs out, the shop says so before you buy, including any substitute the kitchen will use from the same category at the same price. If something runs out after you have paid, we will contact you to agree a substitute or refund those items.</li>
+</ol></section>
+
+<section id="ordering"><h2>3. Ordering &amp; Prices</h2>
+<ol class="cl">
+ <li><span class="n">3.1</span>All prices are in Ringgit Malaysia ( RM ). The packaging for each box is already included in the Meal price.</li>
+ <li><span class="n">3.2</span>A packaging fee based on the number of Meals, and a delivery fee based on distance, courier and service, may be added in the cart. The total shown at checkout, before you pay, is the full amount you will be charged.</li>
+ <li><span class="n">3.3</span>You can review and correct your items, delivery details and total before paying. Your order is accepted once payment succeeds and you receive our order confirmation.</li>
+ <li><span class="n">3.4</span>If a price on our website is clearly wrong because of an error, we will tell you before we cook, and you may pay the correct price or cancel for a full refund.</li>
+ <li><span class="n">3.5</span>Some dates are unavailable because the kitchen is closed. Only dates we can cook for are offered at checkout.</li>
+</ol></section>
+
+<section id="payment"><h2>4. Payment</h2>
+<ol class="cl">
+ <li><span class="n">4.1</span>Orders are paid in full when you place them, using the methods shown at checkout ( for example card, FPX online banking or e-wallet ). Payments are handled by our payment providers; we never see or store your full card details.</li>
+ <li><span class="n">4.2</span>Business customers who have agreed invoice terms with us in writing pay as set out in that agreement ( see section 15 ).</li>
+</ol></section>
+
+<section id="delivery"><h2>5. Delivery &amp; Pick-Up</h2>
+<ol class="cl">
+ <li><span class="n">5.1</span>You choose a date and a time window at checkout, and either <b>self pick-up</b> from our kitchen or <b>delivery</b> by a courier ( Lalamove or Grab ).</li>
+ <li><span class="n">5.2</span>For delivery you choose <b>Normal Delivery</b>, where the rider hands over at the lobby, guard house or collection point you name, or <b>Door-to-Door Service</b> for an extra fee shown at checkout.</li>
+ <li><span class="n">5.3</span>Time windows are our target. Couriers are independent companies and traffic or weather can delay them; we will let you know if your delivery is running significantly late. Once a rider is booked, you will receive a tracking link.</li>
+ <li><span class="n">5.4</span>Please give a complete, accurate address and a phone number the rider can reach. We are not responsible for an order that does not reach you because the details given were wrong or incomplete.</li>
+ <li><span class="n">5.5</span>If you are not there or cannot be reached when the rider arrives, the rider will leave your order at the lobby, guard house or reception of the address given. Your order counts as delivered once it is left there, and from then on it is your responsibility to collect it and put it in the fridge.</li>
+ <li><span class="n">5.6</span>Self pick-up orders should be collected during the time window chosen.</li>
+</ol></section>
+
+<section id="changes"><h2>6. Changing Or Cancelling An Order</h2>
+<ol class="cl">
+ <li><span class="n">6.1</span>You may change or cancel a paid order free of charge up to <b>48 hours</b> before the delivery or pick-up date and time you chose. Contact us by email or WhatsApp.</li>
+ <li><span class="n">6.2</span>A cancelled order is refunded to the way you paid, or given as AERA Credit if you prefer. Refunds to cards and banks usually take 5 – 10 working days to appear, depending on your bank.</li>
+ <li><span class="n">6.3</span>Less than 48 hours before delivery, ingredients have been bought and prepared for your order, so it can no longer be changed or cancelled. This does not affect your rights in section 7 if something is wrong.</li>
+</ol></section>
+
+<section id="problems"><h2>7. If Something Is Wrong</h2>
+<ol class="cl">
+ <li><span class="n">7.1</span>If a Meal is missing, wrong, damaged or not fit to eat when it arrives, tell us within <b>24 hours</b> of delivery or pick-up by email or WhatsApp, with a photo of the box and its label.</li>
+ <li><span class="n">7.2</span>Once we have checked it, <b>you choose</b> one of: a replacement on a later delivery, a refund for the affected Meals, or the same amount as AERA Credit.</li>
+ <li><span class="n">7.3</span>If the problem is the courier's ( for example a late or mishandled delivery ), we will still deal with it for you and take it up with the courier ourselves.</li>
+ <li><span class="n">7.4</span>We cannot accept a claim for a Meal that was not stored as set out in section 8, or that was eaten after the expiry date on its label.</li>
+</ol></section>
+
+<section id="storage"><h2>8. Storing &amp; Eating Your Meals</h2>
+<ol class="cl">
+ <li><span class="n">8.1</span>Put your Meals in the fridge as soon as you receive them and keep them chilled. The MAP Bento Box is designed for the chiller, not the freezer.</li>
+ <li><span class="n">8.2</span>Eat each Meal by the <b>expiry date</b> printed on its label. Reheat until piping hot all the way through before eating.</li>
+ <li><span class="n">8.3</span>Do not eat a Meal if its seal is broken, the pack is swollen, or it smells or looks wrong. Tell us instead ( section 7 ).</li>
+</ol></section>
+
+<section id="allergens"><h2>9. Allergens &amp; Dietary Needs</h2>
+<ol class="cl">
+ <li><span class="n">9.1</span>We mark the common allergens we use ( such as beef, dairy, nuts and prawn ) against each item in the shop. Please check them before you order, and tell us about any allergy when you order.</li>
+ <li><span class="n">9.2</span>Our kitchen handles all of these ingredients. We take care to keep them apart, but we <b>cannot guarantee</b> any Meal is completely free of an allergen. If you have a severe allergy, please speak to us before ordering.</li>
+ <li><span class="n">9.3</span>Salt and spice preferences ( less salt, no salt, less spicy, no spice ) adjust the seasoning in your Meals. They are a taste preference, not a medical low-sodium diet.</li>
+</ol></section>
+
+<section id="nutrition"><h2>10. Nutrition &amp; Meal Plans</h2>
+<ol class="cl">
+ <li><span class="n">10.1</span>Calories and macronutrients ( protein, carbohydrates and fat ) are calculated from our recipes and ingredient data. Because food varies naturally, actual values can differ from what is shown.</li>
+ <li><span class="n">10.2</span>Personalised Meal Plans, daily calorie targets and suggestions from our online coach are general guidance based on the information you give us. They are not medical or dietetic advice. If you are pregnant, have a medical condition or take medication, please check with your doctor before changing your diet.</li>
+</ol></section>
+
+<section id="points"><h2>11. AERA Points, Vouchers &amp; Credit</h2>
+<h3>AERA Points ( AP )</h3>
+<ol class="cl">
+ <li><span class="n">11.1</span>You earn <b>5 AP for every RM 1</b> spent on Meals. Packaging and delivery fees do not earn AP.</li>
+ <li><span class="n">11.2</span><b>100 AP is worth RM 1.</b> You can use AP for up to 10% of an order at checkout, or towards AERA merchandise and delivery vouchers.</li>
+ <li><span class="n">11.3</span>AP <b>expire 6 months</b> after they are earned. They have no cash value, cannot be exchanged for cash and cannot be transferred.</li>
+ <li><span class="n">11.4</span>If an order is refunded, the AP earned on it are removed, and any AP you used on it are returned.</li>
+</ol>
+<h3>Vouchers &amp; treats</h3>
+<ol class="cl">
+ <li><span class="n">11.5</span><b>Welcome gift</b> : a new account that accepts the welcome offer receives 500 AP and a First Order Voucher, once per account.</li>
+ <li><span class="n">11.6</span><b>First Order Voucher</b> : applied automatically to your first order, once per account. It cannot be combined with AP, the Birthday Treat or a delivery voucher on the same order.</li>
+ <li><span class="n">11.7</span><b>Birthday Treat</b> : if you have saved your date of birth, you get the percentage off Meals shown at checkout on one order in your birthday month, once per account per year, while signed in. A minimum spend may apply.</li>
+ <li><span class="n">11.8</span><b>Delivery vouchers</b> are bought with AP and cover the rider fee on one order, up to the value shown on the voucher. The AP are only taken when the order is paid.</li>
+</ol>
+<h3>AERA Credit</h3>
+<ol class="cl">
+ <li><span class="n">11.9</span>AERA Credit is money we owe you, for example after a problem in section 7. It comes off your next order automatically, any balance carries forward, and it does not expire. It cannot be exchanged for cash unless the law requires.</li>
+</ol>
+<ol class="cl">
+ <li><span class="n">11.10</span>We may change or end AP, vouchers or treats with reasonable notice on our website. Anything you have already earned or bought stays valid until its expiry date. We may cancel AP, vouchers or credit obtained by fraud or misuse.</li>
+</ol></section>
+
+<section id="referrals"><h2>12. Referral Codes</h2>
+<ol class="cl">
+ <li><span class="n">12.1</span>If you order with a referral code, you earn an extra 3% of your Meal subtotal in AP.</li>
+ <li><span class="n">12.2</span>The first referral code you use stays linked to your account.</li>
+ <li><span class="n">12.3</span>People and businesses who give out codes are AERA Referrers and are also bound by the Referrer Programme terms they accept when they join.</li>
+</ol></section>
+
+<section id="accounts"><h2>13. Your Account</h2>
+<ol class="cl">
+ <li><span class="n">13.1</span>You are responsible for keeping your password private and for anything done through your account. Tell us straight away if you think someone else has used it.</li>
+ <li><span class="n">13.2</span>Please keep your details accurate. We may suspend an account that is used for fraud or to misuse promotions.</li>
+ <li><span class="n">13.3</span>If you had an account on our previous website, your details and AP balance are carried over when you set a new password on your first sign-in.</li>
+</ol></section>
+
+<section id="subscriptions"><h2>14. Meal Plan Subscriptions</h2>
+<p>This section applies if and when we offer paid Meal Plan subscriptions.</p>
+<ol class="cl">
+ <li><span class="n">14.1</span>A subscription renews automatically at the end of each monthly or yearly period at the price shown when you subscribed, until you cancel.</li>
+ <li><span class="n">14.2</span>You can cancel at any time before the next renewal. You keep access until the end of the period already paid for. Partly used periods are not refunded, except where the law requires.</li>
+ <li><span class="n">14.3</span>We will tell you before any change to the subscription price takes effect, and you may cancel before it applies.</li>
+</ol></section>
+
+<section id="business"><h2>15. Business Customers</h2>
+<ol class="cl">
+ <li><span class="n">15.1</span>Corporate accounts, gym fridge partners and sponsored accounts have their own written agreement with us. Where that agreement differs from these terms, the agreement applies.</li>
+</ol></section>
+
+<section id="liability"><h2>16. Our Responsibility To You</h2>
+<ol class="cl">
+ <li><span class="n">16.1</span>Nothing in these terms removes or limits your rights under the <b>Consumer Protection Act 1999</b>, or any liability that by law cannot be removed or limited, including liability for death or personal injury caused by our negligence.</li>
+ <li><span class="n">16.2</span>Subject to 16.1, our total responsibility for any order is limited to what you paid for it.</li>
+ <li><span class="n">16.3</span>Subject to 16.1, we are not responsible for loss caused by Meals being stored or reheated other than as set out in section 8, eaten after their expiry date, or eaten despite an allergen shown on the item, or by events outside our reasonable control.</li>
+</ol></section>
+
+<section id="privacy"><h2>17. Your Personal Data</h2>
+<ol class="cl">
+ <li><span class="n">17.1</span>We use your personal data to take, cook, deliver and support your orders, to run your account, AP and referrals, and, if you agree, to send you news and offers. We handle it in line with the Personal Data Protection Act 2010 and our <a href="https://my.chatbees.io/p/xXH4dXALg">Privacy Notice</a> ( also in Bahasa Malaysia ).</li>
+ <li><span class="n">17.2</span>We share only what is needed with the companies that help us, such as our payment providers and couriers.</li>
+</ol></section>
+
+<section id="general"><h2>18. General</h2>
+<ol class="cl">
+ <li><span class="n">18.1</span>All content on our website, including photos, text and the AERA name and logo, belongs to us and may not be used without our permission.</li>
+ <li><span class="n">18.2</span>We may update these terms from time to time. The version on our website when you place an order is the one that applies to that order.</li>
+ <li><span class="n">18.3</span>These terms may be shown in other languages. If there is any difference, the English version applies.</li>
+ <li><span class="n">18.4</span>These terms are governed by the laws of <b>Malaysia</b>, and the courts of Malaysia have jurisdiction over any dispute. You may also bring a claim to the Tribunal for Consumer Claims Malaysia.</li>
+</ol>
+<footer>© 2026 AERA Meal Preparation Sdn. Bhd. · <a href="https://my.chatbees.io/p/xXH4dXALg">Privacy Notice</a> · Questions about these terms: <a href="mailto:aera.mealprep@gmail.com">aera.mealprep@gmail.com</a></footer>
+</section>
+</article>
+<article id="zh" lang="zh-Hans" hidden>
+<div class="znote">中文译本仅供方便阅读。如与英文版本有任何差异，以英文版本为准。</div>
+<p>当你通过我们的网站和订购页面、WhatsApp 或客服向 AERA Meal Prep 下单时，这些条款即适用。付款前请仔细阅读。一旦下单，即表示你同意这些条款。</p>
+
+<nav class="toc"><b>目录</b><ol>
+ <li><a href="#z-who">我们是谁</a></li>
+ <li><a href="#z-products">我们出售的产品</a></li>
+ <li><a href="#z-ordering">订购与价格</a></li>
+ <li><a href="#z-payment">付款</a></li>
+ <li><a href="#z-delivery">配送与自取</a></li>
+ <li><a href="#z-changes">更改或取消订单</a></li>
+ <li><a href="#z-problems">如果出现问题</a></li>
+ <li><a href="#z-storage">储存与食用</a></li>
+ <li><a href="#z-allergens">过敏原与饮食需求</a></li>
+ <li><a href="#z-nutrition">营养与餐单</a></li>
+ <li><a href="#z-points">AERA 积分、优惠券与抵用金</a></li>
+ <li><a href="#z-referrals">推荐码</a></li>
+ <li><a href="#z-accounts">你的账户</a></li>
+ <li><a href="#z-subscriptions">餐单订阅</a></li>
+ <li><a href="#z-business">商业客户</a></li>
+ <li><a href="#z-liability">我们对你的责任</a></li>
+ <li><a href="#z-privacy">你的个人资料</a></li>
+ <li><a href="#z-general">一般条款</a></li>
+</ol></nav>
+
+<section id="z-who"><h2>1. 我们是谁</h2>
+<ol class="cl">
+ <li><span class="n">1.1</span>AERA Meal Prep 由 <b>AERA Meal Preparation Sdn. Bhd.</b> 经营，这是一家在马来西亚注册成立的公司，公司编号 202001037122 ( 1393443-P )。"我们"和"AERA"指该公司，"你"指下单的人。</li>
+ <li><span class="n">1.2</span>你可以通过以下方式联系我们：</li>
+</ol>
+<div class="box">
+ <p><b>电邮</b> : <a href="mailto:aera.mealprep@gmail.com">aera.mealprep@gmail.com</a></p>
+ <p><b>电话 / WhatsApp</b> : <a href="tel:+60166630205">016-663 0205</a> · <a href="https://wa.me/60166630205" target="_blank" rel="noopener">用 WhatsApp 联系我们</a></p>
+ <p><b>注册地址、厨房及自取点</b> : No. 35, Jalan Equine 9A, Taman Equine, 43300 Seri Kembangan, Selangor</p>
+</div>
+</section>
+
+<section id="z-products"><h2>2. 我们出售的产品</h2>
+<ol class="cl">
+ <li><span class="n">2.1</span>我们按单现煮即食冷藏餐点。我们出售套餐（减脂和增肌）、单份餐点、单点（À La Carte）、个人定制餐单以及 AERA 周边商品。</li>
+ <li><span class="n">2.2</span>每份餐点都装在 <b>MAP 便当盒</b>（我们的标准包装）或<b>真空袋</b>中，由你在结账时选择。单点只提供真空袋包装。</li>
+ <li><span class="n">2.3</span>图片展示的是一般份量。由于每份餐点都是手工烹调，外观和实际重量可能与图片略有不同。</li>
+ <li><span class="n">2.4</span>如果某道菜售罄，商店会在你购买前说明，包括厨房会用同类别、同价格的哪道菜代替。如果你付款后某项售罄，我们会联系你，商定替换或退还该项的款项。</li>
+</ol></section>
+
+<section id="z-ordering"><h2>3. 订购与价格</h2>
+<ol class="cl">
+ <li><span class="n">3.1</span>所有价格均以马币（RM）计算。每盒的包装费已包含在餐点价格内。</li>
+ <li><span class="n">3.2</span>购物车中可能会加收按餐点数量计算的包装费，以及按距离、快递和服务计算的运费。付款前结账页面显示的总额，就是你需要支付的全部金额。</li>
+ <li><span class="n">3.3</span>付款前，你可以检查并更正所选餐点、配送资料和总额。付款成功并收到我们的订单确认后，订单即告成立。</li>
+ <li><span class="n">3.4</span>如果网站上的价格因错误而明显不正确，我们会在烹调前通知你，你可以按正确价格付款，或取消订单并获全额退款。</li>
+ <li><span class="n">3.5</span>厨房休息的日期无法选择。结账时只会显示我们可以烹调的日期。</li>
+</ol></section>
+
+<section id="z-payment"><h2>4. 付款</h2>
+<ol class="cl">
+ <li><span class="n">4.1</span>订单须在下单时全额付款，可使用结账时显示的付款方式（例如银行卡、FPX 网上银行或电子钱包）。付款由我们的支付服务商处理，我们不会看到或储存你完整的卡号资料。</li>
+ <li><span class="n">4.2</span>已与我们书面约定发票付款条款的商业客户，按该协议付款（见第 15 条）。</li>
+</ol></section>
+
+<section id="z-delivery"><h2>5. 配送与自取</h2>
+<ol class="cl">
+ <li><span class="n">5.1</span>你在结账时选择日期和时段，以及<b>到厨房自取</b>或由快递（Lalamove 或 Grab）<b>配送</b>。</li>
+ <li><span class="n">5.2</span>选择配送时，你可以选<b>普通配送</b>（骑手在你指定的大堂、警卫室或收件点交货），或另付结账时显示的费用选择<b>送货上门服务</b>。</li>
+ <li><span class="n">5.3</span>时段是我们的目标时间。快递是独立公司，交通或天气可能导致延误；如配送明显延迟，我们会通知你。骑手预订后，你会收到追踪链接。</li>
+ <li><span class="n">5.4</span>请提供完整、准确的地址和骑手能联系到你的电话号码。如因所提供的资料错误或不完整而导致订单无法送达，我们概不负责。</li>
+ <li><span class="n">5.5</span>如果骑手到达时你不在或联系不上，骑手会把订单放在所提供地址的大堂、警卫室或前台。订单放下后即视为已送达，此后由你负责取回并放入冰箱。</li>
+ <li><span class="n">5.6</span>自取订单请在所选时段内领取。</li>
+</ol></section>
+
+<section id="z-changes"><h2>6. 更改或取消订单</h2>
+<ol class="cl">
+ <li><span class="n">6.1</span>你可以在所选配送或自取日期和时间的 <b>48 小时</b>前免费更改或取消已付款的订单。请通过电邮或 WhatsApp 联系我们。</li>
+ <li><span class="n">6.2</span>已取消的订单会按原付款方式退款，或按你的意愿转为 AERA 抵用金。退款到银行卡或银行账户通常需要 5 – 10 个工作日，视你的银行而定。</li>
+ <li><span class="n">6.3</span>距离配送不足 48 小时时，食材已为你的订单采购和备好，因此无法再更改或取消。如出现问题，你在第 7 条下的权利不受影响。</li>
+</ol></section>
+
+<section id="z-problems"><h2>7. 如果出现问题</h2>
+<ol class="cl">
+ <li><span class="n">7.1</span>如果餐点送达时缺少、错误、损坏或不宜食用，请在配送或自取后 <b>24 小时</b>内通过电邮或 WhatsApp 告诉我们，并附上餐盒及其标签的照片。</li>
+ <li><span class="n">7.2</span>我们核实后，<b>由你选择</b>：在之后的配送中补送、退还受影响餐点的款项，或获得等额的 AERA 抵用金。</li>
+ <li><span class="n">7.3</span>如果问题出在快递（例如延误或处理不当），我们仍会为你处理，并由我们自行向快递追究。</li>
+ <li><span class="n">7.4</span>未按第 8 条储存的餐点，或在标签到期日之后食用的餐点，我们无法受理索赔。</li>
+</ol></section>
+
+<section id="z-storage"><h2>8. 储存与食用</h2>
+<ol class="cl">
+ <li><span class="n">8.1</span>收到餐点后请立即放入冰箱冷藏。MAP 便当盒适用于冷藏，不适合冷冻。</li>
+ <li><span class="n">8.2</span>请在标签上印的<b>到期日</b>前食用每份餐点。食用前请彻底加热至滚烫。</li>
+ <li><span class="n">8.3</span>如果密封破损、包装鼓胀，或气味、外观异常，请不要食用，并告诉我们（第 7 条）。</li>
+</ol></section>
+
+<section id="z-allergens"><h2>9. 过敏原与饮食需求</h2>
+<ol class="cl">
+ <li><span class="n">9.1</span>我们会在商店中为每项商品标明所用的常见过敏原（例如牛肉、乳制品、坚果和虾）。下单前请查看，并在下单时告诉我们你的任何过敏情况。</li>
+ <li><span class="n">9.2</span>我们的厨房会处理所有这些食材。我们会小心分开处理，但<b>无法保证</b>任何餐点完全不含某种过敏原。如果你有严重过敏，请在下单前与我们联系。</li>
+ <li><span class="n">9.3</span>盐和辣度偏好（少盐、无盐、少辣、不辣）只是调整餐点的调味，属于口味偏好，并非医疗用途的低钠饮食。</li>
+</ol></section>
+
+<section id="z-nutrition"><h2>10. 营养与餐单</h2>
+<ol class="cl">
+ <li><span class="n">10.1</span>热量和三大营养素（蛋白质、碳水化合物和脂肪）是根据我们的食谱和食材数据计算的。由于食物存在天然差异，实际数值可能与显示的有所不同。</li>
+ <li><span class="n">10.2</span>个人定制餐单、每日热量目标和在线教练的建议，是根据你提供的资料给出的一般指引，并非医疗或营养师建议。如果你怀孕、患有疾病或正在服药，改变饮食前请先咨询医生。</li>
+</ol></section>
+
+<section id="z-points"><h2>11. AERA 积分、优惠券与抵用金</h2>
+<h3>AERA 积分（AP）</h3>
+<ol class="cl">
+ <li><span class="n">11.1</span>在餐点上每消费 <b>RM 1 可赚取 5 AP</b>。包装费和运费不计积分。</li>
+ <li><span class="n">11.2</span><b>100 AP 价值 RM 1。</b>你可以在结账时用 AP 抵扣最多 10% 的订单金额，或用于兑换 AERA 周边商品和运费优惠券。</li>
+ <li><span class="n">11.3</span>AP 在赚取后 <b>6 个月到期</b>。AP 没有现金价值，不能兑换现金，也不能转让。</li>
+ <li><span class="n">11.4</span>如果订单退款，该订单赚取的 AP 会被扣除，你在该订单上使用的 AP 会退还。</li>
+</ol>
+<h3>优惠券与礼遇</h3>
+<ol class="cl">
+ <li><span class="n">11.5</span><b>迎新礼</b>：接受迎新优惠的新账户可获得 500 AP 和一张首单优惠券，每个账户限一次。</li>
+ <li><span class="n">11.6</span><b>首单优惠券</b>：自动用于你的第一张订单，每个账户限一次，不能与 AP、生日礼遇或运费优惠券在同一张订单中同时使用。</li>
+ <li><span class="n">11.7</span><b>生日礼遇</b>：如果你已保存出生日期，在生日月份中登录下单，可在一张订单上享有结账时显示的餐点折扣，每个账户每年一次。可能设有最低消费。</li>
+ <li><span class="n">11.8</span><b>运费优惠券</b>用 AP 兑换，可抵扣一张订单的骑手费，最高至优惠券所示金额。AP 只会在订单付款时扣除。</li>
+</ol>
+<h3>AERA 抵用金</h3>
+<ol class="cl">
+ <li><span class="n">11.9</span>AERA 抵用金是我们欠你的款项，例如在第 7 条所述的问题之后发放。它会自动从你的下一张订单中扣除，余额会结转，且不会过期。除法律规定外，不能兑换现金。</li>
+</ol>
+<ol class="cl">
+ <li><span class="n">11.10</span>我们可能在网站上合理通知后更改或终止 AP、优惠券或礼遇。你已赚取或购买的项目在到期日前仍然有效。以欺诈或滥用方式获得的 AP、优惠券或抵用金，我们可以取消。</li>
+</ol></section>
+
+<section id="z-referrals"><h2>12. 推荐码</h2>
+<ol class="cl">
+ <li><span class="n">12.1</span>使用推荐码下单，你可额外获得餐点小计 3% 的 AP。</li>
+ <li><span class="n">12.2</span>你首次使用的推荐码会一直与你的账户绑定。</li>
+ <li><span class="n">12.3</span>派发推荐码的个人和商家是 AERA 推荐人，同时须遵守他们加入时接受的推荐计划条款。</li>
+</ol></section>
+
+<section id="z-accounts"><h2>13. 你的账户</h2>
+<ol class="cl">
+ <li><span class="n">13.1</span>你有责任对密码保密，并对通过你的账户进行的一切操作负责。如果你认为有人使用了你的账户，请立即告诉我们。</li>
+ <li><span class="n">13.2</span>请保持你的资料准确。对于用于欺诈或滥用优惠的账户，我们可以暂停其使用。</li>
+ <li><span class="n">13.3</span>如果你在我们以前的网站上有账户，首次登录并设置新密码后，你的资料和 AP 余额会一并转移。</li>
+</ol></section>
+
+<section id="z-subscriptions"><h2>14. 餐单订阅</h2>
+<p>本条款在我们提供付费餐单订阅时适用。</p>
+<ol class="cl">
+ <li><span class="n">14.1</span>订阅会在每个月度或年度期间结束时，按你订阅时显示的价格自动续订，直至你取消。</li>
+ <li><span class="n">14.2</span>你可以在下次续订前随时取消，并可使用至已付款期间结束。除法律规定外，已使用的部分期间不予退款。</li>
+ <li><span class="n">14.3</span>订阅价格如有变动，我们会在生效前通知你，你可以在变动生效前取消。</li>
+</ol></section>
+
+<section id="z-business"><h2>15. 商业客户</h2>
+<ol class="cl">
+ <li><span class="n">15.1</span>企业账户、健身房冷藏柜合作伙伴和赞助账户与我们另有书面协议。如该协议与本条款不同，以该协议为准。</li>
+</ol></section>
+
+<section id="z-liability"><h2>16. 我们对你的责任</h2>
+<ol class="cl">
+ <li><span class="n">16.1</span>本条款的任何内容均不会取消或限制你在<b>《1999年消费者保护法令》</b>下的权利，也不会取消或限制法律规定不能免除或限制的任何责任，包括因我们的疏忽导致死亡或人身伤害的责任。</li>
+ <li><span class="n">16.2</span>在符合第 16.1 条的前提下，我们对任何订单的全部责任以你为该订单支付的金额为限。</li>
+ <li><span class="n">16.3</span>在符合第 16.1 条的前提下，对于因餐点未按第 8 条储存或加热、在到期日后食用、不顾商品上标示的过敏原而食用，或因超出我们合理控制范围的事件所造成的损失，我们概不负责。</li>
+</ol></section>
+
+<section id="z-privacy"><h2>17. 你的个人资料</h2>
+<ol class="cl">
+ <li><span class="n">17.1</span>我们使用你的个人资料来接收、烹调、配送和支援你的订单，管理你的账户、AP 和推荐，并在你同意时向你发送资讯和优惠。我们依照《2010年个人资料保护法令》和我们的<a href="https://my.chatbees.io/p/xXH4dXALg">隐私声明</a>（英文及马来文）处理你的资料。</li>
+ <li><span class="n">17.2</span>我们只会与协助我们的公司（例如支付服务商和快递）分享所需的资料。</li>
+</ol></section>
+
+<section id="z-general"><h2>18. 一般条款</h2>
+<ol class="cl">
+ <li><span class="n">18.1</span>我们网站上的所有内容，包括照片、文字以及 AERA 名称和标志，均属我们所有，未经许可不得使用。</li>
+ <li><span class="n">18.2</span>我们可能不时更新本条款。你下单时网站上的版本适用于该订单。</li>
+ <li><span class="n">18.3</span>本条款可能以其他语言显示。如有任何差异，以英文版本为准。</li>
+ <li><span class="n">18.4</span>本条款受<b>马来西亚</b>法律管辖，马来西亚法院对任何争议具有管辖权。你也可以向马来西亚消费者索偿仲裁庭提出索赔。</li>
+</ol>
+<footer>© 2026 AERA Meal Preparation Sdn. Bhd. · <a href="https://my.chatbees.io/p/xXH4dXALg">隐私声明</a> · 关于本条款的问题：<a href="mailto:aera.mealprep@gmail.com">aera.mealprep@gmail.com</a></footer>
+</section>
+</article>
+</main>
+
+  <script src="script.js"></script>
+</body>
+</html>
