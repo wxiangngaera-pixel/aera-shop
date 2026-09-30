@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- BASE:START (managed by Coding Agent — do not edit) -->
+<base href="/aera-shop/referrer-signup/">
+<!-- BASE:END -->
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+
+<link rel="icon" href="https://resource.aeramealprep.net/assets/images/logo.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap">
+
+
+
+
+<!-- SEO Meta Tags -->
+<title>Become An AERA Referrer — AERA Meal Prep</title>
+<meta name="description" content="Earn monthly cash-back on every AERA Meal Prep order placed with your referral code. For gyms, studios, coaches and anyone who eats with us." />
+<meta property="og:title" content="Become An AERA Referrer — AERA Meal Prep" />
+<meta property="og:description" content="Earn monthly cash-back on every AERA Meal Prep order placed with your referral code. For gyms, studios, coaches and anyone who eats with us." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Become An AERA Referrer — AERA Meal Prep" />
+<meta name="twitter:description" content="Earn monthly cash-back on every AERA Meal Prep order placed with your referral code. For gyms, studios, coaches and anyone who eats with us." />
+<!-- End SEO Meta Tags -->
+<script data-lp-token-hydrate>
+(function(){try{
+  var slug="lp-mtswqfs2-ide9g";
+  var SITEK="";
+  var SK='lp_access_'+slug;
+  var map={access_token:'lp_pw_',allowlist_access_token:'lp_al_',pin_access_token:'lp_pin_',paywall_access_token:'lp_paid_'};
+  function siteTok(){try{return SITEK?localStorage.getItem(SITEK):null;}catch(e){return null;}}
+  var u=new URL(location.href);var found=null;var changed=false;
+  var PINP=true;
+  if(!PINP){try{localStorage.removeItem('lp_pin_'+slug);if(SITEK)localStorage.removeItem(SITEK);}catch(e){}}
+  Object.keys(map).forEach(function(p){var v=u.searchParams.get(p);if(v){found=v;try{if(PINP||p!=='pin_access_token'){localStorage.setItem(map[p]+slug,v);if(SITEK&&p==='pin_access_token')localStorage.setItem(SITEK,v);}}catch(e){}if(p==='pin_access_token'){try{sessionStorage.setItem('lp_fresh_'+slug,'1');}catch(e){}}u.searchParams.delete(p);changed=true;}});
+  if(found){try{sessionStorage.setItem(SK,found);}catch(e){}}
+  else{try{if(!sessionStorage.getItem(SK)){var t=localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();if(t)sessionStorage.setItem(SK,t);}}catch(e){}}
+  if(changed){try{history.replaceState(null,'',u.toString());}catch(e){}}
+  function getTok(){try{return sessionStorage.getItem(SK)||localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();}catch(e){return null;}}
+  function needsToken(url,method){if(!url)return false;var s=String(url);var m=(method||'GET').toUpperCase();var isSheetWrite=(m==='POST'||m==='PATCH'||m==='PUT'||m==='DELETE')&&/\/sheet-rows(\/|$|\?)/.test(s);var isSheetRead=/\/sheet-data(\/|$|\?)/.test(s);var isLlm=/\/api\/landing-pages\/public\/[^/]+\/(llm|llm-config)(\/|$|\?)/.test(s);return isSheetWrite||isSheetRead||isLlm;}
+  if(window.fetch){var _f=window.fetch;window.fetch=function(input,init){try{var url=typeof input==='string'?input:(input&&input.url)||'';var method=(init&&init.method)||(input&&input.method)||'GET';if(needsToken(url,method)){var tok=getTok();if(tok){init=init||{};var h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});if(!h.has('X-Landing-Page-Token'))h.set('X-Landing-Page-Token',tok);init.headers=h;}}}catch(e){}return _f.call(this,input,init);};}
+  if(window.XMLHttpRequest){var _o=XMLHttpRequest.prototype.open;var _s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__lpM=m;this.__lpU=u;return _o.apply(this,arguments);};XMLHttpRequest.prototype.send=function(){try{if(needsToken(this.__lpU,this.__lpM)){var tok=getTok();if(tok)this.setRequestHeader('X-Landing-Page-Token',tok);}}catch(e){}return _s.apply(this,arguments);};}
+}catch(e){}})();
+</script>
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://my.chatbees.io/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=6951');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='H9H32i9ShW';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    var phone=findPhone();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    var __pLoc=(document.documentElement.lang||navigator.language||'en');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,phone:phone||'',amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,locale:__pLoc,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var sidP=urlParams.get('session_id');
+      if(sidP){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidP})}).catch(function(){});}catch(e){}}
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-cart>
+(function(){
+  var slug='H9H32i9ShW';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findCartEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realCart=function(arg){
+    var items, email='', customerName='', successUrl, cancelUrl, currency;
+    if(Array.isArray(arg)){items=arg;}
+    else if(arg&&typeof arg==='object'){
+      items=arg.items;email=arg.email||'';customerName=arg.name||arg.customerName||'';
+      successUrl=arg.successUrl;cancelUrl=arg.cancelUrl;currency=arg.currency;
+    }
+    if(!Array.isArray(items)||items.length===0){alert('No items in cart.');return Promise.reject('no_items');}
+    var cleanItems=[];var totalCents=0;
+    for(var i=0;i<items.length;i++){
+      var it=items[i];if(!it||typeof it!=='object'){alert('Invalid item at position '+i);return Promise.reject('bad_item');}
+      var nm=typeof it.name==='string'?it.name.trim():'';
+      if(!nm){alert('Item '+(i+1)+' is missing a name.');return Promise.reject('no_name');}
+      var amt=typeof it.amountCents==='number'?it.amountCents:(typeof it.amount==='number'?Math.round(it.amount*100):NaN);
+      if(!isFinite(amt)||amt<1){alert('Item "'+nm+'" needs a valid amount in cents.');return Promise.reject('bad_amount');}
+      var qty=(typeof it.quantity==='number'&&it.quantity>0)?Math.floor(it.quantity):1;
+      cleanItems.push({name:nm,description:it.description||'',amountCents:amt,quantity:qty});
+      totalCents+=amt*qty;
+    }
+    if(totalCents<50){alert('Cart total must be at least $0.50');return Promise.reject('total_too_low');}
+    if(!email)email=findCartEmail();
+    if(!customerName)customerName=findCartName();
+    var cartPhone=findCartPhone();
+    if(!email){var p=window.prompt('Enter your email for the receipt:','');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert('An email address is required to complete checkout.');return Promise.reject('no_email');}}
+    var successBase=window.location.href.split('?')[0];
+    var body={email:email,name:customerName,items:cleanItems,locale:(document.documentElement.lang||navigator.language||'en')};
+    if(currency)body.currency=currency;
+    if(cartPhone)body.phone=cartPhone;
+    body.successUrl=successUrl||(successBase+'?cart=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}');
+    body.cancelUrl=cancelUrl||(successBase+'?cart=cancelled');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/cart/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process checkout');throw new Error(d.error);}
+    });
+  };
+  try{Object.defineProperty(window,'__processCart',{value:__realCart,writable:false,configurable:false});}catch(e){window.__processCart=__realCart;}
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('cart')==='success'){
+      var sidC=urlParams.get('session_id');
+      if(sidC){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidC})}).catch(function(){});}catch(e){}}
+      if(document.getElementById('payment-success-overlay')||document.getElementById('donation-success-overlay')||document.getElementById('cart-success-overlay'))return;
+      var overlay=document.createElement('div');overlay.id='cart-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||'Thank you for your order.';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var cBtn=document.getElementById('lp-cart-success-btn');
+      if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav data-section="nav"><div class="wrap">
+  <a href="https://my.chatbees.io/p/ZQr9fS2jA9"><img src="https://aeramealprep.net/logo/logo_yellow_with_white_text.svg" alt="AERA Meal Prep"></a>
+  <div class="row"><button type="button" class="langsw" id="langSw" onclick="aeraLang()" aria-label="Language"><span class="l1">EN</span><span class="l2">中文</span></button><a href="https://my.chatbees.io/p/ZQr9fS2jA9">Home</a><a href="https://my.chatbees.io/p/HkKJuxBS">Referrer Portal</a><a href="https://my.chatbees.io/p/D2pz8bZ">Order Now</a></div>
+</div></nav>
+
+<header class="hero" data-section="hero"><div class="wrap">
+  <span class="eyebrow">AERA Referral Programme</span>
+  <h1 style="margin:8px 0 10px">Share Good Food.<br>Earn Every Month.</h1>
+  <p>Give your Members, Clients or Friends a Referral Code. Every time they Order, you earn a share of what they spend, paid to you in cash after each month closes. They get extra AERA Points for using it.</p>
+</div></header>
+
+<main data-section="apply"><div class="wrap">
+  <div class="tiers">
+    <div class="tier"><div class="pct">5%</div><b>Normal Referrer</b><small>Anyone who wants to share AERA with Friends, Family or Colleagues.</small></div>
+    <div class="tier"><div class="pct">6.5%</div><b>Fitness Studio OR Gym</b><small>Gyms, Studios and Training Floors putting AERA in front of their Members.</small></div>
+    <div class="tier"><div class="pct">8%</div><b>Fitness Influencer</b><small>Coaches and Creators with an audience who trust what they eat.</small></div>
+  </div>
+
+  <div class="card">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>You Get a Code</h3><p>We set up a Referral Code in your Name and send it to you.</p></div>
+      <div class="step"><div class="n">2</div><h3>They Order with it</h3><p>Your people enter the Code at Checkout. It ties to their Account for good, so you keep earning from them.</p></div>
+      <div class="step"><div class="n">3</div><h3>You Watch it Add-Up</h3><p>Sign in to the Referrer Portal any time to see every Order, month by month.</p></div>
+      <div class="step"><div class="n">4</div><h3>We Pay You</h3><p>Bank Transfer after each month closes, with a Receipt you can download.</p></div>
+    </div>
+    <div class="hint">Cash-Back is worked out on the Meal Subtotal after any Discount. Delivery, Packaging and Processing Fees are not counted.</div>
+  </div>
+
+  <div class="card" id="form">
+    <h2>Apply to be a Referrer</h2>
+    <p class="hint" style="margin-top:4px">Fill this in and press Send. It goes straight to our Kitchen Console and we reply with your Code, usually the same day.</p>
+    <div class="f2">
+      <div><label class="lb" for="rName">Your Name</label><input type="text" id="rName" placeholder="Your full name" autocomplete="name"></div>
+      <div><label class="lb" for="rBiz">Gym, Studio Or Page Name</label><input type="text" id="rBiz" placeholder="Leave blank if it is just you"></div>
+    </div>
+    <div class="f2">
+      <div><label class="lb" for="rEmail">Email</label><input type="email" id="rEmail" placeholder="you@example.com" autocomplete="email"><div class="hint">This is what you will sign in to the Referrer Portal with.</div></div>
+      <div><label class="lb" for="rPhone">Mobile</label><input type="tel" id="rPhone" placeholder="01X XXX XXXX" autocomplete="tel"></div>
+    </div>
+    <div class="f2">
+      <div><label class="lb" for="rType">Which One Are You?</label><select id="rType">
+        <option value="normal">Normal Referrer · 5% Cash-Back</option>
+        <option value="gym">Fitness Studio OR Gym · 6.5% Cash-Back</option>
+        <option value="influencer">Fitness Influencer · 8% Cash-Back</option>
+      </select></div>
+      <div><label class="lb" for="rReach">How Many People Could You Reach?</label><input type="text" id="rReach" placeholder="e.g. 180 gym members, 12k followers"></div>
+    </div>
+    <label class="lb" for="rCode">Referral Code You Would Like</label>
+    <input type="text" id="rCode" placeholder="e.g. AERA-IRONHOUSE" style="text-transform:uppercase" maxlength="24">
+    <div class="hint">Letters, numbers and dashes. We will tell you if it is taken.</div>
+    <div class="sect">Where We Pay Your Cash-Back</div>
+    <p class="hint" style="margin-top:0">We transfer it after each month closes, so we need the Account before we can approve you. It stays in our Kitchen Console — it is never shown on the Portal and never shared.</p>
+    <div class="f2">
+      <div><label class="lb" for="rBank">Bank Name</label><input type="text" id="rBank" placeholder="e.g. Maybank" autocomplete="off"></div>
+      <div><label class="lb" for="rHolder">Account Holder Name</label><input type="text" id="rHolder" placeholder="Exactly as it appears on the Account" autocomplete="off"><div class="hint">If the Account is in your Gym’s name, use the Gym’s name.</div></div>
+    </div>
+    <label class="lb" for="rAcct">Bank Account Number</label>
+    <input type="text" id="rAcct" placeholder="Numbers only" inputmode="numeric" autocomplete="off" maxlength="24">
+    <label class="lb" for="rNote">Anything Else</label>
+    <textarea id="rNote" placeholder="Where you would share it, what your Members are training for, anything we should know…"></textarea>
+    <div class="row" style="margin-top:16px">
+      <p class="aera-legal-note" style="font-size:12px;opacity:.75;margin:10px 0;line-height:1.5">By applying you agree to our <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a> and have read our <a href="https://my.chatbees.io/p/xXH4dXALg" target="_blank" rel="noopener">Privacy Notice</a>.</p>
+<button class="btn btn-y" id="applyBtn" type="button" onclick="apply()">Send My Application</button>
+      
+    </div>
+    <div id="msg"></div>
+  </div>
+
+  <div class="card">
+    <h2>Questions</h2>
+    <details class="faq"><summary>When do I get paid?</summary><p>After each month closes. We total every Order placed with your Code, transfer the Cash-Back to your Bank Account, and stamp the Receipt in your Portal so you can download it.</p></details>
+    <details class="faq"><summary>What counts towards my Cash-Back?</summary><p>The Meal Subtotal after any Discount the customer used. Delivery, Packaging and Processing Fees are never counted.</p></details>
+    <details class="faq"><summary>Can someone change to another Referrer later?</summary><p>No. The first paid order ties that customer to your Code for good, so you keep earning from them.</p></details>
+    <details class="faq"><summary>What does the Customer get?</summary><p>An extra 3% of their Meal Subtotal in AERA Points, on top of the usual 5 AERA Points per RM 1. 100 AERA Points is RM 1.00 OFF a future order.</p></details>
+    <details class="faq"><summary>How do I see my figures?</summary><p>The <a href="https://my.chatbees.io/p/HkKJuxBS">Referrer Portal</a>. Enter the Email on your application, we send a Code, and you are in. Sales by month, which Customers ordered, what is pending and what has been paid.</p></details>
+  </div>
+</div></main>
+
+<script>
+var APPLY_URL='https://my.chatbees.io/api/webhooks/flow/5922/8af12f730a84e00f66ea319b58c3e93321d5adfff08eccab24d2cb65cb048cef';
+function $(s){return document.querySelector(s)}
+function val(id){return ($('#'+id)||{}).value?$('#'+id).value.trim():''}
+var TYPES={normal:'Normal Referrer ( 5% )',gym:'Fitness Studio OR Gym ( 6.5% )',influencer:'Fitness Influencer ( 8% )'};
+function build(){
+ var name=val('rName'),email=val('rEmail');
+ if(!name){msg('warn','Please enter your name.');$('#rName').focus();return null}
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg('warn','Please enter a valid Email. It is what you sign in to the Portal with.');$('#rEmail').focus();return null}
+ var bank=val('rBank'),holder=val('rHolder'),acct=val('rAcct').replace(/[^0-9]/g,'');
+ if(!bank){msg('warn','Please tell us which Bank to pay your Cash-Back into.');$('#rBank').focus();return null}
+ if(!holder){msg('warn','Please enter the name on that Bank Account.');$('#rHolder').focus();return null}
+ if(acct.length<5){msg('warn','Please enter your Bank Account Number — numbers only, including any leading zeros.');$('#rAcct').focus();return null}
+ return {name:name,business:val('rBiz'),email:email,phone:val('rPhone'),
+  tier:val('rType')||'normal',reach:val('rReach'),
+  code:val('rCode').toUpperCase().replace(/[^A-Z0-9-]/g,''),notes:val('rNote'),
+  bank:bank,bankHolder:holder,bankAccount:acct}}
+function msg(k,t){$('#msg').innerHTML='<div class="msg '+k+'">'+t+'</div>'}
+function asText(a){
+ var L=['AERA Referrer Application','','Name: '+a.name];
+ if(a.business)L.push('Gym / Studio / Page: '+a.business);
+ L.push('Email: '+a.email);
+ if(a.phone)L.push('Mobile: '+a.phone);
+ L.push('Type: '+(TYPES[a.tier]||TYPES.normal));
+ if(a.reach)L.push('Reach: '+a.reach);
+ if(a.code)L.push('Code wanted: '+a.code);
+ L.push('','Bank: '+a.bank,'Account Holder: '+a.bankHolder,'Account Number: '+a.bankAccount);
+ if(a.notes)L.push('','Notes: '+a.notes);
+ return L.join('\n')}
+/* The application goes straight into the Kitchen Console's queue. If the send cannot get
+   through, say so plainly and put the application on the page so nothing typed is lost. */
+var SENDING=false;
+function apply(){
+ if(SENDING)return;
+ var a=build();if(!a)return;
+ var btn=$('#applyBtn');SENDING=true;btn.disabled=true;
+ msg('ok','<span class="busy"><span class="spin"></span>Sending your application…</span>');
+ var ctl=new AbortController(),to=setTimeout(function(){ctl.abort()},20000);
+ fetch(APPLY_URL,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctl.signal,
+  body:JSON.stringify({contactEmail:a.email,contactName:a.name,contactPhone:a.phone||'',data:a})})
+ .then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.text()})
+ .then(function(){clearTimeout(to);SENDING=false;btn.disabled=false;
+  msg('ok','<b>Application sent.</b> We have it in our Kitchen Console and will come back to you at <b>'+esc(a.email)+'</b> with your Code, usually the same day.');
+  ['rName','rBiz','rEmail','rPhone','rReach','rCode','rNote','rBank','rHolder','rAcct'].forEach(function(id){var e=$('#'+id);if(e)e.value=''})})
+ .catch(function(){clearTimeout(to);SENDING=false;btn.disabled=false;
+  var t=asText(a);
+  msg('warn','<b>We could not send it just now.</b> Nothing is lost. Copy this and send it to us at <b>'+MAILTO+'</b> and we will set you up.'+
+   '<textarea readonly style="width:100%;min-height:150px;margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:13px">'+
+   String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</textarea>');
+  var ta=document.querySelector('#msg textarea');if(ta){ta.focus();ta.select()}})}
+function esc(x){return String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+var MAILTO='aera.mealprep@gmail.com';
+$('#rCode').addEventListener('input',function(){this.value=this.value.toUpperCase().replace(/[^A-Z0-9-]/g,'')});
+$('#rAcct').addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'')});
+</script>
+<p class="aeralegal">© 2026 AERA Meal Preparation SDN BHD · Seri Kembangan · <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a> · <a href="https://my.chatbees.io/p/xXH4dXALg" target="_blank" rel="noopener">Privacy Notice</a></p>
+<!-- AERA language switch : start -->
+
+
+
+
+<!-- AERA language switch : end -->
+  <script src="script.js"></script>
+</body>
+</html>
