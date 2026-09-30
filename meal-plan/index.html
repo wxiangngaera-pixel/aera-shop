@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- BASE:START (managed by Coding Agent — do not edit) -->
+<base href="/aera-shop/meal-plan/">
+<!-- BASE:END -->
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+
+<link rel="icon" href="https://resource.aeramealprep.net/assets/images/logo.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+
+
+
+
+<!-- SEO Meta Tags -->
+<title>Personalised Meal Plan — AERA Meal Prep</title>
+<meta name="description" content="Answer a few questions and get a personalised weekly meal plan from AERA Meal Prep — calories and macros calculated for your goal, every portion weighed to the gram." />
+<meta property="og:title" content="Personalised Meal Plan — AERA Meal Prep" />
+<meta property="og:description" content="Answer a few questions and get a personalised weekly meal plan from AERA Meal Prep — calories and macros calculated for your goal, every portion weighed to the gram." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Personalised Meal Plan — AERA Meal Prep" />
+<meta name="twitter:description" content="Answer a few questions and get a personalised weekly meal plan from AERA Meal Prep — calories and macros calculated for your goal, every portion weighed to the gram." />
+<!-- End SEO Meta Tags -->
+<script data-lp-token-hydrate>
+(function(){try{
+  var slug="lp-mtrdurph-jwlgz";
+  var SITEK="";
+  var SK='lp_access_'+slug;
+  var map={access_token:'lp_pw_',allowlist_access_token:'lp_al_',pin_access_token:'lp_pin_',paywall_access_token:'lp_paid_'};
+  function siteTok(){try{return SITEK?localStorage.getItem(SITEK):null;}catch(e){return null;}}
+  var u=new URL(location.href);var found=null;var changed=false;
+  var PINP=true;
+  if(!PINP){try{localStorage.removeItem('lp_pin_'+slug);if(SITEK)localStorage.removeItem(SITEK);}catch(e){}}
+  Object.keys(map).forEach(function(p){var v=u.searchParams.get(p);if(v){found=v;try{if(PINP||p!=='pin_access_token'){localStorage.setItem(map[p]+slug,v);if(SITEK&&p==='pin_access_token')localStorage.setItem(SITEK,v);}}catch(e){}if(p==='pin_access_token'){try{sessionStorage.setItem('lp_fresh_'+slug,'1');}catch(e){}}u.searchParams.delete(p);changed=true;}});
+  if(found){try{sessionStorage.setItem(SK,found);}catch(e){}}
+  else{try{if(!sessionStorage.getItem(SK)){var t=localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();if(t)sessionStorage.setItem(SK,t);}}catch(e){}}
+  if(changed){try{history.replaceState(null,'',u.toString());}catch(e){}}
+  function getTok(){try{return sessionStorage.getItem(SK)||localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();}catch(e){return null;}}
+  function needsToken(url,method){if(!url)return false;var s=String(url);var m=(method||'GET').toUpperCase();var isSheetWrite=(m==='POST'||m==='PATCH'||m==='PUT'||m==='DELETE')&&/\/sheet-rows(\/|$|\?)/.test(s);var isSheetRead=/\/sheet-data(\/|$|\?)/.test(s);var isLlm=/\/api\/landing-pages\/public\/[^/]+\/(llm|llm-config)(\/|$|\?)/.test(s);return isSheetWrite||isSheetRead||isLlm;}
+  if(window.fetch){var _f=window.fetch;window.fetch=function(input,init){try{var url=typeof input==='string'?input:(input&&input.url)||'';var method=(init&&init.method)||(input&&input.method)||'GET';if(needsToken(url,method)){var tok=getTok();if(tok){init=init||{};var h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});if(!h.has('X-Landing-Page-Token'))h.set('X-Landing-Page-Token',tok);init.headers=h;}}}catch(e){}return _f.call(this,input,init);};}
+  if(window.XMLHttpRequest){var _o=XMLHttpRequest.prototype.open;var _s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__lpM=m;this.__lpU=u;return _o.apply(this,arguments);};XMLHttpRequest.prototype.send=function(){try{if(needsToken(this.__lpU,this.__lpM)){var tok=getTok();if(tok)this.setRequestHeader('X-Landing-Page-Token',tok);}}catch(e){}return _s.apply(this,arguments);};}
+}catch(e){}})();
+</script>
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://my.chatbees.io/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=6936');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='SrQzC5m2';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    var phone=findPhone();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    var __pLoc=(document.documentElement.lang||navigator.language||'en');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,phone:phone||'',amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,locale:__pLoc,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var sidP=urlParams.get('session_id');
+      if(sidP){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidP})}).catch(function(){});}catch(e){}}
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-cart>
+(function(){
+  var slug='SrQzC5m2';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findCartEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realCart=function(arg){
+    var items, email='', customerName='', successUrl, cancelUrl, currency;
+    if(Array.isArray(arg)){items=arg;}
+    else if(arg&&typeof arg==='object'){
+      items=arg.items;email=arg.email||'';customerName=arg.name||arg.customerName||'';
+      successUrl=arg.successUrl;cancelUrl=arg.cancelUrl;currency=arg.currency;
+    }
+    if(!Array.isArray(items)||items.length===0){alert('No items in cart.');return Promise.reject('no_items');}
+    var cleanItems=[];var totalCents=0;
+    for(var i=0;i<items.length;i++){
+      var it=items[i];if(!it||typeof it!=='object'){alert('Invalid item at position '+i);return Promise.reject('bad_item');}
+      var nm=typeof it.name==='string'?it.name.trim():'';
+      if(!nm){alert('Item '+(i+1)+' is missing a name.');return Promise.reject('no_name');}
+      var amt=typeof it.amountCents==='number'?it.amountCents:(typeof it.amount==='number'?Math.round(it.amount*100):NaN);
+      if(!isFinite(amt)||amt<1){alert('Item "'+nm+'" needs a valid amount in cents.');return Promise.reject('bad_amount');}
+      var qty=(typeof it.quantity==='number'&&it.quantity>0)?Math.floor(it.quantity):1;
+      cleanItems.push({name:nm,description:it.description||'',amountCents:amt,quantity:qty});
+      totalCents+=amt*qty;
+    }
+    if(totalCents<50){alert('Cart total must be at least $0.50');return Promise.reject('total_too_low');}
+    if(!email)email=findCartEmail();
+    if(!customerName)customerName=findCartName();
+    var cartPhone=findCartPhone();
+    if(!email){var p=window.prompt('Enter your email for the receipt:','');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert('An email address is required to complete checkout.');return Promise.reject('no_email');}}
+    var successBase=window.location.href.split('?')[0];
+    var body={email:email,name:customerName,items:cleanItems,locale:(document.documentElement.lang||navigator.language||'en')};
+    if(currency)body.currency=currency;
+    if(cartPhone)body.phone=cartPhone;
+    body.successUrl=successUrl||(successBase+'?cart=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}');
+    body.cancelUrl=cancelUrl||(successBase+'?cart=cancelled');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/cart/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process checkout');throw new Error(d.error);}
+    });
+  };
+  try{Object.defineProperty(window,'__processCart',{value:__realCart,writable:false,configurable:false});}catch(e){window.__processCart=__realCart;}
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('cart')==='success'){
+      var sidC=urlParams.get('session_id');
+      if(sidC){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidC})}).catch(function(){});}catch(e){}}
+      if(document.getElementById('payment-success-overlay')||document.getElementById('donation-success-overlay')||document.getElementById('cart-success-overlay'))return;
+      var overlay=document.createElement('div');overlay.id='cart-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||'Thank you for your order.';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var cBtn=document.getElementById('lp-cart-success-btn');
+      if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav><div class="wrap">
+<a href="https://my.chatbees.io/p/ZQr9fS2jA9" aria-label="AERA Meal Prep"><img src="https://aeramealprep.net/logo/logo_yellow_with_white_text.svg" alt="AERA Meal Prep"></a>
+<div style="display:flex;gap:14px;align-items:center"><a class="homebtn" href="https://my.chatbees.io/p/ZQr9fS2jA9" aria-label="Return to Homepage"><span aria-hidden="true">←</span><span class="hbfull">Return to Homepage</span><span class="hbshort">Home</span></a><a href="https://my.chatbees.io/p/dtTMaV" id="navAcct">My Account</a><button type="button" class="langsw" id="langSw" onclick="aeraLang()" aria-label="Language"><span class="l1">EN</span><span class="l2">中文</span></button><span class="shopwrap"><a class="cartbtn" href="#" aria-haspopup="true" onclick="shopMenu(event)">Shop ▾</a><div class="shopmenu"><a href="https://my.chatbees.io/p/D2pz8bZ#bundles">Meal Bundles</a><a href="https://my.chatbees.io/p/D2pz8bZ#fat">Fat Loss Meals</a><a href="https://my.chatbees.io/p/D2pz8bZ#mass">Mass Gain Meals</a><a href="https://my.chatbees.io/p/D2pz8bZ#all">All Meals</a><a href="https://my.chatbees.io/p/D2pz8bZ#alacarte">À la Carte</a><div class="sep"></div><a href="https://my.chatbees.io/p/VMrvEw">Merchandise</a><a href="https://my.chatbees.io/p/VMrvEw#vouchers">Free Delivery Vouchers</a></div></span></div>
+</div></nav>
+<main class="wrap" style="padding:26px 0 80px">
+<span class="eyebrow">Personalised Meal Plan</span>
+<h1 style="margin-top:6px">Your Plan, Your Macros</h1>
+<p style="color:var(--ink2);margin:8px 0 0;max-width:64ch">Tell us about you and your Goal. We work out your Daily Calories and Macros, then build a week of Meals from our Kitchen. Every portion weighed to the gram. Adjust anything, then Order it.</p>
+<div class="steps" id="stepbar"><button type="button" class="step on" data-s="1" onclick="goStep(1)">1 · About You</button><button type="button" class="step" data-s="2" onclick="goStep(2)">2 · Your Week</button><button type="button" class="step" data-s="3" onclick="goStep(3)">3 · Meal Preferences</button><button type="button" class="step" data-s="4" onclick="goStep(4)">4 · Your Plan</button><button type="button" class="step" data-s="5" onclick="goStep(5)">5 · Order</button></div>
+<div id="subNote"></div>
+<div id="subWall" style="display:none"></div>
+<!-- STEP 1 -->
+<section id="s1" class="card">
+<h2>About You</h2>
+<p class="hint" style="margin-top:2px">Your numbers update as you go. Nothing is saved until you Order.</p>
+<div id="homeNote" style="margin-top:10px"></div>
+<div class="f4 about" style="margin-top:6px">
+<div><label class="lb">Gender</label><div class="chips" id="gender" style="margin-top:0"></div></div>
+<div><label class="lb">Date Of Birth <span class="agepill" id="agePill"></span></label><input type="hidden" id="dob"></div>
+<div><label class="lb">Bodyweight ( Kg )</label><input type="number" id="weight" min="30" max="250" step="0.1" placeholder="70"></div>
+<div><label class="lb">Height ( Cm )</label><input type="number" id="height" min="120" max="230" placeholder="170"></div>
+</div>
+<div id="liveMacros"></div>
+<div class="coach" id="coachSetup">
+<h3><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15.5 10.1 10.9 5.5 9l4.6-1.4L12 3z"/><path d="M18.5 15.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z"/></svg> Not Sure What To Pick?</h3>
+<div class="sub">Our Assistant will suggest an Activity Level, Body Type, Goal and How many Meals a Day to take, with a reason for each. Everything stays yours to change.</div>
+<div class="row"><button class="btn btn-k" type="button" id="coachBtn" onclick="coachAsk('setup')">Suggest My Settings</button><span id="coachMsg" class="hint" style="margin:0"></span></div>
+<div id="coachOut"></div>
+</div>
+<label class="lb">Activity Level — What Is Your Activity Level In A Week?</label>
+<div class="opts three" id="activity"></div>
+<div id="liveIntake"></div>
+<label class="lb">Body Type — Please Describe Your Current Body Type</label>
+<div class="opts three" id="bodytype"></div>
+<label class="lb">Goal — Which Goal Are You Striving For?</label>
+<div class="opts" id="goal"></div>
+<div id="customMacros" style="display:none;margin-top:8px">
+<div class="chips" id="cmMode"></div>
+<div class="f3" id="cmPct" style="margin-top:8px"><div><label class="lb">Protein %</label><input type="number" id="cp" value="40" min="10" max="70"></div><div><label class="lb">Carbs %</label><input type="number" id="cc" value="40" min="10" max="70"></div><div><label class="lb">Fat %</label><input type="number" id="cf" value="20" min="10" max="60"></div></div>
+<div class="f3" id="cmG" style="margin-top:8px;display:none"><div><label class="lb">Protein ( G )</label><input type="number" id="cgp" min="20" max="500" step="5" placeholder="160"></div><div><label class="lb">Carbs ( G )</label><input type="number" id="cgc" min="0" max="800" step="5" placeholder="200"></div><div><label class="lb">Fat ( G )</label><input type="number" id="cgf" min="10" max="300" step="5" placeholder="60"></div></div>
+<div class="hint" id="cmHint"></div></div>
+<div id="targets"></div>
+<div class="foot"><span></span><button class="btn btn-y" onclick="goStep(2)">Next : Your Week →</button></div>
+</section>
+<!-- STEP 2 -->
+<section id="s2" style="display:none">
+<div class="card">
+<h2>Your Week</h2>
+<p class="hint" style="margin-top:2px">How much of your week AERA should cover, and what you like to eat.</p>
+<div class="grp">
+<h3>How Much Should We Cover?</h3>
+<div class="g3">
+<div><label class="lb">Days Of Meal Plan</label><div class="chips" id="days"></div></div>
+<div><label class="lb">AERA Meals Per Day</label><div class="chips" id="mpd"></div></div>
+<div><label class="lb">Meals You Eat In A Day</label><select id="total"></select></div>
+</div>
+<div class="hint" id="shareHint"></div>
+<div id="homeMsg" style="margin-top:8px"></div>
+</div>
+<div class="grp">
+<h3>What You Eat Outside AERA ( Optional )</h3>
+<div class="sub2">Type anything you eat most days that is not from us, a Shake, Breakfast, a Snack. We look up the Macros, you pick the portion, and we take it off your Target so AERA Meals fill only what is left.</div>
+<div class="row" style="margin-top:10px"><button class="btn btn-y s" type="button" onclick="homeAdd(1)">+ Add a Home-Sourced Meal</button></div>
+<div id="homeBox" style="display:none">
+<div class="hmrow">
+<input type="text" id="hmName" placeholder="e.g. Nasi Lemak, 2 Boiled Eggs, Milo Ais" autocomplete="off">
+<button class="btn btn-k" type="button" id="hmBtn" onclick="foodLookup()">Find The Macros</button>
+</div>
+<div id="hmMsg" class="hint" style="margin-top:6px"></div>
+<div id="hmFound"></div>
+<div class="hint" style="margin-top:8px"><a href="#" id="hmManualLink" onclick="hmManual(1);return false">Or enter the numbers myself →</a></div>
+<div id="hmManualBox" style="display:none;margin-top:8px">
+<div class="g4">
+<div><label class="lb" style="margin-top:0">Calories ( Kcal )</label><input type="number" id="hmK" min="0" placeholder="0"></div>
+<div><label class="lb" style="margin-top:0">Protein ( G )</label><input type="number" id="hmP" min="0" placeholder="0"></div>
+<div><label class="lb" style="margin-top:0">Carbs ( G )</label><input type="number" id="hmC" min="0" placeholder="0"></div>
+<div><label class="lb" style="margin-top:0">Fat ( G )</label><input type="number" id="hmF" min="0" placeholder="0"></div>
+</div>
+<div class="row" style="margin-top:8px"><button class="btn btn-o" type="button" onclick="addHome()">Add To My Day</button><button class="btn btn-o" type="button" onclick="hmManual(0)">Cancel</button></div>
+</div>
+<div class="row" style="margin-top:8px"><button class="btn btn-o s" type="button" onclick="homeAdd(0)">Close</button></div>
+</div>
+<div id="homeList"></div>
+</div>
+<div class="foot"><button class="btn btn-o" onclick="goStep(1)">← Back</button><button class="btn btn-y" onclick="goStep(3)">Next : Meal Preferences →</button></div>
+</div>
+</section>
+<!-- STEP 3 · MEAL PREFERENCES -->
+<section id="s3" style="display:none">
+<div class="card">
+<div class="grphd"><h2>Meal Preferences</h2>
+<label class="selall" title="Tick everything in every list below"><input type="checkbox" id="saAll" onchange="selSetPage(this.checked)"><span>Select All</span></label></div>
+<p class="hint" style="margin-top:2px">We mix and match from what you pick here. Leave a list untouched and we will use anything from it.</p>
+<div class="grp">
+<h3>I Do Not Want…</h3>
+<div class="sub2">Start here. Anything you cannot eat or would rather never see, we leave it out of every Meal and it disappears from the lists below.</div>
+<div class="chips" id="avoid"></div>
+</div>
+<div class="grp">
+<h3>How Should We Build Your Meals?</h3>
+<div class="sub2">Both stay inside your Calorie Target. This decides what we hold onto when a Meal cannot be everything at once.</div>
+<div class="g2" id="planMode"></div>
+</div>
+<div class="grp">
+<div class="grphd"><h3>Protein</h3><label class="selall" id="saprotL"><input type="checkbox" id="saprot" onchange="selSet('prot',this.checked)"><span>Select All</span></label></div>
+<div class="sub2">Which Proteins should we build your Meals around?</div>
+<div class="chips" id="prefP"></div>
+</div>
+<div class="grp">
+<div class="grphd"><h3>Carbohydrates</h3><label class="selall" id="sacarbL"><input type="checkbox" id="sacarb" onchange="selSet('carb',this.checked)"><span>Select All</span></label></div>
+<div class="sub2">Pick the Carbs you want with your Meals.</div>
+<div class="chips" id="prefC"></div>
+</div>
+<div class="grp">
+<div class="grphd"><h3>Vegetables</h3><label class="selall" id="savegL"><input type="checkbox" id="saveg" onchange="selSet('veg',this.checked)"><span>Select All</span></label></div>
+<div class="sub2">Tick the ones you like. Oil-Free versions are cooked without Oil, so they carry less Fat.</div>
+<div class="row" style="margin-top:0"><button class="btn btn-o s" id="vNone" type="button" onclick="pickNone('veg')">No Vegetables</button><button class="btn btn-o s" id="vOil" type="button" onclick="pickOilFree()">Oil-Free Only</button></div>
+<div class="chips" id="pickV"></div>
+</div>
+<div class="grp">
+<div class="grphd"><h3>Garnish</h3><label class="selall" id="sagarnishL"><input type="checkbox" id="sagarnish" onchange="selSet('garnish',this.checked)"><span>Select All</span></label></div>
+<div class="sub2">A small extra in the box.</div>
+<div class="row" style="margin-top:0"><button class="btn btn-o s" id="gNone" type="button" onclick="pickNone('garnish')">No Garnish</button></div>
+<div class="chips" id="pickG"></div><div id="gMsg"></div>
+</div>
+<div class="grp">
+<div class="grphd"><h3>Sauces &amp; Gravies</h3><label class="selall" id="sasauceL"><input type="checkbox" id="sasauce" onchange="selSet('sauce',this.checked)"><span>Select All</span></label></div>
+<div class="sub2">How often would you like a Sauce, and which ones?</div>
+<div class="chips" id="prefS"></div>
+<div class="chips" id="pickS" style="margin-top:10px"></div>
+</div>
+<div class="grp">
+<h3>Seasoning &amp; Spice</h3>
+<div class="g2">
+<div><label class="lb" style="margin-top:0">Seasoning</label><select id="seasoning"><option value="normal">Normal Salt</option><option value="less_salt">Less Salt</option><option value="no_salt">No Salt</option></select></div>
+<div><label class="lb" style="margin-top:0">Spice</label><select id="spice"><option value="normal">Normal Spice</option><option value="less_spicy">Less Spicy</option><option value="no_spice">No Spice</option></select></div>
+</div>
+</div>
+<div class="hint" id="prefWarn"></div>
+<div class="foot"><button class="btn btn-o" onclick="goStep(2)">← Back</button><button class="btn btn-y" onclick="generate();goStep(4)">Build My Plan →</button></div>
+</div>
+</section>
+<!-- STEP 4 · YOUR PLAN -->
+<section id="s4" style="display:none">
+<div class="card"><h2>Your Plan</h2><div class="hint" id="planIntro"></div>
+<div class="row planacts" style="display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:14px;padding-bottom:18px;border-bottom:1px solid var(--line)"><button class="btn btn-o s" type="button" onclick="resetPlan()">Reset</button><button class="btn btn-o s" type="button" onclick="newPlan()">Start a New Plan</button><button class="btn btn-o s" type="button" onclick="savePlan()">Save Plan</button><button class="btn btn-o s" type="button" onclick="favPlan()">★ Favourite</button><button class="btn btn-o s" type="button" onclick="slideDeck()">Download Slides</button><button class="btn btn-o s" type="button" onclick="sharePlan()">Share with my Coach</button><a class="btn btn-o s" id="favLink" href="#">My Favourites</a><button class="btn btn-o s" type="button" onclick="havePlan()">I already have a Plan</button><span id="planMsg" class="hint" style="margin:0"></span></div>
+<div id="planCal"></div></div>
+<div class="layout" style="margin-top:16px">
+<div>
+<div class="card">
+<div class="coach" id="coachReview">
+<h3><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> A Second Opinion</h3>
+<div class="sub">Have our Assistant look over the week before you Order. Protein, variety, and what to eat in the Meals we are not covering.</div>
+<div class="row"><button class="btn btn-k" type="button" id="coachRBtn" onclick="coachAsk('review')">Review My Plan</button><span id="coachRMsg" class="hint" style="margin:0"></span></div>
+<div id="coachROut"></div>
+</div>
+<div class="foot"><button class="btn btn-o" onclick="goStep(3)">← Change Answers</button><span><button class="btn btn-o" onclick="generate()">↻ Regenerate</button> <button class="btn btn-y" onclick="goStep(5)">Add To Cart →</button></span></div>
+</div>
+</div>
+<aside class="card side">
+<span class="eyebrow">Daily Target</span>
+<div id="sideTargets"></div>
+<div style="border-top:1px solid var(--line);margin-top:12px;padding-top:10px"><span class="eyebrow">Total Price</span><div class="bigp" id="sidePrice">RM 0.00</div><div class="hint" id="sideMeals"></div></div>
+<button class="btn btn-y" style="width:100%;margin-top:12px" onclick="goStep(5)">Add To Cart →</button>
+</aside>
+</div>
+</section>
+<!-- STEP 5 · ORDER -->
+<section id="s5" class="card" style="display:none">
+<h2>Order Your Plan</h2>
+<div id="orderSummary" style="margin-top:8px"></div>
+<div id="orderAuth"></div>
+<div id="orderMsg"></div>
+<div class="foot"><button class="btn btn-o" onclick="goStep(4)">← Back To Plan</button><button class="btn btn-y" id="orderBtn" onclick="orderPlan()">Add Plan to Cart & Checkout →</button></div>
+</section>
+</main>
+<script>
+var SB={url:'https://swpprjvubgcdsojapaad.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0'};var SYNC_URL='https://my.chatbees.io/api/webhooks/flow/5490/2320a53af9d5f9deecfdbee2bc2c5da845d11731f6f3b3920ac33baaa93305a5';var CAT_URL='https://my.chatbees.io/p/FaMS3PtRe';var CAT_V='c0b5853881';var CHECKOUT_URL='https://my.chatbees.io/p/D2pz8bZ',ACCOUNT_URL='https://my.chatbees.io/p/dtTMaV';var EXTRA_COMP=0.5;var PACK_PER_BOX=1.8;var ACTIVITY=[['1.2','The Minimum Caloric Intake','Not Active — Lower Caloric needs ( BMR × 1.2 )'],['1.375','Moderate Caloric Intake','Moderately Active — Moderate Caloric needs ( BMR × 1.375 )'],['1.45','High Caloric Intake','Active — High Caloric needs ( BMR × 1.45 )']];var ICONS={goal:{fat_loss:'<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l6 6 4-4 8 8"/><path d="M16 17h5v-5"/></svg>',lean_gain:'<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 8v8M3.5 10.5v3M17.5 8v8M20.5 10.5v3M6.5 12h11"/></svg>',mass_gain:'<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M16 7h5v5"/></svg>',healthy:'<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.4C12 20.4 4 15.8 4 10.6A4.1 4.1 0 0 1 12 8.5 4.1 4.1 0 0 1 20 10.6c0 5.2-8 9.8-8 9.8z"/></svg>',custom:'<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h8M17 6h3M4 12h3M12 12h8M4 18h8M17 18h3"/><circle cx="14.5" cy="6" r="2.2"/><circle cx="9.5" cy="12" r="2.2"/><circle cx="14.5" cy="18" r="2.2"/></svg>'}};ICONS.activity={};['1.2','1.375','1.45'].forEach(function(v,i){var b='';for(var j=0;j<=i;j++)b+='<path d="M'+(6+j*4)+' 10v4"/>';ICONS.activity[v]='<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="7" width="15" height="10" rx="2.5"/><path d="M20.5 10.5v3"/>'+b+'</svg>'});ICONS.planMode={macros:'<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v8.5l6 6"/></svg>',kcal:'<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s5 4.2 5 8.6a5 5 0 0 1-10 0C7 9 9 7 9 7s.4 2.2 1.6 2.9C11.6 8 12 5.6 12 3z"/></svg>'};var PLANMODE=[['macros','Strict Macros','We hold your Protein, Carbs and Fat as close to the split as the Kitchen allows. Leaner cuts and Oil-Free Vegetables when the Fat Budget is tight'],['kcal','Calories Only','We hit your Daily Calories and let the Macros fall where they fall. More variety in the box, less exact on the split']];var BODY_POS={ectomorph:'4.8% 39.2%',mesomorph:'46.8% 39.2%',endomorph:'92% 39.2%'};var BODY=[['ectomorph','Ectomorph','Naturally lean, burns through food — +5% Calories and a little more Carbs'],['mesomorph','Mesomorph','Athletic build, gains and loses easily — No change'],['endomorph','Endomorph','Gains easily, holds Fat — −5% Calories, fewer Carbs, more Protein']];var GOALS=[['fat_loss','Fat Loss','50% Protein · 30% Carbs · 20% Fat · −200 KCALs',-200,[50,30,20]],['lean_gain','Lean Mass Gain','45% Protein · 30% Carbs · 25% Fat · +200 KCALs',200,[45,30,25]],['mass_gain','Mass Gain','35% Protein · 45% Carbs · 20% Fat · +200 KCALs',200,[35,45,20]],['healthy','Just Healthy','40% Protein · 40% Carbs · 20% Fat · Maintain',0,[40,40,20]],['custom','Create My Own Macros','Type your Own Split',0,null]];var BODY_NUDGE={ectomorph:{c:5,p:0,f:-5,kcal:5,veg:0,carb:1.08},mesomorph:{c:0,p:0,f:0,kcal:0,veg:0,carb:1},endomorph:{c:-5,p:5,f:0,kcal:-5,veg:25,carb:0.95}};var CUTE={prawn:'<svg class="ce" viewBox="0 0 24 24" aria-hidden="true"><path fill="#F4805F" d="M20.6 5.2c.9 0 1.4 1 .9 1.8-1 1.3-1.9 2.7-2.6 4.3 1 .6 1.6 1.7 1.6 3 0 2.6-2.5 5.2-6.2 5.2-4.1 0-7.4-2.4-7.4-5.6 0-4.7 5.5-8.7 13.7-8.7z"/><circle cx="18.2" cy="7.8" r=".95" fill="#fff"/><path stroke="#F4805F" stroke-width="1.7" stroke-linecap="round" fill="none" d="M7.1 13.4 3.7 11.9M7.7 16.1 4.5 17.7M9.8 17.9 8.3 20.8"/></svg>',seafood:'<svg class="ce" viewBox="0 0 24 24" aria-hidden="true"><path fill="#5AA9E6" d="M16 12c0 3.2-3.6 5.9-8 5.9S.4 15.2.4 12 4 6.1 8 6.1 16 8.8 16 12z"/><path fill="#3D86BF" d="M16 12l7.4-4.6v9.2z"/><circle cx="5.4" cy="10.7" r="1.1" fill="#fff"/></svg>',beef:'<svg class="ce" viewBox="0 0 24 24" aria-hidden="true"><path fill="#D9534F" d="M3.9 10.6C5.5 5.6 13 3.3 17.5 5.7c4.1 2.1 4.3 8.7.6 11.4C14 19.9 2.3 15.6 3.9 10.6z"/><path fill="#F3D8C4" d="M8.4 9.6c2-1.2 4.6-.4 5.3 1.8.7 2.2-1.1 4.1-3.4 3.8-2.1-.3-3.3-2.4-1.9-5.6z"/></svg>',egg:'<svg class="ce" viewBox="0 0 24 24" aria-hidden="true"><path fill="#F4F8FE" stroke="#E2D9C3" d="M12 2.9c4.1 0 6.6 6.1 6.6 10.1a6.6 6.6 0 0 1-13.2 0C5.4 9 7.9 2.9 12 2.9z"/><circle cx="12" cy="13.6" r="3.3" fill="#F6C445"/></svg>',peanut:'<svg class="ce" viewBox="0 0 24 24" aria-hidden="true"><path fill="#D9A05B" d="M12 2.4c3 0 4.8 2.1 4.8 4.4 0 1.8-.9 2.7-.9 4.3 0 2 1.4 3.1 1.4 5.1 0 2.8-2.4 5.5-5.3 5.5s-5.3-2.7-5.3-5.5c0-2 1.4-3.1 1.4-5.1 0-1.6-.9-2.5-.9-4.3C7.2 4.5 9 2.4 12 2.4z"/><path stroke="#B07C3A" stroke-width="1.3" fill="none" d="M9.1 11.7h5.8"/></svg>',tofu:'<svg class="ce" viewBox="0 0 24 24" aria-hidden="true"><path fill="#FBF6E7" stroke="#DCD2B7" d="M12 3.6 20.6 8 12 12.4 3.4 8z"/><path fill="#F0E8D2" stroke="#DCD2B7" d="M3.4 8v7.9l8.6 4.5v-8z"/><path fill="#E6DBBE" stroke="#DCD2B7" d="M20.6 8v7.9L12 20.4v-8z"/></svg>',pasta:'<svg class="ce" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="#F2C94C" stroke-width="2.3" stroke-linecap="round" d="M4.8 11.2c1.2-2.3 2.6-2.3 3.8 0s2.6 2.3 3.8 0 2.6-2.3 3.8 0 1.9 1.7 2.9.9"/><path fill="#E4E8EB" d="M2.3 13h19.4a9.7 9.7 0 0 1-19.4 0z"/></svg>',toast:'<svg class="ce" viewBox="0 0 24 24" aria-hidden="true"><path fill="#E8B860" d="M6.4 21V10.1C4.8 10.1 3.4 8.8 3.4 7.2 3.4 5.4 4.9 4 6.8 4 7.5 2.8 9.5 2 11.9 2s4.4.8 5.2 2c1.9 0 3.4 1.4 3.4 3.2 0 1.6-1.4 2.9-3 2.9V21z"/><path fill="#F7E2B4" d="M8.3 19.1v-8.4h7.5v8.4z"/></svg>'};var AVOID=[['prawn','Prawn',/prawn|shrimp/i,['prawn']],['seafood','Fish',/seafood|squid|fish|salmon|barramundi|toman|tilapia|dory|halibut/i,['seafood']],['beef','Beef',/beef/i,['beef']],['egg','Egg',/\begg\b|carbonara/i,['egg']],['peanut','Peanut & Nuts',/peanut|\bnut\b|nuts|pesto/i,['peanut','nuts']],['tofu','Tofu',/tofu/i,[]],['pasta','Pasta',/pasta|fusilli|fettuccine|carbonara|aglio|bolognese|spaghetti|noodle/i,[]],['toast','Toast',/toast|bread/i,[]]];var CATALOG=[],BYCODE={};function unpackCat(d){var rows=d.r.map(function(v){var o={};for(var i=0;i<d.k.length;i++)o[d.k[i]]=v[i];return o});rows.forEach(function(o){var im=d.i[o.img];o.img=im?d.p[im[0]]+im[1]+(im[2]||'.jpg'):'';var nm=o.n[1];d.t.forEach(function(t){nm=nm.split(t[0]).join(t[1])});o.n=d.n[o.n[0]]+nm;o.sub=d.s[o.sub]||'';o.po=d.o[o.po]||[50,300,25];o.cat='pcvgs'.charAt(o.cat)});rows.forEach(function(o,i){o.sq=d.q[i]||100;o.al=d.a[i]||[]});CATALOG=rows;BYCODE={};rows.forEach(function(r){BYCODE[r.c]=r});return rows}function runEng(j){if(!j)throw new Error('no engine');var el=document.createElement('script');el.text=j;document.head.appendChild(el);if(typeof slideDeck!=='function')throw new Error('engine did not load')}function bootCat(done){var c=null;try{var raw=localStorage.getItem('aera.cat');if(raw){var o=JSON.parse(raw);if(o&&o.v===CAT_V&&o.j)c=o}}catch(e){}if(c){try{unpackCat(c.d);runEng(c.j);return done(true)}catch(e){try{localStorage.removeItem('aera.cat')}catch(e2){}}}fetch(CAT_URL,{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var a=t.indexOf('/*CAT*/'),b=t.indexOf('/*ENDCAT*/');if(a<0||b<a)throw new Error('bad');var d=JSON.parse(t.slice(a+7,b));var e1=t.indexOf('/*ENG*/'),e2=t.indexOf('/*ENDENG*/');if(e1<0||e2<e1)throw new Error('bad');var j=t.slice(e1+7,e2);unpackCat(d);runEng(j);try{localStorage.setItem('aera.cat',JSON.stringify({v:CAT_V,d:d,j:j}))}catch(e){}done(true)}).catch(function(){done(false)})}var Q={gender:'m',dob:'',age:null,height:null,weight:null,kcalEdit:null,activity:'',customMode:'pct',customG:[null,null,null],picked:{},body:'mesomorph',goal:'fat_loss',plan:'macros',custom:[40,40,20],days:7,mpd:2,total:4,avoid:[],prefP:['chicken','seafood','prawn','stir_fried'],prefC:['rice','pasta','potato'],dish:{},pickV:[],noV:false,pickG:[],noG:false,pickS:[],sauce:'sometimes',seasoning:'normal',spice:'normal',home:[]};var PLAN=null,STEP=1,ACCT=null,sb=null,USER=null;function $(s){return document.querySelector(s)}function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}function rm(v){return 'RM '+(Math.round((+v||0)*100)/100).toFixed(2)}function r1(v){return Math.round(v*10)/10}
+/* Toast is the one thing on our list that comes in units rather than by weight: a slice is
+10 g, so 40 g is four slices. Showing the grams alone made people do that sum in their
+heads, and portions used to land on 25 g — two and a half slices, which is not a thing we
+can put in a box. */
+/* The portions here are what the kitchen weighs, which is raw — so that is what the column
+says. When the plan was written in cooked weights we also show the cooked figure it came
+from, worked back through the same rules, rather than putting the word "cooked" under a
+number that is not one. */
+var SRC_BASIS='';try{var _b=JSON.parse(localStorage.getItem('aera.byop')||'null');if(_b&&_b.basis)SRC_BASIS=_b.basis}catch(e){}var RICE_BACK={'basmati long rice':2.90,'fragrant white rice':2.10,'brown rice':2.50,'pearl rice':2.00};function cookedOf(r,g){var n=String(r.n||'').toLowerCase();g=+g||0;if(/classic meal prep brown rice|spiced long rice/.test(n))return null;for(var k in RICE_BACK)if(n.indexOf(k)>=0)return Math.round(g*RICE_BACK[k]);if(r.cat==='p'||(r.cat==='g'&&/chicken|beef|tofu|prawn|fish|salmon/.test(n)))return Math.round(g/1.5);if(r.cat==='v'||(r.cat==='g'&&/corn|pea|mushroom|cabbage/.test(n))){if(/broccoli/.test(n))return g;return Math.max(0,g-25)}return null}function wLab(r,g){var ck=(SRC_BASIS==='cooked')?cookedOf(r,g):null;return '<small class="wlab">Raw weight'+(ck?' &middot; '+ck+' g cooked':'')+'</small>'}function unitOf(r){return (r&&r.sq&&r.sq<=10&&/toast|bread/i.test(r.n||''))
+? {g:r.sq,one:'slice',many:'slices'} : null}function unitStr(r,g){var u=unitOf(r);if(!u)return '';var n=Math.round((+g||0)/u.g);if(!n)return '';return n+' '+(n===1?u.one:u.many)}function gramStr(r,g){var u=unitStr(r,g);return (+g||0)+' g'+(u?' ( '+u+' )':'')}function macStr(x){return Math.round(x.kcal)+' KCALs · Protein '+r1(x.p)+' g · Carbs '+r1(x.c)+' g · Fat '+r1(x.f)+' g'}function macG(x){return Math.round(x.kcal)+' KCALs · Protein '+Math.round(x.p)+' g · Carbs '+Math.round(x.c)+' g · Fat '+Math.round(x.f)+' g'}function signedIn(){return !!(USER||(ACCT&&ACCT.email))}
+/* Subscription: free first month from the account's first visit, then the builder locks.
+Payment Link URLs live in the AERA Settings sheet, so they change without a republish. */
+var PLAN_SET_URL='https://my.chatbees.io/api/public/landing-pages/6938/sheet-data';var TIERS=[['monthly','Monthly','RM 21.99','Billed every month'],['annual','Annually','RM 129.99','Billed once a year — RM 10.83 a month']];var SUB={ready:false,allowed:true,state:'none',days:30,locked:false,links:{}};
+/* What the Kitchen has run out of, published to the AERA Settings Sheet by the Kitchen Console
+and read here on load. If this fetch fails the list stays empty on purpose : a menu that
+empties itself because a sheet was slow is worse than one that offers a dish we have to
+apologise for. */
+var OOS={};function oosHas(c){return !!OOS[String(c||'').toLowerCase()]}function oosIn(m){return ((m&&m.comps)||[]).filter(function(cp){return oosHas(cp.r)})
+.map(function(cp){var r=BYCODE[cp.r];return r?r.n:cp.r})}function oosPlan(){var out=[];((PLAN&&PLAN.meals)||[]).forEach(function(m){oosIn(m).forEach(function(n){if(out.indexOf(n)<0)out.push(n)})});return out}function subEmail(){return String((USER&&USER.email)||(ACCT&&ACCT.email)||'').toLowerCase()}function subLoadLinks(){fetch(PLAN_SET_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
+(j&&j.data||[]).forEach(function(r){var k=String(r.Key||'').trim();if(k==='plan_link_monthly'||k==='plan_link_annual')SUB.links[k.slice(10)]=String(r.Value||'').trim();if(k==='out_of_stock'){OOS={};String(r.Value||'').split(',').forEach(function(c){c=c.trim().toLowerCase();if(c)OOS[c]=1})}});try{if(PLAN&&PLAN.meals&&PLAN.meals.length)renderPlan()}catch(e){}if(SUB.locked)subWall()}).catch(function(){})}function subTiers(){var em=subEmail();return '<div class="tiers">'+TIERS.map(function(t){var u=SUB.links[t[0]]||'';if(u&&em)u+=(u.indexOf('?')>=0?'&':'?')+'prefilled_email='+encodeURIComponent(em)+'&client_reference_id='+encodeURIComponent(em);return '<div class="tier"><div class="tname">'+t[1]+'</div><div class="tprice">'+t[2]+'</div><div class="tnote">'+t[3]+'</div>'+
+(u?'<a class="btn btn-y" href="'+esc(u)+'" target="_blank" rel="noopener">Subscribe</a>':'<button class="btn btn-o" type="button" disabled>Opening Soon</button>')+'</div>'}).join('')+'</div>'}function subWall(preview){var box=$('#subWall');if(!box)return;var em=subEmail();box.innerHTML='<div class="gate"><div class="gicon" aria-hidden="true">✦</div><h3>'+
+(preview?'Your Meal Plan Subscription':'Your free month has ended')+'</h3><p>'+
+(preview?'Your first month is free. After that, keep the builder for RM 21.99 a month or RM 129.99 a year — cancel any time.'
+:'The Personalised Meal Plan builder is a subscription. Choose a plan and it unlocks again — every answer and every plan you have saved is still here.')+'</p>'+subTiers()+'<p class="gsub">'+
+(em?'Subscribing as <b>'+esc(em)+'</b> — please pay with this same email so we can match it to your account.':'Sign in first so your subscription is matched to your account.')+'<br>Payment opens in a new tab. When it is done, come back and refresh this page.</p>'+
+(preview?'<div class="grow"><button class="btn btn-o" type="button" onclick="subHide()">← Back To My Plan</button></div>'
+:'<p class="gsub"><a href="'+ACCOUNT_URL+'">My Account</a> · <a href="'+CHECKOUT_URL+'">Shop The Meals</a></p>')+'</div>';box.style.display='block';var bar=$('#stepbar');if(bar)bar.style.display='none';
+[1,2,3,4,5].forEach(function(i){var x=$('#s'+i);if(x)x.style.display='none'});$('#subNote').innerHTML='';window.scrollTo({top:0,behavior:'smooth'})}function subHide(){var box=$('#subWall');box.style.display='none';box.innerHTML='';var bar=$('#stepbar');if(bar)bar.style.display='';subNote();goStep(STEP||1)}function subNote(){var n=$('#subNote');if(!n)return;if(!SUB.ready||SUB.locked||SUB.state==='active'||!signedIn()){n.innerHTML='';return}var d=Math.max(0,SUB.days|0);n.innerHTML='<div class="msg ok" style="margin-top:14px">Your Free Month of the Personalised Meal Plan '+
+(d?'has <b>'+d+'</b> Day'+(d===1?'':'s')+' left':'ends Today')+'. <a href="#" onclick="subWall(1);return false">See what happens after</a></div>'}function subCheck(){var em=subEmail();if(!sb||!em)return;sb.rpc('plan_access',{p_email:em}).then(function(r){var w=r&&!r.error&&r.data&&r.data[0];if(!w)return;SUB.ready=true;SUB.allowed=!!w.allowed;SUB.state=w.state||'none';SUB.days=+w.days_left||0;if(!SUB.allowed){SUB.locked=true;return subWall()}if(SUB.state==='none'){SUB.state='trial';sb.from('plan_subscriptions').insert({email:em,status:'trial'}).then(function(){},function(){})}subNote()}).catch(function(){})}function goStep(n){if(SUB.locked){subWall();return}try{saveDraft()}catch(e){}  /* never lose a half-filled questionnaire *//* A plan that arrived from the Bring Your Own Plan page needs no questionnaire: the customer already has a plan, and asking a man who has just handed us his coach's sheet for his date of birth and activity level before we will show it to him is nonsense. Everything else, the sign-in at step 4 included, still applies. */if(n>=2&&!(PLAN&&PLAN.byop)&&!validStep1())return;STEP=n;try{saveDraft()}catch(e){}STEP=n;[1,2,3,4,5].forEach(function(i){$('#s'+i).style.display=i===n?'block':'none'});document.querySelectorAll('.step').forEach(function(s){var k=+s.dataset.s;s.classList.toggle('on',k===n);s.classList.toggle('done',k<n)});if(n===2)renderStep2();if(n===3)renderStep3();if(n===4&&!signedIn()){planGate();window.scrollTo({top:0,behavior:'smooth'});saveDraft();return}if(n===4&&!PLAN)generate();if(n===4)renderPlan();if(n===5&&!signedIn()){goStep(4);return}if(n===5)renderOrder();window.scrollTo({top:0,behavior:'smooth'});saveDraft()}function validStep1(){Q.dob=$('#dob').value||'';Q.age=ageFromDob(Q.dob);Q.height=+$('#height').value||0;Q.weight=+$('#weight').value||0;var m=$('#targets');if(!(Q.age>=14&&Q.age<=100&&Q.height>=120&&Q.weight>=30)){m.innerHTML='<div class="msg warn">Please fill in your date of birth, bodyweight and height first.</div>';return false}if(!Q.activity){m.innerHTML='<div class="msg warn">Please pick your activity level.</div>';return false}m.innerHTML='';return true}function dobPicker(hiddenId,minAge,maxAge){var hid=$('#'+hiddenId);var wrap=document.createElement('div');wrap.className='dobpick';var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];var now=new Date();var yMax=now.getFullYear()-(minAge||0),yMin=now.getFullYear()-(maxAge||100);function sel(name,opts,ph){var s=document.createElement('select');s.setAttribute('aria-label',ph);s.innerHTML='<option value="">'+ph+'</option>'+opts.map(function(o){return'<option value="'+o[0]+'">'+o[1]+'</option>'}).join('');return s}var dd=sel('d',Array.from({length:31},function(_,i){return[String(i+1).padStart(2,'0'),String(i+1)]}),'Day'),mm=sel('m',MONTHS.map(function(n,i){return[String(i+1).padStart(2,'0'),n]}),'Month'),yy=sel('y',Array.from({length:yMax-yMin+1},function(_,i){var y=yMax-i;return[String(y),String(y)]}),'Year');wrap.appendChild(dd);wrap.appendChild(mm);wrap.appendChild(yy);hid.parentNode.insertBefore(wrap,hid);function daysIn(y,m){return y&&m?new Date(+y,+m,0).getDate():31}function sync(){var y=yy.value,m=mm.value,d=dd.value;var max=daysIn(y,m);[].slice.call(dd.options).forEach(function(o){if(o.value)o.disabled=+o.value>max});if(d&&+d>max){dd.value='';d=''}var v=(y&&m&&d)?y+'-'+m+'-'+d:'';if(hid.value!==v){hid.value=v;hid.dispatchEvent(new Event('input',{bubbles:true}))}}
+[dd,mm,yy].forEach(function(s){s.addEventListener('change',sync)});return{set:function(v){v=String(v||'');if(/^\d{4}-\d{2}-\d{2}$/.test(v)){yy.value=v.slice(0,4);mm.value=v.slice(5,7);dd.value=v.slice(8,10);if(yy.value!==v.slice(0,4))yy.value=''}else{yy.value='';mm.value='';dd.value=''}hid.value=(yy.value&&mm.value&&dd.value)?v:''}}}function ageFromDob(d){if(!d)return 0;var b=new Date(d+'T00:00:00');if(isNaN(b))return 0;var n=new Date();var a=n.getFullYear()-b.getFullYear();var m=n.getMonth()-b.getMonth();if(m<0||(m===0&&n.getDate()<b.getDate()))a--;return a}function bmr(){var w=Q.weight,h=Q.height,a=Q.age;return Q.gender==='f'?10*w+6.25*h-5*a-161:10*w+6.25*h-5*a+5}function bodyDef(){for(var i=0;i<BODY.length;i++)if(BODY[i][0]===Q.body)return BODY[i];return BODY[1]}function goalDef(){for(var i=0;i<GOALS.length;i++)if(GOALS[i][0]===Q.goal)return GOALS[i];return GOALS[0]}function split(){var g=goalDef();var s=g[4]?g[4].slice():Q.custom.slice();var n=BODY_NUDGE[Q.body]||BODY_NUDGE.mesomorph;s=[s[0]+n.p,s[1]+n.c,s[2]+n.f];var sum=s[0]+s[1]+s[2];return s.map(function(x){return x*100/sum})}function customGrams(){if(Q.goal!=='custom'||Q.customMode!=='g')return null;var g=Q.customG||[];var p=+g[0]||0,c=+g[1]||0,f=+g[2]||0;if(!(p>0&&f>0&&c>=0))return null;return{p:Math.round(p),c:Math.round(c),f:Math.round(f)}}function bodyKcal(tdee){var n=BODY_NUDGE[Q.body]||BODY_NUDGE.mesomorph;return Math.round(tdee*(n.kcal||0)/100/10)*10}function targets(){if(!(Q.age&&Q.height&&Q.weight))return null;var b=bmr(),bmrR=Math.round(b);var act=+Q.activity||0;var tdee=act?b*act:b;var cg=customGrams();if(cg){var k=cg.p*4+cg.c*4+cg.f*9;var sp=[cg.p*4*100/k,cg.c*4*100/k,cg.f*9*100/k];return{bmr:bmrR,tdee:Math.round(tdee),kcal:Math.round(k),calc:Math.round(k),edited:false,fixed:true,hasAct:!!act,bodyKcal:0,p:cg.p,c:cg.c,f:cg.f,split:sp}}var bk=act?bodyKcal(tdee):0;var calc=Math.round(tdee+(act?goalDef()[3]:0)+bk);var floored=false;if(act&&calc<bmrR){calc=bmrR;floored=true}var kcal=(Q.kcalEdit>0)?Math.round(Q.kcalEdit):calc;var s=split();var p=Math.round(kcal*s[0]/100/4),c=Math.round(kcal*s[1]/100/4),f=Math.round(kcal*s[2]/100/9);return{bmr:bmrR,tdee:Math.round(tdee),kcal:kcal,calc:calc,bodyKcal:bk,floored:floored,edited:Q.kcalEdit>0&&Math.round(Q.kcalEdit)!==calc,hasAct:!!act,p:p,c:c,f:f,split:s}}
+/* Items ticked on the Home-Sourced Meals page are handed over in the browser's own store. Take
+them once, skip anything already listed, then clear the hand-over so a second visit does not
+count the same food twice. */
+function homePickup(){var raw='';try{raw=localStorage.getItem('aera.homePick')||''}catch(e){return}if(!raw)return;try{localStorage.removeItem('aera.homePick')}catch(e){}var list=[];try{list=JSON.parse(raw)||[]}catch(e){list=[]}if(!list.length)return;var have={};Q.home.forEach(function(h){have[String(h.n||'').toLowerCase()]=1});var added=0;list.forEach(function(h){if(!h||!h.n)return;var k=String(h.n).toLowerCase();if(have[k])return;have[k]=1;Q.home.push({n:String(h.n),k:+h.k||0,p:+h.p||0,c:+h.c||0,f:+h.f||0});added++});if(added){HOMEPICKED=added;saveDraft()}}var HOMEPICKED=0;function homeTotals(){var t={kcal:0,p:0,c:0,f:0};Q.home.forEach(function(h){t.kcal+=+h.k||0;t.p+=+h.p||0;t.c+=+h.c||0;t.f+=+h.f||0});return t}function aeraTargets(){var t=targets();if(!t)return null;var h=homeTotals();return{kcal:Math.max(0,t.kcal-h.kcal),p:Math.max(0,t.p-h.p),c:Math.max(0,t.c-h.c),f:Math.max(0,t.f-h.f),full:t,home:h}}function shareFrac(){var t=Math.max(Q.mpd,Q.total||3);return Math.min(1,Q.mpd/t)}function planTargets(){var T=aeraTargets();if(!T)return null;var s=shareFrac();return{kcal:Math.round(T.kcal*s),p:Math.round(T.p*s),c:Math.round(T.c*s),f:Math.round(T.f*s),share:Math.round(s*100),full:T.full,home:T.home,remainder:{kcal:Math.round(T.kcal*(1-s)),p:Math.round(T.p*(1-s)),c:Math.round(T.c*(1-s)),f:Math.round(T.f*(1-s))}}}function renderTargets(){var t=targets();var el=$('#targets');var lm=$('#liveMacros'),li=$('#liveIntake');$('#agePill').textContent=Q.age?'Age '+Q.age:'';if(!t){el.innerHTML='';lm.innerHTML='';li.innerHTML='';return}var n=BODY_NUDGE[Q.body];var note=(n&&(n.c||n.p||n.kcal))?' · Adjusted for your Body Type':'';var g=goalDef();lm.innerHTML='<div class="live"><h3>Daily Macronutrients</h3><div class="sub">'+(t.fixed?'From the grams you entered':t.hasAct?'Based on your Daily Intake of '+t.kcal+' KCALs':'Based on your Basal Metabolic Rate of '+t.bmr+' KCALs ( At Rest ) — pick an activity level below for your full Daily Intake')+(t.fixed?'':' · '+esc(g[1])+' split '+Math.round(t.split[0])+' / '+Math.round(t.split[1])+' / '+Math.round(t.split[2])+note)+'</div><div class="macros"><div><b>'+t.kcal+'</b><span>KCALs</span><i>'+((t.fixed||t.hasAct)?'per day':'at rest')+'</i></div><div><b>'+t.p+' g</b><span>Protein</span><i>'+Math.round(t.split[0])+'%</i></div><div><b>'+t.c+' g</b><span>Carbs</span><i>'+Math.round(t.split[1])+'%</i></div><div><b>'+t.f+' g</b><span>Fat</span><i>'+Math.round(t.split[2])+'%</i></div></div></div>';if(t.fixed){li.innerHTML='<div class="live"><h3>Daily Intake</h3><div class="sub">Worked out from the grams you entered: '+t.p+' g Protein and '+t.c+' g Carbs × 4 KCALs, '+t.f+' g Fat × 9 KCALs.</div><div class="intake"><b style="font-family:Montserrat,sans-serif;letter-spacing:-.02em;font-size:24px">'+t.kcal+'</b><span class="u">KCALs per Day</span><a href="#" onclick="Q.customMode=\'pct\';renderCustom();renderTargets();saveDraft();return false">switch back to percentages</a></div></div>'}else if(t.hasAct){li.innerHTML='<div class="live"><h3>Daily Intake</h3><div class="sub">BMR '+t.bmr+' × '+Q.activity+(g[3]?' '+(g[3]>0?'+':'−')+' '+Math.abs(g[3])+' KCALs for '+esc(g[1]):'')+(t.bodyKcal?' '+(t.bodyKcal>0?'+':'−')+' '+Math.abs(t.bodyKcal)+' KCALs for '+esc(bodyDef()[1]):'')+' = <b>'+t.calc+' KCALs</b>'+(t.floored?' ( Held at your BMR — we never plan below it )':'')+'. Adjust it if you know your numbers. Your Macros and Meals follow this figure.</div><div class="intake"><input type="number" id="kcalEdit" min="800" max="6000" step="10" value="'+t.kcal+'"><span class="u">KCALs per Day</span>'+(t.edited?'<a href="#" onclick="Q.kcalEdit=null;renderTargets();saveDraft();return false">Reset to calculated ('+t.calc+')</a>':'')+'</div></div>';var ki=$('#kcalEdit');ki.addEventListener('change',function(){var v=+this.value||0;Q.kcalEdit=v>=800&&v<=6000?v:null;renderTargets();saveDraft()});ki.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();this.blur()}})}else li.innerHTML='';el.innerHTML=''}function optGrid(id,list,cur,onpick){$('#'+id).innerHTML=list.map(function(o){var on=o[0]===cur;if(id==='bodytype')return'<div class="opt pic'+(on?' on':'')+'" data-v="'+o[0]+'"><div class="fig" role="img" aria-label="'+esc(o[1])+'" style="background-position:'+BODY_POS[o[0]]+'"></div><b>'+esc(o[1])+'</b><small>'+esc(o[2])+'</small></div>';var ic=(ICONS[id]||{})[o[0]]||(typeof o[3]==='string'?o[3]:'');return'<div class="opt'+(on?' on':'')+'" data-v="'+o[0]+'">'+(ic?'<span class="ic">'+ic+'</span>':'')+'<b>'+esc(o[1])+'</b><small>'+esc(o[2])+'</small></div>'}).join('');document.querySelectorAll('#'+id+' .opt').forEach(function(el){el.addEventListener('click',function(){onpick(el.dataset.v);optGrid(id,list,el.dataset.v,onpick);renderTargets();saveDraft()})})}function chips(id,list,cur,multi,onpick,ic){$('#'+id).innerHTML=list.map(function(o){var on=multi?cur.indexOf(o[0])>=0:cur===o[0];var g=ic&&ic[o[0]];return'<button type="button" class="tog'+(g?' gx':'')+(on?' on':'')+'" data-v="'+o[0]+'">'+(g||'')+'<span>'+esc(o[1])+'</span></button>'}).join('');document.querySelectorAll('#'+id+' .tog').forEach(function(el){el.addEventListener('click',function(){onpick(el.dataset.v);saveDraft()})})}var GENDER_ICON={m:'<svg class="i" viewBox="0 0 24 24" width="18" height="18" stroke-width="2.2" aria-hidden="true"><circle cx="10" cy="14" r="5.5"/><path d="M14 10l6-6M15 4h5v5"/></svg>',f:'<svg class="i" viewBox="0 0 24 24" width="18" height="18" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="9" r="5.5"/><path d="M12 14.5V22M8.5 18.5h7"/></svg>'};function cmHint(){var el=$('#cmHint');if(!el)return;if(Q.customMode==='g'){var g=Q.customG,k=(+g[0]||0)*4+(+g[1]||0)*4+(+g[2]||0)*9;el.textContent=customGrams()?'That is '+Math.round(k)+' KCALs a day — this becomes your Daily Intake, exactly as typed.':'Enter protein, carbs and fat in grams — we work out the calories for you.';return}var s=Q.custom[0]+Q.custom[1]+Q.custom[2];el.textContent=s===100?'Adds up to 100% — Good.':'Adds up to '+s+'% — we will scale it to 100%.'}function seedGrams(){if(Q.customG&&Q.customG[0]>0)return;var t=targets();if(!t||!t.hasAct)return;Q.customG=[t.p,t.c,t.f];['cgp','cgc','cgf'].forEach(function(id,i){var el=$('#'+id);if(el)el.value=Q.customG[i]})}function renderCustom(){if(Q.customMode==='g')seedGrams();$('#cmPct').style.display=Q.customMode==='g'?'none':'grid';$('#cmG').style.display=Q.customMode==='g'?'grid':'none';chips('cmMode',[['pct','By Percentage'],['g','By Grams']],Q.customMode,false,function(v){Q.customMode=v;Q.kcalEdit=null;renderCustom();renderTargets()});cmHint()}function renderGender(){$('#gender').innerHTML=[['m','Male'],['f','Female']].map(function(o){return'<button type="button" class="tog gx'+(Q.gender===o[0]?' on':'')+'" data-v="'+o[0]+'" aria-pressed="'+(Q.gender===o[0])+'">'+GENDER_ICON[o[0]]+'<span>'+o[1]+'</span></button>'}).join('');document.querySelectorAll('#gender .tog').forEach(function(el){el.addEventListener('click',function(){Q.gender=el.dataset.v;Q.kcalEdit=null;renderGender();renderTargets();saveDraft()})})}function initUI(){optGrid('activity',ACTIVITY,Q.activity,function(v){Q.activity=v;Q.picked.activity=1;Q.kcalEdit=null});renderGender();optGrid('bodytype',BODY,Q.body,function(v){Q.body=v;Q.picked.body=1});optGrid('goal',GOALS,Q.goal,function(v){Q.goal=v;Q.picked.goal=1;Q.kcalEdit=null;$('#customMacros').style.display=v==='custom'?'block':'none';if(v==='custom')renderCustom()});$('#customMacros').style.display=Q.goal==='custom'?'block':'none';
+['cp','cc','cf'].forEach(function(id,i){$('#'+id).value=Q.custom[i];$('#'+id).addEventListener('input',function(){Q.custom=[+$('#cp').value||0,+$('#cc').value||0,+$('#cf').value||0];Q.kcalEdit=null;cmHint();renderTargets();saveDraft()})});
+['cgp','cgc','cgf'].forEach(function(id,i){if(Q.customG[i]!=null)$('#'+id).value=Q.customG[i];$('#'+id).addEventListener('input',function(){Q.customG=[+$('#cgp').value||null,+$('#cgc').value||null,+$('#cgf').value||null];cmHint();renderTargets();saveDraft()})});renderCustom();
+['dob','height','weight'].forEach(function(id){$('#'+id).addEventListener('input',function(){if(id==='dob'){Q.dob=this.value;Q.age=ageFromDob(Q.dob)}else Q[id]=+this.value||0;Q.kcalEdit=null;renderTargets();saveDraft()})});if(!window.DOBP)window.DOBP=dobPicker('dob',14,100);DOBP.set(Q.dob);renderStep2();renderStep3()}function renderStep2(){chips('days',[[5,'5 Days'],[6,'6 Days'],[7,'7 Days']],Q.days,false,function(v){Q.days=+v;Q.picked.week=1;renderStep2()});chips('mpd',[[1,'1 Meal'],[2,'2 Meals'],[3,'3 Meals']],Q.mpd,false,function(v){Q.mpd=+v;Q.picked.week=1;if(Q.total<Q.mpd)Q.total=Q.mpd;renderStep2()});if(Q.total>3)Q.total=3;if(Q.total<Q.mpd)Q.total=Q.mpd;var tl=[1,2,3].filter(function(n){return n>=Q.mpd});$('#total').innerHTML=tl.map(function(n){return'<option value="'+n+'"'+(Q.total===n?' selected':'')+'>'+n+' Meal'+(n>1?'s':'')+'</option>'}).join('');$('#total').onchange=function(){Q.total=+this.value;renderStep2();saveDraft()};var tt=aeraTargets();$('#shareHint').textContent=tt?'AERA provides '+Q.mpd+' of your '+Q.total+' Daily Meals, about '+Math.round(tt.kcal*shareFrac())+' KCALs and '+Math.round(tt.p*shareFrac())+' g Protein a day. The rest comes from your Own Meals and Snacks.':'';var ht=homeTotals();$('#homeList').innerHTML=Q.home.length?'<div class="homebox"><div class="homehd">What You Have Keyed In<span>'+Q.home.length+' Item'+(Q.home.length>1?'s':'')+'</span></div>'+Q.home.map(function(h,i){return'<div class="line" style="grid-template-columns:1fr auto auto"><span>'+esc(h.n)+' <span class="mac">'+macStr({kcal:h.k,p:h.p,c:h.c,f:h.f})+'</span></span><span class="qty"><button type="button" title="Less" onclick="homeQty('+i+',-1)">−</button><span>×'+(h.q||1)+'</span><button type="button" title="More" onclick="homeQty('+i+',1)">+</button></span><button class="x" type="button" title="Remove" onclick="Q.home.splice('+i+',1);renderStep2();saveDraft()">×</button></div>'}).join('')+'<div class="hometot"><span>Your Own Food Adds Up To</span><b>'+Math.round(ht.kcal)+' KCALs · Protein '+r1(ht.p)+' g · Carbs '+r1(ht.c)+' g · Fat '+r1(ht.f)+' g</b></div></div>'
+:'<div class="hint" style="margin:10px 0 0">Nothing keyed in yet. Press + Add a Home-Sourced Meal above and what you add will be listed here.</div>';renderFound()}var PROT_OPTS=[['chicken','Chicken'],['seafood','Seafood & Fish'],['prawn','Prawn'],['beef','Beef'],['stir_fried','Stir-Fried Dishes']];var CARB_OPTS=[['rice','Rice'],['pasta','Pasta'],['potato','Potato & Sweet Potato'],['toast','Toast'],['none','No Carbs']];var SELG=['prot','carb','veg','garnish','sauce'];
+/* Select All, per list and for the whole page. The tickbox reads the list rather than
+remembering its own state : tick one item off by hand and the box goes half-ticked, which
+is the only honest thing for it to show. No Carbs is left out of the carbohydrate sweep on
+purpose — it is the opposite of picking them all. */
+function selKeys(g){if(g==='prot')return liveCats(PROT_OPTS.slice(),Q.prefP).map(function(o){return o[0]});if(g==='carb')return liveCats(CARB_OPTS.slice(),Q.prefC).map(function(o){return o[0]})
+.filter(function(k){return k!=='none'});var cat=g==='veg'?'v':g==='garnish'?'g':'s';return CATALOG.filter(function(r){return r.cat===cat&&!excluded(r)&&!oosHas(r.c)})
+.map(function(r){return r.c})}function selCur(g){return g==='prot'?Q.prefP:g==='carb'?Q.prefC:g==='veg'?Q.pickV:g==='garnish'?Q.pickG:Q.pickS}function selOff(g){if(g==='sauce'&&Q.sauce==='never')return true;return !selKeys(g).length}function selAllOn(g){if(g==='veg'&&Q.noV)return false;if(g==='garnish'&&Q.noG)return false;var k=selKeys(g);if(!k.length)return false;var cur=selCur(g);for(var i=0;i<k.length;i++)if(cur.indexOf(k[i])<0)return false;return true}function selSomeOn(g){if(g==='veg'&&Q.noV)return false;if(g==='garnish'&&Q.noG)return false;return selCur(g).length>0&&!selAllOn(g)}function selApply(g,on){var k=selKeys(g),cur=selCur(g);cur.length=0;if(on)k.forEach(function(x){cur.push(x)});if(g==='veg')Q.noV=!on;if(g==='garnish')Q.noG=!on;
+/* Picking every protein means every dish inside it too, or the sweep would quietly leave
+the narrower choice sitting underneath. */
+if(on&&(g==='prot'||g==='carb')&&Q.dish)k.forEach(function(sub){if(Q.dish[sub])delete Q.dish[sub]})}function selSet(g,on){if(!selOff(g))selApply(g,!!on);renderStep3()}function selSetPage(on){if(on&&Q.sauce==='never')Q.sauce='sometimes';SELG.forEach(function(g){if(!selOff(g))selApply(g,!!on)});renderStep3()}function selPaint(){SELG.forEach(function(g){var b=$('#sa'+g),l=$('#sa'+g+'L');if(!b)return;var off=selOff(g);b.disabled=off;if(l)l.classList.toggle('off',off);b.checked=!off&&selAllOn(g);b.indeterminate=!off&&selSomeOn(g)});var m=$('#saAll');if(!m)return;var live=SELG.filter(function(g){return !selOff(g)});var all=live.length>0&&live.every(function(g){return selAllOn(g)});var some=live.some(function(g){return selAllOn(g)||selSomeOn(g)});m.checked=all;m.indeterminate=!all&&some}function renderStep3(){optGrid('planMode',PLANMODE,Q.plan,function(v){Q.plan=v});chips('avoid',AVOID.map(function(a){return[a[0],a[1]]}),Q.avoid,true,function(v){var i=Q.avoid.indexOf(v);if(i>=0)Q.avoid.splice(i,1);else Q.avoid.push(v);renderStep3()},CUTE);picTiles('prefP',liveCats(PROT_OPTS.slice(),Q.prefP),Q.prefP,true,function(v){toggle(Q.prefP,v);renderStep3()},1);picTiles('prefC',liveCats(CARB_OPTS.slice(),Q.prefC),Q.prefC,true,function(v){if(v==='none'){Q.prefC=Q.prefC.indexOf('none')>=0?['rice','pasta','potato']:['none']}else{toggle(Q.prefC,v);var i=Q.prefC.indexOf('none');if(i>=0)Q.prefC.splice(i,1)}renderStep3()},1);namedChips('pickV','v',Q.pickV);if(Q.noV)$('#pickV').insertAdjacentHTML('afterbegin','<span class="hint" style="margin:0;grid-column:1/-1">No vegetables in your boxes — pick one below or press Select All to bring them back.</span>');namedChips('pickG','g',Q.pickG);var catSize=function(c){return CATALOG.filter(function(r){return r.cat===c&&!excluded(r)}).length};var setOn=function(id,on){var b=$('#'+id);if(b)b.classList.toggle('on',!!on)};var vN=catSize('v'),gN=catSize('g');setOn('vNone',Q.noV);setOn('vAll',!Q.noV&&vN>0&&Q.pickV.length>=vN);setOn('gNone',Q.noG);setOn('gAll',!Q.noG&&gN>0&&Q.pickG.length>=gN);var pg=$('#pickG');if(pg)pg.style.display=Q.noG?'none':'';var gm=$('#gMsg');if(gm)gm.innerHTML=Q.noG?'<span class="hint" style="margin:0">No garnish in your boxes. Press Select All, or pick one, to bring garnishes back.</span>':'';chips('prefS',[['sometimes','Where it Fits'],['never','No Sauce']],Q.sauce,false,function(v){Q.sauce=v;renderStep3()});$('#pickS').style.display=Q.sauce==='never'?'none':'';namedChips('pickS','s',Q.pickS);$('#seasoning').value=Q.seasoning;$('#spice').value=Q.spice;$('#seasoning').onchange=function(){Q.seasoning=this.value;saveDraft()};$('#spice').onchange=function(){Q.spice=this.value;saveDraft()};var warn=[];if(!pool('p').length)warn.push('protein');if(Q.prefC.indexOf('none')<0&&!pool('c').length)warn.push('carbs');if(!pool('v').length)warn.push('vegetables');selPaint();$('#prefWarn').innerHTML=warn.length?'<span class="msg warn" style="display:block">Nothing is left for '+warn.join(' and ')+' — we will fall back to the full menu there. Tick a few more, or take something out of I Do Not Want.</span>':'';saveDraft()}var FOOD=null,FOODQ=1,FOOD_BUSY=false;function hmManual(on){$('#hmManualBox').style.display=on?'block':'none';$('#hmManualLink').parentNode.style.display=on?'none':'block';if(on){FOOD=null;$('#hmFound').innerHTML='';$('#hmMsg').innerHTML=''}}function foodLookup(){var name=($('#hmName').value||'').trim();var msg=$('#hmMsg'),btn=$('#hmBtn');if(!name){msg.innerHTML='<span class="msg warn" style="display:inline-block;margin:0;padding:4px 8px">Type what you eat first.</span>';return}if(FOOD_BUSY)return;FOOD_BUSY=true;btn.disabled=true;FOOD=null;$('#hmFound').innerHTML='';msg.innerHTML='<span class="busy"><span class="spin"></span>Looking up the macros…</span>';coachFetch('food',{text:name}).then(function(a){FOOD_BUSY=false;btn.disabled=false;if(!a||!a.name||!(+a.kcal>0)){msg.innerHTML='<span class="msg warn" style="display:inline-block;margin:0;padding:4px 8px">'+esc((a&&a.note)||'We could not work that one out — try naming it more simply, or enter the numbers yourself.')+'</span>';return}msg.innerHTML='';FOOD={name:a.name,serving:a.serving||'1 serving',kcal:+a.kcal||0,p:+a.p||0,c:+a.c||0,f:+a.f||0,note:a.note||''};FOODQ=1;renderFound();}).catch(function(){FOOD_BUSY=false;btn.disabled=false;msg.innerHTML='<span class="msg warn" style="display:inline-block;margin:0;padding:4px 8px">We could not reach the look-up. Enter the numbers yourself below.</span>'});}function foodQty(v){FOODQ=Math.max(0.25,Math.min(10,+v||1));renderFound()}function renderFound(){var el=$('#hmFound');if(!el)return;if(!FOOD){el.innerHTML='';return}var q=FOODQ,k=FOOD.kcal*q,pp=FOOD.p*q,cc=FOOD.c*q,ff=FOOD.f*q;var opts=[[0.5,'Half'],[1,'1 Serving'],[1.5,'1½'],[2,'2 Servings'],[3,'3 Servings']];el.innerHTML='<div class="found"><div class="nm">'+esc(FOOD.name)+'</div><div class="sv">Per Serving : '+esc(servCase(FOOD.serving))+' · '+Math.round(FOOD.kcal)+' KCALs · Protein '+r1(FOOD.p)+' g · Carbs '+r1(FOOD.c)+' g · Fat '+r1(FOOD.f)+' g</div>'+'<label class="lb" style="margin-top:12px">How Much Do You Have?</label><div class="portion">'+opts.map(function(o){return'<button type="button" class="tog'+(Math.abs(q-o[0])<0.001?' on':'')+'" onclick="foodQty('+o[0]+')">'+o[1]+'</button>'}).join('')+'<input type="number" step="0.25" min="0.25" max="10" value="'+q+'" oninput="FOODQ=Math.max(0.25,Math.min(10,+this.value||1));renderFoundTotals()" aria-label="Servings"><span class="hint" style="margin:0">Servings</span></div>'+'<div class="mac2" id="foundTotal">'+Math.round(k)+' KCALs<small>Protein '+r1(pp)+' g · Carbs '+r1(cc)+' g · Fat '+r1(ff)+' g</small></div>'+
+(FOOD.note?'<div class="hint">'+esc(FOOD.note)+'</div>':'')+'<div class="row" style="margin-top:10px"><button class="btn btn-y" type="button" onclick="addFoundHome()">Add To My Day</button><button class="btn btn-o" type="button" onclick="FOOD=null;renderFound()">Cancel</button><span class="hint" style="margin:0">Estimated Figures. Adjust the Servings to match your portion.</span></div></div>';}function renderFoundTotals(){var e=$('#foundTotal');if(!e||!FOOD)return;var q=FOODQ;
+[].slice.call(document.querySelectorAll('#hmFound .portion .tog')).forEach(function(b){var v=parseFloat((b.getAttribute('onclick')||'').replace(/[^0-9.]/g,''));b.classList.toggle('on',Math.abs(q-v)<0.001)});e.innerHTML=Math.round(FOOD.kcal*q)+' KCALs<small>Protein '+r1(FOOD.p*q)+' g · Carbs '+r1(FOOD.c*q)+' g · Fat '+r1(FOOD.f*q)+' g</small>'}function addFoundHome(){if(!FOOD)return;var q=FOODQ;var nm=FOOD.name+(Math.abs(q-1)<0.001?'':' × '+(q%1?q:q.toFixed(0)));var hh={n:nm,k:Math.round(FOOD.kcal*q),p:Math.round(FOOD.p*q*10)/10,c:Math.round(FOOD.c*q*10)/10,f:Math.round(FOOD.f*q*10)/10};Q.home.push(hh);saveHomeLib(hh);FOOD=null;$('#hmName').value='';renderStep2();saveDraft();}function bentoOne(img,label){return'<div class="bento" role="img" aria-label="'+esc(label)+'" style="background-image:url('+TRAY+')"><b class="full"'+(img?' style="background-image:url('+img+')"':'')+'></b></div>'}function subImg(sub){for(var i=0;i<CATALOG.length;i++){var r=CATALOG[i];if(r.sub===sub&&r.img&&!excluded(r))return r.img}return''}function subLive(sub){for(var i=0;i<CATALOG.length;i++){var r=CATALOG[i];if(r.sub===sub&&!excluded(r))return true}return false}function liveCats(list,sel){var out=[];list.forEach(function(o){if(o[0]==='none'||subLive(o[0]))out.push([o[0],o[1],subImg(o[0])]);else{var i=sel.indexOf(o[0]);if(i>=0)sel.splice(i,1)}});return out}function dishLabel(k,n,on){var s=(Q.dish[k]||[]).length,w=' Dish'+(n===1?'':'es');return !on?'Not in your plan':(!s||s>=n)?(n===1?'1 Dish':'All '+n+w):s+' of '+n+w}function picTiles(id,list,sel,multi,onpick,drop){var el=$('#'+id);if(!el)return;el.className='pgrid';if(!list.length){el.className='chips';el.innerHTML='<span class="hint" style="margin:0">Everything here is ruled out by your I do not want list.</span>';return}el.innerHTML=list.map(function(o){var on=multi?sel.indexOf(o[0])>=0:sel===o[0];var inner=bentoOne(o[2],o[1])+'<span>'+esc(o[1])+'</span>';var ds=drop?CATALOG.filter(function(r){return r.sub===o[0]&&!excluded(r)}):[];if(oosHas(o[0]))return'<button type="button" class="ptile oos" disabled aria-disabled="true" data-v="'+esc(o[0])+'">'+inner+'<i class="dcount">Out of Stock</i></button>';if(!ds.length)return'<button type="button" class="ptile'+(on?' on':'')+'" data-v="'+esc(o[0])+'" aria-pressed="'+on+'">'+inner+(drop?'<i class="dcount">&nbsp;</i>':'')+'</button>';var d=Q.dish[o[0]]||[];return'<details class="dishes"><summary class="ptile'+(on?' on':'')+'">'+inner+'<i class="dcount">'+dishLabel(o[0],ds.length,on)+'</i></summary><div class="dl">'+'<div class="dhead"><button class="btn btn-o s" type="button" data-all="'+esc(o[0])+'">Select All</button><button class="btn btn-o s" type="button" data-clr="'+esc(o[0])+'">None</button></div>'+ds.map(function(r){var ro=oosHas(r.c);return'<label'+(ro?' class="oos"':'')+'><input type="checkbox" data-k="'+esc(o[0])+'" value="'+r.c+'"'+(ro?' disabled':(d.indexOf(r.c)>=0?' checked':''))+'><i class="dth"'+(r.img?' style="background-image:url('+r.img+')"':'')+'></i><span>'+esc(r.n)+(ro?' <em class="oostag">Out of Stock</em>':'')+'</span></label>'}).join('')+'</div></details>'}).join('');
+[].slice.call(el.querySelectorAll('button.ptile')).forEach(function(b){b.addEventListener('click',function(){onpick(b.dataset.v);saveDraft()})});var mark=function(k,d){var n=d.querySelectorAll('input').length,on=sel.indexOf(k)>=0;d.querySelector('.dcount').textContent=dishLabel(k,n,on);d.querySelector('.ptile').classList.toggle('on',on);saveDraft()};
+[].slice.call(el.querySelectorAll('.dishes input')).forEach(function(cb){cb.addEventListener('change',function(){var k=cb.dataset.k,d=cb.closest('details');var a=[];[].slice.call(d.querySelectorAll('input')).forEach(function(x){if(x.checked)a.push(x.value)});if(a.length){Q.dish[k]=a;if(sel.indexOf(k)<0)sel.push(k)}else{delete Q.dish[k];var i=sel.indexOf(k);if(i>=0)sel.splice(i,1)}mark(k,d)})});
+[].slice.call(el.querySelectorAll('.dishes [data-all]')).forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();var k=b.dataset.all,d=b.closest('details');var all=[];
+[].slice.call(d.querySelectorAll('input')).forEach(function(x){x.checked=true;all.push(x.value)});Q.dish[k]=all;if(sel.indexOf(k)<0)sel.push(k);mark(k,d)})});
+[].slice.call(el.querySelectorAll('.dishes [data-clr]')).forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();var k=b.dataset.clr,d=b.closest('details'),i=sel.indexOf(k);delete Q.dish[k];if(i>=0)sel.splice(i,1);
+[].slice.call(d.querySelectorAll('input')).forEach(function(x){x.checked=false});mark(k,d)})});}function namedChips(id,cat,sel){picTiles(id,CATALOG.filter(function(r){return r.cat===cat&&!excluded(r)}).map(function(r){return[r.c,r.n,r.img]}),sel,true,function(v){var i=sel.indexOf(v);if(i>=0)sel.splice(i,1);else{sel.push(v);if(cat==='v')Q.noV=false;if(cat==='g')Q.noG=false}renderStep3()});}function pickAll(what){var cat=what==='veg'?'v':what==='garnish'?'g':'s';var arr=what==='veg'?Q.pickV:what==='garnish'?Q.pickG:Q.pickS;arr.length=0;if(what==='veg')Q.noV=false;if(what==='garnish')Q.noG=false;CATALOG.forEach(function(r){if(r.cat===cat&&!excluded(r)&&!oosHas(r.c))arr.push(r.c)});renderStep3()}function pickNone(what){var arr=what==='veg'?Q.pickV:what==='garnish'?Q.pickG:Q.pickS;arr.length=0;if(what==='veg')Q.noV=true;if(what==='garnish')Q.noG=true;renderStep3()}function pickOilFree(){var of=[];CATALOG.forEach(function(r){if(r.cat==='v'&&/oil-free/i.test(r.n)&&!excluded(r)&&!oosHas(r.c))of.push(r.c)});var same=of.length&&of.length===Q.pickV.length&&of.every(function(c){return Q.pickV.indexOf(c)>=0});Q.pickV.length=0;if(same){Q.noV=true}else{Q.noV=false;of.forEach(function(c){Q.pickV.push(c)})}renderStep3()}function toggle(arr,v){var i=arr.indexOf(v);if(i>=0){if(arr.length>1)arr.splice(i,1)}else arr.push(v)}function saveHomeLib(h){try{var a=JSON.parse(localStorage.getItem('aera.home')||'[]');if(!a.some(function(x){return x.n===h.n}))a.unshift({n:h.n,k:h.k,p:h.p,c:h.c,f:h.f,at:Date.now()});localStorage.setItem('aera.home',JSON.stringify(a.slice(0,40)))}catch(e){}}function homeAdd(on){var b=$('#homeBox');if(b)b.style.display=on?'block':'none';if(on&&$('#hmName'))$('#hmName').focus()}function homeQty(i,d){var h=Q.home[i];if(!h)return;var q0=h.q||1,q=Math.max(1,Math.min(10,q0+d));if(q===q0)return;var f=q/q0;h.q=q;h.k=Math.round(h.k*f);h.p=Math.round(h.p*f*10)/10;h.c=Math.round(h.c*f*10)/10;h.f=Math.round(h.f*f*10)/10;h.n=h.n.replace(/ ×\s*\d+(\.\d+)?$/,'')+(q>1?' × '+q:'');renderStep2();saveDraft()}function addHome(){var n=$('#hmName').value.trim();if(!n){$('#hmMsg').innerHTML='<span class="msg warn" style="display:inline-block;margin:0;padding:4px 8px">Type what you eat first.</span>';return}var hh={n:n,k:+$('#hmK').value||0,p:+$('#hmP').value||0,c:+$('#hmC').value||0,f:+$('#hmF').value||0};Q.home.push(hh);saveHomeLib(hh);['hmName','hmK','hmP','hmC','hmF'].forEach(function(i){$('#'+i).value=''});hmManual(0);renderStep2();saveDraft()}function excluded(r){for(var i=0;i<Q.avoid.length;i++){var a=AVOID.filter(function(x){return x[0]===Q.avoid[i]})[0];if(!a)continue;if(a[2].test(r.n))return true;for(var j=0;j<r.al.length;j++)if(a[3].indexOf(String(r.al[j]).toLowerCase())>=0)return true}return false}
+/* Out of stock is not the same thing as ruled out. A dish you told us to avoid never appears;a dish the kitchen has run out of still appears, marked, so you can see it is us and not you.
+Either way it never reaches a plan, which is what this pool decides. */
+function pool(cat){if(cat==='v'&&Q.noV)return[];var picks=cat==='v'?Q.pickV:cat==='g'?Q.pickG:cat==='s'?Q.pickS:null;var out=CATALOG.filter(function(r){if(r.cat!==cat||excluded(r)||oosHas(r.c))return false;if(picks&&picks.length)return picks.indexOf(r.c)>=0;if(cat==='g')return false;if(cat==='p'&&Q.prefP.indexOf(r.sub)<0)return false;if(cat==='c'&&Q.prefC.indexOf(r.sub)<0)return false;var d=Q.dish[r.sub];return !(d&&d.length&&d.indexOf(r.c)<0)});if(!out.length&&cat==='p')out=CATALOG.filter(function(r){return r.cat==='p'&&!excluded(r)&&!oosHas(r.c)});if(!out.length&&cat==='v')out=CATALOG.filter(function(r){return r.cat==='v'&&!excluded(r)&&!oosHas(r.c)});return out}function per(r,g){var k=g/r.sq;return{kcal:r.kcal*k,p:r.p*k,c:r.cb*k,f:r.f*k,price:r.pr*k}}function clampG(r,g){var st=r.po[2]||25;g=Math.round(g/st)*st;return Math.max(r.po[0],Math.min(r.po[1],g))}function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}function kcalOf(cs){var t=0;cs.forEach(function(cp){var r=BYCODE[cp.r];if(r)t+=per(r,cp.g).kcal});return t}function macOf(cs){var t={kcal:0,p:0,c:0,f:0,price:0};cs.forEach(function(cp){var r=BYCODE[cp.r];if(!r)return;var x=per(r,cp.g);t.kcal+=x.kcal;t.p+=x.p;t.c+=x.c;t.f+=x.f;t.price+=x.price});return t}function idxOf(cs,code){for(var i=0;i<cs.length;i++)if(cs[i].r===code)return i;return -1}function catOf(cs,cat){for(var i=0;i<cs.length;i++){var r=BYCODE[cs[i].r];if(r&&r.cat===cat)return r}return null}function stepG(cs,code,dir){var i=idxOf(cs,code);if(i<0)return false;var r=BYCODE[code],st=r.po[2]||25;var ng=clampG(r,cs[i].g+dir*st);if(ng===cs[i].g)return false;cs[i].g=ng;return true}function inCat(cs,cat){var l=[];cs.forEach(function(cp){var r=BYCODE[cp.r];if(r&&r.cat===cat)l.push({r:r,k:per(r,cp.g).kcal})});l.sort(function(a,b){return b.k-a.k});return l}function stepCat(cs,cat,dir,ok){var l=inCat(cs,cat);for(var j=0;j<l.length;j++){var i=idxOf(cs,l[j].r.c);if(i<0)continue;var old=cs[i].g;if(!stepG(cs,l[j].r.c,dir))continue;if(!ok||ok(cs))return true;cs[i].g=old}return false}function sumCat(cs,cat){var g=0;cs.forEach(function(cp){var r=BYCODE[cp.r];if(r&&r.cat===cat)g+=cp.g});return g}function fatFix(cs,tm,lim){var veg=catOf(cs,'v'),sauce=catOf(cs,'s');if(macOf(cs).f>tm.f*lim&&veg&&!/oil-free/i.test(veg.n)){var free=pool('v').filter(function(x){return /oil-free/i.test(x.n)});var base=veg.n.replace(/\s*\(?\[?\s*oil-free\s*\)?\]?/i,'').trim().toLowerCase();var of=free.filter(function(x){return x.n.replace(/\s*\(?\[?\s*oil-free\s*\)?\]?/i,'').trim().toLowerCase()===base})[0]||free.sort(function(a,b){return a.f/a.sq-b.f/b.sq})[0];if(of){var i=idxOf(cs,veg.c);if(i>=0){cs[i].r=of.c;cs[i].g=clampG(of,cs[i].g)}}}if(macOf(cs).f>tm.f*lim&&sauce){var j=idxOf(cs,sauce.c);if(j>=0)cs[j].g=clampG(sauce,sauce.po[0])}return cs}function mealScore(cs,t){var m=macOf(cs),strict=Q.plan!=='kcal',e=0;
+ if(t.kcal>0)e+=3*Math.abs(m.kcal/t.kcal-1);
+ if(t.p>0)e+=strict?Math.abs(m.p/t.p-1):0.6*Math.max(0,1-m.p/t.p);
+ if(t.c>0&&strict)e+=0.6*Math.abs(m.c/t.c-1);
+ if(t.f>0)e+=(strict?1.2:0.8)*Math.max(0,m.f/t.f-1)+0.2*Math.max(0,1-m.f/t.f);
+ return e}function balance(cs,tm,strict,want,soft,lock){if(!(tm.kcal>0))return cs;lock=lock||'';
+ var carb=catOf(cs,'c'),carb0=carb||want||null,vg0=sumCat(cs,'v');
+ var hi=tm.kcal*1.06,lo=tm.kcal*0.94,g=0;
+ var pFloor=tm.p*(strict?0.94:0.82),pCap=tm.p*(strict?1.1:1.25);
+ var keepP=function(x){return macOf(x).p>=pFloor},capP=function(x){return macOf(x).p<=pCap},fits=function(x){return kcalOf(x)<=hi};
+ var best=null,bestE=1e9;
+ var mark=function(){var x=macOf(cs),e=Math.abs(x.kcal-tm.kcal)/tm.kcal+(x.p<pFloor?0.5*(1-x.p/pFloor):0);if(e<bestE-1e-9){bestE=e;best=cs.map(function(c){var o={};for(var k in c)o[k]=c[k];return o})}};
+ mark();
+ while(kcalOf(cs)>hi&&g++<80){
+  if(carb&&lock.indexOf('c')<0&&stepG(cs,carb.c,-1)){mark();continue}
+  if(stepCat(cs,'p',-1,keepP)){mark();continue}
+  if(stepCat(cs,'v',-1)){mark();continue}
+  if(!soft&&carb&&idxOf(cs,carb.c)>=0){cs.splice(idxOf(cs,carb.c),1);carb=null;mark();continue}
+  if(stepCat(cs,'p',-1)){mark();continue}
+  break}
+ g=0;
+ while(kcalOf(cs)<lo&&g++<80){
+  if(carb&&lock.indexOf('c')<0){var ci=idxOf(cs,carb.c),old=ci>=0?cs[ci].g:0;if(ci>=0&&stepG(cs,carb.c,1)){if(fits(cs)){mark();continue}cs[ci].g=old}}
+  if(stepCat(cs,'p',1,function(x){return capP(x)&&fits(x)})){mark();continue}
+  if(!carb&&carb0&&kcalOf(cs)+per(carb0,carb0.po[0]).kcal<=hi){cs.splice(1,0,{r:carb0.c,g:carb0.po[0]});carb=carb0;mark();continue}
+  if(sumCat(cs,'v')<vg0+150&&stepCat(cs,'v',1,fits)){mark();continue}
+  break}
+ mark();
+ return best||cs}function solveMeal(prot,carb,veg,sauce,tm,garn){var n=BODY_NUDGE[Q.body]||BODY_NUDGE.mesomorph;var strict=Q.plan!=='kcal';var vg=veg?clampG(veg,(Q.goal==='fat_loss'?100:75)+n.veg):0;var sg=sauce?clampG(sauce,sauce.po[0]):0;var gg=garn?clampG(garn,garn.po[0]):0;var base={kcal:0,p:0,c:0,f:0};[[veg,vg],[sauce,sg],[garn,gg]].forEach(function(x){if(!x[0])return;var q=per(x[0],x[1]);base.kcal+=q.kcal;base.p+=q.p;base.c+=q.c;base.f+=q.f});var pg=prot?clampG(prot,150):0,cg=0;for(var it=0;it<3;it++){var pp=prot?per(prot,pg):{kcal:0,p:0,c:0,f:0};if(carb){var rawG=strict?(tm.c-base.c-pp.c)/(carb.cb/carb.sq)*n.carb:(tm.kcal-base.kcal-pp.kcal)/(carb.kcal/carb.sq);cg=clampG(carb,rawG)}var cc=carb&&cg>0?per(carb,cg):{kcal:0,p:0,c:0,f:0};if(prot){var needP=tm.p-base.p-cc.p;pg=clampG(prot,needP/(prot.p/prot.sq))}}var comps=[];if(prot)comps.push({r:prot.c,g:pg});if(carb&&cg>0)comps.push({r:carb.c,g:cg});if(veg)comps.push({r:veg.c,g:vg});if(garn)comps.push({r:garn.c,g:gg});if(sauce)comps.push({r:sauce.c,g:sg});comps=fatFix(comps,tm,strict?1:1.35);comps=balance(comps,tm,strict,carb,true);return comps}function fitFirst(list,cap){if(!(cap>0)||list.length<2)return list;var f=list.filter(function(r){return per(r,r.po[0]).kcal<=cap});if(f.length)return f;return list.slice().sort(function(a,b){return per(a,a.po[0]).kcal-per(b,b.po[0]).kcal}).slice(0,Math.max(2,Math.ceil(list.length*0.3)))}function generate(){if(!signedIn())return planGate();var T=planTargets();if(!T)return;var meals=Q.days*Q.mpd;var perMeal={kcal:T.kcal/Q.mpd,p:T.p/Q.mpd,c:T.c/Q.mpd,f:T.f/Q.mpd};var P=pool('p');P=fitFirst(P,perMeal.kcal*0.6);if(Q.goal==='fat_loss'&&P.length>4){P=P.slice().sort(function(a,b){return a.f/a.sq-b.f/b.sq}).slice(0,Math.ceil(P.length*0.6))}if(perMeal.f>0){var cap=perMeal.f*(Q.plan==='kcal'?1.2:0.7),lean=P.filter(function(r){return per(r,150).f<=cap});if(lean.length>=(Q.plan==='kcal'?4:3))P=lean}if(Q.plan!=='kcal'&&perMeal.p>0){var big=P.filter(function(r){return per(r,r.po[1]).p>=perMeal.p*0.85});if(big.length>=3)P=big}P=shuffle(P);var C=Q.prefC.indexOf('none')>=0?[]:pool('c').slice();C=fitFirst(C,perMeal.kcal*0.45);C=shuffle(C);var V=shuffle(pool('v')),S=shuffle(pool('s')),G=shuffle(pool('g'));var pi=0,ci=0,vi=0,si=0,gi=0;var out=[];var lastP='';var USE={};
+ var sauceFor=function(carb,d,m){if(!S.length||Q.sauce==='never')return null;var s=S[si%S.length];
+  var want=per(s,s.po[0]).kcal<=perMeal.kcal*0.14&&(Q.sauce==='always'||(Q.sauce==='sometimes'&&(carb?!/fried|pasta|fusilli|fettuccine|aglio|bolognese|carbonara|olio/i.test(carb.n):true)&&(m+d)%2===0));return want?s:null};
+ var bring=function(A,i,k){if(!k||!A.length)return;var a=i%A.length,b=(i+k)%A.length,t=A[a];A[a]=A[b];A[b]=t};
+ for(var d=0;d<Q.days;d++){for(var m=0;m<Q.mpd;m++){
+  var veg=V.length?V[vi++%V.length]:null;var garn=G.length?G[gi++%G.length]:null;var best=null;
+  var nP=P.length?Math.min(3,P.length):1,nC=C.length?Math.min(2,C.length):1;
+  for(var a=0;a<nP;a++){var prot=P.length?P[(pi+a)%P.length]:null;if(prot&&P.length>1&&prot.c===lastP)continue;
+   for(var b=0;b<nC;b++){var carb=C.length?C[(ci+b)%C.length]:null;var sauce=sauceFor(carb,d,m);
+    var cs=solveMeal(prot,carb,veg,sauce,perMeal,garn);
+    var sc=mealScore(cs,perMeal)+0.06*(USE[prot?prot.c:'']||0)+0.04*(USE[carb?carb.c:'']||0)+0.01*(a+b);
+    if(!best||sc<best.sc)best={sc:sc,cs:cs,prot:prot,carb:carb,sauce:sauce,a:a,b:b}}}
+  if(!best){var prot0=P.length?P[pi%P.length]:null,carb0=C.length?C[ci%C.length]:null,s0=sauceFor(carb0,d,m);best={cs:solveMeal(prot0,carb0,veg,s0,perMeal,garn),prot:prot0,carb:carb0,sauce:s0,a:0,b:0}}
+  bring(P,pi,best.a);bring(C,ci,best.b);pi++;if(C.length)ci++;if(best.sauce)si++;
+  if(best.prot){lastP=best.prot.c;USE[best.prot.c]=(USE[best.prot.c]||0)+1}else lastP='';if(best.carb)USE[best.carb.c]=(USE[best.carb.c]||0)+1;
+  out.push({day:d+1,slot:m+1,comps:best.cs})}}PLAN={id:'PL-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase(),days:Q.days,mpd:Q.mpd,meals:out,targets:T,q:JSON.parse(JSON.stringify(Q))};SELD=1;TUNED={};MH={};BASE=JSON.stringify(PLAN);renderPlan();saveDraft()}function catCount(m,cat){var n=0;m.comps.forEach(function(cp){var r=BYCODE[cp.r];if(r&&r.cat===cat)n++});return n}function extraComps(m){return Math.max(0,catCount(m,'p')-1)+Math.max(0,catCount(m,'v')-1)}function mealCalc(m){var t={kcal:0,p:0,c:0,f:0,price:0,g:0};m.comps.forEach(function(cp){var r=BYCODE[cp.r];if(!r)return;var x=per(r,cp.g);t.kcal+=x.kcal;t.p+=x.p;t.c+=x.c;t.f+=x.f;t.price+=x.price;t.g+=cp.g});t.price=Math.round((t.price+PACK_PER_BOX+extraComps(m)*EXTRA_COMP)*100)/100;return t}function dayCalc(d){var t={kcal:0,p:0,c:0,f:0,price:0};PLAN.meals.filter(function(m){return m.day===d}).forEach(function(m){var x=mealCalc(m);t.kcal+=x.kcal;t.p+=x.p;t.c+=x.c;t.f+=x.f;t.price+=x.price});return t}function planPrice(){var s=0;PLAN.meals.forEach(function(m){s+=mealCalc(m).price});return Math.round(s*100)/100}function mealName(m){var names=m.comps.map(function(cp){var r=BYCODE[cp.r];return r?r.n:''}).filter(Boolean);return names.join(' · ')}function mealLines(m){return m.comps.map(function(cp){var r=BYCODE[cp.r];return r?'<i>'+esc(r.n)+'</i>':''}).join('')}function titleCase(s){return String(s||'').replace(/\b[a-z]/g,function(c){return c.toUpperCase()})}
+/* A serving string comes from the food lookup, so it arrives in whatever case that service used.
+Capitalise the words but leave the units alone : "1 cup (158 g)" must not become "1 Cup (158 G)". */
+var SERVUNIT={g:1,kg:1,mg:1,ml:1,l:1,cl:1,dl:1,oz:1,lb:1,lbs:1,tbsp:1,tsp:1,cm:1,mm:1,kcal:1,cal:1},SERVSMALL={of:1,a:1,an:1,the:1,and:1,or:1,with:1,'in':1,per:1};function servCase(s){var first=true;return String(s||'').replace(/[A-Za-z]+/g,function(w){var k=w.toLowerCase();if(SERVUNIT[k])return k;if(!first&&SERVSMALL[k]){return k}first=false;return w.charAt(0).toUpperCase()+w.slice(1)})}function swapOptions(cp){var r=BYCODE[cp.r];if(!r)return[];var list=pool(r.cat).slice();if(list.indexOf(r)<0)list.unshift(r);return list}function offPct(v,t){return t?Math.round(v/t*100-100):0}function tbar(l,v,t,u){return'<div class="tot"><span>'+l+' '+Math.round(v)+' / '+Math.round(t)+(u||'')+'</span>'+badge(v,t)+'</div>'+bar(v,t)}function badge(v,t){if(!(t>0))return'<b class="'+(v>0?'hi':'lo')+'">'+(v>0?'Over Target':'None Needed')+'</b>';var d=offPct(v,t);return'<b class="'+(d>3?'hi':d<-3?'lo':'ok')+'">'+(Math.abs(d)<=3?'On Point':(d>0?'+':'−')+Math.abs(d)+'%')+'</b>'}function bar(v,t){if(!(t>0))return'<div class="bar">'+(v>0?'<i class="xs" style="width:100%"></i>':'')+'</div>';if(v<=t)return'<div class="bar"><i style="width:'+(v/t*100)+'%"></i></div>';var g=t/v*100;return'<div class="bar" title="'+Math.round(t)+' target · '+Math.round(v-t)+' over"><i style="width:'+g+'%"></i><i class="xs" style="width:'+(100-g)+'%"></i></div>'}var TRAY='https://my.chatbees.io/objects/generated-images/1302/1788628096238-5f5755c542d808b9.png';function bentoHtml(m){var P=[],C=null,V=[],G=[];
+(m.comps||[]).forEach(function(cp){var r=BYCODE[cp.r];if(!r)return;var x={r:r,g:cp.g};if(r.cat==='p'){if(P.length<2)P.push(x)}else if(r.cat==='c'){if(!C)C=x}else if(r.cat==='v'){if(V.length<2)V.push(x)}else if(r.cat==='g')G.push(x)});var L=V.concat(G).slice(0,2);var cell=function(x,cls){if(!x)return'<b class="'+cls+' empty"></b>';return'<b class="'+cls+'" title="'+esc(x.r.n+' · '+x.g+' g')+'"'+(x.r.img?' style="background-image:url('+x.r.img+')"':'')+'></b>'};var names=[];(m.comps||[]).forEach(function(cp){var r=BYCODE[cp.r];if(r)names.push(r.n+' '+gramStr(r,cp.g))});var inner=(P.length>1?cell(P[0],'pro h1')+cell(P[1],'pro h2'):cell(P[0],'pro'))+cell(C,'crb')+
+(L.length>1?cell(L[0],'veg w1')+cell(L[1],'veg w2'):cell(L[0],'veg'));return'<div class="bento" role="img" aria-label="'+esc(names.join(', '))+'" style="background-image:url('+TRAY+')">'+inner+'</div>';}var SELD=1,TUNED={},DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];var CAP={p:2,c:1,v:2,g:1,s:1},CATNAME={p:'Protein',c:'Carb',v:'Vegetable',g:'Garnish',s:'Sauce'};function pickDay(d){SELD=d;renderPlan()}function dayMeals(d){var n=0;PLAN.meals.forEach(function(m){if(m.day===d)n++});return n}function mealTarget(mi){var T=PLAN.targets,n=PLAN.mpd;
+/* A generated plan spreads one daily target evenly over the boxes. An uploaded plan does
+not work that way: a coach writes a small breakfast and a large dinner on purpose, so
+every box carries the target its own line on the sheet came to. Without this, a toast
+breakfast is marked 71% under a target nobody ever set for it. */
+if(mi!=null&&PLAN.byop&&PLAN.meals[mi]&&PLAN.meals[mi].t)return PLAN.meals[mi].t;if(mi!=null&&PLAN.meals[mi])n=dayMeals(PLAN.meals[mi].day)||1;return{kcal:T.kcal/n,p:T.p/n,c:T.c/n,f:T.f/n}}function renumber(){PLAN.meals.sort(function(a,b){return a.day-b.day||a.slot-b.slot});var by={};PLAN.meals.forEach(function(m){by[m.day]=(by[m.day]||0)+1;m.slot=by[m.day]});var days=Object.keys(by).map(Number).sort(function(a,b){return a-b});var map={};days.forEach(function(d,i){map[d]=i+1});PLAN.meals.forEach(function(m){m.day=map[m.day]});PLAN.days=days.length;PLAN.mpd=Math.max(1,Math.round(PLAN.meals.length/PLAN.days));if(SELD>PLAN.days)SELD=PLAN.days;MH={}}function newMeal(day){var tm={kcal:PLAN.targets.kcal/PLAN.mpd,p:PLAN.targets.p/PLAN.mpd,c:PLAN.targets.c/PLAN.mpd,f:PLAN.targets.f/PLAN.mpd};var pk=function(c){var l=pool(c);return l.length?l[Math.floor(Math.random()*l.length)]:null};return{day:day,slot:99,comps:solveMeal(pk('p'),Q.prefC.indexOf('none')>=0?null:pk('c'),pk('v'),Q.sauce==='never'?null:pk('s'),tm,pk('g'))}}function dupMeal(mi){var m=PLAN.meals[mi];PLAN.meals.splice(mi+1,0,{day:m.day,slot:m.slot+0.5,comps:JSON.parse(JSON.stringify(m.comps))});renumber();renderPlan();saveDraft();msg('Meal duplicated.')}function delMeal(mi){var m=PLAN.meals[mi];if(dayMeals(m.day)<2)return say('Keep one meal a day','Every day needs at least one meal. Use Remove Day if you do not want this day at all.');PLAN.meals.splice(mi,1);renumber();renderPlan();saveDraft()}function addMealTo(d){PLAN.meals.push(newMeal(d));renumber();renderPlan();saveDraft();msg('Meal added to Day '+d+'.')}function dupDay(d){var nd=PLAN.days+1;PLAN.meals.filter(function(m){return m.day===d}).forEach(function(m){PLAN.meals.push({day:nd,slot:m.slot,comps:JSON.parse(JSON.stringify(m.comps))})});renumber();SELD=nd;renderPlan();saveDraft();msg('Day '+d+' copied to Day '+nd+'.')}function addDay(){var nd=PLAN.days+1,n=dayMeals(SELD)||PLAN.mpd;for(var i=0;i<n;i++)PLAN.meals.push(newMeal(nd));renumber();SELD=nd;renderPlan();saveDraft();msg('Day '+nd+' added.')}function delDay(d){if(PLAN.days<2)return say('Keep one day','A plan needs at least one day.');PLAN.meals=PLAN.meals.filter(function(m){return m.day!==d});renumber();renderPlan();saveDraft();msg('Day removed.')}function freeOf(m,cat){var used={};m.comps.forEach(function(cp){used[cp.r]=1});return pool(cat).filter(function(r){return !used[r.c]})}function addComp(mi,cat){var m=PLAN.meals[mi];var have=catCount(m,cat);if(have>=(CAP[cat]||1))return;snap(mi);var opts=freeOf(m,cat);if(!opts.length)return;opts=opts.slice().sort(function(a,b){return per(a,a.po[0]).price-per(b,b.po[0]).price}).slice(0,5);var nr=opts[Math.floor(Math.random()*opts.length)];var g=clampG(nr,nr.po[0]);if(have===1){for(var i=0;i<m.comps.length;i++){var r0=BYCODE[m.comps[i].r];if(!r0||r0.cat!==cat)continue;var share=per(r0,m.comps[i].g).kcal/2;m.comps[i].g=clampG(r0,m.comps[i].g/2);g=clampG(nr,share/(nr.kcal/nr.sq));break}}m.comps.push({r:nr.c,g:g});m.comps=balance(m.comps,mealTarget(mi),(PLAN.q.plan||'macros')!=='kcal',null,true);renderPlan();saveDraft()}function delComp(mi,ci){var m=PLAN.meals[mi];var r=BYCODE[m.comps[ci].r];if(!r)return;snap(mi);if(r.cat==='p'&&catCount(m,'p')<2)return;m.comps.splice(ci,1);m.comps=balance(m.comps,mealTarget(mi),(PLAN.q.plan||'macros')!=='kcal',null,true);renderPlan();saveDraft()}function dv(m,cat,k){var r=catOf(m.comps,cat);if(!r)return 0;return (k==='kcal'?r.kcal:k==='p'?r.p:k==='c'?r.cb:r.f)/r.sq}function aim(m,k,val){var tol=k==='kcal'?12:1.5,g=0;while(g++<80){var cur=macOf(m.comps),c=cur[k],d=val-c;if(Math.abs(d)<=tol)break;var dir=d>0?1:-1;var cats=['p','c','v','s','g'].filter(function(x){return catCount(m,x)});cats.sort(function(a,b){return dv(m,b,k)-dv(m,a,k)});var top=cats.length?dv(m,cats[0],k):0;cats=cats.filter(function(x){return dv(m,x,k)>=top*0.35});var moved=false;for(var i=0;i<cats.length;i++)if(stepCat(m.comps,cats[i],dir)){moved=true;break}if(!moved)break}}function aimSet(mi,k,v){snap(mi);aim(PLAN.meals[mi],k,+v);renderPlan();saveDraft()}function aimStep(mi,k,dir){snap(mi);var c=macOf(PLAN.meals[mi].comps);aim(PLAN.meals[mi],k,c[k]+dir*(k==='kcal'?25:5));renderPlan();saveDraft()}function abar(mi,k,l,v,t,u){return'<div class="tot"><span>'+l+' '+Math.round(v)+' / '+Math.round(t)+(u||'')+'</span>'+badge(v,t)+'</div>'+'<div class="brow"><button type="button" title="Less '+l+'" aria-label="Less '+l+'" onclick="aimStep('+mi+',\''+k+'\',-1)">−</button>'+bar(v,t)+'<button type="button" title="More '+l+'" aria-label="More '+l+'" onclick="aimStep('+mi+',\''+k+'\',1)">+</button></div>'}var TUNE=[['kcal','Fit My Calories'],['protein','Maximise Protein'],['carb','Reduce Carbs'],['fat','Reduce Fat'],['cost','Lower the Cost']];function tune(m,mode,mi){var tm=mealTarget(mi),strict=(PLAN.q.plan||'macros')!=='kcal',g=0;if(mode==='carb'){var c=catOf(m.comps,'c');if(c)m.comps[idxOf(m.comps,c.c)].g=clampG(c,c.po[0]);m.comps=balance(m.comps,tm,strict,null,true,'c');return}if(mode==='fat'){var f0=macOf(m.comps).f;aim(m,'f',Math.max(0,Math.min(tm.f,f0*0.85)));return}m.comps=balance(m.comps,tm,strict,null,true);if(mode==='protein'){while(g++<24&&stepCat(m.comps,'p',1,function(x){return kcalOf(x)<=tm.kcal*1.06})){}}}function onTarget(x,t,mode){return mode==='kcal'?Math.abs(x.kcal-t.kcal)<=t.kcal*0.06:mode==='protein'?x.p>=t.p:mode==='carb'?x.c<=t.c:mode==='fat'?x.f<=t.f:false}function bestSwap(m,mode,mi){var tm=mealTarget(mi),strict=(PLAN.q.plan||'macros')!=='kcal';var b0=score(macOf(m.comps),tm,mode),best=null;m.comps.forEach(function(cp,ci){var r=BYCODE[cp.r];if(!r)return;pool(r.cat).forEach(function(nr){if(nr.c===cp.r)return;var t=m.comps.map(function(x){return{r:x.r,g:x.g}});t[ci]={r:nr.c,g:clampG(nr,cp.g)};t=balance(t,tm,strict,null,true);var v=score(macOf(t),tm,mode);if(v>b0+0.05&&(!best||v>best.v))best={ci:ci,from:r,to:nr,v:v,comps:t}})});return best}function offerSwap(mi,mode){var m=PLAN.meals[mi],b=bestSwap(m,mode,mi);if(!b)return say(tuneName(mode)+' — nothing left to change',LIMIT[mode]);say(tuneName(mode)+' — portions alone cannot go further','We can get closer by changing one item: '+b.from.n+' → '+b.to.n+'. That is not what you picked in Meal Preferences, so it is your call.','Change It For Me',function(){snap(mi);m.comps=b.comps;TUNED[mi]=mode;TUNED[mi+'n']='Changed '+b.from.n+' to '+b.to.n+' — now '+macG(mealCalc(m))+' · '+rm(mealCalc(m).price);renderPlan();saveDraft()})}function offerAll(mode){var n=0,list=[];PLAN.meals.forEach(function(m,i){var b=bestSwap(m,mode,i);if(b){list.push([i,b]);n++}});if(!n)return say(tuneName(mode)+' — nothing left to change',LIMIT[mode]+' That is true for every box here.');say(tuneName(mode)+' — portions alone cannot go further','We can get closer in '+n+' box'+(n>1?'es':'')+' by changing one item each, for example '+list[0][1].from.n+' → '+list[0][1].to.n+'. Those are not what you picked in Meal Preferences.','Change Them For Me',function(){snapAll();list.forEach(function(x){PLAN.meals[x[0]].comps=x[1].comps;TUNED[x[0]]=mode;TUNED[x[0]+'n']=''});TUNED.all=mode;TUNED.allNote='Changed one item in '+n+' box'+(n>1?'es':'')+' for '+tuneName(mode)+' — plan now '+rm(planPrice());renderPlan();saveDraft()})}
+/* One door for everyone whose plan was written somewhere else. Which way they go depends
+on who did the writing, which is a question worth asking once rather than making them
+guess between two buttons that sound like the same thing. */
+function havePlan(){var o=document.querySelector('.modal');if(o)o.remove();var d=document.createElement('div');d.className='modal';d.innerHTML='<div class="mbox" role="dialog" aria-modal="true" aria-labelledby="hpT">'+'<h3 id="hpT">Already Have A Plan?</h3>'+'<p>Two ways in, depending on who wrote it.</p>'+'<a class="btn btn-y" style="display:block;text-align:center;margin-bottom:6px" '+'href="https://my.chatbees.io/p/DSBcJ9bN4">Someone Wrote It For Me</a>'+'<p style="margin:0 0 16px">Type it out or photograph the sheet. We read it, turn the '+'portions into the weights our kitchen works to, and show you what we would cook.</p>'+'<a class="btn btn-o" style="display:block;text-align:center;margin-bottom:6px" '+'href="https://my.chatbees.io/p/vP2uvq">I Am The Coach</a>'+'<p style="margin:0 0 16px">Build it from our kitchen list yourself, for as many clients as '+'you like. Nothing is read by a machine, so nothing can be misread.</p>'+'<button class="btn btn-o" type="button" data-close>Close</button></div>';d.addEventListener('click',function(e){if(e.target===d||(e.target.hasAttribute&&e.target.hasAttribute('data-close')))d.remove()});document.body.appendChild(d);var f=d.querySelector('a');if(f)f.focus()}function say(t,m,lbl,fn){var o=document.querySelector('.modal');if(o)o.remove();var d=document.createElement('div');d.className='modal';d.innerHTML='<div class="mbox" role="dialog" aria-modal="true"><h3>'+esc(t)+'</h3><p>'+esc(m)+'</p><div class="row" style="display:flex;gap:8px;flex-wrap:wrap">'+(lbl?'<button class="btn btn-y" type="button" data-go>'+esc(lbl)+'</button><button class="btn btn-o" type="button">Keep My Picks</button>':'<button class="btn btn-y" type="button">OK</button>')+'</div></div>';d.addEventListener('click',function(e){if(e.target===d||e.target.tagName==='BUTTON'){var go=e.target.hasAttribute&&e.target.hasAttribute('data-go');d.remove();if(go&&fn)fn()}});document.body.appendChild(d);d.querySelector('button').focus()}var ATTARGET={kcal:'This box is already inside your calorie target.',protein:'This box already meets your protein target.',carb:'Carbs in this box are already at or under target.',fat:'Fat in this box is already at or under target.',cost:''};var LIMIT={kcal:'This box is already as close to your calorie target as our portions allow.',protein:'Protein is already at the largest portion we serve for these items.',carb:'Carbs are already at our smallest portion, or this box has no carb. We never take the carb out — use the × in the table for that.',fat:'This box is already as low in fat as these recipes go.',cost:'This is already the cheapest combination from the items you picked.'};function score(x,t,mode){return mode==='kcal'?-Math.abs(x.kcal-t.kcal):mode==='protein'?x.p:mode==='carb'?-x.c:mode==='fat'?-x.f:-x.price}function tuneName(mode){for(var i=0;i<TUNE.length;i++)if(TUNE[i][0]===mode)return TUNE[i][1];return mode}function tuneMeal(mi,mode){var m=PLAN.meals[mi],t=mealTarget(mi),b=score(mealCalc(m),t,mode);snap(mi);tune(m,mode,mi);var x=mealCalc(m);if(score(x,t,mode)-b<0.05){renderPlan();return onTarget(x,t,mode)?say(tuneName(mode)+' — already there',ATTARGET[mode]):offerSwap(mi,mode)}TUNED[mi]=mode;TUNED[mi+'n']='Applied: '+tuneName(mode)+' — now '+Math.round(x.kcal)+' KCALs ( target '+Math.round(t.kcal)+' ) · Protein '+Math.round(x.p)+' g · Carbs '+Math.round(x.c)+' g · Fat '+Math.round(x.f)+' g · '+rm(x.price);renderPlan();saveDraft()}function tuneAll(mode){var n=0;snapAll();PLAN.meals.forEach(function(m,i){var t=mealTarget(i),b=score(mealCalc(m),t,mode);tune(m,mode,i);if(score(mealCalc(m),t,mode)-b>=0.05)n++;TUNED[i]=mode;TUNED[i+'n']=''});if(!n){renderPlan();return offerAll(mode)}TUNED.all=mode;TUNED.allNote='Applied to all '+PLAN.meals.length+' boxes: '+tuneName(mode)+' — plan now '+rm(planPrice())+' · Day '+SELD+' lands '+Math.round(dayCalc(SELD).kcal)+' / '+Math.round(PLAN.targets.kcal)+' kcal';renderPlan();saveDraft()}function tuneRow(pre,lbl,on,extra){return'<div class="tune"><span class="lb">'+lbl+'</span>'+TUNE.map(function(t){return'<button class="btn btn-o s'+(on===t[0]?' on':'')+'" type="button" onclick="'+pre+'\''+t[0]+'\')">'+t[1]+'</button>'}).join('')+(extra||'')+'</div>'}function renderPlan(){if(!PLAN)return;var _s4=document.getElementById('s4');if(_s4)_s4.classList.remove('gated');var cro=$('#coachROut');if(cro)cro.innerHTML='';var T=PLAN.targets||{};if(!T.remainder)T.remainder={kcal:0,p:0,c:0,f:0};if(!T.full)T.full={kcal:T.kcal||0,p:T.p||0,c:T.c||0,f:T.f||0};if(!T.home)T.home={kcal:0,p:0,c:0,f:0};if(T.share==null)T.share=100;if(!PLAN.q)PLAN.q={};var perMeal=mealTarget();if(SELD>PLAN.days||SELD<1)SELD=1;var tk=0;PLAN.meals.forEach(function(m){tk+=mealCalc(m).kcal});var avg=PLAN.meals.length?tk/PLAN.meals.length:0;var off=perMeal.kcal?Math.round((avg/perMeal.kcal-1)*100):0;$('#planIntro').textContent=PLAN.days+' Days x '+PLAN.mpd+' Meal'+(PLAN.mpd>1?'s':'')+' = '+PLAN.meals.length+' Meals, each aiming for ≈ '+Math.round(perMeal.kcal)+' KCALs · Protein '+Math.round(perMeal.p)+' g · Carbs '+Math.round(perMeal.c)+' g · Fat '+Math.round(perMeal.f)+' g — '+PLAN.mpd+' of your '+Math.max(PLAN.mpd,PLAN.q.total||3)+' Meals a Day'+(T.remainder.kcal?' ( The other ≈ '+T.remainder.kcal+' KCALs · Protein '+T.remainder.p+' g is your own food )':'')+(T.home.kcal?', after the '+Math.round(T.home.kcal)+' KCALs you listed':'')+'. Built '+((PLAN.q.plan||'macros')==='kcal'?'to your Calorie Target':'to your Macro split, inside your Calories')+(Math.abs(off)>=8?'; our portions land about '+Math.abs(off)+'% '+(off>0?'above':'below')+' it':'')+'. Swap a Dish, Change a Portion or use the Tuning Buttons, everything updates live.';
+/* An uploaded plan has no calorie goal of its own, so the target IS the plan: what the
+customer's own sheet adds up to. Saying so plainly beats leaving the generated-plan
+wording in place, which talks about a macro split they never gave us. */
+if(PLAN.byop)$('#planIntro').textContent=PLAN.days+' Day'+(PLAN.days>1?'s':'')+' x '+PLAN.mpd+' Meal'+(PLAN.mpd>1?'s':'')+' = '+PLAN.meals.length+' box'+(PLAN.meals.length>1?'es':'')+', built '+
+(PLAN.src==='coach'?'by your coach':'from the plan you uploaded')+'. The target is what that plan'+' adds up to, so the bars start on point and only move when you change something of ours.'+' Swap A Dish, Change A Portion or use the Tuning Buttons — everything updates live.';var h=tuneRow('tuneAll(','Tune the Whole Plan',TUNED.all)+(TUNED.allNote?'<div class="tuned">'+esc(TUNED.allNote)+'</div>':'')+'<div class="daytabs">';
+/* A plan that came with its own day names keeps them. Numbering a coach's Monday,Wednesday and Friday as Day 1 Mon, Day 2 Tue, Day 3 Wed quietly rewrites their plan. */
+for(var d=1;d<=PLAN.days;d++){var dn=(PLAN.dayNames&&PLAN.dayNames[d-1])||'';h+='<button type="button" class="'+(SELD===d?'on':'')+'" onclick="pickDay('+d+')">Day '+d+'<small>'+esc(dn?dn.slice(0,9):DOW[(d-1)%7])+'</small></button>'}h+='<button type="button" class="adddaybtn" onclick="addDay()" title="Add another day">+ Add Day</button></div>';var dc=dayCalc(SELD);
+/* Same reasoning for the day: an uploaded plan's Tuesday is measured against their own
+Tuesday, not against the average of their week. */
+var dT=T;if(PLAN.byop){var a={kcal:0,p:0,c:0,f:0},any=false;PLAN.meals.forEach(function(m){if(m.day!==SELD||!m.t)return;any=true;a.kcal+=m.t.kcal;a.p+=m.t.p;a.c+=m.t.c;a.f+=m.t.f});if(any)dT=a}h+='<div class="dpanel"><div class="mh"><span>Day '+SELD+' ( '+esc((PLAN.dayNames&&PLAN.dayNames[SELD-1])||DOW[(SELD-1)%7])+' )</span><span class="mac">'+Math.round(dc.kcal)+' KCALs · Protein '+Math.round(dc.p)+' g · Carbs '+Math.round(dc.c)+' g · Fat '+Math.round(dc.f)+' g · <b>'+rm(dc.price)+'</b></span></div>'+'<div class="drow"><button class="btn btn-o s" type="button" onclick="addMealTo('+SELD+')">+ Add Meal</button><button class="btn btn-o s" type="button" onclick="dupDay('+SELD+')">Duplicate Day</button><button class="btn btn-o s" type="button" onclick="delDay('+SELD+')">Remove Day</button></div>'+'<div class="dtot">'+tbar("Today's Protein",dc.p,dT.p,' g')+tbar("Today's Carbs",dc.c,dT.c,' g')+tbar("Today's Fat",dc.f,dT.f,' g')+'</div>';PLAN.meals.forEach(function(m,mi){if(m.day===SELD)h+=mealCard(m,mi)});h+='</div>';$('#planCal').innerHTML=h;$('#sideTargets').innerHTML='<div class="tiles" style="grid-template-columns:1fr 1fr"><div class="tile"><div class="l">Calories</div><div class="v">'+Math.round(T.kcal)+'</div></div><div class="tile"><div class="l">Protein</div><div class="v">'+T.p+' g</div></div><div class="tile"><div class="l">Carbs</div><div class="v">'+T.c+' g</div></div><div class="tile"><div class="l">Fat</div><div class="v">'+T.f+' g</div></div></div>'+'<div class="hint">Your full day is '+T.full.kcal+' KCALs · Protein = '+T.full.p+' g. AERA covers '+T.share+'% of it'+(T.remainder.kcal?'; eat about '+T.remainder.kcal+' KCALs ( Protein = '+T.remainder.p+' g ) from your own food':'')+(T.home.kcal?', on top of the '+Math.round(T.home.kcal)+' KCALs you listed':'')+'.</div>'+'<button class="btn btn-o s" type="button" style="width:100%;margin-top:10px" onclick="goStep(2);homeAdd(1)">+ Add a Home-Sourced Meal</button>';$('#sidePrice').textContent=rm(planPrice());$('#sideMeals').textContent=PLAN.meals.length+' Meals · Packaging Included · ≈ '+rm(planPrice()/PLAN.meals.length)+' per Meal'}var SUBN={chicken:'Chicken',seafood:'Seafood & Fish',prawn:'Prawn',beef:'Beef',stir_fried:'Stir-Fried Menus',rice:'Rice',pasta:'Pasta',potato:'Potato & Sweet Potato',toast:'Toast',vegetables:'Vegetables',garnish:'Garnish',sauce:'Sauces & Gravies'};function swFilter(b){var d=b.parentNode.parentNode;[].slice.call(d.querySelectorAll('.dhead .btn')).forEach(function(x){x.classList.toggle('on',x===b)});var k=b.getAttribute('data-s');[].slice.call(d.querySelectorAll('.srow')).forEach(function(r){r.style.display=(!k||r.getAttribute('data-s')===k)?'':'none'})}function swapPanel(mi,ci,cur,opts){var subs=[];opts.forEach(function(o){if(subs.indexOf(o.sub)<0)subs.push(o.sub)});var pick=subs.length>1?cur.sub:'';var head=subs.length>1?'<div class="dhead">'+subs.map(function(x){return'<button class="btn btn-o s'+(x===pick?' on':'')+'" type="button" data-s="'+esc(x)+'" onclick="swFilter(this)">'+esc(SUBN[x]||x)+'</button>'}).join('')+'</div>':'';return'<details class="dishes swapd"><summary class="swapbtn"><i class="dth sm"'+(cur.img?' style="background-image:url('+cur.img+')"':'')+'></i><span>'+esc(cur.n)+'</span></summary><div class="dl">'+head+'<div class="sl">'+opts.map(function(o){var x=per(o,o.po[0]);return'<button class="srow" type="button" data-s="'+esc(o.sub)+'"'+((pick&&o.sub!==pick)?' style="display:none"':'')+' onclick="swapComp('+mi+','+ci+',\''+o.c+'\')"><i class="dth"'+(o.img?' style="background-image:url('+o.img+')"':'')+'></i><em>'+esc(o.n)+'<small>'+Math.round(x.kcal)+' KCALs · Protein '+r1(x.p)+' · Carbs '+r1(x.c)+' · Fat '+r1(x.f)+' per '+o.po[0]+' g</small></em></button>'}).join('')+'</div></div></details>'}function mealCard(m,mi){var mc=mealCalc(m),pm=mealTarget(mi);var h='<div class="mcard"><div class="mh"><span class="mtitle"><b>Meal '+m.slot+'</b>'+mealLines(m)+'</span><span class="mac">'+macG(mc)+' · <b>'+rm(mc.price)+'</b> <button class="btn btn-o s" type="button" onclick="dupMeal('+mi+')">Duplicate</button> <button class="btn btn-o s" type="button" onclick="delMeal('+mi+')">Delete</button></span></div><div class="mrow"><div class="mbento">'+bentoHtml(m)+'</div><div class="mmain">'+'<div class="tblwrap"><table class="etbl"><thead><tr><th>Item</th><th>Per Portion</th><th>Weight</th><th class="n">Price</th><th></th></tr></thead><tbody>';m.comps.forEach(function(cp,ci){var r=BYCODE[cp.r];if(!r)return;var x=per(r,cp.g);var used={};m.comps.forEach(function(o,j){if(j!==ci)used[o.r]=1});var opts=swapOptions(cp).filter(function(o){return !used[o.c]});var canDel=!(r.cat==='p'&&catCount(m,'p')<2);h+='<tr'+(oosHas(cp.r)?' class="oosrow"':'')+'><td>'+swapPanel(mi,ci,r,opts)+(oosHas(cp.r)?'<div class="oostag b">Out of Stock — swap this one</div>':'')+'</td><td class="mac">'+macStr(x)+'</td><td><span class="qty"><button type="button" onclick="bump('+mi+','+ci+',-1)">−</button><span>'+gramStr(r,cp.g)+'</span><button type="button" onclick="bump('+mi+','+ci+',1)">+</button></span>'+wLab(r,cp.g)+'</td><td class="n">'+rm(x.price)+'</td><td>'+(canDel?'<button class="x" type="button" title="Remove" aria-label="Remove '+esc(r.n)+'" onclick="delComp('+mi+','+ci+')">×</button>':'')+'</td></tr>'});h+='</tbody></table></div>';var add='';['p','c','v','g','s'].forEach(function(cat){var have=catCount(m,cat);if(have>=(CAP[cat]||1)||!freeOf(m,cat).length)return;add+='<button class="btn btn-o s" type="button" onclick="addComp('+mi+',\''+cat+'\')">+ '+CATNAME[cat]+(have>0&&(cat==='p'||cat==='v')?' ( + '+rm(EXTRA_COMP)+' )':'')+'</button>'});var ex=extraComps(m);var d=offPct(mc.kcal,pm.kcal);if(d>=8)h+='<div class="over">This box runs '+d+'% over your calorie target. Trim a portion above, use Fit My Calories, or <a href="#" onclick="offerSwap('+mi+',\'kcal\');return false">let us suggest an item to change</a>.</div>';h+='<div class="addrow">'+(add||'<span class="hint" style="margin:0">Box is full.</span>')+(ex?'<span class="hint" style="margin:0">'+ex+' extra packaging · + '+rm(ex*EXTRA_COMP)+'</span>':'')+'</div>'+tuneRow('tuneMeal('+mi+',','Tune This Meal',TUNED[mi],'<button class="btn btn-o s" type="button" onclick="undoMeal('+mi+')"'+((MH[mi]||[]).length?'':' disabled')+'>↶ Undo</button>')+(TUNED[mi+'n']?'<div class="tuned">'+esc(TUNED[mi+'n'])+'</div>':'')+'<div style="margin-top:10px">'+abar(mi,'kcal','Calories',mc.kcal,pm.kcal)+abar(mi,'p','Protein',mc.p,pm.p,' g')+abar(mi,'c','Carbs',mc.c,pm.c,' g')+abar(mi,'f','Fat',mc.f,pm.f,' g')+'</div>';return h+'</div></div></div>'}function bump(mi,ci,dir){snap(mi);var cp=PLAN.meals[mi].comps[ci];var r=BYCODE[cp.r];var st=r.po[2]||25;cp.g=clampG(r,cp.g+dir*st);renderPlan();saveDraft()}function swapComp(mi,ci,code){snap(mi);var cp=PLAN.meals[mi].comps[ci];var nr=BYCODE[code];if(!nr)return;cp.r=code;cp.g=clampG(nr,cp.g);renderPlan();saveDraft()}var MH={},BASE=null;function snap(mi){if(!PLAN||!PLAN.meals[mi])return;var a=MH[mi]||(MH[mi]=[]);a.push(JSON.stringify(PLAN.meals[mi].comps));if(a.length>25)a.shift()}function snapAll(){if(PLAN)PLAN.meals.forEach(function(m,i){snap(i)})}function undoMeal(mi){var a=MH[mi];if(!a||!a.length)return;PLAN.meals[mi].comps=JSON.parse(a.pop());delete TUNED[mi];TUNED[mi+'n']='';renderPlan();saveDraft()}function newPlan(){if(!confirm('Start a new plan? Your current plan is cleared — starred favourites and saved plans are kept.'))return;PLAN=null;BASE=null;TUNED={};MH={};try{localStorage.removeItem('aera.plan')}catch(e){}saveDraft();$('#planCal').innerHTML='';goStep(1);window.scrollTo({top:0,behavior:'smooth'})}function resetPlan(){if(!BASE)return say('Nothing to reset','This plan is as it was built.');snapAll();PLAN=JSON.parse(BASE);TUNED={};renderPlan();saveDraft();msg('Back to the plan we first built for you.')}function msg(t){var e=$('#planMsg');if(e){e.textContent=t;clearTimeout(msg._t);msg._t=setTimeout(function(){e.textContent=''},6000)}}function planPayload(){var em=(ACCT&&ACCT.email)||(USER&&USER.email)||'';var T=PLAN.targets;return{id:PLAN.id,email:em,days:PLAN.days,mpd:PLAN.mpd,targets:{kcal:Math.round(T.kcal),p:T.p,c:T.c,f:T.f,share:T.share,full:T.full,home:T.home,remainder:T.remainder},prefs:{goal:Q.goal,plan:Q.plan,body:Q.body,activity:Q.activity,dob:Q.dob,kcalEdit:Q.kcalEdit||null,seasoning:Q.seasoning,spice:Q.spice,avoid:Q.avoid,home:Q.home,q:PLAN.q||Q},meals:PLAN.meals.map(function(m){return{day:m.day,slot:m.slot,name:mealName(m),comps:m.comps.map(function(cp){var r=BYCODE[cp.r];return{code:cp.r,id:'',name:r?r.n:'',grams:cp.g}}),kcal:Math.round(mealCalc(m).kcal),price:mealCalc(m).price}}),price:planPrice(),boxes:PLAN.meals.length}}function syncPlan(){try{return fetch(SYNC_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:'sync-'+String(PLAN.id).replace(/[^A-Za-z0-9-]/g,'')+'-'+Date.now().toString(36)+'@aera-sync.invalid',data:{kind:'plan',planId:PLAN.id,planEmail:planPayload().email,plan:JSON.stringify(planPayload())}})})}catch(e){}}
+function saveDraft(){try{localStorage.setItem('aera.planDraft',JSON.stringify({q:Q,plan:PLAN,step:STEP}))}catch(e){}}function loadDraft(){try{var d=JSON.parse(localStorage.getItem('aera.planDraft')||'null');if(d&&d.q){Object.assign(Q,d.q);if(d.plan&&d.plan.meals)PLAN=d.plan}}catch(e){}try{ACCT=JSON.parse(localStorage.getItem('aera.account')||'null')}catch(e){}if(ACCT&&ACCT.email){var na=$('#navAcct');na.textContent='My Account · '+(ACCT.name||ACCT.email).split(' ')[0];if(!Q.home.length&&ACCT.seasoning)Q.seasoning=ACCT.seasoning;if(ACCT.spice)Q.spice=ACCT.spice
+/* The five numbers were already given on the account page, so ask for nothing twice.
+Anything already typed here wins -- this only fills what is still empty. */
+var ab=ACCT.body||{};if(!Q.dob&&ab.dob)Q.dob=ab.dob;if(!Q.gender&&ab.gender)Q.gender=ab.gender;if(!(+Q.height>0)&&+ab.height>0)Q.height=+ab.height;if(!(+Q.weight>0)&&+ab.weight>0)Q.weight=+ab.weight;if(!Q.activity&&+ab.activity>0)Q.activity=String(ab.activity);if(Q.dob)Q.age=ageFromDob(Q.dob);}loadDraftValues()}function initSupabase(){if(typeof supabase==='undefined'||SB.url.indexOf('YOUR_')>=0)return;try{sb=supabase.createClient(SB.url,SB.key);sb.auth.getSession().then(function(r){USER=r.data.session?r.data.session.user:null;if(!USER)return;subCheck();return sb.from('profiles').select('gender,birth_year,birth_date,height_cm,weight_kg,activity,body_type,goal,seasoning,spice').eq('id',USER.id).maybeSingle().then(function(p){var d=p.data;if(!d)return;if(d.gender)Q.gender=d.gender;if(d.birth_date&&!Q.dob){Q.dob=String(d.birth_date).slice(0,10);Q.age=ageFromDob(Q.dob)}if(d.height_cm&&!Q.height)Q.height=d.height_cm;if(d.weight_kg&&!Q.weight)Q.weight=d.weight_kg;if(d.activity&&ACTIVITY.some(function(a){return a[0]===String(d.activity)}))Q.activity=String(d.activity);if(d.body_type)Q.body=d.body_type;if(d.goal)Q.goal=d.goal;if(d.seasoning)Q.seasoning=d.seasoning;if(d.spice)Q.spice=d.spice;loadDraftValues();initUI();renderTargets();planNumsApply()})}).catch(function(){})}catch(e){}}
+/* ===== The five numbers come from the profile =====Sex, date of birth, height, weight and activity level are asked once, when someone signs in,and kept on their profile. When they are all there this page does not ask again: the fields
+are replaced by a line showing what we already hold, with a way to change it. What stays in
+this step is the part that belongs to the plan rather than to the person — body type, goal
+and the macro split. When any of the five is missing the fields come back exactly as before,so a signed-out visitor, or someone who chose "fill up later", can still build a plan. */
+function planNumsKnown(){return !!(Q.gender&&Q.dob&&+Q.height>0&&+Q.weight>0&&+Q.activity>0)}function planActWord(){for(var i=0;i<ACTIVITY.length;i++)if(ACTIVITY[i][0]===String(Q.activity))return ACTIVITY[i][2]||ACTIVITY[i][1];return ''}function planNumsApply(){var s1=document.getElementById('s1');if(!s1)return;var about=s1.querySelector('.f4.about');var act=document.getElementById('activity');var actLb=(act&&act.previousElementSibling&&act.previousElementSibling.classList.contains('lb'))
+?act.previousElementSibling:null;var live=document.getElementById('liveIntake');var known=planNumsKnown()&&signedIn();
+[about,act,actLb].forEach(function(el){if(el)el.style.display=known?'none':''});var strip=document.getElementById('planNums');if(!known){if(strip)strip.style.display='none';return}if(!strip){strip=document.createElement('div');strip.id='planNums';strip.className='pnums';if(about&&about.parentNode)about.parentNode.insertBefore(strip,about)}strip.style.display='';var age=Q.age||ageFromDob(Q.dob);strip.innerHTML='<div class="pnums-in"><b>What we already have</b>'+'<span>'+(Q.gender==='f'?'Female':'Male')+' · '+(age?age+' years':'')+' · '+Q.height+' cm · '+Q.weight+' kg · '+planActWord()+'</span></div>'+'<a class="pnums-a" href="'+ACCOUNT_URL+'#body">Change these</a>';if(live)live.style.display=''}function loadDraftValues(){if(Q.dob){$('#dob').value=Q.dob;if(window.DOBP)DOBP.set(Q.dob);Q.age=ageFromDob(Q.dob)}if(Q.height)$('#height').value=Q.height;if(Q.weight)$('#weight').value=Q.weight}async function saveProfileNumbers(){if(!sb||!USER)return;try{await sb.from('profiles').upsert({id:USER.id,email:USER.email.toLowerCase(),gender:Q.gender,birth_date:Q.dob||null,birth_year:Q.dob?+Q.dob.slice(0,4):null,height_cm:Q.height||null,weight_kg:Q.weight||null,activity:+Q.activity,body_type:Q.body,goal:Q.goal,seasoning:Q.seasoning,spice:Q.spice,updated_at:new Date().toISOString()})}catch(e){}}var _gen=generate;generate=function(){_gen();saveProfileNumbers()};document.addEventListener('click',function(e){[].slice.call(document.querySelectorAll('details.dishes[open]')).forEach(function(d){if(!d.contains(e.target))d.open=false})});$('#targets').innerHTML='<div class="hint">Loading our kitchen list…</div>';bootCat(function(ok){if(!ok){$('#targets').innerHTML='<div class="msg bad">We could not load our kitchen list just now. Please refresh the page — if it keeps happening, your connection is blocking my.chatbees.io.</div>';return}loadDraft();homePickup();initUI();renderTargets();initSupabase();subLoadLinks();planNumsApply();var fl=$('#favLink');if(fl)fl.href=ACCOUNT_URL+'#plans';var fresh=/[?&]new=1/.test(location.search)||location.hash==='#new';if(PLAN){BASE=JSON.stringify(PLAN);renderPlan();if(!fresh)goStep(4)}else if(!fresh&&signedIn()){var g='';try{g=localStorage.getItem('aera.planGate')||''}catch(e){}if(g&&Q.dob&&Q.height&&Q.weight&&Q.activity){try{localStorage.removeItem('aera.planGate')}catch(e){}goStep(4)}}if(fresh)goStep(1);if(HOMEPICKED)homePickedNote()});
+/* The items are in either way. Step 2 will not open until Step 1 has the numbers it needs, so say
+so on Step 1 rather than bouncing the customer there with no explanation. */
+function homePickedNote(){var n=HOMEPICKED,word=n+' Home-Sourced Meal'+(n>1?'s':'');var ready=Q.age>=14&&Q.age<=100&&Q.height>=120&&Q.weight>=30&&!!Q.activity;var msg=function(el,t){var e=$(el);if(e)e.innerHTML='<span class="msg ok" style="display:inline-block;margin:0;padding:6px 10px">'+t+'</span>'};if(ready){goStep(2);msg('#homeMsg',word+' added from your list.');return}msg('#homeNote',word+' added from your list. Fill in your numbers below and we will take them off your Target.')}function shopMenu(e){if(e)e.preventDefault();var w=document.querySelector('.shopwrap');if(!w)return;w.classList.toggle('open')}document.addEventListener('click',function(e){var w=document.querySelector('.shopwrap');if(w&&!w.contains(e.target))w.classList.remove('open')});document.addEventListener('keydown',function(e){if(e.key==='Escape'){var w=document.querySelector('.shopwrap');if(w)w.classList.remove('open')}});</script>
+<!-- AERA walkthrough : start -->
+
+<!-- ============ AERA walkthrough ============A spotlight tour on the real page : the page dims, one control is lit, a short caption with
+a small moving picture sits beside it and points at the thing it is explaining. It opens
+itself once on a first visit and after that lives behind the "How It Works" button. Steps
+whose control is not on screen are skipped, so a tour never points at nothing. -->
+
+
+
+<!-- AERA walkthrough : end -->
+<p class="aeralegal">© 2026 AERA Meal Preparation SDN BHD · Seri Kembangan · <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a> · <a href="https://my.chatbees.io/p/xXH4dXALg" target="_blank" rel="noopener">Privacy Notice</a></p>
+<!-- AERA language switch : start -->
+
+
+
+
+
+
+
+
+<!-- AERA language switch : end -->
+
+
+  <script src="script.js"></script>
+</body>
+</html>
