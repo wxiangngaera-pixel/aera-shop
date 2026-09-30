@@ -1,32 +1,7 @@
-(function(){
-  if(window.__AERA_API) return; window.__AERA_API=1;
-  if(/my\.chatbees\.io$/i.test(location.hostname)) return;
-  var API="https://my.chatbees.io";
-  function conv(u){
-    try{
-      if(typeof u!=="string") return u;
-      if(u.indexOf("/api/")===0) return API+u;
-      if(u.indexOf(location.origin+"/api/")===0) return API+u.slice(location.origin.length);
-    }catch(e){}
-    return u;
-  }
-  var of=window.fetch;
-  if(of) window.fetch=function(i,o){
-    try{
-      if(typeof i==="string") i=conv(i);
-      else if(typeof Request!=="undefined" && i instanceof Request){
-        var n=conv(i.url); if(n!==i.url) i=new Request(n,i);
-      }
-    }catch(e){}
-    return of.call(this,i,o);
-  };
-  var XP=window.XMLHttpRequest && window.XMLHttpRequest.prototype;
-  var oo=XP && XP.open;
-  if(oo) XP.open=function(m,u){ var a=[].slice.call(arguments); try{a[1]=conv(u)}catch(e){} return oo.apply(this,a); };
-})();
-
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 function tourWhich(){var m={1:'intro',2:'week',3:'prefs',4:'plan',5:'order'};for(var i=1;i<=5;i++){var e=document.getElementById('s'+i);if(e&&getComputedStyle(e).display!=='none')return m[i]}return 'intro'}
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* ---- the little pictures ----
 One loop each, drawn here in plain SVG so nothing is fetched and nothing can go missing.
 Canvas is 64 x 40, the ink is the card's own, the accent is AERA yellow. */
@@ -50,8 +25,10 @@ last=e;steps.push(st)});if(!steps.length)return;
 out of the way and leave it for the Help button, which passes force */
 if(!force&&steps.length<2)return;S.k=k;S.i=0;S.steps=steps;S.pct=0;mask.classList.add('on');card.classList.add('on');show()}function auto(k){if(!seen(k))setTimeout(function(){start(k)},900)}function which(){return (typeof tourWhich==='function'&&tourWhich())||Object.keys(TOURS)[0]}function helpBtn(){var help=document.createElement('button');help.type='button';help.className='at-help';help.id='atHelp';help.innerHTML='<i>?</i> '+HELP;help.onclick=function(){start(which(),true)};document.body.appendChild(help)}window.AERATOUR={start:start,auto:auto,seen:seen,stop:stop};function boot(){build();helpBtn();auto(which())}if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();})();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){var g=window.goStep;if(typeof g!=='function')return;window.goStep=function(){g.apply(this,arguments);setTimeout(function(){var k=tourWhich();if(window.AERATOUR&&!AERATOUR.seen(k))AERATOUR.start(k)},450)}})();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 window.AERA_I18N={};window.AERA_I18N_RE=[];
 (function(){
  var KEY='aera_lang',lang='en';
@@ -84,6 +61,7 @@ window.AERA_I18N={};window.AERA_I18N_RE=[];
  if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
 "Return to Homepage":"返回首页","Home":"首页","Shop ▾":"选购 ▾","Meal Bundles":"一周套餐","Fat Loss Meals":"减脂餐","Mass Gain Meals":"增肌餐","All Meals":"全部餐点","À la Carte":"单点","Merchandise":"周边商品","Free Delivery Vouchers":"免运费优惠券","My Account":"我的账户","How It Works":"运作方式","Terms & Conditions":"条款与细则",
 "Personalised Meal Plan":"个人定制餐单","Your Plan, Your Macros":"您的餐单，您的营养比例","Tell us about you and your Goal. We work out your Daily Calories and Macros, then build a week of Meals from our Kitchen. Every portion weighed to the gram. Adjust anything, then Order it.":"告诉我们您的身体数据与目标。我们会算出您的每日热量与营养比例，再用厨房的餐点排出一周。每一份都称到克。任何地方都可以调整，然后下单。","1 · About You":"1 · 关于您","2 · Your Week":"2 · 您的一周","3 · Meal Preferences":"3 · 饮食偏好","4 · Your Plan":"4 · 您的餐单","5 · Order":"5 · 下单","Your Free Month of the Personalised Meal Plan has":"您的个人定制餐单免费月还剩","Days left.":"天。","See what happens after":"了解之后会怎样",
@@ -103,6 +81,7 @@ window.AERA_I18N_RE.push(
 );
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
 "Skip":"略过","Next":"下一步","Back":"上一步","Done":"完成","Got it":"知道了","Got It":"知道了","GOT IT":"知道了","Finish":"完成",
 "The FIVE Steps":"五个步骤","Complete the FIVE Steps.":"完成这五个步骤。","Step 1. About You":"步骤 1．关于您","We calculate your Calories and Macros from these INFOs.":"我们会用这些资料算出您的热量与营养比例。","Let us decide for you!":"让我们帮您决定！","Your Numbers are LIVE.":"您的数字是即时的。","Live Numbers.":"即时更新的数字。","Step 2 · How many days":"步骤 2 · 要几天","How much of your week AERA should cover.":"AERA 要覆盖您一周中的多少。","How many of them are ours":"其中几餐由我们提供","Meals a Day from us, the rest of your Day stays yours.":"每天由我们提供几餐，其余仍由您自己安排。","Meals you eat in a Day":"您一天吃几餐","Tell us your whole Day so the Calories split properly.":"告诉我们您一整天的情况，热量才能正确分配。","Start with what you DO NOT eat":"先从您不吃的开始","Anything you tick here will be left out of every Meal.":"您在这里勾选的，每一餐都不会出现。","How we build your Meals":"我们怎么帮您配餐","Prioritise your Goal.":"以您的目标为优先。","In a hurry? Tick everything":"赶时间？全部勾选","ticks every list on this page at once.":"会一次勾选这一页的所有清单。","Normal, Less OR None. Kitchen preps accordingly.":"正常、减少或完全不要。厨房会照着做。","Step 4 · Your plan":"步骤 4 · 您的餐单","The week we built, with your Daily Target beside it.":"我们排出的这一周，旁边是您的每日目标。","What it costs":"价格是多少","Moves with your portions. Delivery comes at Checkout.":"会随您的份量变动。配送费在结账时计算。","Keep it, share it, or bring your own":"保存、分享，或自带餐单","Favourite it, send it to your Coach, or upload a plan you already have.":"收藏它、寄给您的教练，或上传您已经有的餐单。","Step 5 · Check it over":"步骤 5 · 再确认一次","Everything you chose, in one list.":"您选的所有内容，集中成一份清单。","Into the cart":"加入购物车","This takes the whole week to Checkout.":"这会把整整一周带到结账页。"
@@ -110,16 +89,19 @@ Object.assign(window.AERA_I18N,{
 window.AERA_I18N_RE.push([/^Step (\d+) of (\d+)$/i,"第 $1 步，共 $2 步"]);
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
 "Please fill in your date of birth, bodyweight and height first.":"请先填写出生日期、体重与身高。","Please pick your activity level.":"请选择您的活动量。","We could not load our kitchen list just now. Please refresh the page — if it keeps happening, your connection is blocking my.chatbees.io.":"目前无法载入厨房的菜色清单。请重新整理页面 — 若持续发生，可能是您的网络挡住了 my.chatbees.io。","Enter protein, carbs and fat in grams — we work out the calories for you.":"以克为单位输入蛋白质、碳水与脂肪 — 热量由我们计算。","Meal duplicated.":"已复制这一餐。","Every day needs at least one meal. Use Remove Day if you do not want this day at all.":"每一天至少要有一餐。若完全不需要这一天，请用「移除这一天」。","A plan needs at least one day.":"餐单至少要有一天。","Day removed.":"已移除这一天。","Carbs in this box are already at or under target.":"这一盒的碳水已经等于或低于目标。","Fat in this box is already at or under target.":"这一盒的脂肪已经等于或低于目标。","Carbs are already at our smallest portion, or this box has no carb. We never take the carb out — use the × in the table for that.":"碳水已经是我们最小的份量，或这一盒本来就没有碳水。我们不会直接拿掉碳水 — 要拿掉请用表格中的 ×。","This box is already as low in fat as these recipes go.":"以这些菜色来说，这一盒的脂肪已经降到最低。","This is already the cheapest combination from the items you picked.":"以您选的项目来说，这已经是最便宜的组合。","This plan is as it was built.":"这份餐单就是最初生成的样子。","Back to the plan we first built for you.":"已回到我们最初为您生成的餐单。","Your first month is free. After that, keep the builder for RM 21.99 a month or RM 129.99 a year — cancel any time.":"第一个月免费。之后可以每月 RM 21.99 或每年 RM 129.99 继续使用 — 随时可取消。","The Personalised Meal Plan builder is a subscription. Choose a plan and it unlocks again — every answer and every plan you have saved is still here.":"个人定制餐单工具为订阅制。选择一个方案即可重新解锁 — 您所有的答案与已保存的餐单都还在。","Sign in first so your subscription is matched to your account.":"请先登录，让订阅与您的账户对应。","Please enter your email address.":"请输入您的电邮地址。","No items in cart.":"购物车里没有项目。","An email address is required to complete checkout.":"完成结账需要电邮地址。","Thank you for your order.":"感谢您的订购。"
 });
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
 "Your Meal Plan Subscription":"您的餐单订阅","Your free month has ended":"您的免费月已结束","Monthly":"每月","Annually":"每年","Billed every month":"每月扣款一次","Billed once a year — RM 10.83 a month":"每年扣款一次 — 相当于每月 RM 10.83","Subscribe":"订阅","Opening Soon":"即将开放","Subscribing as":"订阅使用的电邮：","— please pay with this same email so we can match it to your account.":"— 请用同一个电邮付款，我们才能对应到您的账户。","Payment opens in a new tab. When it is done, come back and refresh this page.":"付款会在新分页开启。完成后请回到这里并重新整理页面。","← Back To My Plan":"← 返回我的餐单","Shop The Meals":"选购餐点","Day left.":"天。","ends Today.":"今天结束。","Day left":"天","Days left":"天"
 });
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){var D=window.AERA_I18N;var P=[
 ["Pan Seared Spicy Chicken Breast","香煎香辣鸡胸"],["Baked Spicy Chicken Breast","烤香辣鸡胸"],["Pan Seared Indian Curry Chicken Breast","香煎印度咖喱鸡胸"],["Baked Indian Curry Chicken Breast","烤印度咖喱鸡胸"],["Pan Seared Smoked Paprika Chicken Breast","香煎烟熏红椒粉鸡胸"],["Baked Smoked Paprika Chicken Breast","烤烟熏红椒粉鸡胸"],["Pan Seared Salt & Pepper Chicken Breast","香煎椒盐鸡胸"],["Baked Salt & Pepper Chicken Breast","烤椒盐鸡胸"],["Pan Seared Onion Garlic Chicken Breast","香煎蒜香洋葱鸡胸"],["Baked Onion Garlic Chicken Breast","烤蒜香洋葱鸡胸"],["Pan Seared Ginger Garlic Chicken Breast","香煎姜蒜鸡胸"],["Baked Ginger Garlic Chicken Breast","烤姜蒜鸡胸"],["Tandoori Chicken","印度烤鸡"],["Chicken Katsu","日式炸鸡扒"],["Grilled Teriyaki Chicken Breast","照烧烤鸡胸"],["Grilled Teriyaki Chicken Chop","照烧烤鸡扒"],["Grilled Chicken Chop","烤鸡扒"],["Chicken Breast Meatball","鸡胸肉丸"],
 ["Pan Seared Salmon","香煎三文鱼"],["Baked Salmon","烤三文鱼"],["Pan Seared Barramundi Fillet","香煎金目鲈鱼柳"],["Baked Barramundi Fillet","烤金目鲈鱼柳"],["Pan Seared Toman Fish Sliced","香煎多曼鱼片"],["Baked Toman Fish Sliced","烤多曼鱼片"],["Pan Seared Halibut","香煎比目鱼"],["Baked Halibut","烤比目鱼"],["Pan Seared Salmon Cubes","香煎三文鱼粒"],["Baked Salmon Cubes","烤三文鱼粒"],["Pan Seared Tiger Prawn","香煎大虎虾"],["Baked Tiger Prawn","烤大虎虾"],["Stir Fried Vannamei Prawn","炒白虾"],["Vannamei Prawn ( Oil-Free )","白虾（无油）"],["Sautéed Beef Sliced","煎炒牛肉片"],
@@ -139,6 +121,7 @@ Object.assign(D,{
 if(window.aeraRetranslate)window.aeraRetranslate();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-DATE-ZH : English dates -> Chinese, only when the page is in Chinese mode.
    Dates come out of toLocaleDateString('en-MY',...) at render time, so they arrive
    inside sentences the dictionary has already translated. This rewrites the date
@@ -195,10 +178,12 @@ if(window.aeraRetranslate)window.aeraRetranslate();
  if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-LEGAL-ZH */
 Object.assign(window.AERA_I18N||{},{"Terms & Conditions":"条款与条件","Privacy Notice":"隐私声明"});
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-CONSENT : explicit consent before health information is stored, and a clear
    notice before the AI coach sends anything to OpenAI ( PDPA 2010 ). Consent is kept
    on the device and, once signed in on My Account, copied to the customer's profile. */
@@ -275,6 +260,7 @@ if(window.aeraRetranslate)window.aeraRetranslate();
  var n=0,iv=setInterval(function(){sync();if(++n>=15)clearInterval(iv)},4000);
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){
   if(window.__AERA_HOSTMAP) return; window.__AERA_HOSTMAP=1;
   if(/my\.chatbees\.io$/i.test(location.hostname)) return;
