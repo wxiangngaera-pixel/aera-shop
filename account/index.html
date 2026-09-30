@@ -743,7 +743,7 @@ function hashTab(){var hh=(location.hash||'').replace('#','').toLowerCase();
 window.addEventListener('hashchange',function(){
  if(!USER)return;var t=hashTab();if(t&&t!==TAB)setTab(t);
  try{obMaybeAsk()}catch(e){}});
-function setTab(t){TAB=t;if(t==='body')bodyLoad();if(t==='favs')favPics();['orders','plans','favs','home','points','refs','details','address','prefs','body'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===t)})}
+function setTab(t){TAB=t;if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();['orders','plans','favs','home','points','refs','details','address','prefs','body'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===t)})}
 async function loadProfile(){var r=await sb.from('profiles').select('*').eq('id',USER.id).maybeSingle();PROFILE=r.data||{id:USER.id,email:USER.email};if(!r.data){var meta=USER.user_metadata||{};var seed={id:USER.id,email:USER.email.toLowerCase(),name:meta.name||null,phone:meta.phone||null};
   var w=await sb.from('profiles').upsert(seed);
   if(w.error&&/23505|duplicate|unique/i.test((w.error.message||'')+' '+(w.error.code||''))){delete seed.phone;await sb.from('profiles').upsert(seed)}
@@ -996,6 +996,9 @@ function planBento(m){
  return'<div class="bento" role="img" aria-label="'+esc(m.name||'Meal')+'" style="background-image:url('+TRAY+')">'+inner+'</div>'}
 /* Show Meals was opened : fetch the catalogue once, then draw the pictures in place */
 var PICSDONE=false;
+/* every Meal of the plan as a MAP Bento Box, right on the card ( the catalogue loads when My Meal Plans opens ) */
+function planStrip(meals){if(!BYCODE||!meals||!meals.length)return '';var pics=meals.slice().sort(function(a,b){return ((+a.day||1)-(+b.day||1))||((+a.slot||1)-(+b.slot||1))}).map(function(m){return planBento(m)}).filter(Boolean);return pics.length?'<div class="fstrip pstrip">'+pics.join('')+'</div>':''}
+function plansPics(){if(PICSDONE)return;PICSDONE=true;catLoad().then(function(){if(BYCODE&&Object.keys(BYCODE).length)try{renderPlans()}catch(e){}})}
 function planPics(el){
  if(!el||!el.open||PICSDONE)return;
  PICSDONE=true;
@@ -1013,7 +1016,7 @@ function renderPlans(){var el=$('#plansList');if(!el)return;var rows=PLANS||[],o
  el.innerHTML=rows.map(function(p,idx){var t=p.targets||{},pr=p.prefs||{},meals=Array.isArray(p.meals)?p.meals:[];var byDay={};meals.forEach(function(m){(byDay[m.day||1]=byDay[m.day||1]||[]).push(m)});
   return'<div class="order"><div class="top"><span class="no">'+esc(String(p.id))+'</span><span><span class="chip '+(ordered[p.id]?'ok':'')+'">'+esc(ordered[p.id]?'Ordered · '+ordered[p.id]:'Saved, not ordered yet')+'</span></span></div>'+
   '<div class="meta">'+esc(GOAL[pr.goal]||'')+(pr.goal?' · ':'')+(p.days||'?')+' Days x '+(p.meals_per_day||'?')+' Meal'+(p.meals_per_day===1?'':'s')+' a day · '+(p.boxes||meals.length)+' Boxes'+(p.created_at?' · '+fmtDate(String(p.created_at).slice(0,10)):'')+'</div>'+
-  (t.kcal?'<div class="hint" style="margin-top:6px">AERA Meals Target ≈ '+Math.round(t.kcal)+' KCALs · Protein '+Math.round(t.p||0)+' g · Carbs '+Math.round(t.c||0)+' g · Fat '+Math.round(t.f||0)+' g per Day</div>':'')+
+  (t.kcal?'<div class="hint" style="margin-top:6px">AERA Meals Target ≈ '+Math.round(t.kcal)+' KCALs · Protein '+Math.round(t.p||0)+' g · Carbs '+Math.round(t.c||0)+' g · Fat '+Math.round(t.f||0)+' g per Day</div>':'')+planStrip(meals)+
   '<details style="margin-top:8px" ontoggle="planPics(this)"><summary style="cursor:pointer;font-weight:600;font-size:13px">Show Meals</summary><div class="items" style="margin-top:6px">'+Object.keys(byDay).sort(function(a,b){return a-b}).map(function(d){return'<div class="daywrap"><b>Day '+d+'</b>'+byDay[d].map(function(m){return'<div class="mealrow">'+planBento(m)+'<span class="mtxt">'+esc(m.name||(m.comps||[]).map(function(c){return c.name}).join(' · '))+((m.comps||[]).length?'<br><span style="color:var(--mute)">'+esc((m.comps||[]).map(function(c){return c.name+' '+c.grams+' g'}).join(' · '))+'</span>':'')+'</span></div>'}).join('')+'</div>'}).join('')+'</div></details>'+
   '<div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-y s" type="button" onclick="planOpen('+idx+')">Open &amp; Tune This Plan</button></div>'+
   '<div style="margin-top:8px;max-width:360px"><div class="tot" style="font-weight:700"><span>Plan Price</span><b>'+rm(p.price)+'</b></div><div class="hint">≈ '+rm((+p.boxes||meals.length)?p.price/(+p.boxes||meals.length):0)+' per Meal · Packaging Included</div></div></div>'}).join('')}
