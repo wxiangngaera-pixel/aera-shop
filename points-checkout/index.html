@@ -668,5 +668,10 @@ function rememberContact(name,email,phone){try{if(document.getElementById('remem
 (function(){try{var c=JSON.parse(localStorage.getItem('aera.contact')||'null');if(!c)return;if(c.name)document.getElementById('name').value=c.name;if(c.email)document.getElementById('email').value=c.email;if(c.phone)document.getElementById('phone').value=c.phone;document.getElementById('detailsHint').textContent='· filled in from your last order — edit if anything changed'}catch(e){}})();
 render();renderCart();loadPoints();
 </script>
+
+<!-- AERA host map : start -->
+
+<!-- AERA host map : end -->
+  <script src="script.js"></script>
 </body>
 </html>
