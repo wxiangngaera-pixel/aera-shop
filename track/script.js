@@ -1,30 +1,4 @@
-(function(){
-  if(window.__AERA_API) return; window.__AERA_API=1;
-  if(/my\.chatbees\.io$/i.test(location.hostname)) return;
-  var API="https://my.chatbees.io";
-  function conv(u){
-    try{
-      if(typeof u!=="string") return u;
-      if(u.indexOf("/api/")===0) return API+u;
-      if(u.indexOf(location.origin+"/api/")===0) return API+u.slice(location.origin.length);
-    }catch(e){}
-    return u;
-  }
-  var of=window.fetch;
-  if(of) window.fetch=function(i,o){
-    try{
-      if(typeof i==="string") i=conv(i);
-      else if(typeof Request!=="undefined" && i instanceof Request){
-        var n=conv(i.url); if(n!==i.url) i=new Request(n,i);
-      }
-    }catch(e){}
-    return of.call(this,i,o);
-  };
-  var XP=window.XMLHttpRequest && window.XMLHttpRequest.prototype;
-  var oo=XP && XP.open;
-  if(oo) XP.open=function(m,u){ var a=[].slice.call(arguments); try{a[1]=conv(u)}catch(e){} return oo.apply(this,a); };
-})();
-
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* The lookup runs in the database, not here. This page sends one Order Number
    and receives that one Order's delivery status : no Name, no Email, no Phone,
    no Address, no money. Nothing else is ever sent to this page, which is why it
@@ -83,6 +57,7 @@ function look(e){
 }catch(e){}})();
 $('#ono').addEventListener('input',function(){this.value=this.value.toUpperCase()});
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 window.AERA_I18N={};window.AERA_I18N_RE=[];
 (function(){
  var KEY='aera_lang',lang='en';
@@ -115,11 +90,13 @@ window.AERA_I18N={};window.AERA_I18N_RE=[];
  if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
 "Return to Homepage":"返回首页","Home":"首页","Track My Order":"查询我的订单","Type your Order Number and we will show you where that delivery is. It is printed on your Order Confirmation Email and on the box.":"输入您的订单号码，我们就会显示这份配送到哪里了。号码印在订单确认电邮和餐盒上。","Track It":"查询","One Order at a time. We show the Delivery only — never your Name, Address or anything you paid.":"一次查询一笔订单。我们只显示配送状态 — 不会显示您的姓名、地址或付款资料。","Ordered while signed in?":"下单时已登录？","See every Order in My Account":"在「我的账户」查看所有订单","Questions? WhatsApp or email":"有疑问？可用 WhatsApp 或电邮联系","Back to the Shop":"返回商店","Terms & Conditions":"条款与细则","Track My Rider ↗":"追踪我的骑手 ↗","Note given to the Rider":"给骑手的备注","Looking for that Order…":"正在查找这笔订单…","No Delivery found for that Order Number.":"找不到这个订单号码的配送记录。","Please type your Order Number. It looks like AK-20260919-001.":"请输入您的订单号码，格式类似 AK-20260919-001。","We could not reach the Kitchen just now. Try again in a moment.":"目前无法连线到厨房，请稍后再试。","Track My Order · AERA Meal Prep":"查询我的订单 · AERA Meal Prep"
 });
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-DATE-ZH : English dates -> Chinese, only when the page is in Chinese mode.
    Dates come out of toLocaleDateString('en-MY',...) at render time, so they arrive
    inside sentences the dictionary has already translated. This rewrites the date
@@ -176,10 +153,12 @@ if(window.aeraRetranslate)window.aeraRetranslate();
  if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-LEGAL-ZH */
 Object.assign(window.AERA_I18N||{},{"Terms & Conditions":"条款与条件","Privacy Notice":"隐私声明"});
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){
   if(window.__AERA_HOSTMAP) return; window.__AERA_HOSTMAP=1;
   if(/my\.chatbees\.io$/i.test(location.hostname)) return;
