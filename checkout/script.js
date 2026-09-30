@@ -1,30 +1,4 @@
-(function(){
-  if(window.__AERA_API) return; window.__AERA_API=1;
-  if(/my\.chatbees\.io$/i.test(location.hostname)) return;
-  var API="https://my.chatbees.io";
-  function conv(u){
-    try{
-      if(typeof u!=="string") return u;
-      if(u.indexOf("/api/")===0) return API+u;
-      if(u.indexOf(location.origin+"/api/")===0) return API+u.slice(location.origin.length);
-    }catch(e){}
-    return u;
-  }
-  var of=window.fetch;
-  if(of) window.fetch=function(i,o){
-    try{
-      if(typeof i==="string") i=conv(i);
-      else if(typeof Request!=="undefined" && i instanceof Request){
-        var n=conv(i.url); if(n!==i.url) i=new Request(n,i);
-      }
-    }catch(e){}
-    return of.call(this,i,o);
-  };
-  var XP=window.XMLHttpRequest && window.XMLHttpRequest.prototype;
-  var oo=XP && XP.open;
-  if(oo) XP.open=function(m,u){ var a=[].slice.call(arguments); try{a[1]=conv(u)}catch(e){} return oo.apply(this,a); };
-})();
-
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* On a phone the whole order panel sits behind the Cart button, so every control the
    walkthrough points at is off screen until it is opened. Open it first. */
 function tourPrep(){
@@ -32,6 +6,7 @@ function tourPrep(){
   if(side&&getComputedStyle(side).display==='none'&&typeof openCart==='function')openCart()}
  catch(e){}}
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* ---- the little pictures ----
    One loop each, drawn here in plain SVG so nothing is fetched and nothing can go missing.
    Canvas is 64 x 40, the ink is the card's own, the accent is AERA yellow. */
@@ -282,6 +257,7 @@ function auto(k){if(seen(k))return;
  if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 window.AERA_I18N={};window.AERA_I18N_RE=[];
 (function(){
  var KEY='aera_lang',lang='en';
@@ -314,6 +290,7 @@ window.AERA_I18N={};window.AERA_I18N_RE=[];
  if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
 "Return to Homepage":"返回首页","Home":"首页","Merchandise":"周边商品","My Account":"我的账户","Cart ·":"购物车 ·","AERA Meal Prep":"AERA Meal Prep",
 "Order online":"线上订购","Everything is cooked to Order, weighed to the gram and MAP-Packed to stay fresh for 7 Days in the chiller. Choose Self Pick-Up or Rider Delivery ( Lalamove or Grab ) at Checkout.":"所有餐点都是接单后现做，称到克，并以 MAP 保鲜包装，冷藏可放 7 天。结账时可选自取或骑手配送（Lalamove 或 Grab）。",
@@ -327,6 +304,7 @@ window.AERA_I18N_RE.push(
 );
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
 "Skip":"略过","Next":"下一步","Back":"上一步","Done":"完成","Got it":"知道了","Got It":"知道了","GOT IT":"知道了","Finish":"完成",
 "Checkout, in plain steps":"结账流程，一步一步来","Nothing is charged until the last button.":"在按下最后一个按钮之前，不会扣任何款。","How you want to receive your Meals?":"您想怎么拿到餐点？","Self Pick-Up ( FREE ) OR Delivery ( FEES APPLY )":"自取（免费）或配送（需付费）","Schedule to receive Meals":"安排收餐时间","Select your Date & Time.":"选择日期与时段。","Additional fees applied.":"需额外付费。","Select your Packaging Method":"选择您的包装方式","MAP Bento Box with better Texture.":"MAP 保鲜餐盒，口感更好。","Vacuum Packed save spaces.":"真空包装更省空间。","( P.S. Both go into Microwave, not recommended to store in Freezer. )":"（附注：两种都可微波加热，不建议冷冻保存。）","Save yourself the typing":"省去重复输入","Leave this ticked and your details come back next time.":"保持勾选，下次您的资料就会自动带出。","A code from a gym or coach?":"有健身房或教练给的代码？","Enter it and you earn extra AERA Points on this order.":"输入后，这笔订单可获得额外的 AERA 积分。","Your points":"您的积分","5 points for every RM 1 you spend on meals.":"餐点每消费 RM 1 可得 5 点积分。","Vouchers you own":"您拥有的优惠券","Press Use Voucher and the rider fee comes off.":"按「使用优惠券」，骑手配送费就会扣除。","Pay":"付款","Card, FPX Online Banking OR GrabPay.":"信用卡、FPX 网上银行或 GrabPay。"
@@ -334,6 +312,7 @@ Object.assign(window.AERA_I18N,{
 window.AERA_I18N_RE.push([/^Step (\d+) of (\d+)$/i,"第 $1 步，共 $2 步"]);
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
 "Add at least one meal first.":"请先至少加入一餐。","Please sign in first.":"请先登录。","Please enter a contact name.":"请输入联络人姓名。","Please enter a valid email.":"请输入有效的电邮地址。","Please choose a date.":"请选择日期。","Please enter the delivery address.":"请输入配送地址。","Please enter your full address including postcode.":"请输入完整地址，包含邮区编号。","Address lookup failed — please try again.":"地址查询失败 — 请再试一次。","Please enter your name.":"请输入您的姓名。","Please enter a valid email for your receipt.":"请输入有效的电邮地址以接收收据。","Please enter your mobile number — the Rider needs it to reach you.":"请输入手机号码 — 骑手需要用它联系您。","Please enter your mobile number so the Kitchen can reach you about this Order.":"请输入手机号码，方便厨房就这笔订单联系您。","Please choose Lalamove or Grab.":"请选择 Lalamove 或 Grab。","Please choose normal delivery or door-to-door service.":"请选择普通配送或送到门服务。","Please sign in or create an account before you order — it is how we keep your order, your points and your addresses together.":"下单前请先登录或注册账户 — 这样才能把您的订单、积分与地址放在一起。","Ordering on account is not switched on for this page yet. Please WhatsApp us and we will raise it for you.":"这个页面尚未开启挂账下单。请用 WhatsApp 联系我们，我们会为您处理。","Priced at cost — food, packaging and the payment fee. Delivery is charged as normal. Points and credit do not apply on a cost price order.":"按成本计价 — 含食材、包装与支付手续费。配送费照常计算。成本价订单不适用积分与余额。","Checkout is not available right now. Please WhatsApp us to order.":"目前无法结账。请用 WhatsApp 联系我们下单。","Could not start payment. Please try again or WhatsApp us.":"无法启动付款。请再试一次，或用 WhatsApp 联系我们。","Payment was not completed — your order is still here whenever you are ready.":"付款尚未完成 — 您的订单还在，随时可以继续。","Loading the a la carte list…":"正在载入单点清单…","Nothing in this group yet.":"这个分类目前还没有内容。","Enter your address and press “Check Delivery Fee” first.":"请先输入地址并按「查询配送费」。","We couldn't find that address on the map. Try adding the area, postcode and city ( e.g. \"Bangsar South, 59200 Kuala Lumpur\" ).":"地图上找不到这个地址。请补上区域、邮区编号与城市（例如「Bangsar South, 59200 Kuala Lumpur」）。","Please enter your email address.":"请输入您的电邮地址。","No items in cart.":"购物车里没有项目。","An email address is required to complete checkout.":"完成结账需要电邮地址。"
 });
@@ -342,6 +321,7 @@ window.AERA_I18N_RE.push(
 );
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){var D=window.AERA_I18N;var P=[
 ["Pan Seared Spicy Chicken Breast","香煎香辣鸡胸"],["Baked Spicy Chicken Breast","烤香辣鸡胸"],["Pan Seared Indian Curry Chicken Breast","香煎印度咖喱鸡胸"],["Baked Indian Curry Chicken Breast","烤印度咖喱鸡胸"],["Pan Seared Smoked Paprika Chicken Breast","香煎烟熏红椒粉鸡胸"],["Baked Smoked Paprika Chicken Breast","烤烟熏红椒粉鸡胸"],["Pan Seared Salt & Pepper Chicken Breast","香煎椒盐鸡胸"],["Baked Salt & Pepper Chicken Breast","烤椒盐鸡胸"],["Pan Seared Onion Garlic Chicken Breast","香煎蒜香洋葱鸡胸"],["Baked Onion Garlic Chicken Breast","烤蒜香洋葱鸡胸"],["Pan Seared Ginger Garlic Chicken Breast","香煎姜蒜鸡胸"],["Baked Ginger Garlic Chicken Breast","烤姜蒜鸡胸"],["Tandoori Chicken","印度烤鸡"],["Chicken Katsu","日式炸鸡扒"],["Grilled Teriyaki Chicken Breast","照烧烤鸡胸"],["Grilled Teriyaki Chicken Chop","照烧烤鸡扒"],["Grilled Chicken Chop","烤鸡扒"],["Chicken Breast Meatball","鸡胸肉丸"],
 ["Pan Seared Salmon","香煎三文鱼"],["Baked Salmon","烤三文鱼"],["Pan Seared Barramundi Fillet","香煎金目鲈鱼柳"],["Baked Barramundi Fillet","烤金目鲈鱼柳"],["Pan Seared Toman Fish Sliced","香煎多曼鱼片"],["Baked Toman Fish Sliced","烤多曼鱼片"],["Pan Seared Halibut","香煎比目鱼"],["Baked Halibut","烤比目鱼"],["Pan Seared Salmon Cubes","香煎三文鱼粒"],["Baked Salmon Cubes","烤三文鱼粒"],["Pan Seared Tiger Prawn","香煎大虎虾"],["Baked Tiger Prawn","烤大虎虾"],["Stir Fried Vannamei Prawn","炒白虾"],["Vannamei Prawn ( Oil-Free )","白虾（无油）"],["Sautéed Beef Sliced","煎炒牛肉片"],
@@ -361,16 +341,19 @@ Object.assign(D,{
 if(window.aeraRetranslate)window.aeraRetranslate();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
 "✓ No Common Allergens":"✓ 无常见致敏原 No Common Allergens","No beef, dairy, nuts or prawn in any item":"任何一项都不含牛肉、乳制品、坚果或虾","Vacuum Packed":"真空包装"
 });
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
 "Fat Loss":"减脂","Mass Gain":"增肌","KCALs":"大卡","KCAL":"大卡","Protein":"蛋白质","Carbs":"碳水","Fat":"脂肪","Baked Sweet Potato ( Orange ) ( Oil-Free )":"烤黄心番薯（无油） Baked Sweet Potato ( Orange ) ( Oil-Free )","Baked Sweet Potato ( Purple ) ( Oil-Free )":"烤紫心番薯（无油） Baked Sweet Potato ( Purple ) ( Oil-Free )"
 });
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
 "Rice":"饭类","Pasta":"意面","Potato":"马铃薯","Toast":"吐司","Chicken":"鸡肉","Seafood":"海鲜","Beef":"牛肉","Stir Fried":"热炒","Vegetables":"蔬菜","Prawn":"虾","Fish":"鱼","Egg":"蛋","Tofu":"豆腐","Peanut & Nuts":"花生与坚果","Garnish":"配菜","Sauce":"酱汁","Sauces":"酱汁",
 "Single portions to add to your order — sized to the gram, priced by weight.":"可加进订单的单份餐点 — 称到克，按重量计价。","À la Carte is packed in a vacuum bag":"单点采用真空袋包装",", not a bento box, and carries RM 0.90 of packaging per portion.":"，不是餐盒，每份包装费 RM 0.90。","per 100 g raw":"每 100 克生重","Small":"小份","Large":"大份"
@@ -378,6 +361,7 @@ Object.assign(window.AERA_I18N,{
 window.AERA_I18N_RE.push([/^(\d+) g · ([\d,]+) KCALs$/,"$1 克 · $2 大卡"]);
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-DATE-ZH : English dates -> Chinese, only when the page is in Chinese mode.
    Dates come out of toLocaleDateString('en-MY',...) at render time, so they arrive
    inside sentences the dictionary has already translated. This rewrites the date
@@ -434,10 +418,12 @@ if(window.aeraRetranslate)window.aeraRetranslate();
  if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-LEGAL-ZH */
 Object.assign(window.AERA_I18N||{},{"By paying you agree to our":"付款即表示您同意我们的","Terms & Conditions":"条款与条件","and have read our":"，并已阅读我们的","Privacy Notice":"隐私声明"});
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-POINTS-ZH */
 (function(){var D=window.AERA_I18N||{},R=window.AERA_I18N_RE;
 Object.assign(D,{"Use on this order":"本单使用","Don't use points":"不使用积分","Paused on this Order while the First Order Voucher is on. Your points stay in your account for next time.":"首单优惠券启用期间，本单暂停使用积分。积分会保留在您的账户，下次可用。","Paused on this Order while a Cost Price Code is applied. Your points stay in your account for next time.":"使用成本价代码期间，本单暂停使用积分。积分会保留在您的账户，下次可用。"});
@@ -450,6 +436,7 @@ R.unshift(
  [/^You need at least 100 AP to take RM 1\.00 off — this order adds (.+)\.$/,'满 100 AP 才能折抵 RM 1.00 — 这笔订单可获得 $1。']);}
 if(window.aeraRetranslate)window.aeraRetranslate();})();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-BRACKETS : house style is a space inside every bracket and a capital first word — "( Car )", "( Once a year )" */
 function vehUp(){var v=String(vehicle()||'');return v.charAt(0).toUpperCase()+v.slice(1)}
 (function(){var R=window.AERA_I18N_RE;if(!R)return;
@@ -460,10 +447,12 @@ function vehUp(){var v=String(vehicle()||'');return v.charAt(0).toUpperCase()+v.
   [/Door-to-Door \( (Car|Motorcycle) \)/,function(m,v){return '送到门（'+VZ[v]+'）'}]);
  if(window.aeraRetranslate)window.aeraRetranslate()})();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-COMPANY-NOSIGNIN : a company orders on its account by typing its company email — no login */
 Object.assign(window.AERA_I18N||{},{"Ordering for a company with an AERA account? No login needed — just type your company email under Your Details.":"公司账户下单？无需登录 — 只要在“您的资料”输入公司邮箱即可。"});
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-DATE-PRETTY : show the Delivery / Pick-Up date the way the rest of the shop does
    ( en-MY, e.g. "Wed, 23 Sept" ) instead of the browser own date box. The native input is
    kept exactly as it is, only hidden behind a button, so every other script that reads or
@@ -511,6 +500,7 @@ if(window.aeraRetranslate)window.aeraRetranslate();
   else setTimeout(boot,300);
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){
   if(window.__AERA_HOSTMAP) return; window.__AERA_HOSTMAP=1;
   if(/my\.chatbees\.io$/i.test(location.hostname)) return;
