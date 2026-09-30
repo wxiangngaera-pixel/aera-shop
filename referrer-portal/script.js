@@ -1,30 +1,4 @@
-(function(){
-  if(window.__AERA_API) return; window.__AERA_API=1;
-  if(/my\.chatbees\.io$/i.test(location.hostname)) return;
-  var API="https://my.chatbees.io";
-  function conv(u){
-    try{
-      if(typeof u!=="string") return u;
-      if(u.indexOf("/api/")===0) return API+u;
-      if(u.indexOf(location.origin+"/api/")===0) return API+u.slice(location.origin.length);
-    }catch(e){}
-    return u;
-  }
-  var of=window.fetch;
-  if(of) window.fetch=function(i,o){
-    try{
-      if(typeof i==="string") i=conv(i);
-      else if(typeof Request!=="undefined" && i instanceof Request){
-        var n=conv(i.url); if(n!==i.url) i=new Request(n,i);
-      }
-    }catch(e){}
-    return of.call(this,i,o);
-  };
-  var XP=window.XMLHttpRequest && window.XMLHttpRequest.prototype;
-  var oo=XP && XP.open;
-  if(oo) XP.open=function(m,u){ var a=[].slice.call(arguments); try{a[1]=conv(u)}catch(e){} return oo.apply(this,a); };
-})();
-
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 var DATA_URL='/api/public/landing-pages/6950/sheet-data';
 var TIERS={normal:'Normal Referrer',gym:'Fitness Studio / Gym',influencer:'Fitness Influencer'};
 var R={rows:[],loaded:false,year:'',month:''};
@@ -125,6 +99,7 @@ function receipt(mo){mo=mo||R.month;var L=inMonth(mo);if(!L.length)return;
  setTimeout(function(){try{w.focus();w.print()}catch(e){}},600)}
 load();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 window.AERA_I18N={};window.AERA_I18N_RE=[];
 (function(){
  var KEY='aera_lang',lang='en';
@@ -157,6 +132,7 @@ window.AERA_I18N={};window.AERA_I18N_RE=[];
  if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
 "Home":"首页","Order Now":"立即订购","Referrer Portal":"推荐人专区","Terms & Conditions":"条款与细则",
 "Your Cash-Back":"您的回扣","Every order placed with your referral code, month by month — what it earned you, and what has been paid.":"每一笔使用您推荐码的订单，按月列出 — 为您赚了多少，以及已经付了多少。","Loading your figures…":"正在载入您的数字…","We could not load your figures just now. Please refresh the page.":"目前无法载入您的数字，请重新整理页面。","Nothing here yet.":"这里还没有内容。","Once someone orders with your referral code, every order shows up here with the cash-back it earned you.":"只要有人使用您的推荐码下单，每一笔订单都会显示在这里，并附上为您赚到的回扣。","Year":"年","Month":"月","Sales This Month":"本月销售额","Cash-Back This Month":"本月回扣","Pending Cash-Back":"待付回扣","Across every month, not yet paid":"所有月份合计，尚未支付","Paid Cash-Back":"已付回扣","Received all time":"历来已收到","Awaiting payment":"等待付款","Date":"日期","Order":"订单","Customer":"顾客","Meal Subtotal":"餐点小计","Rate":"比率","Status":"状态","Total":"合计","Every Month":"所有月份","Orders":"订单数","Sales":"销售额","Cash-Back":"回扣","Receipt":"收据","Cash-Back Receipt":"回扣收据","Normal Referrer":"一般推荐人","Fitness Studio / Gym":"健身工作室 / 健身房","Fitness Influencer":"健身网红","Cashback":"回扣","Pending":"待付","Paid":"已付","Allow pop-ups for this page, then press the receipt button again.":"请允许此页面弹出视窗，然后再按一次收据按钮。","Referrer Portal — AERA Meal Prep":"推荐人专区 — AERA Meal Prep"
@@ -164,6 +140,7 @@ Object.assign(window.AERA_I18N,{
 window.AERA_I18N_RE.push([/^([\d.]+)% of the meal subtotal$/,"餐点小计的 $1%"]);
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-DATE-ZH : English dates -> Chinese, only when the page is in Chinese mode.
    Dates come out of toLocaleDateString('en-MY',...) at render time, so they arrive
    inside sentences the dictionary has already translated. This rewrites the date
@@ -220,10 +197,12 @@ if(window.aeraRetranslate)window.aeraRetranslate();
  if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-LEGAL-ZH */
 Object.assign(window.AERA_I18N||{},{"Terms & Conditions":"条款与条件","Privacy Notice":"隐私声明"});
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 if(window.AERA_I18N)Object.assign(window.AERA_I18N,{"Date":"日期","Order":"订单","Customer":"客户","Meal Subtotal":"餐点小计","Rate":"比例","Your Cash-Back":"您的现金回馈","Status":"状态","Month":"月份","Orders":"订单数","Sales":"销售额","Cash-Back":"现金回馈","Cashback":"现金回馈","Pending":"待付款","Paid":"已付款","Normal Referrer":"一般推荐人","Fitness Studio / Gym":"健身工作室 / 健身房","Fitness Influencer":"健身网红","Allow pop-ups for this page, then press the receipt button again.":"请允许此页面的弹出窗口，然后再按一次收据按钮。","Loading your figures…":"正在载入您的数据…","Referrer Portal":"推荐人入口","Home":"首页","Order Now":"立即订购"});
 if(window.AERA_I18N_RE)window.AERA_I18N_RE.push([/^Paid (.+) · Ref (.+)$/,"已付款 $1 · 参考 $2"],
  [/^Paid (.+)$/,"已付款 $1"],
@@ -231,6 +210,7 @@ if(window.AERA_I18N_RE)window.AERA_I18N_RE.push([/^Paid (.+) · Ref (.+)$/,"已�
  [/^(\d+) orders?$/,"$1 笔订单"]);
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){
   if(window.__AERA_HOSTMAP) return; window.__AERA_HOSTMAP=1;
   if(/my\.chatbees\.io$/i.test(location.hostname)) return;
