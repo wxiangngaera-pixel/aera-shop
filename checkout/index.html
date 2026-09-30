@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- BASE:START (managed by Coding Agent — do not edit) -->
+<base href="/aera-shop/checkout/">
+<!-- BASE:END -->
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+
+<link rel="icon" href="https://resource.aeramealprep.net/assets/images/logo.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap">
+
+
+
+
+<!-- SEO Meta Tags -->
+<title>Order — AERA Meal Prep</title>
+<meta name="description" content="Order AERA fat-loss and mass-gain meal preps. Self pick-up in Seri Kembangan or Lalamove / Grab delivery across Klang Valley." />
+<meta property="og:title" content="Order — AERA Meal Prep" />
+<meta property="og:description" content="Order AERA fat-loss and mass-gain meal preps. Self pick-up in Seri Kembangan or Lalamove / Grab delivery across Klang Valley." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Order — AERA Meal Prep" />
+<meta name="twitter:description" content="Order AERA fat-loss and mass-gain meal preps. Self pick-up in Seri Kembangan or Lalamove / Grab delivery across Klang Valley." />
+<!-- End SEO Meta Tags -->
+<meta name="sheet-data-url" content="https://my.chatbees.io/api/public/landing-pages/6927/sheet-data">
+<script data-lp-token-hydrate>
+(function(){try{
+  var slug="lp-mtqu0yej-h1a6q";
+  var SITEK="";
+  var SK='lp_access_'+slug;
+  var map={access_token:'lp_pw_',allowlist_access_token:'lp_al_',pin_access_token:'lp_pin_',paywall_access_token:'lp_paid_'};
+  function siteTok(){try{return SITEK?localStorage.getItem(SITEK):null;}catch(e){return null;}}
+  var u=new URL(location.href);var found=null;var changed=false;
+  var PINP=true;
+  if(!PINP){try{localStorage.removeItem('lp_pin_'+slug);if(SITEK)localStorage.removeItem(SITEK);}catch(e){}}
+  Object.keys(map).forEach(function(p){var v=u.searchParams.get(p);if(v){found=v;try{if(PINP||p!=='pin_access_token'){localStorage.setItem(map[p]+slug,v);if(SITEK&&p==='pin_access_token')localStorage.setItem(SITEK,v);}}catch(e){}if(p==='pin_access_token'){try{sessionStorage.setItem('lp_fresh_'+slug,'1');}catch(e){}}u.searchParams.delete(p);changed=true;}});
+  if(found){try{sessionStorage.setItem(SK,found);}catch(e){}}
+  else{try{if(!sessionStorage.getItem(SK)){var t=localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();if(t)sessionStorage.setItem(SK,t);}}catch(e){}}
+  if(changed){try{history.replaceState(null,'',u.toString());}catch(e){}}
+  function getTok(){try{return sessionStorage.getItem(SK)||localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();}catch(e){return null;}}
+  function needsToken(url,method){if(!url)return false;var s=String(url);var m=(method||'GET').toUpperCase();var isSheetWrite=(m==='POST'||m==='PATCH'||m==='PUT'||m==='DELETE')&&/\/sheet-rows(\/|$|\?)/.test(s);var isSheetRead=/\/sheet-data(\/|$|\?)/.test(s);var isLlm=/\/api\/landing-pages\/public\/[^/]+\/(llm|llm-config)(\/|$|\?)/.test(s);return isSheetWrite||isSheetRead||isLlm;}
+  if(window.fetch){var _f=window.fetch;window.fetch=function(input,init){try{var url=typeof input==='string'?input:(input&&input.url)||'';var method=(init&&init.method)||(input&&input.method)||'GET';if(needsToken(url,method)){var tok=getTok();if(tok){init=init||{};var h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});if(!h.has('X-Landing-Page-Token'))h.set('X-Landing-Page-Token',tok);init.headers=h;}}}catch(e){}return _f.call(this,input,init);};}
+  if(window.XMLHttpRequest){var _o=XMLHttpRequest.prototype.open;var _s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__lpM=m;this.__lpU=u;return _o.apply(this,arguments);};XMLHttpRequest.prototype.send=function(){try{if(needsToken(this.__lpU,this.__lpM)){var tok=getTok();if(tok)this.setRequestHeader('X-Landing-Page-Token',tok);}}catch(e){}return _s.apply(this,arguments);};}
+}catch(e){}})();
+</script>
+
+<script data-gate>
+(function(){
+  var slug='lp-mtqu0yej-h1a6q';var apiBase='https://my.chatbees.io';var currency='MYR';var presets=[2500,5000,10000,25000];var minAmt=100;var maxAmt=500000;var thankYouMsg='Order received — thank you!';
+  var successSubtext='Payment received — thank you! We\'ll cook your meals fresh for your chosen date. A receipt is on its way to your email, and you\'ll get your rider\'s tracking link once your order is packed — or use "Track my order" in the menu any time.';var successBtnLabel='Close';var successBtnColor='#F5A623';var successRedirect='';
+  function getLang(){var l=(document.documentElement.lang||navigator.language||'en').toLowerCase();return l.split('-')[0];}
+  function getLocale(){return (document.documentElement.lang||navigator.language||'en');}
+  var I18N={en:{min:'Minimum is ',max:'Maximum is ',emailPrompt:'Enter your email for the receipt:',emailRequired:'An email address is required to complete checkout.',failed:'Failed to process donation'},fr:{min:'Le minimum est ',max:'Le maximum est ',emailPrompt:'Entrez votre adresse e-mail pour le reçu :',emailRequired:'Une adresse e-mail est requise pour finaliser le paiement.',failed:'Échec du traitement du don'},es:{min:'El mínimo es ',max:'El máximo es ',emailPrompt:'Introduce tu correo electrónico para el recibo:',emailRequired:'Se requiere una dirección de correo electrónico para completar el pago.',failed:'No se pudo procesar la donación'},pt:{min:'O mínimo é ',max:'O máximo é ',emailPrompt:'Insira seu e-mail para o recibo:',emailRequired:'Um endereço de e-mail é necessário para concluir o pagamento.',failed:'Falha ao processar a doação'},de:{min:'Mindestbetrag ist ',max:'Höchstbetrag ist ',emailPrompt:'Geben Sie Ihre E-Mail-Adresse für die Quittung ein:',emailRequired:'Eine E-Mail-Adresse ist erforderlich, um den Checkout abzuschließen.',failed:'Spende konnte nicht verarbeitet werden'},it:{min:'Il minimo è ',max:'Il massimo è ',emailPrompt:'Inserisci la tua email per la ricevuta:',emailRequired:"È richiesto un indirizzo email per completare il pagamento.",failed:'Impossibile elaborare la donazione'}};
+  function t(k){var L=getLang();return (I18N[L]&&I18N[L][k])||I18N.en[k];}
+  function fmtD(c){try{return new Intl.NumberFormat(getLocale(),{style:'currency',currency:currency}).format(c/100);}catch(e){return new Intl.NumberFormat('en-US',{style:'currency',currency:currency}).format(c/100);}}
+  function findDonEmail(){var ids=['email','emailAddress','buyer-email','buyerEmail','donor-email','donorEmail','user-email','userEmail','contact-email'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.indexOf('@')>-1)return el.value.trim();}var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.indexOf('@')>-1)return inputs[j].value.trim();}return '';}
+  function findDonName(){var ids=['name','fullName','full-name','donor-name','donorName','customer-name','user-name'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"])');for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}return '';}
+  function findDonPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  window.__processDonation=function(a,b,c,d){
+    var amountCents,email='',donorName='',donorMessage='',productName='',productDescription='',quantity=1;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents||(a.amount?Math.round(Number(a.amount)*100):0);
+      email=a.email||'';
+      productName=a.productName||a.label||'';
+      productDescription=a.productDescription||a.description||'';
+      donorName=a.name||a.donorName||'';
+      donorMessage=a.message||a.donorMessage||'';
+      quantity=a.quantity&&parseInt(a.quantity,10)>0?parseInt(a.quantity,10):1;
+    }else{
+      amountCents=typeof a==='number'?a:(parseInt(a,10)||0);
+      var rest=[b,c,d];var nonEmail=[];
+      for(var i=0;i<rest.length;i++){var v=rest[i];if(typeof v==='string'&&v){if(!email&&v.indexOf('@')>-1&&/^[^s@]+@[^s@]+.[^s@]+$/.test(v.trim())){email=v.trim();}else{nonEmail.push(v);}}}
+      donorName=nonEmail[0]||'';donorMessage=nonEmail[1]||'';
+    }
+    if(!email)email=findDonEmail();
+    if(!donorName)donorName=findDonName();
+    var donorPhone=findDonPhone();
+    if(!amountCents||amountCents<minAmt){alert(t('min')+fmtD(minAmt));return Promise.reject('below_min');}
+    if(amountCents>maxAmt){alert(t('max')+fmtD(maxAmt));return Promise.reject('above_max');}
+    if(!email){var p=window.prompt(t('emailPrompt'),'');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert(t('emailRequired'));return Promise.reject('no_email');}}
+    var successBase=window.location.href.split('?')[0];
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/donation/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:donorName||'',phone:donorPhone||'',amountCents:amountCents,message:donorMessage||'',productName:productName||'',productDescription:productDescription||'',quantity:quantity,locale:getLocale(),successUrl:successBase+'?donation=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?donation=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||t('failed'));throw new Error(d.error);}
+    });
+  };
+  window.__donationConfig={currency:currency,presets:presets.map(function(c){return c/100;}),minAmount:minAmt/100,maxAmount:maxAmt/100,formatAmount:fmtD};
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('donation')==='success'){
+      var sidD=urlParams.get('session_id');
+      if(sidD){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidD})}).catch(function(){});}catch(e){}}
+      var overlay=document.createElement('div');overlay.id='donation-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">'+esc(thankYouMsg)+'</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(successSubtext)+'</p><button id="lp-don-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var dBtn=document.getElementById('lp-don-success-btn');
+      if(dBtn){dBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://my.chatbees.io/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=6927');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='D2pz8bZ';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='Payment received — thank you! We\'ll cook your meals fresh for your chosen date. A receipt is on its way to your email, and you\'ll get your rider\'s tracking link once your order is packed — or use "Track my order" in the menu any time.';var successBtnLabel='Close';var successBtnColor='#F5A623';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    var phone=findPhone();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    var __pLoc=(document.documentElement.lang||navigator.language||'en');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,phone:phone||'',amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,locale:__pLoc,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var sidP=urlParams.get('session_id');
+      if(sidP){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidP})}).catch(function(){});}catch(e){}}
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-cart>
+(function(){
+  var slug='D2pz8bZ';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='Payment received — thank you! We\'ll cook your meals fresh for your chosen date. A receipt is on its way to your email, and you\'ll get your rider\'s tracking link once your order is packed — or use "Track my order" in the menu any time.';var successBtnLabel='Close';var successBtnColor='#F5A623';var successRedirect='';
+  function findCartEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realCart=function(arg){
+    var items, email='', customerName='', successUrl, cancelUrl, currency;
+    if(Array.isArray(arg)){items=arg;}
+    else if(arg&&typeof arg==='object'){
+      items=arg.items;email=arg.email||'';customerName=arg.name||arg.customerName||'';
+      successUrl=arg.successUrl;cancelUrl=arg.cancelUrl;currency=arg.currency;
+    }
+    if(!Array.isArray(items)||items.length===0){alert('No items in cart.');return Promise.reject('no_items');}
+    var cleanItems=[];var totalCents=0;
+    for(var i=0;i<items.length;i++){
+      var it=items[i];if(!it||typeof it!=='object'){alert('Invalid item at position '+i);return Promise.reject('bad_item');}
+      var nm=typeof it.name==='string'?it.name.trim():'';
+      if(!nm){alert('Item '+(i+1)+' is missing a name.');return Promise.reject('no_name');}
+      var amt=typeof it.amountCents==='number'?it.amountCents:(typeof it.amount==='number'?Math.round(it.amount*100):NaN);
+      if(!isFinite(amt)||amt<1){alert('Item "'+nm+'" needs a valid amount in cents.');return Promise.reject('bad_amount');}
+      var qty=(typeof it.quantity==='number'&&it.quantity>0)?Math.floor(it.quantity):1;
+      cleanItems.push({name:nm,description:it.description||'',amountCents:amt,quantity:qty});
+      totalCents+=amt*qty;
+    }
+    if(totalCents<50){alert('Cart total must be at least $0.50');return Promise.reject('total_too_low');}
+    if(!email)email=findCartEmail();
+    if(!customerName)customerName=findCartName();
+    var cartPhone=findCartPhone();
+    if(!email){var p=window.prompt('Enter your email for the receipt:','');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert('An email address is required to complete checkout.');return Promise.reject('no_email');}}
+    var successBase=window.location.href.split('?')[0];
+    var body={email:email,name:customerName,items:cleanItems,locale:(document.documentElement.lang||navigator.language||'en')};
+    if(currency)body.currency=currency;
+    if(cartPhone)body.phone=cartPhone;
+    body.successUrl=successUrl||(successBase+'?cart=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}');
+    body.cancelUrl=cancelUrl||(successBase+'?cart=cancelled');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/cart/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process checkout');throw new Error(d.error);}
+    });
+  };
+  try{Object.defineProperty(window,'__processCart',{value:__realCart,writable:false,configurable:false});}catch(e){window.__processCart=__realCart;}
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('cart')==='success'){
+      var sidC=urlParams.get('session_id');
+      if(sidC){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidC})}).catch(function(){});}catch(e){}}
+      if(document.getElementById('payment-success-overlay')||document.getElementById('donation-success-overlay')||document.getElementById('cart-success-overlay'))return;
+      var overlay=document.createElement('div');overlay.id='cart-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||'Thank you for your order.';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var cBtn=document.getElementById('lp-cart-success-btn');
+      if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav><div class="wrap">
+  <a href="https://my.chatbees.io/p/ZQr9fS2jA9" aria-label="AERA Meal Prep"><img src="https://aeramealprep.net/logo/logo_yellow_with_white_text.svg" alt="AERA Meal Prep"></a>
+  <div style="display:flex;gap:14px;align-items:center"><a class="homebtn" href="https://my.chatbees.io/p/ZQr9fS2jA9" aria-label="Return to Homepage"><span aria-hidden="true">←</span><span class="hbfull">Return to Homepage</span><span class="hbshort">Home</span></a><button type="button" class="langsw" id="langSw" onclick="aeraLang()" aria-label="Language"><span class="l1">EN</span><span class="l2">中文</span></button><a href="https://my.chatbees.io/p/VMrvEw">Merchandise</a><a href="https://my.chatbees.io/p/dtTMaV" id="navAcct">My Account</a><button class="cartbtn" onclick="openCart()">Cart · <span id="cartCount">0</span></button></div>
+</div></nav>
+
+<main class="wrap layout">
+  <section>
+    <span class="eyebrow">Order online</span>
+    <p style="color:var(--ink2);margin:8px 0 0;max-width:62ch">Everything is cooked to Order, weighed to the gram and MAP-Packed to stay fresh for 7 Days in the chiller. Choose Self Pick-Up or Rider Delivery ( Lalamove or Grab ) at Checkout.</p>
+    <div class="tabs" role="tablist"><button class="tab on" data-f="bundle">Meal Bundles</button><button class="tab" data-f="fat">Fat Loss Meals</button><button class="tab" data-f="mass">Mass Gain Meals</button><button class="tab" data-f="all">All Meals</button><button class="tab" data-f="alc">À la Carte</button></div>
+    <div class="grid" id="grid"></div>
+    <p class="hint" style="margin-top:16px">Prices in Malaysian Ringgit, packaging included. Serving weights are Raw ( Before cooking ). That's how our Kitchen weighs every portion. Each Meal carries badges for Beef, Dairy, Nuts, Prawn and how Spicy it is. They cover our own Kitchen. Everything is cooked in one Kitchen, so we cannot promise a Meal is free of traces. If you have a serious Allergy, message us on WhatsApp before ordering.</p>
+  </section>
+
+  <aside class="side card" id="side">
+    <button class="btn btn-o closex" onclick="closeCart()">← Back to Menu</button>
+    <h2>Your Order</h2>
+    <div id="lines"><div class="empty">Your Cart is empty. Add Meals from the Menu.</div></div>
+
+    <label class="lb">Packaging <span style="font-weight:500;text-transform:none;letter-spacing:0">· Choose 1</span></label>
+    <label class="opt on" id="pkBento"><input type="radio" name="pk" value="bento" checked onchange="setPack('bento')"><svg class="pkico" viewBox="0 0 40 30" aria-hidden="true"><rect x="2.5" y="4.5" width="35" height="21" rx="4"/><path d="M2.5 9.5h35"/><path d="M16 9.5v16M16 18h21.5"/><circle class="d" cx="24" cy="14" r="1.5"/><circle class="d" cx="30" cy="14" r="1.5"/><circle class="d" cx="27" cy="22" r="1.5"/></svg><span><b>MAP Bento Box</b><small>Oxygen replaced with Nitrogen / CO₂, blend and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life.</small></span><span class="fee" id="pkBentoFee"></span></label>
+    <label class="opt" id="pkVacuum"><input type="radio" name="pk" value="vacuum" onchange="setPack('vacuum')"><svg class="pkico" viewBox="0 0 40 30" aria-hidden="true"><path d="M9.5 3.5h21l-1.4 3.2a3 3 0 0 0-.2 1.2v18.6H11.1V7.9a3 3 0 0 0-.2-1.2z"/><path d="M9.5 3.5c2.6 1.4 5.2 1.4 7.8 0M17.3 3.5c2.6 1.4 5.2 1.4 7.8 0M25.1 3.5c1.8 1 3.6 1.3 5.4.8"/><path class="d" d="M15 13.5c3.5-1.6 7-1.6 10.5 0M15 18.5c3.5-1.6 7-1.6 10.5 0"/></svg><span><b>Vacuum Packed</b><small>Same freshness, flatter pack. Takes far less fridge space, compresses the food slightly. Can be frozen, but not recommended.</small></span><span class="fee" id="pkVacuumFee"></span></label>
+
+    <label class="lb">Fulfilment</label>
+    <label class="opt on" id="optPickup"><input type="radio" name="ful" value="pickup" checked onchange="setFul('pickup')"><svg class="pkico" viewBox="0 0 40 30" aria-hidden="true"><path d="M6 11.5h28v14.5H6z"/><path d="M4.5 11.5 8 5.5h24l3.5 6z"/><path class="d" d="M11 5.5l-1.6 6M18 5.5l-.8 6M26 5.5l.8 6M33 5.5l1.6 6"/><path d="M16 26V17.5h8V26"/><circle class="d" cx="22.2" cy="21.8" r="1"/></svg><span><b>Self Pick-Up</b><small>35, Jalan Equine 9A, Taman Equine, 43300 Seri Kembangan · Daily 9 AM - 5 PM</small></span><span class="fee">FREE</span></label>
+    <label class="opt" id="optDelivery"><input type="radio" name="ful" value="delivery" onchange="setFul('delivery')"><svg class="pkico" viewBox="0 0 40 30" aria-hidden="true"><path d="M3 18.5V7h20.5v11.5z"/><path d="M23.5 11.5h8l5 7v0h-13z"/><path class="d" d="M25.5 13h4.8l2.9 3.6h-7.7z"/><circle cx="10.5" cy="21.3" r="2.9"/><circle cx="30.5" cy="21.3" r="2.9"/></svg><span><b>Rider Delivery</b><small>Lalamove or Grab Rider brings your whole Order in one trip, anywhere in Klang Valley. Fee calculated from your address. Compare both Couriers below.</small></span><span class="fee">from RM <span id="feeFromAny">6</span></span></label>
+
+    <div id="deliveryBox" style="display:none">
+      <label class="lb">Delivery Address</label>
+      <div id="savedAddr"></div>
+      <div class="acwrap"><input type="text" id="address" placeholder="Start typing your address…" autocomplete="off" oninput="acInput()" onkeydown="acKey(event)" onblur="setTimeout(acHide,200)"><div class="ac" id="acList"></div></div>
+      <div class="hint">Pick your Address from the suggestions, then add your Unit / Floor in the notes if needed.</div>
+      <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-k" type="button" onclick="checkFee()" id="feeBtn">Check Delivery Fee</button></div>
+      <div id="feeMsg"></div>
+
+      <label class="lb">Courier <span id="courierHint" style="font-weight:500;text-transform:none;letter-spacing:0">· Rates shown for Normal Delivery / Door-to-Door</span></label>
+      <label class="opt" id="optLalamove" style="margin-top:4px"><input type="radio" name="courier" value="lalamove" onchange="setCourier('lalamove')"><span class="clogo lala"><img alt="Lalamove" referrerpolicy="no-referrer" hidden><i>Lalamove</i></span><span class="crate"><small id="rateLalamove"></small></span></label>
+      <label class="opt" id="optGrab"><input type="radio" name="courier" value="grab" onchange="setCourier('grab')"><span class="clogo grab"><img alt="Grab" referrerpolicy="no-referrer" hidden><i>Grab</i></span><span class="crate"><small id="rateGrab"></small></span></label>
+
+      <div id="handoverBox" style="display:none">
+        <label class="lb">Delivery Service</label>
+        <label class="opt" id="hoDrop" style="margin-top:4px"><input type="radio" name="ho" value="drop" onchange="setHandover('drop')"><span><b>Normal Delivery</b><small>Rider hands over at your lobby, guard house or a collection point you name in the notes.</small></span><span class="fee" id="rateDrop"></span></label>
+        <label class="opt" id="hoDoor"><input type="radio" name="ho" value="door" onchange="setHandover('door')"><span><b>Door-to-Door Service</b><small id="doorHint">Rider brings the order right to your door. Normal Delivery + RM 2.00 by motorcycle or + RM 5.00 by car.</small></span><span class="fee" id="rateDoor"></span></label>
+      </div>
+    </div>
+
+    <div class="f2">
+      <div><label class="lb" id="dateLbl">Pick-Up Date</label><input type="date" id="date"></div>
+      <div><label class="lb">Time Slot</label><select id="slot"></select></div>
+    </div>
+    <div class="hint" id="cutoffHint"></div>
+
+    <div id="authGate"></div>
+    <label class="lb">Your Details <span style="font-weight:500;text-transform:none;letter-spacing:0" id="detailsHint">· We only ask what the Order needs</span></label>
+    <input type="text" id="name" placeholder="Your Name" autocomplete="name">
+    <div class="f2" style="margin-top:8px">
+      <div><input type="email" id="email" placeholder="Email" required autocomplete="email" oninput="apInput();coChanged()" onchange="apInput(true);coChanged()"><div class="hint" style="margin-top:3px">For your Receipt, Order Tracking and AERA Points. Your AERA Points appear below as you type.</div></div>
+      <div><input type="tel" id="phone" placeholder="Mobile" required autocomplete="tel"><div class="hint" style="margin-top:3px" id="phoneHint">So the Kitchen can reach you about this Order.</div></div>
+    </div>
+    <label style="display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--ink2);margin-top:8px;cursor:pointer"><input type="checkbox" id="remember" checked style="width:auto;margin:0"> Remember my details on this device so I don't type them next time</label>
+    <label class="lb">Referral Code <span style="font-weight:500;text-transform:none;letter-spacing:0">· Optional</span></label>
+    <input type="text" id="refCode" placeholder="e.g. AERA-GYMNAME" autocomplete="off" maxlength="24" oninput="refInput()" style="text-transform:uppercase">
+    <div id="refMsg" class="hint" style="margin-top:4px">Have a Code from a Gym, Studio or Coach? Enter it and you earn extra AERA Points on your Meals.</div>
+    <div id="apBox" class="apbox"></div>
+    <div id="foBox"></div>
+    <label class="lb">Notes for the Kitchen / Rider</label><textarea id="notes" placeholder="e.g. less spicy, leave at guard house, call on arrival"></textarea>
+
+    <div style="margin-top:14px">
+      <div class="tot"><span>Subtotal</span><b id="subtotal">RM 0.00</b></div>
+      <div class="tot"><span id="pkName">Packaging Fee</span><b id="pkAmt">RM 0.00</b></div>
+      <div class="tot"><span id="feeName">Delivery</span><b id="feeAmt">—</b></div>
+      <div class="tot" id="foRow" style="display:none;color:var(--green)"><span id="foName">First Order Voucher</span><b id="foAmt">− RM 0.00</b></div>
+      <div class="tot" id="vouchRow" style="display:none;color:var(--green)"><span id="vouchName"></span><b id="vouchAmt">− RM 0.00</b></div>
+      <div class="tot" id="discRow" style="display:none;color:var(--green)"><span id="discName">AERA Points discount</span><b id="discAmt">− RM 0.00</b></div>
+      <div class="tot" id="crRow" style="display:none;color:var(--green)"><span id="crName">AERA Credit</span><b id="crAmt">− RM 0.00</b></div>
+      <div class="tot" id="ccRow" style="display:none;color:var(--green)"><span id="ccName">Cost Price</span><b id="ccAmt"></b></div>
+      <div class="tot" id="gwRow" style="display:none"><span>Payment Processing</span><b id="gwAmt">RM 0.00</b></div>
+   <div class="row" id="bdRow" style="display:none;color:var(--green)"><span id="bdName">🎂 Birthday treat</span><b id="bdAmt">− RM 0.00</b></div>
+      <div class="tot big"><span>Total</span><span id="total">RM 0.00</span></div>
+      <div class="hint" id="earnHint"></div>
+    </div>
+    <div id="coBox" style="margin-top:12px;display:none;border:1px solid var(--navy-line);background:var(--navy-soft);border-radius:10px;padding:11px 13px">
+      <div style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--navy)">Corporate account</div>
+      <div id="coName" style="font-weight:800;font-size:14px;margin-top:2px"></div>
+      <div id="coTerms" style="font-size:12px;color:var(--ink2);margin-top:1px"></div>
+      <div id="coSaved" style="font-size:12px;color:var(--green);margin-top:4px"></div>
+      <button class="btn btn-o" type="button" id="coBillBtn" onclick="coBill()" style="margin-top:9px;width:100%;display:none">Order On Account</button>
+      <div id="coDone" style="margin-top:8px"></div>
+      <div class="hint" style="margin:6px 0 0;font-size:11px">Ordering on account charges nothing here — the kitchen gets the order and the invoice follows on your terms. Paying by card or FPX now is always an option too.</div>
+    </div>
+    <div id="ccBox" style="margin-top:10px;display:none">
+      <label class="lb" for="ccInput" style="font-size:11px">Cost price code ( if you have one )</label>
+      <div style="display:flex;gap:8px">
+        <input type="text" id="ccInput" placeholder="Enter code" style="flex:1;text-transform:uppercase" autocomplete="off">
+        <button class="btn btn-o" type="button" onclick="ccTry()">Apply</button>
+      </div>
+      <div id="ccMsg"></div>
+    </div>
+    <div id="vouchBox"></div>
+    <div id="payMsg"></div>
+    <p class="aeralegalnote" style="margin:0 0 10px;font-size:12px;line-height:1.5;color:#6B7280;text-align:center">By paying you agree to our <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a> and have read our <a href="https://my.chatbees.io/p/xXH4dXALg" target="_blank" rel="noopener">Privacy Notice</a>.</p><button class="btn btn-y paybtn" id="payBtn" onclick="pay()">Pay Securely</button>
+    <div class="secure" id="secureTxt">Card, FPX Online Banking or GrabPay via Stripe. We never see your card details.</div>
+<div id="bpOverlay" style="display:none;position:fixed;inset:0;background:rgba(20,18,14,.72);z-index:100;align-items:center;justify-content:center;padding:20px"><div class="card" style="max-width:440px;width:100%;text-align:center;padding:28px"><div id="bpOverlayBody"></div><button class="btn btn-y" style="margin-top:16px" onclick="bpClose()">Close</button></div></div>
+  </aside>
+</main>
+<div class="sheet"><span><b id="sheetCount">0 items</b> · <span id="sheetTotal">RM 0.00</span></span><button class="cartbtn" onclick="openCart()">View Order →</button></div>
+
+<script>
+/* ===== Settings (edit here) ===== */
+var KITCHEN={lat:2.9976100,lng:101.6742575};
+var POINTS_URL='/api/public/landing-pages/6927/sheet-data'; // public AERA Points balances (hashed keys only — no emails or names in that sheet)
+var PAY={gateway:'stripe', // 'stripe' = Chatbees on-page Stripe checkout; 'billplz' = Billplz (FPX, Touch 'n Go, GrabPay, Boost, ShopeePay, DuitNow QR, cards) via flow 5488
+ flowUrl:'', // the Billplz webhook is read from the settings sheet (key: billplz_flow_url) so that no
+ // token is baked into this public page. A browser-called webhook can never truly be secret,
+ // but this keeps it in one place to rotate and off the page source.
+
+ lookupUrl:'/api/public/landing-pages/6931/sheet-data', // bill links published by the flow (hashed keys)
+ pollMs:1000,pollMax:15};
+var COURIER_LOGO={
+ lalamove:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iNTYiIHZpZXdCb3g9IjAgMCAyMDAgNTYiPgogICAgPGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8Zz4KICAgICAgICAgICAgPGc+CiAgICAgICAgICAgICAgICA8Zz4KICAgICAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMCAwSDIwMFY1NkgweiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTYzIC0xNzApIHRyYW5zbGF0ZSg2MyAxNzApIi8+CiAgICAgICAgICAgICAgICAgICAgPHBhdGggZmlsbD0iI0ZGNjcxRCIgZD0iTTU1LjE5LjAyNWMuMDY3LS4wNDEuMTUzLS4wMy4yMDguMDI2LjA2My4wNjYuMDYuMTctLjAwNi4yMzMtMi40MiAyLjM3OC04LjE1OCA3LjkyLTExLjM2MiAxMC4zOTYtLjQ0My4zNDQtMy40NTQgOS4wODEtNS44MTIgMTQuMzA4LTIgNC40MzQtNS4xMjcgNy4wMy0xMy4yNDUgMTEuNDYyLTUuNjEzIDMuMDU5LTkuMzI4IDE0LjU4LTE0LjYgMTguOTA3LS4wNTMuMDQtLjEyMy4wNS0uMTg0LjAyNS0uMDk0LS4wNC0uMTQtLjE0Ny0uMS0uMjQxTDIxLjc5IDI4LjgzNGMtMS4yMjQtLjExMy00LjQ3LTMuMDEzLTguMTA3LTYuNjQ3LS4wMi0uMDIxLS4wMjgtLjA1Mi0uMDItLjA4LjAxMy0uMDQ0LjA2LS4wNjkuMTAzLS4wNTZsMTYuMzMgNS4zNTVjLjAwNi4wMDEuMDEzIDAgLjAxOC0uMDAzLjAxMi0uMDA3LjAxNy0uMDIyLjAxLS4wMzRsLTEuMTEzLTEuODhjLS4wODctLjE0Ni0uMjIzLS4yNTUtLjM4My0uMzA4bC0xNy41NTItNS43NTVjLS4xLS4wMzMtLjE4OS0uMDktLjI2MS0uMTY0LS41OS0uNjEyLTEuMTc0LTEuMjI1LTEuNzUzLTEuODM4LS4wMTItLjAxMi0uMDE1LS4wMy0uMDEtLjA0Ni4wMDgtLjAyNC4wMzQtLjAzNi4wNTgtLjAyOGwxOC42NDUgNi4xMTZjLjAwOC4wMDMuMDE2LjAwMi4wMjMtLjAwMi4wMTItLjAwNy4wMTYtLjAyMy4wMDktLjAzNWwtMS4xMzctMS45NGMtLjA2My0uMTA3LS4xNjUtLjE4Ni0uMjgzLS4yMjJMNi45MDQgMTQuODg0Yy0uMjAxLS4wNjYtLjM4Mi0uMTgyLS41MjYtLjMzOC0uNTI1LS41NjgtMS4wMzMtMS4xMjItMS41MTktMS42NTYtLjAxNy0uMDE2LS4wMjEtLjA0LS4wMTItLjA2LjAxMi0uMDI4LjA0NC0uMDQuMDcxLS4wMjhMMjUuNCAxOS41MjZjLjAwNy4wMDMuMDE2LjAwMi4wMjItLjAwMi4wMTItLjAwNy4wMTYtLjAyMy4wMDktLjAzNWwtMS4xMzYtMS45MzRjLS4wNjQtLjExLS4xNjUtLjE5Mi0uMjg0LS4yMzNMMy4wMTUgMTAuNDM2bC0uMzYzLS4xMjVjLS4xMjctLjA0My0uMjQtLjExOS0uMzMtLjIxOUMxLjEzOCA4Ljc3Ny4zOTkgNy45NDIuMDMgNy41MjJjLS4wMjgtLjAzMy0uMDM3LS4wNzgtLjAyNC0uMTE5LjAyMi0uMDY0LjA5LS4wOTkuMTU0LS4wNzdDMy43NjIgOC41MTMgMjkuMTEgMTYuODggMzEuMDk3IDE3LjUxNWMwIDAtMy4yNzItOS44IDExLjYxLTkuOC40NyAwIDkuMTA2LTUuNTIgMTIuNDg0LTcuNjl6bTk4LjY4MiAxNy42ODNjNS42NzUgMCA4LjgyMiAzLjYxNiA4LjgyMiA4LjMyIDAgNi44NDUtNC41NDUgMTEuNjQ2LTExLjA3OCAxMS42NDYtNS42ODEgMC04LjgyMy0zLjYxNi04LjgyMy04LjMyIDAtNi44NzQgNC41NDUtMTEuNjQ2IDExLjA3OS0xMS42NDZ6bTQ1Ljc3Mi4zOTVjLjE1Ny0uMDA1LjI4Ny4xMi4yOTIuMjc2IDAgLjAyNS0uMDAyLjA1LS4wMDguMDczbC0uNTA1IDIuOGMtLjAyLjE0Mi0uMTQyLjI0Ni0uMjg0LjI0NWgtOS4xMTZjLS4xNDEuMDA1LS4yNi4xMDgtLjI4NC4yNDdsLS42ODQgMy44OGMtLjAzNi4xNTMuMDU4LjMwNi4yMS4zNDMuMDI3LjAwNi4wNTUuMDA4LjA4Mi4wMDdoOC4yOGMuMTU3LS4wMDQuMjg4LjEyLjI5Mi4yNzYgMCAuMDI1LS4wMDIuMDUtLjAwOC4wNzNsLS40OTYgMi43OTVjLS4wMi4xNDEtLjE0Mi4yNDYtLjI4NS4yNDVoLTguNDk5Yy0uMTQuMDA0LS4yNi4xMDgtLjI4NC4yNDdsLS42NzYgMy45MTRjLS4wMzQuMTUzLjA2Mi4zMDUuMjE1LjM0LjAyMy4wMDUuMDQ2LjAwNy4wNy4wMDdoOS4xNzFjLjE1Ny0uMDA1LjI4OC4xMi4yOTIuMjc2IDAgLjAyNC0uMDAyLjA1LS4wMDcuMDczbC0uNTA2IDIuODRjLS4wMi4xNDItLjE0Mi4yNDYtLjI4NC4yNDVoLTEzLjYxOGMtLjE1Ny4wMDQtLjI4Ny0uMTItLjI5MS0uMjc3LS4wMDEtLjAyNC4wMDEtLjA0OS4wMDctLjA3M2wzLjI5LTE4LjYwOGMuMDItLjE0MS4xNDEtLjI0Ni4yODQtLjI0NHptLTMwLjExNS0uMDA2Yy4xNDcgMCAuMjcuMTEyLjI4NC4yNTlsMS45MjYgMTQuNTk3Yy0uMDI1LjE1Ny4wODEuMzA0LjIzOC4zMy4xNTcuMDI1LjMwNS0uMDgyLjMzLS4yMzlsNy4yMi0xNC43N2MuMDUtLjEwMy4xNTQtLjE2OC4yNjctLjE2OWgzLjk5N2MuMTU2LS4wMTIuMjkzLjEwNC4zMDYuMjYxLjAwNS4wNjItLjAxLjEyNS0uMDQ0LjE3N2wtOS44NjYgMTguNmMtLjA0OS4wOTgtLjE1MS4xNTktLjI2MS4xNTZoLTUuMjc4Yy0uMTQ3LjAwNi0uMjc0LS4xMDEtLjI5Mi0uMjQ3bC0zLjIzNi0xOC42MDhjLS4wMzQtLjE1My4wNjItLjMwNS4yMTUtLjM0LjAyMi0uMDA1LjA0Ni0uMDA3LjA2OS0uMDA3em0tNDIuMzQ1LS4wMTdjLjE1OCAwIC4yODUuMTI3LjI4NS4yODRsLjkgMTMuMDI3Yy4wMTcuMTY0LjE2My4yODMuMzI3LjI2Ny4xMDUtLjAxMS4xOTctLjA3Ny4yNDEtLjE3M2w1LjM0LTEzLjIwM2MuMDQ0LS4xMTguMTYtLjE5My4yODUtLjE4NWg2LjcwOWMuMTU3LS4wMDQuMjg3LjEyLjI5MS4yNzcuMDAxLjAyNC0uMDAyLjA0OC0uMDA3LjA3M2wtMy4yOTIgMTguNjA4Yy0uMDIuMTQxLS4xNDIuMjQ2LS4yODUuMjQ0aC0zLjc2M2MtLjE1Ny4wMDUtLjI4Ny0uMTItLjI5Mi0uMjc2IDAtLjAyNS4wMDItLjA1LjAwOC0uMDczbDIuMTQ4LTExLjkzYy4wNDYtLjE1Ny0uMDQzLS4zMjMtLjItLjM3LS4xNTYtLjA0Ny0uMzIyLjA0Mi0uMzY5LjE5OWwtNS4yNyAxMi4yNjNjLS4wNDQuMTE1LS4xNi4xODctLjI4My4xNzloLTQuNjQ0Yy0uMTU3IDAtLjI4NS0uMTI3LS4yODUtLjI4NGwtLjk0LTEyLjI2M2MuMDA4LS4xNjItLjExNy0uMy0uMjgtLjMwOC0uMTYyLS4wMDgtLjMuMTE3LS4zMDguMjhsLTIuMTM5IDEyLjMyYy0uMDE4LjE0MS0uMTQuMjQ3LS4yODQuMjQ2aC0zLjc1NWMtLjE2NC0uMDA1LS4yOTQtLjE0My0uMjg4LS4zMDhsLjAwNC0uMDQxIDMuMjkyLTE4LjYwOWMuMDItLjE0LjE0Mi0uMjQ2LjI4NC0uMjQ0aDYuNTd6bS01MC45ODIuMDE3Yy4xNDQtLjAwMS4yNjUuMTA1LjI4NC4yNDdsMy4yMzMgMTguNjAzYy4wMDUuMDIzLjAwNy4wNDYuMDA3LjA3LS4wMDQuMTU2LS4xMzUuMjgtLjI5MS4yNzdoLTQuMTE5Yy0uMTQ0LS4wMDYtLjI2NC0uMTE0LS4yODQtLjI1NmwtLjcwNS00LjkxN2MtLjAyMS0uMTQyLS4xNC0uMjQ4LS4yODQtLjI1M0g2OS44Yy0uMDY2IDAtLjEzMS0uMDE1LS4xOS0uMDQ0LS4yMDYtLjEwNC0uMjg5LS4zNTUtLjE4NS0uNTZsMS4yODYtMi41ODljLjA3Mi0uMTQxLjIxNy0uMjMuMzc1LS4yM2gyLjM0NGwuMDMyLS4wMDNjLjE2My0uMDI0LjI3NS0uMTc1LjI1Mi0uMzM4bC0uNzM2LTUuMTEzYy4wMjUtLjE1Ny0uMDgyLS4zMDQtLjIzOC0uMzMtLjE1Ny0uMDI0LS4zMDUuMDgyLS4zMy4yNGwtMS45NCAzLjg0OC0uMjIyLjQ0OS0uNDA5LjgxNXYuMDE1bC00LjI0NiA4LjUzOC0uMjg0LjU2OGMtLjA0OC4xMDMtLjE1Mi4xNjgtLjI2NC4xNjVoLTMuOTk3Yy0uMDQ5IDAtLjA5Ny0uMDEyLS4xNC0uMDM0LS4xNDYtLjA3Ny0uMjAxLS4yNTgtLjEyNC0uNDAzbDkuODctMTguNjA5Yy4wNS0uMS4xNTQtLjE2LjI2NS0uMTU2em0zNS41OTggMGMuMTQxLjAwNS4yNi4xMDguMjg0LjI0N2wzLjIxOCAxOC42MDljLjAwNi4wMjIuMDA4LjA0Ni4wMDcuMDctLjAwNC4xNTYtLjEzNC4yOC0uMjkuMjc2aC00LjEyMmMtLjE0Ny4wMDEtLjI3LS4xMS0uMjg0LS4yNTVsLS43MDgtNC45MThjLS4wMTYtLjE0NC0uMTM4LS4yNTMtLjI4NC0uMjUyaC00LjI2Yy0uMDY3IDAtLjEzMy0uMDE3LS4xOTItLjA0OC0uMjA1LS4xMDYtLjI4NC0uMzU5LS4xNzgtLjU2M2wxLjI4Ny0yLjU4OGMuMDctLjE0LjIxNC0uMjMuMzcyLS4yM2gyLjM0NGwuMDMyLS4wMDNjLjE2Mi0uMDI0LjI3Ni0uMTc1LjI1Mi0uMzM4bC0uNzM2LTUuMTEzYy4wMjUtLjE1Ny0uMDgxLS4zMDQtLjIzOS0uMzMtLjE1Ny0uMDI0LS4zMDQuMDgyLS4zMy4yNGwtMS41ODEgMy4xNjQtLjM5NS43OTItLjU2OCAxLjE2MnYuMDJsLTMuODk4IDcuODQtLjYyNCAxLjI1NWMtLjA0OC4xMDQtLjE1My4xNjktLjI2Ny4xNjVoLTMuOTk3Yy0uMDYyLjAwNS0uMTI1LS4wMS0uMTc3LS4wNDUtLjEzMi0uMDg1LS4xNy0uMjYtLjA4NS0uMzkybDkuODY5LTE4LjYwOWMuMDUyLS4wOTYuMTU0LS4xNTYuMjY0LS4xNTZ6bS0yMy4wNDggMGMuMTU3LS4wMDQuMjg3LjEyLjI5MS4yNzYgMCAuMDI1LS4wMDEuMDUtLjAwNy4wNzRsLTIuNjMgMTQuODNjLS4wMzcuMTUzLjA1OC4zMDYuMjEuMzQyLjAyNC4wMDYuMDQ5LjAwOC4wNzMuMDA3aDkuMDU5Yy4xNTctLjAxMi4yOTQuMTA0LjMwNi4yNi4wMDUuMDYzLS4wMS4xMjUtLjA0NC4xNzhsLTEuNjM0IDMuMDhjLS4wNDcuMDkyLS4xNC4xNTItLjI0NC4xNTVIODEuNzI0Yy0uMTU3LjAwNC0uMjg3LS4xMi0uMjkxLS4yNzYgMC0uMDI1LjAwMi0uMDUuMDA3LS4wNzNsMy4yOS0xOC42MDljLjAyLS4xNC4xNDEtLjI0NS4yODQtLjI0NHptLTM1LjYxMiAwYy4xNTYtLjAwNC4yODcuMTIuMjkxLjI3Ni4wMDEuMDI1LS4wMDIuMDUtLjAwNy4wNzRsLTIuNjAyIDE0LjgzYy0uMDM2LjE1My4wNTguMzA2LjIxMS4zNDIuMDI0LjAwNi4wNDguMDA4LjA3My4wMDdoOS4wNTljLjE1Ni0uMDEyLjI5My4xMDQuMzA1LjI2LjAwNS4wNjMtLjAxLjEyNS0uMDQ0LjE3OGwtMS42MzQgMy4wOGMtLjA0OS4wOTYtLjE0OS4xNTctLjI1OC4xNTVINDYuMTNjLS4xNTcuMDA0LS4yODctLjEyLS4yOTItLjI3NiAwLS4wMjUuMDAzLS4wNS4wMDgtLjA3M2wzLjI3My0xOC42MDljLjAyLS4xNC4xNDEtLjI0NS4yODQtLjI0NGgzLjczOHptMTAwLjQ3OSAyLjgzOGMtNC4yMyAwLTYuMjA0IDQuNTQ1LTYuMjA0IDguMzIzIDAgMy4wNTkgMS41NTcgNS4yMDQgNC40NTEgNS4yMDQgNC4yMDQgMCA2LjIwNy00LjUzNyA2LjIwNy04LjMyMyAwLTMuMDg4LTEuNTYtNS4yMDQtNC40NTQtNS4yMDR6IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNjMgLTE3MCkgdHJhbnNsYXRlKDYzIDE3MCkiLz4KICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+Cg==',
+ grab:'data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTEzLjA1IDY3OS4xMiI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiMwMGIxNGY7fTwvc3R5bGU+PC9kZWZzPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTEyMi4xMyw0MjAuNzJjMCwxMzcuODUsMTA0LDI0My41NywyMzguNSwyNDMuNTcsMTI5LjM5LDAsMTk0LjUxLTgzLjczLDE5NC41MS0xNzUuOTF2LTMzSDM2Ni41NXY1MC43NGgxMzdjLjg1LDQ5LjktNDQuODIsMTA4LjI1LTE0Mi45MiwxMDguMjUtMTA4LjI2LDAtMTgzLjUzLTgwLjM0LTE4My41My0xOTMuNjcsMC0xMDkuMSw4MS4xOS0xOTEuMTQsMTkyLjgzLTE5MS4xNCw3Mi43MywwLDEzMC4yNCwxNy43NywxODMuNTIsNTVsMy4zOS0yLjU0VjIzNC42NmMtMzkuNzUtMjcuOTEtMTA3LjQxLTU1LTE4OC42LTU1QzIzMC4zOCwxNzkuNjksMTIyLjEzLDI4Ni4yNSwxMjIuMTMsNDIwLjcyWm0tNzguNjUsMGMwLDE4Mi42OCwxMzUuMzEsMzE4Ljg0LDMxNy4xNSwzMTguODQsMTY1Ljc2LDAsMjY3LjI1LTEwNCwyNjcuMjUtMjcyLjMyVjM4MUgzNjYuNTV2NDloMjE0djQ1LjY3YzAsMTMxLjk0LTgyLDIxNC0yMTkuODksMjE0LTE1MS4zOSwwLTI2My44Ny0xMTUuODYtMjYzLjg3LTI2OC45NCwwLTE0OC44NSwxMTguNC0yNjYuNDEsMjcxLjQ4LTI2Ni40MSw3Mi43MywwLDEzOC43LDE3Ljc3LDE4OC42LDUyLjQ0di00OS45Yy00OC4yMS0zNC42Ny0xMTEuNjQtNTIuNDMtMTg4LjYtNTIuNDNDMTg0LjcxLDEwNC40Miw0My40OCwyNDQsNDMuNDgsNDIwLjcyWm02OTEuODEsNDMuMTNWNzI1LjE4aDQ5Ljg5VjQ2NC43YzAtNTguMzYsMzguMDYtOTkuOCw5NC43My05OS44LDE2LjkxLDAsMzIuMTMsNC4yMyw0OC4yLDExLDYuNzctMTYuMDcsMTMuNTMtMjkuNiwyMi00Mi4yOS0xNy43Ni0xMS44NC00NC0xOS40NS02OS4zNS0xOS40NUM3OTUuMzMsMzE0LjE2LDczNS4yOSwzNzUuOSw3MzUuMjksNDYzLjg1Wk02NjEuNzEsNzI1LjE4aDQ5LjlWNDYzLjg1YzAtMTAzLjE4LDY5LjM1LTE3My4zNywxNzAtMTczLjM3LDMzLjgzLDAsNjguNSwxMSw4My43MiwyMC4zLDkuMzEtMTEsMTkuNDYtMjIuODQsMzMtMzMuODMtMzEuMjktMjItNzMuNTgtMzQuNjgtMTE5LjI1LTM0LjY4LTEzMi43OCwwLTIxNy4zNSw4OS42NS0yMTcuMzUsMjIyLjQzWk0xNDQ0LDQzMi41NnY3My41OGMyOS42LTM5Ljc1LDU1LTc0LjQzLDc4LjY1LTEwMy4xOCw2MC03My41OCwxMTIuNDktMTE0LjE3LDE5My42OC0xMTQuMTcsMTA5Ljk0LDAsMTkwLjI5LDgyLjg4LDE5MC4yOSwxOTkuNTksMCwxMTQuMTctNzguNjYsMjAxLjI4LTE4Ni45MSwyMDEuMjgtODgsMC0xNjQuMDctNjAtMTgxLjgzLTE0Mi4wOGwtMzUuNTIsNDguMjFjMjcuOSw4MC4zNCwxMDkuOTQsMTQzLjc3LDIxNi41LDE0My43NywxMzcsMCwyMzcuNjUtMTA5Ljk0LDIzNy42NS0yNTEuMThDMTk1Ni41MiwzNDUuNDUsMTg1NSwyMzgsMTcxNi4zNCwyMzgsMTU3Mi41NiwyMzgsMTUwNi41OSwzNDUuNDUsMTQ0NCw0MzIuNTZabTE1NC43NywzNy4yMWgtMS42OWwtMzguOTEsNTMuMjhjNi43Nyw2MC45LDY4LjUxLDE0Mi4wOSwxNjEuNTQsMTQyLjA5LDk0LjcyLDAsMTYzLjIyLTc3LDE2My4yMi0xNzcuNjFzLTcwLjE5LTE3NS4wNi0xNjYuNi0xNzUuMDZjLTkzLjg4LDAtMTQ4LDY4LjUtMTg2LjA3LDExOS4yNC0xOC42LDI0LjUzLTUwLjc0LDY0LjI4LTg2LjI2LDExNC4xOHY4MS4xOWMzMy00OS4wNSw3Ny44MS0xMDYuNTYsMTEwLjc5LTE0Ni4zMSw1NS44Mi02Ni44Miw4OS42NS0xMTcuNTYsMTYwLjY5LTExNy41Niw2OS4zNSwwLDExNi43MSw1My4yOCwxMTYuNzEsMTI0LjMyLDAsNzMuNTgtNDQuODIsMTI3LjcxLTExMi40OCwxMjcuNzEtNzEsMC0xMjAuOTQtNjUuMTItMTIwLjk0LTEzNy44NlptLTQ5LjktNDA5LjMzVjI3MWMxNS4yMi0xMS44NCwzMi4xNC0yNi4yMiw0OS45LTMzVjYwLjQ0Wk0xNDc0LjQ2LDM0OGMxNS4yMi0xOS40NSwzMi4xMy00MC42LDQ5Ljg5LTU4LjM2VjYwLjQ0aC00OS44OVptLTIwMywyNDEtLjg1LS44NGMtMjEuMTQsMTYuOTEtNTUuODEsMjcuMDYtODguOCwyNy4wNi02Ny42NiwwLTExOC40LTUwLjc1LTExOC40LTEyNiwwLTcxLjg4LDQ5LjktMTI2Ljg2LDExNi43MS0xMjYuODZDMTI1MiwzNjIuMzYsMTI5Niw0MTQuOCwxMjk2LDQ4NVY3MjUuMThoNDkuODlWNDgyLjQ2YzAtOTguMTEtNjguNS0xNzAtMTY0LjkxLTE3MC05NS41NywwLTE2OS4xNSw3MS44OC0xNjkuMTUsMTc2Ljc1LDAsMTA0LDcyLjczLDE3OC40NSwxNjkuMTUsMTc1LjkyLDM2LjM2LS44NSw3My41OC0xNC4zOCw5MC40OS0yNi4yMlpNOTM2LjU3LDQ4OC4zOGMwLDE0Ny4xNiwxMDQsMjUxLjE4LDI0NC40MiwyNTEuMTgsMzEuMjksMCw2Ny42Ni05LjMsOTAuNDktMjcuMDZWNjYyLjZjLTE1LjIyLDEyLjY5LTUyLjQ0LDI3LjA2LTkwLjQ5LDI3LjA2LTExNSwwLTE5Mi44My04MS4xOS0xOTIuODMtMjAxLjI4LDAtMTE0LjE3LDgyLjg4LTE5OS41OSwxOTIuODMtMTk5LjU5LDEwOS4xLDAsMTg4LjYsODAuMzQsMTg4LjYsMTkyLjgyVjcyNS4xOGg1MC43NFY0ODAuNzdjMC0xNDAuMzktOTguOTUtMjQzLjU3LTIzOS4zNC0yNDMuNTdDMTA0My4xMywyMzcuMiw5MzYuNTcsMzQ2LjMsOTM2LjU3LDQ4OC4zOFoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC00My40OCAtNjAuNDQpIi8+PC9zdmc+'
+} /* Each courier's own official logo file, downloaded from lalamove.com and Grab's press
+   library and carried inside this page. Both refuse the file when another site asks for it,
+   so nothing is fetched from their servers at request time and the logos cannot break.
+   If one is ever removed the option falls back to a brand-coloured name chip. */
+var ACCOUNT_URL='https://my.chatbees.io/p/dtTMaV';
+function syncContact(tag){return 'sync-'+String(tag||'x').replace(/[^A-Za-z0-9-]/g,'')+'-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)+'@aera-sync.invalid'} // fresh contact per flow call (reused contacts resolve stale fields)
+var SETTINGS_URL='/api/public/landing-pages/6938/sheet-data';var BD={pct:0,minRm:0,loaded:false};
+/* What the kitchen has run out of, published to the AERA Settings Sheet by the Kitchen Console.
+   An out of stock dish is shown and marked rather than removed, so nobody hunts for something
+   that quietly vanished. If this fetch fails the list stays empty on purpose — a shop that
+   empties itself because a sheet was slow is worse than one offering a dish we have to
+   apologise for. */
+var OOS={};
+function oosHas(c){return !!OOS[String(c||'').toLowerCase()]}
+function oosSku(k){k=String(k||'');if(k.indexOf('ALC-')!==0)return false;
+ var a=k.split('-');return a.length>2&&oosHas(a[1])}
+function oosInCart(){return Object.keys(CART).filter(function(k){return CART[k]>0&&oosSku(k)})
+ .map(function(k){return (CAT[k]||{}).name||k})}
+/* A Meal is not pulled when one of its parts runs out — the kitchen swaps in something from the
+   same category and the Meal is sold at the price it has always had. What the customer is owed
+   is being told before they pay, so every Meal and Bundle card carrying one says so. */
+var OOSM={};
+function oosMealParse(v){OOSM={};String(v||'').split('~').forEach(function(e){
+ var a=e.split('|');var sku=String(a[0]||'').trim().toUpperCase();if(!sku||!a[1])return;
+ (OOSM[sku]=OOSM[sku]||[]).push({n:String(a[1]).trim(),c:String(a[2]||'').trim()})})}
+function oosMeal(sku){return OOSM[String(sku||'').toUpperCase()]||[]}
+function oosBundle(sku,goal){var seen={},out=[];
+ bundleMeals(sku,goal).forEach(function(m){oosMeal(m[0]).forEach(function(x){
+  var k=x.n.toLowerCase();if(seen[k])return;seen[k]=1;out.push(x)})});
+ return out}
+function oosNote(list){
+ if(!list||!list.length)return'';
+ var txt=list.map(function(x){return '<b>'+esc(x.n)+'</b>'}).join(' and ');
+ var cats={};list.forEach(function(x){if(x.c)cats[x.c]=1});
+ var ck=Object.keys(cats);
+ var what=ck.length===1?esc(ck[0]+(list.length>1?' each':'')):'item from the same group';
+ return'<div class="oosnote">'+txt+' '+(list.length===1?'is':'are')+
+  ' currently out of stock. The kitchen will substitute another '+what+
+  '. The price does not change.</div>'}
+function loadSettings(){fetch(SETTINGS_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){(j&&j.data||[]).forEach(function(r){var k=String(r.Key||'').trim();if(k==='birthday_pct')BD.pct=Math.max(0,Math.min(100,+r.Value||0));if(k==='birthday_min_rm')BD.minRm=Math.max(0,+r.Value||0);
+   if(k==='first_order_mode')FO.mode=(+r.Value||0)===1?'pct':'rm';
+   if(k==='first_order_pct')FO.pct=Math.max(0,Math.min(100,+r.Value||0));
+   if(k==='first_order_rm')FO.rm=Math.max(0,+r.Value||0);
+   if(k==='first_order_min_rm')FO.minRm=Math.max(0,+r.Value||0);
+   if(k==='first_order_max_rm')FO.cap=Math.max(0,+r.Value||0);
+   if(k==='closed_dates')CLO.raw=String(r.Value==null?'':r.Value);
+   if(k==='closed_weekdays')CLO.wdRaw=String(r.Value==null?'':r.Value);
+   if(k==='orders_paused')CLO.paused=String(r.Value==null?'':r.Value).trim()==='1';
+   if(k==='closure_message')CLO.msg=String(r.Value==null?'':r.Value).trim();
+   if(k==='billplz_flow_url')PAY.flowUrl=String(r.Value==null?'':r.Value).trim();
+   if(k==='out_of_stock'){OOS={};String(r.Value||'').split(',').forEach(function(c){
+     c=c.trim().toLowerCase();if(c)OOS[c]=1})}
+   if(k==='out_of_stock_meals')oosMealParse(r.Value);
+   if(k==='corp_accounts')coParseAccts(r.Value);
+   if(k==='corp_prices')coParsePrices(r.Value);
+   if(k==='corp_flow_url')CO.flowUrl=String(r.Value==null?'':r.Value).trim();
+   if(k==='cost_codes')ccParseCodes(r.Value);
+   if(k==='cost_meals')CC.meals=ccPairs(r.Value);
+   if(k==='cost_alc')CC.alc=ccPairs(r.Value);
+   if(k==='pack_cost_bento')CC.packBento=+r.Value||0;
+   if(k==='pack_cost_vacuum')CC.packVac=+r.Value||0;
+   if(k==='pack_cost_alc')CC.packAlc=+r.Value||0;
+   if(k==='fee_pct')CC.feePct=+r.Value||0;
+   if(k==='fee_fixed')CC.feeFixed=+r.Value||0});
+  CLO.loaded=true;cloParse();cloApply();
+  BD.loaded=true;renderCart();try{render()}catch(e){}}).catch(function(){})}
+function bdayYear(){return myNow().getFullYear()}
+/* ===== First Order Voucher: RM 30 off a first order of RM 300+ of meals, once per account.
+   It stands alone — while it is on, AERA Points, the birthday treat and delivery vouchers are off. ===== */
+var FO={rm:30,minRm:300,mode:'rm',pct:0,cap:0},FOON=true;
+function foOn(){return FO.mode==='pct'?FO.pct>0:FO.rm>0}
+function foAmount(sub){if(!foOn()||sub<FO.minRm)return 0;var v=FO.mode==='pct'?sub*FO.pct/100:FO.rm;
+ if(FO.mode==='pct'&&FO.cap>0)v=Math.min(v,FO.cap);return Math.round(Math.min(v,sub)*100)/100}
+function foShort(){return FO.mode==='pct'?(FO.pct+'% OFF'):(rm(FO.rm)+' OFF')}
+function foHeadline(){return FO.mode==='pct'?(FO.pct+'% OFF'+(FO.cap>0?' up to '+rm(FO.cap):'')):(rm(FO.rm)+' OFF')}
+function foKey(){return ACCT&&ACCT.email?('aera.foUsed:'+String(ACCT.email).toLowerCase()):''}
+function foUsed(){if(!ACCT)return true;if(ACCT.foUsed)return true;
+ try{if(foKey()&&localStorage.getItem(foKey()))return true}catch(e){}
+ /* orders is null until the account page has counted them — treat unknown as "not a first order" */
+ return ACCT.orders==null||(+ACCT.orders||0)>0}
+/* The welcome pop-up on the account page is where the voucher is accepted; the account copy
+   carries that acceptance across to here. Nothing is offered that was never claimed. */
+function foAccepted(){return !!(ACCT&&ACCT.welcome)}
+function foOffered(){return !!(signedIn()&&!foUsed()&&foOn()&&foAccepted())}
+function foQualifies(){return foOffered()&&mealBase()>=FO.minRm}
+function firstOrderRM(){if(ccOn())return 0;return (FOON&&foQualifies())?foAmount(mealBase()):0}
+function foMarkUsed(){try{var k=window.__foUsed;if(k){localStorage.setItem(k,'1');
+  var a=JSON.parse(localStorage.getItem('aera.account')||'null');if(a){a.foUsed=true;localStorage.setItem('aera.account',JSON.stringify(a))}}}catch(e){}}
+function foToggle(on){FOON=!!on;if(FOON){APS.redeemRM=0;VOUCHER=null}refee();renderCart()}
+function renderFo(){var el=document.getElementById('foBox');if(!el)return;
+ if(!foOffered()||!count()){el.innerHTML='';return}
+ var base=mealBase(),on=firstOrderRM()>0,short=Math.max(0,FO.minRm-base);
+ el.innerHTML='<div class="fobox'+(on?' on':'')+'"><div class="t"><span>First Order Voucher</span><b>'+foHeadline()+'</b></div>'+
+  (short>0
+    ?'<p>Yours on your first order once your meals reach '+rm(FO.minRm)+'. Another <b>'+rm(short)+'</b> of meals to go — packaging and delivery are not counted.</p>'+
+     '<div class="bar"><i style="width:'+Math.round(Math.min(100,base/FO.minRm*100))+'%"></i></div>'
+    :'<p>'+(on?'<b>Your First Order Voucher \u2014 '+foShort()+', is applied to this Order.</b> '+'That is '+rm(firstOrderRM())+' OFF your Meals. It stands on its own, so AERA Points, the Birthday Treat and Delivery Vouchers are paused while it is on.'
+              :'Ready to Use — '+foHeadline()+'. Using it pauses AERA Points, the Birthday Treat and Delivery Vouchers on this Order.')+'</p>'+
+     '<div class="act">'+(on?'<button class="btn btn-o" type="button" style="padding:7px 13px" onclick="foToggle(false)">Save It For Later</button>'
+                            :'<button class="btn btn-y" type="button" style="padding:7px 13px" onclick="foToggle(true)">Use My First Order Voucher</button>')+'</div>')+
+  '</div>'}
+function voucherMarkUsed(){try{var c=localStorage.getItem('aera.voucherPending');localStorage.removeItem('aera.voucherPending');if(c)dropVoucher(String(c).toUpperCase())}catch(e){}}
+function bdayMarkUsed(){voucherMarkUsed();foMarkUsed();try{var bu=window.__bdayUsed||localStorage.getItem('aera.bdayPending');localStorage.removeItem('aera.bdayPending');if(bu){localStorage.setItem('aera.bdayUsed',bu);var a=JSON.parse(localStorage.getItem('aera.account')||'null');if(a){a.bdayUsed=bdayYear();localStorage.setItem('aera.account',JSON.stringify(a))}}}catch(e){}}
+function bdayEligible(){if(!ACCT||!ACCT.dob||!BD.pct||!count())return false;var m=+String(ACCT.dob).slice(5,7);if(m!==myNow().getMonth()+1)return false;var y=bdayYear();if(+ACCT.bdayUsed===y)return false;try{if(localStorage.getItem('aera.bdayUsed')===ACCT.email.toLowerCase()+':'+y)return false}catch(e){}return mealBase()>=BD.minRm}
+function birthdayRM(){if(ccOn())return 0;if(firstOrderRM()>0)return 0;return bdayEligible()?Math.round(mealBase()*BD.pct)/100:0} // My Account page (Supabase sign-in); it leaves a small copy of the profile in this browser that the checkout reads
+var ACCT=null;
+(function(){try{var g=new URLSearchParams(location.search).get('gw');if(g==='billplz'||g==='stripe'||g==='reset'){if(g==='reset')localStorage.removeItem('aera.gw');else localStorage.setItem('aera.gw',g)}var s=localStorage.getItem('aera.gw');if(s==='billplz'||s==='stripe')PAY.gateway=s}catch(e){}})(); // testing switch: open the page with ?gw=billplz (or ?gw=stripe / ?gw=reset) to override the gateway in this browser only
+var AP={perRM:5,rmPer100:1,capPct:10,expiryMonths:6}; // 5 AP per RM 1 on meals; 100 AP = RM 1; max 10% of the order per checkout; points expire 6 months after earning
+var ROAD_FACTOR=1.25,MAX_KM=60;
+var COURIERS={lalamove:{name:'Lalamove',rate:{base:6,baseKm:10,perKm:1.0,cap:25,freeAbove:0}},grab:{name:'Grab',rate:{base:7,baseKm:10,perKm:1.1,cap:27,freeAbove:0}}}; // Normal delivery rate per courier (RM): base covers baseKm, then perKm per extra km, capped at cap; freeAbove = free delivery for subtotals ≥ this (0 = never). PLACEHOLDER numbers until AERA confirms.
+var DOOR_SURCHARGE={motorcycle:2,car:5}; // Door-to-Door Service = Normal Delivery + this, by vehicle (both couriers)
+var MOTO_MAX_BOXES=1; // orders up to this many boxes go by motorcycle, bigger orders by car (keep in step with the Lalamove booking flow)
+function vehicle(){return boxes()<=MOTO_MAX_BOXES?'motorcycle':'car'}
+function doorExtra(){return DOOR_SURCHARGE[vehicle()]}
+var PACK_PER_BOX=1.8; // RM per box, already INCLUDED in every displayed meal/bundle price (BUNDLES/MEALS below hold the food price before packaging)
+var PACKAGING={bento:{name:'MAP Bento Box'},vacuum:{name:'Vacuum Packed'}};
+var PACK_FEE_TABLE=[[7,3.2],[10,3.9],[14,3.2],[17,3.7],[21,6.4],[24,7.1],[30,9.6]]; // additional packaging fee at checkout: [up to N boxes, RM]. 1-7 → 3.20, 8-10 → 3.90, 11-14 → 3.20, 15-17 → 3.70, 18-21 → 6.40, 22-24 → 7.10, 25-30 → 9.60
+var PACK_FEE_BEYOND={per:7,amount:3.2}; // above the last row: last fee + RM amount for every further `per` boxes
+var SLOTS=[['09:00-11:00','9 AM - 11 AM'],['11:00-13:00','11 AM - 1 PM'],['13:00-15:00','1 PM - 3 PM'],['15:00-17:00','3 PM - 5 PM']]; // [value used by the kitchen & rider booking, label shown to the customer]
+function slotLabel(v){for(var i=0;i<SLOTS.length;i++)if(SLOTS[i][0]===v)return SLOTS[i][1];return v}
+var CUTOFF_HOUR=12,CUTOFF_MIN=45,LEAD_DAYS=2;
+/* MON, 21st SEP : the day written the way the shop writes it. */
+function bigDay(d){var n=d.getDate(),t=(n%100>=11&&n%100<=13)?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th');
+ var dow=['SUN','MON','TUE','WED','THU','FRI','SAT'][d.getDay()];
+ var mo=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][d.getMonth()];
+ return dow+', '+n+t+' '+mo} // order before 12:45pm → earliest slot 2 days later
+var BUNDLES=[
+ ["BUNDLE-11","Fat Loss Bundle · 7 Days x 1 Meal","fat",144.99,7,["7 Chef-Selected Fat Loss Meals","RM 22.50 per Meal","Lean Proteins, Oil-Free Vegetables"],"https://my.chatbees.io/objects/quick-uploads/1302/f1f440404d9bdc9f.jpg"],
+ ["BUNDLE-7","Fat Loss Bundle · 7 Days x 2 Meals","fat",323.99,14,["14 Different Fat Loss Meals — No Repeats","RM 24.90 per Meal","Most Popular"],"https://my.chatbees.io/objects/quick-uploads/1302/6cd842cd6fd9717c.jpg"],
+ ["BUNDLE-13","Mass Gain Bundle · 7 Days x 1 Meal","mass",152.99,7,["7 Chef-Selected Mass Gain Meals","RM 23.70 per Meal","800 KCALs - 1,260 KCALs, 40 g - 60 g Protein each"],"https://my.chatbees.io/objects/quick-uploads/1302/7e20ca59b543daa7.jpg"],
+ ["BUNDLE-12","Mass Gain Bundle · 7 Days x 2 Meals","mass",339.99,14,["14 Different Mass Gain Meals — No Repeats","RM 26.10 per Meal","Bigger Portions, Higher Carbs"],"https://my.chatbees.io/objects/quick-uploads/1302/cdd3eaa61bcef587.jpg"]
+];
+var MEALS = [
+ ["MEAL-10","Aglio Olio","fat",26.7,576,31,67,21,"https://my.chatbees.io/objects/quick-uploads/1302/d228cac817165404.jpg","Pan Seared Tiger Prawn 100 g · Aglio Olio 75 g · Sweated Broccoli 75 g",250],
+ ["MEAL-23","Assam Fettuccine","mass",30.8,860,38,94,37,"https://my.chatbees.io/objects/quick-uploads/1302/54ad5f5f99873bd6.jpg","Pan Seared Tiger Prawn 100 g · Assam Fettuccine 75 g · Sweated Broccoli 75 g · Assam Sauce 60 g",310],
+ ["MEAL-13","Black Pepper Chicken Sliced","mass",17.1,871,52,101,29,"https://my.chatbees.io/objects/quick-uploads/1302/7e20ca59b543daa7.jpg","Black Pepper Chicken Sliced 150 g · Brown Rice 75 g · Peas & Corn 100 g",325],
+ ["MEAL-58","Black Pepper Pasta","fat",21.9,779,53,90,23,"https://my.chatbees.io/objects/quick-uploads/1302/e5889c544b7a47e8.jpg","Grilled Chicken Chop 150 g · Black Pepper Pasta 75 g · Sweated Broccoli 75 g · Black Pepper Sauce 60 g",360],
+ ["MEAL-25","Bolognese","fat",21.1,761,52,84,24,"https://my.chatbees.io/objects/quick-uploads/1302/40ba7660ea09bfc4.jpg","Bolognese Chicken Breast 100 g · Bolognese 75 g · Sweated Broccoli 75 g · Tomato Concasse 60 g",310],
+ ["MEAL-27","Cajun Spiced Fusilli","mass",23.5,872,53,86,35,"https://my.chatbees.io/objects/quick-uploads/1302/051b3233749d80a9.jpg","Grilled Teriyaki Chicken Chop 150 g · Cajun Spiced Fusilli 75 g · Sweated Broccoli 75 g · Cajun Spiced Gravy 60 g",360],
+ ["MEAL-59","Cauliflower Fried Rice","fat",32.4,575,38,30,33,"https://my.chatbees.io/objects/quick-uploads/1302/707b85bebe9ec81d.jpg","Pan Seared Tiger Prawn 100 g · Cauliflower Fried Rice 100 g · Stir Fried Kangkung w/ Sambal Belacan 75 g",275],
+ ["MEAL-15","Classic Meal Prep Chicken Sliced & Homemade Sambal","mass",19.8,849,50,98,28,"https://my.chatbees.io/objects/quick-uploads/1302/065eceba3b2ebcaf.jpg","Chicken Sliced 150 g · Brown Rice 75 g · Sweated Broccoli 75 g · Homemade Sambal 60 g",360],
+ ["MEAL-8","Creamy Mushroom Pasta","mass",25.1,886,59,84,35,"https://my.chatbees.io/objects/quick-uploads/1302/cdd3eaa61bcef587.jpg","Stir Fried Ground Chicken Breast w/ Mushroom Gravy 100 g · Creamy Mushroom Pasta 75 g · Peas & \"Bacon\" 100 g · Mushroom Gravy 60 g",335],
+ ["MEAL-19","Curry Chicken Sliced","fat",14.0,651,45,57,27,"https://my.chatbees.io/objects/quick-uploads/1302/c5ac5dbd6b40f89e.jpg","Curry Chicken Sliced 150 g · Basmati Long Rice 50 g · Sweated Cauliflower 75 g",275],
+ ["MEAL-34","Egg Fried Brown Rice","mass",24.4,885,42,103,34,"https://my.chatbees.io/objects/quick-uploads/1302/e478eb3ebf3769cc.jpg","Stir Fried Vannamei Prawn 100 g · Egg Fried Brown Rice 100 g · Peas & Corn 100 g",300],
+ ["MEAL-30","Gam Hiong Chicken Breast","mass",19.2,1264,63,132,54,"https://my.chatbees.io/objects/quick-uploads/1302/0c7c881b9c97ae2e.jpg","Gam Hiong Chicken Breast 150 g · Brown Rice 75 g · Stir Fried Sweet Pea 75 g",300],
+ ["MEAL-14","Garlic Mashed Potato with Grilled Chicken Chop & Brown Sauce","fat",24.3,652,43,65,24,"https://my.chatbees.io/objects/quick-uploads/1302/163c79a8c25dbc56.jpg","Grilled Chicken Chop 150 g · Garlic Mashed Potato 150 g · Sweated Broccoli 75 g · Brown Sauce 60 g",435],
+ ["MEAL-21","Gingered Spring Onion Toman Fish Sliced","mass",26.0,798,42,89,30,"https://my.chatbees.io/objects/quick-uploads/1302/378629b116cf880d.jpg","Gingered Spring Onion Toman Fish Sliced 150 g · Fragrant White Rice 75 g · Stir Fried Broccoli Stem 100 g",325],
+ ["MEAL-9","Green Curry Chicken Sliced","fat",16.6,653,43,61,27,"https://my.chatbees.io/objects/quick-uploads/1302/f1f440404d9bdc9f.jpg","Green Curry Chicken Sliced 150 g · Basmati Long Rice 50 g · Baked Eggplant 100 g",300],
+ ["MEAL-16","Grilled Teriyaki Chicken Breast & Sweet & Sour Sauce","fat",23.9,509,41,56,13,"https://my.chatbees.io/objects/quick-uploads/1302/3d4dda127200808e.jpg","Grilled Teriyaki Chicken Breast 150 g · Baked Sweet Potato ( Orange ) 150 g · Asperges 75 g · Sweet & Sour Sauce 60 g",435],
+ ["MEAL-22","Imitation Salted Egg Yolk Chicken Thigh","mass",20.2,1080,50,102,53,"https://my.chatbees.io/objects/quick-uploads/1302/cb4b717d4f73a112.jpg","Salted Egg Yolk Chicken Thigh 150 g · Fragrant White Rice 75 g · Sweated Broccoli 75 g",300],
+ ["MEAL-33","Imitation Salted Egg Yolk Pasta","mass",32.7,946,45,83,48,"https://my.chatbees.io/objects/quick-uploads/1302/97d491c90d587bd7.jpg","Salted Egg Yolk Tiger Prawn 100 g · Salted Egg Yolk Pasta 75 g · Sweated Broccoli 75 g · Salted Egg Yolk Gravy 60 g",310],
+ ["MEAL-26","Japanese Curry Chicken Katsu with Rice","mass",22.2,1029,54,113,40,"https://my.chatbees.io/objects/quick-uploads/1302/2750fce3b4d73063.jpg","Chicken Katsu 150 g · Pearl Rice 100 g · Japanese Curry Garnishes 100 g · Japanese Curry Gravy 60 g",410],
+ ["MEAL-24","Pad Krapow Chicken Breast","fat",11.2,563,34,65,19,"https://my.chatbees.io/objects/quick-uploads/1302/613bf3feec488d0b.jpg","Pad Krapow Chicken Breast 100 g · Basmati Long Rice 50 g · Stir Fried French Bean 75 g",225],
+ ["MEAL-11","Pan Seared Barramundi Fillet with Homemade Sambal","fat",24.5,660,42,89,15,"https://my.chatbees.io/objects/quick-uploads/1302/fbd9528ea969604d.jpg","Pan Seared Barramundi Fillet 150 g · Spiced Long Rice 75 g · Stir Fried French Bean 75 g · Homemade Sambal 60 g",360],
+ ["MEAL-18","Pan Seared Salmon with Mushroom Gravy","fat",29.0,593,40,46,27,"https://my.chatbees.io/objects/quick-uploads/1302/6cd842cd6fd9717c.jpg","Pan Seared Salmon 150 g · Baked Potato 150 g · Sweated Broccoli 75 g · Mushroom Gravy 60 g",435],
+ ["MEAL-12","Pan Seared Smoked Paprika Chicken Breast & Tomato Concasse","fat",19.1,326,42,15,11,"https://my.chatbees.io/objects/quick-uploads/1302/d37d78c8c5bbcdae.jpg","Pan Seared Smoked Paprika Chicken Breast 150 g · Baked Sweet Potato ( Purple ) 150 g · Sweated Broccoli 75 g · Tomato Concasse 60 g",435],
+ ["MEAL-20","Pan Seared Spicy Chicken Breast with Pesto Sauce","fat",23.5,412,44,33,12,"https://my.chatbees.io/objects/quick-uploads/1302/4ecc1270ff70aa0f.jpg","Pan Seared Spicy Chicken Breast 150 g · Garlic Toast 40 g · Sweated Broccoli 75 g · Pesto Sauce 60 g",325],
+ ["MEAL-32","Quinoa Fried Rice","mass",26.3,933,66,89,35,"https://my.chatbees.io/objects/quick-uploads/1302/65771ee44125250e.jpg","Grilled Teriyaki Chicken Breast 150 g · Quinoa Fried Rice 100 g · Sweated Broccoli 75 g",325],
+ ["MEAL-17","Soy Garlic Chicken Sliced","fat",14.2,565,42,58,18,"https://my.chatbees.io/objects/quick-uploads/1302/89b77953054ae8aa.jpg","Soy Garlic Chicken Sliced 150 g · Fragrant White Rice 50 g · Sweated Cauliflower 75 g",275],
+ ["MEAL-28","Stir Fried Kung Pao Chicken Breast","mass",17.3,864,48,89,35,"https://my.chatbees.io/objects/quick-uploads/1302/4594c863149f5972.jpg","Stir Fried Kung Pao Chicken Breast 150 g · Brown Rice 75 g · Baked Eggplant 100 g",325],
+ ["MEAL-36","Stir Fried Mushroom Chicken Casserole","mass",18.7,1032,52,123,37,"https://my.chatbees.io/objects/quick-uploads/1302/9be81a3880a5b89d.jpg","Stir Fried Mushroom Chicken Casserole 150 g · Fragrant White Rice 75 g · Stir Fried Broccoli Stem 100 g",325],
+ ["MEAL-31","Sweet & Sour Chicken Breast","mass",17.9,1073,51,118,44,"https://my.chatbees.io/objects/quick-uploads/1302/2cfeb4c55c209802.jpg","Sweet & Sour Chicken Breast 150 g · Fragrant White Rice 75 g · Sweated Broccoli 75 g",300]
+];
+/* ===== Cart ===== */
+var CART={};try{CART=JSON.parse(localStorage.getItem('aera.cart')||'{}')}catch(e){CART={}}
+var FUL='pickup',COURIER='',HANDOVER='',GEO=null,FEE_RM=null,PACK='bento';
+var APS={rows:null,loaded:false,failed:false,email:'',key:'',mine:[],available:0,expiringSoon:0,expiringDate:'',redeemRM:0,timer:null};
+/* ===== AERA Credit =====
+   Money the kitchen owes this customer, spent on this order whether they ask or not. It is not
+   AERA Points : points are earned, capped and chosen; credit is given, comes off by itself and
+   whatever is left over waits for the next order. It rides the same ledger, matched on the same
+   hashed key, so nothing new has to be fetched.
+
+   The gateways will not take a charge of RM 0, and there is no way to record an order that does
+   not go through one, so a floor is left on the bill and the rest of the credit carries over.
+   Nothing is lost — it is simply spent across two orders instead of one. */
+/* ===== Cost Price =====
+   A code that prices this order at what it cost AERA to make : the food, the packaging it goes
+   in, and the fee the payment gateway takes. Delivery is charged as normal because that money
+   goes to the rider. Nothing else stacks on top — no points earned, no credit spent, no birthday
+   or first-order discount — because the whole margin has already been given away once.
+
+   The figures come from the AERA Settings Sheet, published from the Kitchen Console. This page
+   can only read that list, never hold it, so a code switched off in the console still works here
+   until the page is reloaded; the console catches those orders and flags them. */
+var CC={codes:[],meals:{},alc:{},code:'',on:null,err:'',
+ packBento:null,packVac:null,packAlc:null,feePct:null,feeFixed:null};
+function ccPairs(v,into){into={};String(v||'').split(',').forEach(function(e){
+  var a=e.split('=');var k=String(a[0]||'').trim();if(!k)return;
+  var n=+a[1];if(n>0)into[k.toUpperCase()]=n});return into}
+function ccParseCodes(v){CC.codes=String(v||'').split(',').map(function(e){
+  var a=e.split('|');var c=String(a[0]||'').trim().toUpperCase();if(!c)return null;
+  return{code:c,until:String(a[1]||'').trim(),max:Math.max(0,+a[2]||0),
+   who:String(a[3]||'').split(';').map(function(x){return x.trim()}).filter(Boolean)}}).filter(Boolean)}
+/* A code can be open, or tied to named accounts. The accounts arrive as one-way hashes, so this
+   page can tell whether the person signed in is on the list without ever being told who is. */
+function ccKey(email){return sha256hex('aera-cost:'+String(email||'').trim().toLowerCase()).slice(0,16)}
+function ccWhoAmI(){var e=(document.getElementById('email')||{}).value||(ACCT&&ACCT.email)||'';
+ e=String(e).trim().toLowerCase();
+ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)?e:''}
+function ccFind(code){var c=String(code||'').trim().toUpperCase();if(!c)return null;
+ var hit=CC.codes.filter(function(x){return x.code===c})[0];
+ if(!hit)return null;
+ if(hit.until&&iso(myNow())>hit.until)return null;
+ return hit}
+function ccOn(){return !!CC.on}
+function ccReady(){return !!(Object.keys(CC.meals).length||Object.keys(CC.alc).length)}
+function ccPackOf(sku){var x=CAT[sku]||{};
+ if(x.alc)return CC.packAlc==null?0:CC.packAlc;
+ var per=(PACK==='vacuum'?CC.packVac:CC.packBento);
+ return (per==null?0:per)*(+x.boxes||0)}
+/* What one line costs AERA. A Meal and a Bundle are looked up by their own code; an à la carte
+   portion is its dish's cost at the standard serving, scaled by the size the customer picked. */
+function ccFoodOf(sku){
+ var x=CAT[sku];if(!x)return null;
+ var up=String(sku).toUpperCase();
+ if(CC.meals[up]!=null)return CC.meals[up];
+ if(x.alc){
+  var a=String(sku).split('-'),code=String(a[1]||'').toUpperCase(),sz=String(a[2]||'S').toUpperCase();
+  var base=CC.alc[code];if(base==null)return null;
+  var row=(ALC.rows||[]).filter(function(r){return String(r.code||'').toUpperCase()===code})[0];
+  var mult=row?(sz==='L'?+row.bg||0:+row.sm||0):0;
+  if(!(mult>0))return null;
+  return Math.round(base*mult*100)/100}
+ if(up.indexOf('BUNDLE-')===0){
+  var pool=bundleMeals(sku,x.goal).map(function(m){return CC.meals[String(m[0]).toUpperCase()]})
+    .filter(function(v){return v!=null});
+  if(!pool.length)return null;
+  var avg=pool.reduce(function(a,b){return a+b},0)/pool.length;
+  return Math.round(avg*(+x.boxes||pool.length)*100)/100}
+ return null}
+function ccLine(sku){var f=ccFoodOf(sku);if(f==null)return null;
+ return Math.round((f+ccPackOf(sku))*100)/100}
+/* Anything this page cannot cost is a reason to refuse the code outright rather than guess. */
+function ccMissing(){return Object.keys(CART).filter(function(k){
+  return CART[k]>0&&(CAT[k]?ccLine(k)===null:false)}).map(function(k){return (CAT[k]||{}).name||k})}
+function ccGatewayFee(t){var p=CC.feePct==null?0:CC.feePct,f=CC.feeFixed==null?0:CC.feeFixed;
+ return Math.round((t*p/100+f)*100)/100}
+function ccTry(){
+ var box=document.getElementById('ccMsg');CC.err='';
+ var typed=(document.getElementById('ccInput')||{}).value||'';
+ if(!String(typed).trim()){CC.on=null;renderCart();return}
+ if(!ccReady()){CC.err='Cost prices are not published yet — ask the kitchen.';CC.on=null;return renderCart()}
+ var hit=ccFind(typed);
+ if(!hit){CC.err='That code is not recognised, or it has expired.';CC.on=null;return renderCart()}
+ if(hit.who&&hit.who.length){
+  var me=ccWhoAmI();
+  if(!me){CC.err='That code belongs to particular accounts — sign in first and we will check.';CC.on=null;return renderCart()}
+  if(hit.who.indexOf(ccKey(me))<0){CC.err='That code is not available on this account.';CC.on=null;return renderCart()}}
+ if(Object.keys(CART).some(function(k){return CART[k]>0&&String(k).indexOf('PLAN-')===0})){
+  CC.err='A personalised plan cannot be priced at cost. Remove it and the rest of the order can.';CC.on=null;return renderCart()}
+ CC.on=hit;
+ var miss=ccMissing();
+ if(miss.length){CC.err='We do not have a cost price for '+miss.join(', ')+'. Remove '+(miss.length===1?'it':'them')+' and the code will work.';CC.on=null}
+ renderCart()}
+function ccClear(){CC.on=null;CC.err='';var i=document.getElementById('ccInput');if(i)i.value='';renderCart()}
+/* The box itself is only for the people it is for. It shows when the account signed in is named
+   on a live code — not when an email is merely typed into the field, or someone could hunt for
+   who is on the list by watching the box appear. A code that is open to anyone is not named on
+   anybody, so it travels as a link instead : ?cost=THECODE reveals the box and fills it in. */
+function ccForMe(){
+ var e=String((ACCT&&ACCT.email)||'').trim().toLowerCase();
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e))return false;
+ var k=ccKey(e);
+ return CC.codes.some(function(c){
+  if(c.until&&iso(myNow())>c.until)return false;
+  return (c.who||[]).indexOf(k)>=0})}
+/* ===== Corporate accounts =====
+   A company with an account of its own. The Console sends the accounts down as one-way hashes
+   of their emails, so this page can tell that whoever is signed in belongs to an account
+   without ever being handed a customer list. Their agreed prices come down beside them and
+   replace the shop price line by line.
+   A corporate on payment terms does not go near the gateway : nothing is charged, the order is
+   posted straight to the kitchen, and the invoice follows. That is the whole point of terms. */
+var CO={accts:[],prices:{},on:null,flowUrl:'',sending:false,done:'',err:''};
+function coKey(email){return sha256hex('aera-corp:'+String(email||'').trim().toLowerCase()).slice(0,16)}
+function coParseAccts(v){CO.accts=String(v||'').split(',').map(function(e){
+  var a=e.split('|');var who=String(a[0]||'').split(';').map(function(x){return x.trim()}).filter(Boolean);
+  if(!who.length)return null;
+  return{who:who,name:String(a[1]||'').trim(),terms:String(a[2]||'net30').trim(),
+   pct:Math.max(0,Math.min(99,+a[3]||0)),id:String(a[4]||'').trim()}}).filter(Boolean)}
+function coParsePrices(v){CO.prices={};
+ String(v||'').split(',').forEach(function(e){
+  var i=e.indexOf(':');if(i<0)return;
+  var id=e.slice(0,i).trim();if(!id)return;var m={};
+  e.slice(i+1).split(';').forEach(function(pair){
+   var a=pair.split('=');var k=String(a[0]||'').trim();if(!k)return;
+   var val=parseFloat(a[1]);if(isFinite(val)&&val>=0)m[k.toUpperCase()]=val});
+  CO.prices[id]=m})}
+function coWhoAmI(){var e=(document.getElementById('email')||{}).value||(ACCT&&ACCT.email)||'';
+ e=String(e).trim().toLowerCase();
+ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)?e:''}
+function coMatch(){var e=coWhoAmI();if(!e)return null;
+ var k=coKey(e),hit=null;
+ CO.accts.forEach(function(a){if(!hit&&a.who.indexOf(k)>=0)hit=a});
+ return hit}
+/* Pure : it only decides which account is in play. Whoever calls it does the repainting, so
+   calling it from inside renderCart cannot send renderCart round again. */
+function coRefresh(){CO.on=coMatch();return CO.on}
+function coChanged(){var was=CO.on?CO.on.id:'';coRefresh();
+ if((CO.on?CO.on.id:'')!==was){renderCart();coPaint();try{renderAuthGate()}catch(e){}}}
+function coOn(){return !!CO.on&&!ccOn()}
+function coTerms(){return CO.on?String(CO.on.terms||'net30'):''}
+function coOnTerms(){return coOn()&&coTerms()!=='prepaid'}
+function coTermText(){var t=coTerms();
+ return t==='net14'?'Invoiced, due in 14 days':t==='net30'?'Invoiced, due in 30 days'
+  :t==='deposit'?'Deposit invoice first, balance on delivery':'Paid before the kitchen starts'}
+/* Their price for one line : the figure agreed for that exact item, else the account
+   percentage off the shop price, else the shop price untouched. */
+function coLine(sku){if(!coOn())return null;
+ var x=CAT[sku];if(!x)return null;
+ var m=CO.prices[CO.on.id]||{};
+ var set=m[String(sku).toUpperCase()];
+ if(set!=null)return Math.round(set*100)/100;
+ if(CO.on.pct>0)return Math.round((+x.price||0)*(1-CO.on.pct/100)*100)/100;
+ return null}
+function uPrice(sku){var u=ccOn()?ccLine(sku):coLine(sku);
+ return u==null?((CAT[sku]||{}).price||0):u}
+function coSaved(){if(!coOn())return 0;var s=0;
+ Object.keys(CART).forEach(function(k){var x=CAT[k];if(!x)return;
+  var u=coLine(k);if(u!=null)s+=(x.price-u)*CART[k]});
+ return Math.round(s*100)/100}
+function coPaint(){
+ var box=document.getElementById('coBox');if(!box)return;
+ if(!coOn()){box.style.display='none';return}
+ box.style.display='';
+ var sv=coSaved();
+ document.getElementById('coName').textContent=CO.on.name||'Corporate account';
+ document.getElementById('coTerms').textContent=coTermText();
+ var s=document.getElementById('coSaved');
+ s.textContent=sv>0?('Your account prices save '+rm(sv)+' on this order.')
+  :'Your account prices are applied to this order.';
+ var b=document.getElementById('coBillBtn');
+ if(b)b.style.display=coOnTerms()?'':'none';
+ var d=document.getElementById('coDone');
+ if(d)d.innerHTML=CO.done?('<div class="msg ok">'+CO.done+'</div>')
+   :(CO.err?('<div class="msg bad">'+esc(CO.err)+'</div>'):'')}
+/* Ordering on terms. Nothing is charged here — the order goes to the kitchen and the invoice
+   follows on the agreed terms. */
+async function coBill(){
+ var m=document.getElementById('payMsg');m.innerHTML='';
+ if(!coOnTerms())return;
+ if(CO.sending)return;
+ if(!count())return m.innerHTML='<div class="msg warn">Add at least one meal first.</div>';
+ var gone=oosInCart();
+ if(gone.length)return m.innerHTML='<div class="msg warn"><b>'+gone.join('</b>, <b>')+'</b> '+
+   (gone.length===1?'is':'are')+' out of stock. Remove '+(gone.length===1?'it':'them')+' and try again.</div>';
+ if(!signedIn()&&!coOn()){renderAuthGate();return m.innerHTML='<div class="msg warn">Please sign in first.</div>'}
+ var name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),
+  phone=document.getElementById('phone').value.trim(),date=document.getElementById('date').value,
+  slot=document.getElementById('slot').value,notes=(document.getElementById('notes')||{}).value||'';
+ if(!name)return m.innerHTML='<div class="msg warn">Please enter a contact name.</div>';
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return m.innerHTML='<div class="msg warn">Please enter a valid email.</div>';
+ if(!date)return m.innerHTML='<div class="msg warn">Please choose a date.</div>';
+ var shutWhy=cloWhy(date);
+ if(shutWhy)return m.innerHTML='<div class="msg warn">'+esc(cloNice(date))+' — '+esc(shutWhy)+' Please pick another day.</div>';
+ if(isDel()&&!document.getElementById('address').value.trim())
+  return m.innerHTML='<div class="msg warn">Please enter the delivery address.</div>';
+ if(!CO.flowUrl)return m.innerHTML='<div class="msg bad">Ordering on account is not switched on for this page yet. Please WhatsApp us and we will raise it for you.</div>';
+ var sub=subtotal(),pkg=packFee(),fee=isDel()?(FEE_RM||0):0;
+ var total=Math.round((sub+pkg+fee)*100)/100;
+ var no=orderNo();
+ var items=Object.keys(CART).filter(function(k){return CAT[k]&&CART[k]>0})
+  .map(function(k){return k+'x'+CART[k]+'@'+uPrice(k).toFixed(2)}).join(';');
+ CO.sending=true;CO.err='';CO.done='';coPaint();
+ var btn=document.getElementById('coBillBtn');if(btn){btn.disabled=true;btn.textContent='Sending to the kitchen…'}
+ try{
+  var r=await fetch(CO.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({contactEmail:email,contactName:name,data:{
+    orderNo:no,companyId:CO.on.id,company:CO.on.name,email:email,name:name,phone:phone,
+    type:isDel()?'delivery':'pickup',date:date,slot:slot,
+    address:isDel()?document.getElementById('address').value.trim():'',
+    packaging:PACK,items:items,boxes:String(boxes()),
+    subtotal:sub.toFixed(2),packFee:pkg.toFixed(2),deliveryFee:fee.toFixed(2),
+    total:total.toFixed(2),terms:coTerms(),notes:String(notes||'').slice(0,400)}})});
+  var j=await r.json();
+  if(!j||!j.success)throw new Error('The kitchen did not confirm it');
+  CO.done='<b>Order '+esc(no)+' is with the kitchen.</b> Nothing has been charged — your invoice for '+
+   rm(total)+' follows on your account terms ( '+esc(coTermText())+' ).';
+  CART={};save();render();renderCart()}
+ catch(e){CO.err='We could not send that through just now. Please try again, or WhatsApp us and we will raise it by hand.'}
+ CO.sending=false;
+ if(btn){btn.disabled=false;btn.textContent='Order On Account'}
+ coPaint();
+ document.getElementById('payMsg').innerHTML='';
+ var box=document.getElementById('coBox');if(box&&CO.done)box.scrollIntoView({behavior:'smooth',block:'center'})}
+var CC_URL='';
+try{CC_URL=String(new URLSearchParams(location.search).get('cost')||'').trim().toUpperCase()}catch(e){}
+function ccVisible(){return ccOn()||ccForMe()||(!!CC_URL&&!!ccFind(CC_URL))}
+function ccPaint(){
+ var box=document.getElementById('ccBox');if(!box)return;
+ var show=ccVisible();
+ box.style.display=show?'':'none';
+ if(show&&CC_URL&&!ccOn()&&!CC.err){
+  var i=document.getElementById('ccInput');
+  if(i&&!i.value){i.value=CC_URL;ccTry()}}}
+var CR_FLOOR=1.00;
+function crMine(){var k=APS.key||'';if(!k)return[];
+ return (APS.rows||[]).filter(function(r){return String(r.Key||'').trim()===k})}
+function crAvail(){var g=0,u=0;
+ crMine().forEach(function(r){g+=+r.Credit||0;u+=+r.CreditUsed||0});
+ return Math.max(0,Math.round((g-u)*100)/100)}
+function crApplied(t){if(ccOn())return 0;var a=crAvail();
+ if(!(a>0)||!(t>CR_FLOOR))return 0;
+ return Math.round(Math.min(a,t-CR_FLOOR)*100)/100}
+function sha256hex(str){var K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];var H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];var b=[];for(var i=0;i<str.length;i++){var c=str.charCodeAt(i);if(c<128)b.push(c);else if(c<2048)b.push(192|c>>6,128|c&63);else if(c<55296||c>=57344)b.push(224|c>>12,128|c>>6&63,128|c&63);else{i++;c=65536+((c&1023)<<10|str.charCodeAt(i)&1023);b.push(240|c>>18,128|c>>12&63,128|c>>6&63,128|c&63)}}var l=b.length*8;b.push(128);while(b.length%64!==56)b.push(0);for(var j=7;j>=0;j--)b.push(j>=4?0:(l/Math.pow(2,j*8))&255);var w=new Array(64);function R(x,n){return(x>>>n)|(x<<(32-n))}for(var p=0;p<b.length;p+=64){for(var t=0;t<16;t++)w[t]=(b[p+t*4]<<24)|(b[p+t*4+1]<<16)|(b[p+t*4+2]<<8)|b[p+t*4+3];for(t=16;t<64;t++){var s0=R(w[t-15],7)^R(w[t-15],18)^(w[t-15]>>>3),s1=R(w[t-2],17)^R(w[t-2],19)^(w[t-2]>>>10);w[t]=(w[t-16]+s0+w[t-7]+s1)|0}var a=H[0],bb=H[1],cc=H[2],d=H[3],e=H[4],f=H[5],g=H[6],h=H[7];for(t=0;t<64;t++){var S1=R(e,6)^R(e,11)^R(e,25),ch=(e&f)^(~e&g),t1=(h+S1+ch+K[t]+w[t])|0,S0=R(a,2)^R(a,13)^R(a,22),mj=(a&bb)^(a&cc)^(bb&cc),t2=(S0+mj)|0;h=g;g=f;f=e;e=(d+t1)|0;d=cc;cc=bb;bb=a;a=(t1+t2)|0}H[0]=(H[0]+a)|0;H[1]=(H[1]+bb)|0;H[2]=(H[2]+cc)|0;H[3]=(H[3]+d)|0;H[4]=(H[4]+e)|0;H[5]=(H[5]+f)|0;H[6]=(H[6]+g)|0;H[7]=(H[7]+h)|0}var out='';for(i=0;i<8;i++)out+=('00000000'+(H[i]>>>0).toString(16)).slice(-8);return out}
+function apKey(email){return sha256hex('aera-points:'+String(email||'').trim().toLowerCase()).slice(0,24)}
+
+function apBalance(rows,todayIso){var ev=rows.map(function(r){return{d:String(r.Date||'').slice(0,10),e:+r.Earned||0,r:+r.Redeemed||0,exp:String(r.Expires||'').slice(0,10)}}).sort(function(a,b){return a.d.localeCompare(b.d)});var batches=[],earned=0,redeemed=0;ev.forEach(function(x){if(x.e>0){batches.push({g:x.e,exp:x.exp});earned+=x.e}if(x.r>0){redeemed+=x.r;var left=x.r;batches.forEach(function(b){if(left<=0||b.g<=0)return;if(b.exp&&b.exp<x.d)return;var t=Math.min(b.g,left);b.g-=t;left-=t})}});var avail=0,expired=0,soon=0,soonDate='';var in30=addDaysIso(todayIso,30);batches.forEach(function(b){if(b.g<=0)return;if(b.exp&&b.exp<todayIso)expired+=b.g;else{avail+=b.g;if(b.exp&&b.exp<=in30){soon+=b.g;if(!soonDate||b.exp<soonDate)soonDate=b.exp}}});return{available:avail,expired:expired,earned:earned,redeemed:redeemed,expiringSoon:soon,expiringDate:soonDate}}
+function addDaysIso(isoDate,k){var d=new Date(isoDate+'T00:00:00');d.setDate(d.getDate()+k);return iso(d)}
+function addMonthsIso(isoDate,k){var d=new Date(isoDate+'T00:00:00');d.setMonth(d.getMonth()+k);return iso(d)}
+function mealBase(){return Math.round((subtotal()-packIncluded())*100)/100}
+function discountRM(){if(ccOn())return 0;if(firstOrderRM()>0)return 0;return APS.email?Math.min(APS.redeemRM,maxRedeemRM()):0}
+function maxRedeemRM(){var cap=Math.floor(subtotal()*AP.capPct/100);var byPts=Math.floor(APS.available/100*AP.rmPer100);return Math.max(0,Math.min(cap,byPts))}
+function pointsBase(){if(ccOn())return 0;return Math.max(0,Math.floor((mealBase()-birthdayRM()-discountRM())*AP.perRM))}
+function pointsEarned(){return pointsBase()+refBonusAp()}
+function apFmt(p){return Math.round(p).toLocaleString('en-MY')+' AP'}
+function packIncluded(){
+ if(ccOn()){var s=0;Object.keys(CART).forEach(function(k){if(CAT[k])s+=ccPackOf(k)*CART[k]});return Math.round(s*100)/100}
+ return Math.round((boxes()*PACK_PER_BOX+alcPackIncluded())*100)/100}
+function alcPackIncluded(){var s=0;Object.keys(CART).forEach(function(k){var x=CAT[k];if(x&&x.alc)s+=ALC_PACK*CART[k]});return Math.round(s*100)/100}
+function packFee(){if(ccOn())return 0;var b=boxes();if(!b)return 0;for(var i=0;i<PACK_FEE_TABLE.length;i++){if(b<=PACK_FEE_TABLE[i][0])return PACK_FEE_TABLE[i][1]}var last=PACK_FEE_TABLE[PACK_FEE_TABLE.length-1];return Math.round((last[1]+Math.ceil((b-last[0])/PACK_FEE_BEYOND.per)*PACK_FEE_BEYOND.amount)*100)/100}
+function save(){try{localStorage.setItem('aera.cart',JSON.stringify(CART))}catch(e){}}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function rm(v){return 'RM '+(Math.round(v*100)/100).toFixed(2)}
+function incl(base,boxes){return Math.round((base+PACK_PER_BOX*boxes)*100)/100}
+var PLANITEM=null;try{PLANITEM=JSON.parse(localStorage.getItem('aera.plan')||'null')}catch(e){}
+function catalog(){var o={};BUNDLES.forEach(function(b){o[b[0]]={sku:b[0],name:b[1],goal:b[2],price:incl(b[3],b[4]),base:b[3],boxes:b[4]}});MEALS.forEach(function(m){o[m[0]]={sku:m[0],name:m[1]+(m[2]==='fat'?' ( Fat Loss )':' ( Mass Gain )'),goal:m[2],price:incl(m[3],1),base:m[3],boxes:1}});
+ if(PLANITEM&&PLANITEM.id){o['PLAN-'+PLANITEM.id]={sku:'PLAN-'+PLANITEM.id,name:PLANITEM.name||'Personalised Plan',goal:'plan',price:Math.round((+PLANITEM.price||0)*100)/100,base:Math.round(((+PLANITEM.price||0)-PACK_PER_BOX*(+PLANITEM.boxes||1))*100)/100,boxes:+PLANITEM.boxes||1,plan:true}}
+ Object.keys(CART).forEach(function(k){if(!o[k]&&k.indexOf('ALC-')!==0)delete CART[k]});return o}
+var CAT=catalog();
+bundleFeed(function(){if(typeof render==='function'&&document.getElementById('grid'))render()});
+function add(sku,d){if(!CAT[sku])return;if(CAT[sku].plan)d=d>0?0:d;CART[sku]=Math.max(0,(CART[sku]||0)+d);if(!CART[sku])delete CART[sku];save();render();refee()}
+function subtotal(){var s=0;Object.keys(CART).forEach(function(k){if(!CAT[k])return;
+ s+=uPrice(k)*CART[k]});return Math.round(s*100)/100}
+function boxes(){var s=0;Object.keys(CART).forEach(function(k){if(CAT[k])s+=CAT[k].boxes*CART[k]});return s}
+function count(){var s=0;Object.keys(CART).forEach(function(k){s+=CART[k]});return s}
+/* ===== Menu ===== */
+/* ===== Allergen & spice badges — set per meal in the AERA Console, read from its sheet ===== */
+var TAGS_URL='/api/public/landing-pages/6970/sheet-data';
+var MEAL_ALG=[['beef','Beef','🥩'],['dairy','Dairy','🥛'],['nuts','Nuts','🥜'],['prawn','Prawn','🦐']];
+var HEATNAME=['','Mild','Medium','Hot','Optional'];
+/* Each meal's items with their own allergens. Set item by item in the AERA Console; this is the baked copy. */
+var MEAL_ITEMS={
+ 'MEAL-8':[['Stir Fried Ground Chicken Breast w/ Mushroom Gravy',100,'',0],['Creamy Mushroom Pasta',75,'',0],['Mushroom Gravy',60,'dairy',0],['Peas & "Bacon"',100,'',0]],
+ 'MEAL-9':[['Green Curry Chicken Sliced',150,'',0],['Basmati Long Rice',50,'',0],['Baked Eggplant',100,'',0]],
+ 'MEAL-10':[['Pan Seared Tiger Prawn',100,'prawn',0],['Aglio Olio',75,'prawn',1],['Sweated Broccoli ( Oil-Free )',75,'',0]],
+ 'MEAL-11':[['Pan Seared Barramundi Fillet',150,'',0],['Spiced Long Rice',75,'',0],['Stir Fried French Bean ( Oil-Free )',75,'',0],['Homemade Sambal',60,'',0]],
+ 'MEAL-12':[['Pan Seared Smoked Paprika Chicken Breast',150,'',0],['Baked Sweet Potato ( Purple ) ( Oil-Free )',150,'',0],['Sweated Broccoli ( Oil-Free )',75,'',0],['Tomato Concasse',60,'',0]],
+ 'MEAL-13':[['Black Pepper Chicken Sliced',150,'',0],['Classic Meal Prep Brown Rice',75,'',0],['Peas & Corn',100,'',0]],
+ 'MEAL-14':[['Grilled Chicken Chop',150,'',0],['Garlic Mashed Potato',150,'',0],['Sweated Broccoli ( Oil-Free )',75,'',0],['Brown Sauce',60,'',0]],
+ 'MEAL-15':[['Classic Meal Prep Chicken Sliced',150,'',0],['Classic Meal Prep Brown Rice',75,'',0],['Sweated Broccoli ( Oil-Free )',75,'',0],['Homemade Sambal',60,'',0]],
+ 'MEAL-16':[['Grilled Teriyaki Chicken Breast',150,'',0],['Baked Sweet Potato ( Orange ) ( Oil-Free )',150,'',0],['Asperges ( Oil-Free )',75,'',0],['Sweet & Sour Sauce',60,'',0]],
+ 'MEAL-17':[['Soy Garlic Chicken Sliced',150,'',2],['Fragrant White Rice',50,'',0],['Sweated Cauliflower ( Oil-Free )',75,'',0]],
+ 'MEAL-18':[['Pan Seared Salmon',150,'',0],['Baked Potato ( Oil-Free )',150,'',0],['Sweated Broccoli ( Oil-Free )',75,'',0],['Mushroom Gravy',60,'dairy',0]],
+ 'MEAL-19':[['Curry Chicken Sliced',150,'',0],['Basmati Long Rice',50,'',0],['Sweated Cauliflower ( Oil-Free )',75,'',0]],
+ 'MEAL-20':[['Pan Seared Spicy Chicken Breast',150,'',1],['Garlic Toast',40,'',0],['Sweated Broccoli ( Oil-Free )',75,'',0],['Pesto Sauce',60,'dairy,nuts',1]],
+ 'MEAL-21':[['Gingered Spring Onion Toman Fish Sliced',150,'',2],['Fragrant White Rice',75,'',0],['Stir Fried Broccoli Stem ( Oil-Free )',100,'',0]],
+ 'MEAL-22':[['Imitation Salted Egg Yolk Chicken Thigh',150,'',2],['Fragrant White Rice',75,'',0],['Sweated Broccoli ( Oil-Free )',75,'',0]],
+ 'MEAL-23':[['Pan Seared Tiger Prawn',100,'prawn',0],['Assam Fettuccine',75,'',0],['Sweated Broccoli ( Oil-Free )',75,'',0],['Assam Sauce',60,'dairy',0]],
+ 'MEAL-24':[['Pad Krapow Chicken Breast',100,'',3],['Basmati Long Rice',50,'',0],['Stir Fried French Bean ( Oil-Free )',75,'',0]],
+ 'MEAL-25':[['Bolognese Chicken Breast',100,'',0],['Bolognese',75,'',0],['Sweated Broccoli ( Oil-Free )',75,'',0],['Tomato Concasse',60,'',0]],
+ 'MEAL-26':[['Chicken Katsu',150,'',0],['Pearl Rice',100,'',0],['Japanese Curry Gravy',60,'',0],['Japanese Curry Garnishes',100,'',0]],
+ 'MEAL-27':[['Grilled Teriyaki Chicken Chop',150,'',0],['Cajun Spiced Fusilli',75,'dairy',1],['Sweated Broccoli ( Oil-Free )',75,'',0],['Cajun Spiced Gravy',60,'dairy',0]],
+ 'MEAL-28':[['Stir Fried Kung Pao Chicken Breast',150,'',2],['Brown Rice',75,'',0],['Baked Eggplant',100,'',0]],
+ 'MEAL-29':[['Gingered Spring Onion Beef Sliced',150,'beef',2],['Fragrant White Rice',75,'',0],['Stir Fried Broccoli Stem ( Oil-Free )',100,'',0]],
+ 'MEAL-30':[['Gam Hiong Chicken Breast',150,'',0],['Classic Meal Prep Brown Rice',75,'',0],['Stir Fried Sweet Pea ( Oil-Free )',75,'',0]],
+ 'MEAL-31':[['Sweet & Sour Chicken Breast',150,'',0],['Fragrant White Rice',75,'',0],['Sweated Broccoli ( Oil-Free )',75,'',0]],
+ 'MEAL-32':[['Grilled Teriyaki Chicken Breast',150,'',0],['Quinoa Fried Rice',100,'',3],['Sweated Broccoli ( Oil-Free )',75,'',0]],
+ 'MEAL-33':[['Imitation Salted Egg Yolk Tiger Prawn',100,'prawn',2],['Imitation Salted Egg Yolk Pasta',75,'',2],['Sweated Broccoli ( Oil-Free )',75,'',0],['Imitation Salted Egg Yolk Gravy',60,'dairy',1]],
+ 'MEAL-34':[['Stir Fried Vannamei Prawn',100,'prawn',0],['Egg Fried Brown Rice',100,'',0],['Peas & Corn',100,'',0]],
+ 'MEAL-36':[['Stir Fried Mushroom Chicken Casserole',150,'',2],['Fragrant White Rice',75,'',0],['Stir Fried Broccoli Stem ( Oil-Free )',100,'',0]],
+ 'MEAL-57':[['Sautéed Beef Sliced',150,'beef',2],['Fragrant White Rice',75,'',0],['Stir Fried Kangkung w/ Garlic',100,'prawn',0]],
+ 'MEAL-58':[['Grilled Chicken Chop',150,'',0],['Black Pepper Pasta',75,'',0],['Sweated Broccoli ( Oil-Free )',75,'',0],['Black Pepper Sauce',60,'',0]],
+ 'MEAL-59':[['Pan Seared Tiger Prawn',100,'prawn',0],['Cauliflower Fried Rice',100,'',0],['Stir Fried Kangkung w/ Sambal Belacan',75,'prawn',3]]
+};
+/* Baked copy so the badges are right even if the list cannot be reached; the Console's copy wins. */
+var TAGS={'MEAL-8':{al:['dairy'],heat:0},'MEAL-9':{al:[],heat:0},'MEAL-10':{al:['prawn'],heat:1},'MEAL-11':{al:[],heat:0},'MEAL-12':{al:[],heat:0},'MEAL-13':{al:[],heat:0},'MEAL-14':{al:[],heat:0},'MEAL-15':{al:[],heat:0},'MEAL-16':{al:[],heat:0},'MEAL-17':{al:[],heat:2},'MEAL-18':{al:['dairy'],heat:0},'MEAL-19':{al:[],heat:0},'MEAL-20':{al:['dairy','nuts'],heat:1},'MEAL-21':{al:[],heat:2},'MEAL-22':{al:[],heat:2},'MEAL-23':{al:['dairy','prawn'],heat:0},'MEAL-24':{al:[],heat:3},'MEAL-25':{al:[],heat:0},'MEAL-26':{al:[],heat:0},'MEAL-27':{al:['dairy'],heat:1},'MEAL-28':{al:[],heat:2},'MEAL-29':{al:['beef'],heat:2},'MEAL-30':{al:[],heat:0},'MEAL-31':{al:[],heat:0},'MEAL-32':{al:[],heat:3},'MEAL-33':{al:['dairy','prawn'],heat:2},'MEAL-34':{al:['prawn'],heat:0},'MEAL-36':{al:[],heat:2},'MEAL-57':{al:['beef','prawn'],heat:2},'MEAL-58':{al:[],heat:0},'MEAL-59':{al:['prawn'],heat:3}};
+function algOf(k){for(var i=0;i<MEAL_ALG.length;i++)if(MEAL_ALG[i][0]===k)return MEAL_ALG[i];return null}
+function loadTags(){fetch(TAGS_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
+  var rows=[],hd=j&&Array.isArray(j.headers)?j.headers:null,raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];
+  raw.forEach(function(r){if(Array.isArray(r)&&hd){var o={};hd.forEach(function(k,i){o[k]=r[i]});rows.push(o)}else if(r&&typeof r==='object')rows.push(r)});
+  var out={},items={};rows.forEach(function(r){var sku=String(r.Sku||'').trim().toUpperCase();if(!sku)return;
+   out[sku]={heat:Math.max(0,Math.min(4,Math.round(+r.Heat||0)))};
+   var raw=String(r.Items||'').trim();
+   if(raw){var list=[];raw.split('|').forEach(function(t){var a=t.split('=');if(!a[0])return;
+     list.push([a[0].trim(),Math.round((+a[1]||0)*100)/100,String(a[2]||'').split(',').map(function(x){return x.trim().toLowerCase()}).filter(algOf).join(','),Math.max(0,Math.min(4,Math.round(+a[3]||0))),(+a[4]?1:0)])});
+    if(list.length)items[sku]=list}});
+  if(Object.keys(out).length){Object.keys(out).forEach(function(k){TAGS[k]=out[k]});
+   Object.keys(items).forEach(function(k){MEAL_ITEMS[k]=items[k]});render()}}).catch(function(){})}
+function tagsOf(sku){return TAGS[String(sku||'').toUpperCase()]||null}
+function itemsOf(sku){return MEAL_ITEMS[String(sku||'').toUpperCase()]||null}
+/* The a la carte list is the same kitchen's parts, already photographed in their bags,
+   so a meal's parts are found there by name. */
+var BAG_BY_NAME={};
+/* Sauces and gravies are vacuum packed like everything else, but they were never shot for the
+   a la carte sprite sheet. The Meal Preferences catalogue has a picture of each, so those are
+   used instead — a sauce is never left out of the pack. */
+var PART_IMG={'assam sauce':'https://my.chatbees.io/objects/generated-images/1302/1789181580440-aa3a4c26a6a2ba2f.png','black pepper sauce':'https://my.chatbees.io/objects/generated-images/1302/1789181260031-04c41dbc415e4f9e.png','brown sauce':'https://my.chatbees.io/objects/generated-images/1302/1789181299299-7b020a2df887190d.png','cajun spiced gravy':'https://my.chatbees.io/objects/generated-images/1302/1789181335345-35ebc41a0192d5a2.png','homemade sambal':'https://my.chatbees.io/objects/generated-images/1302/1789181188478-7b3ce027bb585cdf.png','japanese curry garnishes':'https://my.chatbees.io/objects/generated-images/1302/1789181407600-9f8fd972baceaf75.png','japanese curry gravy':'https://my.chatbees.io/objects/generated-images/1302/1789181372307-ab4f53c8f073165c.png','mushroom gravy':'https://my.chatbees.io/objects/generated-images/1302/1789181139270-38ff4b8c2acc8eee.png','peas & "bacon"':'https://my.chatbees.io/objects/generated-images/1302/1789181541100-a270556b08504b22.png','peas & corn':'https://my.chatbees.io/objects/generated-images/1302/1789181510709-7b2f1251ae717daa.png','pesto sauce':'https://my.chatbees.io/objects/generated-images/1302/1789181225503-4ac6bc2ead4362ba.png','sweet & sour sauce':'https://my.chatbees.io/objects/generated-images/1302/1789181448378-98cddbe6d372d8f7.png','tomato concasse':'https://my.chatbees.io/objects/generated-images/1302/1789181479162-a108fd8cd3207c51.png'};
+function nrm(s){return String(s||'').toLowerCase().replace(/\s+/g,' ').trim()}
+function bagOf(n){var x=BAG_BY_NAME[nrm(n)];return x||null}
+/* the label under each bag stays to two lines: the bracketed notes are already in the list below */
+function bagName(n){n=String(n||'').replace(/\s*\([^)]*\)/g,'').replace(/\s+/g,' ').trim();
+ if(n.length<=26)return n;var t=n.slice(0,26),i=t.lastIndexOf(' ');return (i>14?t.slice(0,i):t.slice(0,25))+'…'}
+function mealBags(sku){var it=itemsOf(sku);if(!it||!it.length)return '';
+ /* Every part of the meal gets its own bag, stacked one on top of another. The picture is the
+    photographed bag where there is one, and the catalogue picture for the sauces and gravies
+    that were never shot in their bags. A part with neither is left out rather than drawn as an
+    empty container. */
+ var shot=[];it.forEach(function(r){var s=bagOf(r[0]);
+  if(s)shot.push({name:r[0],inner:'<i style="'+spriteStyle(s)+'"></i>'});
+  else{var u=PART_IMG[nrm(r[0])];
+   /* Sauces and gravies were never shot in their bags, so PART_IMG holds AERA's own Meal
+      Preferences picture of each one, sealed into the same vacuum pack as the other parts. */
+   if(u)shot.push({name:r[0],inner:'<i style="background-image:url('+esc(u)+');background-size:cover;background-position:50% 50%"></i>'})}});
+ if(!shot.length)return '';
+ var cells=shot.map(function(c){
+  return '<div class="mcell">'+c.inner+'<u title="'+esc(c.name)+'">'+esc(bagName(c.name))+'</u></div>'}).join('');
+ return '<div class="mbags">'+cells+'<span class="vc" title="Vacuum Packed">Vacuum</span></div>'}
+function mealPic(x){var b=(PACK==='vacuum')?mealBags(x.sku):'';
+ return b||'<img loading="lazy" src="'+esc(x.img)+'" alt="">'}
+/* A Bundle is photographed as a stack of bento boxes. Choose the vacuum bag and the card picture
+   becomes one Meal of that Bundle shown the way a single Meal is shown : its parts, each sealed in
+   its own bag. The whole list is in See The Meals Inside, so one Meal here is enough to say what
+   arrives. Until the a la carte feed has loaded there are no bag photographs to draw, so the
+   Bundle keeps its own picture rather than showing an empty box. */
+function bundleBags(sku,goal){
+ var pool=bundleMeals(sku,goal);
+ for(var i=0;i<pool.length;i++){var b=mealBags(pool[i][0]);if(b)return b}
+ return ''}
+/* Choose the vacuum bag and every Meal in the See The Meals Inside list shows what actually
+   arrives : each part of that Meal sealed in its own bag, as a strip of small pictures under
+   the Meal name. A part with no bag photograph is left out rather than drawn as an empty
+   square, and until the a la carte feed has loaded there are no photographs at all, so the
+   list stays as plain names. */
+function mealStrip(sku){
+ var it=itemsOf(sku);if(!it||!it.length)return '';
+ var cells=[];
+ it.forEach(function(r){var sp=bagOf(r[0]);
+  if(sp){cells.push('<i title="'+esc(r[0])+'" style="'+spriteStyle(sp)+'"></i>');return}
+  var u=PART_IMG[nrm(r[0])];
+  if(u)cells.push('<i title="'+esc(r[0])+'" style="background-image:url('+esc(u)+
+   ');background-size:cover;background-position:50% 50%"></i>')});
+ if(!cells.length)return '';
+ return '<span class="bstrip">'+cells.join('')+'</span>'}
+function bundlePic(x){var b=(PACK==='vacuum')?bundleBags(x.sku,x.goal):'';
+ return b||'<img loading="lazy" src="'+esc(x.img)+'" alt="">'}
+function mealAlg(sku){var it=itemsOf(sku);if(!it)return[];var seen={},out=[];
+ it.forEach(function(r){String(r[2]||'').split(',').forEach(function(k){if(k&&!seen[k]&&algOf(k)){seen[k]=1;out.push(k)}})});return out}
+function mealHeat(sku){var it=itemsOf(sku);if(!it)return 0;var h=0;
+ it.forEach(function(r){var v=+r[3]||0;if(v===4)h=4;else if(h!==4&&v>h)h=v});return h}
+function heatMark(h){return h===4?'🌶❓':new Array(h+1).join('🌶')}
+function tagChips(sku){var t=tagsOf(sku);if(!t)return '';var out=[];
+ if(!mealAlg(sku).length&&!mealHeat(sku))out.push('<span class="tag clear" title="No beef, dairy, nuts or prawn in any item">✓ No Common Allergens</span>');
+ return out.length?'<div class="tags">'+out.join('')+'</div>':''}
+/* A bundle is chef-selected, so it carries whatever the meals of that goal can carry. */
+/* The exact Meals the Kitchen packs for each Bundle, straight from the Kitchen Console. */
+var BUNDLE_MEALS={
+ 'BUNDLE-11':['MEAL-9','MEAL-11','MEAL-17','MEAL-19','MEAL-24','MEAL-25','MEAL-59'],
+ 'BUNDLE-7':['MEAL-59','MEAL-58','MEAL-9','MEAL-10','MEAL-11','MEAL-12','MEAL-17','MEAL-14','MEAL-19','MEAL-16','MEAL-24','MEAL-18','MEAL-25','MEAL-20'],
+ 'BUNDLE-13':['MEAL-13','MEAL-15','MEAL-21','MEAL-22','MEAL-30','MEAL-31','MEAL-26'],
+ 'BUNDLE-12':['MEAL-13','MEAL-8','MEAL-15','MEAL-23','MEAL-21','MEAL-27','MEAL-22','MEAL-33','MEAL-30','MEAL-32','MEAL-31','MEAL-34','MEAL-28','MEAL-36']};
+/* The Bundle lists above are a fallback baked in at publish time. The Kitchen Console
+   publishes the live lists to a Sheet, and this reads them on every visit, so a Bundle
+   reshuffled in the Console shows up here without the page being rebuilt. */
+var BUNDLES_URL='/api/public/landing-pages/7004/sheet-data';
+function bundleFeed(after){
+ fetch(BUNDLES_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
+  var got=0;(j&&j.data||[]).forEach(function(r){
+   var sku=String(r.Sku==null?'':r.Sku).trim();
+   var meals=String(r.Meals==null?'':r.Meals).split('|').map(function(x){return x.trim().toUpperCase()}).filter(Boolean);
+   if(sku&&meals.length){BUNDLE_MEALS[sku]=meals;got++}});
+  if(got&&typeof after==='function')after()}).catch(function(){})}
+/* the Meals in one Bundle, by SKU. If a Bundle is ever missing from the list above we fall
+   back to every Meal of that goal, so a card can never come out empty. */
+function bundleMeals(sku,goal){var by={};MEALS.forEach(function(m){by[m[0]]=m});
+ var out=(BUNDLE_MEALS[sku]||[]).map(function(k){return by[k]}).filter(Boolean);
+ return out.length?out:MEALS.filter(function(m){return m[2]===goal})}
+function bundleChips(sku,goal){var al={},heat=0;
+ bundleMeals(sku,goal).forEach(function(m){mealAlg(m[0]).forEach(function(k){al[k]=1});
+  if(mealHeat(m[0])>0)heat=1});
+ var out=MEAL_ALG.filter(function(a){return al[a[0]]}).map(function(a){return'<span class="tag may">'+a[2]+' '+a[1]+'</span>'});
+ if(heat>0)out.push('<span class="tag may">🌶 Some Are Spicy</span>');
+ if(!out.length)return '';
+ return '<div class="tags"><span class="lbl">May Contain</span>'+out.join('')+'</div>'}
+/* One line per component, with that component's own allergens beside it. */
+function servingList(sku,raw,txt){
+ var it=itemsOf(sku),li,total=raw;
+ if(it&&it.length){total=0;it.forEach(function(r){total+=+r[1]||0});
+  li=it.map(function(r){var marks=String(r[2]||'').split(',').map(algOf).filter(Boolean),h=+r[3]||0,fr=+r[4]?1:0;
+   var tip=marks.map(function(a){return 'contains '+a[1].toLowerCase()});
+   if(h===4)tip.push('you choose how spicy');else if(h>0)tip.push(HEATNAME[h].toLowerCase()+' spice');
+   if(fr)tip.push('fried');
+   var mk=marks.map(function(a){return a[2]}).join('')+(h?heatMark(h):'')+(fr?'🍳':'');
+   return '<li>'+esc(r[0])+' <i>× '+(Math.round((+r[1]||0)*100)/100)+' g'+
+    (mk?'<u title="'+esc(tip.join(', '))+'">'+mk+'</u>':'')+'</i></li>'})}
+ else{li=String(txt||'').split('·').map(function(t){return t.trim()}).filter(Boolean).map(function(t){
+   var m=/^(.*?)\s+(\d+(?:\.\d+)?)\s*g$/.exec(t);
+   return m?'<li>'+esc(m[1])+' <i>× '+m[2]+' g</i></li>':'<li>'+esc(t)+'</li>'})}
+ if(!li.length)return '';
+ return '<div class="serving"><ul>'+li.join('')+'</ul></div>'}
+/* a bundle is chef-selected from that goal's menu — show customers the menu it is drawn from */
+function bundleInside(sku,goal,boxes){
+ var pool=bundleMeals(sku,goal);
+ var per=pool.length>=14?'two a day for seven days, every one different':'one a day for seven days';
+ return '<details class="inside"><summary>See the '+pool.length+' Meals Inside</summary>'+
+  (PACK==='vacuum'?'<div class="vacline"><span>Vacuum Packed</span>Each part of a Meal comes in its own sealed bag.</div>':'')+
+  '<ol>'+pool.map(function(m){var oo=oosMeal(m[0]);var mp=(PACK!=='vacuum'&&m[8])?'<img class="insidepic" loading="lazy" src="'+esc(m[8])+'" alt="">':'';
+    return'<li'+(oo.length?' class="oosout"':'')+'>'+mp+'<span>'+esc(m[1])+
+     (oo.length?'<em class="oosmk">'+esc(oo.map(function(x){return x.n}).join(', '))+' — substituted</em>':'')+
+     '</span><em>'+m[4]+' KCALs · '+m[5]+' g P</em>'+
+     (PACK==='vacuum'?mealStrip(m[0]):'')+'</li>'}).join('')+'</ol>'+
+  '<div class="note">These are the '+pool.length+' meals the kitchen packs for this bundle — '+per+'. Tell us in the kitchen notes at checkout if there is one you would rather not have and we will swap it.</div></details>'}
+function card(x){var q=CART[x.sku]||0;var qty=q?'<span class="qty"><button type="button" onclick="add(\''+x.sku+'\',-1)">−</button><span>'+q+'</span><button type="button" onclick="add(\''+x.sku+'\',1)">+</button></span>':'<button class="btn btn-k" type="button" onclick="add(\''+x.sku+'\',1)">Add</button>';
+ if(x.bundle)return '<article class="item bundle '+x.goal+'">'+bundlePic(x)+'<div class="body"><span class="goal">'+(x.goal==='fat'?'Fat Loss Bundle':'Mass Gain Bundle')+'</span><div class="name">'+esc(x.name.split(' · ').pop())+'</div><ul>'+x.bul.map(function(b){return'<li>'+esc(b)+'</li>'}).join('')+'</ul>'+bundleChips(x.sku,x.goal)+bundleInside(x.sku,x.goal,x.boxes)+oosNote(oosBundle(x.sku,x.goal))+'<div class="row"><span class="price">'+rm(x.price)+'</span>'+qty+'</div></div></article>';
+ return '<article class="item '+x.goal+'">'+mealPic(x)+'<div class="body"><span class="goal">'+(x.goal==='fat'?'Fat Loss':'Mass Gain')+'</span><div class="name">'+esc(x.name)+'</div><div class="macros"><span><b>'+x.kcal+'</b>KCALs</span><span><b>'+x.p+'g</b>Protein</span><span><b>'+x.c+'g</b>Carbs</span><span><b>'+x.f+'g</b>Fat</span></div>'+(x.serving?servingList(x.sku,x.raw,x.serving):'')+tagChips(x.sku)+oosNote(oosMeal(x.sku))+'<div class="row"><span class="price">'+rm(x.price)+'</span>'+qty+'</div></div></article>'}
+/* ===== À la Carte =====
+   The list lives on its own page so this one stays inside the publish limit. Each portion is
+   priced as food + RM 0.90 of packaging, and is packed in a vacuum bag rather than a bento box,
+   so it does not count towards the per-box packaging fee that the meals pay. */
+var ALC_URL='https://my.chatbees.io/p/KRtgrR5XpH',ALC_PACK=0.9;
+var ALC={rows:[],cats:[],loaded:false,cat:'rice'};
+function alcLoad(){fetch(ALC_URL,{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){
+  var a=t.indexOf('/*ALC*/'),b=t.indexOf('/*ENDALC*/');if(a<0||b<a)return;
+  var d=JSON.parse(t.slice(a+7,b));ALC.cats=d.c||[];
+  ALC.rows=(d.r||[]).map(function(v){var o={};(d.k||[]).forEach(function(k,i){o[k]=v[i]});
+   o.img=(o.img>=0&&d.i)?d.i[o.img]:'';
+   o.bagUrl=(o.bag>=0&&d.b)?d.b[o.bag]:'';
+   var sp=o.sp,sh=(Array.isArray(sp)&&d.s)?d.s[sp[0]]:null;
+   o.sheet=(sh&&sh.u)?{u:sh.u,c:sh.c,r:sh.r,x:sp[1],y:sp[2]}:null;return o});
+  ALC.rows.forEach(function(x){if(x.sheet)BAG_BY_NAME[nrm(x.name)]=x.sheet});
+  ALC.loaded=true;alcIntoCatalog();
+  Object.keys(CART).forEach(function(k){if(k.indexOf('ALC-')===0&&!CAT[k])delete CART[k]});
+  render();renderCart();refee()}).catch(function(){})}
+function alcSku(code,sz){return 'ALC-'+code+'-'+sz}
+function alcGrams(x,mult){return Math.round(x.sg*mult*10)/10}
+function alcIntoCatalog(){ALC.rows.forEach(function(x){
+  [['S',x.sm],['L',x.bg]].forEach(function(z){
+   if(!(z[1]>0))return;
+   var base=Math.round(x.price*z[1]*100)/100;
+   CAT[alcSku(x.code,z[0])]={sku:alcSku(x.code,z[0]),goal:'alc',alc:1,boxes:0,base:base,
+    price:Math.round((base+ALC_PACK)*100)/100,
+    name:x.name+' ( '+alcGrams(x,z[1])+' g )'}})}) }
+function spriteStyle(s){var bx=s.c>1?(s.x/(s.c-1)*100):0,by=s.r>1?(s.y/(s.r-1)*100):0;
+ return 'background-image:url('+esc(s.u)+');background-size:'+(s.c*100)+'% '+(s.r*100)+'%;'+
+  'background-position:'+bx.toFixed(4)+'% '+by.toFixed(4)+'%'}
+function bagCell(s){return '<div class="bagpic" role="img" style="'+spriteStyle(s)+'"></div>'}
+function alcCatName(k){var c=ALC.cats.filter(function(y){return y[0]===k})[0];return c?c[1]:k}
+function alcCard(x){
+ var rows=[['S',x.sm,'Small'],['L',x.bg,'Large']].filter(function(z){return z[1]>0}).map(function(z){
+  var sku=alcSku(x.code,z[0]),q=CART[sku]||0,c=CAT[sku];if(!c)return '';
+  var btn=q?'<span class="qty"><button type="button" onclick="add(\''+sku+'\',-1)">−</button><span>'+q+'</span><button type="button" onclick="alcAdd(\''+sku+'\')">+</button></span>'
+          :'<button class="btn btn-k" type="button" onclick="alcAdd(\''+sku+'\')">Add</button>';
+  return '<div class="sz"><span class="lab">'+z[2]+'<small>'+alcGrams(x,z[1])+' g · '+Math.round(x.kcal*z[1])+' KCALs</small></span>'+
+   '<span class="price">'+rm(c.price)+'</span>'+btn+'</div>'}).join('');
+ var pic=x.sheet?bagCell(x.sheet)
+  :x.bagUrl?'<img loading="lazy" src="'+esc(x.bagUrl)+'" alt="">'
+  :x.img?'<div class="vac"><div class="vbag"><div class="vpouch"><img loading="lazy" src="'+x.img+'" alt="">'+
+   '</div><span class="vseal t"></span><span class="vseal b"></span><span class="vfilm"></span></div></div>'
+  :'';/* nothing photographed yet — show no picture rather than an empty bag */
+ var out=oosHas(x.code);
+ if(out)rows='<div class="sz oosbar">Out Of Stock — back on the menu as soon as the kitchen has it again</div>';
+ return '<article class="item alc'+(out?' oositem':'')+'">'+pic+
+  '<div class="body"><span class="goal">'+esc(alcCatName(x.cat))+(out?' <em class="oostag">Out Of Stock</em>':'')+'</span><div class="name">'+esc(x.name)+'</div>'+
+  '<div class="macros"><span><b>'+x.kcal+'</b>KCALs</span><span><b>'+x.p+'g</b>Protein</span><span><b>'+x.c+'g</b>Carbs</span><span><b>'+x.f+'g</b>Fat</span></div>'+
+  '<div class="per">per '+x.sg+' g raw</div>'+rows+'</div></article>'}
+function alcRender(){
+ if(!ALC.loaded)return '<div class="alcnote">Loading the a la carte list…</div>';
+ var chips='<div class="alcchips">'+ALC.cats.map(function(c){
+   return '<button type="button" class="'+(ALC.cat===c[0]?'on':'')+'" onclick="alcPick(\''+c[0]+'\')">'+esc(c[1])+'</button>'}).join('')+'</div>';
+ var note='<div class="alcnote">Single portions to add to your order — sized to the gram, priced by weight. '+
+  '<b>À la Carte is packed in a vacuum bag</b>, not a bento box, and carries RM '+ALC_PACK.toFixed(2)+' of packaging per portion.</div>';
+ var cards=ALC.rows.filter(function(x){return x.cat===ALC.cat}).map(alcCard).join('');
+ return chips+note+(cards||'<div class="alcnote">Nothing in this group yet.</div>')}
+function alcPick(c){ALC.cat=c;render();window.scrollTo({top:document.getElementById('grid').offsetTop-90,behavior:'smooth'})}
+function alcAdd(sku){add(sku,1);alcVacNotice()}
+function alcVacNotice(){var seen='';try{seen=sessionStorage.getItem('aera.alcVac')||''}catch(e){}
+ if(seen)return; try{sessionStorage.setItem('aera.alcVac','1')}catch(e){}
+ var w=document.createElement('div');w.className='vacwrap';
+ w.innerHTML='<div class="vacbox"><div style="font-size:30px">🍱</div><h3>À la Carte Comes In A Vacuum Bag</h3>'+
+  '<p>Single portions are vacuum sealed rather than packed in a MAP bento box — that is what keeps a plain portion fresh without a tray around it. '+
+  'Your meals still come in whichever box you choose at checkout.</p>'+
+  '<button class="btn btn-y" type="button" style="margin-top:16px" onclick="this.closest(\'.vacwrap\').remove()">Got It</button></div>';
+ w.addEventListener('click',function(e){if(e.target===w)w.remove()});
+ document.body.appendChild(w)}
+var FILTER='bundle';
+function render(){var h='';if(FILTER==='alc'){document.getElementById('grid').innerHTML=alcRender();return}
+if(FILTER==='bundle')BUNDLES.forEach(function(b){h+=card({sku:b[0],name:b[1],goal:b[2],price:CAT[b[0]].price,bul:b[5],img:b[6],boxes:b[4],bundle:true})});else MEALS.forEach(function(m){if(FILTER!=='all'&&m[2]!==FILTER)return;h+=card({sku:m[0],name:m[1],goal:m[2],price:CAT[m[0]].price,kcal:m[4],p:m[5],c:m[6],f:m[7],img:m[8],serving:m[9],raw:m[10]})});document.getElementById('grid').innerHTML=h}
+document.querySelectorAll('.tab').forEach(function(t){t.addEventListener('click',function(){document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});t.classList.add('on');FILTER=t.dataset.f;render()})});
+/* the Shop menu on the other pages links here with a hash — honour it */
+function shopHash(){var h=(location.hash||'').replace('#','').toLowerCase();
+ var map={bundles:'bundle',bundle:'bundle',fat:'fat',mass:'mass',all:'all',meals:'all',alacarte:'alc',alc:'alc'};
+ if(!map[h])return;FILTER=map[h];
+ document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.dataset.f===FILTER)});render()}
+window.addEventListener('hashchange',shopHash);shopHash();
+/* ===== Cart panel ===== */
+/* ===== Free delivery vouchers (redeemed with AERA Points) ===== */
+var MERCH_URL='https://my.chatbees.io/p/VMrvEw';
+var VOUCH_URL='/api/public/landing-pages/6966/sheet-data';
+/* Vouchers are managed in the AERA Console. These two are the fallback if the list cannot be reached.
+   The AP price charged is always the one from this table, never the copy stored in the browser. */
+var VOUCHER_TYPES={
+ 'FREEDELIVERY-5':{name:'RM 5.00 Free Delivery Voucher',ap:500,handover:'any',value:5},
+ 'FREEDELIVERY-10':{name:'RM 10.00 Free Delivery Voucher',ap:1000,handover:'any',value:10}
+};
+function loadVoucherTypes(){fetch(VOUCH_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
+  var rows=[],hd=j&&Array.isArray(j.headers)?j.headers:null,raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];
+  raw.forEach(function(r){if(Array.isArray(r)&&hd){var o={};hd.forEach(function(k,i){o[k]=r[i]});rows.push(o)}else if(r&&typeof r==='object')rows.push(r)});
+  var out={};rows.forEach(function(r){var c=String(r.Code||'').trim().toUpperCase(),ap=Math.round(+r.AP||0);
+   if(!c||!(ap>0))return;
+   out[c]={name:String(r.Name||c).trim(),ap:ap,handover:String(r.Handover||'any').trim().toLowerCase(),
+    value:Math.max(0,Math.round((+r.Value||0)*100)/100),
+    off:/^(n|no|false|0)$/i.test(String(r.Active==null?'yes':r.Active))}});
+  if(Object.keys(out).length){VOUCHER_TYPES=out;
+   if(VOUCHER&&!VOUCHER_TYPES[VOUCHER.code])VOUCHER=null;
+   refee();renderCart()}}).catch(function(){})}
+var VOUCHER=null; /* the voucher applied to this order */
+function myVouchers(){var out=[];try{(JSON.parse(localStorage.getItem('aera.vouchers')||'[]')||[]).forEach(function(v){
+  var d=VOUCHER_TYPES[String(v&&v.code||'').toUpperCase()];if(d&&!d.off)out.push({code:String(v.code).toUpperCase(),name:d.name,ap:d.ap,handover:d.handover,value:+d.value||0})})}catch(e){}
+ return out}
+function dropVoucher(code){try{var l=(JSON.parse(localStorage.getItem('aera.vouchers')||'[]')||[]).filter(function(v){return String(v&&v.code||'').toUpperCase()!==code});
+  localStorage.setItem('aera.vouchers',JSON.stringify(l))}catch(e){}}
+function voucherBlocked(v){
+ if(firstOrderRM()>0)return 'Your First Order Voucher is on this order, and it stands on its own. Save it for later to use this instead.';
+ if(!isDel())return 'Vouchers cover the rider fee, so pick Rider Delivery first.';
+ if(v.handover==='drop'&&HANDOVER==='door')return 'This voucher covers Normal Delivery only. Switch to Normal Delivery to use it.';
+ if(v.handover==='door'&&HANDOVER!=='door')return 'This voucher covers Door-to-Door only. Switch to Door-to-Door to use it.';
+ if(!ready()||FEE_RM==null)return 'Check your delivery fee first, then the voucher can come off it.';
+ if(FEE_RM<=0)return 'Delivery is already free on this order.';
+ if(!APS.email)return 'Enter your email above so we can check your points.';
+ if(!APS.loaded)return 'Checking your points…';
+ if(APS.available-Math.round(discountRM()*100/AP.rmPer100)<v.ap)return 'You have '+apFmt(APS.available)+' — this voucher needs '+apFmt(v.ap)+'.';
+ return ''}
+function useVoucher(code){var v=myVouchers().filter(function(x){return x.code===code})[0];if(!v)return;
+ var why=voucherBlocked(v);if(why){renderCart();return}
+ VOUCHER=v;refee();renderCart()}
+function clearVoucher(){VOUCHER=null;refee();renderCart()}
+function voucherAp(){return VOUCHER?VOUCHER.ap:0}
+/* A voucher with a Worth covers up to that much of the rider fee; Worth 0 covers the whole fee. */
+function voucherCap(v){return (v&&+v.value>0)?+v.value:Infinity}
+function voucherSaved(){if(ccOn())return 0;if(!VOUCHER||firstOrderRM()>0)return 0;var f=FEE_RM||0;return Math.round(Math.min(f,voucherCap(VOUCHER))*100)/100}
+function renderVouchers(){var el=document.getElementById('vouchBox');if(!el)return;
+ var list=myVouchers();
+ if(!list.length){el.innerHTML='';return}
+ el.innerHTML=list.map(function(v){var on=VOUCHER&&VOUCHER.code===v.code;var why=on?'':voucherBlocked(v);
+  var cov=(+v.value>0)?rm(v.value)+' off the rider fee':'your whole rider fee';
+  var got=on?Math.round(Math.min(FEE_RM||0,voucherCap(v))*100)/100:0;
+  return'<div class="vline'+(on?' on':'')+'"><span class="vn"><b>'+esc(v.name)+'</b><small>'+apFmt(v.ap)+' from your points · covers '+cov+(on?' · '+rm(got)+' off this order':'')+'</small>'+
+   (why?'<i>'+esc(why)+'</i>':'')+'</span>'+
+   (on?'<button class="btn btn-o" type="button" style="padding:6px 12px" onclick="clearVoucher()">Undo</button>'
+      :'<button class="btn btn-y" type="button" style="padding:6px 12px" onclick="useVoucher(\''+v.code+'\')"'+(why?' disabled':'')+'>Use Voucher</button>')+
+   '</div>'}).join('')}
+alcLoad();
+function renderCart(){var el=document.getElementById('lines');var keys=Object.keys(CART).filter(function(k){return !!CAT[k]});
+ el.innerHTML=keys.length?keys.map(function(k){var x=CAT[k];if(x.plan)return'<div class="line"><span class="n">'+esc(x.name)+'<small>'+x.boxes+' Meals · Packaging included · <a href="https://my.chatbees.io/p/SrQzC5m2">Edit plan</a></small></span><button class="btn btn-o" type="button" style="padding:6px 10px" onclick="add(\''+k+'\',-1)">Remove</button><b>'+rm(x.price)+'</b></div>';var up=uPrice(k),cut=up<x.price-0.004;
+  return'<div class="line"><span class="n">'+esc(x.name)+'<small>'+(cut?'<s style="opacity:.55">'+rm(x.price)+'</s> ':'')+rm(up)+' × '+CART[k]+(x.boxes>1?' · '+(x.boxes*CART[k])+' boxes':'')+'</small></span><span class="qty"><button type="button" onclick="add(\''+k+'\',-1)">−</button><span>'+CART[k]+'</span><button type="button" onclick="add(\''+k+'\',1)">+</button></span><b>'+rm(up*CART[k])+'</b></div>'}).join(''):'<div class="empty">Your Cart is empty. Add Meals from the Menu.</div>';
+ document.getElementById('cartCount').textContent=count();document.getElementById('sheetCount').textContent=count()+' item'+(count()===1?'':'s');
+ var sub=subtotal();var fee=isDel()?FEE_RM:0;var pk=packFee();var bday=birthdayRM();var disc=discountRM();
+ var vsave=voucherSaved();var fo=firstOrderRM();var total=Math.max(0,sub+pk+(fee||0)-vsave-bday-disc-fo);
+ var cred=crApplied(total);total=Math.round((total-cred)*100)/100;
+ var gwf=ccOn()?ccGatewayFee(total):0;total=Math.round((total+gwf)*100)/100;
+ coRefresh();coPaint();
+ renderVouchers();renderFo();
+ var fr=document.getElementById('foRow');if(fr){fr.style.display=fo>0?'flex':'none';
+  document.getElementById('foName').textContent='First Order Voucher · '+rm(FO.minRm)+'+ of meals';
+  document.getElementById('foAmt').textContent='− '+rm(fo);
+ var fn=document.getElementById('foName');if(fn)fn.textContent='First Order Voucher · '+foShort()}
+ var vr=document.getElementById('vouchRow');if(vr){vr.style.display=vsave>0?'flex':'none';
+  document.getElementById('vouchName').textContent=VOUCHER?VOUCHER.name+' · '+apFmt(VOUCHER.ap):'';
+  document.getElementById('vouchAmt').textContent='− '+rm(vsave)}
+ var br=document.getElementById('bdRow');br.style.display=bday>0?'flex':'none';document.getElementById('bdName').textContent='🎂 Birthday treat · '+BD.pct+'% off meals ( Once a year )';document.getElementById('bdAmt').textContent='− '+rm(bday);
+ document.getElementById('subtotal').textContent=rm(sub);
+ var dr=document.getElementById('discRow');dr.style.display=disc>0?'flex':'none';document.getElementById('discName').textContent='AERA Points discount · '+apFmt(disc*100/AP.rmPer100);document.getElementById('discAmt').textContent='− '+rm(disc);
+ document.getElementById('earnHint').textContent=keys.length?'You earn '+apFmt(pointsEarned())+' with this Order ( '+AP.perRM+' AP per RM 1 on Meals · 100 AP = RM '+AP.rmPer100.toFixed(2)+' OFF future Orders ).':'';
+ renderPoints();
+ document.getElementById('pkName').textContent='Packaging Fee · '+PACKAGING[PACK].name+' · '+boxes()+' Box'+(boxes()===1?'':'es');document.getElementById('pkAmt').textContent=rm(pk);
+ document.getElementById('feeName').textContent=isDel()?(COURIER?COURIERS[COURIER].name+(HANDOVER?(HANDOVER==='drop'?' · Normal Delivery':' · Door-to-Door ( '+vehUp()+' )'):''):'Delivery')+(GEO&&GEO.km?' · '+GEO.km.toFixed(1)+' km':''):'Self Pick-Up';
+ document.getElementById('feeAmt').textContent=isDel()?(FEE_RM==null?(!GEO?'Check address':!COURIER?'Choose courier':!HANDOVER?'Choose service':'—'):(FEE_RM===0?'FREE':rm(FEE_RM))):'FREE';
+ updateRates();
+ (function(){var cr=document.getElementById('crRow');if(!cr)return;
+  cr.style.display=cred>0?'flex':'none';
+  var left=Math.round((crAvail()-cred)*100)/100;
+  document.getElementById('crName').innerHTML='AERA Credit'+(left>0?' <span style="opacity:.75;font-weight:400">· '+rm(left)+' left for next time</span>':'');
+  document.getElementById('crAmt').textContent='− '+rm(cred)})();
+ (function(){var cr=document.getElementById('ccRow'),gw=document.getElementById('gwRow');if(!cr)return;
+  cr.style.display=ccOn()?'flex':'none';gw.style.display=ccOn()&&gwf>0?'flex':'none';
+  document.getElementById('ccName').innerHTML='Cost Price <span style="opacity:.75;font-weight:400">· code '+esc(CC.on?CC.on.code:'')+'</span>';
+  document.getElementById('ccAmt').textContent='at cost';
+  document.getElementById('gwAmt').textContent=rm(gwf);
+  var b=document.getElementById('ccMsg');
+  ccPaint();
+  if(b)b.innerHTML=CC.err?'<div class="msg warn">'+esc(CC.err)+'</div>'
+   :ccOn()?'<div class="msg">Priced at cost — food, packaging and the payment fee. Delivery is charged as normal. Points and credit do not apply on a cost price order. <a href="#" onclick="ccClear();return false">Remove</a></div>':''})();
+ document.getElementById('total').textContent=rm(total);document.getElementById('sheetTotal').textContent=rm(total);
+ document.getElementById('payBtn').textContent=keys.length?'Pay '+rm(total)+' Securely':'Pay Securely';}
+function openCart(){document.getElementById('side').classList.add('open')}function closeCart(){document.getElementById('side').classList.remove('open')}
+function setPack(p){PACK=p;document.getElementById('pkBento').classList.toggle('on',p==='bento');document.getElementById('pkVacuum').classList.toggle('on',p==='vacuum');renderCart();render()}
+function isDel(){return FUL==='delivery'}
+function ready(){return !!(GEO&&GEO.km!=null&&GEO.km<=MAX_KM)}
+function rateText(c,hh){var F=COURIERS[c].rate;if(ready()){var f=feeFor(GEO.km,subtotal(),c,hh);return f===0?'FREE':rm(f)}return 'from RM '+(F.base+(hh==='door'?doorExtra():0))}
+function updateRates(){document.getElementById('rateLalamove').textContent='Normal '+rateText('lalamove','drop')+' · Door-to-Door '+rateText('lalamove','door');document.getElementById('rateGrab').textContent='Normal '+rateText('grab','drop')+' · Door-to-Door '+rateText('grab','door');
+ document.getElementById('doorHint').textContent='Rider brings the order right to your door. Normal Delivery + '+rm(DOOR_SURCHARGE.motorcycle)+' by motorcycle or + '+rm(DOOR_SURCHARGE.car)+' by car — this order goes by '+vehicle()+' ( + '+rm(doorExtra())+' ).';
+ if(COURIER){document.getElementById('rateDrop').textContent=rateText(COURIER,'drop');document.getElementById('rateDoor').textContent=rateText(COURIER,'door')}}
+function setCourier(c){COURIER=c;document.getElementById('optLalamove').classList.toggle('on',c==='lalamove');document.getElementById('optGrab').classList.toggle('on',c==='grab');document.getElementById('handoverBox').style.display=c?'block':'none';refee()}
+function setHandover(hh){HANDOVER=hh;document.getElementById('hoDoor').classList.toggle('on',hh==='door');document.getElementById('hoDrop').classList.toggle('on',hh==='drop');refee()}
+function refee(){FEE_RM=null;if(isDel()&&ready()&&COURIER&&HANDOVER)FEE_RM=feeFor(GEO.km,subtotal(),COURIER,HANDOVER);
+ if(VOUCHER&&voucherBlocked(VOUCHER))VOUCHER=null;
+var fm=document.getElementById('feeMsg');if(fm&&GEO&&GEO.label&&ready())fm.innerHTML='<div class="msg ok">Matched: '+esc(GEO.label)+'<br>About '+GEO.km+' km from our kitchen'+(FEE_RM!=null?' · '+feeName()+' '+(FEE_RM===0?'FREE':rm(FEE_RM)):' · Now choose a courier and service below')+'</div>';renderCart()}
+function feeName(){return (COURIER?COURIERS[COURIER].name:'Delivery')+(HANDOVER==='drop'?' Normal Delivery':HANDOVER==='door'?' Door-to-Door ( '+vehUp()+' )':'')}
+function setFul(f){FUL=f;document.getElementById('optPickup').classList.toggle('on',f==='pickup');document.getElementById('optDelivery').classList.toggle('on',f==='delivery');document.getElementById('deliveryBox').style.display=isDel()?'block':'none';document.getElementById('dateLbl').textContent=isDel()?'Delivery Date':'Pick-Up Date';if(isDel()&&ACCT&&ACCT.address&&GEO&&GEO.km!=null&&!document.getElementById('feeMsg').innerHTML){if(GEO.km>MAX_KM){document.getElementById('feeMsg').innerHTML='<div class="msg bad">Your saved address is about '+GEO.km+' km from our kitchen — outside our delivery area.</div>'}else if(ACCT.address.notes){var nt=document.getElementById('notes');if(nt&&!nt.value)nt.value=ACCT.address.notes}}var ph=document.getElementById('phone');if(ph){ph.placeholder=isDel()?'Mobile ( The Rider Calls This )':'Mobile ( Optional )';document.getElementById('phoneHint').textContent=isDel()?'The Rider calls this number on arrival.':'So the Kitchen can reach you about this Order.'}refee()}
+/* ===== AERA Points ===== */
+function renderPoints(){var box=document.getElementById('apBox');if(!box)return;if(!count()){box.innerHTML='';return}
+ if(!APS.email){box.innerHTML='<div class="row"><span><b>AERA Points</b><br><span class="hint" style="margin:0">Enter your Email above — If you have AERA Points, they show here and you can take up to '+AP.capPct+'% off this order.</span></span></div>';return}
+ if(!APS.loaded){box.innerHTML='<div class="row"><span><b>AERA Points</b><br><span class="hint" style="margin:0">'+(APS.failed?'Points are unavailable right now — you still earn them on this order.':'Checking your balance…')+'</span></span></div>';return}
+ if(!APS.mine.length&&!(APS.available>0)){box.innerHTML='<div class="row"><span><b>AERA Points</b><br><span class="hint" style="margin:0">No points yet for '+esc(APS.email)+' — this order earns '+apFmt(pointsEarned())+', ready to use next time.</span></span></div>';return}
+ if(firstOrderRM()>0||ccOn()){box.innerHTML='<div class="row"><span><b>AERA Points</b><br><span class="hint" style="margin:0">'+esc(APS.email)+'</span></span><b class="big">'+apFmt(APS.available)+'</b></div><div class="hint">'+(ccOn()?'Paused on this Order while a Cost Price Code is applied. Your points stay in your account for next time.':'Paused on this Order while the First Order Voucher is on. Your points stay in your account for next time.')+'</div>'+refBonusLine();return}
+ var maxRM=maxRedeemRM();var opts=[];for(var v=0;v<=maxRM;v++)opts.push('<option value="'+v+'"'+(v===APS.redeemRM?' selected':'')+'>'+(v===0?'Don\'t use points':'RM '+v+'.00 off ( '+(v*100/AP.rmPer100)+' AP )')+'</option>');
+ var hist=APS.mine.slice().sort(function(a,b){return String(b.Date||'').localeCompare(String(a.Date||''))}).slice(0,5).map(function(r){var e=+r.Earned||0,d=+r.Redeemed||0;return'<tr><td>'+esc(String(r.Date||'').slice(0,10))+(e&&r.Expires?'<span class="hint" style="margin:0;display:inline"> · expires '+esc(String(r.Expires).slice(0,10))+'</span>':'')+'</td><td class="r">'+(e?'+'+e:'')+(d?'<span style="color:var(--bad)">−'+d+'</span>':'')+'</td></tr>'}).join('');
+ box.innerHTML='<div class="row"><span><b>AERA Points</b><br><span class="hint" style="margin:0">'+esc(APS.email)+'</span></span><b class="big">'+apFmt(APS.available)+'</b></div>'+
+ '<div class="hint">Worth RM '+(APS.available/100*AP.rmPer100).toFixed(2)+(APS.expiringSoon?' · <span style="color:var(--warn)">'+apFmt(APS.expiringSoon)+' expire on '+esc(APS.expiringDate)+'</span>':'')+'</div>'+
+ (maxRM>0?'<div class="row" style="margin-top:8px"><span>Use on this order <span class="hint" style="margin:0">( Max '+AP.capPct+'% = RM '+maxRM+' )</span></span><select onchange="APS.redeemRM=+this.value;renderCart()">'+opts.join('')+'</select></div>':'<div class="hint">You need at least 100 AP to take RM 1.00 off — this order adds '+apFmt(pointsEarned())+'.</div>')+
+ (hist?'<table>'+hist+'</table>':'')+refBonusLine()}
+function refBonusLine(){var b=refBonusAp();if(!b)return '';
+ return '<div class="hint" style="margin-top:6px;color:var(--green);font-weight:600">+ '+apFmt(b)+' bonus for using '+esc(REF.name)+' ( '+REF_BONUS_PCT+'% of your meal subtotal ).</div>'}
+function loadPoints(){fetch(POINTS_URL).then(function(r){return r.json()}).then(function(j){var rows=[];var hd=j&&Array.isArray(j.headers)?j.headers:null;var raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];raw.forEach(function(r){if(Array.isArray(r)&&hd){var o={};hd.forEach(function(k,i){o[k]=r[i]});rows.push(o)}else if(r&&typeof r==='object')rows.push(r)});APS.rows=rows;APS.loaded=true;apLookup(document.getElementById('email').value);renderCart()}).catch(function(){APS.rows=[];APS.loaded=true;APS.failed=true;renderCart()})}
+/* ===== Referral cash-back ===== */
+var REF_URL='/api/public/landing-pages/6947/sheet-data',REFLINK_URL='/api/public/landing-pages/6948/sheet-data';
+var REF_TIER={normal:{name:'Referral Partner',rate:5},gym:{name:'Fitness Studio / Gym',rate:6.5},influencer:{name:'Fitness Influencer',rate:8}};
+var REF_BONUS_PCT=3; // extra AERA Points for the customer, worth this % of the meal subtotal after discounts
+var REF={rows:[],links:[],loaded:false,typed:'',locked:'',code:'',name:'',tier:'',rate:0,state:''};
+function refKey(email){return sha256hex('aera-ref:'+String(email||'').trim().toLowerCase()).slice(0,24)}
+function refRows(j){var rows=[],hd=j&&Array.isArray(j.headers)?j.headers:null,raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];
+ raw.forEach(function(r){if(Array.isArray(r)&&hd){var o={};hd.forEach(function(k,i){o[k]=r[i]});rows.push(o)}else if(r&&typeof r==='object')rows.push(r)});return rows}
+function loadReferrals(){
+ fetch(REF_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){REF.rows=refRows(j)}).catch(function(){REF.rows=[]})
+  .then(function(){return fetch(REFLINK_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){REF.links=refRows(j)}).catch(function(){REF.links=[]})})
+  .then(function(){REF.loaded=true;try{var t=localStorage.getItem('aera.ref');if(t&&!REF.typed){REF.typed=t;var e=document.getElementById('refCode');if(e&&!e.value)e.value=t}}catch(e){}refApply()})}
+function refFind(code){code=String(code||'').trim().toUpperCase();if(!code)return null;
+ for(var i=0;i<REF.rows.length;i++){var r=REF.rows[i];
+  if(String(r.Code||'').trim().toUpperCase()!==code)continue;
+  var act=String(r.Active==null?'yes':r.Active).trim().toLowerCase();
+  if(act==='no'||act==='false'||act==='0')return null;
+  var tier=String(r.Tier||'normal').trim().toLowerCase();var t=REF_TIER[tier]||REF_TIER.normal;
+  return{code:code,name:String(r.Name||'').trim()||code,tier:tier,tierName:t.name,rate:+r.Rate>0?+r.Rate:t.rate}}
+ return null}
+function refLocked(email){var k=refKey(email);if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email||'')))return '';
+ for(var i=0;i<REF.links.length;i++){if(String(REF.links[i].Key||'').trim()===k)return String(REF.links[i].Code||'').trim().toUpperCase()}
+ try{var o=JSON.parse(localStorage.getItem('aera.refLock')||'null');if(o&&o.k===k)return String(o.c||'').toUpperCase()}catch(e){}
+ return ''}
+function refInput(){var e=document.getElementById('refCode');if(!e)return;
+ var v=e.value.toUpperCase().replace(/[^A-Z0-9-]/g,'');if(e.value!==v)e.value=v;REF.typed=v;
+ try{localStorage.setItem('aera.ref',v)}catch(x){}refApply();renderCart()}
+function refApply(){var em=(document.getElementById('email')||{}).value||'';
+ REF.locked=refLocked(em);
+ var use=REF.locked||REF.typed;var hit=refFind(use);
+ REF.code=hit?hit.code:'';REF.name=hit?hit.name:'';REF.tier=hit?hit.tier:'';REF.rate=hit?hit.rate:0;
+ REF.state=!use?'':(hit?(REF.locked?'locked':'ok'):'bad');
+ var box=document.getElementById('refCode'),msg=document.getElementById('refMsg');
+ if(box){box.disabled=!!REF.locked;if(REF.locked&&box.value!==REF.locked)box.value=REF.locked}
+ if(!msg)return;
+ if(REF.state==='locked')msg.innerHTML='<span style="color:var(--green);font-weight:600">You are registered under '+esc(REF.name)+' ( '+esc(REF.code)+' ).</span> A referral code stays with your account and cannot be swapped.';
+ else if(REF.state==='ok')msg.innerHTML='<span style="color:var(--green);font-weight:600">'+esc(REF.name)+' ( '+esc(REF.code)+' ) applied.</span> You earn an extra '+REF_BONUS_PCT+'% of your meal subtotal in AERA Points. Once this order is paid, your account stays with this referrer.';
+ else if(REF.state==='bad')msg.innerHTML='<span style="color:var(--bad);font-weight:600">We do not recognise that code.</span> Check it with whoever gave it to you, or leave it blank.';
+ else msg.textContent='Have a Code from a Gym, Studio or Coach? Enter it and you earn extra AERA Points on your Meals.'}
+function refEligible(){return Math.max(0,Math.round((mealBase()-birthdayRM()-discountRM())*100)/100)}
+function refBonusAp(){if(!REF.code)return 0;return Math.max(0,Math.floor(refEligible()*REF_BONUS_PCT/100*100/AP.rmPer100))}
+function refCashback(){if(!REF.code)return 0;return Math.round(refEligible()*REF.rate)/100}
+function apLookup(email){email=String(email||'').trim().toLowerCase();var ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);if(!ok){APS.email='';APS.key='';APS.mine=[];APS.available=0;APS.redeemRM=0;return}if(email!==APS.email){APS.redeemRM=0}APS.email=email;APS.key=apKey(email);/* A signed-in customer's balance comes from their account ledger, which is the complete record: it holds the points carried over from the old site as well as everything earned here. The public sheet below is only for someone ordering without signing in. */var acct=(ACCT&&ACCT.email&&String(ACCT.email).toLowerCase()===email&&ACCT.ap!=null)?(+ACCT.ap||0):null;if(acct!==null){APS.mine=[];APS.available=acct;APS.expiringSoon=0;APS.expiringDate='';return}if(!APS.loaded)return;APS.mine=(APS.rows||[]).filter(function(r){return String(r.Key||'').trim()===APS.key});var b=apBalance(APS.mine,iso(myNow()));APS.available=b.available;APS.expiringSoon=b.expiringSoon;APS.expiringDate=b.expiringDate}
+function apInput(now){clearTimeout(APS.timer);var v=document.getElementById('email').value;var run=function(){apLookup(v);refApply();renderCart()};if(now)run();else APS.timer=setTimeout(run,350)}
+/* ===== Address suggestions (OpenStreetMap / Photon — free, no API key) ===== */
+var AC={items:[],sel:-1,timer:null,seq:0};
+function acHide(){var l=document.getElementById('acList');if(l)l.classList.remove('open');AC.sel=-1}
+function acRender(){var l=document.getElementById('acList');if(!AC.items.length){acHide();return}l.innerHTML=AC.items.map(function(it,i){return'<div class="'+(i===AC.sel?'sel':'')+'" onmousedown="acPick('+i+')"><b>'+esc(it.main)+'</b><small>'+esc(it.sub)+'</small></div>'}).join('');l.classList.add('open')}
+function acKey(e){if(!AC.items.length||!document.getElementById('acList').classList.contains('open'))return;if(e.key==='ArrowDown'){AC.sel=Math.min(AC.items.length-1,AC.sel+1);acRender();e.preventDefault()}else if(e.key==='ArrowUp'){AC.sel=Math.max(0,AC.sel-1);acRender();e.preventDefault()}else if(e.key==='Enter'){if(AC.sel>=0){acPick(AC.sel);e.preventDefault()}}else if(e.key==='Escape')acHide()}
+function acPick(i){var it=AC.items[i];if(!it)return;document.getElementById('address').value=it.full;acHide();AC.items=[];if(it.lat!=null){acApply({lat:it.lat,lng:it.lng,label:it.full})}else checkFee()}
+function acApply(g){var m=document.getElementById('feeMsg');var km=Math.round(hav(KITCHEN,g)*ROAD_FACTOR*10)/10;g.km=km;GEO=g;FEE_RM=null;if(km>MAX_KM){m.innerHTML='<div class="msg bad">That address is about '+km+' km from our kitchen — outside our delivery area. Please choose self pick-up or WhatsApp us.</div>';renderCart();return}refee()}
+function acInput(){var q=document.getElementById('address').value.trim();GEO=null;FEE_RM=null;renderCart();clearTimeout(AC.timer);if(q.length<3){AC.items=[];acHide();return}AC.timer=setTimeout(function(){acFetch(q)},280)}
+function acFetch(q){var seq=++AC.seq;
+ fetch('https://photon.komoot.io/api/?q='+encodeURIComponent(q)+'&limit=6&lang=en&lat='+KITCHEN.lat+'&lon='+KITCHEN.lng).then(function(r){return r.json()}).then(function(j){if(seq!==AC.seq)return;var seen={};AC.items=((j&&j.features)||[]).filter(function(f){return f.properties&&(f.properties.countrycode||'').toUpperCase()==='MY'}).map(function(f){var p=f.properties;var main=[p.name,p.housenumber&&p.street?p.housenumber+' '+p.street:p.street].filter(Boolean).join(', ')||p.city||p.district||'';var sub=[p.district,p.city,p.postcode,p.state].filter(function(x){return x&&x!==main}).join(', ');var full=[main,sub].filter(Boolean).join(', ');return{main:main,sub:sub,full:full,lat:f.geometry.coordinates[1],lng:f.geometry.coordinates[0]}}).filter(function(it){if(!it.main||seen[it.full])return false;seen[it.full]=1;return true}).slice(0,6);AC.sel=-1;acRender()}).catch(function(){})}
+/* ===== Fee ===== */
+function feeFor(km,sub,c,hh){var F=COURIERS[c||COURIER||'lalamove'].rate;hh=hh||HANDOVER||'drop';var f;if(F.freeAbove&&sub>=F.freeAbove)f=0;else{f=F.base+Math.max(0,km-F.baseKm)*F.perKm;if(F.cap)f=Math.min(f,F.cap);f=Math.round(f*10)/10}if(hh==='door')f+=doorExtra();return Math.round(f*100)/100}
+function hav(a,b){var R=6371,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180,s=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);return 2*R*Math.asin(Math.sqrt(s))}
+function checkFee(){var q=document.getElementById('address').value.trim();var m=document.getElementById('feeMsg');if(q.length<8){m.innerHTML='<div class="msg warn">Please enter your full address including postcode.</div>';return}
+ var b=document.getElementById('feeBtn');b.disabled=true;b.textContent='Checking…';m.innerHTML='';GEO=null;FEE_RM=null;renderCart();
+ fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=my&q='+encodeURIComponent(q),{headers:{'Accept':'application/json'}}).then(function(r){return r.json()}).then(function(j){
+  b.disabled=false;b.textContent='Check Delivery Fee';
+  if(!j||!j[0]){m.innerHTML='<div class="msg bad">We couldn\'t find that address on the map. Try adding the area, postcode and city ( e.g. "Bangsar South, 59200 Kuala Lumpur" ).</div>';renderCart();return}
+  var g={lat:+j[0].lat,lng:+j[0].lon,label:j[0].display_name};var km=Math.round(hav(KITCHEN,g)*ROAD_FACTOR*10)/10;g.km=km;
+  if(km>MAX_KM){GEO=g;FEE_RM=null;m.innerHTML='<div class="msg bad">That address is about '+km+' km from our kitchen — outside our delivery area. Please choose self pick-up or WhatsApp us.</div>';renderCart();return}
+  GEO=g;refee();
+ }).catch(function(){b.disabled=false;b.textContent='Check Delivery Fee';m.innerHTML='<div class="msg bad">Address lookup failed — please try again.</div>'})}
+/* ===== Dates ===== */
+function myNow(){var d=new Date();return new Date(d.getTime()+(d.getTimezoneOffset()+480)*60000)}
+function iso(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function earliest(){var n=myNow();var lead=LEAD_DAYS+((n.getHours()>CUTOFF_HOUR||(n.getHours()===CUTOFF_HOUR&&n.getMinutes()>=CUTOFF_MIN))?1:0);var d=new Date(n);d.setDate(d.getDate()+lead);return d}
+(function(){var e=earliest();var di=document.getElementById('date');di.min=iso(e);di.value=iso(e);var mx=new Date(e);mx.setDate(mx.getDate()+21);di.max=iso(mx);document.getElementById('slot').innerHTML=SLOTS.map(function(s){return'<option value="'+s[0]+'">'+s[1]+'</option>'}).join('');document.getElementById('cutoffHint').textContent='Order before '+(CUTOFF_HOUR>12?CUTOFF_HOUR-12:CUTOFF_HOUR)+':'+('0'+CUTOFF_MIN).slice(-2)+(CUTOFF_HOUR>=12?' PM':' AM')+' for the earliest slot '+LEAD_DAYS+' Days later. Earliest available : '+bigDay(e)+'.';document.getElementById('feeFromAny').textContent=Math.min(COURIERS.lalamove.rate.base,COURIERS.grab.rate.base);updateRates()})();
+/* ===== Delivery closures =====
+   Four rows the Kitchen Console writes to the settings sheet. A closed day is closed for
+   Delivery AND Self Pick-Up alike: the kitchen is shut, so nothing leaves it by any route.
+   The three tests below run in the same order as the Console's own eight-week preview, so
+   what the kitchen sees there is exactly what a customer meets here. */
+var CLO={raw:'',wdRaw:'',dates:[],wd:{},paused:false,msg:'',loaded:false};
+var WDFULL=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+function cloParse(){
+ CLO.dates=String(CLO.raw||'').split(';').map(function(s){
+  s=s.trim();if(!s)return null;
+  var bar=s.indexOf('|'),why=bar>=0?s.slice(bar+1).trim():'';
+  var sp=(bar>=0?s.slice(0,bar):s).trim().split('..');
+  var a=(sp[0]||'').trim(),b=(sp[1]||sp[0]||'').trim();
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(a)||!/^\d{4}-\d{2}-\d{2}$/.test(b))return null;
+  if(b<a){var t=a;a=b;b=t}
+  return{from:a,to:b,why:why}}).filter(Boolean);
+ CLO.wd={};String(CLO.wdRaw||'').split(',').forEach(function(x){
+  var n=parseInt(x,10);if(n>=0&&n<=6)CLO.wd[n]=1})}
+function cloDay(s){var p=String(s).split('-');return new Date(+p[0],+p[1]-1,+p[2],12,0,0,0)}
+function cloWhy(s){
+ if(!s)return'';
+ if(CLO.paused)return CLO.msg||'We are not taking orders at the moment.';
+ var w=cloDay(s).getDay();
+ if(CLO.wd[w])return'We do not deliver on a '+WDFULL[w]+'.';
+ for(var i=0;i<CLO.dates.length;i++){var e=CLO.dates[i];
+  if(s>=e.from&&s<=e.to)return e.why||CLO.msg||'The kitchen is closed that day.'}
+ return''}
+function cloNextOpen(d){var c=new Date(d);
+ for(var i=0;i<180;i++){var s=iso(c);if(!cloWhy(s))return s;c.setDate(c.getDate()+1)}
+ return''}
+function cloNice(s){return cloDay(s).toLocaleDateString('en-MY',{weekday:'short',day:'numeric',month:'short'})}
+function cloNote(){var n=document.getElementById('closureNote');
+ if(!n){n=document.createElement('div');n.className='hint';n.id='closureNote';
+  var ch=document.getElementById('cutoffHint');
+  if(ch&&ch.parentNode)ch.parentNode.insertBefore(n,ch.nextSibling)}
+ return n}
+function cloLockPay(on,why){var b=document.getElementById('payBtn');if(b)b.disabled=!!on;
+ var m=document.getElementById('payMsg');
+ if(m&&on)m.innerHTML='<div class="msg warn">'+esc(why||'')+'</div>'}
+/* Runs once the settings arrive, and again whenever the customer picks a date. */
+function cloApply(){
+ var di=document.getElementById('date');if(!di)return;
+ var n=cloNote();
+ if(CLO.paused){di.value='';di.disabled=true;n.style.color='#b42318';
+  n.innerHTML='<b>'+esc(CLO.msg||'We are not taking orders at the moment.')+'</b>';
+  cloLockPay(true,CLO.msg||'We are not taking orders at the moment.');return}
+ di.disabled=false;cloLockPay(false);
+ var open=cloNextOpen(earliest());
+ if(!open){n.textContent='';return}
+ di.min=open;
+ var mx=cloDay(open);mx.setDate(mx.getDate()+28);di.max=iso(mx);
+ if(!di.value||di.value<open||cloWhy(di.value))di.value=open;
+ var shut=[],c=cloDay(open);
+ for(var i=0;i<28&&shut.length<4;i++){var s=iso(c);if(cloWhy(s))shut.push(s);c.setDate(c.getDate()+1)}
+ n.style.color='';
+ n.textContent=shut.length?'Kitchen closed: '+shut.map(cloNice).join(', ')+'.':''}
+/* A closed day cannot be greyed out inside a native date box, so it is caught the moment it
+   is chosen and the customer is moved to the next day we are actually open. */
+(function(){
+ var di=document.getElementById('date');if(!di)return;
+ di.addEventListener('change',function(){
+  var why=cloWhy(di.value);if(!why)return cloApply();
+  var nx=cloNextOpen(cloDay(di.value));
+  var n=cloNote();n.style.color='#b42318';
+  n.innerHTML='<b>'+esc(cloNice(di.value))+' — '+esc(why)+'</b>'+
+   (nx?' Moved you to '+esc(cloNice(nx))+', the next day we are open.':'');
+  if(nx)di.value=nx})})();
+
+/* ===== Pay ===== */
+/* Stripe keeps the order message as metadata (max 500 chars), so the order is sent in a compact v2 form; the flow and console expand it. */
+function compactOrder(o){var MAX=490;var c={v:2,n:o.orderNo,f:o.fulfil==='delivery'?o.courier:'pickup',h:o.fulfil==='delivery'?o.handover:'',d:o.date,s:o.slot,g:o.geo?[+o.geo.lat.toFixed(5),+o.geo.lng.toFixed(5),o.geo.km]:null,p:o.phone,i:o.items.map(function(i){return i.sku+'x'+i.qty}).join(','),b:o.boxes,pk:o.packaging,pf:o.packagingFee,pi:o.packagingIncluded,sub:Math.round(o.subtotal*100)/100,fee:o.deliveryFee,bd:o.birthdayDiscount||0,bp:o.birthdayPct||0,fo:o.firstOrderDiscount||0,rd:o.discount||0,cu:o.creditUsed||0,ck:o.creditKey||'',cc:o.costCode||'',rp:o.pointsRedeemed||0,ap:o.pointsEarned||0,ex:o.pointsExpire,vc:o.voucherCode||'',va:o.voucherAp||0,vs:o.voucherSaved||0,rf:o.referralCode||'',rk:o.referralKey||'',rr:o.referralRate||0,rc:o.referralCashback||0,rb:o.referralBonusAp||0,re:o.referralEligible||0,t:o.total,nm:o.name,e:o.email,a:o.address,no:o.notes,pr:o.prefs||'',pl:o.planLines||''};
+ var J=function(){return JSON.stringify(c)};var room=function(){return MAX-J().length};
+ if(room()<0){var cut=function(k,min){var over=-room();if(over<=0)return;var keep=Math.max(min,c[k].length-over-1);c[k]=c[k].length>keep?c[k].slice(0,keep)+'…':c[k]};if(c.pl&&room()<0)c.pl='';cut('a',110);cut('no',0);cut('a',60);cut('pr',0);if(room()<0){c.e='';cut('nm',0)}}
+ return J()}
+function orderNo(){var n=myNow();return 'AERA-'+String(n.getFullYear()).slice(2)+('0'+(n.getMonth()+1)).slice(-2)+('0'+n.getDate()).slice(-2)+'-'+Math.random().toString(36).slice(2,6).toUpperCase()}
+/* Credit is real money, so it is checked against the ledger again at the moment of paying
+   rather than trusted from whenever this page happened to load. A second attempt — another tab,
+   a back button, a retry after a timeout — sees the balance as it stands now and stops if it has
+   moved. The Kitchen Console is the one place credit is ever settled, and it settles orders in
+   the order they arrive, so an order that claims more than it holds is refused there and shown
+   to the Kitchen before any food is packed. */
+async function pay(){var m=document.getElementById('payMsg');m.innerHTML='';
+ if(!count())return m.innerHTML='<div class="msg warn">Add at least one meal first.</div>';
+ var gone=oosInCart();
+ if(gone.length)return m.innerHTML='<div class="msg warn"><b>'+gone.join('</b>, <b>')+
+  '</b> '+(gone.length===1?'has':'have')+' just gone out of stock. Remove '+(gone.length===1?'it':'them')+
+  ' from your order and the rest is good to go.</div>';
+ if(!signedIn()&&!coOn()){renderAuthGate();var g=document.getElementById('authGate');if(g)g.scrollIntoView({behavior:'smooth',block:'center'});
+  return m.innerHTML='<div class="msg warn">Please sign in or create an account before you order — it is how we keep your order, your points and your addresses together.</div>'}
+ var name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),phone=document.getElementById('phone').value.trim(),date=document.getElementById('date').value,slot=document.getElementById('slot').value,notes=document.getElementById('notes').value.trim();
+ if(!name)return m.innerHTML='<div class="msg warn">Please enter your name.</div>';
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return m.innerHTML='<div class="msg warn">Please enter a valid email for your receipt.</div>';
+ if(phone.replace(/\D/g,'').length<9)return m.innerHTML='<div class="msg warn">'+
+  (isDel()?'Please enter your mobile number — the Rider needs it to reach you.'
+         :'Please enter your mobile number so the Kitchen can reach you about this Order.')+'</div>';
+ rememberContact(name,email,phone);
+ if(crAvail()>0||APS.key){
+  var before=crAvail();
+  try{await new Promise(function(done){var t=setTimeout(done,6000);
+    fetch(POINTS_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
+     var rows=[],hd=j&&Array.isArray(j.headers)?j.headers:null;
+     var raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];
+     raw.forEach(function(r){if(Array.isArray(r)&&hd){var x={};hd.forEach(function(k,i){x[k]=r[i]});rows.push(x)}
+      else if(r&&typeof r==='object')rows.push(r)});
+     if(rows.length)APS.rows=rows;clearTimeout(t);done()}).catch(function(){clearTimeout(t);done()})})}catch(e){}
+  apLookup(email);renderCart();
+  if(Math.round(crAvail()*100)!==Math.round(before*100))
+   return m.innerHTML='<div class="msg warn">Your AERA Credit has changed since this page opened — it now stands at <b>'+rm(crAvail())+'</b>. The total above has been updated; press Pay again to go ahead.</div>'}
+ if(!date)return m.innerHTML='<div class="msg warn">Please choose a date.</div>';
+ var shutWhy=cloWhy(date);
+ if(shutWhy)return m.innerHTML='<div class="msg warn">'+esc(cloNice(date))+' — '+esc(shutWhy)+
+   ' Please pick another day.</div>';
+ if(isDel()){if(!ready())return m.innerHTML='<div class="msg warn">Enter your address and press “Check Delivery Fee” first.</div>';if(!COURIER)return m.innerHTML='<div class="msg warn">Please choose Lalamove or Grab.</div>';if(!HANDOVER||FEE_RM==null)return m.innerHTML='<div class="msg warn">Please choose normal delivery or door-to-door service.</div>'}
+ var items=Object.keys(CART).map(function(k){return{sku:k,name:CAT[k].name,qty:CART[k],price:CAT[k].price,boxes:CAT[k].boxes}});
+ apLookup(email);renderCart();
+ var sub=subtotal(),fee=isDel()?FEE_RM:0,pkg=packFee(),pki=packIncluded(),bday=birthdayRM(),disc=discountRM(),foRM=firstOrderRM();
+ var vSave=voucherSaved(),vAp=voucherAp(),vName=VOUCHER?VOUCHER.name:'',vCode=VOUCHER?VOUCHER.code:'';
+ var total=Math.round((sub+pkg+fee-vSave-bday-disc-foRM)*100)/100;
+ var cred=crApplied(total);total=Math.round((total-cred)*100)/100;
+ var gwf=ccOn()?ccGatewayFee(total):0;total=Math.round((total+gwf)*100)/100;
+ var no=orderNo();refApply();
+ var apEarn=pointsEarned(),apRedeem=Math.round(disc*100/AP.rmPer100)+vAp,apExp=addMonthsIso(iso(myNow()),AP.expiryMonths);
+ var refBonus=refBonusAp(),refElig=REF.code?refEligible():0,refCash=refCashback();
+ var order={orderNo:no,fulfil:isDel()?'delivery':'pickup',courier:isDel()?COURIER:'',handover:isDel()?HANDOVER:'',date:date,slot:slot,address:isDel()?document.getElementById('address').value.trim():'',geo:GEO?{lat:GEO.lat,lng:GEO.lng,km:GEO.km}:null,phone:phone,name:name,email:email,notes:notes,prefs:acctPrefs()||(PLANITEM&&CART['PLAN-'+PLANITEM.id]&&PLANITEM.prefs?PLANITEM.prefs.split('/').filter(function(x){return x&&x!=='normal'}).map(function(x){return x.replace('_',' ')}).join(' · '):''),planLines:(PLANITEM&&CART['PLAN-'+PLANITEM.id])?PLANITEM.pl:'',account:ACCT?1:0,items:items,boxes:boxes(),packaging:PACK,packagingFee:pkg,packagingIncluded:pki,subtotal:sub,deliveryFee:fee,birthdayDiscount:bday,birthdayPct:bday>0?BD.pct:0,firstOrderDiscount:foRM,discount:disc,pointsRedeemed:apRedeem,pointsEarned:apEarn,pointsBase:pointsBase(),pointsExpire:apExp,
+  creditUsed:cred,creditKey:cred>0?APS.key:'',costCode:ccOn()?CC.on.code:'',gatewayFee:gwf,
+  voucherCode:vCode,voucherName:vName,voucherAp:vAp,voucherSaved:vSave,deliveryCharged:Math.round((fee-vSave)*100)/100,total:total,
+  referralCode:REF.code||'',referralName:REF.name||'',referralTier:REF.tier||'',referralRate:REF.code?REF.rate:0,referralEligible:refElig,referralCashback:refCash,referralBonusAp:refBonus,referralKey:REF.code?refKey(email):'',
+  source:'checkout-page'};
+ if(REF.code){try{localStorage.setItem('aera.refLock',JSON.stringify({k:refKey(email),c:REF.code}))}catch(e){}}
+ var desc=items.map(function(i){return i.qty+'× '+i.name}).join(', ')+' · '+PACKAGING[PACK].name+' Packaging Fee '+rm(pkg)+(foRM?' · First Order Voucher −'+rm(foRM):'')+(bday?' · Birthday treat −'+rm(bday):'')+(disc?' · AERA Points −'+rm(disc):'')+(cred?' · AERA Credit −'+rm(cred):'')+' · '+(isDel()?feeName()+' '+rm(fee)+' ( '+(GEO.km||'?')+' km )':'Self Pick-Up')+(REF.code?' · Referral '+REF.code+' ( '+REF.rate+'% = '+rm(refCash)+' ) · Bonus '+refBonus+' AP':'')+(vCode?' · Voucher '+vName+' ( −'+rm(vSave)+' delivery, '+vAp+' AP )':'')+' · '+date+' '+slotLabel(slot);
+ var msg=compactOrder(order);window.__foUsed=foRM>0?('aera.foUsed:'+email.toLowerCase()):'';window.__bdayUsed=bday>0?email.toLowerCase()+':'+bdayYear():'';try{if(window.__bdayUsed)localStorage.setItem('aera.bdayPending',window.__bdayUsed);else localStorage.removeItem('aera.bdayPending')}catch(e){}
+ if(PAY.gateway==='billplz'){
+   if(!PAY.flowUrl)return msg.innerHTML='<div class="msg warn">Billplz is not configured on this page. Add the flow webhook address to the settings sheet under <b>billplz_flow_url</b>, or open this page with <b>?gw=stripe</b>.</div>';
+   return payBillplz(order,msg,total,name,email,phone)}
+ if(typeof window.__processDonation!=='function')return m.innerHTML='<div class="msg bad">Checkout is not available right now. Please WhatsApp us to order.</div>';
+ try{sessionStorage.setItem('aera.lastOrder',JSON.stringify(order))}catch(e){}
+ if(vCode)try{localStorage.setItem('aera.voucherPending',vCode)}catch(e){}
+ var btn=document.getElementById('payBtn');btn.disabled=true;btn.textContent='Opening secure payment…';
+ window.__processDonation({amount:total,email:email,name:name,productName:'AERA Meal Prep order '+no,productDescription:desc.slice(0,480),message:msg,quantity:1}).catch(function(e){btn.disabled=false;renderCart();if(e&&e!=='below_min'&&e!=='above_max'&&e!=='no_email')m.innerHTML='<div class="msg bad">Could not start payment. Please try again or WhatsApp us.</div>'})}
+/* ===== Billplz (FPX / Touch 'n Go / GrabPay / cards) ===== */
+function billKey(orderNo,email){return sha256hex('aera-bill:'+String(orderNo).trim()+'|'+String(email).trim().toLowerCase()).slice(0,24)}
+function bpRows(){return fetch(PAY.lookupUrl,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){return Array.isArray(j)?j:(j&&(j.data||j.rows))||[]})}
+function bpPoll(matchFn,tries){return new Promise(function(res){var n=0;(function tick(){bpRows().then(function(rows){var hit=null;rows.forEach(function(r){if(matchFn(r))hit=r});if(hit)return res(hit);if(++n>=tries)return res(null);setTimeout(tick,PAY.pollMs)}).catch(function(){if(++n>=tries)return res(null);setTimeout(tick,PAY.pollMs)})})()})}
+function bpShow(html){document.getElementById('bpOverlayBody').innerHTML=html;document.getElementById('bpOverlay').style.display='flex'}
+function bpClose(){document.getElementById('bpOverlay').style.display='none'}
+function payBillplz(order,msg,total,name,email,phone){var m=document.getElementById('payMsg');var btn=document.getElementById('payBtn');btn.disabled=true;btn.textContent='Preparing secure payment…';
+ var pending={orderNo:order.orderNo,msg:msg,email:email.toLowerCase(),total:total,at:Date.now()};try{sessionStorage.setItem('aera.pendingOrder',JSON.stringify(pending));localStorage.setItem('aera.pendingOrder',JSON.stringify(pending))}catch(e){}
+ var key=billKey(order.orderNo,email);
+ fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact(order.orderNo),data:{action:'create',orderNo:order.orderNo,amountCents:Math.round(total*100),custEmail:email,custName:name,custPhone:phone}})})
+ .then(function(r){return r.json()}).then(function(j){if(!j||!j.success)throw new Error('flow');return bpPoll(function(r){return String(r.Key||'')===key},PAY.pollMax)})
+ .then(function(row){if(row&&row['Bill URL']&&String(row.Status||'')==='created'){btn.textContent='Opening secure payment…';location.href=row['Bill URL'];return}
+  btn.disabled=false;renderCart();m.innerHTML='<div class="msg bad">Could not start payment'+(row&&/^failed/.test(String(row.Status||''))?' (payment provider error)':'')+'. Please try again or WhatsApp us.</div>'})
+ .catch(function(){btn.disabled=false;renderCart();m.innerHTML='<div class="msg bad">Could not start payment. Please try again or WhatsApp us.</div>'})}
+function bpReturn(){var q=new URLSearchParams(location.search);var id=q.get('billplz[id]');if(!id)return false;var paid=q.get('billplz[paid]')==='true';history.replaceState(null,'',location.pathname);
+ var pending=null;try{pending=JSON.parse(sessionStorage.getItem('aera.pendingOrder')||localStorage.getItem('aera.pendingOrder')||'null')}catch(e){}
+ var m=document.getElementById('payMsg');if(window.innerWidth<=940)openCart();
+ if(!paid){m.innerHTML='<div class="msg warn">Payment was not completed — your order is still here whenever you are ready.</div>';return true}
+ var doneKey='aera.bp.done.'+id;var done=false;try{done=!!localStorage.getItem(doneKey)}catch(e){}
+ var thanks=function(no){CART={};save();try{localStorage.removeItem('aera.plan')}catch(e){}bdayMarkUsed();render();renderCart();try{localStorage.setItem(doneKey,'1');sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(e){}bpShow('<h2>Order received — thank you!</h2><p style="color:var(--ink2)">'+(no?'Order <b>'+esc(no)+'</b>. ':'')+'Payment confirmed. Your receipt is on its way by email, and you can follow the order on <a href="'+(ACCT?'https://my.chatbees.io/p/dtTMaV#orders':'https://my.chatbees.io/p/8s4Xd6h')+'">Track My Order</a>.</p>')};
+ if(done){thanks(pending&&pending.orderNo);return true}
+ if(!pending||!pending.msg){bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! We could not match this payment to an order in this browser — please WhatsApp us your Billplz receipt so the kitchen can confirm your order.</p>');return true}
+ bpShow('<h2>Confirming your payment…</h2><p style="color:var(--ink2)">One moment while we verify it with Billplz.</p>');
+ fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact('verify'),data:{action:'verify',billId:id,message:pending.msg,custEmail:pending.email}})})
+ .then(function(r){return r.json()}).then(function(){return bpPoll(function(r){return String(r.Key||'')==='paid:'+id},10)})
+ .then(function(row){if(row&&String(row.Status||'')==='paid')thanks(pending.orderNo);else bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! Billplz confirmed the payment but our system could not record order <b>'+esc(pending.orderNo)+'</b> automatically'+(row?' ( '+esc(String(row.Status||''))+' )':'')+'. Please WhatsApp us and we will confirm it by hand.</p>')})
+ .catch(function(){bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! We could not reach our order system just now — please WhatsApp us with order <b>'+esc(pending.orderNo)+'</b>.</p>')});
+ return true}
+/* ===== After payment ===== */
+(function(){if(PAY.gateway==='billplz'){document.getElementById('secureTxt').textContent="FPX online banking, Touch 'n Go eWallet, GrabPay, Boost, ShopeePay, DuitNow QR or card — secured by Billplz. We never see your card or bank details."}var q=location.search;if(bpReturn())return;if(q.indexOf('donation=success')>=0){CART={};save();try{localStorage.removeItem('aera.plan')}catch(e){}bdayMarkUsed();return}var m=/[?&]add=([A-Z0-9-]+)/i.exec(q);if(m&&CAT[m[1].toUpperCase()]){var sku=m[1].toUpperCase();CART[sku]=(CART[sku]||0)+1;save();FILTER=sku.indexOf('BUNDLE')===0?'bundle':CAT[sku].goal;document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.dataset.f===FILTER)});if(window.innerWidth<=940)openCart();history.replaceState(null,'',location.pathname)}})();
+/* ===== Signed-in account (copy left in this browser by the My Account page) ===== */
+function signedIn(){return !!(ACCT&&ACCT.email)}
+function authUrl(a){return 'https://my.chatbees.io/p/dtTMaV?next=checkout#'+a}
+function renderAuthGate(){var el=document.getElementById('authGate');if(!el)return;
+ if(signedIn()||coOn()){el.innerHTML='';return}
+ el.innerHTML='<div class="agate"><b>Sign in to place your order</b>'+
+  '<small>Your Order, AERA Points and Delivery Addresses all live in your Account. It takes a moment to create one, and your Cart is kept while you do.</small>'+
+  '<div class="arow"><a class="btn btn-y s" href="'+authUrl('signup')+'">Create An Account</a>'+
+  '<a class="btn btn-o s" href="'+authUrl('login')+'">Log In</a></div>'+
+  '<small style="display:block;margin-top:8px">Ordering for a company with an AERA account? No login needed — just type your company email under Your Details.</small></div>'}
+function acctLoad(){try{var a=JSON.parse(localStorage.getItem('aera.account')||'null');if(a&&a.email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(a.email))ACCT=a}catch(e){}if(!ACCT)return;
+ var ei=document.getElementById('email');ei.value=ACCT.email;ei.readOnly=true;ei.style.background='#F2F5FA';
+ if(ACCT.name)document.getElementById('name').value=ACCT.name;if(ACCT.phone)document.getElementById('phone').value=ACCT.phone;
+ if(ACCT.packaging==='vacuum'||ACCT.packaging==='bento'){document.querySelector('input[name="pk"][value="'+ACCT.packaging+'"]').checked=true;setPack(ACCT.packaging)}
+ var na=document.getElementById('navAcct');if(na)na.textContent='My Account · '+(ACCT.name||ACCT.email).split(' ')[0];
+ document.getElementById('detailsHint').innerHTML='· Signed in as '+esc(ACCT.name||ACCT.email);
+ var rem=document.getElementById('remember');if(rem)rem.parentNode.style.display='none';
+ if(ACCT.address&&ACCT.address.address){document.getElementById('address').value=ACCT.address.address;if(ACCT.address.lat!=null&&ACCT.address.lng!=null){GEO={lat:+ACCT.address.lat,lng:+ACCT.address.lng,label:ACCT.address.address};GEO.km=Math.round(hav(KITCHEN,GEO)*ROAD_FACTOR*10)/10}}
+ renderSavedAddr()}
+var SADDR_CUSTOM=false;
+function savedAddrList(){return (ACCT&&Array.isArray(ACCT.addresses))?ACCT.addresses.filter(function(a){return a&&a.address}):[]}
+function renderSavedAddr(){var el=document.getElementById('savedAddr');if(!el)return;var L=savedAddrList();
+ if(!L.length){el.innerHTML='';return}
+ var cur=(document.getElementById('address')||{}).value||'';
+ el.innerHTML='<div class="sadd">'+L.map(function(a,i){var on=cur&&cur.trim()===String(a.address).trim();
+  return'<button type="button" class="sa'+(on?' on':'')+'" onclick="pickSavedAddr('+i+')"><b>'+esc(a.label||'Address')+(a.def?' <span class="chip ok">Default</span>':'')+'</b><small>'+esc(a.address)+'</small>'+(a.km?'<i>About '+a.km+' km from our kitchen</i>':'')+'</button>'}).join('')+
+  '<button type="button" class="sa'+((SADDR_CUSTOM||(cur&&!L.some(function(a){return cur.trim()===String(a.address).trim()})))?' on':'')+'" onclick="pickSavedAddr(-1)"><b>Use A Different Address</b><small>Type it in below</small></button></div>'}
+function pickSavedAddr(i){var box=document.getElementById('address');if(!box)return;
+ if(i<0){SADDR_CUSTOM=true;box.value='';box.focus();GEO=null;FEE_RM=null;document.getElementById('feeMsg').innerHTML='';renderSavedAddr();refee();return}
+ var a=savedAddrList()[i];if(!a)return;SADDR_CUSTOM=false;
+ box.value=a.address;acHide();
+ if(a.lat!=null&&a.lng!=null){GEO={lat:+a.lat,lng:+a.lng,label:a.address};GEO.km=a.km!=null?+a.km:Math.round(hav(KITCHEN,GEO)*ROAD_FACTOR*10)/10;document.getElementById('feeMsg').innerHTML='';updateRates()}
+ else{GEO=null;FEE_RM=null;document.getElementById('feeMsg').innerHTML='<div class="hint" style="margin:0">Press Check Delivery Fee to work out the rate for this address.</div>'}
+ if(a.notes){var nt=document.getElementById('notes');if(nt&&!nt.value)nt.value=a.notes}
+ renderSavedAddr();refee()}
+function acctForget(){try{localStorage.removeItem('aera.account')}catch(e){}ACCT=null;renderSavedAddr();renderAuthGate();var ei=document.getElementById('email');ei.readOnly=false;ei.style.background='';ei.value='';document.getElementById('detailsHint').textContent='· We only ask what the Order needs';var rem=document.getElementById('remember');if(rem)rem.parentNode.style.display='';var na=document.getElementById('navAcct');if(na)na.textContent='My Account';apLookup('');renderCart()}
+function acctPrefs(){if(!ACCT)return '';var p=[];if(ACCT.seasoning&&ACCT.seasoning!=='normal')p.push(ACCT.seasoning.replace('_',' '));if(ACCT.spice&&ACCT.spice!=='normal')p.push(ACCT.spice.replace('_',' '));if(ACCT.allergens)p.push('allergies: '+ACCT.allergens);if(ACCT.dislikes)p.push(ACCT.dislikes);return p.join(' · ')}
+/* ===== Remembered details (this device only) ===== */
+function rememberContact(name,email,phone){try{if(document.getElementById('remember').checked)localStorage.setItem('aera.contact',JSON.stringify({name:name,email:email,phone:phone}));else localStorage.removeItem('aera.contact')}catch(e){}}
+(function(){try{var c=JSON.parse(localStorage.getItem('aera.contact')||'null');if(!c)return;if(c.name)document.getElementById('name').value=c.name;if(c.email)document.getElementById('email').value=c.email;if(c.phone)document.getElementById('phone').value=c.phone;document.getElementById('detailsHint').textContent='· filled in from your last order — edit if anything changed'}catch(e){}})();
+acctLoad();renderAuthGate();apLookup(document.getElementById('email').value);render();renderCart();loadPoints();loadSettings();loadReferrals();loadVoucherTypes();loadTags();
+
+try{Object.keys(COURIER_LOGO).forEach(function(k){var u=COURIER_LOGO[k];var e=document.querySelector('#opt'+k.charAt(0).toUpperCase()+k.slice(1)+' .clogo img');if(!e)return;if(!u)return e.remove();e.onerror=function(){this.remove()};e.onload=function(){this.hidden=false};e.src=u})}catch(e){}
+</script>
+
+<!-- AERA walkthrough : start -->
+
+<!-- ============ AERA walkthrough ============
+     A spotlight tour on the real page : the page dims, one control is lit, a short caption with
+     a small moving picture sits beside it and points at the thing it is explaining. It opens
+     itself once on a first visit and after that lives behind the "How It Works" button. Steps
+     whose control is not on screen are skipped, so a tour never points at nothing. -->
+
+
+<!-- AERA walkthrough : end -->
+<p class="aeralegal">© 2026 AERA Meal Preparation SDN BHD · Seri Kembangan · <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a> · <a href="https://my.chatbees.io/p/xXH4dXALg" target="_blank" rel="noopener">Privacy Notice</a></p>
+<!-- AERA language switch : start -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- AERA language switch : end -->
+
+  <script src="script.js"></script>
+</body>
+</html>
