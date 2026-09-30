@@ -1,30 +1,4 @@
-(function(){
-  if(window.__AERA_API) return; window.__AERA_API=1;
-  if(/my\.chatbees\.io$/i.test(location.hostname)) return;
-  var API="https://my.chatbees.io";
-  function conv(u){
-    try{
-      if(typeof u!=="string") return u;
-      if(u.indexOf("/api/")===0) return API+u;
-      if(u.indexOf(location.origin+"/api/")===0) return API+u.slice(location.origin.length);
-    }catch(e){}
-    return u;
-  }
-  var of=window.fetch;
-  if(of) window.fetch=function(i,o){
-    try{
-      if(typeof i==="string") i=conv(i);
-      else if(typeof Request!=="undefined" && i instanceof Request){
-        var n=conv(i.url); if(n!==i.url) i=new Request(n,i);
-      }
-    }catch(e){}
-    return of.call(this,i,o);
-  };
-  var XP=window.XMLHttpRequest && window.XMLHttpRequest.prototype;
-  var oo=XP && XP.open;
-  if(oo) XP.open=function(m,u){ var a=[].slice.call(arguments); try{a[1]=conv(u)}catch(e){} return oo.apply(this,a); };
-})();
-
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){
 var SB={url:'https://swpprjvubgcdsojapaad.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0'};
 var SHOP_URL='https://my.chatbees.io/p/ZQr9fS2jA9';
@@ -389,6 +363,7 @@ $('#gpass').addEventListener('keydown',function(e){if(e.key==='Enter')signIn()})
 boot();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 window.AERA_I18N={};window.AERA_I18N_RE=[];
 (function(){
  var KEY='aera_lang',lang='en';
@@ -421,10 +396,12 @@ window.AERA_I18N={};window.AERA_I18N_RE=[];
  if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{"AERA Fridge — Merchant Portal":"AERA 冰箱 — 商户入口","Fridge Merchant Portal":"冰箱商户入口","Your Fridge":"您的冰箱","Sign in to see what is in it.":"登录后即可查看里面有什么。","Sign out":"登出","Sign In":"登录","Use the same email and password as the AERA website. If you shop with us, that account already works here.":"使用与 AERA 网站相同的电邮和密码。若您有在我们这里下单，那个账户在这里就能用。","No account yet?":"还没有账户？","Create one on the AERA website":"到 AERA 网站注册一个","with the email we have on file for your gym, then come back and sign in.":"请用我们记录中您健身房的电邮注册，然后回来登录。","Email":"电邮","Password":"密码","I have forgotten my password":"我忘记密码了","Which Fridge":"哪一台冰箱","In Your Fridge Now":"目前冰箱里的餐点","Loading…":"载入中…","Tell Us What Sold":"告诉我们卖出了什么","Counted By":"清点人","Date":"日期","Anything We Should Know":"有什么需要我们知道的","Send To AERA":"发送给 AERA","Add a number to at least one meal first.":"请先为至少一款餐点填上数量。","Order More Stock":"补货下单","Checking your fridge…":"正在检查您的冰箱…","This is a request, not a Delivery. We confirm it and bring it. You are only billed for what actually arrives.":"这是一份请求，不是配送 — 我们确认后才送过去。只有实际送达的部分才会计费。","Your Name":"您的姓名","Delivery Date":"配送日期","Anything Else":"其他事项","Send The Order":"送出订单","Balance Payable To AERA":"应付 AERA 的余额","What You Have Sent Us":"您传给我们的记录","Anything wrong on this page, tell us and we will fix it at our end.":"这个页面若有任何不对，告诉我们，我们会在后台修正。","This Month":"本月","Type your email and password.":"请输入电邮和密码。","That email and password do not match an AERA account.":"这个电邮和密码与任何 AERA 账户都不相符。","Type your email first, then press this again.":"请先输入电邮，然后再按一次。","If that email has an AERA account, a reset link is on its way to it.":"若这个电邮有 AERA 账户，重设链接已寄出。","That account is signed in, but it is not set against a fridge. Ask AERA to put this email on your fridge, then sign in again.":"这个账户已登录，但尚未绑定任何冰箱。请联系 AERA 将这个电邮绑定到您的冰箱，然后重新登录。","Send us a count when some have sold and the order opens again.":"卖出一些之后传一份清点给我们，补货就会重新开放。","Nothing in the fridge right now":"冰箱现在是空的","No date on file":"没有日期记录","Boxes returned":"退回的餐盒","Boxes delivered":"送达的餐盒","Credit Note":"贷记单","Credit Note No":"贷记单号","Invoice No":"发票号码","Total Credited":"贷记总额","Total Due":"应付总额","These boxes did not sell, whether they came back to us or were thrown away past their date. They were invoiced in full and are credited back here at cost.":"这些餐盒未售出 — 不论是退回给我们，还是过期后丢弃。已全额开票，并在此按成本贷记退还。","Your browser blocked the window. Allow pop-ups for this page and try again.":"浏览器拦截了弹出窗口。请允许此页面的弹出窗口后再试一次。","Front desk":"前台","Your website password":"您的网站密码","Fridge was switched off overnight…":"冰箱昨晚被关掉了…","More Fat Loss than Mass Gain this week…":"这周减脂餐要比增肌餐多一些…"});
 window.AERA_I18N_RE.push([/^(\d+) in the fridge$/,"冰箱里有 $1 份"],[/^Best before (.+)$/,"最佳食用期限 $1"]);
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-DATE-ZH : English dates -> Chinese, only when the page is in Chinese mode.
    Dates come out of toLocaleDateString('en-MY',...) at render time, so they arrive
    inside sentences the dictionary has already translated. This rewrites the date
@@ -481,10 +458,12 @@ if(window.aeraRetranslate)window.aeraRetranslate();
  if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* AERA-LEGAL-ZH */
 Object.assign(window.AERA_I18N||{},{"Terms & Conditions":"条款与条件","Privacy Notice":"隐私声明"});
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* EN / 中文 toggle */
 (function(){function boot(){if(document.getElementById("langSw"))return;
  var z=false;try{z=(localStorage.getItem("aera_lang")||"en")==="zh"}catch(e){}
@@ -498,6 +477,7 @@ if(window.aeraRetranslate)window.aeraRetranslate();
  document.body.appendChild(d)}
  if(document.readyState==="loading")addEventListener("DOMContentLoaded",boot);else boot()})();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 if(window.AERA_I18N)Object.assign(window.AERA_I18N,{"Delivered":"已送达","Credited":"已贷记","Invoiced":"已开票","boxes":"盒","box":"盒","before credits":"扣除贷记前","credited to you":"贷记给您","Sending…":"发送中…","Out of date":"已过期","Document":"单据","Boxes":"盒数","Amount":"金额","Item":"项目","Each":"单价","Count":"清点","Request":"补货请求","No fridge on this account yet.":"这个账户还没有绑定冰箱。","Nothing yet":"目前还没有记录","Nothing to show yet.":"目前还没有内容。"});
 if(window.AERA_I18N_RE)window.AERA_I18N_RE.unshift(
  [/^(\d+) Boxe?s? in the Fridge · (\d+) at or near its date$/,"冰箱里有 $1 盒 · $2 盒接近有效期"],
@@ -510,6 +490,7 @@ if(window.AERA_I18N_RE)window.AERA_I18N_RE.unshift(
 );
 if(window.aeraRetranslate)window.aeraRetranslate();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){var D=window.AERA_I18N;if(!D)return;
 var P=[
 ["Pan Seared Spicy Chicken Breast","香煎香辣鸡胸"],["Baked Spicy Chicken Breast","烤香辣鸡胸"],["Pan Seared Indian Curry Chicken Breast","香煎印度咖喱鸡胸"],["Baked Indian Curry Chicken Breast","烤印度咖喱鸡胸"],["Pan Seared Smoked Paprika Chicken Breast","香煎烟熏红椒粉鸡胸"],["Baked Smoked Paprika Chicken Breast","烤烟熏红椒粉鸡胸"],["Pan Seared Salt & Pepper Chicken Breast","香煎椒盐鸡胸"],["Baked Salt & Pepper Chicken Breast","烤椒盐鸡胸"],["Pan Seared Onion Garlic Chicken Breast","香煎蒜香洋葱鸡胸"],["Baked Onion Garlic Chicken Breast","烤蒜香洋葱鸡胸"],["Pan Seared Ginger Garlic Chicken Breast","香煎姜蒜鸡胸"],["Baked Ginger Garlic Chicken Breast","烤姜蒜鸡胸"],["Tandoori Chicken","印度烤鸡"],["Chicken Katsu","日式炸鸡扒"],["Grilled Teriyaki Chicken Breast","照烧烤鸡胸"],["Grilled Teriyaki Chicken Chop","照烧烤鸡扒"],["Grilled Chicken Chop","烤鸡扒"],["Chicken Breast Meatball","鸡胸肉丸"],
@@ -579,6 +560,7 @@ var R=window.AERA_I18N_RE;if(R)R.push(
 if(window.aeraRetranslate)window.aeraRetranslate();
 })();
 
+(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){
   if(window.__AERA_HOSTMAP) return; window.__AERA_HOSTMAP=1;
   if(/my\.chatbees\.io$/i.test(location.hostname)) return;
