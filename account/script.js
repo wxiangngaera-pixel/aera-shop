@@ -289,7 +289,7 @@ if(window.aeraRetranslate)window.aeraRetranslate();
 (function(){
  var KEY='aera.consent',PN='https://my.chatbees.io/p/xXH4dXALg';
  var EN={health:{h:'Your Health Information',
-   p:'Body measurements, Weight Control readings and allergies are health information. We store them only to cook your meals safely, build your plan and show your progress. You can delete them at any time.',
+   p:'Body Measurements, Weight Control readings and Allergies are Health Information. We store them only to cook your Meals safely, build your Plan and show your Progress. You can delete them at any time.',
    c:'I agree that AERA may store and use my health information for these purposes.',y:'Agree & Continue'},
   coach:{h:'Before The Coach Answers',
    p:'To make its suggestions, the coach sends your sex, age, height, bodyweight and BMI, the food you type, or the meals in your plan to OpenAI in the United States.',
