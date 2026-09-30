@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://wxiangngaera-pixel.github.io/aera-shop/merchandise/</loc>
+    <lastmod>2026-09-30T09:56:30.302Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://wxiangngaera-pixel.github.io/aera-shop/meal-plan/</loc>
     <lastmod>2026-09-30T09:56:23.828Z</lastmod>
     <changefreq>weekly</changefreq>
@@ -58,11 +63,6 @@
   <url>
     <loc>https://wxiangngaera-pixel.github.io/aera-shop/terms/</loc>
     <lastmod>2026-09-30T09:52:20.298Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://wxiangngaera-pixel.github.io/aera-shop/merchandise/</loc>
-    <lastmod>2026-09-30T09:51:12.391Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
