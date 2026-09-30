@@ -575,6 +575,8 @@ async function suVerify(){
  var btn=document.getElementById('suCodeBtn');
  if(btn){btn.disabled=true;btn.textContent='Checking\u2026'}
  if(m)m.innerHTML='';
+ /* a brand-new account lands on the homepage, same as a normal sign-in */
+ try{sessionStorage.setItem('aera.goHome','1')}catch(_){}
  var ok=false,err='';
  for(var i=0;i<2&&!ok;i++){
   try{var r=await sb.auth.verifyOtp({email:SU.email,token:code,type:i?'email':'signup'});
@@ -582,6 +584,7 @@ async function suVerify(){
    err=r.error.message||''}catch(e){err=(e&&e.message)||String(e)}}
  SU.checking=false;
  if(!ok){
+  try{sessionStorage.removeItem('aera.goHome')}catch(_){}
   if(btn){btn.disabled=false;btn.textContent='Confirm'}
   if(m)m.innerHTML='<span style="color:var(--bad)">'+esc(err||'That code did not work. Check it, or press the link in the email instead.')+'</span>';
   return}
@@ -601,11 +604,13 @@ async function suPoll(){
  SU.done=true;suStop();
  suPaint('<b>Confirmed \u2014 signing you in\u2026</b>');
  try{
+  try{sessionStorage.setItem('aera.goHome','1')}catch(_){}
   var si=await sb.auth.signInWithPassword({email:SU.email,password:SU.pass});
   SU.pass='';
   if(si.error)throw si.error;
   /* onAuthStateChange takes it from here : the account opens and the welcome gifts appear */
  }catch(err){
+  try{sessionStorage.removeItem('aera.goHome')}catch(_){}
   suPaint('<b>Confirmed.</b><div class="suhint">Sign in below to pick up where you left off.</div>');
   var le=$('#lEmail');if(le)le.value=SU.email;setAuth('login')}}
 /* The device that opened the letter. It has a session now, but it is almost never the device the
@@ -626,7 +631,7 @@ function suHere(){
  try{window.__aeraSearch='';window.__aeraHash=''}catch(e){}
  [].forEach.call(document.querySelectorAll('#authView .tab'),function(t){t.style.display=''});
  msg('authMsg','');
- if(USER)showAccount();else{setAuth('login');}}
+ if(USER){try{sessionStorage.setItem('aera.goHome','1')}catch(_){}showAccount()}else{setAuth('login');}}
 async function doSignup(e){e.preventDefault();busy('sBtn',true,'Creating…');msg('authMsg','');try{var email=$('#sEmail').value.trim().toLowerCase();
  var ph=$('#sPhone').value.trim();
  if(ph){if(!phoneOk(ph))throw new Error('That does not look like a Malaysian mobile number.');
