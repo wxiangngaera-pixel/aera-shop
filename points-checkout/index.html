@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- BASE:START (managed by Coding Agent — do not edit) -->
+<base href="/aera-shop/points-checkout/">
+<!-- BASE:END -->
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+
+<link rel="icon" href="https://resource.aeramealprep.net/assets/images/logo.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@400;500;600;700&display=swap">
+
+
+<!-- SEO Meta Tags -->
+<title>AERA Points · Order — AERA Meal Prep</title>
+<meta name="description" content="Order AERA fat-loss and mass-gain meal preps. Self pick-up in Seri Kembangan or Lalamove / Grab delivery across Klang Valley." />
+<meta property="og:title" content="AERA Points · Order — AERA Meal Prep" />
+<meta property="og:description" content="Order AERA fat-loss and mass-gain meal preps. Self pick-up in Seri Kembangan or Lalamove / Grab delivery across Klang Valley." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="AERA Points · Order — AERA Meal Prep" />
+<meta name="twitter:description" content="Order AERA fat-loss and mass-gain meal preps. Self pick-up in Seri Kembangan or Lalamove / Grab delivery across Klang Valley." />
+<!-- End SEO Meta Tags -->
+<meta name="sheet-data-url" content="https://my.chatbees.io/api/public/landing-pages/6929/sheet-data">
+<script data-lp-token-hydrate>
+(function(){try{
+  var slug="lp-mtr44xzg-59fwa";
+  var SITEK="";
+  var SK='lp_access_'+slug;
+  var map={access_token:'lp_pw_',allowlist_access_token:'lp_al_',pin_access_token:'lp_pin_',paywall_access_token:'lp_paid_'};
+  function siteTok(){try{return SITEK?localStorage.getItem(SITEK):null;}catch(e){return null;}}
+  var u=new URL(location.href);var found=null;var changed=false;
+  var PINP=true;
+  if(!PINP){try{localStorage.removeItem('lp_pin_'+slug);if(SITEK)localStorage.removeItem(SITEK);}catch(e){}}
+  Object.keys(map).forEach(function(p){var v=u.searchParams.get(p);if(v){found=v;try{if(PINP||p!=='pin_access_token'){localStorage.setItem(map[p]+slug,v);if(SITEK&&p==='pin_access_token')localStorage.setItem(SITEK,v);}}catch(e){}if(p==='pin_access_token'){try{sessionStorage.setItem('lp_fresh_'+slug,'1');}catch(e){}}u.searchParams.delete(p);changed=true;}});
+  if(found){try{sessionStorage.setItem(SK,found);}catch(e){}}
+  else{try{if(!sessionStorage.getItem(SK)){var t=localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();if(t)sessionStorage.setItem(SK,t);}}catch(e){}}
+  if(changed){try{history.replaceState(null,'',u.toString());}catch(e){}}
+  function getTok(){try{return sessionStorage.getItem(SK)||localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();}catch(e){return null;}}
+  function needsToken(url,method){if(!url)return false;var s=String(url);var m=(method||'GET').toUpperCase();var isSheetWrite=(m==='POST'||m==='PATCH'||m==='PUT'||m==='DELETE')&&/\/sheet-rows(\/|$|\?)/.test(s);var isSheetRead=/\/sheet-data(\/|$|\?)/.test(s);var isLlm=/\/api\/landing-pages\/public\/[^/]+\/(llm|llm-config)(\/|$|\?)/.test(s);return isSheetWrite||isSheetRead||isLlm;}
+  if(window.fetch){var _f=window.fetch;window.fetch=function(input,init){try{var url=typeof input==='string'?input:(input&&input.url)||'';var method=(init&&init.method)||(input&&input.method)||'GET';if(needsToken(url,method)){var tok=getTok();if(tok){init=init||{};var h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});if(!h.has('X-Landing-Page-Token'))h.set('X-Landing-Page-Token',tok);init.headers=h;}}}catch(e){}return _f.call(this,input,init);};}
+  if(window.XMLHttpRequest){var _o=XMLHttpRequest.prototype.open;var _s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__lpM=m;this.__lpU=u;return _o.apply(this,arguments);};XMLHttpRequest.prototype.send=function(){try{if(needsToken(this.__lpU,this.__lpM)){var tok=getTok();if(tok)this.setRequestHeader('X-Landing-Page-Token',tok);}}catch(e){}return _s.apply(this,arguments);};}
+}catch(e){}})();
+</script>
+
+<style data-gate>body{visibility:hidden;}</style>
+<script data-gate>
+(function(){
+  var slug='lp-mtr44xzg-59fwa';var apiBase='https://my.chatbees.io';
+  var PIN_TOKEN_KEY='lp_pin_'+slug;var ACCESS_TOKEN_KEY='lp_access_'+slug;var PIN_FRESH_KEY='lp_fresh_'+slug;
+  var PIN_SITE_KEY="";var PIN_OWNER="1302";var PIN_MAX_AGE=2592000000;var PIN_PERSIST=true;var pinPassed=false;
+  function pinStore(t){try{sessionStorage.setItem(ACCESS_TOKEN_KEY,t);}catch(e){}if(PIN_PERSIST){try{localStorage.setItem(PIN_TOKEN_KEY,t);if(PIN_SITE_KEY)localStorage.setItem(PIN_SITE_KEY,t);}catch(e){}}}
+  function pinScopeOk(p){return p.length>=4&&(p[0]==='pin'||((p[0]==='pinsite'||p[0]==='pinsite2')&&PIN_SITE_KEY&&(p[0]!=='pinsite2'||p[1]===PIN_OWNER)));}
+  function pinParts(t){try{var b64=t.indexOf('.')>0?t.split('.')[0]:t;return atob(b64).split(':');}catch(e){}return [];}
+  function pinValid(t){var p=pinParts(t);if(pinScopeOk(p)){var ts=parseInt(p[p.length-1]);return isFinite(ts)&&(Date.now()-ts)<PIN_MAX_AGE;}return false;}
+  function pinOnVerified(t){pinStore(t);if(PIN_PERSIST){window.location.reload();}else{var u=new URL(window.location.href);u.searchParams.set('pin_access_token',t);window.location.replace(u.toString());}}
+  var urlParams=new URLSearchParams(window.location.search);var pinToken=urlParams.get('pin_access_token');
+  var pinFresh=false;try{if(sessionStorage.getItem(PIN_FRESH_KEY)==='1'){pinFresh=true;sessionStorage.removeItem(PIN_FRESH_KEY);}}catch(e){}
+  if(!PIN_PERSIST&&!pinToken&&!pinFresh){try{localStorage.removeItem(PIN_TOKEN_KEY);sessionStorage.removeItem(ACCESS_TOKEN_KEY);}catch(e){}}
+  if(!PIN_PERSIST&&!pinToken&&pinFresh){try{pinPassed=!!sessionStorage.getItem(ACCESS_TOKEN_KEY);}catch(e){}}
+  if(PIN_PERSIST){var storedToken=null;try{storedToken=localStorage.getItem(PIN_TOKEN_KEY)||(PIN_SITE_KEY?localStorage.getItem(PIN_SITE_KEY):null);}catch(e){}if(storedToken&&pinValid(storedToken)){pinPassed=true;try{sessionStorage.setItem(ACCESS_TOKEN_KEY,storedToken);}catch(e){}}}
+  if(pinToken){var hp=pinParts(pinToken);var hopOk=pinScopeOk(hp)&&isFinite(parseInt(hp[hp.length-1]))&&(Date.now()-parseInt(hp[hp.length-1]))<900000;var url=new URL(window.location.href);url.searchParams.delete('pin_access_token');window.history.replaceState({},'',url.toString());if(hopOk){pinStore(pinToken);pinPassed=true;}}
+  if(pinPassed){document.addEventListener('DOMContentLoaded',function(){document.body.style.visibility='visible';});return;}
+  document.addEventListener('DOMContentLoaded',function(){
+  var currentMethod='email';var currentIdentifier='';
+  var gateHtml='<div id="pin-gate" style="position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;padding:16px;"><div style="background:white;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.15);width:100%;max-width:420px;padding:32px;text-align:center;"><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Identity Verification</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">Please verify your identity to access this page.</p><form id="pin-request-form"><label for="pin-full-name" style="display:block;text-align:left;font-size:14px;font-weight:500;color:#374151;margin-bottom:6px;">Full Name <span style="color:#9ca3af;font-weight:400;">(optional)</span></label><input type="text" id="pin-full-name" placeholder="" style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:16px;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" /><input type="email" id="pin-identifier" placeholder="Enter your email address" required style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:16px;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" /><div id="pin-req-error" style="display:none;color:#ef4444;font-size:14px;margin-bottom:12px;"></div><button type="submit" id="pin-send-btn" style="width:100%;height:48px;font-size:16px;font-weight:600;color:white;border:none;border-radius:8px;cursor:pointer;background:#2563eb;">Send Verification Code</button></form><form id="pin-verify-form" style="display:none;"><p id="pin-sent-msg" style="font-size:14px;color:#6b7280;margin-bottom:12px;"></p><input type="text" id="pin-code" placeholder="Enter 6-digit PIN" maxlength="6" style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:20px;text-align:center;letter-spacing:8px;font-family:monospace;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" required /><div id="pin-ver-error" style="display:none;color:#ef4444;font-size:14px;margin-bottom:12px;"></div><button type="submit" id="pin-verify-btn" style="width:100%;height:48px;font-size:16px;font-weight:600;color:white;border:none;border-radius:8px;cursor:pointer;background:#2563eb;">Verify PIN</button><button type="button" id="pin-resend-btn" style="width:100%;margin-top:8px;padding:8px;background:none;border:none;color:#6b7280;cursor:pointer;font-size:14px;">Resend PIN</button><button type="button" id="pin-back-btn" style="width:100%;padding:8px;background:none;border:none;color:#9ca3af;cursor:pointer;font-size:14px;">Use different contact</button></form></div></div>';
+  document.body.insertAdjacentHTML('beforeend',gateHtml);document.body.style.visibility='visible';
+  var reqForm=document.getElementById('pin-request-form');var verForm=document.getElementById('pin-verify-form');var idInput=document.getElementById('pin-identifier');var codeInput=document.getElementById('pin-code');var sendBtn=document.getElementById('pin-send-btn');var verifyBtn=document.getElementById('pin-verify-btn');var reqError=document.getElementById('pin-req-error');var verError=document.getElementById('pin-ver-error');var sentMsg=document.getElementById('pin-sent-msg');
+  
+  function gateName(){var n=document.getElementById('pin-full-name');return (n&&n.value||'').trim();}
+  function gateRequiredNameOk(){return !!gateName();}
+  function sendPin(){var id=idInput.value.trim();if(!id)return;var nm=gateName();sendBtn.disabled=true;sendBtn.textContent='Sending...';reqError.style.display='none';var body=currentMethod==='sms'?{phone:id}:{email:id};if(nm){body.name=nm;}fetch(apiBase+'/api/landing-pages/public/'+slug+'/generate-pin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(d){if(d.success){currentIdentifier=id;reqForm.style.display='none';verForm.style.display='block';sentMsg.textContent='We sent a 6-digit PIN to '+id;codeInput.focus();}else{reqError.textContent=d.message||'Failed to send PIN';reqError.style.display='block';}}).catch(function(){reqError.textContent='Failed to send PIN';reqError.style.display='block';}).finally(function(){sendBtn.disabled=false;sendBtn.textContent='Send Verification Code';});}
+  function verifyPin(){var pin=codeInput.value.trim();if(!pin||pin.length!==6){verError.textContent='Please enter the 6-digit PIN';verError.style.display='block';return;}verifyBtn.disabled=true;verifyBtn.textContent='Verifying...';verError.style.display='none';var body=currentMethod==='sms'?{phone:currentIdentifier,pin:pin}:{email:currentIdentifier,pin:pin};fetch(apiBase+'/api/landing-pages/public/'+slug+'/verify-pin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(d){if(d.verified){pinOnVerified(d.accessToken);}else{verError.textContent=d.message||'Invalid PIN code';verError.style.display='block';}}).catch(function(){verError.textContent='Failed to verify PIN';verError.style.display='block';}).finally(function(){verifyBtn.disabled=false;verifyBtn.textContent='Verify PIN';});}
+  reqForm.addEventListener('submit',function(e){e.preventDefault();sendPin();});verForm.addEventListener('submit',function(e){e.preventDefault();verifyPin();});document.getElementById('pin-resend-btn').addEventListener('click',sendPin);document.getElementById('pin-back-btn').addEventListener('click',function(){verForm.style.display='none';reqForm.style.display='block';codeInput.value='';verError.style.display='none';});codeInput.addEventListener('input',function(e){e.target.value=e.target.value.replace(/[^0-9]/g,'').slice(0,6);});idInput.focus();
+  });
+})();
+</script>
+<script data-gate>
+(function(){
+  var slug='lp-mtr44xzg-59fwa';var apiBase='https://my.chatbees.io';var currency='MYR';var presets=[2500,5000,10000,25000];var minAmt=100;var maxAmt=500000;var thankYouMsg='Order received — thank you!';
+  var successSubtext='Payment received — thank you! We\'ll cook your meals fresh for your chosen date. A receipt is on its way to your email, and you\'ll get your rider\'s tracking link once your order is packed — or use "Track my order" in the menu any time.';var successBtnLabel='Close';var successBtnColor='#16a34a';var successRedirect='';
+  function getLang(){var l=(document.documentElement.lang||navigator.language||'en').toLowerCase();return l.split('-')[0];}
+  function getLocale(){return (document.documentElement.lang||navigator.language||'en');}
+  var I18N={en:{min:'Minimum is ',max:'Maximum is ',emailPrompt:'Enter your email for the receipt:',emailRequired:'An email address is required to complete checkout.',failed:'Failed to process donation'},fr:{min:'Le minimum est ',max:'Le maximum est ',emailPrompt:'Entrez votre adresse e-mail pour le reçu :',emailRequired:'Une adresse e-mail est requise pour finaliser le paiement.',failed:'Échec du traitement du don'},es:{min:'El mínimo es ',max:'El máximo es ',emailPrompt:'Introduce tu correo electrónico para el recibo:',emailRequired:'Se requiere una dirección de correo electrónico para completar el pago.',failed:'No se pudo procesar la donación'},pt:{min:'O mínimo é ',max:'O máximo é ',emailPrompt:'Insira seu e-mail para o recibo:',emailRequired:'Um endereço de e-mail é necessário para concluir o pagamento.',failed:'Falha ao processar a doação'},de:{min:'Mindestbetrag ist ',max:'Höchstbetrag ist ',emailPrompt:'Geben Sie Ihre E-Mail-Adresse für die Quittung ein:',emailRequired:'Eine E-Mail-Adresse ist erforderlich, um den Checkout abzuschließen.',failed:'Spende konnte nicht verarbeitet werden'},it:{min:'Il minimo è ',max:'Il massimo è ',emailPrompt:'Inserisci la tua email per la ricevuta:',emailRequired:"È richiesto un indirizzo email per completare il pagamento.",failed:'Impossibile elaborare la donazione'}};
+  function t(k){var L=getLang();return (I18N[L]&&I18N[L][k])||I18N.en[k];}
+  function fmtD(c){try{return new Intl.NumberFormat(getLocale(),{style:'currency',currency:currency}).format(c/100);}catch(e){return new Intl.NumberFormat('en-US',{style:'currency',currency:currency}).format(c/100);}}
+  function findDonEmail(){var ids=['email','emailAddress','buyer-email','buyerEmail','donor-email','donorEmail','user-email','userEmail','contact-email'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.indexOf('@')>-1)return el.value.trim();}var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.indexOf('@')>-1)return inputs[j].value.trim();}return '';}
+  function findDonName(){var ids=['name','fullName','full-name','donor-name','donorName','customer-name','user-name'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"])');for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}return '';}
+  function findDonPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  window.__processDonation=function(a,b,c,d){
+    var amountCents,email='',donorName='',donorMessage='',productName='',productDescription='',quantity=1;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents||(a.amount?Math.round(Number(a.amount)*100):0);
+      email=a.email||'';
+      productName=a.productName||a.label||'';
+      productDescription=a.productDescription||a.description||'';
+      donorName=a.name||a.donorName||'';
+      donorMessage=a.message||a.donorMessage||'';
+      quantity=a.quantity&&parseInt(a.quantity,10)>0?parseInt(a.quantity,10):1;
+    }else{
+      amountCents=typeof a==='number'?a:(parseInt(a,10)||0);
+      var rest=[b,c,d];var nonEmail=[];
+      for(var i=0;i<rest.length;i++){var v=rest[i];if(typeof v==='string'&&v){if(!email&&v.indexOf('@')>-1&&/^[^s@]+@[^s@]+.[^s@]+$/.test(v.trim())){email=v.trim();}else{nonEmail.push(v);}}}
+      donorName=nonEmail[0]||'';donorMessage=nonEmail[1]||'';
+    }
+    if(!email)email=findDonEmail();
+    if(!donorName)donorName=findDonName();
+    var donorPhone=findDonPhone();
+    if(!amountCents||amountCents<minAmt){alert(t('min')+fmtD(minAmt));return Promise.reject('below_min');}
+    if(amountCents>maxAmt){alert(t('max')+fmtD(maxAmt));return Promise.reject('above_max');}
+    if(!email){var p=window.prompt(t('emailPrompt'),'');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert(t('emailRequired'));return Promise.reject('no_email');}}
+    var successBase=window.location.href.split('?')[0];
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/donation/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:donorName||'',phone:donorPhone||'',amountCents:amountCents,message:donorMessage||'',productName:productName||'',productDescription:productDescription||'',quantity:quantity,locale:getLocale(),successUrl:successBase+'?donation=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?donation=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||t('failed'));throw new Error(d.error);}
+    });
+  };
+  window.__donationConfig={currency:currency,presets:presets.map(function(c){return c/100;}),minAmount:minAmt/100,maxAmount:maxAmt/100,formatAmount:fmtD};
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('donation')==='success'){
+      var sidD=urlParams.get('session_id');
+      if(sidD){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidD})}).catch(function(){});}catch(e){}}
+      var overlay=document.createElement('div');overlay.id='donation-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">'+esc(thankYouMsg)+'</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(successSubtext)+'</p><button id="lp-don-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var dBtn=document.getElementById('lp-don-success-btn');
+      if(dBtn){dBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://my.chatbees.io/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=6929');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='ZmQYknnnM';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='Payment received — thank you! We\'ll cook your meals fresh for your chosen date. A receipt is on its way to your email, and you\'ll get your rider\'s tracking link once your order is packed — or use "Track my order" in the menu any time.';var successBtnLabel='Close';var successBtnColor='#16a34a';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    var phone=findPhone();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    var __pLoc=(document.documentElement.lang||navigator.language||'en');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,phone:phone||'',amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,locale:__pLoc,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var sidP=urlParams.get('session_id');
+      if(sidP){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidP})}).catch(function(){});}catch(e){}}
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-cart>
+(function(){
+  var slug='ZmQYknnnM';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='Payment received — thank you! We\'ll cook your meals fresh for your chosen date. A receipt is on its way to your email, and you\'ll get your rider\'s tracking link once your order is packed — or use "Track my order" in the menu any time.';var successBtnLabel='Close';var successBtnColor='#16a34a';var successRedirect='';
+  function findCartEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realCart=function(arg){
+    var items, email='', customerName='', successUrl, cancelUrl, currency;
+    if(Array.isArray(arg)){items=arg;}
+    else if(arg&&typeof arg==='object'){
+      items=arg.items;email=arg.email||'';customerName=arg.name||arg.customerName||'';
+      successUrl=arg.successUrl;cancelUrl=arg.cancelUrl;currency=arg.currency;
+    }
+    if(!Array.isArray(items)||items.length===0){alert('No items in cart.');return Promise.reject('no_items');}
+    var cleanItems=[];var totalCents=0;
+    for(var i=0;i<items.length;i++){
+      var it=items[i];if(!it||typeof it!=='object'){alert('Invalid item at position '+i);return Promise.reject('bad_item');}
+      var nm=typeof it.name==='string'?it.name.trim():'';
+      if(!nm){alert('Item '+(i+1)+' is missing a name.');return Promise.reject('no_name');}
+      var amt=typeof it.amountCents==='number'?it.amountCents:(typeof it.amount==='number'?Math.round(it.amount*100):NaN);
+      if(!isFinite(amt)||amt<1){alert('Item "'+nm+'" needs a valid amount in cents.');return Promise.reject('bad_amount');}
+      var qty=(typeof it.quantity==='number'&&it.quantity>0)?Math.floor(it.quantity):1;
+      cleanItems.push({name:nm,description:it.description||'',amountCents:amt,quantity:qty});
+      totalCents+=amt*qty;
+    }
+    if(totalCents<50){alert('Cart total must be at least $0.50');return Promise.reject('total_too_low');}
+    if(!email)email=findCartEmail();
+    if(!customerName)customerName=findCartName();
+    var cartPhone=findCartPhone();
+    if(!email){var p=window.prompt('Enter your email for the receipt:','');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert('An email address is required to complete checkout.');return Promise.reject('no_email');}}
+    var successBase=window.location.href.split('?')[0];
+    var body={email:email,name:customerName,items:cleanItems,locale:(document.documentElement.lang||navigator.language||'en')};
+    if(currency)body.currency=currency;
+    if(cartPhone)body.phone=cartPhone;
+    body.successUrl=successUrl||(successBase+'?cart=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}');
+    body.cancelUrl=cancelUrl||(successBase+'?cart=cancelled');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/cart/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process checkout');throw new Error(d.error);}
+    });
+  };
+  try{Object.defineProperty(window,'__processCart',{value:__realCart,writable:false,configurable:false});}catch(e){window.__processCart=__realCart;}
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('cart')==='success'){
+      var sidC=urlParams.get('session_id');
+      if(sidC){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidC})}).catch(function(){});}catch(e){}}
+      if(document.getElementById('payment-success-overlay')||document.getElementById('donation-success-overlay')||document.getElementById('cart-success-overlay'))return;
+      var overlay=document.createElement('div');overlay.id='cart-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||'Thank you for your order.';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var cBtn=document.getElementById('lp-cart-success-btn');
+      if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav><div class="wrap">
+  <a href="https://my.chatbees.io/p/ZQr9fS2jA9" aria-label="AERA Meal Prep"><img src="https://aeramealprep.net/logo/logo_yellow_with_white_text.svg" alt="AERA Meal Prep"></a>
+  <div style="display:flex;gap:14px;align-items:center"><a href="https://my.chatbees.io/p/8s4Xd6h">Track My Order</a><button class="cartbtn" onclick="openCart()">Cart · <span id="cartCount">0</span></button></div>
+</div></nav>
+
+<main class="wrap layout">
+  <section>
+    <span class="eyebrow">Order online</span>
+    <h1 style="margin-top:6px">Pick Your Meals</h1><p class="hint" style="margin-top:4px">Signed in for AERA Points — your balance and discount are in the order panel.</p>
+    <p style="color:var(--ink2);margin:8px 0 0;max-width:62ch">Everything is cooked to order, weighed to the gram and MAP-packed to stay fresh for 7 days in the chiller. Choose self pick-up or rider delivery (Lalamove or Grab) at checkout.</p>
+    <div class="tabs" role="tablist"><button class="tab on" data-f="bundle">Meal Bundles</button><button class="tab" data-f="fat">Fat Loss Meals</button><button class="tab" data-f="mass">Mass Gain Meals</button><button class="tab" data-f="all">All Meals</button></div>
+    <div class="grid" id="grid"></div>
+    <p class="hint" style="margin-top:16px">Prices in Malaysian Ringgit, packaging included. Serving weights are raw (before cooking) — that's how our kitchen weighs every portion. Meals containing prawn, seafood, dairy, peanut or beef are named as such — for allergies, message us on WhatsApp before ordering.</p>
+  </section>
+
+  <aside class="side card" id="side">
+    <button class="btn btn-o closex" onclick="closeCart()">← Back to Menu</button>
+    <h2>Your Order</h2>
+    <div id="lines"><div class="empty">Your cart is empty — add meals from the menu.</div></div>
+
+    <div id="apBox" class="apbox"></div>
+
+    <label class="lb">Packaging <span style="font-weight:500;text-transform:none;letter-spacing:0">· choose one</span></label>
+    <label class="opt on" id="pkBento"><input type="radio" name="pk" value="bento" checked onchange="setPack('bento')"><span><b>MAP Bento Box</b><small>Oxygen replaced with a nitrogen / CO₂ blend and top-sealed — food is never compressed. Keep chilled, 7-day shelf life.</small></span><span class="fee" id="pkBentoFee"></span></label>
+    <label class="opt" id="pkVacuum"><input type="radio" name="pk" value="vacuum" onchange="setPack('vacuum')"><span><b>Vacuum Bag</b><small>Same freshness, flatter pack — takes far less fridge space, compresses the food slightly. Can be frozen.</small></span><span class="fee" id="pkVacuumFee"></span></label>
+
+    <label class="lb">Fulfilment</label>
+    <label class="opt on" id="optPickup"><input type="radio" name="ful" value="pickup" checked onchange="setFul('pickup')"><span><b>Self Pick-Up</b><small>35, Jalan Equine 9A, Taman Equine, 43300 Seri Kembangan · Daily 9 AM – 5 PM</small></span><span class="fee">FREE</span></label>
+    <label class="opt" id="optDelivery"><input type="radio" name="ful" value="delivery" onchange="setFul('delivery')"><span><b>Rider Delivery</b><small>Lalamove or Grab rider brings your whole order in one chilled trip, anywhere in Klang Valley. Fee calculated from your address — compare both couriers below.</small></span><span class="fee">from RM <span id="feeFromAny">6</span></span></label>
+
+    <div id="deliveryBox" style="display:none">
+      <label class="lb">Delivery Address</label>
+      <div class="acwrap"><input type="text" id="address" placeholder="Start typing your address…" autocomplete="off" oninput="acInput()" onkeydown="acKey(event)" onblur="setTimeout(acHide,200)"><div class="ac" id="acList"></div></div>
+      <div class="hint">Pick your address from the suggestions, then add your unit / floor in the notes if needed.</div>
+      <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-k" type="button" onclick="checkFee()" id="feeBtn">Check Delivery Fee</button></div>
+      <div id="feeMsg"></div>
+
+      <label class="lb">Courier <span id="courierHint" style="font-weight:500;text-transform:none;letter-spacing:0">· Rates shown for Normal Delivery / Door-to-Door</span></label>
+      <label class="opt" id="optLalamove" style="margin-top:4px"><input type="radio" name="courier" value="lalamove" onchange="setCourier('lalamove')"><span><b>Lalamove</b><small id="rateLalamove"></small></span></label>
+      <label class="opt" id="optGrab"><input type="radio" name="courier" value="grab" onchange="setCourier('grab')"><span><b>Grab</b><small id="rateGrab"></small></span></label>
+
+      <div id="handoverBox" style="display:none">
+        <label class="lb">Delivery Service</label>
+        <label class="opt" id="hoDrop" style="margin-top:4px"><input type="radio" name="ho" value="drop" onchange="setHandover('drop')"><span><b>Normal Delivery</b><small>Rider hands over at your lobby, guard house or a collection point you name in the notes.</small></span><span class="fee" id="rateDrop"></span></label>
+        <label class="opt" id="hoDoor"><input type="radio" name="ho" value="door" onchange="setHandover('door')"><span><b>Door-to-Door Service</b><small id="doorHint">Rider brings the order right to your door. Normal Delivery + RM 2.00 by motorcycle or + RM 5.00 by car.</small></span><span class="fee" id="rateDoor"></span></label>
+      </div>
+    </div>
+
+    <div class="f2">
+      <div><label class="lb" id="dateLbl">Pick-Up Date</label><input type="date" id="date"></div>
+      <div><label class="lb">Time Slot</label><select id="slot"></select></div>
+    </div>
+    <div class="hint" id="cutoffHint"></div>
+
+    <label class="lb">Your Details <span style="font-weight:500;text-transform:none;letter-spacing:0" id="detailsHint">· we only ask what the order needs</span></label>
+    <input type="text" id="name" placeholder="Your Name" autocomplete="name">
+    <div class="f2" style="margin-top:8px">
+      <div><input type="email" id="email" placeholder="Email" required autocomplete="email"><div class="hint" style="margin-top:3px">For your receipt, order tracking and AERA Points.</div></div>
+      <div><input type="tel" id="phone" placeholder="Mobile (optional)" autocomplete="tel"><div class="hint" style="margin-top:3px" id="phoneHint">Optional for self pick-up.</div></div>
+    </div>
+    <label style="display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--ink2);margin-top:8px;cursor:pointer"><input type="checkbox" id="remember" checked style="width:auto;margin:0"> Remember my details on this device so I don't type them next time</label>
+    <label class="lb">Notes for the Kitchen / Rider</label><textarea id="notes" placeholder="e.g. less spicy, leave at guard house, call on arrival"></textarea>
+
+    <div style="margin-top:14px">
+      <div class="tot"><span>Subtotal</span><b id="subtotal">RM 0.00</b></div>
+      <div class="tot"><span id="pkName">Packaging Fee</span><b id="pkAmt">RM 0.00</b></div>
+      <div class="tot"><span id="feeName">Delivery</span><b id="feeAmt">—</b></div>
+      <div class="tot" id="discRow" style="display:none;color:var(--green)"><span id="discName">AERA Points discount</span><b id="discAmt">− RM 0.00</b></div>
+      <div class="tot big"><span>Total</span><span id="total">RM 0.00</span></div>
+      <div class="hint" id="earnHint"></div>
+    </div>
+    <div id="payMsg"></div>
+    <button class="btn btn-y paybtn" id="payBtn" onclick="pay()">Pay Securely</button>
+    <div class="secure">Card, FPX online banking or GrabPay via Stripe. We never see your card details.</div>
+  </aside>
+</main>
+<div class="sheet"><span><b id="sheetCount">0 items</b> · <span id="sheetTotal">RM 0.00</span></span><button class="cartbtn" onclick="openCart()">View Order →</button></div>
+
+<script>
+/* ===== Settings (edit here) ===== */
+var KITCHEN={lat:2.9976100,lng:101.6742575};
+var POINTS_MODE=true,POINTS_PAGE_ID=''; // set on the sign-in (PIN-gated) copy of this page that can read the customer's AERA Points
+var AP={perRM:5,rmPer100:1,capPct:10,expiryMonths:6,pointsPage:'https://my.chatbees.io/p/ZmQYknnnM'}; // 5 AP per RM 1 on meals; 100 AP = RM 1; max 10% of the order per checkout; points expire 6 months after earning
+var ROAD_FACTOR=1.25,MAX_KM=60;
+var COURIERS={lalamove:{name:'Lalamove',rate:{base:6,baseKm:10,perKm:1.0,cap:25,freeAbove:0}},grab:{name:'Grab',rate:{base:7,baseKm:10,perKm:1.1,cap:27,freeAbove:0}}}; // Normal delivery rate per courier (RM): base covers baseKm, then perKm per extra km, capped at cap; freeAbove = free delivery for subtotals ≥ this (0 = never). PLACEHOLDER numbers until AERA confirms.
+var DOOR_SURCHARGE={motorcycle:2,car:5}; // Door-to-Door Service = Normal Delivery + this, by vehicle (both couriers)
+var MOTO_MAX_BOXES=1; // orders up to this many boxes go by motorcycle, bigger orders by car (keep in step with the Lalamove booking flow)
+function vehicle(){return boxes()<=MOTO_MAX_BOXES?'motorcycle':'car'}
+function doorExtra(){return DOOR_SURCHARGE[vehicle()]}
+var PACK_PER_BOX=1.8; // RM per box, already INCLUDED in every displayed meal/bundle price (BUNDLES/MEALS below hold the food price before packaging)
+var PACKAGING={bento:{name:'MAP Bento Box'},vacuum:{name:'Vacuum Bag'}};
+var PACK_FEE_TABLE=[[7,3.2],[10,3.9],[14,3.2],[17,3.7],[21,6.4],[24,7.1],[30,9.6]]; // additional packaging fee at checkout: [up to N boxes, RM]. 1–7 → 3.20, 8–10 → 3.90, 11–14 → 3.20, 15–17 → 3.70, 18–21 → 6.40, 22–24 → 7.10, 25–30 → 9.60
+var PACK_FEE_BEYOND={per:7,amount:3.2}; // above the last row: last fee + RM amount for every further `per` boxes
+var SLOTS=[['09:00-11:00','9 AM – 11 AM'],['11:00-13:00','11 AM – 1 PM'],['13:00-15:00','1 PM – 3 PM'],['15:00-17:00','3 PM – 5 PM']]; // [value used by the kitchen & rider booking, label shown to the customer]
+function slotLabel(v){for(var i=0;i<SLOTS.length;i++)if(SLOTS[i][0]===v)return SLOTS[i][1];return v}
+var CUTOFF_HOUR=12,CUTOFF_MIN=45,LEAD_DAYS=2; // order before 12:45pm → earliest slot 2 days later
+var BUNDLES=[
+ ["BUNDLE-11","Fat Loss · 7 days × 1 meal","fat",144.99,7,["7 Chef-Selected Fat Loss Meals","~RM 22.50 Per Meal","Lean Proteins, Oil-Free Vegetables"],"https://my.chatbees.io/objects/quick-uploads/1302/f1f440404d9bdc9f.jpg"],
+ ["BUNDLE-7","Fat Loss · 7 days × 2 meals","fat",323.99,14,["14 Different Fat Loss Meals — No Repeats","~RM 24.90 Per Meal","Most Popular"],"https://my.chatbees.io/objects/quick-uploads/1302/6cd842cd6fd9717c.jpg"],
+ ["BUNDLE-13","Mass Gain · 7 days × 1 meal","mass",152.99,7,["7 Chef-Selected Mass Gain Meals","~RM 23.70 Per Meal","800–1,260 KCAL, 40–60 g Protein Each"],"https://my.chatbees.io/objects/quick-uploads/1302/7e20ca59b543daa7.jpg"],
+ ["BUNDLE-12","Mass Gain · 7 days × 2 meals","mass",339.99,14,["14 Different Mass Gain Meals — No Repeats","~RM 26.10 Per Meal","Bigger Portions, Higher Carbs"],"https://my.chatbees.io/objects/quick-uploads/1302/cdd3eaa61bcef587.jpg"]
+];
+var MEALS = [
+ ["MEAL-10","Aglio Olio","fat",26.7,576,31,67,21,"https://my.chatbees.io/objects/quick-uploads/1302/d228cac817165404.jpg","Pan Seared Tiger Prawn 100 g · Aglio Olio 75 g · Sweated Broccoli 75 g",250],
+ ["MEAL-23","Assam Fettuccine","mass",30.8,860,38,94,37,"https://my.chatbees.io/objects/quick-uploads/1302/54ad5f5f99873bd6.jpg","Pan Seared Tiger Prawn 100 g · Assam Fettuccine 75 g · Sweated Broccoli 75 g · Assam Sauce 60 g",310],
+ ["MEAL-13","Black Pepper Chicken Sliced","mass",17.1,871,52,101,29,"https://my.chatbees.io/objects/quick-uploads/1302/7e20ca59b543daa7.jpg","Black Pepper Chicken Sliced 150 g · Brown Rice 75 g · Peas & Corn 100 g",325],
+ ["MEAL-58","Black Pepper Pasta","fat",21.9,779,53,90,23,"https://my.chatbees.io/objects/quick-uploads/1302/e5889c544b7a47e8.jpg","Grilled Chicken Chop 150 g · Black Pepper Pasta 75 g · Sweated Broccoli 75 g · Black Pepper Sauce 60 g",360],
+ ["MEAL-25","Bolognese","fat",21.1,761,52,84,24,"https://my.chatbees.io/objects/quick-uploads/1302/40ba7660ea09bfc4.jpg","Bolognese Chicken Breast 100 g · Bolognese 75 g · Sweated Broccoli 75 g · Tomato Concasse 60 g",310],
+ ["MEAL-27","Cajun Spiced Fusilli","mass",23.5,872,53,86,35,"https://my.chatbees.io/objects/quick-uploads/1302/051b3233749d80a9.jpg","Grilled Teriyaki Chicken Chop 150 g · Cajun Spiced Fusilli 75 g · Sweated Broccoli 75 g · Cajun Spiced Gravy 60 g",360],
+ ["MEAL-59","Cauliflower Fried Rice","fat",32.4,575,38,30,33,"https://my.chatbees.io/objects/quick-uploads/1302/707b85bebe9ec81d.jpg","Pan Seared Tiger Prawn 100 g · Cauliflower Fried Rice 100 g · Stir Fried Kangkung w/ Sambal Belacan 75 g",275],
+ ["MEAL-15","Classic Meal Prep Chicken Sliced & Homemade Sambal","mass",19.8,849,50,98,28,"https://my.chatbees.io/objects/quick-uploads/1302/065eceba3b2ebcaf.jpg","Chicken Sliced 150 g · Brown Rice 75 g · Sweated Broccoli 75 g · Homemade Sambal 60 g",360],
+ ["MEAL-8","Creamy Mushroom Pasta","mass",25.1,886,59,84,35,"https://my.chatbees.io/objects/quick-uploads/1302/cdd3eaa61bcef587.jpg","Stir Fried Ground Chicken Breast w/ Mushroom Gravy 100 g · Creamy Mushroom Pasta 75 g · Peas & \"Bacon\" 100 g · Mushroom Gravy 60 g",335],
+ ["MEAL-19","Curry Chicken Sliced","fat",14.0,651,45,57,27,"https://my.chatbees.io/objects/quick-uploads/1302/c5ac5dbd6b40f89e.jpg","Curry Chicken Sliced 150 g · Basmati Long Rice 50 g · Sweated Cauliflower 75 g",275],
+ ["MEAL-34","Egg Fried Brown Rice","mass",24.4,885,42,103,34,"https://my.chatbees.io/objects/quick-uploads/1302/e478eb3ebf3769cc.jpg","Stir Fried Vannamei Prawn 100 g · Egg Fried Brown Rice 100 g · Peas & Corn 100 g",300],
+ ["MEAL-30","Gam Hiong Chicken Breast","mass",19.2,1264,63,132,54,"https://my.chatbees.io/objects/quick-uploads/1302/0c7c881b9c97ae2e.jpg","Gam Hiong Chicken Breast 150 g · Brown Rice 75 g · Stir Fried Sweet Pea 75 g",300],
+ ["MEAL-14","Garlic Mashed Potato with Grilled Chicken Chop & Brown Sauce","fat",24.3,652,43,65,24,"https://my.chatbees.io/objects/quick-uploads/1302/163c79a8c25dbc56.jpg","Grilled Chicken Chop 150 g · Garlic Mashed Potato 150 g · Sweated Broccoli 75 g · Brown Sauce 60 g",435],
+ ["MEAL-21","Gingered Spring Onion Toman Fish Sliced","mass",26.0,798,42,89,30,"https://my.chatbees.io/objects/quick-uploads/1302/378629b116cf880d.jpg","Gingered Spring Onion Toman Fish Sliced 150 g · Fragrant White Rice 75 g · Stir Fried Broccoli Stem 100 g",325],
+ ["MEAL-9","Green Curry Chicken Sliced","fat",16.6,653,43,61,27,"https://my.chatbees.io/objects/quick-uploads/1302/f1f440404d9bdc9f.jpg","Green Curry Chicken Sliced 150 g · Basmati Long Rice 50 g · Baked Eggplant 100 g",300],
+ ["MEAL-16","Grilled Teriyaki Chicken Breast & Sweet & Sour Sauce","fat",23.9,509,41,56,13,"https://my.chatbees.io/objects/quick-uploads/1302/3d4dda127200808e.jpg","Grilled Teriyaki Chicken Breast 150 g · Baked Sweet Potato ( Orange ) 150 g · Asperges 75 g · Sweet & Sour Sauce 60 g",435],
+ ["MEAL-22","Imitation Salted Egg Yolk Chicken Thigh","mass",20.2,1080,50,102,53,"https://my.chatbees.io/objects/quick-uploads/1302/cb4b717d4f73a112.jpg","Salted Egg Yolk Chicken Thigh 150 g · Fragrant White Rice 75 g · Sweated Broccoli 75 g",300],
+ ["MEAL-33","Imitation Salted Egg Yolk Pasta","mass",32.7,946,45,83,48,"https://my.chatbees.io/objects/quick-uploads/1302/97d491c90d587bd7.jpg","Salted Egg Yolk Tiger Prawn 100 g · Salted Egg Yolk Pasta 75 g · Sweated Broccoli 75 g · Salted Egg Yolk Gravy 60 g",310],
+ ["MEAL-26","Japanese Curry Chicken Katsu with Rice","mass",22.2,1029,54,113,40,"https://my.chatbees.io/objects/quick-uploads/1302/2750fce3b4d73063.jpg","Chicken Katsu 150 g · Pearl Rice 100 g · Japanese Curry Garnishes 100 g · Japanese Curry Gravy 60 g",410],
+ ["MEAL-24","Pad Krapow Chicken Breast","fat",11.2,563,34,65,19,"https://my.chatbees.io/objects/quick-uploads/1302/613bf3feec488d0b.jpg","Pad Krapow Chicken Breast 100 g · Basmati Long Rice 50 g · Stir Fried French Bean 75 g",225],
+ ["MEAL-11","Pan Seared Barramundi Fillet with Homemade Sambal","fat",24.5,660,42,89,15,"https://my.chatbees.io/objects/quick-uploads/1302/fbd9528ea969604d.jpg","Pan Seared Barramundi Fillet 150 g · Spiced Long Rice 75 g · Stir Fried French Bean 75 g · Homemade Sambal 60 g",360],
+ ["MEAL-18","Pan Seared Salmon with Mushroom Gravy","fat",29.0,593,40,46,27,"https://my.chatbees.io/objects/quick-uploads/1302/6cd842cd6fd9717c.jpg","Pan Seared Salmon 150 g · Baked Potato 150 g · Sweated Broccoli 75 g · Mushroom Gravy 60 g",435],
+ ["MEAL-12","Pan Seared Smoked Paprika Chicken Breast & Tomato Concasse","fat",19.1,326,42,15,11,"https://my.chatbees.io/objects/quick-uploads/1302/d37d78c8c5bbcdae.jpg","Pan Seared Smoked Paprika Chicken Breast 150 g · Baked Sweet Potato ( Purple ) 150 g · Sweated Broccoli 75 g · Tomato Concasse 60 g",435],
+ ["MEAL-20","Pan Seared Spicy Chicken Breast with Pesto Sauce","fat",23.5,412,44,33,12,"https://my.chatbees.io/objects/quick-uploads/1302/4ecc1270ff70aa0f.jpg","Pan Seared Spicy Chicken Breast 150 g · Garlic Toast 40 g · Sweated Broccoli 75 g · Pesto Sauce 60 g",325],
+ ["MEAL-32","Quinoa Fried Rice","mass",26.3,933,66,89,35,"https://my.chatbees.io/objects/quick-uploads/1302/65771ee44125250e.jpg","Grilled Teriyaki Chicken Breast 150 g · Quinoa Fried Rice 100 g · Sweated Broccoli 75 g",325],
+ ["MEAL-17","Soy Garlic Chicken Sliced","fat",14.2,565,42,58,18,"https://my.chatbees.io/objects/quick-uploads/1302/89b77953054ae8aa.jpg","Soy Garlic Chicken Sliced 150 g · Fragrant White Rice 50 g · Sweated Cauliflower 75 g",275],
+ ["MEAL-28","Stir Fried Kung Pao Chicken Breast","mass",17.3,864,48,89,35,"https://my.chatbees.io/objects/quick-uploads/1302/4594c863149f5972.jpg","Stir Fried Kung Pao Chicken Breast 150 g · Brown Rice 75 g · Baked Eggplant 100 g",325],
+ ["MEAL-36","Stir Fried Mushroom Chicken Casserole","mass",18.7,1032,52,123,37,"https://my.chatbees.io/objects/quick-uploads/1302/9be81a3880a5b89d.jpg","Stir Fried Mushroom Chicken Casserole 150 g · Fragrant White Rice 75 g · Stir Fried Broccoli Stem 100 g",325],
+ ["MEAL-31","Sweet & Sour Chicken Breast","mass",17.9,1073,51,118,44,"https://my.chatbees.io/objects/quick-uploads/1302/2cfeb4c55c209802.jpg","Sweet & Sour Chicken Breast 150 g · Fragrant White Rice 75 g · Sweated Broccoli 75 g",300]
+];
+/* ===== Cart ===== */
+var CART={};try{CART=JSON.parse(localStorage.getItem('aera.cart')||'{}')}catch(e){CART={}}
+var FUL='pickup',COURIER='',HANDOVER='',GEO=null,FEE_RM=null,PACK='bento';
+var APS={rows:null,email:'',available:0,redeemRM:0,loaded:false};
+function apBalance(rows,todayIso){var ev=rows.map(function(r){return{d:String(r.Date||'').slice(0,10),e:+r.Earned||0,r:+r.Redeemed||0,exp:String(r.Expires||'').slice(0,10)}}).sort(function(a,b){return a.d.localeCompare(b.d)});var batches=[],earned=0,redeemed=0;ev.forEach(function(x){if(x.e>0){batches.push({g:x.e,exp:x.exp});earned+=x.e}if(x.r>0){redeemed+=x.r;var left=x.r;batches.forEach(function(b){if(left<=0||b.g<=0)return;if(b.exp&&b.exp<x.d)return;var t=Math.min(b.g,left);b.g-=t;left-=t})}});var avail=0,expired=0,soon=0,soonDate='';var in30=addDaysIso(todayIso,30);batches.forEach(function(b){if(b.g<=0)return;if(b.exp&&b.exp<todayIso)expired+=b.g;else{avail+=b.g;if(b.exp&&b.exp<=in30){soon+=b.g;if(!soonDate||b.exp<soonDate)soonDate=b.exp}}});return{available:avail,expired:expired,earned:earned,redeemed:redeemed,expiringSoon:soon,expiringDate:soonDate}}
+function addDaysIso(isoDate,k){var d=new Date(isoDate+'T00:00:00');d.setDate(d.getDate()+k);return iso(d)}
+function addMonthsIso(isoDate,k){var d=new Date(isoDate+'T00:00:00');d.setMonth(d.getMonth()+k);return iso(d)}
+function mealBase(){return Math.round((subtotal()-packIncluded())*100)/100}
+function discountRM(){return POINTS_MODE?Math.min(APS.redeemRM,maxRedeemRM()):0}
+function maxRedeemRM(){var cap=Math.floor(subtotal()*AP.capPct/100);var byPts=Math.floor(APS.available/100*AP.rmPer100);return Math.max(0,Math.min(cap,byPts))}
+function pointsEarned(){return Math.max(0,Math.floor((mealBase()-discountRM())*AP.perRM))}
+function apFmt(p){return Math.round(p).toLocaleString('en-MY')+' AP'}
+function packIncluded(){return Math.round(boxes()*PACK_PER_BOX*100)/100}
+function packFee(){var b=boxes();if(!b)return 0;for(var i=0;i<PACK_FEE_TABLE.length;i++){if(b<=PACK_FEE_TABLE[i][0])return PACK_FEE_TABLE[i][1]}var last=PACK_FEE_TABLE[PACK_FEE_TABLE.length-1];return Math.round((last[1]+Math.ceil((b-last[0])/PACK_FEE_BEYOND.per)*PACK_FEE_BEYOND.amount)*100)/100}
+function save(){try{localStorage.setItem('aera.cart',JSON.stringify(CART))}catch(e){}}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function rm(v){return 'RM '+(Math.round(v*100)/100).toFixed(2)}
+function incl(base,boxes){return Math.round((base+PACK_PER_BOX*boxes)*100)/100}
+function catalog(){var o={};BUNDLES.forEach(function(b){o[b[0]]={sku:b[0],name:b[1],goal:b[2],price:incl(b[3],b[4]),base:b[3],boxes:b[4]}});MEALS.forEach(function(m){o[m[0]]={sku:m[0],name:m[1]+(m[2]==='fat'?' (Fat Loss)':' (Mass Gain)'),goal:m[2],price:incl(m[3],1),base:m[3],boxes:1}});return o}
+var CAT=catalog();
+function add(sku,d){CART[sku]=Math.max(0,(CART[sku]||0)+d);if(!CART[sku])delete CART[sku];save();render();refee()}
+function subtotal(){var s=0;Object.keys(CART).forEach(function(k){s+=CAT[k].price*CART[k]});return s}
+function boxes(){var s=0;Object.keys(CART).forEach(function(k){s+=CAT[k].boxes*CART[k]});return s}
+function count(){var s=0;Object.keys(CART).forEach(function(k){s+=CART[k]});return s}
+/* ===== Menu ===== */
+function card(x){var q=CART[x.sku]||0;var qty=q?'<span class="qty"><button type="button" onclick="add(\''+x.sku+'\',-1)">−</button><span>'+q+'</span><button type="button" onclick="add(\''+x.sku+'\',1)">+</button></span>':'<button class="btn btn-k" type="button" onclick="add(\''+x.sku+'\',1)">Add</button>';
+ if(x.bundle)return '<article class="item bundle '+x.goal+'"><img loading="lazy" src="'+x.img+'" alt=""><div class="body"><span class="goal">'+(x.goal==='fat'?'Fat Loss bundle':'Mass Gain bundle')+'</span><div class="name">'+esc(x.name)+'</div><ul>'+x.bul.map(function(b){return'<li>'+esc(b)+'</li>'}).join('')+'</ul><div class="row"><span class="price">'+rm(x.price)+'</span>'+qty+'</div></div></article>';
+ return '<article class="item '+x.goal+'"><img loading="lazy" src="'+x.img+'" alt=""><div class="body"><span class="goal">'+(x.goal==='fat'?'Fat Loss':'Mass Gain')+'</span><div class="name">'+esc(x.name)+'</div><div class="macros"><span><b>'+x.kcal+'</b>KCAL</span><span><b>'+x.p+'g</b>Protein</span><span><b>'+x.c+'g</b>Carbs</span><span><b>'+x.f+'g</b>Fat</span></div>'+(x.serving?'<div class="serving"><b>'+x.raw+' g raw serving</b> · '+esc(x.serving)+'</div>':'')+'<div class="row"><span class="price">'+rm(x.price)+'</span>'+qty+'</div></div></article>'}
+var FILTER='bundle';
+function render(){var h='';if(FILTER==='bundle')BUNDLES.forEach(function(b){h+=card({sku:b[0],name:b[1],goal:b[2],price:CAT[b[0]].price,bul:b[5],img:b[6],bundle:true})});else MEALS.forEach(function(m){if(FILTER!=='all'&&m[2]!==FILTER)return;h+=card({sku:m[0],name:m[1],goal:m[2],price:CAT[m[0]].price,kcal:m[4],p:m[5],c:m[6],f:m[7],img:m[8],serving:m[9],raw:m[10]})});document.getElementById('grid').innerHTML=h}
+document.querySelectorAll('.tab').forEach(function(t){t.addEventListener('click',function(){document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});t.classList.add('on');FILTER=t.dataset.f;render()})});
+/* ===== Cart panel ===== */
+function renderCart(){var el=document.getElementById('lines');var keys=Object.keys(CART);
+ el.innerHTML=keys.length?keys.map(function(k){var x=CAT[k];return'<div class="line"><span class="n">'+esc(x.name)+'<small>'+rm(x.price)+' × '+CART[k]+(x.boxes>1?' · '+(x.boxes*CART[k])+' boxes':'')+'</small></span><span class="qty"><button type="button" onclick="add(\''+k+'\',-1)">−</button><span>'+CART[k]+'</span><button type="button" onclick="add(\''+k+'\',1)">+</button></span><b>'+rm(x.price*CART[k])+'</b></div>'}).join(''):'<div class="empty">Your cart is empty — add meals from the menu.</div>';
+ document.getElementById('cartCount').textContent=count();document.getElementById('sheetCount').textContent=count()+' item'+(count()===1?'':'s');
+ var sub=subtotal();var fee=isDel()?FEE_RM:0;var pk=packFee();var disc=discountRM();var total=Math.max(0,sub+pk+(fee||0)-disc);
+ document.getElementById('subtotal').textContent=rm(sub);
+ var dr=document.getElementById('discRow');dr.style.display=disc>0?'flex':'none';document.getElementById('discName').textContent='AERA Points discount · '+apFmt(disc*100/AP.rmPer100);document.getElementById('discAmt').textContent='− '+rm(disc);
+ document.getElementById('earnHint').textContent=keys.length?'You earn '+apFmt(pointsEarned())+' with this order ('+AP.perRM+' AP per RM 1 on meals · 100 AP = RM '+AP.rmPer100.toFixed(2)+' off future orders).':'';
+ renderPoints();
+ document.getElementById('pkName').textContent='Packaging Fee · '+PACKAGING[PACK].name+' · '+boxes()+' Box'+(boxes()===1?'':'es');document.getElementById('pkAmt').textContent=rm(pk);
+ document.getElementById('feeName').textContent=isDel()?(COURIER?COURIERS[COURIER].name+(HANDOVER?(HANDOVER==='drop'?' · Normal Delivery':' · Door-to-Door ('+vehicle()+')'):''):'Delivery')+(GEO&&GEO.km?' · '+GEO.km.toFixed(1)+' km':''):'Self Pick-Up';
+ document.getElementById('feeAmt').textContent=isDel()?(FEE_RM==null?(!GEO?'Check address':!COURIER?'Choose courier':!HANDOVER?'Choose service':'—'):(FEE_RM===0?'FREE':rm(FEE_RM))):'FREE';
+ updateRates();
+ document.getElementById('total').textContent=rm(total);document.getElementById('sheetTotal').textContent=rm(total);
+ document.getElementById('payBtn').textContent=keys.length?'Pay '+rm(total)+' Securely':'Pay Securely';}
+function openCart(){document.getElementById('side').classList.add('open')}function closeCart(){document.getElementById('side').classList.remove('open')}
+function setPack(p){PACK=p;document.getElementById('pkBento').classList.toggle('on',p==='bento');document.getElementById('pkVacuum').classList.toggle('on',p==='vacuum');renderCart()}
+function isDel(){return FUL==='delivery'}
+function ready(){return !!(GEO&&GEO.km!=null&&GEO.km<=MAX_KM)}
+function rateText(c,hh){var F=COURIERS[c].rate;if(ready()){var f=feeFor(GEO.km,subtotal(),c,hh);return f===0?'FREE':rm(f)}return 'from RM '+(F.base+(hh==='door'?doorExtra():0))}
+function updateRates(){document.getElementById('rateLalamove').textContent='Normal '+rateText('lalamove','drop')+' · Door-to-Door '+rateText('lalamove','door');document.getElementById('rateGrab').textContent='Normal '+rateText('grab','drop')+' · Door-to-Door '+rateText('grab','door');
+ document.getElementById('doorHint').textContent='Rider brings the order right to your door. Normal Delivery + '+rm(DOOR_SURCHARGE.motorcycle)+' by motorcycle or + '+rm(DOOR_SURCHARGE.car)+' by car — this order goes by '+vehicle()+' (+ '+rm(doorExtra())+').';
+ if(COURIER){document.getElementById('rateDrop').textContent=rateText(COURIER,'drop');document.getElementById('rateDoor').textContent=rateText(COURIER,'door')}}
+function setCourier(c){COURIER=c;document.getElementById('optLalamove').classList.toggle('on',c==='lalamove');document.getElementById('optGrab').classList.toggle('on',c==='grab');document.getElementById('handoverBox').style.display=c?'block':'none';refee()}
+function setHandover(hh){HANDOVER=hh;document.getElementById('hoDoor').classList.toggle('on',hh==='door');document.getElementById('hoDrop').classList.toggle('on',hh==='drop');refee()}
+function refee(){FEE_RM=null;if(isDel()&&ready()&&COURIER&&HANDOVER)FEE_RM=feeFor(GEO.km,subtotal(),COURIER,HANDOVER);var fm=document.getElementById('feeMsg');if(fm&&GEO&&GEO.label&&ready())fm.innerHTML='<div class="msg ok">Matched: '+esc(GEO.label)+'<br>About '+GEO.km+' km from our kitchen'+(FEE_RM!=null?' · '+feeName()+' '+(FEE_RM===0?'FREE':rm(FEE_RM)):' · Now choose a courier and service below')+'</div>';renderCart()}
+function feeName(){return (COURIER?COURIERS[COURIER].name:'Delivery')+(HANDOVER==='drop'?' Normal Delivery':HANDOVER==='door'?' Door-to-Door ('+vehicle()+')':'')}
+function setFul(f){FUL=f;document.getElementById('optPickup').classList.toggle('on',f==='pickup');document.getElementById('optDelivery').classList.toggle('on',f==='delivery');document.getElementById('deliveryBox').style.display=isDel()?'block':'none';document.getElementById('dateLbl').textContent=isDel()?'Delivery Date':'Pick-Up Date';var ph=document.getElementById('phone');if(ph){ph.placeholder=isDel()?'Mobile (the rider calls this)':'Mobile (optional)';document.getElementById('phoneHint').textContent=isDel()?'The rider calls this number on arrival.':'Optional for self pick-up.'}refee()}
+/* ===== AERA Points ===== */
+function renderPoints(){var box=document.getElementById('apBox');if(!box)return;
+ if(!POINTS_MODE){box.innerHTML=count()?'<div class="row"><span><b>AERA Points</b><br><span class="hint" style="margin:0">Have points? Sign in with your email to use up to '+AP.capPct+'% of this order.</span></span><a class="btn btn-o" href="'+AP.pointsPage+'">Use my points →</a></div>':'';return}
+ if(!APS.loaded){box.innerHTML='<div class="row"><span><b>AERA Points</b><br><span class="hint" style="margin:0">Loading your balance…</span></span></div>';return}
+ var maxRM=maxRedeemRM();var opts=[];for(var v=0;v<=maxRM;v++)opts.push('<option value="'+v+'"'+(v===APS.redeemRM?' selected':'')+'>'+(v===0?'Don\'t use points':'RM '+v+'.00 off ('+(v*100/AP.rmPer100)+' AP)')+'</option>');
+ var hist=(APS.rows||[]).slice().sort(function(a,b){return String(b.Date||'').localeCompare(String(a.Date||''))}).slice(0,6).map(function(r){var e=+r.Earned||0,d=+r.Redeemed||0;return'<tr><td>'+esc(String(r.Date||'').slice(0,10))+'<br><span class="hint" style="margin:0">'+esc(r.Note||r['Order No']||'')+'</span></td><td class="r">'+(e?'+'+e:'')+(d?'<span style="color:var(--bad)">−'+d+'</span>':'')+'</td></tr>'}).join('');
+ box.innerHTML='<div class="row"><span><b>AERA Points</b>'+(APS.email?'<br><span class="hint" style="margin:0">'+esc(APS.email)+'</span>':'')+'</span><b class="big">'+apFmt(APS.available)+'</b></div>'+
+ '<div class="hint">Worth RM '+(APS.available/100*AP.rmPer100).toFixed(2)+(APS.expiringSoon?' · <span style="color:var(--warn)">'+apFmt(APS.expiringSoon)+' expire on '+esc(APS.expiringDate)+'</span>':'')+'</div>'+
+ (count()?'<div class="row" style="margin-top:8px"><span>Use on this order <span class="hint" style="margin:0">(max '+AP.capPct+'% = RM '+maxRM+')</span></span><select onchange="APS.redeemRM=+this.value;renderCart()">'+opts.join('')+'</select></div>':'<div class="hint">Add meals to use your points on this order.</div>')+
+ (hist?'<table>'+hist+'</table>':'<div class="hint">No points yet — they start with your first order.</div>')}
+function loadPoints(){if(!POINTS_MODE)return;var mu=document.querySelector('meta[name="sheet-data-url"]');var url=mu&&mu.content?mu.content:'/api/public/landing-pages/'+POINTS_PAGE_ID+'/sheet-data';fetch(url,{credentials:'include'}).then(function(r){return r.json()}).then(function(j){var rows=[];var hd=j&&Array.isArray(j.headers)?j.headers:null;var raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];raw.forEach(function(r){if(Array.isArray(r)&&hd){var o={};hd.forEach(function(k,i){o[k]=r[i]});rows.push(o)}else if(r&&typeof r==='object')rows.push(r)});APS.rows=rows;var em=(rows.find(function(r){return r.Email})||{}).Email||'';APS.email=String(em).trim().toLowerCase();var b=apBalance(rows,iso(myNow()));APS.available=b.available;APS.expiringSoon=b.expiringSoon;APS.expiringDate=b.expiringDate;APS.loaded=true;if(APS.email){var ei=document.getElementById('email');ei.value=APS.email;ei.readOnly=true;ei.style.background='#F3F1EA';var nm=(rows.find(function(r){return r.Name})||{}).Name||'';var ni=document.getElementById('name');if(nm&&!ni.value)ni.value=nm}renderCart()}).catch(function(){APS.loaded=true;APS.rows=[];renderCart()})}
+/* ===== Address suggestions (OpenStreetMap / Photon — free, no API key) ===== */
+var AC={items:[],sel:-1,timer:null,seq:0};
+function acHide(){var l=document.getElementById('acList');if(l)l.classList.remove('open');AC.sel=-1}
+function acRender(){var l=document.getElementById('acList');if(!AC.items.length){acHide();return}l.innerHTML=AC.items.map(function(it,i){return'<div class="'+(i===AC.sel?'sel':'')+'" onmousedown="acPick('+i+')"><b>'+esc(it.main)+'</b><small>'+esc(it.sub)+'</small></div>'}).join('');l.classList.add('open')}
+function acKey(e){if(!AC.items.length||!document.getElementById('acList').classList.contains('open'))return;if(e.key==='ArrowDown'){AC.sel=Math.min(AC.items.length-1,AC.sel+1);acRender();e.preventDefault()}else if(e.key==='ArrowUp'){AC.sel=Math.max(0,AC.sel-1);acRender();e.preventDefault()}else if(e.key==='Enter'){if(AC.sel>=0){acPick(AC.sel);e.preventDefault()}}else if(e.key==='Escape')acHide()}
+function acPick(i){var it=AC.items[i];if(!it)return;document.getElementById('address').value=it.full;acHide();AC.items=[];if(it.lat!=null){acApply({lat:it.lat,lng:it.lng,label:it.full})}else checkFee()}
+function acApply(g){var m=document.getElementById('feeMsg');var km=Math.round(hav(KITCHEN,g)*ROAD_FACTOR*10)/10;g.km=km;GEO=g;FEE_RM=null;if(km>MAX_KM){m.innerHTML='<div class="msg bad">That address is about '+km+' km from our kitchen — outside our delivery area. Please choose self pick-up or WhatsApp us.</div>';renderCart();return}refee()}
+function acInput(){var q=document.getElementById('address').value.trim();GEO=null;FEE_RM=null;renderCart();clearTimeout(AC.timer);if(q.length<3){AC.items=[];acHide();return}AC.timer=setTimeout(function(){acFetch(q)},280)}
+function acFetch(q){var seq=++AC.seq;
+ fetch('https://photon.komoot.io/api/?q='+encodeURIComponent(q)+'&limit=6&lang=en&lat='+KITCHEN.lat+'&lon='+KITCHEN.lng).then(function(r){return r.json()}).then(function(j){if(seq!==AC.seq)return;var seen={};AC.items=((j&&j.features)||[]).filter(function(f){return f.properties&&(f.properties.countrycode||'').toUpperCase()==='MY'}).map(function(f){var p=f.properties;var main=[p.name,p.housenumber&&p.street?p.housenumber+' '+p.street:p.street].filter(Boolean).join(', ')||p.city||p.district||'';var sub=[p.district,p.city,p.postcode,p.state].filter(function(x){return x&&x!==main}).join(', ');var full=[main,sub].filter(Boolean).join(', ');return{main:main,sub:sub,full:full,lat:f.geometry.coordinates[1],lng:f.geometry.coordinates[0]}}).filter(function(it){if(!it.main||seen[it.full])return false;seen[it.full]=1;return true}).slice(0,6);AC.sel=-1;acRender()}).catch(function(){})}
+/* ===== Fee ===== */
+function feeFor(km,sub,c,hh){var F=COURIERS[c||COURIER||'lalamove'].rate;hh=hh||HANDOVER||'drop';var f;if(F.freeAbove&&sub>=F.freeAbove)f=0;else{f=F.base+Math.max(0,km-F.baseKm)*F.perKm;if(F.cap)f=Math.min(f,F.cap);f=Math.round(f*10)/10}if(hh==='door')f+=doorExtra();return Math.round(f*100)/100}
+function hav(a,b){var R=6371,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180,s=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);return 2*R*Math.asin(Math.sqrt(s))}
+function checkFee(){var q=document.getElementById('address').value.trim();var m=document.getElementById('feeMsg');if(q.length<8){m.innerHTML='<div class="msg warn">Please enter your full address including postcode.</div>';return}
+ var b=document.getElementById('feeBtn');b.disabled=true;b.textContent='Checking…';m.innerHTML='';GEO=null;FEE_RM=null;renderCart();
+ fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=my&q='+encodeURIComponent(q),{headers:{'Accept':'application/json'}}).then(function(r){return r.json()}).then(function(j){
+  b.disabled=false;b.textContent='Check Delivery Fee';
+  if(!j||!j[0]){m.innerHTML='<div class="msg bad">We couldn\'t find that address on the map. Try adding the area, postcode and city (e.g. "Bangsar South, 59200 Kuala Lumpur").</div>';renderCart();return}
+  var g={lat:+j[0].lat,lng:+j[0].lon,label:j[0].display_name};var km=Math.round(hav(KITCHEN,g)*ROAD_FACTOR*10)/10;g.km=km;
+  if(km>MAX_KM){GEO=g;FEE_RM=null;m.innerHTML='<div class="msg bad">That address is about '+km+' km from our kitchen — outside our delivery area. Please choose self pick-up or WhatsApp us.</div>';renderCart();return}
+  GEO=g;refee();
+ }).catch(function(){b.disabled=false;b.textContent='Check Delivery Fee';m.innerHTML='<div class="msg bad">Address lookup failed — please try again.</div>'})}
+/* ===== Dates ===== */
+function myNow(){var d=new Date();return new Date(d.getTime()+(d.getTimezoneOffset()+480)*60000)}
+function iso(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function earliest(){var n=myNow();var lead=LEAD_DAYS+((n.getHours()>CUTOFF_HOUR||(n.getHours()===CUTOFF_HOUR&&n.getMinutes()>=CUTOFF_MIN))?1:0);var d=new Date(n);d.setDate(d.getDate()+lead);return d}
+(function(){var e=earliest();var di=document.getElementById('date');di.min=iso(e);di.value=iso(e);var mx=new Date(e);mx.setDate(mx.getDate()+21);di.max=iso(mx);document.getElementById('slot').innerHTML=SLOTS.map(function(s){return'<option value="'+s[0]+'">'+s[1]+'</option>'}).join('');document.getElementById('cutoffHint').textContent='Order before '+(CUTOFF_HOUR>12?CUTOFF_HOUR-12:CUTOFF_HOUR)+':'+('0'+CUTOFF_MIN).slice(-2)+(CUTOFF_HOUR>=12?' PM':' AM')+' for the earliest slot '+LEAD_DAYS+' days later. Earliest available: '+e.toLocaleDateString('en-MY',{weekday:'short',day:'numeric',month:'short'})+'.';document.getElementById('feeFromAny').textContent=Math.min(COURIERS.lalamove.rate.base,COURIERS.grab.rate.base);updateRates()})();
+/* ===== Pay ===== */
+/* Stripe keeps the order message as metadata (max 500 chars), so the order is sent in a compact v2 form; the flow and console expand it. */
+function compactOrder(o){var MAX=490;var c={v:2,n:o.orderNo,f:o.fulfil==='delivery'?o.courier:'pickup',h:o.fulfil==='delivery'?o.handover:'',d:o.date,s:o.slot,g:o.geo?[+o.geo.lat.toFixed(5),+o.geo.lng.toFixed(5),o.geo.km]:null,p:o.phone,i:o.items.map(function(i){return i.sku+'x'+i.qty}).join(','),b:o.boxes,pk:o.packaging,pf:o.packagingFee,pi:o.packagingIncluded,sub:Math.round(o.subtotal*100)/100,fee:o.deliveryFee,rd:o.discount||0,rp:o.pointsRedeemed||0,ap:o.pointsEarned||0,ex:o.pointsExpire,t:o.total,nm:o.name,e:o.email,a:o.address,no:o.notes};
+ var J=function(){return JSON.stringify(c)};var room=function(){return MAX-J().length};
+ if(room()<0){var cut=function(k,min){var over=-room();if(over<=0)return;var keep=Math.max(min,c[k].length-over-1);c[k]=c[k].length>keep?c[k].slice(0,keep)+'…':c[k]};cut('a',110);cut('no',0);cut('a',60);if(room()<0){c.e='';cut('nm',0)}}
+ return J()}
+function orderNo(){var n=myNow();return 'AERA-'+String(n.getFullYear()).slice(2)+('0'+(n.getMonth()+1)).slice(-2)+('0'+n.getDate()).slice(-2)+'-'+Math.random().toString(36).slice(2,6).toUpperCase()}
+function pay(){var m=document.getElementById('payMsg');m.innerHTML='';
+ if(!count())return m.innerHTML='<div class="msg warn">Add at least one meal first.</div>';
+ var name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),phone=document.getElementById('phone').value.trim(),date=document.getElementById('date').value,slot=document.getElementById('slot').value,notes=document.getElementById('notes').value.trim();
+ if(!name)return m.innerHTML='<div class="msg warn">Please enter your name.</div>';
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return m.innerHTML='<div class="msg warn">Please enter a valid email for your receipt.</div>';
+ if(isDel()&&phone.replace(/\D/g,'').length<9)return m.innerHTML='<div class="msg warn">Please enter your mobile number — the rider needs it to reach you.</div>';
+ if(!isDel()&&phone&&phone.replace(/\D/g,'').length<9)return m.innerHTML='<div class="msg warn">That mobile number looks incomplete — fix it or leave it blank for self pick-up.</div>';
+ rememberContact(name,email,phone);
+ if(!date)return m.innerHTML='<div class="msg warn">Please choose a date.</div>';
+ if(isDel()){if(!ready())return m.innerHTML='<div class="msg warn">Enter your address and press “Check Delivery Fee” first.</div>';if(!COURIER)return m.innerHTML='<div class="msg warn">Please choose Lalamove or Grab.</div>';if(!HANDOVER||FEE_RM==null)return m.innerHTML='<div class="msg warn">Please choose normal delivery or door-to-door service.</div>'}
+ var items=Object.keys(CART).map(function(k){return{sku:k,name:CAT[k].name,qty:CART[k],price:CAT[k].price,boxes:CAT[k].boxes}});
+ var sub=subtotal(),fee=isDel()?FEE_RM:0,pkg=packFee(),pki=packIncluded(),disc=discountRM(),total=Math.round((sub+pkg+fee-disc)*100)/100;var no=orderNo();var apEarn=pointsEarned(),apRedeem=Math.round(disc*100/AP.rmPer100),apExp=addMonthsIso(iso(myNow()),AP.expiryMonths);
+ if(POINTS_MODE&&APS.email&&email.toLowerCase()!==APS.email)return m.innerHTML='<div class="msg warn">Points can only be used with the email you signed in with ('+esc(APS.email)+').</div>';
+ var order={orderNo:no,fulfil:isDel()?'delivery':'pickup',courier:isDel()?COURIER:'',handover:isDel()?HANDOVER:'',date:date,slot:slot,address:isDel()?document.getElementById('address').value.trim():'',geo:GEO?{lat:GEO.lat,lng:GEO.lng,km:GEO.km}:null,phone:phone,name:name,email:email,notes:notes,items:items,boxes:boxes(),packaging:PACK,packagingFee:pkg,packagingIncluded:pki,subtotal:sub,deliveryFee:fee,discount:disc,pointsRedeemed:apRedeem,pointsEarned:apEarn,pointsExpire:apExp,total:total,source:'checkout-page'};
+ var desc=items.map(function(i){return i.qty+'× '+i.name}).join(', ')+' · '+PACKAGING[PACK].name+' Packaging Fee '+rm(pkg)+(disc?' · AERA Points −'+rm(disc):'')+' · '+(isDel()?feeName()+' '+rm(fee)+' ('+(GEO.km||'?')+' km)':'Self Pick-Up')+' · '+date+' '+slotLabel(slot);
+ var msg=compactOrder(order);
+ if(typeof window.__processDonation!=='function')return m.innerHTML='<div class="msg bad">Checkout is not available right now. Please WhatsApp us to order.</div>';
+ try{sessionStorage.setItem('aera.lastOrder',JSON.stringify(order))}catch(e){}
+ var btn=document.getElementById('payBtn');btn.disabled=true;btn.textContent='Opening secure payment…';
+ window.__processDonation({amount:total,email:email,name:name,productName:'AERA Meal Prep order '+no,productDescription:desc.slice(0,480),message:msg,quantity:1}).catch(function(e){btn.disabled=false;renderCart();if(e&&e!=='below_min'&&e!=='above_max'&&e!=='no_email')m.innerHTML='<div class="msg bad">Could not start payment. Please try again or WhatsApp us.</div>'})}
+/* ===== After payment ===== */
+(function(){var q=location.search;if(q.indexOf('donation=success')>=0){CART={};save();return}var m=/[?&]add=([A-Z0-9-]+)/i.exec(q);if(m&&CAT[m[1].toUpperCase()]){var sku=m[1].toUpperCase();CART[sku]=(CART[sku]||0)+1;save();FILTER=sku.indexOf('BUNDLE')===0?'bundle':CAT[sku].goal;document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.dataset.f===FILTER)});if(window.innerWidth<=940)openCart();history.replaceState(null,'',location.pathname)}})();
+/* ===== Remembered details (this device only) ===== */
+function rememberContact(name,email,phone){try{if(document.getElementById('remember').checked)localStorage.setItem('aera.contact',JSON.stringify({name:name,email:email,phone:phone}));else localStorage.removeItem('aera.contact')}catch(e){}}
+(function(){try{var c=JSON.parse(localStorage.getItem('aera.contact')||'null');if(!c)return;if(c.name)document.getElementById('name').value=c.name;if(c.email)document.getElementById('email').value=c.email;if(c.phone)document.getElementById('phone').value=c.phone;document.getElementById('detailsHint').textContent='· filled in from your last order — edit if anything changed'}catch(e){}})();
+render();renderCart();loadPoints();
+</script>
+</body>
+</html>
