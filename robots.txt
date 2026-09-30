@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://wxiangngaera-pixel.github.io/aera-shop/sitemap.xml
+Sitemap: https://aeramealprep.net/sitemap.xml
