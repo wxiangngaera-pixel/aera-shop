@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://aeramealprep.net/</loc>
+    <lastmod>2026-09-30T16:30:12.536Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://aeramealprep.net/account/</loc>
-    <lastmod>2026-09-30T16:26:57.603Z</lastmod>
+    <lastmod>2026-09-30T16:30:06.611Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -18,11 +23,6 @@
   <url>
     <loc>https://aeramealprep.net/meal-plan/</loc>
     <lastmod>2026-09-30T15:48:36.495Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/</loc>
-    <lastmod>2026-09-30T15:21:28.497Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
