@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- BASE:START (managed by Coding Agent — do not edit) -->
+<base href="/aera-shop/privacy/">
+<!-- BASE:END -->
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap">
+
+
+<!-- SEO Meta Tags -->
+<title>Privacy Notice — AERA Meal Prep</title>
+<meta name="description" content="How AERA Meal Prep collects, uses and protects your personal data. Notis Privasi dalam Bahasa Malaysia disediakan." />
+<meta property="og:title" content="Privacy Notice — AERA Meal Prep" />
+<meta property="og:description" content="How AERA Meal Prep collects, uses and protects your personal data. Notis Privasi dalam Bahasa Malaysia disediakan." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Privacy Notice — AERA Meal Prep" />
+<meta name="twitter:description" content="How AERA Meal Prep collects, uses and protects your personal data. Notis Privasi dalam Bahasa Malaysia disediakan." />
+<!-- End SEO Meta Tags -->
+<script data-lp-token-hydrate>
+(function(){try{
+  var slug="lp-muao8it1-znyfg";
+  var SITEK="";
+  var SK='lp_access_'+slug;
+  var map={access_token:'lp_pw_',allowlist_access_token:'lp_al_',pin_access_token:'lp_pin_',paywall_access_token:'lp_paid_'};
+  function siteTok(){try{return SITEK?localStorage.getItem(SITEK):null;}catch(e){return null;}}
+  var u=new URL(location.href);var found=null;var changed=false;
+  var PINP=true;
+  if(!PINP){try{localStorage.removeItem('lp_pin_'+slug);if(SITEK)localStorage.removeItem(SITEK);}catch(e){}}
+  Object.keys(map).forEach(function(p){var v=u.searchParams.get(p);if(v){found=v;try{if(PINP||p!=='pin_access_token'){localStorage.setItem(map[p]+slug,v);if(SITEK&&p==='pin_access_token')localStorage.setItem(SITEK,v);}}catch(e){}if(p==='pin_access_token'){try{sessionStorage.setItem('lp_fresh_'+slug,'1');}catch(e){}}u.searchParams.delete(p);changed=true;}});
+  if(found){try{sessionStorage.setItem(SK,found);}catch(e){}}
+  else{try{if(!sessionStorage.getItem(SK)){var t=localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();if(t)sessionStorage.setItem(SK,t);}}catch(e){}}
+  if(changed){try{history.replaceState(null,'',u.toString());}catch(e){}}
+  function getTok(){try{return sessionStorage.getItem(SK)||localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();}catch(e){return null;}}
+  function needsToken(url,method){if(!url)return false;var s=String(url);var m=(method||'GET').toUpperCase();var isSheetWrite=(m==='POST'||m==='PATCH'||m==='PUT'||m==='DELETE')&&/\/sheet-rows(\/|$|\?)/.test(s);var isSheetRead=/\/sheet-data(\/|$|\?)/.test(s);var isLlm=/\/api\/landing-pages\/public\/[^/]+\/(llm|llm-config)(\/|$|\?)/.test(s);return isSheetWrite||isSheetRead||isLlm;}
+  if(window.fetch){var _f=window.fetch;window.fetch=function(input,init){try{var url=typeof input==='string'?input:(input&&input.url)||'';var method=(init&&init.method)||(input&&input.method)||'GET';if(needsToken(url,method)){var tok=getTok();if(tok){init=init||{};var h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});if(!h.has('X-Landing-Page-Token'))h.set('X-Landing-Page-Token',tok);init.headers=h;}}}catch(e){}return _f.call(this,input,init);};}
+  if(window.XMLHttpRequest){var _o=XMLHttpRequest.prototype.open;var _s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__lpM=m;this.__lpU=u;return _o.apply(this,arguments);};XMLHttpRequest.prototype.send=function(){try{if(needsToken(this.__lpU,this.__lpM)){var tok=getTok();if(tok)this.setRequestHeader('X-Landing-Page-Token',tok);}}catch(e){}return _s.apply(this,arguments);};}
+}catch(e){}})();
+</script>
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://my.chatbees.io/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=7262');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='xXH4dXALg';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    var phone=findPhone();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    var __pLoc=(document.documentElement.lang||navigator.language||'en');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,phone:phone||'',amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,locale:__pLoc,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var sidP=urlParams.get('session_id');
+      if(sidP){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidP})}).catch(function(){});}catch(e){}}
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-cart>
+(function(){
+  var slug='xXH4dXALg';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findCartEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realCart=function(arg){
+    var items, email='', customerName='', successUrl, cancelUrl, currency;
+    if(Array.isArray(arg)){items=arg;}
+    else if(arg&&typeof arg==='object'){
+      items=arg.items;email=arg.email||'';customerName=arg.name||arg.customerName||'';
+      successUrl=arg.successUrl;cancelUrl=arg.cancelUrl;currency=arg.currency;
+    }
+    if(!Array.isArray(items)||items.length===0){alert('No items in cart.');return Promise.reject('no_items');}
+    var cleanItems=[];var totalCents=0;
+    for(var i=0;i<items.length;i++){
+      var it=items[i];if(!it||typeof it!=='object'){alert('Invalid item at position '+i);return Promise.reject('bad_item');}
+      var nm=typeof it.name==='string'?it.name.trim():'';
+      if(!nm){alert('Item '+(i+1)+' is missing a name.');return Promise.reject('no_name');}
+      var amt=typeof it.amountCents==='number'?it.amountCents:(typeof it.amount==='number'?Math.round(it.amount*100):NaN);
+      if(!isFinite(amt)||amt<1){alert('Item "'+nm+'" needs a valid amount in cents.');return Promise.reject('bad_amount');}
+      var qty=(typeof it.quantity==='number'&&it.quantity>0)?Math.floor(it.quantity):1;
+      cleanItems.push({name:nm,description:it.description||'',amountCents:amt,quantity:qty});
+      totalCents+=amt*qty;
+    }
+    if(totalCents<50){alert('Cart total must be at least $0.50');return Promise.reject('total_too_low');}
+    if(!email)email=findCartEmail();
+    if(!customerName)customerName=findCartName();
+    var cartPhone=findCartPhone();
+    if(!email){var p=window.prompt('Enter your email for the receipt:','');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert('An email address is required to complete checkout.');return Promise.reject('no_email');}}
+    var successBase=window.location.href.split('?')[0];
+    var body={email:email,name:customerName,items:cleanItems,locale:(document.documentElement.lang||navigator.language||'en')};
+    if(currency)body.currency=currency;
+    if(cartPhone)body.phone=cartPhone;
+    body.successUrl=successUrl||(successBase+'?cart=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}');
+    body.cancelUrl=cancelUrl||(successBase+'?cart=cancelled');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/cart/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process checkout');throw new Error(d.error);}
+    });
+  };
+  try{Object.defineProperty(window,'__processCart',{value:__realCart,writable:false,configurable:false});}catch(e){window.__processCart=__realCart;}
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('cart')==='success'){
+      var sidC=urlParams.get('session_id');
+      if(sidC){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidC})}).catch(function(){});}catch(e){}}
+      if(document.getElementById('payment-success-overlay')||document.getElementById('donation-success-overlay')||document.getElementById('cart-success-overlay'))return;
+      var overlay=document.createElement('div');overlay.id='cart-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||'Thank you for your order.';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var cBtn=document.getElementById('lp-cart-success-btn');
+      if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="top"><div class="in"><b>AERA</b><a href="https://my.chatbees.io/p/ZQr9fS2jA9">← Back to AERA Meal Prep</a></div></div>
+<div class="hero"><div class="in">
+ <h1 id="ttl">Privacy Notice</h1>
+ <p id="upd">Last updated 21 September 2026</p>
+ <div class="sw" role="tablist" aria-label="Language"><button type="button" id="bEN" class="on" onclick="setL('en')">English</button><button type="button" id="bBM" onclick="setL('bm')">Bahasa Malaysia</button></div>
+</div></div>
+
+
+<main>
+<!-- ============================ ENGLISH ============================ -->
+<article id="en" lang="en">
+<p>This notice explains how AERA Meal Preparation Sdn. Bhd. collects, uses and protects your personal data, as required by the Personal Data Protection Act 2010. It applies to our website and ordering pages, your AERA account, and orders placed with us by WhatsApp or email.</p>
+
+<h2>1. Who We Are</h2>
+<div class="box">
+ <p><b>AERA Meal Preparation Sdn. Bhd.</b> ( Company No. 202001037122 ( 1393443-P ) )</p>
+ <p>No. 35, Jalan Equine 9A, Taman Equine, 43300 Seri Kembangan, Selangor</p>
+ <p>Email : <a href="mailto:aera.mealprep@gmail.com">aera.mealprep@gmail.com</a> · Phone / WhatsApp : <a href="tel:+60166630205">016-663 0205</a></p>
+</div>
+<p>Please send any question, request or complaint about your personal data to the email above, marked "Personal Data".</p>
+
+<h2>2. The Personal Data We Collect</h2>
+<ul>
+ <li><b>Contact details</b> : your name, email address, phone number and delivery addresses.</li>
+ <li><b>Account details</b> : your date of birth and your password. Your password is stored in encrypted form by our account provider; we cannot see it.</li>
+ <li><b>Orders</b> : what you order, delivery or pick-up date and time, courier, packaging, notes for the kitchen and rider, the amount paid and payment status. Your full card details are handled by our payment providers and never reach us.</li>
+ <li><b>Food preferences</b> : meal preferences, foods you do not want, allergies, and salt and spice preferences.</li>
+ <li><b>Meal plan details</b> : gender, age, height, bodyweight, activity level, goal, body type and food you eat outside AERA, used to work out your calorie and macro targets.</li>
+ <li><b>Weight Control records</b> : bodyweight, body fat, muscle mass, BMI, visceral fat and any body-composition reports you choose to upload.</li>
+ <li><b>Loyalty</b> : your AERA Points, vouchers, AERA Credit and any referral code you used.</li>
+ <li><b>Referrers only</b> : the bank details you give us so we can pay your cash-back.</li>
+ <li><b>Messages</b> : what you send us by email, WhatsApp or chat.</li>
+ <li><b>On your device</b> : our pages save a few settings in your own browser, such as your language and the checkout details you last used, so you do not have to type them again. You can clear these by clearing your browser's site data.</li>
+</ul>
+
+<h2>3. Health-Related Data</h2>
+<p>Your Weight Control records, body measurements and allergies can reveal information about your physical health, which the law treats as <b>sensitive personal data</b>. We only collect it with your explicit consent, when you choose to enter it. It is optional: you can order without it, and you can delete it from your account at any time.</p>
+
+<h2>4. Where We Get It</h2>
+<ul>
+ <li>From you, when you order, create an account, build a meal plan or contact us.</li>
+ <li>From our previous website, if you had an account there: your contact details, your last order and your AERA Points balance were carried over to your new account.</li>
+ <li>From our payment providers and couriers, who tell us whether a payment succeeded and how a delivery is progressing.</li>
+</ul>
+
+<h2>5. Why We Use It</h2>
+<ul>
+ <li>To take, cook, pack and deliver your orders, and to contact you about them.</li>
+ <li>To run your account, AERA Points, vouchers, AERA Credit and the Birthday Treat.</li>
+ <li>To build your personalised meal plan and show your progress.</li>
+ <li>To pay referral cash-back and show referrers the orders placed with their code.</li>
+ <li>To answer your questions and complaints, and to put things right.</li>
+ <li>To keep business, accounting and tax records, and to prevent fraud and misuse.</li>
+ <li>If you agree, to send you news and offers. You can stop these at any time.</li>
+</ul>
+<p>Your name, contact details, delivery address and payment are needed to fulfil an order; without them we cannot accept it. Everything else is optional.</p>
+
+<h2>6. Who We Share It With</h2>
+<p>We do not sell your personal data. We share only what each party needs:</p>
+<div class="wrap"><table>
+ <tr><th>Who</th><th>What</th><th>Why</th></tr>
+ <tr><td>Payment providers ( Stripe, Billplz )</td><td>Name, email, amount</td><td>To take your payment</td></tr>
+ <tr><td>Couriers ( Lalamove, Grab )</td><td>Name, phone, delivery address, rider notes</td><td>To deliver your order</td></tr>
+ <tr><td>Our technology providers ( Supabase for accounts, Google for order records, Chatbees for our website, emails and forms, and the system our kitchen uses to plan orders )</td><td>The data they store or run for us</td><td>To operate our website and kitchen</td></tr>
+ <tr><td>OpenAI, only if you use the online meal-plan coach</td><td>Gender, age, height, bodyweight and BMI, or a food you describe</td><td>To generate the coach's suggestions</td></tr>
+ <tr><td>Your referrer, only if you used a referral code</td><td>Your name, a partly hidden email address, order date and the order's meal value</td><td>So they can see the cash-back your orders earned</td></tr>
+ <tr><td>Our professional advisers and the authorities</td><td>What is needed</td><td>When the law requires it, or to protect our legal rights</td></tr>
+</table></div>
+<p>These providers may only use your data to provide their service to us.</p>
+
+<h2>7. Transfers Outside Malaysia</h2>
+<p>Some of the providers above store or process data outside Malaysia, for example in Japan and the United States. We use them because they are needed to take and deliver your order, or, for the meal-plan coach, because you chose to use it. We choose established providers that protect personal data, and we send them only what they need.</p>
+
+<h2>8. How Long We Keep It</h2>
+<ul>
+ <li><b>Order and payment records</b> : 7 years, as company and tax law requires.</li>
+ <li><b>Your account, preferences, meal plans and Weight Control records</b> : while your account is open. If you ask us to close it, we delete them within 30 days, apart from the records above.</li>
+ <li><b>Marketing</b> : until you ask us to stop.</li>
+</ul>
+
+<h2>9. How We Protect It</h2>
+<p>Your account data is protected so that each customer can see only their own. Access to our systems is limited to the people who need it to run AERA. Card payments are handled entirely by our payment providers. If a personal data breach happens that is likely to cause you significant harm, we will tell you and the Personal Data Protection Commissioner as the law requires.</p>
+
+<h2>10. Your Rights</h2>
+<ul>
+ <li><b>See</b> the personal data we hold about you, and <b>correct</b> it if it is wrong. Most of it you can view and change yourself under My Account.</li>
+ <li><b>Withdraw your consent</b> to optional uses, such as health-related data or marketing.</li>
+ <li><b>Ask us to stop</b> sending you marketing. We only send it if you ticked the box to receive it, and you can switch it off yourself under My Account → Meal Preferences → News &amp; Offers.</li>
+ <li><b>Ask us to send</b> your data to you or another organisation, where this is technically possible.</li>
+ <li><b>Complain</b> to us, or to the Personal Data Protection Commissioner Malaysia.</li>
+</ul>
+<p>Email your request to <a href="mailto:aera.mealprep@gmail.com">aera.mealprep@gmail.com</a>. We will reply within 21 days and may need to confirm your identity first.</p>
+
+<h2>11. Children</h2>
+<p>Our shop is meant for adults. If you are under 18, please ask a parent or guardian to order for you.</p>
+
+<h2>12. Changes To This Notice</h2>
+<p>We may update this notice. The date at the top shows when it last changed, and we will tell you of any important change by email or on our website.</p>
+<p>This notice is available in English and Bahasa Malaysia. If the two differ, the English version applies.</p>
+</article>
+
+<!-- ======================== BAHASA MALAYSIA ======================== -->
+<article id="bm" lang="ms" hidden>
+<p>Notis ini menerangkan bagaimana AERA Meal Preparation Sdn. Bhd. mengumpul, menggunakan dan melindungi data peribadi anda, seperti yang dikehendaki oleh Akta Perlindungan Data Peribadi 2010. Notis ini terpakai kepada laman web dan halaman pesanan kami, akaun AERA anda, serta pesanan yang dibuat melalui WhatsApp atau e-mel.</p>
+
+<h2>1. Siapa Kami</h2>
+<div class="box">
+ <p><b>AERA Meal Preparation Sdn. Bhd.</b> ( No. Syarikat 202001037122 ( 1393443-P ) )</p>
+ <p>No. 35, Jalan Equine 9A, Taman Equine, 43300 Seri Kembangan, Selangor</p>
+ <p>E-mel : <a href="mailto:aera.mealprep@gmail.com">aera.mealprep@gmail.com</a> · Telefon / WhatsApp : <a href="tel:+60166630205">016-663 0205</a></p>
+</div>
+<p>Sila hantar sebarang pertanyaan, permintaan atau aduan berkaitan data peribadi anda ke e-mel di atas, dengan tajuk "Data Peribadi".</p>
+
+<h2>2. Data Peribadi Yang Kami Kumpul</h2>
+<ul>
+ <li><b>Butiran perhubungan</b> : nama, alamat e-mel, nombor telefon dan alamat penghantaran anda.</li>
+ <li><b>Butiran akaun</b> : tarikh lahir dan kata laluan anda. Kata laluan anda disimpan dalam bentuk tersulit oleh penyedia akaun kami; kami tidak dapat melihatnya.</li>
+ <li><b>Pesanan</b> : apa yang anda pesan, tarikh dan masa penghantaran atau pengambilan, kurier, pembungkusan, nota untuk dapur dan penunggang, jumlah yang dibayar dan status bayaran. Butiran penuh kad anda dikendalikan oleh penyedia pembayaran kami dan tidak sampai kepada kami.</li>
+ <li><b>Pilihan makanan</b> : pilihan hidangan, makanan yang anda tidak mahu, alahan, serta pilihan garam dan pedas.</li>
+ <li><b>Butiran pelan makanan</b> : jantina, umur, tinggi, berat badan, tahap aktiviti, matlamat, jenis badan dan makanan yang anda makan di luar AERA, untuk mengira sasaran kalori dan makro anda.</li>
+ <li><b>Rekod Kawalan Berat</b> : berat badan, lemak badan, jisim otot, BMI, lemak viseral dan sebarang laporan komposisi badan yang anda pilih untuk muat naik.</li>
+ <li><b>Kesetiaan</b> : AERA Points, baucar, Kredit AERA dan sebarang kod rujukan yang anda gunakan.</li>
+ <li><b>Perujuk sahaja</b> : butiran bank yang anda berikan supaya kami boleh membayar pulangan tunai anda.</li>
+ <li><b>Mesej</b> : apa yang anda hantar kepada kami melalui e-mel, WhatsApp atau sembang.</li>
+ <li><b>Pada peranti anda</b> : halaman kami menyimpan beberapa tetapan dalam pelayar anda sendiri, seperti bahasa dan butiran pembayaran terakhir yang anda gunakan, supaya anda tidak perlu menaipnya semula. Anda boleh memadamnya dengan mengosongkan data laman dalam pelayar anda.</li>
+</ul>
+
+<h2>3. Data Berkaitan Kesihatan</h2>
+<p>Rekod Kawalan Berat, ukuran badan dan alahan anda boleh mendedahkan maklumat tentang kesihatan fizikal anda, yang dianggap oleh undang-undang sebagai <b>data peribadi sensitif</b>. Kami hanya mengumpulnya dengan persetujuan nyata anda, apabila anda memilih untuk memasukkannya. Ia adalah pilihan: anda boleh membuat pesanan tanpanya, dan anda boleh memadamnya daripada akaun anda pada bila-bila masa.</p>
+
+<h2>4. Dari Mana Kami Mendapatkannya</h2>
+<ul>
+ <li>Daripada anda, apabila anda membuat pesanan, membuka akaun, membina pelan makanan atau menghubungi kami.</li>
+ <li>Daripada laman web kami yang terdahulu, jika anda mempunyai akaun di sana: butiran perhubungan, pesanan terakhir dan baki AERA Points anda telah dipindahkan ke akaun baharu anda.</li>
+ <li>Daripada penyedia pembayaran dan kurier kami, yang memaklumkan sama ada bayaran berjaya dan perkembangan penghantaran.</li>
+</ul>
+
+<h2>5. Mengapa Kami Menggunakannya</h2>
+<ul>
+ <li>Untuk menerima, memasak, membungkus dan menghantar pesanan anda, dan menghubungi anda mengenainya.</li>
+ <li>Untuk mengendalikan akaun, AERA Points, baucar, Kredit AERA dan Hadiah Hari Jadi anda.</li>
+ <li>Untuk membina pelan makanan peribadi anda dan menunjukkan kemajuan anda.</li>
+ <li>Untuk membayar pulangan tunai rujukan dan menunjukkan kepada perujuk pesanan yang dibuat dengan kod mereka.</li>
+ <li>Untuk menjawab pertanyaan dan aduan anda, serta membetulkan sebarang masalah.</li>
+ <li>Untuk menyimpan rekod perniagaan, perakaunan dan cukai, serta mencegah penipuan dan penyalahgunaan.</li>
+ <li>Jika anda bersetuju, untuk menghantar berita dan tawaran kepada anda. Anda boleh menghentikannya pada bila-bila masa.</li>
+</ul>
+<p>Nama, butiran perhubungan, alamat penghantaran dan bayaran anda diperlukan untuk memenuhi pesanan; tanpanya kami tidak dapat menerima pesanan. Selain itu, semuanya adalah pilihan.</p>
+
+<h2>6. Dengan Siapa Kami Berkongsi</h2>
+<p>Kami tidak menjual data peribadi anda. Kami hanya berkongsi apa yang diperlukan oleh setiap pihak:</p>
+<div class="wrap"><table>
+ <tr><th>Siapa</th><th>Apa</th><th>Mengapa</th></tr>
+ <tr><td>Penyedia pembayaran ( Stripe, Billplz )</td><td>Nama, e-mel, jumlah</td><td>Untuk menerima bayaran anda</td></tr>
+ <tr><td>Kurier ( Lalamove, Grab )</td><td>Nama, telefon, alamat penghantaran, nota penunggang</td><td>Untuk menghantar pesanan anda</td></tr>
+ <tr><td>Penyedia teknologi kami ( Supabase untuk akaun, Google untuk rekod pesanan, Chatbees untuk laman web, e-mel dan borang kami, dan sistem yang digunakan dapur kami untuk merancang pesanan )</td><td>Data yang mereka simpan atau jalankan untuk kami</td><td>Untuk mengendalikan laman web dan dapur kami</td></tr>
+ <tr><td>OpenAI, hanya jika anda menggunakan jurulatih pelan makanan dalam talian</td><td>Jantina, umur, tinggi, berat badan dan BMI, atau makanan yang anda terangkan</td><td>Untuk menjana cadangan jurulatih</td></tr>
+ <tr><td>Perujuk anda, hanya jika anda menggunakan kod rujukan</td><td>Nama anda, alamat e-mel yang disembunyikan sebahagiannya, tarikh pesanan dan nilai hidangan pesanan</td><td>Supaya mereka dapat melihat pulangan tunai daripada pesanan anda</td></tr>
+ <tr><td>Penasihat profesional kami dan pihak berkuasa</td><td>Apa yang diperlukan</td><td>Apabila dikehendaki oleh undang-undang, atau untuk melindungi hak undang-undang kami</td></tr>
+</table></div>
+<p>Penyedia ini hanya boleh menggunakan data anda untuk memberikan perkhidmatan mereka kepada kami.</p>
+
+<h2>7. Pemindahan Ke Luar Malaysia</h2>
+<p>Sesetengah penyedia di atas menyimpan atau memproses data di luar Malaysia, contohnya di Jepun dan Amerika Syarikat. Kami menggunakan mereka kerana mereka diperlukan untuk menerima dan menghantar pesanan anda, atau, bagi jurulatih pelan makanan, kerana anda memilih untuk menggunakannya. Kami memilih penyedia yang mantap dan melindungi data peribadi, dan kami hanya menghantar apa yang mereka perlukan.</p>
+
+<h2>8. Berapa Lama Kami Menyimpannya</h2>
+<ul>
+ <li><b>Rekod pesanan dan pembayaran</b> : 7 tahun, seperti yang dikehendaki oleh undang-undang syarikat dan cukai.</li>
+ <li><b>Akaun, pilihan, pelan makanan dan rekod Kawalan Berat anda</b> : selagi akaun anda dibuka. Jika anda meminta kami menutupnya, kami akan memadamnya dalam tempoh 30 hari, kecuali rekod di atas.</li>
+ <li><b>Pemasaran</b> : sehingga anda meminta kami berhenti.</li>
+</ul>
+
+<h2>9. Bagaimana Kami Melindunginya</h2>
+<p>Data akaun anda dilindungi supaya setiap pelanggan hanya dapat melihat data mereka sendiri. Akses kepada sistem kami terhad kepada mereka yang memerlukannya untuk mengendalikan AERA. Pembayaran kad dikendalikan sepenuhnya oleh penyedia pembayaran kami. Jika berlaku pelanggaran data peribadi yang mungkin menyebabkan kemudaratan ketara kepada anda, kami akan memaklumkan anda dan Pesuruhjaya Perlindungan Data Peribadi seperti yang dikehendaki oleh undang-undang.</p>
+
+<h2>10. Hak Anda</h2>
+<ul>
+ <li><b>Melihat</b> data peribadi yang kami simpan tentang anda, dan <b>membetulkannya</b> jika salah. Kebanyakannya boleh anda lihat dan ubah sendiri di My Account.</li>
+ <li><b>Menarik balik persetujuan</b> anda bagi kegunaan pilihan, seperti data berkaitan kesihatan atau pemasaran.</li>
+ <li><b>Meminta kami berhenti</b> menghantar bahan pemasaran kepada anda. Kami hanya menghantarnya jika anda menandakan kotak untuk menerimanya, dan anda boleh mematikannya sendiri di My Account → Meal Preferences → News &amp; Offers.</li>
+ <li><b>Meminta kami menghantar</b> data anda kepada anda atau organisasi lain, jika ia boleh dilakukan secara teknikal.</li>
+ <li><b>Membuat aduan</b> kepada kami, atau kepada Pesuruhjaya Perlindungan Data Peribadi Malaysia.</li>
+</ul>
+<p>E-melkan permintaan anda ke <a href="mailto:aera.mealprep@gmail.com">aera.mealprep@gmail.com</a>. Kami akan membalas dalam tempoh 21 hari dan mungkin perlu mengesahkan identiti anda terlebih dahulu.</p>
+
+<h2>11. Kanak-Kanak</h2>
+<p>Kedai kami ditujukan untuk orang dewasa. Jika anda berumur bawah 18 tahun, sila minta ibu bapa atau penjaga membuat pesanan untuk anda.</p>
+
+<h2>12. Perubahan Kepada Notis Ini</h2>
+<p>Kami mungkin mengemas kini notis ini. Tarikh di bahagian atas menunjukkan bila ia terakhir diubah, dan kami akan memaklumkan sebarang perubahan penting melalui e-mel atau di laman web kami.</p>
+<p>Notis ini tersedia dalam Bahasa Inggeris dan Bahasa Malaysia. Jika terdapat perbezaan, versi Bahasa Inggeris akan diguna pakai.</p>
+</article>
+
+<footer id="ft">© 2026 AERA Meal Preparation Sdn. Bhd. · <a href="https://my.chatbees.io/p/G7mXL4RMz2">Terms &amp; Conditions</a></footer>
+</main>
+
+  <script src="script.js"></script>
+</body>
+</html>
