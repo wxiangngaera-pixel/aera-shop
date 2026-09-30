@@ -11,7 +11,7 @@ function setL(l){if(!TX[l])l="en";
 (function(){
   if(window.__AERA_HOSTMAP) return; window.__AERA_HOSTMAP=1;
   if(/my\.chatbees\.io$/i.test(location.hostname)) return;
-  var MAP={"ZQr9fS2jA9":"/","D2pz8bZ":"/checkout","dtTMaV":"/account","SrQzC5m2":"/meal-plan",
+  var MAP={"ZQr9fS2jA9":"/","xR3Dfd9n":"/fridge","D2pz8bZ":"/checkout","dtTMaV":"/account","SrQzC5m2":"/meal-plan",
   "DSBcJ9bN4":"/bring-your-own-plan","8s4Xd6h":"/track","VMrvEw":"/merchandise","TVRk6bqam":"/corporate",
   "G7mXL4RMz2":"/terms","xXH4dXALg":"/privacy","B2WjrKhnz":"/contact","DiB2ZadptP":"/thank-you",
   "HkKJuxBS":"/referrer-portal","H9H32i9ShW":"/referrer-signup","ZmQYknnnM":"/points-checkout"};
