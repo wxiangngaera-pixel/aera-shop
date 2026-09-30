@@ -350,6 +350,7 @@
         <h3>Set a New Password</h3>
         <label class="lb">New Password</label><input type="password" id="rPass" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters">
         <button class="btn btn-y" style="width:100%;margin-top:16px;padding:13px" id="rBtn">Save Password</button>
+        <button type="button" class="btn btn-o s" style="width:100%;margin-top:10px" onclick="RECOVERY=false;history.replaceState(null,'',location.pathname+location.search);if(USER)showAccount();else setAuth('login')">Cancel</button>
       </form>
       <div id="legacyNote"></div>
       <div id="authMsg"></div>
@@ -368,6 +369,7 @@
         <button data-t="points" onclick="setTab('points')">AERA Points</button>
         <button data-t="refs" onclick="setTab('refs')">Referrals</button>
         <button data-t="details" onclick="setTab('details')">Settings</button>
+        <button data-t="pw" onclick="pwFocus()">Change Password</button>
         <button data-t="address" onclick="setTab('address')">Addresses</button>
         <button data-t="prefs" onclick="setTab('prefs')">Meal Preferences</button>
           <button data-t="body" onclick="setTab('body')">Weight Control</button>
@@ -392,6 +394,15 @@
           <button class="btn btn-k" style="margin-top:14px" id="pBtn">Save Details</button><span id="pMsg"></span>
         </form>
         <div id="phoneBox" style="margin-top:20px;border-top:1px solid var(--line);padding-top:16px"></div>
+        <form id="pwBox" onsubmit="return savePw(event)" style="margin-top:20px;border-top:1px solid var(--line);padding-top:16px;border-radius:12px">
+          <h3 style="margin:0">Change Password</h3>
+          <div id="pwNote"></div>
+          <div class="f2"><div><label class="lb">New Password</label><input type="password" id="pwNew" autocomplete="new-password" minlength="8" required placeholder="At least 8 characters"></div>
+          <div><label class="lb">Type It Again</label><input type="password" id="pwNew2" autocomplete="new-password" minlength="8" required placeholder="Same password again"></div></div>
+          <label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px;cursor:pointer"><input type="checkbox" style="width:auto" onchange="$('#pwNew').type=$('#pwNew2').type=this.checked?'text':'password'"> Show Password</label>
+          <button class="btn btn-k" style="margin-top:14px" id="pwBtn">Save New Password</button>
+          <div id="pwMsg"></div>
+        </form>
       </div>
       <div id="tAddress" class="card" style="display:none">
         <h2>Addresses</h2>
@@ -471,12 +482,32 @@ function friendly(e){var m=(e&&e.message)||String(e||'');if(/Invalid login crede
 /* ===== Supabase ===== */
 var sb=null,USER=null,PROFILE=null,ADDRS=[],TAB='orders',ORDERCOUNT=null;
 function configured(){return SB.url.indexOf('YOUR_PROJECT')<0&&SB.key.indexOf('YOUR_SUPABASE')<0&&typeof supabase!=='undefined'}
+/* A reset link arrives as #access_token=…&type=recovery (or #error_code=… when it has expired). Read it BEFORE supabase-js wipes the hash,
+   and keep the reset form up until the new password is saved — otherwise the SIGNED_IN / INITIAL_SESSION events open the account instead. */
+var REC_LINK=/type=recovery/i.test((location.hash||'')+(location.search||'')),RECOVERY=REC_LINK||/^#change-password$/i.test(location.hash||''),REC_SHOWN=false,RESET_ERR=/error_code=otp_expired|error_description=/i.test(location.hash||'');
+function showReset(){if(!USER){showAuth();setAuth('reset');return}if(REC_SHOWN)return;REC_SHOWN=true;
+ /* open the account itself, then land on Settings → Change Password */
+ Promise.resolve(showAccount()).then(function(){pwFocus(REC_LINK)},function(){pwFocus(REC_LINK)})}
+function pwFocus(fromLink){if($('#acctView').style.display==='none')return;setTab('details');
+ document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t==='pw')});
+ $('#pwNote').innerHTML=fromLink?'<div class="msg ok">You opened a password reset link. Choose your new password below and you are done.</div>':'';
+ msg('pwMsg','');var f=$('#pwBox');f.style.boxShadow=fromLink?'0 0 0 3px var(--y)':'';f.style.padding=fromLink?'16px':'16px 0 0';f.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(function(){try{$('#pwNew').focus()}catch(e){}},350)}
+async function savePw(e){e.preventDefault();var a=$('#pwNew').value,b=$('#pwNew2').value;
+ if(a.length<8){msg('pwMsg','<div class="msg bad">Password must be at least 8 characters.</div>');return false}
+ if(a!==b){msg('pwMsg','<div class="msg bad">The two passwords do not match.</div>');return false}
+ busy('pwBtn',true,'Saving…');msg('pwMsg','');
+ try{var r=await sb.auth.updateUser({password:a});if(r.error)throw r.error;
+  RECOVERY=false;REC_LINK=false;if(location.hash)history.replaceState(null,'',location.pathname+location.search);
+  $('#pwNew').value=$('#pwNew2').value='';$('#pwNote').innerHTML='';$('#pwBox').style.boxShadow='';$('#pwBox').style.padding='16px 0 0';
+  msg('pwMsg','<div class="msg ok">Password changed. Use your new password next time you sign in.</div>')}
+ catch(err){var m=friendly(err);if(/different from the old/i.test(m))m='That is your current password. Please choose a different one.';msg('pwMsg','<div class="msg bad">'+esc(m)+'</div>')}
+ busy('pwBtn',false);return false}
 function init(){if(!configured()){$('#setup').style.display='block';return}
  sb=supabase.createClient(SB.url,SB.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
- sb.auth.onAuthStateChange(function(ev,session){if(ev==='PASSWORD_RECOVERY'){showAuth();setAuth('reset');return}USER=session?session.user:null;if(USER&&!SU.done){var ok=false;try{ok=suFromLink()}catch(e){}
+ sb.auth.onAuthStateChange(function(ev,session){if(ev==='PASSWORD_RECOVERY')RECOVERY=true;if(RECOVERY&&session){USER=session.user;showReset();return}USER=session?session.user:null;if(USER&&!SU.done){var ok=false;try{ok=suFromLink()}catch(e){}
   if(ok){try{suConfirmedScreen();return}catch(e){}}}if(USER)showAccount();else showAuth()});
  if((location.hash||'').toLowerCase().indexOf('logout')>=0){doLogout(true);return}
- sb.auth.getSession().then(function(r){USER=r.data.session?r.data.session.user:null;if(location.hash.indexOf('type=recovery')>=0){showAuth();setAuth('reset');return}if(USER){var ok2=false;try{ok2=suFromLink()}catch(e){}
+ sb.auth.getSession().then(function(r){USER=r.data.session?r.data.session.user:null;if(RECOVERY&&USER){showReset();return}if(RESET_ERR&&!USER){history.replaceState(null,'',location.pathname+location.search);showAuth();setAuth('forgot');msg('authMsg','<div class="msg bad">That reset link has expired or was already used. Enter your email below for a fresh one.</div>');return}if(USER){var ok2=false;try{ok2=suFromLink()}catch(e){}
   if(ok2){try{suConfirmedScreen();return}catch(e){}}}if(USER)showAccount();else showAuth()})}
 function showAuth(){$('#acctView').style.display='none';$('#authView').style.display='block';try{localStorage.removeItem('aera.account')}catch(e){}
  var hh=(location.hash||'').replace('#','').toLowerCase();if(hh==='signup-fridge'||hh==='fridge'){setAuth('signup');gymMode()}else if(hh==='signup'||hh==='register')setAuth('signup');else if(hh==='login'||hh==='signin')setAuth('login')}
@@ -609,7 +640,7 @@ async function doSignup(e){e.preventDefault();busy('sBtn',true,'Creating…');ms
  var su=r.data&&r.data.user;
  if(su&&su.identities&&su.identities.length===0){setAuth('login');var le=$('#lEmail');if(le)le.value=email;msg('authMsg','<div class="msg bad">That email already has an AERA account, so no new confirmation was sent. Sign in below, or use Forgot Password if you cannot remember it.</div>')} else if(r.data&&r.data.session){/* signed in immediately */} else suWait(email,$('#sPass').value,tok)}catch(err){msg('authMsg','<div class="msg bad">'+esc(friendly(err))+'</div>')}busy('sBtn',false);return false}
 async function doForgot(e){e.preventDefault();busy('fBtn',true,'Sending…');msg('authMsg','');try{var r=await sb.auth.resetPasswordForEmail($('#fEmail').value.trim(),{redirectTo:location.origin+location.pathname});if(r.error)throw r.error;msg('authMsg','<div class="msg ok">If that email has an account, a reset link is on its way.</div>')}catch(err){msg('authMsg','<div class="msg bad">'+esc(friendly(err))+'</div>')}busy('fBtn',false);return false}
-async function doReset(e){e.preventDefault();busy('rBtn',true,'Saving…');msg('authMsg','');try{var r=await sb.auth.updateUser({password:$('#rPass').value});if(r.error)throw r.error;history.replaceState(null,'',location.pathname);msg('authMsg','<div class="msg ok">Password saved — you are signed in.</div>');var s=await sb.auth.getSession();USER=s.data.session?s.data.session.user:null;if(USER)showAccount()}catch(err){msg('authMsg','<div class="msg bad">'+esc(friendly(err))+'</div>')}busy('rBtn',false);return false}
+async function doReset(e){e.preventDefault();busy('rBtn',true,'Saving…');msg('authMsg','');try{var r=await sb.auth.updateUser({password:$('#rPass').value});if(r.error)throw r.error;RECOVERY=false;history.replaceState(null,'',location.pathname);msg('authMsg','<div class="msg ok">Password saved — you are signed in.</div>');var s=await sb.auth.getSession();USER=s.data.session?s.data.session.user:null;if(USER)showAccount()}catch(err){msg('authMsg','<div class="msg bad">'+esc(friendly(err))+'</div>')}busy('rBtn',false);return false}
 async function doLogout(back){try{await sb.auth.signOut()}catch(e){}
  USER=null;PROFILE=null;ADDRS=[];
  try{['aera.account','aera.refLock'].forEach(function(k){localStorage.removeItem(k)})}catch(e){}
@@ -665,7 +696,7 @@ async function showAccount(){var nx=nextTarget();
  await legacyClaim();
  if(nx){try{await loadAddresses()}catch(e){}cacheAccount();location.replace(nx);return}
  /* signed in and settled — ask for the five numbers if any are still missing */
- try{setTimeout(function(){wgFirstThenNumbers()},400)}catch(e){}
+ try{if(!RECOVERY)setTimeout(function(){wgFirstThenNumbers()},400)}catch(e){}
  TAB=hashTab()||'orders';
  setTab(TAB);renderFavs();renderHome();
  var jobs=[loadOrders(),loadPlans(),loadPoints(),loadAddresses(),loadRefs(),bodyLoad()];
