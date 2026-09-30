@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- AERA api host : start -->
 
-<!-- AERA api host : end -->
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -482,7 +480,7 @@
 </main>
 <div class="sheet"><span><b id="sheetCount">0 items</b> · <span id="sheetTotal">RM 0.00</span></span><button class="cartbtn" onclick="openCart()">View Order →</button></div>
 
-<script>
+<script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* ===== Settings (edit here) ===== */
 var KITCHEN={lat:2.9976100,lng:101.6742575};
 var POINTS_MODE=true,POINTS_PAGE_ID=''; // set on the sign-in (PIN-gated) copy of this page that can read the customer's AERA Points
