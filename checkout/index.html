@@ -1572,7 +1572,7 @@ function tuLoad(){if(TU.loaded)return Promise.resolve(TU);
  return fetch(SETTINGS_URL).then(function(r){return r.json()}).then(function(j){(j&&j.data||[]).forEach(function(r){var k=String(r.Key||'').trim(),v=String(r.Value||'').trim();
   if(k==='topup_amounts'){var a=v.split(/[,\s]+/).map(Number).filter(function(n){return n>0});if(a.length)TU.amounts=a}
   if(k==='topup_min'&&+v>0)TU.min=+v;
-  if(k==='topup_max'&&+v>0)TU.max=+v;
+  if(k==='topup_max'&&+v>0)TU.max=+v;if(k==='as_low'&&+v>0)TU_LOW=+v;
   if(k==='topup_bonus'){TU.tiers=v.split(/[,;\s]+/).map(function(p){var x=p.split('=');return[+x[0],+x[1]]}).filter(function(t){return t[0]>0&&t[1]>0}).sort(function(a,b){return a[0]-b[0]})}});
   TU.loaded=true;return TU}).catch(function(){TU.loaded=true;return TU})}
 function tuBonusRM(amt){var b=0;TU.tiers.forEach(function(t){if(amt>=t[0])b=t[1]});return b}
@@ -1580,7 +1580,7 @@ function tuBonusAP(amt){return Math.round(tuBonusRM(amt)*100/(AP.rmPer100||1))}
 function tuNo(){var d=typeof myNow==='function'?myNow():new Date();var p=function(n){return('0'+n).slice(-2)};return'TU-'+String(d.getFullYear()).slice(2)+p(d.getMonth()+1)+p(d.getDate())+'-'+Math.random().toString(36).slice(2,6).toUpperCase()}
 function tuOrderGap(){/* what the card would still pay for the cart as it stands */try{var t=document.getElementById('total');var v=t?+String(t.textContent).replace(/[^0-9.]/g,''):0;return v>0?v:0}catch(e){return 0}}
 function tuPaint(){var el=document.getElementById('tuLine');if(!el){var cr=document.getElementById('crRow');if(!cr||!cr.parentNode)return;el=document.createElement('div');el.id='tuLine';el.className='tuline';cr.parentNode.insertBefore(el,cr.nextSibling)}
- if(!APS.key){el.style.display='none';return}el.style.display='';
+ if(!APS.key){el.style.display='none';return}el.style.display='';try{tuLoad().then(tuLowCheck)}catch(e){}
  var bal=crAvail(),gap=tuOrderGap();
  el.innerHTML='<span>AERA Credit balance <b>'+rm(bal)+'</b>'+(gap>0&&Object.keys(CART||{}).length?' · <span class="tusub">Top up instead and pay this Order from your Credit</span>':'')+'</span><button type="button" class="tubtn" onclick="tuOpen()">Top Up</button>'}
 function tuOpen(pre){tuLoad().then(function(){var o=document.getElementById('tuOverlay');if(!o){o=document.createElement('div');o.id='tuOverlay';o.className='tuov';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.addEventListener('click',function(e){if(e.target===o)tuClose()});document.body.appendChild(o)}
@@ -1596,6 +1596,17 @@ function tuOpen(pre){tuLoad().then(function(){var o=document.getElementById('tuO
   '<button type="button" class="btn btn-y" id="tuPay" style="width:100%;margin-top:12px" onclick="tuPay()">Pay Securely</button>'+
   '<p class="tulegal">AERA Credit can be refunded on request. Bonus AERA Points are a reward, cannot be refunded and expire '+AP.expiryMonths+' months after the Top-Up. See our <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a>.</p></div>';
  o.style.display='flex';tuSum()})}
+/* Auto Subscription customers are paid from AERA Credit, so when their Credit is low they are
+   told here as well as in My Account ( which marks the browser with aera.autoSub ). Once a day. */
+var TU_LOW=300;
+function tuLowCheck(){try{var who=localStorage.getItem('aera.autoSub')||'';if(!who||!APS.loaded||APS.failed||APS.email!==who)return;
+ var bal=crAvail();if(bal>TU_LOW)return;var ov=document.getElementById('tuOverlay');if(ov&&ov.style.display==='flex')return;
+ var d=new Date(),k='aera.lowShown.'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1')}catch(e){return}
+ var o=document.getElementById('tuOverlay');if(!o){o=document.createElement('div');o.id='tuOverlay';o.className='tuov';o.addEventListener('click',function(e){if(e.target===o)tuClose()});document.body.appendChild(o)}
+ o.innerHTML='<div class="tucard" style="text-align:center"><button type="button" class="tux" onclick="tuClose()" aria-label="Close">×</button><h3>Your AERA Credit Is Running Low</h3>'+
+  '<p class="tuhint">You have <b>'+rm(crAvail())+'</b> left. Your Auto Subscription is paid from AERA Credit, so top up to keep your next delivery coming.</p>'+
+  '<button type="button" class="btn btn-y" style="width:100%" onclick="TU.pick=0;tuOpen(1500)">Top Up Now</button><button type="button" class="btn btn-o" style="width:100%;margin-top:8px" onclick="tuClose()">Later</button></div>';
+ o.style.display='flex'}
 function tuClose(){var o=document.getElementById('tuOverlay');if(o)o.style.display='none'}
 function tuPick(a){TU.pick=a;var i=document.getElementById('tuOwn');if(i)i.value='';[].forEach.call(document.querySelectorAll('.tuamt'),function(b){b.classList.toggle('on',b.querySelector('b').textContent===rm(a))});tuSum()}
 function tuOwn(v){var n=Math.round((+v||0)*100)/100;TU.pick=n;[].forEach.call(document.querySelectorAll('.tuamt'),function(b){b.classList.remove('on')});tuSum()}
