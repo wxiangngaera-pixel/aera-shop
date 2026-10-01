@@ -370,6 +370,7 @@
         <button data-t="favs" onclick="setTab('favs')">My Favourite Meal Plans</button>
         <button data-t="home" onclick="setTab('home')">My Home-Sourced Meals</button>
         <button data-t="points" onclick="setTab('points')">AERA Points</button>
+        <button data-t="credit" onclick="setTab('credit')">AERA Credit</button>
         <button data-t="refs" onclick="setTab('refs')">Referrals</button>
         <button data-t="details" onclick="setTab('details')">Settings</button>
         <button data-t="pw" onclick="pwFocus()">Change Password</button>
@@ -386,6 +387,7 @@
       <div id="tHome" class="card" style="display:none"><h2>My Home-Sourced Meals</h2><p class="hint" style="margin-top:2px">Everything you have keyed in on the Home-Sourced Meals Page. Add them to a plan from the “Your Week” step.</p><div id="homeLib" style="margin-top:10px"></div><div style="margin-top:14px"><a class="btn btn-y" href="https://my.chatbees.io/p/8kZjg8U5XD">Add a Home-Sourced Meal →</a></div></div>
       <div id="tPlans" class="card" style="display:none"><h2>Your Personalised Meal Plans</h2><div id="plansList"><div class="empty">Loading…</div></div><div style="margin-top:14px"><a class="btn btn-y" href="https://my.chatbees.io/p/SrQzC5m2">Build a New Plan →</a></div></div>
       <div id="tPoints" class="card" style="display:none"><h2>AERA Points</h2><div id="pointsBox"><div class="empty">Loading…</div></div></div>
+      <div id="tCredit" class="card" style="display:none"><h2>AERA Credit</h2><div id="creditBox"><div class="empty">Loading…</div></div></div>
       <div id="tRefs" class="card" style="display:none"><h2>Referrals</h2><div id="refsBox"><div class="empty">Loading…</div></div></div>
       <div id="tDetails" class="card" style="display:none">
         <h2>Settings</h2>
@@ -465,6 +467,27 @@ var STATUS={new:['Preparing','cat'],in_kitchen:['In the kitchen','warn'],packed:
 function $(s){return document.querySelector(s)}
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function rm(v){return 'RM '+(Math.round((+v||0)*100)/100).toFixed(2)}
+/* ===== AERA Credit =====
+   Money paid in ahead ( Top-Ups ) and spent on Orders automatically at Checkout. The balance is read
+   from the same public sheet Checkout uses, by the hashed key of the signed-in email, so both
+   pages always agree. Topping up happens on the Order page, where the payment lives. */
+function crKey(email){return sha256hex('aera-points:'+String(email||'').trim().toLowerCase()).slice(0,24)}
+function crTopUpUrl(){var u=SHOP_URL;try{if(window.aeraUrl)u=aeraUrl(u)}catch(e){}return u+(u.indexOf('?')<0?'?':'&')+'topup=1'}
+async function creditLoad(){var el=$('#creditBox');if(!el||!USER)return;
+ var key=crKey(USER.email),rows=[];
+ try{var j=await fetch('https://my.chatbees.io/api/public/landing-pages/6927/sheet-data?t='+Date.now()).then(function(r){return r.json()});
+  var hd=j&&Array.isArray(j.headers)?j.headers:null,raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];
+  raw.forEach(function(r){var o=r;if(Array.isArray(r)&&hd){o={};hd.forEach(function(k,i){o[k]=r[i]})}if(o&&String(o.Key||'').trim()===key)rows.push(o)})}
+ catch(e){el.innerHTML='<div class="msg bad">We could not load your AERA Credit just now. Please try again in a moment.</div>';return}
+ var g=0,u=0,hist=[];rows.forEach(function(r){var c=+r.Credit||0,s=+r.CreditUsed||0;g+=c;u+=s;var d=String(r.Date||'').slice(0,10);
+  if(c>0)hist.push({d:d,t:'Top-Up',v:c});if(s>0)hist.push({d:d,t:'Spent On An Order',v:-s})});
+ var bal=Math.max(0,Math.round((g-u)*100)/100);hist.sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0});
+ el.innerHTML='<div class="crbal"><div><div class="crlb">Your Balance</div><div class="crnum">'+rm(bal)+'</div></div><a class="btn btn-y" href="'+esc(crTopUpUrl())+'">Top Up</a></div>'+
+  '<p class="hint" style="margin:10px 0 0">AERA Credit comes off your next Order automatically at Checkout. If it does not cover the whole Order, you pay the rest by card. Top up RM 200 or more and you also get bonus AERA Points.</p>'+
+  (hist.length?'<h3 class="crh">History</h3><div class="crlist">'+hist.map(function(x){return'<div class="crrow"><span><b>'+x.t+'</b><small>'+esc(fmtDate(x.d))+'</small></span><b class="'+(x.v>0?'crp':'crm')+'">'+(x.v>0?'+ ':'− ')+rm(Math.abs(x.v))+'</b></div>'}).join('')+'</div>'
+   :'<div class="empty" style="margin-top:14px">No Top-Ups yet.</div>')+
+  '<p class="hint" style="margin-top:14px">Want unused Credit back? WhatsApp us and we refund it. Bonus AERA Points cannot be refunded.</p>'}
+(function(){var s=document.createElement('style');s.textContent='.crbal{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-radius:14px;background:linear-gradient(135deg,#16479E,#0E3576);color:#fff}.crbal .btn{flex:none}.crlb{font-size:12px;opacity:.8;letter-spacing:.04em;text-transform:uppercase}.crnum{font-size:28px;font-weight:700;margin-top:2px}.crh{margin:18px 0 6px;font-size:15px}.crlist{border-top:1px solid #E3E7EE}.crrow{display:flex;justify-content:space-between;align-items:center;padding:10px 2px;border-bottom:1px solid #E3E7EE;font-size:14px}.crrow small{display:block;color:#6B7280;font-size:12px;margin-top:2px}.crp{color:#2F8F5B}.crm{color:#3A3A3A}';document.head.appendChild(s)})();
 function fmtDate(d){if(!d)return '';var x=new Date(String(d).slice(0,10)+'T00:00:00');if(isNaN(x))return String(d);
  var n=x.getDate(),t=(n%100>=11&&n%100<=13)?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th');
  return ['SUN','MON','TUE','WED','THU','FRI','SAT'][x.getDay()]+', '+n+t+' '+
@@ -737,13 +760,13 @@ function acctHold(on){
  setTimeout(function(){if(document.getElementById('acctHold'))location.replace(HOME_URL)},12000)}
 function acctReveal(){acctHold(false);var v=$('#acctView');if(v)v.style.display='grid'}
 function hashTab(){var hh=(location.hash||'').replace('#','').toLowerCase();
- if(hh==='addresses')hh='address';if(hh==='settings')hh='details';if(hh==='referrals')hh='refs';
+ if(hh==='addresses')hh='address';if(hh==='settings')hh='details';if(hh==='referrals')hh='refs';if(hh==='topup'||hh==='aera-credit')hh='credit';
  if(hh==='track'||hh==='tracking')hh='orders';
- return ['orders','plans','favs','home','points','refs','details','address','prefs','body'].indexOf(hh)>=0?hh:''}
+ return ['orders','plans','favs','home','points','credit','refs','details','address','prefs','body'].indexOf(hh)>=0?hh:''}
 window.addEventListener('hashchange',function(){
  if(!USER)return;var t=hashTab();if(t&&t!==TAB)setTab(t);
  try{obMaybeAsk()}catch(e){}});
-function setTab(t){TAB=t;if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();['orders','plans','favs','home','points','refs','details','address','prefs','body'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===t)})}
+function setTab(t){TAB=t;if(t==='credit')creditLoad();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();['orders','plans','favs','home','points','credit','refs','details','address','prefs','body'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===t)})}
 async function loadProfile(){var r=await sb.from('profiles').select('*').eq('id',USER.id).maybeSingle();PROFILE=r.data||{id:USER.id,email:USER.email};if(!r.data){var meta=USER.user_metadata||{};var seed={id:USER.id,email:USER.email.toLowerCase(),name:meta.name||null,phone:meta.phone||null};
   var w=await sb.from('profiles').upsert(seed);
   if(w.error&&/23505|duplicate|unique/i.test((w.error.message||'')+' '+(w.error.code||''))){delete seed.phone;await sb.from('profiles').upsert(seed)}
