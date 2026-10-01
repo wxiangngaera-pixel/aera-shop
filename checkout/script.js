@@ -503,11 +503,44 @@ if(window.aeraRetranslate)window.aeraRetranslate();
       btn.textContent=t||"Choose a date";
       btn.style.color=t?"inherit":"var(--mute)";
     }
-    btn.addEventListener("click",function(){
-      try{ if(di.showPicker){ di.showPicker(); return; } }catch(e){}
-      di.style.opacity="1";di.style.zIndex="2";di.focus();di.click();
-      setTimeout(function(){di.style.opacity="0";di.style.zIndex="-1";},4000);
-    });
+    /* Our own calendar: the browser date box behind the button does not open on some phones
+       and on Safari for Mac, so customers could not pick any day after the earliest one.
+       Every open day from the earliest to the last one we take is shown; Sundays and any day the
+       kitchen is closed are greyed out. Picking a day sets the real date box and fires "change",
+       so the slot rules and closure checks run exactly as before. */
+    (function(){var st=document.createElement("style");st.textContent=
+      ".dpop{position:absolute;left:0;top:calc(100% + 6px);z-index:50;background:#fff;border:1px solid var(--line,#DDE4EF);border-radius:14px;box-shadow:0 12px 32px rgba(11,27,54,.16);padding:12px;width:min(330px,calc(100vw - 40px))}"+
+      ".dpop .dh{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font-size:11px;font-weight:700;color:#6B7690;text-align:center;margin-bottom:4px}"+
+      ".dpop .dg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}"+
+      ".dpop .dm{grid-column:1/-1;font-size:12px;font-weight:800;color:#16479E;letter-spacing:.06em;text-transform:uppercase;margin:6px 0 2px}"+
+      ".dpop .dd{border:0;border-radius:9px;padding:8px 0;font:inherit;font-weight:700;font-size:14px;background:#EEF2F9;color:#0B1B36;cursor:pointer;font-variant-numeric:tabular-nums}"+
+      ".dpop .dd:hover{background:#DCE6F7}.dpop .dd.on{background:#16479E;color:#fff}.dpop .dd[disabled]{background:transparent;color:#B7C0D3;cursor:not-allowed;text-decoration:line-through}"+
+      ".dpop .dx{visibility:hidden}.dpop .dn{font-size:12px;color:#6B7690;margin:10px 2px 0;line-height:1.4}";document.head.appendChild(st)})();
+    function isoD(d){return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)}
+    function parseD(v){var p=String(v||"").split("-");return p.length===3?new Date(+p[0],+p[1]-1,+p[2],12):null}
+    function closePop(){var p=wrap.querySelector(".dpop");if(p)p.remove();document.removeEventListener("click",outside,true)}
+    function outside(ev){if(!wrap.contains(ev.target))closePop()}
+    function openPop(){closePop();if(di.disabled)return;
+      var lo=parseD(di.min),hi=parseD(di.max);if(!lo){lo=new Date();lo.setHours(12,0,0,0)}if(!hi){hi=new Date(lo);hi.setDate(hi.getDate()+28)}
+      var start=new Date(lo);start.setDate(start.getDate()-((start.getDay()+6)%7));
+      var end=new Date(hi);end.setDate(end.getDate()+(6-((end.getDay()+6)%7)));
+      var html='<div class="dh"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="dg">';
+      var lastM=-1;
+      for(var d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+        if(d.getDay()===1&&d.getMonth()!==lastM&&d<=hi){var wk=new Date(d);var ms=[];for(var k=0;k<7;k++){if(ms.indexOf(wk.getMonth())<0)ms.push(wk.getMonth());wk.setDate(wk.getDate()+1)}
+          if(lastM===-1||ms.indexOf(lastM)<0||ms.length>1){html+='<div class="dm">'+new Date(d.getFullYear(),ms[ms.length-1],1).toLocaleDateString("en-MY",{month:"long",year:"numeric"})+'</div>';lastM=ms[ms.length-1]}}
+        var v=isoD(d),inR=d>=lo&&d<=hi;
+        if(!inR){html+='<span class="dd dx"></span>';continue}
+        var why="";try{why=(typeof cloWhy==="function"&&cloWhy(v))||""}catch(e){}if(!why&&d.getDay()===0)why="Closed on Sundays";
+        html+='<button type="button" class="dd'+(v===di.value?' on':'')+'" data-v="'+v+'"'+(why?' disabled title="'+String(why).replace(/"/g,"")+'"':' title="'+d.toLocaleDateString("en-MY",{weekday:"long",day:"numeric",month:"long"})+'"')+'>'+d.getDate()+'</button>'}
+      html+='</div><div class="dn">Greyed-out days are closed. Latest day you can book now : '+hi.toLocaleDateString("en-MY",{weekday:"short",day:"numeric",month:"short"})+'.</div>';
+      var pop=document.createElement("div");pop.className="dpop";pop.setAttribute("role","dialog");pop.setAttribute("aria-label","Choose a date");pop.innerHTML=html;wrap.appendChild(pop);
+      pop.addEventListener("click",function(ev){var t=ev.target.closest&&ev.target.closest("button[data-v]");if(!t||t.disabled)return;
+        di.value=t.getAttribute("data-v");try{di.dispatchEvent(new Event("input",{bubbles:true}))}catch(e){}try{di.dispatchEvent(new Event("change",{bubbles:true}))}catch(e){}sync();closePop();btn.focus()});
+      pop.addEventListener("keydown",function(ev){if(ev.key==="Escape"){closePop();btn.focus()}});
+      setTimeout(function(){document.addEventListener("click",outside,true);var on=pop.querySelector(".dd.on")||pop.querySelector("button[data-v]:not([disabled])");if(on)on.focus()},0)}
+    btn.setAttribute("aria-haspopup","dialog");
+    btn.addEventListener("click",function(){if(wrap.querySelector(".dpop"))closePop();else openPop()});
     di.addEventListener("change",sync);
     di.addEventListener("input",sync);
     sync();
