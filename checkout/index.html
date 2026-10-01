@@ -1474,9 +1474,16 @@ function cloApply(){
 
 /* ===== Pay ===== */
 /* Stripe keeps the order message as metadata (max 500 chars), so the order is sent in a compact v2 form; the flow and console expand it. */
-function compactOrder(o){var MAX=490;var c={v:2,n:o.orderNo,f:o.fulfil==='delivery'?o.courier:'pickup',h:o.fulfil==='delivery'?o.handover:'',d:o.date,s:o.slot,g:o.geo?[+o.geo.lat.toFixed(5),+o.geo.lng.toFixed(5),o.geo.km]:null,p:o.phone,i:o.items.map(function(i){return i.sku+'x'+i.qty}).join(','),b:o.boxes,pk:o.packaging,pf:o.packagingFee,pi:o.packagingIncluded,sub:Math.round(o.subtotal*100)/100,fee:o.deliveryFee,bd:o.birthdayDiscount||0,bp:o.birthdayPct||0,fo:o.firstOrderDiscount||0,rd:o.discount||0,cu:o.creditUsed||0,ck:o.creditKey||'',cc:o.costCode||'',rp:o.pointsRedeemed||0,ap:o.pointsEarned||0,ex:o.pointsExpire,vc:o.voucherCode||'',va:o.voucherAp||0,vs:o.voucherSaved||0,rf:o.referralCode||'',rk:o.referralKey||'',rr:o.referralRate||0,rc:o.referralCashback||0,rb:o.referralBonusAp||0,re:o.referralEligible||0,t:o.total,nm:o.name,e:o.email,a:o.address,no:o.notes,pr:o.prefs||'',pl:o.planLines||''};
+/* Stripe keeps at most 500 characters of order details per payment ( 501 and the payment page
+   refuses to open: "Failed to create donation checkout session" ). Every reader of this JSON ( flows 5486 and
+   5490, the Kitchen Console ) treats a missing key as 0 or blank, so when it is too long: first drop keys that
+   carry nothing, then shorten the free text ( plan lines, address, notes, preferences ). Email is never dropped. */
+function compactOrder(o){var MAX=495;var c={v:2,n:o.orderNo,f:o.fulfil==='delivery'?o.courier:'pickup',h:o.fulfil==='delivery'?o.handover:'',d:o.date,s:o.slot,g:o.geo?[+o.geo.lat.toFixed(5),+o.geo.lng.toFixed(5),o.geo.km]:null,p:o.phone,i:o.items.map(function(i){return i.sku+'x'+i.qty}).join(','),b:o.boxes,pk:o.packaging,pf:o.packagingFee,pi:o.packagingIncluded,sub:Math.round(o.subtotal*100)/100,fee:o.deliveryFee,bd:o.birthdayDiscount||0,bp:o.birthdayPct||0,fo:o.firstOrderDiscount||0,rd:o.discount||0,cu:o.creditUsed||0,ck:o.creditKey||'',cc:o.costCode||'',rp:o.pointsRedeemed||0,ap:o.pointsEarned||0,ex:o.pointsExpire,vc:o.voucherCode||'',va:o.voucherAp||0,vs:o.voucherSaved||0,rf:o.referralCode||'',rk:o.referralKey||'',rr:o.referralRate||0,rc:o.referralCashback||0,rb:o.referralBonusAp||0,re:o.referralEligible||0,t:o.total,nm:o.name,e:o.email,a:o.address,no:o.notes,pr:o.prefs||'',pl:o.planLines||''};
  var J=function(){return JSON.stringify(c)};var room=function(){return MAX-J().length};
- if(room()<0){var cut=function(k,min){var over=-room();if(over<=0)return;var keep=Math.max(min,c[k].length-over-1);c[k]=c[k].length>keep?c[k].slice(0,keep)+'…':c[k]};if(c.pl&&room()<0)c.pl='';cut('a',110);cut('no',0);cut('a',60);cut('pr',0);if(room()<0){c.e='';cut('nm',0)}}
+ var KEEP=['v','n','f','d','s','i','b','sub','fee','t','e','nm','p','a'];
+ if(room()<0)Object.keys(c).forEach(function(k){if(KEEP.indexOf(k)>=0)return;var v=c[k];if(v===0||v===''||v==null||v===false||(Array.isArray(v)&&!v.length))delete c[k]});
+ if(room()<0){var cut=function(k,min){if(c[k]==null)return;var over=-room();if(over<=0)return;var s=String(c[k]);var keep=Math.max(min,s.length-over-1);if(s.length>keep)c[k]=keep>0?s.slice(0,keep)+'…':''};
+  if(c.pl&&room()<0)delete c.pl;cut('a',110);cut('no',0);cut('a',60);cut('pr',0);cut('nm',12);cut('a',30);if(room()<0)cut('a',0);if(room()<0)cut('nm',0)}
  return J()}
 function orderNo(){var n=myNow();return 'AERA-'+String(n.getFullYear()).slice(2)+('0'+(n.getMonth()+1)).slice(-2)+('0'+n.getDate()).slice(-2)+'-'+Math.random().toString(36).slice(2,6).toUpperCase()}
 /* Credit is real money, so it is checked against the ledger again at the moment of paying
