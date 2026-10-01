@@ -1567,7 +1567,7 @@ function bpReturn(){var q=new URLSearchParams(location.search);var id=q.get('bil
    topup_bonus = "200=10,500=30" ( top up RM 200 or more, get RM 10 of AERA Points ).
    Payment goes through the same Stripe checkout as an Order; flow 5486 sees "k":"topup" in the
    message and books Credit ( and any bonus ) instead of an Order. */
-var TU={amounts:[50,100,200,500],min:50,max:5000,tiers:[[200,10]],loaded:false,pick:0};
+var TU={amounts:[50,100,200,500],min:50,max:5000,tiers:[],loaded:false,pick:0};
 function tuLoad(){if(TU.loaded)return Promise.resolve(TU);
  return fetch(SETTINGS_URL).then(function(r){return r.json()}).then(function(j){(j&&j.data||[]).forEach(function(r){var k=String(r.Key||'').trim(),v=String(r.Value||'').trim();
   if(k==='topup_amounts'){var a=v.split(/[,\s]+/).map(Number).filter(function(n){return n>0});if(a.length)TU.amounts=a}
@@ -1594,7 +1594,7 @@ function tuOpen(pre){tuLoad().then(function(){var o=document.getElementById('tuO
   '<label class="lb" for="tuEmail" style="margin-top:12px">Email For Your AERA Account</label><input type="email" id="tuEmail" value="'+esc(em)+'" placeholder="you@email.com" autocomplete="email">'+
   '<div id="tuSum" class="tusum"></div><div id="tuMsg"></div>'+
   '<button type="button" class="btn btn-y" id="tuPay" style="width:100%;margin-top:12px" onclick="tuPay()">Pay Securely</button>'+
-  '<p class="tulegal">AERA Credit can be refunded on request. Bonus AERA Points are a reward, cannot be refunded and expire '+AP.expiryMonths+' months after the Top-Up. See our <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a>.</p></div>';
+  '<p class="tulegal">AERA Credit can be refunded on request. You earn AERA Points when you spend your Credit on Meals, the same as any Order. See our <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a>.</p></div>';
  o.style.display='flex';tuSum()})}
 /* Auto Subscription customers are paid from AERA Credit, so when their Credit is low they are
    told here as well as in My Account ( which marks the browser with aera.autoSub ). Once a day. */
