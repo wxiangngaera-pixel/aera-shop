@@ -392,7 +392,7 @@
       <div id="tCredit" class="card" style="display:none"><h2>AERA Credit</h2><div id="creditBox"><div class="empty">Loading…</div></div></div>
       <div id="tAuto" class="card" style="display:none"><h2>Auto Subscription</h2><div id="autoBox"><div class="empty">Loading…</div></div></div>
       <div id="tInbox" class="card" style="display:none"><h2>Inbox</h2><div class="ibsw" style="display:none"><button type="button" data-s="inbox" onclick="setTab('inbox')">Received</button><button type="button" data-s="send" onclick="setTab('send')">Send A Message</button></div><div id="inboxBox"><div class="empty">Loading…</div></div></div>
-      <div id="tSend" class="card" style="display:none"><h2>Inbox</h2><div class="ibsw" style="display:none"><button type="button" data-s="inbox" onclick="setTab('inbox')">Received</button><button type="button" data-s="send" onclick="setTab('send')">Send A Message</button></div><p class="hint" style="margin-top:-4px">Only AERA message senders see this. Messages appear in your customers' Inbox.</p><div id="sendBox"><div class="empty">Loading…</div></div></div>
+      <div id="tSend" class="card" style="display:none"><h2>Inbox</h2><div class="ibsw" style="display:none"><button type="button" data-s="inbox" onclick="setTab('inbox')">Received</button><button type="button" data-s="send" onclick="setTab('send')">Send A Message</button></div><p class="hint" style="margin-top:-4px">Only AERA Message Senders see this. Messages appear in your Customers' Inbox.</p><div id="sendBox"><div class="empty">Loading…</div></div></div>
       <div id="tRefs" class="card" style="display:none"><h2>Referrals</h2><div id="refsBox"><div class="empty">Loading…</div></div></div>
       <div id="tDetails" class="card" style="display:none">
         <h2>Settings</h2>
@@ -691,7 +691,7 @@ function smDrop(k,i){smKeep();if(k==='f'){try{URL.revokeObjectURL(SM.files[i].pr
 function renderSend(){var el=document.getElementById('sendBox');if(!el)return;if(!IS_ADMIN){el.innerHTML='';return}
  var all=SM.to==='all';
  var to='<div class="smto"><label><input type="radio" name="smTo" '+(all?'checked':'')+' onchange="smKeep();SM.to=\'all\';renderSend()"> All Users</label><label><input type="radio" name="smTo" '+(!all?'checked':'')+' onchange="smKeep();SM.to=\'one\';renderSend()"> One Customer</label></div>'+
-  (all?'<div class="hint">Everyone with an account sees it, including anyone who signs up while it is showing.</div>':
+  (all?'<div class="hint">Everyone with an Account sees it, including anyone who signs up while it is showing.</div>':
    (SM.pick?'<div class="smpick"><div><b>'+esc(SM.pick.name||SM.pick.email)+'</b><small>'+esc(SM.pick.email)+(SM.pick.phone?' · '+esc(SM.pick.phone):'')+'</small></div><button class="btn btn-o s" type="button" onclick="smKeep();SM.pick=null;renderSend()">Change</button></div>':
     '<input type="search" id="smQ" placeholder="Search by name, email or phone number" oninput="smSearch(this.value)" autocomplete="off"><div id="smRes" class="smres"></div>'));
  var th=SM.files.map(function(f,i){return'<div class="smth">'+(f.type==='video'?'<video src="'+f.preview+'" muted></video><i>Video</i>':'<img src="'+f.preview+'" alt="">')+'<button type="button" onclick="smDrop(\'f\','+i+')" aria-label="Remove">×</button></div>'}).join('')+
