@@ -505,7 +505,7 @@ var ASUBS=null,AS_SET={min:1500,low:300},AS_BAL=null;
 var AS_FREQ={weekly:'Every Week',fortnightly:'Every 2 Weeks',monthly:'Every Month'};
 function asNowMY(){var d=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kuala_Lumpur'}));d.setHours(0,0,0,0);return d}
 function asIso(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
-function asMinDate(){var d=asNowMY();d.setDate(d.getDate()+4);return asIso(d)}
+function asMinDate(){var d=asNowMY();d.setDate(d.getDate()+4);if(d.getDay()===0)d.setDate(d.getDate()+1);return asIso(d)}
 function asDaysTo(iso){return Math.round((new Date(String(iso).slice(0,10)+'T00:00:00')-asNowMY())/864e5)}
 function asTopUpUrl(a){return crTopUpUrl().replace(/topup=1$/,'topup='+(a||AS_SET.min))}
 async function asSettings(){try{var j=await fetch('https://my.chatbees.io/api/public/landing-pages/6938/sheet-data?t='+Date.now()).then(function(r){return r.json()});
@@ -541,7 +541,7 @@ function asPlanBtn(p,idx,ordered){var s=asSubFor(p.id);
 var AS_RULES='<ul class="asrules"><li>Each delivery repeats your Order of this Plan — same address, time slot and packaging — and is paid from your <b>AERA Credit</b>.</li>'+
  '<li>To reschedule, give us <b>4 days\' notice</b>. With less notice, a <b>RM 20</b> late fee comes off your AERA Credit.</li>'+
  '<li>Once Meals are cooked or delivered, that delivery cannot be moved and is <b>not refunded</b>.</li>'+
- '<li>You can switch it off at any time. A delivery already booked in the last 4 days still goes ahead.</li></ul>';
+ '<li>You can switch it off at any time. A delivery already booked in the last 4 days still goes ahead.</li><li>We do not deliver on Sundays.</li></ul>';
 async function asStartOpen(idx){var p=PLANS[idx];if(!p)return;
  asModal('<h3>Start Auto Subscription</h3><p class="asp">Checking your AERA Credit…</p>');
  await asSettings();var bal=await asCredit();
