@@ -656,12 +656,37 @@ function ibUnread(){return INBOX.filter(function(m){return !INREAD[m.id]}).lengt
 function ibBadge(){var n=ibUnread();var b=document.getElementById('ibBadge');if(b){b.textContent=n?String(n):'';b.style.display=n?'':'none'}
  try{localStorage.setItem('aera.inboxUnread',String(n))}catch(e){}}
 function ibThumb(md){var x=(md||[])[0];if(!x)return'';return x.type==='video'?'<span class="ibtn ibvid">▶</span>':'<span class="ibtn" style="background-image:url(\''+esc(x.url)+'\')"></span>'}
+/* Inbox list with tick boxes: tick one or more messages ( or Select All ) and delete them together.
+   Deleting only hides them for this customer ( table inbox_hidden ). */
+var IBSEL={};
+(function(){var c=document.createElement('style');c.textContent='.ibtools{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:8px 2px 2px}'+
+ '.ibtools label{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;cursor:pointer;color:#3A4660}.ibtools .ibcnt{font-size:12.5px;color:#6B7280;font-weight:600}'+
+ '.ibitem{display:flex;align-items:center;gap:10px;margin-top:8px}.ibitem .ibrow{margin-top:0;flex:1;min-width:0}.ibitem.sel .ibrow{border-color:#16479E;box-shadow:0 0 0 1px #16479E inset}'+
+ '.ibck{width:20px;height:20px;flex:none;margin:0;accent-color:#16479E;cursor:pointer}'+
+ '.ibdelbtn[disabled]{opacity:.45;cursor:not-allowed}';document.head.appendChild(c)})();
 function renderInbox(){var el=document.getElementById('inboxBox');if(!el)return;
- if(!INBOX.length){el.innerHTML='<div class="empty">No messages yet. News, offers and notes from AERA land here.</div>';return}
- el.innerHTML=INBOX.map(function(m,i){var un=!INREAD[m.id];
-  return'<button type="button" class="ibrow'+(un?' un':'')+'" onclick="ibOpen('+i+')">'+ibThumb(m.media)+
+ if(!INBOX.length){IBSEL={};el.innerHTML='<div class="empty">No messages yet. News, offers and notes from AERA land here.</div>';return}
+ Object.keys(IBSEL).forEach(function(k){if(!INBOX.some(function(m){return m.id===k}))delete IBSEL[k]});
+ var n=Object.keys(IBSEL).length,all=n&&n===INBOX.length;
+ el.innerHTML='<div class="ibtools"><label><input type="checkbox" class="ibck" id="ibAll" '+(all?'checked':'')+' onchange="ibSelAll(this.checked)"> Select All</label>'+
+  '<span style="display:flex;align-items:center;gap:10px"><span class="ibcnt">'+(n?n+' selected':'')+'</span><button class="btn btn-o s ibdelbtn" type="button" onclick="ibBulkAsk()"'+(n?'':' disabled')+'>Delete'+(n?' ( '+n+' )':'')+'</button></span></div>'+
+  INBOX.map(function(m,i){var un=!INREAD[m.id],sel=!!IBSEL[m.id];
+  return'<div class="ibitem'+(sel?' sel':'')+'"><input type="checkbox" class="ibck" aria-label="Select '+esc(m.title)+'" '+(sel?'checked':'')+' onchange="ibSel(\''+m.id+'\',this.checked)">'+
+   '<button type="button" class="ibrow'+(un?' un':'')+'" onclick="ibOpen('+i+')">'+ibThumb(m.media)+
    '<span class="ibtx"><b>'+(un?'<i class="ibdot" aria-label="Unread"></i>':'')+esc(m.title)+'</b><small>'+esc(String(m.body||'').replace(/\s+/g,' ').slice(0,110))+'</small></span>'+
-   '<span class="ibdt">'+esc(fmtDate(String(m.created_at).slice(0,10)))+'</span></button>'}).join('')}
+   '<span class="ibdt">'+esc(fmtDate(String(m.created_at).slice(0,10)))+'</span></button></div>'}).join('');
+ var al=document.getElementById('ibAll');if(al)al.indeterminate=!!n&&!all}
+function ibSel(id,on){if(on)IBSEL[id]=1;else delete IBSEL[id];renderInbox()}
+function ibSelAll(on){IBSEL={};if(on)INBOX.forEach(function(m){IBSEL[m.id]=1});renderInbox()}
+function ibBulkAsk(){var n=Object.keys(IBSEL).length;if(!n)return;
+ asModal('<h3>Delete '+(n===1?'This Message':n+' Messages')+'?</h3><p class="asp">'+(n===1?'It':'They')+' will be removed from your Inbox. This cannot be undone.</p>',
+  '<button class="btn btn-y" type="button" onclick="ibBulkGo()">Delete'+(n>1?' '+n:'')+'</button><button class="btn btn-o" type="button" onclick="asClose()">Keep '+(n===1?'It':'Them')+'</button>')}
+async function ibBulkGo(){asClose();var ids=Object.keys(IBSEL);if(!ids.length)return;
+ var r=await sb.from('inbox_hidden').upsert(ids.map(function(id){return{message_id:id,user_id:USER.id}}),{onConflict:'message_id,user_id',ignoreDuplicates:true});
+ if(r.error){asModal('<h3>Could Not Delete</h3><p class="asp">'+esc(r.error.message)+'</p>','<button class="btn btn-o" type="button" onclick="asClose()">Close</button>');return}
+ var unread=ids.filter(function(id){return !INREAD[id]});
+ for(var i=0;i<unread.length;i++){INREAD[unread[i]]=1;try{await sb.from('inbox_reads').insert({message_id:unread[i],email:String(USER.email).toLowerCase()})}catch(e){}}
+ INBOX=INBOX.filter(function(m){return !IBSEL[m.id]});IBSEL={};ibBadge();renderInbox()}
 function ibZoom(src){ibZoomClose();var o=document.createElement('div');o.className='iblb';o.id='ibLb';
  o.innerHTML='<div class="iblbbar"><span>Tap the picture to zoom in or out</span><button type="button" aria-label="Close" onclick="ibZoomClose()">✕</button></div><div class="iblbsc" id="ibLbSc"><img alt=""></div>';
  var im=o.querySelector('img');im.src=src;var sc=o.querySelector('.iblbsc');
