@@ -460,6 +460,9 @@ function kcSetupPaint(){
    '<select id="kcSR" style="flex:0 1 120px"><option value="kitchen">Kitchen</option><option value="admin">Admin</option></select><button class="kc-btn sm" onclick="kcStaffAdd()">Add</button></div><div id="kcStaffMsg"></div></div>'+
   '<div class="kc-sec"><h3>4 · Chatbees</h3><p>'+(KCS.cb&&KCS.cb.token?'A token is saved. Paste a new one to replace it.':'Not connected yet. In Chatbees go to Settings → API → Create New Token, then paste it here.')+' Rider booking, plans and status updates need it.</p>'+
    '<div class="kc-row"><input type="password" id="kcCB" placeholder="Chatbees API token" autocomplete="off" style="flex:3 1 220px"><button class="kc-btn sm" onclick="kcCbSave()">Save</button><button class="kc-btn ghost sm" onclick="kcCbTest()">Test</button></div><div id="kcCbMsg"></div></div>'+
+  '<div class="kc-sec"><h3>5 · Google Sheets</h3><p>'+(KCS.cb&&KCS.cb.google?'Connected. The console writes to the website sheets ( settings, vouchers, banners, referrers, points ).':KCS.cb&&KCS.cb.gclient?'Client saved. Tap Connect Google and allow access with the Google account that owns the AERA sheets.':'Paste the Client ID and Client secret from Google Cloud, then tap Connect Google.')+'</p>'+
+   '<div class="kc-row"><input type="text" id="kcGI" placeholder="Client ID" autocomplete="off" style="flex:2 1 220px"><input type="password" id="kcGS" placeholder="Client secret" autocomplete="off" style="flex:1 1 160px"><button class="kc-btn sm" onclick="kcGSave()">Save</button></div>'+
+   '<div class="kc-row" style="margin-top:8px"><button class="kc-btn y sm" onclick="kcGConnect()">Connect Google</button><button class="kc-btn ghost sm" onclick="kcGTest()">Test</button></div><div id="kcGMsg"></div></div>'+
   '<div class="kc-foot"><a onclick="kcSignOut()">Sign out</a>'+(KCS.hasApp?'<button class="kc-btn y" onclick="location.hash=\'\';kcOpen()">Open the Console →</button>':'')+'</div></div>';
 }
 function kcMsg(id,t,bad){var el=document.getElementById(id);if(el)el.innerHTML=t?'<div class="'+(bad?'kc-err':'kc-ok')+'">'+kcEsc(t)+'</div>':''}
@@ -497,6 +500,13 @@ async function kcCbSave(){var v=document.getElementById('kcCB').value.trim();if(
 async function kcCbTest(){kcMsg('kcCbMsg','Checking Chatbees…');try{var s=(await kc.auth.getSession()).data.session;
  var r=await fetch(KC_URL+'/functions/v1/kc-mcp?status=1',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+s.access_token,apikey:KC_ANON},body:'{}'});var j=await r.json();
  if(j.connected)kcMsg('kcCbMsg',j.mode==='api'?'Connected. '+(j.note||''):'Connected. Everything that uses Chatbees works.');else kcMsg('kcCbMsg','Not connected : '+(j.error||r.status),1)}catch(e){kcMsg('kcCbMsg',e.message||String(e),1)}}
+
+async function kcFn(q){var s=(await kc.auth.getSession()).data.session;var r=await fetch(KC_URL+'/functions/v1/kc-mcp?'+q,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+s.access_token,apikey:KC_ANON},body:'{}'});return r.json()}
+async function kcGSave(){var i=document.getElementById('kcGI').value.trim(),s=document.getElementById('kcGS').value.trim();if(!i||!s)return kcMsg('kcGMsg','Paste both the Client ID and the Client secret.',1);
+ var r=await kc.rpc('kc_set_google',{p_client_id:i,p_client_secret:s});if(r.error)return kcMsg('kcGMsg',r.error.message,1);
+ document.getElementById('kcGI').value='';document.getElementById('kcGS').value='';KCS.cb=Object.assign({},KCS.cb,{gclient:true,google:false});kcMsg('kcGMsg','Saved. Now tap Connect Google.')}
+async function kcGConnect(){kcMsg('kcGMsg','Opening Google…');try{var j=await kcFn('gstart=1');if(!j.url)return kcMsg('kcGMsg',j.error||'Could not start',1);location.href=j.url}catch(e){kcMsg('kcGMsg',e.message||String(e),1)}}
+async function kcGTest(){kcMsg('kcGMsg','Checking Google…');try{var j=await kcFn('gstatus=1');if(j.connected)kcMsg('kcGMsg','Connected. Website sheets work from the console.');else kcMsg('kcGMsg','Not connected : '+(j.error||''),1)}catch(e){kcMsg('kcGMsg',e.message||String(e),1)}}
 
 window.addEventListener('hashchange',function(){if(location.hash==='#setup'&&KCS.role==='admin')kcSetup()});
 kcStart().catch(function(e){KCS.err=e.message||String(e);kcLogin()});
