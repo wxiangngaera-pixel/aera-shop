@@ -442,6 +442,7 @@ function KC_SHIM(URL_,ANON_,KEY_){
 async function kcLoadAdmin(){
  var st=await kc.rpc('kc_stats');KCS.stats=st.data||{};
  var sf=await kc.rpc('kc_staff_list');KCS.staff=sf.data||[];
+ var cs=await kc.rpc('kc_cb_status');KCS.cb=cs.data||{};
 }
 function kcStatsLine(){var s=KCS.stats||{},n=0,k=0;Object.keys(s).forEach(function(c){n+=+s[c]||0;k++});return n?(n+' records in '+k+' lists'):'No data yet'}
 async function kcSetup(){kcLoading('Loading set up…');try{await kcLoadAdmin()}catch(e){}kcSetupPaint()}
@@ -457,6 +458,8 @@ function kcSetupPaint(){
      (r.email===String(KCS.user.email).toLowerCase()?'':'<button class="kc-btn ghost sm" onclick="kcStaffDel(\''+kcEsc(r.email)+'\')">Remove</button>')+'</td></tr>'}).join('')+'</table>'+
    '<div class="kc-row" style="margin-top:10px"><input type="email" id="kcSE" placeholder="kitchen@…" style="flex:2 1 200px"><input type="text" id="kcSL" placeholder="Label ( optional )" style="flex:1 1 120px">'+
    '<select id="kcSR" style="flex:0 1 120px"><option value="kitchen">Kitchen</option><option value="admin">Admin</option></select><button class="kc-btn sm" onclick="kcStaffAdd()">Add</button></div><div id="kcStaffMsg"></div></div>'+
+  '<div class="kc-sec"><h3>4 · Chatbees</h3><p>'+(KCS.cb&&KCS.cb.token?'A token is saved. Paste a new one to replace it.':'Not connected yet. In Chatbees go to Settings → API → Create New Token, then paste it here.')+' Rider booking, plans and status updates need it.</p>'+
+   '<div class="kc-row"><input type="password" id="kcCB" placeholder="Chatbees API token" autocomplete="off" style="flex:3 1 220px"><button class="kc-btn sm" onclick="kcCbSave()">Save</button><button class="kc-btn ghost sm" onclick="kcCbTest()">Test</button></div><div id="kcCbMsg"></div></div>'+
   '<div class="kc-foot"><a onclick="kcSignOut()">Sign out</a>'+(KCS.hasApp?'<button class="kc-btn y" onclick="location.hash=\'\';kcOpen()">Open the Console →</button>':'')+'</div></div>';
 }
 function kcMsg(id,t,bad){var el=document.getElementById(id);if(el)el.innerHTML=t?'<div class="'+(bad?'kc-err':'kc-ok')+'">'+kcEsc(t)+'</div>':''}
@@ -488,6 +491,12 @@ async function kcStaffAdd(){var e=document.getElementById('kcSE').value.trim().t
 async function kcStaffDel(e){if(!confirm('Remove '+e+' from the Kitchen Console?'))return;
  var r=await kc.rpc('kc_staff_set',{p_email:e,p_role:'',p_label:null});if(r.error)return kcMsg('kcStaffMsg',r.error.message,1);
  await kcLoadAdmin();kcSetupPaint()}
+
+async function kcCbSave(){var v=document.getElementById('kcCB').value.trim();if(!v)return kcMsg('kcCbMsg','Paste the token first.',1);
+ var r=await kc.rpc('kc_set_cb_token',{p_token:v});if(r.error)return kcMsg('kcCbMsg',r.error.message,1);document.getElementById('kcCB').value='';KCS.cb={token:true};kcCbTest()}
+async function kcCbTest(){kcMsg('kcCbMsg','Checking Chatbees…');try{var s=(await kc.auth.getSession()).data.session;
+ var r=await fetch(KC_URL+'/functions/v1/kc-mcp?status=1',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+s.access_token,apikey:KC_ANON},body:'{}'});var j=await r.json();
+ if(j.connected)kcMsg('kcCbMsg',j.mode==='api'?'Connected. '+(j.note||''):'Connected. Everything that uses Chatbees works.');else kcMsg('kcCbMsg','Not connected : '+(j.error||r.status),1)}catch(e){kcMsg('kcCbMsg',e.message||String(e),1)}}
 
 window.addEventListener('hashchange',function(){if(location.hash==='#setup'&&KCS.role==='admin')kcSetup()});
 kcStart().catch(function(e){KCS.err=e.message||String(e);kcLogin()});
