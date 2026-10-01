@@ -379,7 +379,6 @@
         <button data-t="address" onclick="setTab('address')">Addresses</button>
         <button data-t="prefs" onclick="setTab('prefs')">Meal Preferences</button>
           <button data-t="body" onclick="setTab('body')">Weight Control</button>
-          <button data-t="send" onclick="setTab('send')" style="display:none">Send Messages</button>
       </div>
       <button class="btn btn-o s" style="margin-top:16px" onclick="doLogout()">Sign Out</button>
     </aside>
@@ -392,8 +391,8 @@
       <div id="tPoints" class="card" style="display:none"><h2>AERA Points</h2><div id="pointsBox"><div class="empty">Loading…</div></div></div>
       <div id="tCredit" class="card" style="display:none"><h2>AERA Credit</h2><div id="creditBox"><div class="empty">Loading…</div></div></div>
       <div id="tAuto" class="card" style="display:none"><h2>Auto Subscription</h2><div id="autoBox"><div class="empty">Loading…</div></div></div>
-      <div id="tInbox" class="card" style="display:none"><h2>Inbox</h2><div id="inboxBox"><div class="empty">Loading…</div></div></div>
-      <div id="tSend" class="card" style="display:none"><h2>Send Messages</h2><p class="hint" style="margin-top:-4px">Only you can see this page. Messages appear in your customers' Inbox.</p><div id="sendBox"><div class="empty">Loading…</div></div></div>
+      <div id="tInbox" class="card" style="display:none"><h2>Inbox</h2><div class="ibsw" style="display:none"><button type="button" data-s="inbox" onclick="setTab('inbox')">Received</button><button type="button" data-s="send" onclick="setTab('send')">Send A Message</button></div><div id="inboxBox"><div class="empty">Loading…</div></div></div>
+      <div id="tSend" class="card" style="display:none"><h2>Inbox</h2><div class="ibsw" style="display:none"><button type="button" data-s="inbox" onclick="setTab('inbox')">Received</button><button type="button" data-s="send" onclick="setTab('send')">Send A Message</button></div><p class="hint" style="margin-top:-4px">Only AERA message senders see this. Messages appear in your customers' Inbox.</p><div id="sendBox"><div class="empty">Loading…</div></div></div>
       <div id="tRefs" class="card" style="display:none"><h2>Referrals</h2><div id="refsBox"><div class="empty">Loading…</div></div></div>
       <div id="tDetails" class="card" style="display:none">
         <h2>Settings</h2>
@@ -664,7 +663,7 @@ async function ibOpen(i){var m=INBOX[i];if(!m)return;
  if(!INREAD[m.id]){INREAD[m.id]=1;ibBadge();renderInbox();try{await sb.from('inbox_reads').insert({message_id:m.id,email:String(USER.email).toLowerCase()})}catch(e){}}}
 /* ---- Send Messages ( kitchen admins only ) ---- */
 async function smInit(){try{var r=await sb.rpc('is_inbox_sender');if(r.error)r=await sb.rpc('is_kitchen_admin');IS_ADMIN=!r.error&&r.data===true}catch(e){IS_ADMIN=false}
- var b=document.querySelector('.menu button[data-t="send"]');if(b)b.style.display=IS_ADMIN?'':'none';
+ document.querySelectorAll('.ibsw').forEach(function(x){x.style.display=IS_ADMIN?'':'none'});
  if(!IS_ADMIN)return;
  var q=new URLSearchParams(location.search).get('to');if(q){SM.to='one';SM.pickEmail=q.toLowerCase()}
  if(TAB==='send'||location.hash==='#send'){setTab('send')}}
@@ -1026,7 +1025,7 @@ function hashTab(){var hh=(location.hash||'').replace('#','').toLowerCase();
 window.addEventListener('hashchange',function(){
  if(!USER)return;var t=hashTab();if(t&&t!==TAB)setTab(t);
  try{obMaybeAsk()}catch(e){}});
-function setTab(t){TAB=t;if(t==='credit')creditLoad();if(t==='auto')loadAutoSubs();if(t==='inbox')loadInbox();if(t==='send')smLoad();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();['orders','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===t)})}
+function setTab(t){if(t==='send'&&!IS_ADMIN)t='inbox';TAB=t;if(t==='credit')creditLoad();if(t==='auto')loadAutoSubs();if(t==='inbox')loadInbox();if(t==='send')smLoad();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();['orders','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===(t==='send'?'inbox':t))});document.querySelectorAll('.ibsw button').forEach(function(b){b.classList.toggle('on',b.dataset.s===t)})}
 async function loadProfile(){var r=await sb.from('profiles').select('*').eq('id',USER.id).maybeSingle();PROFILE=r.data||{id:USER.id,email:USER.email};if(!r.data){var meta=USER.user_metadata||{};var seed={id:USER.id,email:USER.email.toLowerCase(),name:meta.name||null,phone:meta.phone||null};
   var w=await sb.from('profiles').upsert(seed);
   if(w.error&&/23505|duplicate|unique/i.test((w.error.message||'')+' '+(w.error.code||''))){delete seed.phone;await sb.from('profiles').upsert(seed)}
