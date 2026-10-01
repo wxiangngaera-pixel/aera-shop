@@ -1976,3 +1976,5 @@ if(window.aeraRetranslate)window.aeraRetranslate();
   try{ new MutationObserver(function(ms){ for(var i=0;i<ms.length;i++){ var n=ms[i].addedNodes; for(var j=0;j<n.length;j++) if(n[j].nodeType===1) fix(n[j]); } })
     .observe(document.documentElement,{childList:true,subtree:true}); }catch(e){}
 })();
+
+/* Inbox count, as My Account last saw it */(function(){function go(){var n=0;try{n=+localStorage.getItem("aera.inboxUnread")||0}catch(e){}["hbInbox","hbInbox2"].forEach(function(id){var el=document.getElementById(id);if(el){el.textContent=n?String(n):"";el.style.display=n?"inline-block":"none"}})}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go);else go()})();
