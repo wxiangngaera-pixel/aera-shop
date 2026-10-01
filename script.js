@@ -1977,4 +1977,16 @@ if(window.aeraRetranslate)window.aeraRetranslate();
     .observe(document.documentElement,{childList:true,subtree:true}); }catch(e){}
 })();
 
-/* Inbox count, as My Account last saw it */(function(){function go(){var n=0;try{n=+localStorage.getItem("aera.inboxUnread")||0}catch(e){}["hbInbox","hbInbox2"].forEach(function(id){var el=document.getElementById(id);if(el){el.textContent=n?String(n):"";el.style.display=n?"inline-block":"none"}})}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go);else go()})();
+/* Inbox button in the menu bar. The count shows at once from what My Account last saw, then
+   is checked live against the Website database with the visitor's own sign-in ( same site, so the
+   session My Account keeps is right here ); if that sign-in has lapsed, the saved count stays. */
+(function(){var SBU="https://swpprjvubgcdsojapaad.supabase.co",KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0";
+function paint(n){var el=document.getElementById("hbInbox");if(el){el.textContent=n>9?"9+":(n?String(n):"");el.style.display=n?"inline-block":"none"}var b=document.getElementById("inboxBtn");if(b){b.setAttribute("aria-label",n?"Inbox, "+n+" unread":"Inbox");b.title=n?n+" unread message"+(n>1?"s":""):"Inbox"}}
+function go(){var c=0;try{c=+localStorage.getItem("aera.inboxUnread")||0}catch(e){}paint(c);
+ var tok=null,uid=null,em="";try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var o=JSON.parse(localStorage.getItem(k)||"null");if(o&&o.access_token){tok=o.access_token;uid=o.user&&o.user.id;em=String(o.user&&o.user.email||"").toLowerCase()}}}}catch(e){}
+ if(!tok||!uid)return;var hd={apikey:KEY,Authorization:"Bearer "+tok};
+ var d=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Kuala_Lumpur"}));var t=d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);
+ Promise.all([fetch(SBU+"/rest/v1/inbox_messages?select=id,to_email,ends_at&withdrawn_at=is.null&limit=150",{headers:hd}).then(function(r){return r.ok?r.json():null}),
+  fetch(SBU+"/rest/v1/inbox_reads?select=message_id&user_id=eq."+uid,{headers:hd}).then(function(r){return r.ok?r.json():null})]).then(function(a){if(!a[0]||!a[1])return;var rd={};a[1].forEach(function(x){rd[x.message_id]=1});
+  var n=a[0].filter(function(m){return (!m.ends_at||m.ends_at>=t)&&(!m.to_email||String(m.to_email).toLowerCase()===em)&&!rd[m.id]}).length;paint(n);try{localStorage.setItem("aera.inboxUnread",String(n))}catch(e){}}).catch(function(){})}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go);else go()})();
