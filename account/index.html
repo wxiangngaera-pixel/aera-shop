@@ -17,6 +17,14 @@
 
 
 
+<!-- AERA app ( Add to Home Screen + notifications ) -->
+<link rel="manifest" href="https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push?manifest">
+<meta name="theme-color" content="#16479E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AERA">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push?icon=180">
 
 <!-- SEO Meta Tags -->
 <title>My Account — AERA Meal Prep</title>
@@ -391,7 +399,7 @@
       <div id="tPoints" class="card" style="display:none"><h2>AERA Points</h2><div id="pointsBox"><div class="empty">Loading…</div></div></div>
       <div id="tCredit" class="card" style="display:none"><h2>AERA Credit</h2><div id="creditBox"><div class="empty">Loading…</div></div></div>
       <div id="tAuto" class="card" style="display:none"><h2>Auto Subscription</h2><div id="autoBox"><div class="empty">Loading…</div></div></div>
-      <div id="tInbox" class="card" style="display:none"><h2>Inbox</h2><div class="ibsw" style="display:none"><button type="button" data-s="inbox" onclick="setTab('inbox')">Received</button><button type="button" data-s="send" onclick="setTab('send')">Send A Message</button></div><div id="inboxBox"><div class="empty">Loading…</div></div></div>
+      <div id="tInbox" class="card" style="display:none"><h2>Inbox</h2><div class="ibsw" style="display:none"><button type="button" data-s="inbox" onclick="setTab('inbox')">Received</button><button type="button" data-s="send" onclick="setTab('send')">Send A Message</button></div><div id="inboxBox"><div class="empty">Loading…</div></div><div id="alertBox"></div></div>
       <div id="tSend" class="card" style="display:none"><h2>Inbox</h2><div class="ibsw" style="display:none"><button type="button" data-s="inbox" onclick="setTab('inbox')">Received</button><button type="button" data-s="send" onclick="setTab('send')">Send A Message</button></div><p class="hint" style="margin-top:-4px">Only AERA Message Senders see this. Messages appear in your Customers' Inbox.</p><div id="sendBox"><div class="empty">Loading…</div></div></div>
       <div id="tRefs" class="card" style="display:none"><h2>Referrals</h2><div id="refsBox"><div class="empty">Loading…</div></div></div>
       <div id="tDetails" class="card" style="display:none">
@@ -661,6 +669,63 @@ async function ibOpen(i){var m=INBOX[i];if(!m)return;
   (m.button_label&&m.button_url?'<a class="btn btn-y" href="'+esc(m.button_url)+'">'+esc(m.button_label)+'</a>':'')+(IS_ADMIN?'<button class="btn btn-o" type="button" onclick="smForward(\''+m.id+'\')">Forward</button>':'')+'<button class="btn btn-o" type="button" onclick="asClose()">Close</button>');
  var c=document.querySelector('#asOv .ascard');if(c)c.classList.add('ibwide');
  if(!INREAD[m.id]){INREAD[m.id]=1;ibBadge();renderInbox();try{await sb.from('inbox_reads').insert({message_id:m.id,email:String(USER.email).toLowerCase()})}catch(e){}}}
+/* ---- Alerts On Your Phone ----
+   Customers choose how they hear about a new Inbox message without signing in:
+   phone notifications ( web push, worker at /push/script.js, sent by the Supabase function aera-push ),
+   an AERA card in Apple / Google Wallet ( Chatbees wallet program 684, lock-screen alerts ),
+   and email ( on unless they switch it off ). All three are fired by the inbox_messages trigger. */
+var AL={row:null,push:'',busy:false};
+var AL_FN='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push';
+(function(){var c=document.createElement('style');c.textContent='.alrow{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid #E3E7EE;border-radius:12px;padding:12px 14px;margin-top:8px;background:#fff}'+
+ '.alrow b{display:block;font-size:14.5px}.alrow small{display:block;color:#6B7280;font-size:12.5px;margin-top:2px}.alact{flex:none;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}.alact .hint{max-width:300px;text-align:right;margin:0}'+
+ '.alon{font-size:12.5px;font-weight:700;color:#1E7B4B;background:#E7F6EE;border-radius:99px;padding:5px 10px}'+
+ '.alsw{position:relative;display:inline-block;width:46px;height:26px;cursor:pointer}.alsw input{position:absolute;opacity:0;width:0;height:0}.alsw span{position:absolute;inset:0;background:#CBD3E1;border-radius:99px;transition:.2s}'+
+ '.alsw span:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}.alsw input:checked+span{background:#16479E}.alsw input:checked+span:before{transform:translateX(20px)}'+
+ '@media(max-width:560px){.alrow{flex-direction:column;align-items:flex-start}.alact{justify-content:flex-start}.alact .hint{text-align:left}}';document.head.appendChild(c)})();
+function alIOS(){return /iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}
+function alStandalone(){return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}
+function alPushOK(){return 'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window}
+async function alPushState(){if(!alPushOK())return alIOS()&&!alStandalone()?'ios-home':'unsupported';
+ if(Notification.permission==='denied')return 'blocked';
+ try{var reg=await navigator.serviceWorker.getRegistration('/push/');var s=reg&&await reg.pushManager.getSubscription();return s?'on':'off'}catch(e){return 'off'}}
+async function alLoad(){if(!USER||!sb)return;try{var r=await sb.from('inbox_alerts').select('email_on,wallet_url').eq('email',String(USER.email).toLowerCase()).maybeSingle();AL.row=r.data||{email_on:true,wallet_url:null}}catch(e){AL.row={email_on:true}}
+ AL.push=await alPushState();renderAlerts()}
+function alKey(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return Uint8Array.from(atob(s),function(c){return c.charCodeAt(0)})}
+async function alPushOn(){if(AL.busy)return;AL.busy=true;renderAlerts();var msg='',bad=false;
+ try{var p=await Notification.requestPermission();
+  if(p!=='granted')throw new Error(p==='denied'?'Notifications are blocked for aeramealprep.net. Allow them in your browser or phone settings, then try again.':'Please tap Allow to get notifications.');
+  var reg=await navigator.serviceWorker.register('/push/script.js',{scope:'/push/'});
+  var w=reg.installing||reg.waiting||reg.active;
+  if(w&&w.state!=='activated')await new Promise(function(res){var t=setTimeout(res,8000);w.addEventListener('statechange',function(){if(w.state==='activated'){clearTimeout(t);res()}})});
+  var k=await fetch(AL_FN+'?vapid').then(function(r){return r.json()});if(!k||!k.key)throw new Error('Could not reach the notification service. Please try again.');
+  var sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:alKey(k.key)});
+  var j=sub.toJSON();var r=await sb.rpc('push_save',{p_endpoint:j.endpoint,p_p256dh:j.keys.p256dh,p_auth:j.keys.auth,p_ua:navigator.userAgent});if(r.error)throw new Error(r.error.message);
+  AL.push='on';msg='Done. This device will get a notification for every new AERA message.'}
+ catch(e){msg=e.message||String(e);bad=true;AL.push=await alPushState()}
+ AL.busy=false;renderAlerts(msg,bad)}
+async function alPushOff(){AL.busy=true;renderAlerts();try{var reg=await navigator.serviceWorker.getRegistration('/push/');var s=reg&&await reg.pushManager.getSubscription();if(s){await sb.rpc('push_remove',{p_endpoint:s.endpoint});await s.unsubscribe()}}catch(e){}
+ AL.push=await alPushState();AL.busy=false;renderAlerts('Notifications are off on this device.')}
+async function alEmail(on){var r=await sb.rpc('alerts_set_email',{p_on:!!on});if(!r.error){AL.row=AL.row||{};AL.row.email_on=!!on}
+ renderAlerts(r.error?r.error.message:(on?'Email alerts are on.':'Email alerts are off.'),!!r.error)}
+async function alWallet(){if(AL.row&&AL.row.wallet_url){location.href=AL.row.wallet_url;return}
+ AL.busy=true;renderAlerts('Setting up your AERA card…');
+ try{var r=await sb.rpc('wallet_request');if(r.error)throw new Error(r.error.message);var u=r.data;
+  for(var i=0;!u&&i<20;i++){await new Promise(function(z){setTimeout(z,1500)});var q=await sb.from('inbox_alerts').select('wallet_url').eq('email',String(USER.email).toLowerCase()).maybeSingle();u=q.data&&q.data.wallet_url}
+  if(!u)throw new Error('Your card is taking longer than usual. Please try again in a minute.');
+  AL.row=AL.row||{};AL.row.wallet_url=u;AL.busy=false;renderAlerts();location.href=u}
+ catch(e){AL.busy=false;renderAlerts(e.message||String(e),true)}}
+function renderAlerts(msg,bad){var el=document.getElementById('alertBox');if(!el||!USER)return;var R=AL.row||{email_on:true};var p=AL.push,b=AL.busy?' disabled':'';
+ var push=p==='on'?'<span class="alon">On for this device</span><button class="btn btn-o s" type="button" onclick="alPushOff()"'+b+'>Turn Off</button>'
+  :p==='ios-home'?'<div class="hint">On iPhone : tap <b>Share</b> → <b>Add to Home Screen</b>, open <b>AERA</b> from your Home Screen, sign in, then turn this on here.</div>'
+  :p==='blocked'?'<div class="hint">Notifications are blocked for aeramealprep.net. Allow them in your browser or phone settings, then come back here.</div>'
+  :p==='unsupported'?'<div class="hint">This browser cannot show notifications. Try Chrome, or Safari on iPhone ( iOS 16.4 or newer ).</div>'
+  :'<button class="btn btn-y s" type="button" onclick="alPushOn()"'+b+'>Turn On Notifications</button>';
+ el.innerHTML='<h3 class="crh" style="margin-top:26px">Alerts On Your Phone</h3><p class="hint" style="margin-top:-2px">Know the moment a new message arrives, without signing in to check.</p>'+
+  '<div class="alrow"><div><b>Phone Notifications</b><small>A pop-up on this phone or computer.</small></div><div class="alact">'+push+'</div></div>'+
+  '<div class="alrow"><div><b>AERA Card In Your Wallet</b><small>Apple Wallet or Google Wallet. New messages show on your lock screen.</small></div><div class="alact"><button class="btn '+(R.wallet_url?'btn-o':'btn-y')+' s" type="button" onclick="alWallet()"'+b+'>'+(R.wallet_url?'Open My Card':'Add To Wallet')+'</button></div></div>'+
+  '<div class="alrow"><div><b>Email</b><small>To '+esc(String(USER.email||''))+'</small></div><div class="alact"><label class="alsw" aria-label="Email alerts"><input type="checkbox" '+(R.email_on!==false?'checked':'')+' onchange="alEmail(this.checked)"><span></span></label></div></div>'+
+  (msg?'<div class="msg '+(bad?'bad':'ok')+'" style="margin-top:10px">'+esc(msg)+'</div>':'')}
+try{if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',function(e){if(e.data&&e.data.aera==='inbox'){try{setTab('inbox')}catch(x){}}})}catch(e){}
 /* ---- Send Messages ( kitchen admins only ) ---- */
 async function smInit(){try{var r=await sb.rpc('is_inbox_sender');if(r.error)r=await sb.rpc('is_kitchen_admin');IS_ADMIN=!r.error&&r.data===true}catch(e){IS_ADMIN=false}
  document.querySelectorAll('.ibsw').forEach(function(x){x.style.display=IS_ADMIN?'':'none'});
@@ -1036,7 +1101,7 @@ function hashTab(){var hh=(location.hash||'').replace('#','').toLowerCase();
 window.addEventListener('hashchange',function(){
  if(!USER)return;var t=hashTab();if(t&&t!==TAB)setTab(t);
  try{obMaybeAsk()}catch(e){}});
-function setTab(t){if(t==='send'&&!IS_ADMIN)t='inbox';TAB=t;if(t==='credit')creditLoad();if(t==='auto')loadAutoSubs();if(t==='inbox')loadInbox();if(t==='send')smLoad();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();['orders','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===(t==='send'?'inbox':t))});document.querySelectorAll('.ibsw button').forEach(function(b){b.classList.toggle('on',b.dataset.s===t)})}
+function setTab(t){if(t==='send'&&!IS_ADMIN)t='inbox';TAB=t;if(t==='credit')creditLoad();if(t==='auto')loadAutoSubs();if(t==='inbox'){loadInbox();alLoad()}if(t==='send')smLoad();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();['orders','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===(t==='send'?'inbox':t))});document.querySelectorAll('.ibsw button').forEach(function(b){b.classList.toggle('on',b.dataset.s===t)})}
 async function loadProfile(){var r=await sb.from('profiles').select('*').eq('id',USER.id).maybeSingle();PROFILE=r.data||{id:USER.id,email:USER.email};if(!r.data){var meta=USER.user_metadata||{};var seed={id:USER.id,email:USER.email.toLowerCase(),name:meta.name||null,phone:meta.phone||null};
   var w=await sb.from('profiles').upsert(seed);
   if(w.error&&/23505|duplicate|unique/i.test((w.error.message||'')+' '+(w.error.code||''))){delete seed.phone;await sb.from('profiles').upsert(seed)}
