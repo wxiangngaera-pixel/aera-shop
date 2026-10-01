@@ -616,12 +616,12 @@ var PACK_FEE_TABLE=[[7,3.2],[10,3.9],[14,3.2],[17,3.7],[21,6.4],[24,7.1],[30,9.6
 var PACK_FEE_BEYOND={per:7,amount:3.2}; // above the last row: last fee + RM amount for every further `per` boxes
 var SLOTS=[['09:00-11:00','9 AM - 11 AM'],['11:00-13:00','11 AM - 1 PM'],['13:00-15:00','1 PM - 3 PM'],['15:00-17:00','3 PM - 5 PM']]; // [value used by the kitchen & rider booking, label shown to the customer]
 function slotLabel(v){for(var i=0;i<SLOTS.length;i++)if(SLOTS[i][0]===v)return SLOTS[i][1];return v}
-var CUTOFF_HOUR=12,CUTOFF_MIN=45,LEAD_DAYS=2;
+var CUTOFF_HOUR=13,CUTOFF_MIN=0,LEAD_DAYS=3,LATE_SLOT='15:00-17:00';
 /* MON, 21st SEP : the day written the way the shop writes it. */
 function bigDay(d){var n=d.getDate(),t=(n%100>=11&&n%100<=13)?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th');
  var dow=['SUN','MON','TUE','WED','THU','FRI','SAT'][d.getDay()];
  var mo=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][d.getMonth()];
- return dow+', '+n+t+' '+mo} // order before 12:45pm → earliest slot 2 days later
+ return dow+', '+n+t+' '+mo} // 3 kitchen days, closed days ( Sunday ) not counted; after 1 PM only the 3–5 PM slot on that earliest day
 var BUNDLES=[
  ["BUNDLE-11","Fat Loss Bundle · 7 Days x 1 Meal","fat",144.99,7,["7 Chef-Selected Fat Loss Meals","RM 22.50 per Meal","Lean Proteins, Oil-Free Vegetables"],"https://my.chatbees.io/objects/quick-uploads/1302/f1f440404d9bdc9f.jpg"],
  ["BUNDLE-7","Fat Loss Bundle · 7 Days x 2 Meals","fat",323.99,14,["14 Different Fat Loss Meals — No Repeats","RM 24.90 per Meal","Most Popular"],"https://my.chatbees.io/objects/quick-uploads/1302/6cd842cd6fd9717c.jpg"],
@@ -1390,8 +1390,20 @@ function checkFee(){var q=document.getElementById('address').value.trim();var m=
 /* ===== Dates ===== */
 function myNow(){var d=new Date();return new Date(d.getTime()+(d.getTimezoneOffset()+480)*60000)}
 function iso(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
-function earliest(){var n=myNow();var lead=LEAD_DAYS+((n.getHours()>CUTOFF_HOUR||(n.getHours()===CUTOFF_HOUR&&n.getMinutes()>=CUTOFF_MIN))?1:0);var d=new Date(n);d.setDate(d.getDate()+lead);return d}
-(function(){var e=earliest();var di=document.getElementById('date');di.min=iso(e);di.value=iso(e);var mx=new Date(e);mx.setDate(mx.getDate()+21);di.max=iso(mx);document.getElementById('slot').innerHTML=SLOTS.map(function(s){return'<option value="'+s[0]+'">'+s[1]+'</option>'}).join('');document.getElementById('cutoffHint').textContent='Order before '+(CUTOFF_HOUR>12?CUTOFF_HOUR-12:CUTOFF_HOUR)+':'+('0'+CUTOFF_MIN).slice(-2)+(CUTOFF_HOUR>=12?' PM':' AM')+' for the earliest slot '+LEAD_DAYS+' Days later. Earliest available : '+bigDay(e)+'.';document.getElementById('feeFromAny').textContent=Math.min(COURIERS.lalamove.rate.base,COURIERS.grab.rate.base);updateRates()})();
+/* The schedule the old site ran on: the kitchen needs 3 days, and a day it is closed ( Sunday, or
+   any weekday closed in the Kitchen Console ) does not count. The 1 PM cut-off does not move the
+   earliest day — an order after 1 PM keeps it but only its last slot, 3 PM to 5 PM. On a closed
+   day there is no cut-off at all. */
+function shutWd(){return (typeof CLO!=='undefined'&&CLO&&CLO.loaded)?CLO.wd:{0:1}}
+function lateOrder(){var n=myNow();if(shutWd()[n.getDay()])return false;return n.getHours()>CUTOFF_HOUR||(n.getHours()===CUTOFF_HOUR&&n.getMinutes()>=CUTOFF_MIN)}
+function earliest(){var n=myNow();var d=new Date(n.getFullYear(),n.getMonth(),n.getDate(),12,0,0,0);var w=shutWd(),k=0,g=0;while(k<LEAD_DAYS&&g<40){d.setDate(d.getDate()+1);g++;if(!w[d.getDay()])k++}return d}
+function cutHint(){var el=document.getElementById('cutoffHint');if(!el)return;var e=earliest();
+ el.textContent=(lateOrder()?'It is past 1 PM, so '+bigDay(e)+' only has the 3 PM – 5 PM slot. Pick a later day for any time slot.':'Order before 1 PM for any time slot. After 1 PM the earliest day only has the 3 PM – 5 PM slot.')+' We need 3 days to prep, not counting Sundays. Earliest available : '+bigDay(e)+'.'}
+function slotPaint(){var di=document.getElementById('date'),sl=document.getElementById('slot');if(!di||!sl)return;
+ var lim=lateOrder()&&di.value===iso(earliest());
+ [].forEach.call(sl.options,function(o){o.disabled=lim&&o.value!==LATE_SLOT;o.textContent=slotLabel(o.value)+(o.disabled?' ( Full After 1 PM )':'')});
+ if(lim&&sl.value!==LATE_SLOT)sl.value=LATE_SLOT;cutHint()}
+(function(){var e=earliest();var di=document.getElementById('date');di.min=iso(e);di.value=iso(e);var mx=new Date(e);mx.setDate(mx.getDate()+21);di.max=iso(mx);document.getElementById('slot').innerHTML=SLOTS.map(function(s){return'<option value="'+s[0]+'">'+s[1]+'</option>'}).join('');slotPaint();document.getElementById('feeFromAny').textContent=Math.min(COURIERS.lalamove.rate.base,COURIERS.grab.rate.base);updateRates()})();
 /* ===== Delivery closures =====
    Four rows the Kitchen Console writes to the settings sheet. A closed day is closed for
    Delivery AND Self Pick-Up alike: the kitchen is shut, so nothing leaves it by any route.
@@ -1447,7 +1459,7 @@ function cloApply(){
  var shut=[],c=cloDay(open);
  for(var i=0;i<28&&shut.length<4;i++){var s=iso(c);if(cloWhy(s))shut.push(s);c.setDate(c.getDate()+1)}
  n.style.color='';
- n.textContent=shut.length?'Kitchen closed: '+shut.map(cloNice).join(', ')+'.':''}
+ n.textContent=shut.length?'Kitchen closed: '+shut.map(cloNice).join(', ')+'.':'';slotPaint()}
 /* A closed day cannot be greyed out inside a native date box, so it is caught the moment it
    is chosen and the customer is moved to the next day we are actually open. */
 (function(){
@@ -1458,7 +1470,7 @@ function cloApply(){
   var n=cloNote();n.style.color='#b42318';
   n.innerHTML='<b>'+esc(cloNice(di.value))+' — '+esc(why)+'</b>'+
    (nx?' Moved you to '+esc(cloNice(nx))+', the next day we are open.':'');
-  if(nx)di.value=nx})})();
+  if(nx)di.value=nx;slotPaint()})})();
 
 /* ===== Pay ===== */
 /* Stripe keeps the order message as metadata (max 500 chars), so the order is sent in a compact v2 form; the flow and console expand it. */
