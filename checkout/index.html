@@ -406,7 +406,8 @@
       <label class="lb">Delivery Address</label>
       <div id="savedAddr"></div>
       <div class="acwrap"><input type="text" id="address" placeholder="Start typing your address…" autocomplete="off" oninput="acInput()" onkeydown="acKey(event)" onblur="setTimeout(acHide,200)"><div class="ac" id="acList"></div></div>
-      <div class="hint">Pick your Address from the suggestions, then add your Unit / Floor in the notes if needed.</div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:10px;margin-top:8px"><div><label class="lb" for="addrUnit">Unit / House No. *</label><input type="text" id="addrUnit" placeholder="e.g. A-12-3 or No. 8" autocomplete="address-line2"></div><div><label class="lb" for="addrPost">Postcode *</label><input type="text" id="addrPost" inputmode="numeric" maxlength="5" placeholder="e.g. 51200" autocomplete="postal-code" oninput="this.value=this.value.replace(/\D/g,'').slice(0,5)"></div></div>
+      <div class="hint">Pick your Address from the suggestions, then fill in your Unit / House No. and Postcode — both are required.</div>
       <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-k" type="button" onclick="checkFee()" id="feeBtn">Check Delivery Fee</button></div>
       <div id="feeMsg"></div>
 
@@ -854,6 +855,7 @@ async function coBill(){
  if(shutWhy)return m.innerHTML='<div class="msg warn">'+esc(cloNice(date))+' — '+esc(shutWhy)+' Please pick another day.</div>';
  if(isDel()&&!document.getElementById('address').value.trim())
   return m.innerHTML='<div class="msg warn">Please enter the delivery address.</div>';
+ if(isDel()&&addrMissing())return m.innerHTML='<div class="msg warn">'+addrMissing()+'</div>';
  if(!CO.flowUrl)return m.innerHTML='<div class="msg bad">Ordering on account is not switched on for this page yet. Please WhatsApp us and we will raise it for you.</div>';
  var sub=subtotal(),pkg=packFee(),fee=isDel()?(FEE_RM||0):0;
  var total=Math.round((sub+pkg+fee)*100)/100;
@@ -867,7 +869,7 @@ async function coBill(){
    body:JSON.stringify({contactEmail:email,contactName:name,data:{
     orderNo:no,companyId:CO.on.id,company:CO.on.name,email:email,name:name,phone:phone,
     type:isDel()?'delivery':'pickup',date:date,slot:slot,
-    address:isDel()?document.getElementById('address').value.trim():'',
+    address:isDel()?addrFull():'',
     packaging:PACK,items:items,boxes:String(boxes()),
     subtotal:sub.toFixed(2),packFee:pkg.toFixed(2),deliveryFee:fee.toFixed(2),
     total:total.toFixed(2),terms:coTerms(),notes:String(notes||'').slice(0,400)}})});
@@ -1370,7 +1372,7 @@ var AC={items:[],sel:-1,timer:null,seq:0};
 function acHide(){var l=document.getElementById('acList');if(l)l.classList.remove('open');AC.sel=-1}
 function acRender(){var l=document.getElementById('acList');if(!AC.items.length){acHide();return}l.innerHTML=AC.items.map(function(it,i){return'<div class="'+(i===AC.sel?'sel':'')+'" onmousedown="acPick('+i+')"><b>'+esc(it.main)+'</b><small>'+esc(it.sub)+'</small></div>'}).join('');l.classList.add('open')}
 function acKey(e){if(!AC.items.length||!document.getElementById('acList').classList.contains('open'))return;if(e.key==='ArrowDown'){AC.sel=Math.min(AC.items.length-1,AC.sel+1);acRender();e.preventDefault()}else if(e.key==='ArrowUp'){AC.sel=Math.max(0,AC.sel-1);acRender();e.preventDefault()}else if(e.key==='Enter'){if(AC.sel>=0){acPick(AC.sel);e.preventDefault()}}else if(e.key==='Escape')acHide()}
-function acPick(i){var it=AC.items[i];if(!it)return;document.getElementById('address').value=it.full;acHide();AC.items=[];if(it.lat!=null){acApply({lat:it.lat,lng:it.lng,label:it.full})}else checkFee()}
+function acPick(i){var it=AC.items[i];if(!it)return;document.getElementById('address').value=it.full;acHide();addrPostFill();AC.items=[];if(it.lat!=null){acApply({lat:it.lat,lng:it.lng,label:it.full})}else checkFee()}
 function acApply(g){var m=document.getElementById('feeMsg');var km=Math.round(hav(KITCHEN,g)*ROAD_FACTOR*10)/10;g.km=km;GEO=g;FEE_RM=null;if(km>MAX_KM){m.innerHTML='<div class="msg bad">That address is about '+km+' km from our kitchen — outside our delivery area. Please choose self pick-up or WhatsApp us.</div>';renderCart();return}refee()}
 function acInput(){var q=document.getElementById('address').value.trim();GEO=null;FEE_RM=null;renderCart();clearTimeout(AC.timer);if(q.length<3){AC.items=[];acHide();return}AC.timer=setTimeout(function(){acFetch(q)},280)}
 function acFetch(q){var seq=++AC.seq;
@@ -1378,6 +1380,12 @@ function acFetch(q){var seq=++AC.seq;
 /* ===== Fee ===== */
 function feeFor(km,sub,c,hh){var F=COURIERS[c||COURIER||'lalamove'].rate;hh=hh||HANDOVER||'drop';var f;if(F.freeAbove&&sub>=F.freeAbove)f=0;else{f=F.base+Math.max(0,km-F.baseKm)*F.perKm;if(F.cap)f=Math.min(f,F.cap);f=Math.round(f*10)/10}if(hh==='door')f+=doorExtra();return Math.round(f*100)/100}
 function hav(a,b){var R=6371,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180,s=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);return 2*R*Math.asin(Math.sqrt(s))}
+/* Full delivery address : Unit / House No. + the picked street address + Postcode ( both required ). */
+function addrVal(id){var e=document.getElementById(id);return e?String(e.value||'').trim():''}
+function addrFull(){var a=addrVal('address'),u=addrVal('addrUnit'),p=addrVal('addrPost'),s=a;
+ if(u&&s.toLowerCase().indexOf(u.toLowerCase())!==0)s=u+', '+s;if(p&&s.indexOf(p)<0)s=s+', '+p;return s}
+function addrMissing(){if(!addrVal('addrUnit'))return'Please enter your Unit / House No.';if(!/^\d{5}$/.test(addrVal('addrPost')))return'Please enter your 5-digit Postcode.';return''}
+function addrPostFill(){var p=document.getElementById('addrPost');if(!p||p.value)return;var m=addrVal('address').match(/\b(\d{5})\b/);if(m)p.value=m[1]}
 function checkFee(){var q=document.getElementById('address').value.trim();var m=document.getElementById('feeMsg');if(q.length<8){m.innerHTML='<div class="msg warn">Please enter your full address including postcode.</div>';return}
  var b=document.getElementById('feeBtn');b.disabled=true;b.textContent='Checking…';m.innerHTML='';GEO=null;FEE_RM=null;renderCart();
  fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=my&q='+encodeURIComponent(q),{headers:{'Accept':'application/json'}}).then(function(r){return r.json()}).then(function(j){
@@ -1535,7 +1543,7 @@ async function pay(){var m=document.getElementById('payMsg');m.innerHTML='';
  var shutWhy=cloWhy(date);
  if(shutWhy)return m.innerHTML='<div class="msg warn">'+esc(cloNice(date))+' — '+esc(shutWhy)+
    ' Please pick another day.</div>';
- if(isDel()){if(!ready())return m.innerHTML='<div class="msg warn">Enter your address and press “Check Delivery Fee” first.</div>';if(!COURIER)return m.innerHTML='<div class="msg warn">Please choose Lalamove or Grab.</div>';if(!HANDOVER||FEE_RM==null)return m.innerHTML='<div class="msg warn">Please choose normal delivery or door-to-door service.</div>'}
+ if(isDel()){if(!ready())return m.innerHTML='<div class="msg warn">Enter your address and press “Check Delivery Fee” first.</div>';var _am=addrMissing();if(_am)return m.innerHTML='<div class="msg warn">'+_am+'</div>';if(!COURIER)return m.innerHTML='<div class="msg warn">Please choose Lalamove or Grab.</div>';if(!HANDOVER||FEE_RM==null)return m.innerHTML='<div class="msg warn">Please choose normal delivery or door-to-door service.</div>'}
  var items=Object.keys(CART).map(function(k){return{sku:k,name:CAT[k].name,qty:CART[k],price:CAT[k].price,boxes:CAT[k].boxes}});
  apLookup(email);renderCart();
  var sub=subtotal(),fee=isDel()?FEE_RM:0,pkg=packFee(),pki=packIncluded(),bday=birthdayRM(),disc=discountRM(),foRM=firstOrderRM();
@@ -1546,7 +1554,7 @@ async function pay(){var m=document.getElementById('payMsg');m.innerHTML='';
  var no=orderNo();refApply();
  var apEarn=pointsEarned(),apRedeem=Math.round(disc*100/AP.rmPer100)+vAp,apExp=addMonthsIso(iso(myNow()),AP.expiryMonths);
  var refBonus=refBonusAp(),refElig=REF.code?refEligible():0,refCash=refCashback();
- var order={orderNo:no,fulfil:isDel()?'delivery':'pickup',courier:isDel()?COURIER:'',handover:isDel()?HANDOVER:'',date:date,slot:slot,address:isDel()?document.getElementById('address').value.trim():'',geo:GEO?{lat:GEO.lat,lng:GEO.lng,km:GEO.km}:null,phone:phone,name:name,email:email,notes:notes,prefs:acctPrefs()||(PLANITEM&&CART['PLAN-'+PLANITEM.id]&&PLANITEM.prefs?PLANITEM.prefs.split('/').filter(function(x){return x&&x!=='normal'}).map(function(x){return x.replace('_',' ')}).join(' · '):''),planLines:(PLANITEM&&CART['PLAN-'+PLANITEM.id])?PLANITEM.pl:'',account:ACCT?1:0,items:items,boxes:boxes(),packaging:PACK,packagingFee:pkg,packagingIncluded:pki,subtotal:sub,deliveryFee:fee,birthdayDiscount:bday,birthdayPct:bday>0?BD.pct:0,firstOrderDiscount:foRM,discount:disc,pointsRedeemed:apRedeem,pointsEarned:apEarn,pointsBase:pointsBase(),pointsExpire:apExp,
+ var order={orderNo:no,fulfil:isDel()?'delivery':'pickup',courier:isDel()?COURIER:'',handover:isDel()?HANDOVER:'',date:date,slot:slot,address:isDel()?addrFull():'',geo:GEO?{lat:GEO.lat,lng:GEO.lng,km:GEO.km}:null,phone:phone,name:name,email:email,notes:notes,prefs:acctPrefs()||(PLANITEM&&CART['PLAN-'+PLANITEM.id]&&PLANITEM.prefs?PLANITEM.prefs.split('/').filter(function(x){return x&&x!=='normal'}).map(function(x){return x.replace('_',' ')}).join(' · '):''),planLines:(PLANITEM&&CART['PLAN-'+PLANITEM.id])?PLANITEM.pl:'',account:ACCT?1:0,items:items,boxes:boxes(),packaging:PACK,packagingFee:pkg,packagingIncluded:pki,subtotal:sub,deliveryFee:fee,birthdayDiscount:bday,birthdayPct:bday>0?BD.pct:0,firstOrderDiscount:foRM,discount:disc,pointsRedeemed:apRedeem,pointsEarned:apEarn,pointsBase:pointsBase(),pointsExpire:apExp,
   creditUsed:cred,creditKey:cred>0?APS.key:'',costCode:ccOn()?CC.on.code:'',gatewayFee:gwf,
   voucherCode:vCode,voucherName:vName,voucherAp:vAp,voucherSaved:vSave,deliveryCharged:Math.round((fee-vSave)*100)/100,total:total,
   referralCode:REF.code||'',referralName:REF.name||'',referralTier:REF.tier||'',referralRate:REF.code?REF.rate:0,referralEligible:refElig,referralCashback:refCash,referralBonusAp:refBonus,referralKey:REF.code?refKey(email):'',
@@ -1705,7 +1713,7 @@ function acctLoad(){try{var a=JSON.parse(localStorage.getItem('aera.account')||'
  var na=document.getElementById('navAcct');if(na)na.textContent='My Account · '+(ACCT.name||ACCT.email).split(' ')[0];
  document.getElementById('detailsHint').innerHTML='· Signed in as '+esc(ACCT.name||ACCT.email);
  var rem=document.getElementById('remember');if(rem)rem.parentNode.style.display='none';
- if(ACCT.address&&ACCT.address.address){document.getElementById('address').value=ACCT.address.address;if(ACCT.address.lat!=null&&ACCT.address.lng!=null){GEO={lat:+ACCT.address.lat,lng:+ACCT.address.lng,label:ACCT.address.address};GEO.km=Math.round(hav(KITCHEN,GEO)*ROAD_FACTOR*10)/10}}
+ if(ACCT.address&&ACCT.address.address){document.getElementById('address').value=ACCT.address.address;addrPostFill();if(ACCT.address.lat!=null&&ACCT.address.lng!=null){GEO={lat:+ACCT.address.lat,lng:+ACCT.address.lng,label:ACCT.address.address};GEO.km=Math.round(hav(KITCHEN,GEO)*ROAD_FACTOR*10)/10}}
  renderSavedAddr()}
 var SADDR_CUSTOM=false;
 function savedAddrList(){return (ACCT&&Array.isArray(ACCT.addresses))?ACCT.addresses.filter(function(a){return a&&a.address}):[]}
@@ -1718,7 +1726,7 @@ function renderSavedAddr(){var el=document.getElementById('savedAddr');if(!el)re
 function pickSavedAddr(i){var box=document.getElementById('address');if(!box)return;
  if(i<0){SADDR_CUSTOM=true;box.value='';box.focus();GEO=null;FEE_RM=null;document.getElementById('feeMsg').innerHTML='';renderSavedAddr();refee();return}
  var a=savedAddrList()[i];if(!a)return;SADDR_CUSTOM=false;
- box.value=a.address;acHide();
+ box.value=a.address;acHide();addrPostFill();
  if(a.lat!=null&&a.lng!=null){GEO={lat:+a.lat,lng:+a.lng,label:a.address};GEO.km=a.km!=null?+a.km:Math.round(hav(KITCHEN,GEO)*ROAD_FACTOR*10)/10;document.getElementById('feeMsg').innerHTML='';updateRates()}
  else{GEO=null;FEE_RM=null;document.getElementById('feeMsg').innerHTML='<div class="hint" style="margin:0">Press Check Delivery Fee to work out the rate for this address.</div>'}
  if(a.notes){var nt=document.getElementById('notes');if(nt&&!nt.value)nt.value=a.notes}
