@@ -406,8 +406,9 @@
       <label class="lb">Delivery Address</label>
       <div id="savedAddr"></div>
       <div class="acwrap"><input type="text" id="address" placeholder="Start typing your address…" autocomplete="off" oninput="acInput()" onkeydown="acKey(event)" onblur="setTimeout(acHide,200)"><div class="ac" id="acList"></div></div>
-      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:10px;margin-top:8px"><div><label class="lb" for="addrUnit">Unit / House No. *</label><input type="text" id="addrUnit" placeholder="e.g. A-12-3 or No. 8" autocomplete="address-line2"></div><div><label class="lb" for="addrPost">Postcode *</label><input type="text" id="addrPost" inputmode="numeric" maxlength="5" placeholder="e.g. 51200" autocomplete="postal-code" oninput="this.value=this.value.replace(/\D/g,'').slice(0,5)"></div></div>
-      <div class="hint">Pick your Address from the suggestions, then fill in your Unit / House No. and Postcode — both are required.</div>
+      <div style="margin-top:8px"><label class="lb" for="addrUnit">Address Line 1 *</label><input type="text" id="addrUnit" placeholder="Unit / House No., Building, Street" autocomplete="address-line1"></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:10px"><div><label class="lb" for="addrLine2">Address Line 2</label><input type="text" id="addrLine2" placeholder="Taman / Area ( optional )" autocomplete="address-line2"></div><div><label class="lb" for="addrPost">Postcode *</label><input type="text" id="addrPost" inputmode="numeric" maxlength="5" placeholder="e.g. 51200" autocomplete="postal-code" oninput="this.value=this.value.replace(/\D/g,'').slice(0,5)"></div></div>
+      <div class="hint">Pick your Address from the suggestions, then fill in Address Line 1 ( Unit / House No. ) and Postcode — both are required.</div>
       <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-k" type="button" onclick="checkFee()" id="feeBtn">Check Delivery Fee</button></div>
       <div id="feeMsg"></div>
 
@@ -1382,9 +1383,9 @@ function feeFor(km,sub,c,hh){var F=COURIERS[c||COURIER||'lalamove'].rate;hh=hh||
 function hav(a,b){var R=6371,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180,s=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);return 2*R*Math.asin(Math.sqrt(s))}
 /* Full delivery address : Unit / House No. + the picked street address + Postcode ( both required ). */
 function addrVal(id){var e=document.getElementById(id);return e?String(e.value||'').trim():''}
-function addrFull(){var a=addrVal('address'),u=addrVal('addrUnit'),p=addrVal('addrPost'),s=a;
- if(u&&s.toLowerCase().indexOf(u.toLowerCase())!==0)s=u+', '+s;if(p&&s.indexOf(p)<0)s=s+', '+p;return s}
-function addrMissing(){if(!addrVal('addrUnit'))return'Please enter your Unit / House No.';if(!/^\d{5}$/.test(addrVal('addrPost')))return'Please enter your 5-digit Postcode.';return''}
+function addrFull(){var a=addrVal('address'),u=addrVal('addrUnit'),l2=addrVal('addrLine2'),p=addrVal('addrPost'),lo=a.toLowerCase(),s=a;
+ if(l2&&lo.indexOf(l2.toLowerCase())<0)s=l2+(s?', '+s:'');if(u&&lo.indexOf(u.toLowerCase())!==0)s=u+(s?', '+s:'');if(p&&s.indexOf(p)<0)s=s+', '+p;return s}
+function addrMissing(){if(!addrVal('addrUnit'))return'Please enter Address Line 1 ( Unit / House No. ).';if(!/^\d{5}$/.test(addrVal('addrPost')))return'Please enter your 5-digit Postcode.';return''}
 function addrPostFill(){var p=document.getElementById('addrPost');if(!p||p.value)return;var m=addrVal('address').match(/\b(\d{5})\b/);if(m)p.value=m[1]}
 function checkFee(){var q=document.getElementById('address').value.trim();var m=document.getElementById('feeMsg');if(q.length<8){m.innerHTML='<div class="msg warn">Please enter your full address including postcode.</div>';return}
  var b=document.getElementById('feeBtn');b.disabled=true;b.textContent='Checking…';m.innerHTML='';GEO=null;FEE_RM=null;renderCart();
