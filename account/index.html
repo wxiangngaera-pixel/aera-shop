@@ -642,7 +642,16 @@ async function loadInbox(){if(!sb||!USER)return;
  var r=await sb.from('inbox_messages').select('id,to_email,title,body,media,button_label,button_url,ends_at,created_at,withdrawn_at').order('created_at',{ascending:false}).limit(150);
  INBOX=(r.data||[]).filter(ibMine);
  var rr=await sb.from('inbox_reads').select('message_id').eq('user_id',USER.id);INREAD={};(rr.data||[]).forEach(function(x){INREAD[x.message_id]=1});
+ /* messages the customer deleted stay hidden for them only ( table inbox_hidden ) */
+ try{var hh=await sb.from('inbox_hidden').select('message_id').eq('user_id',USER.id);var HID={};(hh.data||[]).forEach(function(x){HID[x.message_id]=1});INBOX=INBOX.filter(function(m){return !HID[m.id]})}catch(e){}
  ibBadge();renderInbox()}
+function ibDelAsk(id){asModal('<h3>Delete This Message?</h3><p class="asp">It will be removed from your Inbox. This cannot be undone.</p>',
+ '<button class="btn btn-y" type="button" onclick="ibDelGo(\''+id+'\')">Delete</button><button class="btn btn-o" type="button" onclick="asClose()">Keep It</button>')}
+async function ibDelGo(id){asClose();
+ var r=await sb.from('inbox_hidden').insert({message_id:id,user_id:USER.id});
+ if(r.error&&!/duplicate|23505/i.test(r.error.message||'')){asModal('<h3>Could Not Delete</h3><p class="asp">'+esc(r.error.message)+'</p>','<button class="btn btn-o" type="button" onclick="asClose()">Close</button>');return}
+ if(!INREAD[id]){INREAD[id]=1;try{await sb.from('inbox_reads').insert({message_id:id,email:String(USER.email).toLowerCase()})}catch(e){}}
+ INBOX=INBOX.filter(function(m){return m.id!==id});ibBadge();renderInbox()}
 function ibUnread(){return INBOX.filter(function(m){return !INREAD[m.id]}).length}
 function ibBadge(){var n=ibUnread();var b=document.getElementById('ibBadge');if(b){b.textContent=n?String(n):'';b.style.display=n?'':'none'}
  try{localStorage.setItem('aera.inboxUnread',String(n))}catch(e){}}
@@ -666,7 +675,7 @@ async function ibOpen(i){var m=INBOX[i];if(!m)return;
  asModal('<p class="asp" style="margin-bottom:4px">'+esc(fmtDate(String(m.created_at).slice(0,10)))+(m.to_email?'':' · To All AERA Members')+'</p><h3>'+esc(m.title)+'</h3>'+
   (m.body?'<p class="ibbody">'+ibLinkify(m.body)+'</p>':'')+
   (md.length?'<div class="ibgal">'+md.map(function(x){return x.type==='video'?'<video src="'+esc(x.url)+'" controls playsinline preload="metadata"></video>':'<img src="'+esc(x.url)+'" alt="" loading="lazy" title="Tap to enlarge" onclick="ibZoom(this.src)">'}).join('')+'</div>'+(md.some(function(x){return x.type!=='video'})?'<p class="ibhint">Tap a picture to enlarge it.</p>':''):''),
-  (m.button_label&&m.button_url?'<a class="btn btn-y" href="'+esc(m.button_url)+'">'+esc(m.button_label)+'</a>':'')+(IS_ADMIN?'<button class="btn btn-o" type="button" onclick="smForward(\''+m.id+'\')">Forward</button>':'')+'<button class="btn btn-o" type="button" onclick="asClose()">Close</button>');
+  (m.button_label&&m.button_url?'<a class="btn btn-y" href="'+esc(m.button_url)+'">'+esc(m.button_label)+'</a>':'')+(IS_ADMIN?'<button class="btn btn-o" type="button" onclick="smForward(\''+m.id+'\')">Forward</button>':'')+'<button class="btn btn-o ibdel" type="button" onclick="ibDelAsk(\''+m.id+'\')">Delete</button><button class="btn btn-o" type="button" onclick="asClose()">Close</button>');
  var c=document.querySelector('#asOv .ascard');if(c)c.classList.add('ibwide');
  if(!INREAD[m.id]){INREAD[m.id]=1;ibBadge();renderInbox();try{await sb.from('inbox_reads').insert({message_id:m.id,email:String(USER.email).toLowerCase()})}catch(e){}}}
 /* ---- Alerts On Your Phone ----
@@ -722,7 +731,6 @@ function renderAlerts(msg,bad){var el=document.getElementById('alertBox');if(!el
   :'<button class="btn btn-y s" type="button" onclick="alPushOn()"'+b+'>Turn On Notifications</button>';
  el.innerHTML='<h3 class="crh" style="margin-top:26px">Alerts On Your Phone</h3><p class="hint" style="margin-top:-2px">Know the moment a new message arrives, without signing in to check.</p>'+
   '<div class="alrow"><div><b>Phone Notifications</b><small>A pop-up on this phone or computer.</small></div><div class="alact">'+push+'</div></div>'+
-  '<div class="alrow"><div><b>AERA Card In Your Wallet</b><small>Apple Wallet or Google Wallet. New messages show on your lock screen.</small></div><div class="alact"><button class="btn '+(R.wallet_url?'btn-o':'btn-y')+' s" type="button" onclick="alWallet()"'+b+'>'+(R.wallet_url?'Open My Card':'Add To Wallet')+'</button></div></div>'+
   '<div class="alrow"><div><b>Email</b><small>To '+esc(String(USER.email||''))+'</small></div><div class="alact"><label class="alsw" aria-label="Email alerts"><input type="checkbox" '+(R.email_on!==false?'checked':'')+' onchange="alEmail(this.checked)"><span></span></label></div></div>'+
   (msg?'<div class="msg '+(bad?'bad':'ok')+'" style="margin-top:10px">'+esc(msg)+'</div>':'')}
 try{if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',function(e){if(e.data&&e.data.aera==='inbox'){try{setTab('inbox')}catch(x){}}})}catch(e){}
