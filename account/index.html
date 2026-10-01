@@ -371,6 +371,7 @@
         <button data-t="home" onclick="setTab('home')">My Home-Sourced Meals</button>
         <button data-t="points" onclick="setTab('points')">AERA Points</button>
         <button data-t="credit" onclick="setTab('credit')">AERA Credit</button>
+        <button data-t="auto" onclick="setTab('auto')">Auto Subscription</button>
         <button data-t="refs" onclick="setTab('refs')">Referrals</button>
         <button data-t="details" onclick="setTab('details')">Settings</button>
         <button data-t="pw" onclick="pwFocus()">Change Password</button>
@@ -388,6 +389,7 @@
       <div id="tPlans" class="card" style="display:none"><h2>Your Personalised Meal Plans</h2><div id="plansList"><div class="empty">Loading…</div></div><div style="margin-top:14px"><a class="btn btn-y" href="https://my.chatbees.io/p/SrQzC5m2">Build a New Plan →</a></div></div>
       <div id="tPoints" class="card" style="display:none"><h2>AERA Points</h2><div id="pointsBox"><div class="empty">Loading…</div></div></div>
       <div id="tCredit" class="card" style="display:none"><h2>AERA Credit</h2><div id="creditBox"><div class="empty">Loading…</div></div></div>
+      <div id="tAuto" class="card" style="display:none"><h2>Auto Subscription</h2><div id="autoBox"><div class="empty">Loading…</div></div></div>
       <div id="tRefs" class="card" style="display:none"><h2>Referrals</h2><div id="refsBox"><div class="empty">Loading…</div></div></div>
       <div id="tDetails" class="card" style="display:none">
         <h2>Settings</h2>
@@ -488,6 +490,134 @@ async function creditLoad(){var el=$('#creditBox');if(!el||!USER)return;
    :'<div class="empty" style="margin-top:14px">No Top-Ups yet.</div>')+
   '<p class="hint" style="margin-top:14px">Want unused Credit back? WhatsApp us and we refund it. Bonus AERA Points cannot be refunded.</p>'}
 (function(){var s=document.createElement('style');s.textContent='.crbal{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-radius:14px;background:linear-gradient(135deg,#16479E,#0E3576);color:#fff}.crbal .btn{flex:none}.crlb{font-size:12px;opacity:.8;letter-spacing:.04em;text-transform:uppercase}.crnum{font-size:28px;font-weight:700;margin-top:2px}.crh{margin:18px 0 6px;font-size:15px}.crlist{border-top:1px solid #E3E7EE}.crrow{display:flex;justify-content:space-between;align-items:center;padding:10px 2px;border-bottom:1px solid #E3E7EE;font-size:14px}.crrow small{display:block;color:#6B7280;font-size:12px;margin-top:2px}.crp{color:#2F8F5B}.crm{color:#3A3A3A}';document.head.appendChild(s)})();
+/* ===== Auto Subscription =====
+   A Meal Plan the customer has ordered once, repeated every week, 2 weeks or month and paid from
+   AERA Credit. Starting needs at least RM 1,500 of Credit. Moving a delivery is free with 4 days'
+   notice; with less it costs RM 20 from Credit; once the Meals are cooked it cannot move and is
+   not refunded. The rules are enforced by the database ( as_start, as_reschedule, as_set ) — this
+   page only explains them and asks before anything costs money. The Kitchen Console books each
+   delivery 4 days ahead. */
+var ASUBS=null,AS_SET={min:1500,low:300},AS_BAL=null;
+var AS_FREQ={weekly:'Every Week',fortnightly:'Every 2 Weeks',monthly:'Every Month'};
+function asNowMY(){var d=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kuala_Lumpur'}));d.setHours(0,0,0,0);return d}
+function asIso(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function asMinDate(){var d=asNowMY();d.setDate(d.getDate()+4);return asIso(d)}
+function asDaysTo(iso){return Math.round((new Date(String(iso).slice(0,10)+'T00:00:00')-asNowMY())/864e5)}
+function asTopUpUrl(a){return crTopUpUrl().replace(/topup=1$/,'topup='+(a||AS_SET.min))}
+async function asSettings(){try{var j=await fetch('https://my.chatbees.io/api/public/landing-pages/6938/sheet-data?t='+Date.now()).then(function(r){return r.json()});
+ (j&&j.data||[]).forEach(function(r){var k=String(r.Key||'').trim(),v=+r.Value;if(k==='as_start_min'&&v>0)AS_SET.min=v;if(k==='as_low'&&v>0)AS_SET.low=v})}catch(e){}}
+async function asCredit(){if(!USER)return 0;var key=crKey(USER.email),g=0,u=0;
+ try{var j=await fetch('https://my.chatbees.io/api/public/landing-pages/6927/sheet-data?t='+Date.now()).then(function(r){return r.json()});
+  var hd=j&&Array.isArray(j.headers)?j.headers:null,raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];
+  raw.forEach(function(r){var o=r;if(Array.isArray(r)&&hd){o={};hd.forEach(function(k,i){o[k]=r[i]})}if(o&&String(o.Key||'').trim()===key){g+=+o.Credit||0;u+=+o.CreditUsed||0}})}catch(e){return AS_BAL||0}
+ AS_BAL=Math.max(0,Math.round((g-u)*100)/100);return AS_BAL}
+async function loadAutoSubs(){if(!sb||!USER)return;
+ var r=await sb.from('auto_subs').select('*').order('created_at',{ascending:true});ASUBS=r.error?[]:(r.data||[]);
+ var live=ASUBS.some(function(s){return s.status!=='off'});
+ try{if(live)localStorage.setItem('aera.autoSub',String(USER.email).toLowerCase());else localStorage.removeItem('aera.autoSub')}catch(e){}
+ await asSettings();await asCredit();renderAuto();try{renderPlans()}catch(e){}
+ if(live)asLowCheck()}
+function asLowCheck(){if(AS_BAL==null||AS_BAL>AS_SET.low)return;
+ var k='aera.lowShown.'+asIso(asNowMY());try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1')}catch(e){}
+ var paused=(ASUBS||[]).some(function(s){return s.status==='paused'});
+ asModal('<div class="asic">!</div><h3>Your AERA Credit Is Running Low</h3><p>You have <b>'+rm(AS_BAL)+'</b> left. Your Auto Subscription is paid from AERA Credit'+
+  (paused?', and it is <b>paused</b> until you top up.':', so top up now to keep your next delivery coming.')+'</p>',
+  '<a class="btn btn-y" href="'+esc(asTopUpUrl(AS_SET.min))+'">Top Up '+rm(AS_SET.min)+'</a><button class="btn btn-o" type="button" onclick="asClose()">Later</button>')}
+function asModal(body,btns){var o=document.getElementById('asOv');if(!o){o=document.createElement('div');o.id='asOv';o.className='asov';
+  o.addEventListener('click',function(e){if(e.target===o)asClose()});document.body.appendChild(o)}
+ o.innerHTML='<div class="ascard" role="dialog" aria-modal="true"><button type="button" class="asx" onclick="asClose()" aria-label="Close">×</button>'+body+'<div id="asMsg"></div><div class="asbtns">'+(btns||'')+'</div></div>';o.style.display='flex'}
+function asClose(){var o=document.getElementById('asOv');if(o)o.style.display='none'}
+function asErr(e){var m=String((e&&(e.message||e.msg))||e||'Something went wrong. Please try again.');return m.replace(/^.*?ERROR:\s*/,'')}
+function asSubFor(planId){return (ASUBS||[]).filter(function(s){return s.plan_id===planId&&s.status!=='off'})[0]||null}
+/* the line under each saved Plan in My Meal Plans */
+function asPlanBtn(p,idx,ordered){var s=asSubFor(p.id);
+ if(s)return'<button class="btn btn-o s" type="button" onclick="setTab(\'auto\');location.hash=\'auto\'">Auto Subscription · '+esc(AS_FREQ[s.freq]||'')+(s.status==='paused'?' · Paused':'')+'</button>';
+ if(ordered&&ordered[p.id])return'<button class="btn btn-o s" type="button" onclick="asStartOpen('+idx+')">Start Auto Subscription</button>';
+ return'<span class="hint" style="align-self:center">Order this Plan once to start an Auto Subscription.</span>'}
+var AS_RULES='<ul class="asrules"><li>Each delivery repeats your Order of this Plan — same address, time slot and packaging — and is paid from your <b>AERA Credit</b>.</li>'+
+ '<li>To reschedule, give us <b>4 days\' notice</b>. With less notice, a <b>RM 20</b> late fee comes off your AERA Credit.</li>'+
+ '<li>Once Meals are cooked or delivered, that delivery cannot be moved and is <b>not refunded</b>.</li>'+
+ '<li>You can switch it off at any time. A delivery already booked in the last 4 days still goes ahead.</li></ul>';
+async function asStartOpen(idx){var p=PLANS[idx];if(!p)return;
+ asModal('<h3>Start Auto Subscription</h3><p class="asp">Checking your AERA Credit…</p>');
+ await asSettings();var bal=await asCredit();
+ if(bal<AS_SET.min){
+  asModal('<h3>Start Auto Subscription</h3><p>Auto Subscription is paid from AERA Credit, so it needs at least <b>'+rm(AS_SET.min)+'</b> in Credit to start. You have <b>'+rm(bal)+'</b>.</p>'+
+   '<p class="asp">Top up '+rm(AS_SET.min)+' or more, then come back here and press Start Auto Subscription again.</p>'+AS_RULES,
+   '<a class="btn btn-y" href="'+esc(asTopUpUrl(AS_SET.min))+'">Top Up '+rm(AS_SET.min)+'</a><button class="btn btn-o" type="button" onclick="asClose()">Not Now</button>');return}
+ asModal('<h3>Start Auto Subscription</h3><p class="asp">'+esc(p.name||p.id)+' · AERA Credit '+rm(bal)+'</p>'+
+  '<label class="lb">How Often</label><div class="asfreq">'+Object.keys(AS_FREQ).map(function(k,i){return'<label><input type="radio" name="asFreq" value="'+k+'"'+(i===0?' checked':'')+'> '+AS_FREQ[k]+'</label>'}).join('')+'</div>'+
+  '<label class="lb" for="asFirst">First Delivery</label><input type="date" id="asFirst" min="'+asMinDate()+'" value="'+asMinDate()+'">'+
+  '<div class="hint">The earliest is 4 days from today, so the kitchen can prepare.</div>'+AS_RULES+
+  '<label class="ascheck"><input type="checkbox" id="asAgree"> I agree to these Auto Subscription rules.</label>',
+  '<button class="btn btn-y" type="button" id="asGo" onclick="asStartGo('+idx+')">Start Auto Subscription</button><button class="btn btn-o" type="button" onclick="asClose()">Cancel</button>')}
+async function asStartGo(idx){var p=PLANS[idx],m=document.getElementById('asMsg');m.innerHTML='';
+ var f=(document.querySelector('input[name=asFreq]:checked')||{}).value,d=document.getElementById('asFirst').value;
+ if(!document.getElementById('asAgree').checked){m.innerHTML='<div class="msg bad">Please tick to agree to the rules first.</div>';return}
+ if(!d||d<asMinDate()){m.innerHTML='<div class="msg bad">Pick a first delivery at least 4 days from today.</div>';return}
+ var b=document.getElementById('asGo');b.disabled=true;b.textContent='Starting…';
+ var r=await sb.rpc('as_start',{p_plan_id:p.id,p_freq:f,p_first:d});
+ if(r.error){b.disabled=false;b.textContent='Start Auto Subscription';m.innerHTML='<div class="msg bad">'+esc(asErr(r.error))+'</div>';return}
+ asModal('<div class="asic ok">✓</div><h3>Auto Subscription Started</h3><p>'+esc(p.name||p.id)+', '+esc(AS_FREQ[f])+'. Your first delivery is on <b>'+esc(fmtDate(d))+'</b>. We book it 4 days before and take it from your AERA Credit.</p>',
+  '<button class="btn btn-y" type="button" onclick="asClose();setTab(\'auto\');location.hash=\'auto\'">See My Auto Subscription</button>');
+ loadAutoSubs()}
+function renderAuto(){var el=document.getElementById('autoBox');if(!el)return;var L=ASUBS||[];
+ var head='<div class="crbal"><div><div class="crlb">AERA Credit</div><div class="crnum">'+(AS_BAL==null?'…':rm(AS_BAL))+'</div></div><a class="btn btn-y" href="'+esc(asTopUpUrl(AS_SET.min))+'">Top Up</a></div>';
+ if(!L.length){el.innerHTML=head+'<p class="hint" style="margin-top:12px">No Auto Subscription yet. Open <a href="#plans" onclick="setTab(\'plans\')">My Meal Plans</a> and press <b>Start Auto Subscription</b> on a Plan you have ordered before. You need at least '+rm(AS_SET.min)+' in AERA Credit to start.</p>'+AS_RULES;return}
+ el.innerHTML=head+L.map(function(s,i){var d=asDaysTo(s.next_date),cooked=/^(cooking|cooked|packed|out|delivered)$/.test(s.cur_status||'');
+  var st=s.status==='active'?'<span class="chip ok">Active</span>':s.status==='paused'?'<span class="chip warn">Paused</span>':'<span class="chip">Off</span>';
+  return'<div class="order assub"><div class="top"><span class="no">'+esc(s.plan_name||s.plan_id)+'</span>'+st+'</div>'+
+   '<div class="asgrid"><div><small>How Often</small><b>'+esc(AS_FREQ[s.freq]||s.freq)+'</b></div>'+
+   '<div><small>'+(s.status==='off'?'Was Next':'Next Delivery')+'</small><b>'+esc(fmtDate(s.next_date))+'</b>'+(s.status!=='off'&&d>=0?'<small>in '+d+' day'+(d===1?'':'s')+'</small>':'')+'</div>'+
+   '<div><small>Each Delivery</small><b>'+rm(s.per_delivery)+'</b><small>from AERA Credit</small></div></div>'+
+   (s.status==='paused'?'<div class="msg warn" style="margin-top:10px">Paused because your AERA Credit does not cover the next delivery. Top up, then press Turn On.</div>':'')+
+   (s.cur_order_no&&s.status!=='off'?'<div class="hint" style="margin-top:8px">Booked as Order <b>'+esc(s.cur_order_no)+'</b>'+(cooked?' · the kitchen has started cooking, so this delivery can no longer be moved.':' · the kitchen is preparing it.')+'</div>':'')+
+   '<div id="asRes'+i+'"></div>'+
+   '<div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">'+
+   (s.status!=='off'?'<button class="btn btn-y s" type="button" onclick="asResOpen('+i+')"'+(cooked?' disabled':'')+'>Reschedule</button><button class="btn btn-o s" type="button" onclick="asOffAsk('+i+')">Turn Off</button>':'')+
+   (s.status!=='active'?'<button class="btn btn-y s" type="button" onclick="asOnOpen('+i+')">Turn On</button>':'')+
+   '</div></div>'}).join('')+AS_RULES}
+function asResOpen(i){var s=ASUBS[i],el=document.getElementById('asRes'+i);if(!s||!el)return;
+ var late=asDaysTo(s.next_date)<4;
+ el.innerHTML='<div class="asres"><label class="lb" for="asNew'+i+'">Move '+esc(fmtDate(s.next_date))+' To</label><input type="date" id="asNew'+i+'" min="'+asMinDate()+'" value="'+asMinDate()+'">'+
+  (late?'<div class="msg warn" style="margin-top:8px">Your delivery is less than 4 days away. Moving it now is late notice and <b>RM 20</b> comes off your AERA Credit.</div>':'<div class="hint">Free — you are giving us 4 days\' notice or more.</div>')+
+  '<div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-y s" type="button" onclick="asResGo('+i+')">'+(late?'Move And Pay RM 20':'Move Delivery')+'</button><button class="btn btn-o s" type="button" onclick="renderAuto()">Cancel</button></div><div id="asResMsg'+i+'"></div></div>'}
+async function asResGo(i){var s=ASUBS[i],d=document.getElementById('asNew'+i).value,m=document.getElementById('asResMsg'+i);m.innerHTML='';
+ if(!d||d<asMinDate()){m.innerHTML='<div class="msg bad">The new date must be at least 4 days from today.</div>';return}
+ var r=await sb.rpc('as_reschedule',{p_id:s.id,p_date:d});
+ if(r.error){m.innerHTML='<div class="msg bad">'+esc(asErr(r.error))+'</div>';return}
+ var fee=+((r.data||{}).fee||0);
+ asModal('<div class="asic ok">✓</div><h3>Delivery Moved</h3><p>Your delivery is now on <b>'+esc(fmtDate(d))+'</b>.'+(fee?' A late-notice fee of <b>'+rm(fee)+'</b> comes off your AERA Credit.':'')+'</p>','<button class="btn btn-y" type="button" onclick="asClose()">Done</button>');
+ loadAutoSubs()}
+function asOffAsk(i){var s=ASUBS[i];if(!s)return;var booked=!!s.cur_order_no;
+ asModal('<h3>Turn Off Auto Subscription?</h3><p>No more deliveries of <b>'+esc(s.plan_name||s.plan_id)+'</b> will be booked. Your AERA Credit stays in your account.</p>'+
+  (booked?'<div class="msg warn">Your delivery on '+esc(fmtDate(s.next_date))+' is already booked, so it still goes ahead and is not refunded.</div>':''),
+  '<button class="btn btn-y" type="button" id="asOffGo" onclick="asOffGo('+i+')">Turn Off</button><button class="btn btn-o" type="button" onclick="asClose()">Keep It On</button>')}
+async function asOffGo(i){var s=ASUBS[i],m=document.getElementById('asMsg');var r=await sb.rpc('as_set',{p_id:s.id,p_on:false});
+ if(r.error){m.innerHTML='<div class="msg bad">'+esc(asErr(r.error))+'</div>';return}
+ asModal('<h3>Auto Subscription Turned Off</h3><p>'+((r.data||{}).booked_goes_ahead?'Your booked delivery on '+esc(fmtDate(s.next_date))+' still goes ahead. Nothing more after that.':'No more deliveries will be booked.')+' You can turn it back on here any time.</p>','<button class="btn btn-y" type="button" onclick="asClose()">Done</button>');
+ loadAutoSubs()}
+async function asOnOpen(i){var s=ASUBS[i];if(!s)return;asModal('<h3>Turn On Auto Subscription</h3><p class="asp">Checking your AERA Credit…</p>');
+ await asSettings();var bal=await asCredit();
+ if(bal<AS_SET.min){asModal('<h3>Turn On Auto Subscription</h3><p>You need at least <b>'+rm(AS_SET.min)+'</b> in AERA Credit to turn it on. You have <b>'+rm(bal)+'</b>.</p>',
+  '<a class="btn btn-y" href="'+esc(asTopUpUrl(AS_SET.min))+'">Top Up '+rm(AS_SET.min)+'</a><button class="btn btn-o" type="button" onclick="asClose()">Not Now</button>');return}
+ var booked=!!s.cur_order_no&&asDaysTo(s.next_date)>=0;
+ asModal('<h3>Turn On Auto Subscription</h3><p class="asp">'+esc(s.plan_name||s.plan_id)+' · '+esc(AS_FREQ[s.freq])+' · AERA Credit '+rm(bal)+'</p>'+
+  (booked?'<p>Your booked delivery on <b>'+esc(fmtDate(s.next_date))+'</b> is still coming; we carry on from there.</p>':
+   '<label class="lb" for="asOnD">Next Delivery</label><input type="date" id="asOnD" min="'+asMinDate()+'" value="'+(s.next_date>=asMinDate()?s.next_date:asMinDate())+'">')+AS_RULES,
+  '<button class="btn btn-y" type="button" onclick="asOnGo('+i+')">Turn On</button><button class="btn btn-o" type="button" onclick="asClose()">Cancel</button>')}
+async function asOnGo(i){var s=ASUBS[i],m=document.getElementById('asMsg');var el=document.getElementById('asOnD');var d=el?el.value:null;
+ var r=await sb.rpc('as_set',{p_id:s.id,p_on:true,p_date:d});
+ if(r.error){m.innerHTML='<div class="msg bad">'+esc(asErr(r.error))+'</div>';return}
+ asModal('<div class="asic ok">✓</div><h3>Auto Subscription On</h3><p>Next delivery: <b>'+esc(fmtDate((r.data||{}).date||d))+'</b>.</p>','<button class="btn btn-y" type="button" onclick="asClose()">Done</button>');
+ loadAutoSubs()}
+(function(){var c=document.createElement('style');c.textContent='.asov{display:none;position:fixed;inset:0;background:rgba(11,20,40,.6);z-index:200;align-items:center;justify-content:center;padding:16px}'+
+ '.ascard{position:relative;background:#fff;border-radius:16px;max-width:480px;width:100%;max-height:92vh;overflow:auto;padding:24px 22px 20px;box-shadow:0 20px 60px rgba(0,0,0,.3)}.ascard h3{margin:0 0 8px;color:#16479E;font-size:20px}.ascard p{font-size:14px;line-height:1.55;margin:0 0 10px}.asp{color:#6B7280}'+
+ '.asx{position:absolute;top:10px;right:12px;border:0;background:none;font-size:26px;line-height:1;color:#6B7280;cursor:pointer}.asbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.asic{width:44px;height:44px;border-radius:50%;background:#FDB913;color:#0B0B0B;display:grid;place-items:center;font-weight:800;font-size:22px;margin-bottom:10px}.asic.ok{background:#2F8F5B;color:#fff}'+
+ '.asrules{margin:12px 0 4px;padding-left:18px;font-size:12.5px;line-height:1.55;color:#3A3A3A}.asrules li{margin-bottom:4px}.asfreq{display:flex;gap:14px;flex-wrap:wrap;margin:4px 0 12px;font-size:14px}.asfreq label{display:flex;align-items:center;gap:6px;cursor:pointer}'+
+ '.ascheck{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin-top:10px;cursor:pointer}.ascheck input{margin-top:3px}.ascard input[type=date]{width:100%}'+
+ '.assub{margin-top:14px}.asgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}.asgrid small{display:block;font-size:11px;color:#6B7280}.asgrid b{display:block;font-size:15px}.asres{margin-top:12px;padding:12px;border:1px dashed #E3E7EE;border-radius:10px;background:#F8FAFD}'+
+ '@media(max-width:560px){.asgrid{grid-template-columns:1fr 1fr}}';document.head.appendChild(c)})();
 function fmtDate(d){if(!d)return '';var x=new Date(String(d).slice(0,10)+'T00:00:00');if(isNaN(x))return String(d);
  var n=x.getDate(),t=(n%100>=11&&n%100<=13)?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th');
  return ['SUN','MON','TUE','WED','THU','FRI','SAT'][x.getDay()]+', '+n+t+' '+
@@ -730,7 +860,7 @@ async function showAccount(){var nx=nextTarget();
  try{if(!RECOVERY)setTimeout(function(){wgFirstThenNumbers()},400)}catch(e){}
  TAB=hashTab()||'orders';
  setTab(TAB);renderFavs();renderHome();
- var jobs=[loadOrders(),loadPlans(),loadPoints(),loadAddresses(),loadRefs(),bodyLoad()];
+ var jobs=[loadOrders(),loadPlans(),loadAutoSubs(),loadPoints(),loadAddresses(),loadRefs(),bodyLoad()];
  if(!goHome)return;
  /* Signing in ends at the homepage. We wait for all of the above to land first: the
     homepage is drawn from the copy this page leaves in the browser, so leaving early
@@ -760,13 +890,13 @@ function acctHold(on){
  setTimeout(function(){if(document.getElementById('acctHold'))location.replace(HOME_URL)},12000)}
 function acctReveal(){acctHold(false);var v=$('#acctView');if(v)v.style.display='grid'}
 function hashTab(){var hh=(location.hash||'').replace('#','').toLowerCase();
- if(hh==='addresses')hh='address';if(hh==='settings')hh='details';if(hh==='referrals')hh='refs';if(hh==='topup'||hh==='aera-credit')hh='credit';
+ if(hh==='addresses')hh='address';if(hh==='settings')hh='details';if(hh==='referrals')hh='refs';if(hh==='topup'||hh==='aera-credit')hh='credit';if(hh==='auto-subscription'||hh==='subscription')hh='auto';
  if(hh==='track'||hh==='tracking')hh='orders';
- return ['orders','plans','favs','home','points','credit','refs','details','address','prefs','body'].indexOf(hh)>=0?hh:''}
+ return ['orders','plans','favs','home','points','credit','auto','refs','details','address','prefs','body'].indexOf(hh)>=0?hh:''}
 window.addEventListener('hashchange',function(){
  if(!USER)return;var t=hashTab();if(t&&t!==TAB)setTab(t);
  try{obMaybeAsk()}catch(e){}});
-function setTab(t){TAB=t;if(t==='credit')creditLoad();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();['orders','plans','favs','home','points','credit','refs','details','address','prefs','body'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===t)})}
+function setTab(t){TAB=t;if(t==='credit')creditLoad();if(t==='auto')loadAutoSubs();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();['orders','plans','favs','home','points','credit','auto','refs','details','address','prefs','body'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===t)})}
 async function loadProfile(){var r=await sb.from('profiles').select('*').eq('id',USER.id).maybeSingle();PROFILE=r.data||{id:USER.id,email:USER.email};if(!r.data){var meta=USER.user_metadata||{};var seed={id:USER.id,email:USER.email.toLowerCase(),name:meta.name||null,phone:meta.phone||null};
   var w=await sb.from('profiles').upsert(seed);
   if(w.error&&/23505|duplicate|unique/i.test((w.error.message||'')+' '+(w.error.code||''))){delete seed.phone;await sb.from('profiles').upsert(seed)}
@@ -1045,7 +1175,7 @@ function renderPlans(){var el=$('#plansList');if(!el)return;var rows=PLANS||[],o
   '<div class="meta">'+esc(GOAL[pr.goal]||'')+(pr.goal?' · ':'')+(p.days||'?')+' Days x '+(p.meals_per_day||'?')+' Meal'+(p.meals_per_day===1?'':'s')+' a day · '+(p.boxes||meals.length)+' Boxes'+(p.created_at?' · '+fmtDate(String(p.created_at).slice(0,10)):'')+'</div>'+
   (t.kcal?'<div class="hint" style="margin-top:6px">AERA Meals Target ≈ '+Math.round(t.kcal)+' KCALs · Protein '+Math.round(t.p||0)+' g · Carbs '+Math.round(t.c||0)+' g · Fat '+Math.round(t.f||0)+' g per Day</div>':'')+planStrip(meals)+
   '<details style="margin-top:8px" ontoggle="planPics(this)"><summary style="cursor:pointer;font-weight:600;font-size:13px">Show Meals</summary><div class="items" style="margin-top:6px">'+Object.keys(byDay).sort(function(a,b){return a-b}).map(function(d){return'<div class="daywrap"><b>Day '+d+'</b>'+byDay[d].map(function(m){return'<div class="mealrow">'+planBento(m)+'<span class="mtxt">'+esc(m.name||(m.comps||[]).map(function(c){return c.name}).join(' · '))+((m.comps||[]).length?'<br><span style="color:var(--mute)">'+esc((m.comps||[]).map(function(c){return c.name+' '+c.grams+' g'}).join(' · '))+'</span>':'')+'</span></div>'}).join('')+'</div>'}).join('')+'</div></details>'+
-  '<div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-y s" type="button" onclick="planOpen('+idx+')">Open &amp; Tune This Plan</button></div>'+
+  '<div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-y s" type="button" onclick="planOpen('+idx+')">Open &amp; Tune This Plan</button>'+asPlanBtn(p,idx,ordered)+'</div>'+
   '<div style="margin-top:8px;max-width:360px"><div class="tot" style="font-weight:700"><span>Plan Price</span><b>'+rm(p.price)+'</b></div><div class="hint">≈ '+rm((+p.boxes||meals.length)?p.price/(+p.boxes||meals.length):0)+' per Meal · Packaging Included</div></div></div>'}).join('')}
 /* Customers name their saved plans; the name lives on the plan row ( rename_meal_plan checks it is theirs ) */
 function planRename(i){var p=PLANS[i];var el=document.getElementById('planName'+i);if(!p||!el)return;
