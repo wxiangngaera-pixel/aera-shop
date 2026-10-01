@@ -366,6 +366,7 @@
       <div class="who" id="who"></div><div class="email" id="whoEmail"></div>
       <div class="menu">
         <button class="on" data-t="orders" onclick="setTab('orders')">Orders</button>
+        <button data-t="inbox" onclick="setTab('inbox')">Inbox<span class="ibn" id="ibBadge" style="display:none"></span></button>
         <button data-t="plans" onclick="setTab('plans')">My Meal Plans</button>
         <button data-t="favs" onclick="setTab('favs')">My Favourite Meal Plans</button>
         <button data-t="home" onclick="setTab('home')">My Home-Sourced Meals</button>
@@ -378,6 +379,7 @@
         <button data-t="address" onclick="setTab('address')">Addresses</button>
         <button data-t="prefs" onclick="setTab('prefs')">Meal Preferences</button>
           <button data-t="body" onclick="setTab('body')">Weight Control</button>
+          <button data-t="send" onclick="setTab('send')" style="display:none">Send Messages</button>
       </div>
       <button class="btn btn-o s" style="margin-top:16px" onclick="doLogout()">Sign Out</button>
     </aside>
@@ -390,6 +392,8 @@
       <div id="tPoints" class="card" style="display:none"><h2>AERA Points</h2><div id="pointsBox"><div class="empty">Loading…</div></div></div>
       <div id="tCredit" class="card" style="display:none"><h2>AERA Credit</h2><div id="creditBox"><div class="empty">Loading…</div></div></div>
       <div id="tAuto" class="card" style="display:none"><h2>Auto Subscription</h2><div id="autoBox"><div class="empty">Loading…</div></div></div>
+      <div id="tInbox" class="card" style="display:none"><h2>Inbox</h2><div id="inboxBox"><div class="empty">Loading…</div></div></div>
+      <div id="tSend" class="card" style="display:none"><h2>Send Messages</h2><p class="hint" style="margin-top:-4px">Only you can see this page. Messages appear in your customers' Inbox.</p><div id="sendBox"><div class="empty">Loading…</div></div></div>
       <div id="tRefs" class="card" style="display:none"><h2>Referrals</h2><div id="refsBox"><div class="empty">Loading…</div></div></div>
       <div id="tDetails" class="card" style="display:none">
         <h2>Settings</h2>
@@ -618,6 +622,124 @@ async function asOnGo(i){var s=ASUBS[i],m=document.getElementById('asMsg');var e
  '.ascheck{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin-top:10px;cursor:pointer}.ascheck input{margin-top:3px}.ascard input[type=date]{width:100%}'+
  '.assub{margin-top:14px}.asgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}.asgrid small{display:block;font-size:11px;color:#6B7280}.asgrid b{display:block;font-size:15px}.asres{margin-top:12px;padding:12px;border:1px dashed #E3E7EE;border-radius:10px;background:#F8FAFD}'+
  '@media(max-width:560px){.asgrid{grid-template-columns:1fr 1fr}}';document.head.appendChild(c)})();
+/* ===== Inbox =====
+   Messages from AERA, to this customer or to All Users ( inbox_messages ). Opening one marks it
+   read ( inbox_reads ). A kitchen admin signed in here also gets Send Messages, where they write
+   to one customer ( found by name, email or phone ) or to All Users, with pictures and videos
+   uploaded to the Website's file store ( inbox-media ). The database decides who may do what. */
+var INBOX=[],INREAD={},IS_ADMIN=false,SM={to:'all',pick:null,files:[],links:[],people:null,sent:null,reads:{},busy:false};
+function ibLinkify(t){return esc(t).replace(/(https:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>').replace(/\n/g,'<br>')}
+function ibMine(m){var me=String(USER&&USER.email||'').toLowerCase();var t=asIso(asNowMY());
+ return !m.withdrawn_at&&(!m.ends_at||m.ends_at>=t)&&(!m.to_email||String(m.to_email).toLowerCase()===me)}
+async function loadInbox(){if(!sb||!USER)return;
+ var r=await sb.from('inbox_messages').select('id,to_email,title,body,media,button_label,button_url,ends_at,created_at,withdrawn_at').order('created_at',{ascending:false}).limit(150);
+ INBOX=(r.data||[]).filter(ibMine);
+ var rr=await sb.from('inbox_reads').select('message_id').eq('user_id',USER.id);INREAD={};(rr.data||[]).forEach(function(x){INREAD[x.message_id]=1});
+ ibBadge();renderInbox()}
+function ibUnread(){return INBOX.filter(function(m){return !INREAD[m.id]}).length}
+function ibBadge(){var n=ibUnread();var b=document.getElementById('ibBadge');if(b){b.textContent=n?String(n):'';b.style.display=n?'':'none'}
+ try{localStorage.setItem('aera.inboxUnread',String(n))}catch(e){}}
+function ibThumb(md){var x=(md||[])[0];if(!x)return'';return x.type==='video'?'<span class="ibtn ibvid">▶</span>':'<span class="ibtn" style="background-image:url(\''+esc(x.url)+'\')"></span>'}
+function renderInbox(){var el=document.getElementById('inboxBox');if(!el)return;
+ if(!INBOX.length){el.innerHTML='<div class="empty">No messages yet. News, offers and notes from AERA land here.</div>';return}
+ el.innerHTML=INBOX.map(function(m,i){var un=!INREAD[m.id];
+  return'<button type="button" class="ibrow'+(un?' un':'')+'" onclick="ibOpen('+i+')">'+ibThumb(m.media)+
+   '<span class="ibtx"><b>'+(un?'<i class="ibdot" aria-label="Unread"></i>':'')+esc(m.title)+'</b><small>'+esc(String(m.body||'').replace(/\s+/g,' ').slice(0,110))+'</small></span>'+
+   '<span class="ibdt">'+esc(fmtDate(String(m.created_at).slice(0,10)))+'</span></button>'}).join('')}
+async function ibOpen(i){var m=INBOX[i];if(!m)return;
+ var md=Array.isArray(m.media)?m.media:[];
+ asModal('<p class="asp" style="margin-bottom:4px">'+esc(fmtDate(String(m.created_at).slice(0,10)))+(m.to_email?'':' · To All AERA Members')+'</p><h3>'+esc(m.title)+'</h3>'+
+  (m.body?'<p class="ibbody">'+ibLinkify(m.body)+'</p>':'')+
+  (md.length?'<div class="ibgal">'+md.map(function(x){return x.type==='video'?'<video src="'+esc(x.url)+'" controls playsinline preload="metadata"></video>':'<img src="'+esc(x.url)+'" alt="" loading="lazy">'}).join('')+'</div>':''),
+  (m.button_label&&m.button_url?'<a class="btn btn-y" href="'+esc(m.button_url)+'">'+esc(m.button_label)+'</a>':'')+'<button class="btn btn-o" type="button" onclick="asClose()">Close</button>');
+ var c=document.querySelector('#asOv .ascard');if(c)c.classList.add('ibwide');
+ if(!INREAD[m.id]){INREAD[m.id]=1;ibBadge();renderInbox();try{await sb.from('inbox_reads').insert({message_id:m.id,email:String(USER.email).toLowerCase()})}catch(e){}}}
+/* ---- Send Messages ( kitchen admins only ) ---- */
+async function smInit(){try{var r=await sb.rpc('is_kitchen_admin');IS_ADMIN=!r.error&&r.data===true}catch(e){IS_ADMIN=false}
+ var b=document.querySelector('.menu button[data-t="send"]');if(b)b.style.display=IS_ADMIN?'':'none';
+ if(!IS_ADMIN)return;
+ var q=new URLSearchParams(location.search).get('to');if(q){SM.to='one';SM.pickEmail=q.toLowerCase()}
+ if(TAB==='send'||location.hash==='#send'){setTab('send')}}
+async function smLoad(){if(!IS_ADMIN)return;
+ if(!SM.people){var r=await sb.from('profiles').select('email,name,phone').order('name',{ascending:true}).limit(5000);SM.people=(r.data||[]).filter(function(p){return p.email})}
+ if(SM.pickEmail&&!SM.pick){var p=SM.people.find(function(x){return String(x.email).toLowerCase()===SM.pickEmail});SM.pick=p||{email:SM.pickEmail,name:'',phone:''};SM.pickEmail=''}
+ var s=await sb.from('inbox_messages').select('id,to_email,title,created_at,withdrawn_at,ends_at,media').order('created_at',{ascending:false}).limit(40);SM.sent=s.data||[];
+ var rd=await sb.from('inbox_reads').select('message_id').limit(20000);SM.reads={};(rd.data||[]).forEach(function(x){SM.reads[x.message_id]=(SM.reads[x.message_id]||0)+1});
+ renderSend()}
+function smKeep(){['smTitle','smBody','smBtnL','smBtnU','smEnds','smUrl'].forEach(function(id){var el=document.getElementById(id);if(el)SM['v_'+id]=el.value})}
+function smV(id){return esc(SM['v_'+id]||'')}
+function smSearch(v){var el=document.getElementById('smRes');if(!el)return;var q=String(v||'').trim().toLowerCase(),dq=q.replace(/\D/g,'');
+ if(q.length<2){el.innerHTML='';return}
+ var L=(SM.people||[]).filter(function(p){return String(p.name||'').toLowerCase().indexOf(q)>=0||String(p.email).toLowerCase().indexOf(q)>=0||(dq.length>=3&&String(p.phone||'').replace(/\D/g,'').indexOf(dq)>=0)}).slice(0,8);
+ el.innerHTML=L.map(function(p,i){return'<button type="button" class="smhit" onclick="smPick(\''+encodeURIComponent(p.email)+'\')"><b>'+esc(p.name||p.email)+'</b><small>'+esc(p.email)+(p.phone?' · '+esc(p.phone):'')+'</small></button>'}).join('')||'<div class="hint">No customer matches that. Try part of their name, email or phone number.</div>'}
+function smPick(e){e=decodeURIComponent(e);smKeep();SM.pick=(SM.people||[]).find(function(p){return p.email===e})||{email:e,name:'',phone:''};renderSend()}
+function smFiles(inp){smKeep();[].slice.call(inp.files||[]).forEach(function(f){
+  if(!/^(image|video)\//.test(f.type)){alertMsg(f.name+' is not a picture or a video.');return}
+  if(f.size>50*1024*1024){alertMsg(f.name+' is over 50 MB. Please make it smaller first.');return}
+  SM.files.push({file:f,type:f.type.indexOf('video')===0?'video':'image',preview:URL.createObjectURL(f)})});inp.value='';renderSend()}
+function alertMsg(t){var m=document.getElementById('smMsg');if(m)m.innerHTML='<div class="msg bad">'+esc(t)+'</div>'}
+function smAddLink(){smKeep();var u=String(SM.v_smUrl||'').trim();if(!/^https:\/\//i.test(u))return alertMsg('Paste a link that starts with https://');
+ SM.links.push({type:/\.(mp4|mov|webm)(\?|$)/i.test(u)?'video':'image',url:u});SM.v_smUrl='';renderSend()}
+function smDrop(k,i){smKeep();if(k==='f'){try{URL.revokeObjectURL(SM.files[i].preview)}catch(e){}SM.files.splice(i,1)}else SM.links.splice(i,1);renderSend()}
+function renderSend(){var el=document.getElementById('sendBox');if(!el)return;if(!IS_ADMIN){el.innerHTML='';return}
+ var all=SM.to==='all';
+ var to='<div class="smto"><label><input type="radio" name="smTo" '+(all?'checked':'')+' onchange="smKeep();SM.to=\'all\';renderSend()"> All Users</label><label><input type="radio" name="smTo" '+(!all?'checked':'')+' onchange="smKeep();SM.to=\'one\';renderSend()"> One Customer</label></div>'+
+  (all?'<div class="hint">Everyone with an account sees it, including anyone who signs up while it is showing.</div>':
+   (SM.pick?'<div class="smpick"><div><b>'+esc(SM.pick.name||SM.pick.email)+'</b><small>'+esc(SM.pick.email)+(SM.pick.phone?' · '+esc(SM.pick.phone):'')+'</small></div><button class="btn btn-o s" type="button" onclick="smKeep();SM.pick=null;renderSend()">Change</button></div>':
+    '<input type="search" id="smQ" placeholder="Search by name, email or phone number" oninput="smSearch(this.value)" autocomplete="off"><div id="smRes" class="smres"></div>'));
+ var th=SM.files.map(function(f,i){return'<div class="smth">'+(f.type==='video'?'<video src="'+f.preview+'" muted></video><i>Video</i>':'<img src="'+f.preview+'" alt="">')+'<button type="button" onclick="smDrop(\'f\','+i+')" aria-label="Remove">×</button></div>'}).join('')+
+  SM.links.map(function(x,i){return'<div class="smth">'+(x.type==='video'?'<video src="'+esc(x.url)+'" muted></video><i>Video</i>':'<img src="'+esc(x.url)+'" alt="">')+'<button type="button" onclick="smDrop(\'l\','+i+')" aria-label="Remove">×</button></div>'}).join('');
+ var T=asIso(asNowMY());
+ var sent=(SM.sent||[]).map(function(r){var n=SM.reads[r.id]||0;var st=r.withdrawn_at?'Withdrawn':(r.ends_at&&r.ends_at<T?'Ended':'Showing');
+  return'<div class="smrow"><div><b>'+esc(r.title)+'</b><small>'+esc(r.to_email||'All Users')+' · '+esc(fmtDate(String(r.created_at).slice(0,10)))+' · '+(r.to_email?(n?'Read':'Not read yet'):n+' read')+' · '+st+'</small></div>'+
+   (r.withdrawn_at?'':'<button class="btn btn-o s" type="button" onclick="smWithdraw(\''+r.id+'\')">Withdraw</button>')+'</div>'}).join('');
+ el.innerHTML='<label class="lb">Send To</label>'+to+
+  '<label class="lb" for="smTitle" style="margin-top:14px">Title</label><input type="text" id="smTitle" maxlength="90" placeholder="e.g. New Menu This Week" value="'+smV('smTitle')+'" oninput="smKeep()">'+
+  '<label class="lb" for="smBody" style="margin-top:12px">Message</label><textarea id="smBody" rows="6" placeholder="Write your message. Line breaks are kept." oninput="smKeep()">'+smV('smBody')+'</textarea>'+
+  '<label class="lb" style="margin-top:12px">Pictures &amp; Videos</label><div class="smmedia">'+th+'<label class="smadd"><input type="file" accept="image/*,video/mp4,video/quicktime,video/webm" multiple onchange="smFiles(this)">+ Add Pictures Or Videos</label></div>'+
+  '<div style="display:flex;gap:8px;margin-top:8px"><input type="url" id="smUrl" placeholder="…or paste a picture or video link ( https:// )" value="'+smV('smUrl')+'" oninput="smKeep()"><button class="btn btn-o s" type="button" onclick="smAddLink()">Add Link</button></div>'+
+  '<div class="hint">Up to 50 MB each. MP4 plays on every phone.</div>'+
+  '<div class="f2" style="margin-top:12px"><div><label class="lb" for="smBtnL">Button Words ( optional )</label><input type="text" id="smBtnL" maxlength="30" placeholder="e.g. Order Now" value="'+smV('smBtnL')+'" oninput="smKeep()"></div>'+
+  '<div><label class="lb" for="smBtnU">Button Link</label><input type="url" id="smBtnU" placeholder="https://aeramealprep.net/checkout/" value="'+smV('smBtnU')+'" oninput="smKeep()"></div></div>'+
+  (all?'<div style="max-width:260px;margin-top:12px"><label class="lb" for="smEnds">Show Until ( optional )</label><input type="date" id="smEnds" value="'+smV('smEnds')+'" onchange="smKeep()"></div>':'')+
+  '<div id="smMsg" style="margin-top:10px"></div><button class="btn btn-y" type="button" style="margin-top:6px" onclick="smSendAsk()"'+(SM.busy?' disabled':'')+'>'+(SM.busy?'Sending…':'Send Message')+'</button>'+
+  '<h3 class="crh" style="margin-top:26px">Sent</h3>'+(sent||'<div class="hint">Nothing sent yet.</div>')}
+function smSendAsk(){smKeep();var t=String(SM.v_smTitle||'').trim(),b=String(SM.v_smBody||'').trim(),bl=String(SM.v_smBtnL||'').trim(),bu=String(SM.v_smBtnU||'').trim();
+ if(SM.to==='one'&&!SM.pick)return alertMsg('Pick the customer first.');
+ if(!t)return alertMsg('Give the message a title.');
+ if(!b&&!SM.files.length&&!SM.links.length)return alertMsg('Write a message or add a picture or video.');
+ if((bl&&!bu)||(bu&&!bl))return alertMsg('A button needs both its words and its link.');
+ if(bu&&!/^https:\/\//i.test(bu))return alertMsg('The button link must start with https://');
+ var who=SM.to==='all'?'All Users':(SM.pick.name||SM.pick.email)+' ( '+SM.pick.email+' )';
+ asModal('<h3>Send This Message?</h3><p><b>'+esc(t)+'</b></p><p class="asp">To '+esc(who)+(SM.files.length+SM.links.length?' · '+(SM.files.length+SM.links.length)+' picture/video':'')+'</p>',
+  '<button class="btn btn-y" type="button" onclick="asClose();smSend()">Send</button><button class="btn btn-o" type="button" onclick="asClose()">Cancel</button>')}
+async function smSend(){SM.busy=true;renderSend();var msg=function(t,bad){var m=document.getElementById('smMsg');if(m)m.innerHTML='<div class="msg '+(bad?'bad':'ok')+'">'+esc(t)+'</div>'};
+ try{var media=SM.links.slice();
+  for(var i=0;i<SM.files.length;i++){var f=SM.files[i].file;msg('Uploading '+(i+1)+' of '+SM.files.length+'…');
+   var ext=(f.name.match(/\.[a-z0-9]+$/i)||[''])[0].toLowerCase();var path=asIso(asNowMY())+'/'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)+ext;
+   var up=await sb.storage.from('inbox-media').upload(path,f,{contentType:f.type,upsert:false});if(up.error)throw new Error('Upload of '+f.name+' failed: '+up.error.message);
+   media.push({type:SM.files[i].type,url:sb.storage.from('inbox-media').getPublicUrl(path).data.publicUrl})}
+  var ends=String(SM.v_smEnds||'').trim();
+  var r=await sb.from('inbox_messages').insert({to_email:SM.to==='all'?null:String(SM.pick.email).toLowerCase(),title:String(SM.v_smTitle).trim(),body:String(SM.v_smBody||'').trim(),media:media,
+   button_label:String(SM.v_smBtnL||'').trim()||null,button_url:String(SM.v_smBtnU||'').trim()||null,ends_at:SM.to==='all'&&ends?ends:null,created_by:String(USER.email).toLowerCase()});
+  if(r.error)throw new Error(r.error.message);
+  SM.files.forEach(function(x){try{URL.revokeObjectURL(x.preview)}catch(e){}});
+  SM.files=[];SM.links=[];['smTitle','smBody','smBtnL','smBtnU','smEnds','smUrl'].forEach(function(id){SM['v_'+id]=''});if(SM.to==='one')SM.pick=null;
+  SM.busy=false;await smLoad();msg('Sent.');loadInbox()}
+ catch(e){SM.busy=false;renderSend();msg(e.message||String(e),true)}}
+async function smWithdraw(id){asModal('<h3>Withdraw This Message?</h3><p>It disappears from every Inbox it reached.</p>',
+ '<button class="btn btn-y" type="button" onclick="asClose();smWithdrawGo(\''+id+'\')">Withdraw</button><button class="btn btn-o" type="button" onclick="asClose()">Keep It</button>')}
+async function smWithdrawGo(id){var r=await sb.from('inbox_messages').update({withdrawn_at:new Date().toISOString()}).eq('id',id);if(r.error)return alertMsg(r.error.message);smLoad();loadInbox()}
+(function(){var c=document.createElement('style');c.textContent='.ibn{display:inline-block;min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:#C8433B;color:#fff;font-size:11px;font-weight:800;line-height:20px;text-align:center;margin-left:6px}'+
+ '.ibrow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1px solid #E3E7EE;border-radius:12px;padding:12px;margin-top:8px;cursor:pointer;font:inherit;color:inherit}.ibrow:hover{border-color:#16479E}.ibrow.un{background:#F4F7FD;border-color:#CBD9F0}'+
+ '.ibtn{flex:none;width:52px;height:52px;border-radius:10px;background:#EDF3FD 50% 50%/cover no-repeat;display:grid;place-items:center;color:#16479E;font-size:18px}.ibtx{flex:1;min-width:0}.ibtx b{display:flex;align-items:center;gap:7px;font-size:14.5px}.ibtx small{display:block;color:#6B7280;font-size:12.5px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'+
+ '.ibdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#FDB913;flex:none}.ibdt{flex:none;font-size:11.5px;color:#6B7280;font-weight:600}.ibbody{white-space:normal}.ibbody a{color:#16479E;word-break:break-all}'+
+ '.ascard.ibwide{max-width:560px}.ibgal{display:grid;gap:8px;margin:6px 0 4px}.ibgal img,.ibgal video{width:100%;border-radius:12px;display:block;background:#0B1B36;max-height:70vh;object-fit:contain}'+
+ '.smto{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px;font-size:14px}.smto label{display:flex;gap:6px;align-items:center;cursor:pointer}.smres{display:grid;gap:4px;margin-top:6px}.smhit{display:block;text-align:left;border:1px solid #E3E7EE;background:#fff;border-radius:10px;padding:8px 10px;cursor:pointer;font:inherit}.smhit:hover{border-color:#16479E}.smhit b{display:block;font-size:13.5px}.smhit small{color:#6B7280;font-size:12px}'+
+ '.smpick{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid #16479E;background:#EDF3FD;border-radius:10px;padding:9px 12px}.smpick b{display:block}.smpick small{color:#6B7280;font-size:12px}'+
+ '.smmedia{display:flex;gap:8px;flex-wrap:wrap}.smth{position:relative;width:96px;height:96px;border-radius:10px;overflow:hidden;background:#EDF1F7;border:1px solid #E3E7EE}.smth img,.smth video{width:100%;height:100%;object-fit:cover;display:block}.smth i{position:absolute;left:5px;bottom:5px;font-style:normal;font-size:10px;font-weight:700;background:rgba(0,0,0,.6);color:#fff;border-radius:5px;padding:1px 5px}.smth button{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;cursor:pointer;line-height:1}'+
+ '.smadd{display:flex;align-items:center;justify-content:center;width:96px;height:96px;border:1.5px dashed #CBD2DE;border-radius:10px;font-size:11.5px;font-weight:700;text-align:center;padding:8px;cursor:pointer;color:#3A3A3A}.smadd input{display:none}'+
+ '.smrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #E3E7EE}.smrow b{display:block;font-size:14px}.smrow small{color:#6B7280;font-size:12px}';document.head.appendChild(c)})();
 function fmtDate(d){if(!d)return '';var x=new Date(String(d).slice(0,10)+'T00:00:00');if(isNaN(x))return String(d);
  var n=x.getDate(),t=(n%100>=11&&n%100<=13)?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th');
  return ['SUN','MON','TUE','WED','THU','FRI','SAT'][x.getDay()]+', '+n+t+' '+
@@ -860,7 +982,7 @@ async function showAccount(){var nx=nextTarget();
  try{if(!RECOVERY)setTimeout(function(){wgFirstThenNumbers()},400)}catch(e){}
  TAB=hashTab()||'orders';
  setTab(TAB);renderFavs();renderHome();
- var jobs=[loadOrders(),loadPlans(),loadAutoSubs(),loadPoints(),loadAddresses(),loadRefs(),bodyLoad()];
+ var jobs=[loadOrders(),loadPlans(),loadAutoSubs(),loadInbox(),smInit(),loadPoints(),loadAddresses(),loadRefs(),bodyLoad()];
  if(!goHome)return;
  /* Signing in ends at the homepage. We wait for all of the above to land first: the
     homepage is drawn from the copy this page leaves in the browser, so leaving early
@@ -892,11 +1014,11 @@ function acctReveal(){acctHold(false);var v=$('#acctView');if(v)v.style.display=
 function hashTab(){var hh=(location.hash||'').replace('#','').toLowerCase();
  if(hh==='addresses')hh='address';if(hh==='settings')hh='details';if(hh==='referrals')hh='refs';if(hh==='topup'||hh==='aera-credit')hh='credit';if(hh==='auto-subscription'||hh==='subscription')hh='auto';
  if(hh==='track'||hh==='tracking')hh='orders';
- return ['orders','plans','favs','home','points','credit','auto','refs','details','address','prefs','body'].indexOf(hh)>=0?hh:''}
+ return ['orders','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].indexOf(hh)>=0?hh:''}
 window.addEventListener('hashchange',function(){
  if(!USER)return;var t=hashTab();if(t&&t!==TAB)setTab(t);
  try{obMaybeAsk()}catch(e){}});
-function setTab(t){TAB=t;if(t==='credit')creditLoad();if(t==='auto')loadAutoSubs();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();['orders','plans','favs','home','points','credit','auto','refs','details','address','prefs','body'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===t)})}
+function setTab(t){TAB=t;if(t==='credit')creditLoad();if(t==='auto')loadAutoSubs();if(t==='inbox')loadInbox();if(t==='send')smLoad();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();['orders','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===t)})}
 async function loadProfile(){var r=await sb.from('profiles').select('*').eq('id',USER.id).maybeSingle();PROFILE=r.data||{id:USER.id,email:USER.email};if(!r.data){var meta=USER.user_metadata||{};var seed={id:USER.id,email:USER.email.toLowerCase(),name:meta.name||null,phone:meta.phone||null};
   var w=await sb.from('profiles').upsert(seed);
   if(w.error&&/23505|duplicate|unique/i.test((w.error.message||'')+' '+(w.error.code||''))){delete seed.phone;await sb.from('profiles').upsert(seed)}
