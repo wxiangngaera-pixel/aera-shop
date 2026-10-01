@@ -445,6 +445,8 @@ Object.assign(D,{"Use on this order":"本单使用","Don't use points":"不使�
 if(R){var MO={JAN:1,FEB:2,MAR:3,APR:4,MAY:5,JUN:6,JUL:7,AUG:8,SEP:9,SEPT:9,OCT:10,NOV:11,DEC:12},WK={MON:'一',TUE:'二',WED:'三',THU:'四',FRI:'五',SAT:'六',SUN:'日'};
 R.unshift(
  [/^Order before (.+?) for the earliest slot (\d+) Days? later\. Earliest available : (MON|TUE|WED|THU|FRI|SAT|SUN)[A-Z]*,? (\d{1,2})(?:st|nd|rd|th)? (JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEPT|SEP|OCT|NOV|DEC)[A-Z]*\.?$/i,function(m,t,n,w,d,mo){var tt=/^12:45 PM$/i.test(t)?'中午 12:45':t;return tt+' 前下单，最早可选 '+n+' 天后的时段。最早可选：'+MO[mo.toUpperCase()]+'月'+(+d)+'日（周'+WK[w.toUpperCase()]+'）。'}],
+ [/^Order before 1 PM for any time slot\. After 1 PM the earliest day only has the 3 PM – 5 PM slot\. We need 3 days to prep, not counting Sundays\. Earliest available : (.+)\.$/,'下午 1 点前下单可选任何时段。下午 1 点后下单，最早那天只剩下午 3 点 – 5 点时段。我们需要 3 天备餐（星期日不计）。最早可选：$1。'],
+ [/^It is past 1 PM, so (.+) only has the 3 PM – 5 PM slot\. Pick a later day for any time slot\. We need 3 days to prep, not counting Sundays\. Earliest available : (.+)\.$/,'已过下午 1 点，$1 只剩下午 3 点 – 5 点时段。选择更晚的日期即可选任何时段。我们需要 3 天备餐（星期日不计）。最早可选：$2。'],
  [/^Worth RM ([\d.,]+)$/,'价值 RM $1'],
  [/^\( Max (\d+)% = RM ([\d.,]+) \)$/,'（最多 $1% = RM $2）'],
  [/^RM ([\d.,]+) off \( ([\d,]+) AP \)$/,'减 RM $1（$2 AP）'],
