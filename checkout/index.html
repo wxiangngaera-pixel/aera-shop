@@ -1480,6 +1480,7 @@ function cloApply(){
    carry nothing, then shorten the free text ( plan lines, address, notes, preferences ). Email is never dropped. */
 function compactOrder(o){var MAX=495;var c={v:2,n:o.orderNo,f:o.fulfil==='delivery'?o.courier:'pickup',h:o.fulfil==='delivery'?o.handover:'',d:o.date,s:o.slot,g:o.geo?[+o.geo.lat.toFixed(5),+o.geo.lng.toFixed(5),o.geo.km]:null,p:o.phone,i:o.items.map(function(i){return i.sku+'x'+i.qty}).join(','),b:o.boxes,pk:o.packaging,pf:o.packagingFee,pi:o.packagingIncluded,sub:Math.round(o.subtotal*100)/100,fee:o.deliveryFee,bd:o.birthdayDiscount||0,bp:o.birthdayPct||0,fo:o.firstOrderDiscount||0,rd:o.discount||0,cu:o.creditUsed||0,ck:o.creditKey||'',cc:o.costCode||'',rp:o.pointsRedeemed||0,ap:o.pointsEarned||0,ex:o.pointsExpire,vc:o.voucherCode||'',va:o.voucherAp||0,vs:o.voucherSaved||0,rf:o.referralCode||'',rk:o.referralKey||'',rr:o.referralRate||0,rc:o.referralCashback||0,rb:o.referralBonusAp||0,re:o.referralEligible||0,t:o.total,nm:o.name,e:o.email,a:o.address,no:o.notes,pr:o.prefs||'',pl:o.planLines||''};
  var J=function(){return JSON.stringify(c)};var room=function(){return MAX-J().length};
+ window.__orderFull=J(); /* the untrimmed copy, kept in the database by orderStash() before payment */
  var KEEP=['v','n','f','d','s','i','b','sub','fee','t','e','nm','p','a'];
  if(room()<0)Object.keys(c).forEach(function(k){if(KEEP.indexOf(k)>=0)return;var v=c[k];if(v===0||v===''||v==null||v===false||(Array.isArray(v)&&!v.length))delete c[k]});
  if(room()<0){var cut=function(k,min){if(c[k]==null)return;var over=-room();if(over<=0)return;var s=String(c[k]);var keep=Math.max(min,s.length-over-1);if(s.length>keep)c[k]=keep>0?s.slice(0,keep)+'…':''};
@@ -1489,6 +1490,13 @@ function compactOrder(o){var MAX=495;var c={v:2,n:o.orderNo,f:o.fulfil==='delive
   /* the delivery address goes last, and never shorter than the street part */
   cut('a',90);cut('a',60);cut('nm',12);if(room()<0)cut('a',0);if(room()<0)cut('nm',0)}
  return J()}
+/* Keeps the full order ( nothing trimmed ) in Supabase just before payment. The paid-order flow
+   ( Chatbees 5486 ) reads it back, so a long address or a big cart always reaches the kitchen in full.
+   Never blocks payment: gives up after 4 seconds. */
+var ORD_SB='https://swpprjvubgcdsojapaad.supabase.co',ORD_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0';
+function orderStash(no){var full=null;try{full=JSON.parse(window.__orderFull||'null')}catch(e){}if(!full||full.n!==no)return Promise.resolve();
+ var p=fetch(ORD_SB+'/rest/v1/rpc/order_stash',{method:'POST',headers:{apikey:ORD_ANON,Authorization:'Bearer '+ORD_ANON,'Content-Type':'application/json'},body:JSON.stringify({p_no:no,p_msg:full})}).catch(function(){});
+ return Promise.race([p,new Promise(function(r){setTimeout(r,4000)})])}
 function orderNo(){var n=myNow();return 'AERA-'+String(n.getFullYear()).slice(2)+('0'+(n.getMonth()+1)).slice(-2)+('0'+n.getDate()).slice(-2)+'-'+Math.random().toString(36).slice(2,6).toUpperCase()}
 /* Credit is real money, so it is checked against the ledger again at the moment of paying
    rather than trusted from whenever this page happened to load. A second attempt — another tab,
@@ -1553,7 +1561,7 @@ async function pay(){var m=document.getElementById('payMsg');m.innerHTML='';
  try{sessionStorage.setItem('aera.lastOrder',JSON.stringify(order))}catch(e){}
  if(vCode)try{localStorage.setItem('aera.voucherPending',vCode)}catch(e){}
  var btn=document.getElementById('payBtn');btn.disabled=true;btn.textContent='Opening secure payment…';
- window.__processDonation({amount:total,email:email,name:name,productName:'AERA Meal Prep order '+no,productDescription:desc.slice(0,480),message:msg,quantity:1}).catch(function(e){btn.disabled=false;renderCart();if(e&&e!=='below_min'&&e!=='above_max'&&e!=='no_email')m.innerHTML='<div class="msg bad">Could not start payment. Please try again or WhatsApp us.</div>'})}
+ orderStash(no).then(function(){return window.__processDonation({amount:total,email:email,name:name,productName:'AERA Meal Prep order '+no,productDescription:desc.slice(0,480),message:msg,quantity:1})}).catch(function(e){btn.disabled=false;renderCart();if(e&&e!=='below_min'&&e!=='above_max'&&e!=='no_email')m.innerHTML='<div class="msg bad">Could not start payment. Please try again or WhatsApp us.</div>'})}
 /* ===== Billplz (FPX / Touch 'n Go / GrabPay / cards) ===== */
 function billKey(orderNo,email){return sha256hex('aera-bill:'+String(orderNo).trim()+'|'+String(email).trim().toLowerCase()).slice(0,24)}
 function bpRows(){return fetch(PAY.lookupUrl,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){return Array.isArray(j)?j:(j&&(j.data||j.rows))||[]})}
