@@ -485,10 +485,10 @@ async function creditLoad(){var el=$('#creditBox');if(!el||!USER)return;
   if(c>0)hist.push({d:d,t:'Top-Up',v:c});if(s>0)hist.push({d:d,t:'Spent On An Order',v:-s})});
  var bal=Math.max(0,Math.round((g-u)*100)/100);hist.sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0});
  el.innerHTML='<div class="crbal"><div><div class="crlb">Your Balance</div><div class="crnum">'+rm(bal)+'</div></div><a class="btn btn-y" href="'+esc(crTopUpUrl())+'">Top Up</a></div>'+
-  '<p class="hint" style="margin:10px 0 0">AERA Credit comes off your next Order automatically at Checkout. If it does not cover the whole Order, you pay the rest by card. Top up RM 200 or more and you also get bonus AERA Points.</p>'+
+  '<p class="hint" style="margin:10px 0 0">AERA Credit comes off your next Order automatically at Checkout. If it does not cover the whole Order, you pay the rest by card. You earn AERA Points when you spend your Credit on Meals.</p>'+
   (hist.length?'<h3 class="crh">History</h3><div class="crlist">'+hist.map(function(x){return'<div class="crrow"><span><b>'+x.t+'</b><small>'+esc(fmtDate(x.d))+'</small></span><b class="'+(x.v>0?'crp':'crm')+'">'+(x.v>0?'+ ':'− ')+rm(Math.abs(x.v))+'</b></div>'}).join('')+'</div>'
    :'<div class="empty" style="margin-top:14px">No Top-Ups yet.</div>')+
-  '<p class="hint" style="margin-top:14px">Want unused Credit back? WhatsApp us and we refund it. Bonus AERA Points cannot be refunded.</p>'}
+  '<p class="hint" style="margin-top:14px">Want unused Credit back? WhatsApp us and we refund it.</p>'}
 (function(){var s=document.createElement('style');s.textContent='.crbal{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-radius:14px;background:linear-gradient(135deg,#16479E,#0E3576);color:#fff}.crbal .btn{flex:none}.crlb{font-size:12px;opacity:.8;letter-spacing:.04em;text-transform:uppercase}.crnum{font-size:28px;font-weight:700;margin-top:2px}.crh{margin:18px 0 6px;font-size:15px}.crlist{border-top:1px solid #E3E7EE}.crrow{display:flex;justify-content:space-between;align-items:center;padding:10px 2px;border-bottom:1px solid #E3E7EE;font-size:14px}.crrow small{display:block;color:#6B7280;font-size:12px;margin-top:2px}.crp{color:#2F8F5B}.crm{color:#3A3A3A}';document.head.appendChild(s)})();
 /* ===== Auto Subscription =====
    A Meal Plan the customer has ordered once, repeated every week, 2 weeks or month and paid from
