@@ -1559,8 +1559,93 @@ function bpReturn(){var q=new URLSearchParams(location.search);var id=q.get('bil
  .then(function(row){if(row&&String(row.Status||'')==='paid')thanks(pending.orderNo);else bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! Billplz confirmed the payment but our system could not record order <b>'+esc(pending.orderNo)+'</b> automatically'+(row?' ( '+esc(String(row.Status||''))+' )':'')+'. Please WhatsApp us and we will confirm it by hand.</p>')})
  .catch(function(){bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! We could not reach our order system just now — please WhatsApp us with order <b>'+esc(pending.orderNo)+'</b>.</p>')});
  return true}
+/* ===== AERA Credit top-up =====
+   The customer pays money in now and spends it on Orders later. Credit is spent automatically at
+   checkout ( see crApplied ), so a balance smaller than the bill simply pays part of it and the
+   card pays the rest. Bigger top-ups earn bonus AERA Points, set in the AERA Settings Sheet:
+   topup_amounts = the quick-pick amounts, topup_min = the smallest own amount,
+   topup_bonus = "200=10,500=30" ( top up RM 200 or more, get RM 10 of AERA Points ).
+   Payment goes through the same Stripe checkout as an Order; flow 5486 sees "k":"topup" in the
+   message and books Credit ( and any bonus ) instead of an Order. */
+var TU={amounts:[50,100,200,500],min:50,max:5000,tiers:[[200,10]],loaded:false,pick:0};
+function tuLoad(){if(TU.loaded)return Promise.resolve(TU);
+ return fetch(SETTINGS_URL).then(function(r){return r.json()}).then(function(j){(j&&j.data||[]).forEach(function(r){var k=String(r.Key||'').trim(),v=String(r.Value||'').trim();
+  if(k==='topup_amounts'){var a=v.split(/[,\s]+/).map(Number).filter(function(n){return n>0});if(a.length)TU.amounts=a}
+  if(k==='topup_min'&&+v>0)TU.min=+v;
+  if(k==='topup_max'&&+v>0)TU.max=+v;
+  if(k==='topup_bonus'){TU.tiers=v.split(/[,;\s]+/).map(function(p){var x=p.split('=');return[+x[0],+x[1]]}).filter(function(t){return t[0]>0&&t[1]>0}).sort(function(a,b){return a[0]-b[0]})}});
+  TU.loaded=true;return TU}).catch(function(){TU.loaded=true;return TU})}
+function tuBonusRM(amt){var b=0;TU.tiers.forEach(function(t){if(amt>=t[0])b=t[1]});return b}
+function tuBonusAP(amt){return Math.round(tuBonusRM(amt)*100/(AP.rmPer100||1))}
+function tuNo(){var d=typeof myNow==='function'?myNow():new Date();var p=function(n){return('0'+n).slice(-2)};return'TU-'+String(d.getFullYear()).slice(2)+p(d.getMonth()+1)+p(d.getDate())+'-'+Math.random().toString(36).slice(2,6).toUpperCase()}
+function tuOrderGap(){/* what the card would still pay for the cart as it stands */try{var t=document.getElementById('total');var v=t?+String(t.textContent).replace(/[^0-9.]/g,''):0;return v>0?v:0}catch(e){return 0}}
+function tuPaint(){var el=document.getElementById('tuLine');if(!el){var cr=document.getElementById('crRow');if(!cr||!cr.parentNode)return;el=document.createElement('div');el.id='tuLine';el.className='tuline';cr.parentNode.insertBefore(el,cr.nextSibling)}
+ if(!APS.key){el.style.display='none';return}el.style.display='';
+ var bal=crAvail(),gap=tuOrderGap();
+ el.innerHTML='<span>AERA Credit balance <b>'+rm(bal)+'</b>'+(gap>0&&Object.keys(CART||{}).length?' · <span class="tusub">Top up instead and pay this Order from your Credit</span>':'')+'</span><button type="button" class="tubtn" onclick="tuOpen()">Top Up</button>'}
+function tuOpen(pre){tuLoad().then(function(){var o=document.getElementById('tuOverlay');if(!o){o=document.createElement('div');o.id='tuOverlay';o.className='tuov';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.addEventListener('click',function(e){if(e.target===o)tuClose()});document.body.appendChild(o)}
+ var gap=tuOrderGap();var amts=TU.amounts.slice();
+ if(!TU.pick)TU.pick=pre&&pre>=TU.min?pre:(amts.filter(function(a){return a>=gap})[0]||amts[amts.length-1]);
+ var em=String((document.getElementById('email')||{}).value||'').trim();
+ o.innerHTML='<div class="tucard"><button type="button" class="tux" onclick="tuClose()" aria-label="Close">×</button>'+
+  '<h3>Top Up AERA Credit</h3><p class="tuhint">Credit is spent on your next Orders automatically. If it does not cover a whole Order, you pay the rest by card.</p>'+
+  '<div class="tuamts">'+amts.map(function(a){var b=tuBonusRM(a);return'<button type="button" class="tuamt'+(TU.pick===a?' on':'')+'" onclick="tuPick('+a+')"><b>'+rm(a)+'</b>'+(b?'<span>+ '+rm(b)+' in Points</span>':'')+'</button>'}).join('')+'</div>'+
+  '<label class="lb" for="tuOwn" style="margin-top:12px">Or Your Own Amount ( RM '+TU.min+' or more )</label><input type="number" id="tuOwn" inputmode="decimal" min="'+TU.min+'" max="'+TU.max+'" step="1" placeholder="e.g. 150"'+(amts.indexOf(TU.pick)<0?' value="'+TU.pick+'"':'')+' oninput="tuOwn(this.value)">'+
+  '<label class="lb" for="tuEmail" style="margin-top:12px">Email For Your AERA Account</label><input type="email" id="tuEmail" value="'+esc(em)+'" placeholder="you@email.com" autocomplete="email">'+
+  '<div id="tuSum" class="tusum"></div><div id="tuMsg"></div>'+
+  '<button type="button" class="btn btn-y" id="tuPay" style="width:100%;margin-top:12px" onclick="tuPay()">Pay Securely</button>'+
+  '<p class="tulegal">AERA Credit can be refunded on request. Bonus AERA Points are a reward, cannot be refunded and expire '+AP.expiryMonths+' months after the Top-Up. See our <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a>.</p></div>';
+ o.style.display='flex';tuSum()})}
+function tuClose(){var o=document.getElementById('tuOverlay');if(o)o.style.display='none'}
+function tuPick(a){TU.pick=a;var i=document.getElementById('tuOwn');if(i)i.value='';[].forEach.call(document.querySelectorAll('.tuamt'),function(b){b.classList.toggle('on',b.querySelector('b').textContent===rm(a))});tuSum()}
+function tuOwn(v){var n=Math.round((+v||0)*100)/100;TU.pick=n;[].forEach.call(document.querySelectorAll('.tuamt'),function(b){b.classList.remove('on')});tuSum()}
+function tuSum(){var s=document.getElementById('tuSum');if(!s)return;var a=TU.pick;
+ if(!(a>=TU.min)){s.innerHTML='<span class="tumute">Pick an amount, RM '+TU.min+' or more.</span>';return}
+ if(a>TU.max){s.innerHTML='<span class="tumute">The most we take in one Top-Up is '+rm(TU.max)+'.</span>';return}
+ var b=tuBonusRM(a),ap=tuBonusAP(a),next=TU.tiers.filter(function(t){return t[0]>a})[0];
+ s.innerHTML='<div class="row"><span>You Pay</span><b>'+rm(a)+'</b></div><div class="row"><span>AERA Credit Added</span><b>'+rm(a)+'</b></div>'+
+  (b?'<div class="row tugreen"><span>Bonus AERA Points</span><b>'+ap.toLocaleString()+' AP ( '+rm(b)+' )</b></div>':'')+
+  (next&&!b?'<div class="tumute">Top up '+rm(next[0])+' or more and get '+rm(next[1])+' in AERA Points.</div>':'')}
+function tuPay(){var m=document.getElementById('tuMsg');m.innerHTML='';var a=TU.pick;
+ if(!(a>=TU.min)||a>TU.max){tuSum();return}
+ var email=String(document.getElementById('tuEmail').value||'').trim().toLowerCase();
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){m.innerHTML='<div class="msg bad">Please enter your email, so the Credit goes to your account.</div>';document.getElementById('tuEmail').focus();return}
+ var name=String((document.getElementById('name')||{}).value||'').trim()||(ACCT&&ACCT.name)||email.split('@')[0];
+ if(typeof window.__processDonation!=='function'){m.innerHTML='<div class="msg bad">Top-Up is not available right now. Please WhatsApp us.</div>';return}
+ var no=tuNo(),tb=tuBonusAP(a);
+ var msg=JSON.stringify({v:3,k:'topup',n:no,e:email,nm:name,tu:a,tb:tb,ex:''});
+ try{var em=document.getElementById('email');if(em&&!em.value){em.value=email;apInput(true)}}catch(e){}
+ try{sessionStorage.setItem('aera.topupPending',JSON.stringify({n:no,e:email,a:a,tb:tb,before:(APS.loaded&&!APS.failed&&APS.key===apKey(email)?crAvail():null),at:Date.now()}));localStorage.setItem('aera.topupPending',sessionStorage.getItem('aera.topupPending'))}catch(e){}
+ var btn=document.getElementById('tuPay');btn.disabled=true;btn.textContent='Opening secure payment…';
+ window.__processDonation({amount:a,email:email,name:name,productName:'AERA Credit Top-Up '+no,productDescription:'AERA Credit '+rm(a)+(tb?' + '+tb+' bonus AERA Points':''),message:msg,quantity:1})
+ .catch(function(e){btn.disabled=false;btn.textContent='Pay Securely';try{sessionStorage.removeItem('aera.topupPending');localStorage.removeItem('aera.topupPending')}catch(x){}
+  if(e!=='below_min'&&e!=='above_max'&&e!=='no_email')m.innerHTML='<div class="msg bad">Could not start payment. Please try again or WhatsApp us.</div>'})}
+/* Back from Stripe after a Top-Up: keep the cart, wait for the Credit to land, then show it. */
+function tuReturn(){var p=null;try{p=JSON.parse(sessionStorage.getItem('aera.topupPending')||localStorage.getItem('aera.topupPending')||'null')}catch(e){}
+ if(!p||!p.n||Date.now()-(+p.at||0)>3*3600*1000)return false;
+ try{sessionStorage.removeItem('aera.topupPending');localStorage.removeItem('aera.topupPending')}catch(e){}
+ try{history.replaceState(null,'',location.pathname+location.search.replace(/[?&]donation=success[^&]*/,'').replace(/^&/,'?')+location.hash)}catch(e){}
+ var o=document.getElementById('tuOverlay');if(!o){o=document.createElement('div');o.id='tuOverlay';o.className='tuov';document.body.appendChild(o)}
+ var show=function(html){o.innerHTML='<div class="tucard" style="text-align:center">'+html+'<button type="button" class="btn btn-y" style="margin-top:16px" onclick="tuClose()">'+(Object.keys(CART||{}).length?'Back To My Order':'Done')+'</button></div>';o.style.display='flex'};
+ show('<h3>Top-Up Received</h3><p class="tuhint">Thank you! Adding '+rm(p.a)+' to your AERA Credit…</p>');
+ var key=apKey(p.e),tries=0;
+ var em=document.getElementById('email');if(em&&!em.value){em.value=p.e}
+ (function poll(){tries++;fetch(POINTS_URL+(POINTS_URL.indexOf('?')<0?'?':'&')+'t='+Date.now()).then(function(r){return r.json()}).then(function(j){var rows=[],hd=j&&Array.isArray(j.headers)?j.headers:null,raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];raw.forEach(function(r){if(Array.isArray(r)&&hd){var x={};hd.forEach(function(k,i){x[k]=r[i]});rows.push(x)}else if(r&&typeof r==='object')rows.push(r)});
+   var g=0,u=0;rows.forEach(function(r){if(String(r.Key||'').trim()===key){g+=+r.Credit||0;u+=+r.CreditUsed||0}});var bal=Math.round((g-u)*100)/100;
+   var landed=p.before!=null?bal>=Math.round((p.before+p.a)*100)/100-0.001:bal>=p.a-0.001;
+   if(landed||tries>=20){APS.rows=rows;APS.loaded=true;apInput(true);
+    show(landed?'<h3>'+rm(p.a)+' Added</h3><p class="tuhint">Your AERA Credit is now <b>'+rm(bal)+'</b>.'+(p.tb?' '+(+p.tb).toLocaleString()+' bonus AERA Points are on their way to your account too.':'')+(Object.keys(CART||{}).length?' Your Order is still in the cart and the Credit is already taken off.':' It is spent on your next Order automatically.')+'</p><p class="tumute">Top-Up '+esc(p.n)+'</p>'
+     :'<h3>Payment Received</h3><p class="tuhint">Thank you! Your Top-Up <b>'+esc(p.n)+'</b> is paid and the Credit will show here in a few minutes. Refresh this page in a moment, or WhatsApp us if it does not appear.</p>');return}
+   setTimeout(poll,3000)}).catch(function(){if(tries<20)setTimeout(poll,3000)})})();
+ return true}
+(function(){var css=document.createElement('style');css.textContent='.tuline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 2px;padding:9px 11px;border:1px dashed var(--line);border-radius:10px;font-size:12.5px;color:var(--ink2);background:#F8FAFD}.tuline .tusub{color:var(--navy)}.tubtn{flex:none;border:0;background:var(--navy);color:#fff;font:600 12px Montserrat,system-ui,sans-serif;padding:7px 12px;border-radius:999px;cursor:pointer}.tubtn:hover{background:var(--navy2)}'+
+ '.tuov{display:none;position:fixed;inset:0;background:rgba(20,18,14,.72);z-index:120;align-items:center;justify-content:center;padding:16px}.tucard{position:relative;background:#fff;border-radius:16px;max-width:440px;width:100%;max-height:92vh;overflow:auto;padding:24px 20px 18px;box-shadow:0 20px 60px rgba(0,0,0,.3)}.tucard h3{margin:0 0 4px;color:var(--navy);font-size:20px}.tux{position:absolute;top:10px;right:12px;border:0;background:none;font-size:26px;line-height:1;color:var(--mute);cursor:pointer}'+
+ '.tuhint{margin:0 0 12px;font-size:13px;color:var(--ink2);line-height:1.5}.tuamts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.tuamt{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 8px;cursor:pointer;text-align:center;font:inherit}.tuamt b{display:block;font-size:16px;color:var(--ink)}.tuamt span{display:block;font-size:11px;color:var(--green);margin-top:2px}.tuamt.on{border-color:var(--navy);background:#EEF3FB;box-shadow:0 0 0 2px rgba(22,71,158,.15)}'+
+ '.tucard input{width:100%}.tusum{margin-top:12px;font-size:13px}.tusum .row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--line)}.tugreen{color:var(--green)}.tumute{font-size:12px;color:var(--mute);margin-top:6px}.tulegal{margin:10px 0 0;font-size:11px;line-height:1.5;color:var(--mute);text-align:center}';document.head.appendChild(css)})();
+(function(){var _rc=renderCart;renderCart=function(){var r=_rc.apply(this,arguments);try{tuPaint()}catch(e){}return r};
+ try{var q=new URLSearchParams(location.search);if(q.get('topup')!=null&&location.search.indexOf('donation=success')<0){var amt=+q.get('topup')||0;setTimeout(function(){tuOpen(amt)},400)}}catch(e){}})();
 /* ===== After payment ===== */
-(function(){if(PAY.gateway==='billplz'){document.getElementById('secureTxt').textContent="FPX online banking, Touch 'n Go eWallet, GrabPay, Boost, ShopeePay, DuitNow QR or card — secured by Billplz. We never see your card or bank details."}var q=location.search;if(bpReturn())return;if(q.indexOf('donation=success')>=0){CART={};save();try{localStorage.removeItem('aera.plan')}catch(e){}bdayMarkUsed();return}var m=/[?&]add=([A-Z0-9-]+)/i.exec(q);if(m&&CAT[m[1].toUpperCase()]){var sku=m[1].toUpperCase();CART[sku]=(CART[sku]||0)+1;save();FILTER=sku.indexOf('BUNDLE')===0?'bundle':CAT[sku].goal;document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.dataset.f===FILTER)});if(window.innerWidth<=940)openCart();history.replaceState(null,'',location.pathname)}})();
+(function(){if(PAY.gateway==='billplz'){document.getElementById('secureTxt').textContent="FPX online banking, Touch 'n Go eWallet, GrabPay, Boost, ShopeePay, DuitNow QR or card — secured by Billplz. We never see your card or bank details."}var q=location.search;if(bpReturn())return;if(q.indexOf('donation=success')>=0){if(tuReturn())return;CART={};save();try{localStorage.removeItem('aera.plan')}catch(e){}bdayMarkUsed();return}var m=/[?&]add=([A-Z0-9-]+)/i.exec(q);if(m&&CAT[m[1].toUpperCase()]){var sku=m[1].toUpperCase();CART[sku]=(CART[sku]||0)+1;save();FILTER=sku.indexOf('BUNDLE')===0?'bundle':CAT[sku].goal;document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.dataset.f===FILTER)});if(window.innerWidth<=940)openCart();history.replaceState(null,'',location.pathname)}})();
 /* ===== Signed-in account (copy left in this browser by the My Account page) ===== */
 function signedIn(){return !!(ACCT&&ACCT.email)}
 function authUrl(a){return 'https://my.chatbees.io/p/dtTMaV?next=checkout#'+a}
