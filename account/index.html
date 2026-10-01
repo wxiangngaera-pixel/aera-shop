@@ -663,7 +663,7 @@ async function ibOpen(i){var m=INBOX[i];if(!m)return;
  var c=document.querySelector('#asOv .ascard');if(c)c.classList.add('ibwide');
  if(!INREAD[m.id]){INREAD[m.id]=1;ibBadge();renderInbox();try{await sb.from('inbox_reads').insert({message_id:m.id,email:String(USER.email).toLowerCase()})}catch(e){}}}
 /* ---- Send Messages ( kitchen admins only ) ---- */
-async function smInit(){try{var r=await sb.rpc('is_kitchen_admin');IS_ADMIN=!r.error&&r.data===true}catch(e){IS_ADMIN=false}
+async function smInit(){try{var r=await sb.rpc('is_inbox_sender');if(r.error)r=await sb.rpc('is_kitchen_admin');IS_ADMIN=!r.error&&r.data===true}catch(e){IS_ADMIN=false}
  var b=document.querySelector('.menu button[data-t="send"]');if(b)b.style.display=IS_ADMIN?'':'none';
  if(!IS_ADMIN)return;
  var q=new URLSearchParams(location.search).get('to');if(q){SM.to='one';SM.pickEmail=q.toLowerCase()}
