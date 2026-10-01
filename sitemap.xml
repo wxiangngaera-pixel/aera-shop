@@ -2,17 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aeramealprep.net/account/</loc>
-    <lastmod>2026-10-01T03:49:37.506Z</lastmod>
+    <lastmod>2026-10-01T04:27:01.093Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
+    <lastmod>2026-10-01T04:20:24.407Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://aeramealprep.net/push/</loc>
     <lastmod>2026-10-01T03:38:54.604Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
-    <lastmod>2026-10-01T03:23:12.876Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
