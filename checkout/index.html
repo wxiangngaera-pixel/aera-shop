@@ -1494,7 +1494,7 @@ function compactOrder(o){var MAX=495;var c={v:2,n:o.orderNo,f:o.fulfil==='delive
    ( Chatbees 5486 ) reads it back, so a long address or a big cart always reaches the kitchen in full.
    Never blocks payment: gives up after 4 seconds. */
 var ORD_SB='https://swpprjvubgcdsojapaad.supabase.co',ORD_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0';
-function orderStash(no){var full=null;try{full=JSON.parse(window.__orderFull||'null')}catch(e){}if(!full||full.n!==no)return Promise.resolve();
+function orderStash(no){var full=null;try{full=JSON.parse(window.__orderFull||'null')}catch(e){}if(!full||full.n!==no)return Promise.resolve();full.lang=document.documentElement.getAttribute('data-lang')==='zh'?'zh':'en';
  var p=fetch(ORD_SB+'/rest/v1/rpc/order_stash',{method:'POST',headers:{apikey:ORD_ANON,Authorization:'Bearer '+ORD_ANON,'Content-Type':'application/json'},body:JSON.stringify({p_no:no,p_msg:full})}).catch(function(){});
  return Promise.race([p,new Promise(function(r){setTimeout(r,4000)})])}
 function orderNo(){var n=myNow();return 'AERA-'+String(n.getFullYear()).slice(2)+('0'+(n.getMonth()+1)).slice(-2)+('0'+n.getDate()).slice(-2)+'-'+Math.random().toString(36).slice(2,6).toUpperCase()}
