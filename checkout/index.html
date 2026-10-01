@@ -1386,10 +1386,42 @@ function addrVal(id){var e=document.getElementById(id);return e?String(e.value||
 function addrFull(){var a=addrVal('address'),u=addrVal('addrUnit'),l2=addrVal('addrLine2'),p=addrVal('addrPost'),lo=a.toLowerCase(),s=a;
  if(l2&&lo.indexOf(l2.toLowerCase())<0)s=l2+(s?', '+s:'');if(u&&lo.indexOf(u.toLowerCase())!==0)s=u+(s?', '+s:'');if(p&&s.indexOf(p)<0)s=s+', '+p;return s}
 function addrMissing(){if(!addrVal('addrUnit'))return'Please enter Address Line 1 ( Unit / House No. ).';if(!/^\d{5}$/.test(addrVal('addrPost')))return'Please enter your 5-digit Postcode.';return''}
-function addrPostFill(){var p=document.getElementById('addrPost');if(!p||p.value)return;var m=addrVal('address').match(/\b(\d{5})\b/);if(m)p.value=m[1]}
+/* Splits a saved / past address into Address Line 1 ( unit, building ), Line 2 ( taman / area ) and Postcode. */
+function addrSplit(s){s=String(s||'').replace(/,\s*(MY|Malaysia)\s*$/i,'').trim();
+ var parts=s.split(/\s*,\s*/).filter(function(p,i,A){return p&&(i===0||p.toLowerCase()!==A[i-1].toLowerCase())});
+ var post='',pi=-1;for(var i=parts.length-1;i>=0;i--){var pm=parts[i].match(/\b(\d{5})\b/);if(pm){post=pm[1];pi=i;break}}
+ var head=pi>=0?parts.slice(0,pi):parts.slice(),n=0;
+ if(/\d/.test(head[0]||'')){n=1;if(head.length>2&&(head[0].length<=14||(/\d/.test(head[1])&&head[1].length<=10)))n=2}
+ else if(head[1]&&/\d/.test(head[1])&&head[1].length<=20)n=2;
+ return{l1:head.slice(0,n).join(', '),l2:head.length>n?head[n]:'',post:post,rest:parts.slice(n).join(', ')}}
+function addrFillFrom(full){var x=addrSplit(full),set=function(id,v){var e=document.getElementById(id);if(e)e.value=v||''};
+ set('addrUnit',x.l1);set('addrLine2',x.l2);set('addrPost',x.post);if(x.rest){var b=document.getElementById('address');if(b)b.value=x.rest}}
+/* Signed-in customers : their addresses from User Management and past orders are offered as saved addresses,
+   and the newest complete one fills the form when it is still empty. */
+var PAST_DONE=false;
+window.aeraPastAddr=function(cli){if(PAST_DONE||!cli||!cli.rpc)return;PAST_DONE=true;
+ cli.rpc('my_past_addresses').then(function(r){var D=(r&&!r.error&&Array.isArray(r.data))?r.data:[];
+  D=D.map(function(x){return String(x.address||'').replace(/,\s*(MY|Malaysia)\s*$/i,'').trim()}).filter(Boolean);if(!D.length)return;
+  var nz=function(s){return String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'')},seen={};
+  D=D.filter(function(a){return addrSplit(a).l1}).concat(D.filter(function(a){return!addrSplit(a).l1}));
+  D=D.filter(function(a){var x=addrSplit(a),k=x.l1?nz(x.l1)+'|'+x.post:nz(a);if(seen[k])return false;seen[k]=1;return true});
+  if(ACCT){var L=Array.isArray(ACCT.addresses)?ACCT.addresses.slice():[],have=L.map(function(a){return nz(a&&a.address)});
+   D.forEach(function(ad){if(have.indexOf(nz(ad))<0){have.push(nz(ad));L.push({label:'From your account',address:ad})}});ACCT.addresses=L;renderSavedAddr()}
+  if(!addrVal('address')&&!addrVal('addrUnit')&&!SADDR_CUSTOM){
+   if(ACCT){var S=savedAddrList();for(var i=0;i<S.length;i++)if(nz(S[i].address)===nz(D[0])){pickSavedAddr(i);return}}
+   addrFillFrom(D[0]);var fm=document.getElementById('feeMsg');if(fm&&!fm.innerHTML)fm.innerHTML='<div class="hint" style="margin:0">Filled in from your account — press Check Delivery Fee.</div>'}
+  else if(!addrVal('addrUnit')){var pc=addrVal('addrPost')||(addrVal('address').match(/\b\d{5}\b/)||[''])[0];
+   for(var k=0;k<D.length;k++){var sp=addrSplit(D[k]);if(sp.l1&&sp.post&&sp.post===pc){var f=function(id,v){var e=document.getElementById(id);if(e&&!e.value)e.value=v||''};f('addrUnit',sp.l1);f('addrLine2',sp.l2);f('addrPost',sp.post);break}}}
+ }).catch(function(){})};
+/* Map lookup with fall-backs : the full address, then without the unit / building, then the postcode. */
+function addrGeoCands(q){var p=q.split(/\s*,\s*/).filter(Boolean),c=[q];for(var i=1;i<p.length-1&&c.length<3;i++)c.push(p.slice(i).join(', '));var m=q.match(/\b\d{5}\b/);if(m)c.push(m[0]+', Malaysia');return c}
+function geoTry(c){var i=0;function go(){if(i>=c.length)return Promise.resolve([]);var q=c[i++];
+ return fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=my&q='+encodeURIComponent(q),{headers:{'Accept':'application/json'}}).then(function(r){return r.json()}).then(function(j){if(j&&j[0])return j;if(i>=c.length)return j;return new Promise(function(r){setTimeout(r,1100)}).then(go)})}
+ return go()}
+function addrPostFill(){var p=document.getElementById('addrPost');if(!p||p.value)return;var pc=addrSplit(addrVal('address')).post;if(pc)p.value=pc}
 function checkFee(){var q=document.getElementById('address').value.trim();var m=document.getElementById('feeMsg');if(q.length<8){m.innerHTML='<div class="msg warn">Please enter your full address including postcode.</div>';return}
  var b=document.getElementById('feeBtn');b.disabled=true;b.textContent='Checking…';m.innerHTML='';GEO=null;FEE_RM=null;renderCart();
- fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=my&q='+encodeURIComponent(q),{headers:{'Accept':'application/json'}}).then(function(r){return r.json()}).then(function(j){
+ geoTry(addrGeoCands(q)).then(function(j){
   b.disabled=false;b.textContent='Check Delivery Fee';
   if(!j||!j[0]){m.innerHTML='<div class="msg bad">We couldn\'t find that address on the map. Try adding the area, postcode and city ( e.g. "Bangsar South, 59200 Kuala Lumpur" ).</div>';renderCart();return}
   var g={lat:+j[0].lat,lng:+j[0].lon,label:j[0].display_name};var km=Math.round(hav(KITCHEN,g)*ROAD_FACTOR*10)/10;g.km=km;
@@ -1714,20 +1746,20 @@ function acctLoad(){try{var a=JSON.parse(localStorage.getItem('aera.account')||'
  var na=document.getElementById('navAcct');if(na)na.textContent='My Account · '+(ACCT.name||ACCT.email).split(' ')[0];
  document.getElementById('detailsHint').innerHTML='· Signed in as '+esc(ACCT.name||ACCT.email);
  var rem=document.getElementById('remember');if(rem)rem.parentNode.style.display='none';
- if(ACCT.address&&ACCT.address.address){document.getElementById('address').value=ACCT.address.address;addrPostFill();if(ACCT.address.lat!=null&&ACCT.address.lng!=null){GEO={lat:+ACCT.address.lat,lng:+ACCT.address.lng,label:ACCT.address.address};GEO.km=Math.round(hav(KITCHEN,GEO)*ROAD_FACTOR*10)/10}}
+ if(ACCT.address&&ACCT.address.address){document.getElementById('address').value=ACCT.address.address;addrFillFrom(ACCT.address.address);if(ACCT.address.lat!=null&&ACCT.address.lng!=null){GEO={lat:+ACCT.address.lat,lng:+ACCT.address.lng,label:ACCT.address.address};GEO.km=Math.round(hav(KITCHEN,GEO)*ROAD_FACTOR*10)/10}}
  renderSavedAddr()}
 var SADDR_CUSTOM=false;
 function savedAddrList(){return (ACCT&&Array.isArray(ACCT.addresses))?ACCT.addresses.filter(function(a){return a&&a.address}):[]}
 function renderSavedAddr(){var el=document.getElementById('savedAddr');if(!el)return;var L=savedAddrList();
  if(!L.length){el.innerHTML='';return}
  var cur=(document.getElementById('address')||{}).value||'';
- el.innerHTML='<div class="sadd">'+L.map(function(a,i){var on=cur&&cur.trim()===String(a.address).trim();
+ el.innerHTML='<div class="sadd">'+L.map(function(a,i){var on=cur&&(cur.trim()===String(a.address).trim()||cur.trim()===addrSplit(a.address).rest);
   return'<button type="button" class="sa'+(on?' on':'')+'" onclick="pickSavedAddr('+i+')"><b>'+esc(a.label||'Address')+(a.def?' <span class="chip ok">Default</span>':'')+'</b><small>'+esc(a.address)+'</small>'+(a.km?'<i>About '+a.km+' km from our kitchen</i>':'')+'</button>'}).join('')+
   '<button type="button" class="sa'+((SADDR_CUSTOM||(cur&&!L.some(function(a){return cur.trim()===String(a.address).trim()})))?' on':'')+'" onclick="pickSavedAddr(-1)"><b>Use A Different Address</b><small>Type it in below</small></button></div>'}
 function pickSavedAddr(i){var box=document.getElementById('address');if(!box)return;
  if(i<0){SADDR_CUSTOM=true;box.value='';box.focus();GEO=null;FEE_RM=null;document.getElementById('feeMsg').innerHTML='';renderSavedAddr();refee();return}
  var a=savedAddrList()[i];if(!a)return;SADDR_CUSTOM=false;
- box.value=a.address;acHide();addrPostFill();
+ box.value=a.address;acHide();addrFillFrom(a.address);
  if(a.lat!=null&&a.lng!=null){GEO={lat:+a.lat,lng:+a.lng,label:a.address};GEO.km=a.km!=null?+a.km:Math.round(hav(KITCHEN,GEO)*ROAD_FACTOR*10)/10;document.getElementById('feeMsg').innerHTML='';updateRates()}
  else{GEO=null;FEE_RM=null;document.getElementById('feeMsg').innerHTML='<div class="hint" style="margin:0">Press Check Delivery Fee to work out the rate for this address.</div>'}
  if(a.notes){var nt=document.getElementById('notes');if(nt&&!nt.value)nt.value=a.notes}
@@ -1815,7 +1847,7 @@ function apply(row){var loc=snap(),rem=row?{cart:norm(row.cart),plan:row.plan||n
  if(!rem||!sameCart(out,rem)||out.at!==rem.at)push(snap());
  if(changed&&typeof window.renderCart==='function'){var t=+(sessionStorage.getItem('aera.cartReload')||0);if(Date.now()-t>15000){try{sessionStorage.setItem('aera.cartReload',String(Date.now()))}catch(e){}location.reload()}}}
 async function pull(){if(!cli)return;try{var ss=(await cli.auth.getSession()).data.session;if(!ss){tok=null;uid=null;return}
-  tok=ss.access_token;uid=ss.user.id;email=String(ss.user.email||'').toLowerCase();
+  tok=ss.access_token;uid=ss.user.id;email=String(ss.user.email||'').toLowerCase();try{if(window.aeraPastAddr)window.aeraPastAddr(cli)}catch(e){}
   var q=await cli.from('carts').select('cart,plan,at').eq('user_id',uid).maybeSingle();if(q.error)return;apply(q.data)}catch(e){}}
 function start(){try{cli=window.supabase.createClient(SBU,SBK,{auth:{persistSession:true,autoRefreshToken:false,detectSessionInUrl:false}})}catch(e){return}
  pull();setInterval(function(){cli.auth.getSession().then(function(r){var ss=r.data.session;tok=ss?ss.access_token:null})},600000);
