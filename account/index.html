@@ -2131,6 +2131,59 @@ function renderOverview(){
 <!-- AERA host map : start -->
 
 <!-- AERA host map : end -->
+<!-- AERA cart sync : start -->
+<script>
+/* One Cart on every device. The Cart lives in this browser ( aera.cart, and aera.plan for a
+   Personalised Meal Plan ). When the customer is signed in, every change is also saved to their
+   account ( Supabase table carts ), and when a page opens the newest copy wins. The first time a
+   browser syncs, a Cart built before signing in is kept and added to the saved one. */
+(function(){if(window.__AERA_CARTSYNC)return;window.__AERA_CARTSYNC=1;
+var SBU='https://swpprjvubgcdsojapaad.supabase.co',SBK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0';
+var LS;try{LS=window.localStorage;LS.getItem('x')}catch(e){return}
+var P=Storage.prototype,_set=P.setItem,_rm=P.removeItem,_get=P.getItem,quiet=false,tok=null,uid=null,email='',cli=null;
+function g(k){try{return _get.call(LS,k)}catch(e){return null}}
+function s(k,v){try{_set.call(LS,k,v)}catch(e){}}
+function r(k){try{_rm.call(LS,k)}catch(e){}}
+function jp(t,d){try{var v=JSON.parse(t);return v==null?d:v}catch(e){return d}}
+function ours(k){return k==='aera.cart'||k==='aera.plan'}
+P.setItem=function(k,v){_set.call(this,k,v);if(this===LS&&ours(k)&&!quiet){s('aera.cartAt',String(Date.now()));push()}};
+P.removeItem=function(k){_rm.call(this,k);if(this===LS&&ours(k)&&!quiet){s('aera.cartAt',String(Date.now()));push()}};
+function norm(c){var o={};Object.keys(c||{}).sort().forEach(function(k){var n=+c[k];if(n>0)o[k]=n});return o}
+function snap(){return{cart:norm(jp(g('aera.cart'),{})),plan:jp(g('aera.plan'),null),at:+g('aera.cartAt')||0}}
+function hasPlan(c){return Object.keys(c).some(function(k){return k.indexOf('PLAN-')===0})}
+function push(x){if(!tok||!uid)return;x=x||snap();
+ try{fetch(SBU+'/rest/v1/carts?on_conflict=user_id',{method:'POST',keepalive:true,headers:{apikey:SBK,Authorization:'Bearer '+tok,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'},
+  body:JSON.stringify({user_id:uid,email:email,cart:x.cart,plan:x.plan,at:x.at,updated_at:new Date().toISOString()})}).catch(function(){})}catch(e){}}
+function put(x){quiet=true;try{s('aera.cart',JSON.stringify(x.cart));if(x.plan)s('aera.plan',JSON.stringify(x.plan));else r('aera.plan');s('aera.cartAt',String(x.at||Date.now()))}finally{quiet=false}}
+function sameCart(a,b){return JSON.stringify(a.cart)===JSON.stringify(b.cart)&&JSON.stringify(a.plan||null)===JSON.stringify(b.plan||null)}
+function apply(row){var loc=snap(),rem=row?{cart:norm(row.cart),plan:row.plan||null,at:+row.at||0}:null,out=null,owner=g('aera.cartUser');
+ if(owner!==uid){
+  if(!owner&&rem){var c={};Object.keys(rem.cart).forEach(function(k){c[k]=rem.cart[k]});
+   Object.keys(loc.cart).forEach(function(k){if(k.indexOf('PLAN-')!==0)c[k]=Math.max(c[k]||0,loc.cart[k])});
+   var lp=hasPlan(loc.cart),rp=hasPlan(rem.cart),pl=rem.plan;
+   if(lp&&(!rp||loc.at>rem.at)){Object.keys(c).forEach(function(k){if(k.indexOf('PLAN-')===0)delete c[k]});Object.keys(loc.cart).forEach(function(k){if(k.indexOf('PLAN-')===0)c[k]=loc.cart[k]});pl=loc.plan}
+   out={cart:norm(c),plan:hasPlan(c)?pl:null,at:Date.now()}}
+  else if(rem)out=rem;else out=owner?{cart:{},plan:null,at:Date.now()}:loc;
+  s('aera.cartUser',uid)}
+ else if(rem&&rem.at>loc.at)out=rem;
+ else if(!rem||loc.at>rem.at){push(loc);return}
+ if(!out)return;
+ var changed=!sameCart(out,loc);if(changed)put(out);
+ if(!rem||!sameCart(out,rem)||out.at!==rem.at)push(snap());
+ if(changed&&typeof window.renderCart==='function'){var t=+(sessionStorage.getItem('aera.cartReload')||0);if(Date.now()-t>15000){try{sessionStorage.setItem('aera.cartReload',String(Date.now()))}catch(e){}location.reload()}}}
+async function pull(){if(!cli)return;try{var ss=(await cli.auth.getSession()).data.session;if(!ss){tok=null;uid=null;return}
+  tok=ss.access_token;uid=ss.user.id;email=String(ss.user.email||'').toLowerCase();
+  var q=await cli.from('carts').select('cart,plan,at').eq('user_id',uid).maybeSingle();if(q.error)return;apply(q.data)}catch(e){}}
+function start(){try{cli=window.supabase.createClient(SBU,SBK,{auth:{persistSession:true,autoRefreshToken:false,detectSessionInUrl:false}})}catch(e){return}
+ pull();setInterval(function(){cli.auth.getSession().then(function(r){var ss=r.data.session;tok=ss?ss.access_token:null})},600000);
+ document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')pull()});
+ window.addEventListener('storage',function(e){if(e.key==='sb-swpprjvubgcdsojapaad-auth-token')pull()})}
+function boot(){if(window.supabase&&window.supabase.createClient)return start();
+ var sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';sc.onload=start;document.head.appendChild(sc)}
+if(document.readyState==='complete')setTimeout(boot,300);else window.addEventListener('load',function(){setTimeout(boot,300)})})();
+</script>
+<!-- AERA cart sync : end -->
+
 
   <script src="script.js"></script>
 </body>
