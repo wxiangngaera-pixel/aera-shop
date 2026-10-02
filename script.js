@@ -2124,3 +2124,10 @@ function start(){walk(document.body);new MutationObserver(function(ms){ms.forEac
   else if(r.attributeName==='style'){var e=r.target,b=e.style.backgroundImage||'';if(e.dataset.cutbg&&b.indexOf(e.dataset.cutbg)<0){delete e.dataset.cutbg;unmask(e)}doBg(e)}})}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['src','style']})}
 if(document.body)start();else document.addEventListener('DOMContentLoaded',start);
 })();
+
+/* AERA : sharp card pictures, fetched after the page has loaded */
+(function(){function apply(){var H=window.AERA_HI||{};[].forEach.call(document.querySelectorAll("img[data-hi]"),function(im){var u=H[im.getAttribute("data-hi")];if(u&&im.getAttribute("src")!==u){var p=new Image();p.onload=function(){im.setAttribute("src",u)};p.src=u}});if(H.steps){var s=document.getElementById("how");if(s)s.style.setProperty("--sp","url(\""+H.steps+"\")")}}
+window.addEventListener("aera-hi",apply);
+function load(){if(window.__aeraHi)return;window.__aeraHi=1;["a","b"].forEach(function(x){var s=document.createElement("script");s.src="https://aeramealprep.net/img-"+x+"/script.js";s.async=true;document.body.appendChild(s)})}
+if(document.readyState==="complete")setTimeout(load,200);else window.addEventListener("load",function(){setTimeout(load,200)});
+})();
