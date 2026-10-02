@@ -575,6 +575,9 @@ html[data-lang="zh"] .langsw .l2{background:var(--navy,#16479E);color:#fff}
 .hin .hpick,.hin .hhome{padding:22px 0 26px}
 .hhome2{padding:4px 0 8px}
 .hsf{display:block;width:100%;height:760px;border:0;background:transparent}
+#meals.alcon .mlfind,#meals.alcon #mealGrid,#meals.alcon #mlMore,#meals.alcon #mealNone{display:none!important}
+#alcBox{display:none}#meals.alcon #alcBox{display:block}
+#alcGo{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:9000;box-shadow:0 10px 24px rgba(0,0,0,.25);white-space:nowrap}
 .hin #delivery .two{grid-template-columns:1fr}
 #bundles,#meals,#how,#delivery,#gyms,#plan,#faq{display:none!important}
 .hbody #bundles,.hbody #meals,.hbody #how,.hbody #delivery,.hbody #gyms,.hbody #plan,.hbody #faq{display:block!important}
