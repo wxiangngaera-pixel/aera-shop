@@ -542,6 +542,30 @@ html[data-lang="zh"] .langsw .l1{background:transparent;color:var(--navy,#16479E
 html[data-lang="zh"] .langsw .l2{background:var(--navy,#16479E);color:#fff}
 @media(max-width:900px){.langsw span{padding:5px 7px;font-size:11px}}
 
+#hub{padding:30px 0 56px}
+#hub .hubg+.hubg{margin-top:30px}
+#hub .hubg>.eyebrow{display:block;margin-bottom:12px}
+.hubc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media(max-width:900px){.hubc{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
+.hcard{position:relative;display:flex;flex-direction:column;gap:5px;min-height:148px;padding:16px 16px 15px;border:1px solid var(--line);border-radius:18px;background:#fff;text-decoration:none;color:var(--ink);box-shadow:0 6px 18px rgba(14,53,118,.06);transition:transform .15s,box-shadow .15s,border-color .15s;-webkit-tap-highlight-color:transparent}
+.hcard:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(14,53,118,.13);border-color:var(--navy-line)}
+.hcard:active{transform:scale(.98)}
+.hcard i{width:44px;height:44px;border-radius:12px;background:var(--navy-soft);color:var(--navy);display:grid;place-items:center;margin-bottom:8px;font-style:normal}
+.hcard i svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hcard.y i{background:var(--y-soft);color:#8A5A00}
+.hcard b{font-size:16px;font-weight:800;line-height:1.25;letter-spacing:-.01em}
+.hcard small{font-size:12.5px;color:var(--mute);line-height:1.4}
+.hcard::after{content:'\2192';position:absolute;right:15px;top:15px;color:var(--navy);font-weight:700;font-size:17px}
+#hubBack{display:none;padding:18px 0 0}
+#hubBack button{font:700 14px Montserrat,system-ui,sans-serif;color:var(--navy);background:var(--navy-soft);border:1px solid var(--navy-line);border-radius:999px;padding:9px 16px;cursor:pointer}
+body #bundles,body #meals,body #how,body #delivery,body #gyms,body #plan,body #faq{display:none!important}
+body.hv-bundles #bundles,body.hv-meals #meals,body.hv-how #how,body.hv-pack #delivery,body.hv-pick #delivery,body.hv-gyms #gyms,body.hv-faq #faq{display:block!important}
+body.hvOpen #hub,body.hvOpen header.hero,body.hvOpen .strip{display:none!important}
+body.hvOpen #hubBack{display:block}
+body.hvOpen section{padding-top:30px}
+body.hv-pack #delivery .two>.panel:nth-child(2),body.hv-pick #delivery .two>.panel:nth-child(1),body.hv-pick #delivery .sec-head{display:none}
+body.hv-pack #delivery .two,body.hv-pick #delivery .two{grid-template-columns:1fr}
+
 @media(prefers-reduced-motion:no-preference){
  .aera-rv{opacity:0;transform:translateY(16px);will-change:opacity,transform}
  .aera-rv.aera-in{opacity:1;transform:none;
