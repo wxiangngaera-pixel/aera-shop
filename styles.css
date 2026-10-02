@@ -576,7 +576,28 @@ html[data-lang="zh"] .langsw .l2{background:var(--navy,#16479E);color:#fff}
 .hhome2{padding:4px 0 8px}
 .hsf{display:block;width:100%;height:760px;border:0;background:transparent}
 #meals.alcon .mlfind,#meals.alcon #mealGrid,#meals.alcon #mlMore,#meals.alcon #mealNone{display:none!important}
-#alcBox{display:none}#meals.alcon #alcBox{display:block}
+.diy{margin:6px 18px 10px;padding:22px 18px;border-radius:20px;background:linear-gradient(135deg,#0B2C66,#16479E);color:#fff}
+.diy h3{font-size:24px;margin:6px 0 4px}.diy>p{color:#D3DDEE;font-size:14px;margin:0 0 14px}
+.diyseg{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.diyseg button{font:700 13px Montserrat,sans-serif;border:1.5px solid rgba(255,255,255,.45);background:transparent;color:#fff;border-radius:999px;padding:8px 14px;cursor:pointer}
+.diyseg button.on{background:var(--y);border-color:var(--y);color:#14181F}
+.diyslots{display:grid;gap:8px;margin:14px 0}
+.diyday{display:grid;grid-template-columns:54px repeat(var(--n),minmax(0,1fr));gap:8px;align-items:center}
+.diyday>b{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:#C3CEE4}
+.dslot{min-height:56px;border:1.5px dashed rgba(255,255,255,.4);border-radius:12px;display:flex;align-items:center;gap:8px;padding:6px 8px;cursor:pointer;font:600 12.5px/1.25 Montserrat,sans-serif;color:#C3CEE4;background:rgba(255,255,255,.04);text-align:left}
+.dslot.on{border-color:var(--y);border-style:solid;box-shadow:0 0 0 2px rgba(253,185,19,.35)}
+.dslot.f{border-style:solid;background:#fff;color:#14181F}
+.dslot img{width:46px;height:31px;object-fit:contain;flex:none}
+.dslot i{margin-left:auto;font-style:normal;font-weight:800;opacity:.45;padding:0 2px}
+.diybar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:rgba(255,255,255,.08);border-radius:14px;padding:12px 14px;margin-bottom:14px}
+.diybar b{font-size:20px}.diyclr{background:transparent!important;color:#fff!important;border-color:rgba(255,255,255,.5)!important}
+#diyAdd[disabled]{opacity:.5;cursor:not-allowed}
+.diypick{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.dpm{background:#fff;color:#14181F;border:0;border-radius:14px;padding:8px;text-align:left;cursor:pointer;font:inherit}
+.dpm img{width:100%;aspect-ratio:3/2;object-fit:contain}
+.dpm b{display:block;font-size:13px;line-height:1.25;margin:6px 0 2px}
+.dpm small{font-size:11.5px;color:var(--mute)}
+#alcBox{display:block}
 #alcGo{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:9000;box-shadow:0 10px 24px rgba(0,0,0,.25);white-space:nowrap}
 .hin #delivery .two{grid-template-columns:1fr}
 #bundles,#meals,#how,#delivery,#gyms,#plan,#faq{display:none!important}
