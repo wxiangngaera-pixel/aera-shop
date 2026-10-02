@@ -65,3 +65,54 @@
   try{ new MutationObserver(function(ms){ for(var i=0;i<ms.length;i++){ var n=ms[i].addedNodes; for(var j=0;j<n.length;j++) if(n[j].nodeType===1) fix(n[j]); } })
     .observe(document.documentElement,{childList:true,subtree:true}); }catch(e){}
 })();
+
+/* AERA : every meal box and vacuum bag picture is shown on its own, without the studio backdrop it was shot on. */
+(function(){if(window.__aeraCut)return;window.__aeraCut=1;
+var SKIP='nav,footer,.ibgal,.smth,.iblbsc,.clogo,[data-nocut]',C={},W={},Q=[],busy=0;
+function src(u){return /^https:\/\/my\.chatbees\.io\/objects\//.test(u)||/^data:image\/(webp|jpe?g|png)/.test(u)}
+function cut(img){var w=img.naturalWidth,h=img.naturalHeight;if(w<60||h<60)return null;var sc=Math.min(1,900/Math.max(w,h));w=Math.round(w*sc);h=Math.round(h*sc);
+ var c=document.createElement('canvas');c.width=w;c.height=h;var x=c.getContext('2d');x.drawImage(img,0,0,w,h);
+ var d=x.getImageData(0,0,w,h),p=d.data,N=w*h,R=[],G=[],B=[],i,k,E=[];
+ for(i=0;i<w;i++){E.push(i,(h-1)*w+i)}for(i=0;i<h;i++){E.push(i*w,i*w+w-1)}
+ E.forEach(function(q){R.push(p[q*4]);G.push(p[q*4+1]);B.push(p[q*4+2])});
+ function med(a){a=a.slice().sort(function(m,n){return m-n});return a[a.length>>1]}
+ var r0=med(R),g0=med(G),b0=med(B),L0=(r0+g0+b0)/3,ch0=Math.max(r0,g0,b0)-Math.min(r0,g0,b0);
+ if(L0<170||ch0>40)return null;
+ var near=0;for(i=0;i<R.length;i++)if(Math.max(Math.abs(R[i]-r0),Math.abs(G[i]-g0),Math.abs(B[i]-b0))<=22)near++;
+ if(near<R.length*0.8)return null;
+ function bg(q){var r=p[q*4],g=p[q*4+1],b=p[q*4+2];
+  if(Math.max(Math.abs(r-r0),Math.abs(g-g0),Math.abs(b-b0))<=22)return 1;
+  var ch=Math.max(r,g,b)-Math.min(r,g,b),L=(r+g+b)/3;
+  return(Math.abs(ch-ch0)<=10&&L<L0&&L>L0-100&&Math.abs((r-g)-(r0-g0))<=8&&Math.abs((g-b)-(g0-b0))<=8)?1:0}
+ var m=new Uint8Array(N),S=new Int32Array(N),qh=0,qt=0;
+ function seed(q){if(!m[q]&&bg(q)){m[q]=1;S[qt++]=q}}
+ E.forEach(seed);
+ while(qh<qt){k=S[qh++];var X=k%w,Y=(k/w)|0;if(X>0)seed(k-1);if(X<w-1)seed(k+1);if(Y>0)seed(k-w);if(Y<h-1)seed(k+w)}
+ if(qt>N*0.97)return null;
+ for(i=0;i<N;i++)if(m[i])p[i*4+3]=0;
+ for(i=0;i<N;i++){if(m[i])continue;var X2=i%w,Y2=(i/w)|0,z=0,n=0;
+  for(var dy=-1;dy<=1;dy++)for(var dx=-1;dx<=1;dx++){var xx=X2+dx,yy=Y2+dy;if(xx<0||yy<0||xx>=w||yy>=h)continue;n++;if(m[yy*w+xx])z++}
+  if(z)p[i*4+3]=Math.round(255*(1-z/n*0.6))}
+ x.putImageData(d,0,0);return c}
+function get(u,cb){if(u in C)return cb(C[u]);(W[u]=W[u]||[]).push(cb);if(W[u].length>1)return;
+ Q.push(u);pump()}
+function pump(){if(busy||!Q.length)return;busy=1;var u=Q.shift(),i=new Image();i.crossOrigin='anonymous';
+ function done(v){C[u]=v;var L=W[u]||[];delete W[u];L.forEach(function(f){try{f(v)}catch(e){}});busy=0;setTimeout(pump,15)}
+ i.onload=function(){var c=null;try{c=cut(i)}catch(e){}if(!c)return done(null);
+  if(c.toBlob)c.toBlob(function(b){done(b?URL.createObjectURL(b):null)},'image/png');else done(c.toDataURL('image/png'))};
+ i.onerror=function(){done(null)};i.src=u}
+function doImg(el){if(el.dataset.cut||(el.closest&&el.closest(SKIP)))return;var u=el.getAttribute('src')||'';if(!src(u))return;
+ el.dataset.cut='1';get(u,function(v){if(v&&el.getAttribute('src')===u){el.removeAttribute('srcset');el.src=v}else if(el.getAttribute('src')!==u){delete el.dataset.cut;img(el)}})}
+function doBg(el){var s=el.style&&el.style.backgroundImage;if(!s||s.indexOf('url(')<0||(el.closest&&el.closest(SKIP)))return;
+ var mm=s.match(/url\(["']?([^"')]+)["']?\)/);if(!mm)return;var u=mm[1];if(!src(u)||el.dataset.cutbg===u)return;el.dataset.cutbg=u;
+ get(u,function(v){if(v&&el.style.backgroundImage.indexOf(u)>=0){el.style.backgroundImage=s.replace(mm[0],'url("'+v+'")')}})}
+function img(el){if(el.complete&&el.naturalWidth)doImg(el);else el.addEventListener('load',function(){doImg(el)},{once:true})}
+function walk(root){if(!root||root.nodeType!==1)return;
+ if(root.tagName==='IMG')img(root);else if(root.style&&root.style.backgroundImage)doBg(root);
+ root.querySelectorAll&&root.querySelectorAll('img,[style*="background"]').forEach(function(e){e.tagName==='IMG'?img(e):doBg(e)})}
+function start(){walk(document.body);new MutationObserver(function(ms){ms.forEach(function(r){
+  if(r.type==='childList')r.addedNodes.forEach(walk);
+  else if(r.attributeName==='src'&&r.target.tagName==='IMG'){if(!/^blob:|^data:image\/png/.test(r.target.getAttribute('src')||'')){delete r.target.dataset.cut;img(r.target)}}
+  else if(r.attributeName==='style')doBg(r.target)})}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['src','style']})}
+if(document.body)start();else document.addEventListener('DOMContentLoaded',start);
+})();
