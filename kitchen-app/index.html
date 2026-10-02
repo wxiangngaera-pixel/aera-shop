@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="AERA Kitchen"><meta name="theme-color" content="#1B3A8A"><link rel="apple-touch-icon" href="https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push?icon=180">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<!-- SEO Meta Tags -->
+<title>AERA Kitchen</title>
+<meta property="og:title" content="AERA Kitchen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="AERA Kitchen" />
+<!-- End SEO Meta Tags -->
+<script data-lp-token-hydrate>
+(function(){try{
+  var slug="lp-muqpzvkj-ed9uv";
+  var SITEK="";
+  var SK='lp_access_'+slug;
+  var map={access_token:'lp_pw_',allowlist_access_token:'lp_al_',pin_access_token:'lp_pin_',paywall_access_token:'lp_paid_'};
+  function siteTok(){try{return SITEK?localStorage.getItem(SITEK):null;}catch(e){return null;}}
+  var u=new URL(location.href);var found=null;var changed=false;
+  var PINP=true;
+  if(!PINP){try{localStorage.removeItem('lp_pin_'+slug);if(SITEK)localStorage.removeItem(SITEK);}catch(e){}}
+  Object.keys(map).forEach(function(p){var v=u.searchParams.get(p);if(v){found=v;try{if(PINP||p!=='pin_access_token'){localStorage.setItem(map[p]+slug,v);if(SITEK&&p==='pin_access_token')localStorage.setItem(SITEK,v);}}catch(e){}if(p==='pin_access_token'){try{sessionStorage.setItem('lp_fresh_'+slug,'1');}catch(e){}}u.searchParams.delete(p);changed=true;}});
+  if(found){try{sessionStorage.setItem(SK,found);}catch(e){}}
+  else{try{if(!sessionStorage.getItem(SK)){var t=localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();if(t)sessionStorage.setItem(SK,t);}}catch(e){}}
+  if(changed){try{history.replaceState(null,'',u.toString());}catch(e){}}
+  function getTok(){try{return sessionStorage.getItem(SK)||localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();}catch(e){return null;}}
+  function needsToken(url,method){if(!url)return false;var s=String(url);var m=(method||'GET').toUpperCase();var isSheetWrite=(m==='POST'||m==='PATCH'||m==='PUT'||m==='DELETE')&&/\/sheet-rows(\/|$|\?)/.test(s);var isSheetRead=/\/sheet-data(\/|$|\?)/.test(s);var isLlm=/\/api\/landing-pages\/public\/[^/]+\/(llm|llm-config)(\/|$|\?)/.test(s);return isSheetWrite||isSheetRead||isLlm;}
+  if(window.fetch){var _f=window.fetch;window.fetch=function(input,init){try{var url=typeof input==='string'?input:(input&&input.url)||'';var method=(init&&init.method)||(input&&input.method)||'GET';if(needsToken(url,method)){var tok=getTok();if(tok){init=init||{};var h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});if(!h.has('X-Landing-Page-Token'))h.set('X-Landing-Page-Token',tok);init.headers=h;}}}catch(e){}return _f.call(this,input,init);};}
+  if(window.XMLHttpRequest){var _o=XMLHttpRequest.prototype.open;var _s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__lpM=m;this.__lpU=u;return _o.apply(this,arguments);};XMLHttpRequest.prototype.send=function(){try{if(needsToken(this.__lpU,this.__lpM)){var tok=getTok();if(tok)this.setRequestHeader('X-Landing-Page-Token',tok);}}catch(e){}return _s.apply(this,arguments);};}
+}catch(e){}})();
+</script>
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://my.chatbees.io/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=7691');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='wGY7gac6G';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    var phone=findPhone();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    var __pLoc=(document.documentElement.lang||navigator.language||'en');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,phone:phone||'',amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,locale:__pLoc,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var sidP=urlParams.get('session_id');
+      if(sidP){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidP})}).catch(function(){});}catch(e){}}
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-cart>
+(function(){
+  var slug='wGY7gac6G';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findCartEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realCart=function(arg){
+    var items, email='', customerName='', successUrl, cancelUrl, currency;
+    if(Array.isArray(arg)){items=arg;}
+    else if(arg&&typeof arg==='object'){
+      items=arg.items;email=arg.email||'';customerName=arg.name||arg.customerName||'';
+      successUrl=arg.successUrl;cancelUrl=arg.cancelUrl;currency=arg.currency;
+    }
+    if(!Array.isArray(items)||items.length===0){alert('No items in cart.');return Promise.reject('no_items');}
+    var cleanItems=[];var totalCents=0;
+    for(var i=0;i<items.length;i++){
+      var it=items[i];if(!it||typeof it!=='object'){alert('Invalid item at position '+i);return Promise.reject('bad_item');}
+      var nm=typeof it.name==='string'?it.name.trim():'';
+      if(!nm){alert('Item '+(i+1)+' is missing a name.');return Promise.reject('no_name');}
+      var amt=typeof it.amountCents==='number'?it.amountCents:(typeof it.amount==='number'?Math.round(it.amount*100):NaN);
+      if(!isFinite(amt)||amt<1){alert('Item "'+nm+'" needs a valid amount in cents.');return Promise.reject('bad_amount');}
+      var qty=(typeof it.quantity==='number'&&it.quantity>0)?Math.floor(it.quantity):1;
+      cleanItems.push({name:nm,description:it.description||'',amountCents:amt,quantity:qty});
+      totalCents+=amt*qty;
+    }
+    if(totalCents<50){alert('Cart total must be at least $0.50');return Promise.reject('total_too_low');}
+    if(!email)email=findCartEmail();
+    if(!customerName)customerName=findCartName();
+    var cartPhone=findCartPhone();
+    if(!email){var p=window.prompt('Enter your email for the receipt:','');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert('An email address is required to complete checkout.');return Promise.reject('no_email');}}
+    var successBase=window.location.href.split('?')[0];
+    var body={email:email,name:customerName,items:cleanItems,locale:(document.documentElement.lang||navigator.language||'en')};
+    if(currency)body.currency=currency;
+    if(cartPhone)body.phone=cartPhone;
+    body.successUrl=successUrl||(successBase+'?cart=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}');
+    body.cancelUrl=cancelUrl||(successBase+'?cart=cancelled');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/cart/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process checkout');throw new Error(d.error);}
+    });
+  };
+  try{Object.defineProperty(window,'__processCart',{value:__realCart,writable:false,configurable:false});}catch(e){window.__processCart=__realCart;}
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('cart')==='success'){
+      var sidC=urlParams.get('session_id');
+      if(sidC){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidC})}).catch(function(){});}catch(e){}}
+      if(document.getElementById('payment-success-overlay')||document.getElementById('donation-success-overlay')||document.getElementById('cart-success-overlay'))return;
+      var overlay=document.createElement('div');overlay.id='cart-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||'Thank you for your order.';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var cBtn=document.getElementById('lp-cart-success-btn');
+      if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="kc-root"><div class="kc-load"><div class="kc-spin"></div>Opening the Kitchen Console…</div></div>
+<script>
+var KC_URL='https://swpprjvubgcdsojapaad.supabase.co';
+var KC_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0';
+var KC_KEY='aera-kitchen-auth';
+var kc=supabase.createClient(KC_URL,KC_ANON,{auth:{storageKey:KC_KEY,persistSession:true,autoRefreshToken:true}});
+var KCS={user:null,role:'',err:'',msg:'',busy:false,stats:null,staff:[],hasApp:false,prog:0};
+function kcEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function kcRoot(){return document.getElementById('kc-root')}
+function kcBrand(){return '<div class="kc-brand"><div class="kc-mark">A</div><div><b>AERA Kitchen Console</b><span>kitchen.aeramealprep.net</span></div></div>'}
+function kcLoading(t){kcRoot().innerHTML='<div class="kc-load"><div class="kc-spin"></div>'+kcEsc(t||'Opening the Kitchen Console…')+'</div>'}
+
+/* ---------- sign in ---------- */
+function kcLogin(){
+ kcRoot().innerHTML='<div class="kc-card">'+kcBrand()+
+  '<h2>Sign in</h2><p class="sub">Use the kitchen login, or your admin account.</p>'+
+  '<form onsubmit="kcDoLogin(event)"><label for="kcE">Email</label><input id="kcE" type="email" autocomplete="username" required>'+
+  '<label for="kcP">Password</label><input id="kcP" type="password" autocomplete="current-password" required>'+
+  '<button class="kc-btn full" id="kcGo" type="submit">Sign in</button></form>'+
+  (KCS.err?'<div class="kc-err">'+kcEsc(KCS.err)+'</div>':'')+
+  '<div class="kc-foot"><span>Forgot the password? Reset it on <a href="https://aeramealprep.net/account/" target="_blank" rel="noopener">My Account</a>.</span></div></div>';
+}
+async function kcDoLogin(e){e.preventDefault();var b=document.getElementById('kcGo');b.disabled=true;b.textContent='Signing in…';KCS.err='';
+ var r=await kc.auth.signInWithPassword({email:document.getElementById('kcE').value.trim().toLowerCase(),password:document.getElementById('kcP').value});
+ if(r.error){KCS.err=r.error.message==='Invalid login credentials'?'That email and password did not work.':r.error.message;return kcLogin()}
+ kcStart()}
+async function kcSignOut(){try{await kc.auth.signOut()}catch(e){}try{localStorage.removeItem(KC_KEY)}catch(e){}KCS.user=null;KCS.role='';location.hash='';kcLogin()}
+
+/* ---------- start ---------- */
+async function kcStart(){
+ kcLoading();
+ var s=(await kc.auth.getSession()).data.session;
+ if(!s){return kcLogin()}
+ KCS.user=s.user;
+ var r=await kc.rpc('kc_role');
+ KCS.role=(r&&r.data)||'';
+ if(!KCS.role){kcRoot().innerHTML='<div class="kc-card">'+kcBrand()+'<h2>Not on the kitchen list</h2><p class="sub">'+kcEsc(s.user.email)+' is not set up for the Kitchen Console. Ask Peter to add it.</p><button class="kc-btn ghost" onclick="kcSignOut()">Use another account</button></div>';return}
+ var a=await kc.storage.from('kc-app').list('',{search:'console.html'});
+ KCS.hasApp=!!(a.data&&a.data.some(function(f){return f.name==='console.html'}));
+ if(KCS.role==='admin'&&(location.hash==='#setup'||!KCS.hasApp))return kcSetup();
+ if(!KCS.hasApp){kcRoot().innerHTML='<div class="kc-card">'+kcBrand()+'<h2>Almost ready</h2><p class="sub">The console has not been set up yet. Ask Peter to finish the set up.</p><button class="kc-btn ghost" onclick="kcSignOut()">Sign out</button></div>';return}
+ kcOpen();
+}
+
+/* ---------- open the console ---------- */
+async function kcOpen(){
+ kcLoading('Loading the console…');
+ var d=await kc.storage.from('kc-app').download('console.html?cb='+Date.now());
+ if(d.error){kcRoot().innerHTML='<div class="kc-card">'+kcBrand()+'<h2>Could not load</h2><div class="kc-err">'+kcEsc(d.error.message)+'</div><button class="kc-btn full" onclick="kcOpen()">Try again</button></div>';return}
+ var app=await d.data.text();
+ var S='scr'+'ipt';
+ var boot='window.__KC_APP=1;window.__KC_ROLE='+JSON.stringify(KCS.role)+';window.__KC_EMAIL='+JSON.stringify(KCS.user.email||'')+';('+KC_SHIM.toString()+')('+JSON.stringify(KC_URL)+','+JSON.stringify(KC_ANON)+','+JSON.stringify(KC_KEY)+');';
+ var html='<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="AERA Kitchen"><meta name="theme-color" content="#1B3A8A"><link rel="apple-touch-icon" href="https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push?icon=180">'+
+  '<'+S+' src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></'+S+'>'+
+  '<'+S+'>'+boot+'</'+S+'>'+app+'</html>';
+ document.open();document.write(html);document.close();
+}
+
+/* The console was written for Claude's runtime ( claude.use('db' | 'mcp' | 'downloads' | 'sample') ).
+   This gives it the same calls, backed by Supabase ( table kc_docs, realtime ) and the kc-mcp function. */
+function KC_SHIM(URL_,ANON_,KEY_){
+ var sb=supabase.createClient(URL_,ANON_,{auth:{storageKey:KEY_,persistSession:true,autoRefreshToken:true}});
+ window.__KC_SB=sb;window.__KC_STANDALONE=true;
+ var EMAIL=window.__KC_EMAIL||'';
+ function cl(v){return v==null?v:JSON.parse(JSON.stringify(v))}
+ function E(e){var x=new Error((e&&(e.message||e.details))||String(e));x.code=e&&e.code;return x}
+ function snapDoc(id,data){return{id:id,exists:data!=null,data:function(){return data==null?undefined:cl(data)}}}
+ function snapColl(m){var docs=Object.keys(m).map(function(id){return snapDoc(id,m[id])});return{docs:docs,size:docs.length,empty:!docs.length,forEach:function(f){docs.forEach(f)}}}
+ var C={}; /* coll -> {m:{id:data}, ls:[fn], ready:bool, loading:promise} */
+ function cc(c){return C[c]||(C[c]={m:{},ls:[],dls:{},ready:false,loading:null,t:0})}
+ async function fetchColl(c){var out={},from=0,N=500;
+  for(;;){var r=await sb.from('kc_docs').select('id,data').eq('coll',c).order('id').range(from,from+N-1);
+   if(r.error)throw E(r.error);(r.data||[]).forEach(function(x){out[x.id]=x.data});
+   if(!r.data||r.data.length<N)break;from+=N}
+  return out}
+ function emit(c){var o=cc(c);if(o.t)return;o.t=setTimeout(function(){o.t=0;
+  var s=snapColl(o.m);o.ls.slice().forEach(function(f){try{f(s)}catch(e){console.error(e)}});
+  Object.keys(o.dls).forEach(function(id){(o.dls[id]||[]).slice().forEach(function(f){try{f(snapDoc(id,o.m[id]))}catch(e){console.error(e)}})})},30)}
+ function local(c,id,data){var o=cc(c);if(!o.ready&&!o.ls.length&&!Object.keys(o.dls).length)return;if(data==null)delete o.m[id];else o.m[id]=data;emit(c)}
+ async function load(c){var o=cc(c);if(o.ready)return o;if(!o.loading)o.loading=fetchColl(c).then(function(m){o.m=m;o.ready=true;o.loading=null;return o},function(e){o.loading=null;throw e});return o.loading}
+ async function reloadAll(){Object.keys(C).forEach(function(c){var o=C[c];if(!o.ready)return;fetchColl(c).then(function(m){o.m=m;emit(c)}).catch(function(){})})}
+ function split(path){var p=String(path).split('/');return{c:p.slice(0,-1).join('/'),id:p[p.length-1]}}
+ function docRef(path){var q=split(path),c=q.c,id=q.id;
+  return{id:id,path:String(path),
+   get:async function(){var o=C[c];if(o&&o.ready)return snapDoc(id,o.m[id]==null?null:o.m[id]);
+    var r=await sb.from('kc_docs').select('data').eq('coll',c).eq('id',id).maybeSingle();if(r.error)throw E(r.error);return snapDoc(id,r.data?r.data.data:null)},
+   set:async function(d){var data=cl(d||{});var r=await sb.from('kc_docs').upsert({coll:c,id:id,data:data,updated_at:new Date().toISOString(),updated_by:EMAIL});if(r.error)throw E(r.error);local(c,id,data)},
+   update:async function(d){var patch=cl(d||{});var r=await sb.rpc('kc_merge',{p_coll:c,p_id:id,p_patch:patch});if(r.error)throw E(r.error);
+    var o=cc(c);local(c,id,Object.assign({},o.m[id]||{},patch))},
+   delete:async function(){var r=await sb.from('kc_docs').delete().eq('coll',c).eq('id',id);if(r.error)throw E(r.error);local(c,id,null)},
+   onSnapshot:function(f,ef){var o=cc(c);(o.dls[id]=o.dls[id]||[]).push(f);ensureRT();
+    load(c).then(function(){f(snapDoc(id,o.m[id]))},function(e){ef&&ef(e)});
+    return function(){o.dls[id]=(o.dls[id]||[]).filter(function(x){return x!==f})}}}}
+ function collRef(c){return{id:c,path:c,
+   doc:function(id){return docRef(c+'/'+(id||('x'+Date.now().toString(36)+Math.random().toString(36).slice(2,7))))},
+   add:async function(d){var r=this.doc();await r.set(d);return r},
+   get:async function(){var o=C[c];if(o&&o.ready)return snapColl(o.m);return snapColl(await fetchColl(c))},
+   onSnapshot:function(f,ef){var o=cc(c);o.ls.push(f);ensureRT();
+    load(c).then(function(){f(snapColl(o.m))},function(e){ef&&ef(e)});
+    return function(){o.ls=o.ls.filter(function(x){return x!==f})}}}}
+ /* realtime : one channel for every list; a missed stretch ( sleep, lost wifi ) is caught up by re-reading */
+ var RT=null,rtDown=false,hidAt=0;
+ function onRow(p){var row=p.new&&p.new.coll?p.new:p.old;if(!row||!row.coll)return;var o=C[row.coll];if(!o||!o.ready)return;
+  if(p.eventType==='DELETE'){delete o.m[row.id];return emit(row.coll)}
+  if(p.new&&p.new.data!==undefined){o.m[row.id]=p.new.data;return emit(row.coll)}
+  sb.from('kc_docs').select('data').eq('coll',row.coll).eq('id',row.id).maybeSingle().then(function(r){if(r.data){o.m[row.id]=r.data.data;emit(row.coll)}})}
+ function ensureRT(){if(RT)return;RT=1;
+  sb.auth.getSession().then(function(x){var s=x.data.session;if(s){try{sb.realtime.setAuth(s.access_token)}catch(e){}}
+  RT=sb.channel('kc-docs').on('postgres_changes',{event:'*',schema:'public',table:'kc_docs'},onRow)
+   .subscribe(function(st){if(st==='SUBSCRIBED'){if(rtDown){rtDown=false;reloadAll()}}
+    else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'||st==='CLOSED'){rtDown=true;var old=RT;RT=null;setTimeout(function(){try{sb.removeChannel(old)}catch(e){}ensureRT()},3000)}})})}
+ document.addEventListener('visibilitychange',function(){if(document.hidden){hidAt=Date.now()}else if(hidAt&&Date.now()-hidAt>30000){hidAt=0;reloadAll()}});
+ sb.auth.onAuthStateChange(function(ev){if(ev==='SIGNED_OUT'){location.reload()}});
+ var DB={doc:docRef,collection:collRef};
+ var MCP={callTool:async function(server,name,args){
+   var s=(await sb.auth.getSession()).data.session;if(!s)throw new Error('Please sign in again.');
+   var r=await fetch(URL_+'/functions/v1/kc-mcp',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+s.access_token,apikey:ANON_},body:JSON.stringify({name:name,args:args||{}})});
+   var j=await r.json().catch(function(){return{}});
+   if(!r.ok||j.error)throw new Error(j.error||('Chatbees link error '+r.status));
+   var res=j.result||{},txt=(res.content||[]).filter(function(x){return x&&x.type==='text'}).map(function(x){return x.text}).join('\n');
+   if(res.isError)throw new Error(txt||'Chatbees error');
+   var pl=res.structuredContent;if(pl==null){try{pl=JSON.parse(txt)}catch(e){pl=txt}}
+   return{payload:pl,content:res.content||[],raw:res}}};
+ var DL={save:async function(o){var data=o&&o.data,b=data instanceof Blob?data:new Blob([data==null?'':data],{type:/\.html?$/i.test(o.filename||'')?'text/html':/\.csv$/i.test(o.filename||'')?'text/csv':'application/octet-stream'});
+   var u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=(o&&o.filename)||'download';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},60000);return true}};
+ window.claude={use:function(k){
+   if(k==='db')return Promise.resolve(DB);
+   if(k==='mcp')return Promise.resolve(MCP);
+   if(k==='downloads')return Promise.resolve(DL);
+   return Promise.reject(new Error(k+' is only available inside Claude'))}};
+ window.kcSignOut=async function(){try{await sb.auth.signOut()}catch(e){}location.href=location.pathname};
+}
+
+/* ---------- admin set up ---------- */
+async function kcLoadAdmin(){
+ var st=await kc.rpc('kc_stats');KCS.stats=st.data||{};
+ var sf=await kc.rpc('kc_staff_list');KCS.staff=sf.data||[];
+ var cs=await kc.rpc('kc_cb_status');KCS.cb=cs.data||{};
+}
+function kcStatsLine(){var s=KCS.stats||{},n=0,k=0;Object.keys(s).forEach(function(c){n+=+s[c]||0;k++});return n?(n+' records in '+k+' lists'):'No data yet'}
+async function kcSetup(){kcLoading('Loading set up…');try{await kcLoadAdmin()}catch(e){}kcSetupPaint()}
+function kcSetupPaint(){
+ kcRoot().innerHTML='<div class="kc-card wide">'+kcBrand()+
+  '<h2>Set up</h2><p class="sub">Signed in as '+kcEsc(KCS.user.email)+' <span class="kc-pill">Admin</span></p>'+
+  '<div class="kc-sec"><h3>1 · Console data</h3><p>'+kcEsc(kcStatsLine())+'. Pick the aera-kitchen-data files exported from the old console ( all parts at once ). Records with the same id are replaced.</p>'+
+   '<input type="file" id="kcData" accept=".json,application/json" multiple onchange="kcImport(this.files)"><div class="kc-bar"><i id="kcProg"></i></div><div id="kcDataMsg"></div></div>'+
+  '<div class="kc-sec"><h3>2 · Console app</h3><p>'+(KCS.hasApp?'Installed. Upload a newer console.html to update everyone.':'Not installed yet. Upload console.html.')+'</p>'+
+   '<input type="file" id="kcApp" accept=".html,text/html" onchange="kcUploadApp(this.files[0])"><div id="kcAppMsg"></div></div>'+
+  '<div class="kc-sec"><h3>3 · Who can sign in</h3><p>Kitchen logins see the kitchen screens only. Make the account on <a href="https://aeramealprep.net/account/" target="_blank" rel="noopener">My Account</a> first ( sign up with the email ), then add it here.</p>'+
+   '<table class="kc-staff">'+(KCS.staff||[]).map(function(r){return '<tr><td>'+kcEsc(r.email)+(r.label?' · '+kcEsc(r.label):'')+'</td><td><span class="kc-pill">'+kcEsc(r.role)+'</span></td><td style="text-align:right">'+
+     (r.email===String(KCS.user.email).toLowerCase()?'':'<button class="kc-btn ghost sm" onclick="kcStaffDel(\''+kcEsc(r.email)+'\')">Remove</button>')+'</td></tr>'}).join('')+'</table>'+
+   '<div class="kc-row" style="margin-top:10px"><input type="email" id="kcSE" placeholder="kitchen@…" style="flex:2 1 200px"><input type="text" id="kcSL" placeholder="Label ( optional )" style="flex:1 1 120px">'+
+   '<select id="kcSR" style="flex:0 1 120px"><option value="kitchen">Kitchen</option><option value="admin">Admin</option></select><button class="kc-btn sm" onclick="kcStaffAdd()">Add</button></div><div id="kcStaffMsg"></div></div>'+
+  '<div class="kc-sec"><h3>4 · Chatbees</h3><p>'+(KCS.cb&&KCS.cb.token?'A token is saved. Paste a new one to replace it.':'Not connected yet. In Chatbees go to Settings → API → Create New Token, then paste it here.')+' Rider booking, plans and status updates need it.</p>'+
+   '<div class="kc-row"><input type="password" id="kcCB" placeholder="Chatbees API token" autocomplete="off" style="flex:3 1 220px"><button class="kc-btn sm" onclick="kcCbSave()">Save</button><button class="kc-btn ghost sm" onclick="kcCbTest()">Test</button></div><div id="kcCbMsg"></div></div>'+
+  '<div class="kc-sec"><h3>5 · Google Sheets</h3><p>'+(KCS.cb&&KCS.cb.google?'Connected. The console writes to the website sheets ( settings, vouchers, banners, referrers, points ).':KCS.cb&&KCS.cb.gclient?'Client saved. Tap Connect Google and allow access with the Google account that owns the AERA sheets.':'Paste the Client ID and Client secret from Google Cloud, then tap Connect Google.')+'</p>'+
+   '<div class="kc-row"><input type="text" id="kcGI" placeholder="Client ID" autocomplete="off" style="flex:2 1 220px"><input type="password" id="kcGS" placeholder="Client secret" autocomplete="off" style="flex:1 1 160px"><button class="kc-btn sm" onclick="kcGSave()">Save</button></div>'+
+   '<div class="kc-row" style="margin-top:8px"><button class="kc-btn y sm" onclick="kcGConnect()">Connect Google</button><button class="kc-btn ghost sm" onclick="kcGTest()">Test</button></div><div id="kcGMsg"></div></div>'+
+  '<div class="kc-foot"><a onclick="kcSignOut()">Sign out</a>'+(KCS.hasApp?'<button class="kc-btn y" onclick="location.hash=\'\';kcOpen()">Open the Console →</button>':'')+'</div></div>';
+}
+function kcMsg(id,t,bad){var el=document.getElementById(id);if(el)el.innerHTML=t?'<div class="'+(bad?'kc-err':'kc-ok')+'">'+kcEsc(t)+'</div>':''}
+async function kcImport(files){
+ if(!files||!files.length)return;var rows=[],bad=[];
+ for(var i=0;i<files.length;i++){try{var j=JSON.parse(await files[i].text());if(!j||j.app!=='aera-kitchen-console'||!j.colls)throw 0;
+   Object.keys(j.colls).forEach(function(c){var m=j.colls[c]||{};Object.keys(m).forEach(function(id){rows.push({coll:c,id:id,data:m[id]})})})}catch(e){bad.push(files[i].name)}}
+ if(bad.length)return kcMsg('kcDataMsg','Not a console data file : '+bad.join(', '),1);
+ if(!rows.length)return kcMsg('kcDataMsg','Those files have no records in them.',1);
+ kcMsg('kcDataMsg','Importing '+rows.length+' records…');
+ var done=0,batch=[],size=0,bar=document.getElementById('kcProg'),now=new Date().toISOString(),me=KCS.user.email;
+ async function flush(){if(!batch.length)return;var b=batch;batch=[];size=0;
+  var r=await kc.from('kc_docs').upsert(b.map(function(x){return{coll:x.coll,id:x.id,data:x.data,updated_at:now,updated_by:me}}));
+  if(r.error)throw new Error(r.error.message);done+=b.length;if(bar)bar.style.width=Math.round(done/rows.length*100)+'%'}
+ try{for(var k=0;k<rows.length;k++){var s=JSON.stringify(rows[k].data).length;if(size+s>1500000||batch.length>=200)await flush();batch.push(rows[k]);size+=s}
+  await flush();await kcLoadAdmin();kcSetupPaint();kcMsg('kcDataMsg','Imported '+done+' records. '+kcStatsLine()+'.')}
+ catch(e){kcMsg('kcDataMsg','Stopped after '+done+' records : '+e.message,1)}}
+async function kcUploadApp(f){
+ if(!f)return;var t=await f.text();
+ if(t.indexOf('AERA Kitchen Console')<0||t.indexOf("claude.use('db')")<0)return kcMsg('kcAppMsg','That does not look like the console file.',1);
+ kcMsg('kcAppMsg','Uploading…');
+ var r=await kc.storage.from('kc-app').upload('console.html',new Blob([t],{type:'text/html'}),{upsert:true,contentType:'text/html',cacheControl:'60'});
+ if(r.error)return kcMsg('kcAppMsg',r.error.message,1);
+ KCS.hasApp=true;kcSetupPaint();kcMsg('kcAppMsg','Console installed.');}
+async function kcStaffAdd(){var e=document.getElementById('kcSE').value.trim().toLowerCase(),l=document.getElementById('kcSL').value.trim(),ro=document.getElementById('kcSR').value;
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e))return kcMsg('kcStaffMsg','Put the email in.',1);
+ var r=await kc.rpc('kc_staff_set',{p_email:e,p_role:ro,p_label:l||null});if(r.error)return kcMsg('kcStaffMsg',r.error.message,1);
+ await kcLoadAdmin();kcSetupPaint();kcMsg('kcStaffMsg',e+' added as '+ro+'.')}
+async function kcStaffDel(e){if(!confirm('Remove '+e+' from the Kitchen Console?'))return;
+ var r=await kc.rpc('kc_staff_set',{p_email:e,p_role:'',p_label:null});if(r.error)return kcMsg('kcStaffMsg',r.error.message,1);
+ await kcLoadAdmin();kcSetupPaint()}
+
+async function kcCbSave(){var v=document.getElementById('kcCB').value.trim();if(!v)return kcMsg('kcCbMsg','Paste the token first.',1);
+ var r=await kc.rpc('kc_set_cb_token',{p_token:v});if(r.error)return kcMsg('kcCbMsg',r.error.message,1);document.getElementById('kcCB').value='';KCS.cb={token:true};kcCbTest()}
+async function kcCbTest(){kcMsg('kcCbMsg','Checking Chatbees…');try{var s=(await kc.auth.getSession()).data.session;
+ var r=await fetch(KC_URL+'/functions/v1/kc-mcp?status=1',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+s.access_token,apikey:KC_ANON},body:'{}'});var j=await r.json();
+ if(j.connected)kcMsg('kcCbMsg',j.mode==='api'?'Connected. '+(j.note||''):'Connected. Everything that uses Chatbees works.');else kcMsg('kcCbMsg','Not connected : '+(j.error||r.status),1)}catch(e){kcMsg('kcCbMsg',e.message||String(e),1)}}
+
+async function kcFn(q){var s=(await kc.auth.getSession()).data.session;var r=await fetch(KC_URL+'/functions/v1/kc-mcp?'+q,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+s.access_token,apikey:KC_ANON},body:'{}'});return r.json()}
+async function kcGSave(){var i=document.getElementById('kcGI').value.trim(),s=document.getElementById('kcGS').value.trim();if(!i||!s)return kcMsg('kcGMsg','Paste both the Client ID and the Client secret.',1);
+ var r=await kc.rpc('kc_set_google',{p_client_id:i,p_client_secret:s});if(r.error)return kcMsg('kcGMsg',r.error.message,1);
+ document.getElementById('kcGI').value='';document.getElementById('kcGS').value='';KCS.cb=Object.assign({},KCS.cb,{gclient:true,google:false});kcMsg('kcGMsg','Saved. Now tap Connect Google.')}
+async function kcGConnect(){kcMsg('kcGMsg','Opening Google…');try{var j=await kcFn('gstart=1');if(!j.url)return kcMsg('kcGMsg',j.error||'Could not start',1);location.href=j.url}catch(e){kcMsg('kcGMsg',e.message||String(e),1)}}
+async function kcGTest(){kcMsg('kcGMsg','Checking Google…');try{var j=await kcFn('gstatus=1');if(j.connected)kcMsg('kcGMsg','Connected. Website sheets work from the console.');else kcMsg('kcGMsg','Not connected : '+(j.error||''),1)}catch(e){kcMsg('kcGMsg',e.message||String(e),1)}}
+
+window.addEventListener('hashchange',function(){if(location.hash==='#setup'&&KCS.role==='admin')kcSetup()});
+kcStart().catch(function(e){KCS.err=e.message||String(e);kcLogin()});
+</script>
+</body>
+</html>
