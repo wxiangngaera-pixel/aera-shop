@@ -14,30 +14,33 @@
 }catch(e){}})();
 
 (function(){
-var V={'#bundles':'bundles','#meals':'meals','#how':'how','#delivery':'pack','#packaging':'pack','#pickup':'pick','#gyms':'gyms','#faq':'faq'};
-var CLS=['hvOpen','hv-bundles','hv-meals','hv-how','hv-pack','hv-pick','hv-gyms','hv-faq'];
-function key(h){h=String(h||'');if(V[h])return V[h];if(/^#faq-/.test(h))return'faq';return''}
-function show(k,h){var b=document.body;CLS.forEach(function(c){b.classList.remove(c)});
- if(!k){window.scrollTo(0,0);return}
+var MAP={'#bundles':'bundles','#meals':'meals','#plan':'plan','#home-sourced':'home','#how':'how','#delivery':'pack','#packaging':'pack','#pickup':'pick','#gyms':'gyms','#faq':'faq'};
+function item(k){return document.getElementById('hc-'+k)}
+function key(h){h=String(h||'');if(MAP[h])return MAP[h];if(/^#faq-/.test(h))return'faq';return''}
+var mounted=0;
+function mount(){if(mounted)return;mounted=1;
+ function put(k,el){var b=item(k);if(b&&el)b.querySelector('.hin').appendChild(el)}
+ function $(i){return document.getElementById(i)}
+ put('bundles',$('bundles'));put('meals',$('meals'));put('plan',$('plan'));put('how',$('how'));
+ var dl=$('delivery');if(dl){var ps=dl.querySelectorAll('.two>.panel');if(ps[1]){var w=document.createElement('div');w.className='wrap hpick';w.appendChild(ps[1]);put('pick',w)}put('pack',dl)}
+ put('gyms',$('gyms'));put('faq',$('faq'));
+ if(key(location.hash))open(key(location.hash),location.hash)}
+function open(k,h,toggle){mount();var it=item(k);if(!it)return;var was=it.classList.contains('open');
+ [].forEach.call(document.querySelectorAll('#hub .hitem.open'),function(x){if(x!==it){x.classList.remove('open');x.querySelector('.hhead').setAttribute('aria-expanded','false')}});
+ if(was&&toggle){it.classList.remove('open');it.querySelector('.hhead').setAttribute('aria-expanded','false');return}
+ it.classList.add('open');it.querySelector('.hhead').setAttribute('aria-expanded','true');
  try{if(typeof window.aeExpand==='function')window.aeExpand()}catch(e){}
- b.classList.add('hvOpen','hv-'+k);
- var t=(h&&!V[h]&&/^#[\w-]+$/.test(h))?document.querySelector(h):null;
- setTimeout(function(){if(t)t.scrollIntoView({block:'start'});else window.scrollTo(0,0)},30)}
-window.hubRoute=function(h){show(key(h),h)};
-window.hubHome=function(){if(history.state&&history.state.hub){history.back()}else{try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}show('')}};
-document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href]');if(!a)return;var h=a.getAttribute('href');
- if(h==='#plan'){e.preventDefault();location.href='https://my.chatbees.io/p/SrQzC5m2';return}
- if(h==='#top'||h==='#'){if(document.body.classList.contains('hvOpen')){e.preventDefault();hubHome()}return}
- var k=key(h);if(!k)return;e.preventDefault();
- if(location.hash!==h){try{history.pushState({hub:1},'',h)}catch(x){}}show(k,h)},true);
-window.addEventListener('popstate',function(){show(key(location.hash),location.hash)});
-window.addEventListener('hashchange',function(){show(key(location.hash),location.hash)});
-document.body.classList.add('hubOn');
-if(key(location.hash))show(key(location.hash),location.hash);
+ var t=(h&&!MAP[h]&&/^#[\w-]+$/.test(h))?document.querySelector(h):null;
+ setTimeout(function(){var el=t||it;var y=el.getBoundingClientRect().top+window.pageYOffset-84;window.scrollTo({top:y,behavior:'smooth'})},400)}
+window.hubTog=function(k){open(k,'',true)};
+window.hubRoute=function(h){if(key(h))open(key(h),h)};
+document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href]');if(!a)return;var h=a.getAttribute('href'),k=key(h);if(!k)return;e.preventDefault();open(k,h)},true);
+window.addEventListener('hashchange',function(){if(key(location.hash))open(key(location.hash),location.hash)});
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();
 function wrap(n,f){var o=window[n];if(typeof o!=='function'||o.__hub)return;var w=function(){try{f.apply(null,arguments)}catch(e){}return o.apply(this,arguments)};w.__hub=1;window[n]=w}
-function hook(){wrap('aeGoMeal',function(){show('meals')});wrap('aeGoTo',function(h){if(key(h))show(key(h),h)})}
+function hook(){wrap('aeGoMeal',function(){open('meals')});wrap('aeGoTo',function(h){if(key(h))open(key(h),h)})}
 hook();window.addEventListener('load',hook);
-var ZH={"Order":"下单","Good to Know":"须知","Meal Bundles":"餐点套餐","7 Days, Chef-Picked for your Goal":"7天，主厨按目标精选","À la Carte":"单点","Build your own week from 29 Meals":"从29款餐点自选一周","Personalised Meal Plan":"个人定制餐单","Built to your Daily Calories & Macros":"按您的每日热量与营养素定制","Home-Sourced Meals":"自备餐点","Count shakes, snacks & home food in your plan":"把奶昔、零食和家常餐计入您的餐单","How it Works":"运作方式","From order to microwave":"从下单到微波加热","Packaging & Delivery":"包装与配送","MAP Bento Box or Vacuum Packed":"MAP 便当盒或真空包装","Delivery & Pick-Up":"配送与自取","Slots, fees and Self Pick-Up":"时段、运费与自取","Gym Fridges":"健身房冰柜","AERA chillers in partner gyms":"合作健身房里的 AERA 冰柜","FAQ":"常见问题","The questions we are asked most":"最常被问的问题","← Back":"← 返回"};
+var ZH={"Order":"下单","Good to Know":"须知","Meal Bundles":"餐点套餐","Chef-Picked for your Goal":"主厨按目标精选","À la Carte":"单点","Build your own week":"自选一周餐点","Personalised Meal Plan":"个人定制餐单","Built to your Daily Calories":"按您的每日热量定制","Home-Sourced Meals":"自备餐点","Shakes, snacks & home food, counted":"奶昔、零食与家常餐，一并计算","How it Works":"运作方式","From order to microwave":"从下单到微波加热","Packaging & Delivery":"包装与配送","MAP Bento Box or Vacuum Packed":"MAP 便当盒或真空包装","Delivery & Pick-Up":"配送与自取","Slots, fees and Self Pick-Up":"时段、运费与自取","Gym Fridges":"健身房冰柜","Grab a Meal after your workout":"运动后随手拿一份","FAQ":"常见问题","The questions we are asked most":"最常被问的问题","Counted in your Plan":"计入您的餐单","Add My Home-Sourced Meals":"添加我的自备餐点"};
 if(window.AERA_I18N)for(var z in ZH)if(!(z in window.AERA_I18N))window.AERA_I18N[z]=ZH[z];
 })();
 
