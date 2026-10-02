@@ -559,6 +559,8 @@ html[data-lang="zh"] .langsw .l2{background:var(--navy,#16479E);color:#fff}
 .himg{position:relative;flex:0 0 48%;min-height:142px}
 .himg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 40%);mask-image:linear-gradient(to right,transparent 0,#000 40%);transition:transform .6s cubic-bezier(.2,.8,.2,1)}
 .himg.cut{filter:drop-shadow(0 14px 18px rgba(0,0,0,.30))}
+.himg.cut.duo img{height:70%;width:auto;aspect-ratio:3/2;max-width:none;top:3%;left:0;right:auto;bottom:auto}
+.himg.cut.duo img.d2{top:auto;left:auto;right:2%;bottom:3%}
 .himg.cut img{object-fit:contain;-webkit-mask-image:none;mask-image:none;top:8px;left:0;width:calc(100% - 6px);height:calc(100% - 16px)}
 .hitem:hover .himg img,.hitem.open .himg img{transform:scale(1.06)}
 .hchev{position:absolute;z-index:3;right:14px;bottom:14px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.94);display:grid;place-items:center;box-shadow:0 4px 12px rgba(0,0,0,.2);transition:transform .3s}
