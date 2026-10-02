@@ -357,8 +357,9 @@ function cut(img){var W0=img.naturalWidth,H0=img.naturalHeight;if(W0<60||H0<60)r
  if(A.n>N*0.97)return null;
  /* the deep cut : anything pale and colourless from the edge in, up to a dark rim such as the bento tray's */
  var D=flood(function(q){return lum(q)>70&&chr(q)<50}),m=A.m;
- if((N-D.n)>=(N-A.n)*0.6){m=D.m;peel(m,function(q){return lum(q)>85&&chr(q)<50})}
- else peel(m,function(q){return lum(q)>95&&hueOk(q,8)});
+ /* only a box with a dark rim is cut ; vacuum bags and anything else keep their backdrop */
+ if((N-D.n)<(N-A.n)*0.6)return null;m=D.m;var rim=0,edge=0;for(i=0;i<N;i++){if(m[i])continue;var X=i%w,Y=(i/w)|0;if((X>0&&m[i-1])||(X<w-1&&m[i+1])||(Y>0&&m[i-w])||(Y<h-1&&m[i+w])){edge++;if(lum(i)<80&&chr(i)<60)rim++}}
+ if(!edge||rim<edge*0.5)return null;peel(m,function(q){return lum(q)>85&&chr(q)<50});
  /* only the outline is returned : the page lays it over the original photo as a mask, so the food keeps every pixel */
  var mc=document.createElement('canvas');mc.width=w;mc.height=h;var mx=mc.getContext('2d'),md=mx.createImageData(w,h);
  for(i=0;i<N;i++)md.data[i*4+3]=m[i]?0:255;mx.putImageData(md,0,0);return mc}
