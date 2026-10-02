@@ -617,21 +617,23 @@ function cut(img){var w=img.naturalWidth,h=img.naturalHeight;if(w<60||h<60)retur
  if(L0<170||ch0>40)return null;
  var near=0;for(i=0;i<R.length;i++)if(Math.max(Math.abs(R[i]-r0),Math.abs(G[i]-g0),Math.abs(B[i]-b0))<=22)near++;
  if(near<R.length*0.8)return null;
- function hueOk(q,t){var r=p[q*4],g=p[q*4+1],b=p[q*4+2],f=((r+g+b)/3)/L0;return Math.abs((r-g)-rg0*f)<=t&&Math.abs((g-b)-gb0*f)<=t&&Math.max(r,g,b)-Math.min(r,g,b)<=ch0+12}
  function lum(q){return(p[q*4]+p[q*4+1]+p[q*4+2])/3}
- function flood(T){var m=new Uint8Array(N),S=new Int32Array(N),qh=0,qt=0;
-  function bg(q){var r=p[q*4],g=p[q*4+1],b=p[q*4+2];if(Math.max(Math.abs(r-r0),Math.abs(g-g0),Math.abs(b-b0))<=22)return 1;var L=(r+g+b)/3;return L<L0&&L>T&&hueOk(q,8)}
-  function seed(q){if(!m[q]&&bg(q)){m[q]=1;S[qt++]=q}}
+ function chr(q){return Math.max(p[q*4],p[q*4+1],p[q*4+2])-Math.min(p[q*4],p[q*4+1],p[q*4+2])}
+ function hueOk(q,t){var r=p[q*4],g=p[q*4+1],b=p[q*4+2],f=lum(q)/L0;return Math.abs((r-g)-rg0*f)<=t&&Math.abs((g-b)-gb0*f)<=t&&chr(q)<=ch0+12}
+ function flood(ok){var m=new Uint8Array(N),S=new Int32Array(N),qh=0,qt=0;
+  function seed(q){if(!m[q]&&ok(q)){m[q]=1;S[qt++]=q}}
   E.forEach(seed);
   while(qh<qt){k=S[qh++];var X=k%w,Y=(k/w)|0;if(X>0)seed(k-1);if(X<w-1)seed(k+1);if(Y>0)seed(k-w);if(Y<h-1)seed(k+w)}
   return{m:m,n:qt}}
- var A=flood(L0-100),Bm=flood(80),m=A.m,deep=0;
+ function peel(m,n,ok){for(var it=0;it<n;it++){var kill=[];for(i=0;i<N;i++){if(m[i])continue;var X=i%w,Y=(i/w)|0;
+   if(!((X>0&&m[i-1])||(X<w-1&&m[i+1])||(Y>0&&m[i-w])||(Y<h-1&&m[i+w])))continue;if(ok(i))kill.push(i)}kill.forEach(function(q){m[q]=1})}}
+ /* the gentle cut : only the backdrop colour and its soft shadow */
+ var A=flood(function(q){if(Math.max(Math.abs(p[q*4]-r0),Math.abs(p[q*4+1]-g0),Math.abs(p[q*4+2]-b0))<=22)return 1;var L=lum(q);return L<L0&&L>L0-100&&hueOk(q,8)});
  if(A.n>N*0.97)return null;
- if((N-Bm.n)>=(N-A.n)*0.6){m=Bm.m;deep=1}
- /* peel the pale rim the backdrop leaves on the edge */
- for(var it=0;it<(deep?5:1);it++){var kill=[];for(i=0;i<N;i++){if(m[i])continue;var X3=i%w,Y3=(i/w)|0;
-   if(!((X3>0&&m[i-1])||(X3<w-1&&m[i+1])||(Y3>0&&m[i-w])||(Y3<h-1&&m[i+w])))continue;
-   if(lum(i)>95&&hueOk(i,deep?14:8))kill.push(i)}kill.forEach(function(q){m[q]=1})}
+ /* the deep cut : anything pale and colourless from the edge in, up to a dark rim such as the bento tray's */
+ var D=flood(function(q){return lum(q)>70&&chr(q)<50}),m=A.m;
+ if((N-D.n)>=(N-A.n)*0.6){m=D.m;peel(m,2,function(q){return lum(q)>50&&chr(q)<50})}
+ else peel(m,1,function(q){return lum(q)>95&&hueOk(q,8)});
  for(i=0;i<N;i++)if(m[i])p[i*4+3]=0;
  for(i=0;i<N;i++){if(m[i])continue;var X2=i%w,Y2=(i/w)|0,z=0,n=0;
   for(var dy=-1;dy<=1;dy++)for(var dx=-1;dx<=1;dx++){var xx=X2+dx,yy=Y2+dy;if(xx<0||yy<0||xx>=w||yy>=h)continue;n++;if(m[yy*w+xx])z++}
