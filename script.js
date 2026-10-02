@@ -42,13 +42,27 @@ function hsLoad(fid,lp,rp,rx){fid=fid||'hsFrame';var f=document.getElementById(f
   var fit=function(){var m=d.querySelector('main')||d.body;f.style.height=Math.max(420,Math.ceil(m.getBoundingClientRect().bottom+(w.pageYOffset||0)+16))+'px'};fit();setTimeout(fit,400);
   if(window.ResizeObserver)new ResizeObserver(fit).observe(d.querySelector('main')||d.body);window.addEventListener('resize',fit)}catch(e){}});
  f.setAttribute('src',u)}
+function alcBar(){var c={};try{c=JSON.parse(localStorage.getItem('aera.cart')||'{}')}catch(e){}var n=0;for(var k in c)n+=typeof c[k]==='number'?c[k]:1;var b=document.getElementById('alcGo');if(!b){if(!n)return;b=document.createElement('a');b.id='alcGo';b.className='btn btn-y';b.href=/aeramealprep\.net$/.test(location.hostname)?'/checkout/':'https://my.chatbees.io/p/D2pz8bZ';document.body.appendChild(b)}b.textContent='Checkout · '+n+' item'+(n===1?'':'s')+' →';b.style.display=n?'':'none'}
+window.addEventListener('storage',function(e){if(e.key==='aera.cart')alcBar()});
+function alcLoad(){var f=document.getElementById('alcFrame');if(!f||f.getAttribute('src'))return;
+ var u=/aeramealprep\.net$/.test(location.hostname)?'/checkout/#alc':'https://my.chatbees.io/p/D2pz8bZ#alc';
+ f.addEventListener('load',function(){try{var w=f.contentWindow,d=f.contentDocument,g=d.getElementById('grid');if(!g)return;
+  if(!/checkout|D2pz8bZ/.test(w.location.href)){location.href=w.location.href;return}
+  for(var el=g;el&&el!==d.body;el=el.parentElement){[].forEach.call(el.parentElement.children,function(s){if(s!==el&&!/^(SCRIPT|STYLE|LINK)$/.test(s.tagName))s.style.setProperty('display','none','important')})}
+  var st=d.createElement('style');st.textContent='html,body{background:transparent!important;margin:0!important;padding:0!important}#grid{margin:0!important}';d.head.appendChild(st);
+  var fit=function(){f.style.height=Math.max(300,Math.ceil(g.getBoundingClientRect().bottom+(w.pageYOffset||0)+12))+'px'};fit();setTimeout(fit,800);if(window.ResizeObserver)new ResizeObserver(fit).observe(g);alcBar()}catch(e){}});
+ f.setAttribute('src',u)}
+window.hubAlc=function(b,e){if(e)e.stopImmediatePropagation();var m=document.getElementById('meals');if(!m)return;
+ [].forEach.call(m.querySelectorAll('.tabs .tab'),function(t){t.classList.toggle('on',t===b)});m.classList.add('alcon');
+ if(!document.getElementById('alcBox')){var x=document.createElement('div');x.id='alcBox';x.innerHTML='<iframe id="alcFrame" class="hsf" title="À la Carte"></iframe>';var g=document.getElementById('mealGrid');g.parentNode.insertBefore(x,g)}alcLoad()};
+document.addEventListener('click',function(e){var t=e.target&&e.target.closest&&e.target.closest('#meals .tabs .tab');if(t&&!t.hasAttribute('onclick')){var m=document.getElementById('meals');if(m)m.classList.remove('alcon')}},true);
 window.hubTog=function(k){open(k,'',true)};
 window.hubRoute=function(h){if(key(h))open(key(h),h)};
 document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href]');if(!a)return;var h=a.getAttribute('href'),k=key(h);if(!k)return;e.preventDefault();open(k,h)},true);
 window.addEventListener('hashchange',function(){if(key(location.hash))open(key(location.hash),location.hash)});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();
 function wrap(n,f){var o=window[n];if(typeof o!=='function'||o.__hub)return;var w=function(){try{f.apply(null,arguments)}catch(e){}return o.apply(this,arguments)};w.__hub=1;window[n]=w}
-function hook(){wrap('aeGoMeal',function(){open('meals')});wrap('aeGoTo',function(h){if(key(h))open(key(h),h)})}
+function hook(){wrap('aeGoMeal',function(){open('meals');var m=document.getElementById('meals');if(m)m.classList.remove('alcon')});wrap('aeGoTo',function(h){if(key(h))open(key(h),h)})}
 hook();window.addEventListener('load',hook);
 var ZH={"Order":"下单","Good to Know":"须知","Meal Bundles":"餐点套餐","Chef-Picked for your Goal":"主厨按目标精选","À la Carte":"单点","Build your own week":"自选一周餐点","Vacuum Packed ONLY":"仅限真空包装","Personalised Meal Plan":"个人定制餐单","Built to your Daily Calories":"按您的每日热量定制","Home-Sourced Meals":"自备餐点","Shakes, snacks & home food, counted":"奶昔、零食与家常餐，一并计算","Shakes, Snacks & Home-Food, counted.":"奶昔、零食与家常餐，一并计算。","How it Works":"运作方式","From order to microwave":"从下单到微波加热","Packaging & Delivery":"包装与配送","MAP Bento Box or Vacuum Packed":"MAP 便当盒或真空包装","Delivery & Pick-Up":"配送与自取","Slots, fees and Self Pick-Up":"时段、运费与自取","Gym Fridges":"健身房冰柜","Grab a Meal after your workout":"运动后随手拿一份","FAQ":"常见问题","The questions we are asked most":"最常被问的问题","Counted in your Plan":"计入您的餐单","Add My Home-Sourced Meals":"添加我的自备餐点"};
 if(window.AERA_I18N)for(var z in ZH)if(!(z in window.AERA_I18N))window.AERA_I18N[z]=ZH[z];
@@ -2061,8 +2075,9 @@ function cut(img){var W0=img.naturalWidth,H0=img.naturalHeight;if(W0<60||H0<60)r
  if(A.n>N*0.97)return null;
  /* the deep cut : anything pale and colourless from the edge in, up to a dark rim such as the bento tray's */
  var D=flood(function(q){return lum(q)>70&&chr(q)<50}),m=A.m;
- if((N-D.n)>=(N-A.n)*0.6){m=D.m;peel(m,function(q){return lum(q)>85&&chr(q)<50})}
- else peel(m,function(q){return lum(q)>95&&hueOk(q,8)});
+ /* only a box with a dark rim is cut ; vacuum bags and anything else keep their backdrop */
+ if((N-D.n)<(N-A.n)*0.6)return null;m=D.m;var rim=0,edge=0;for(i=0;i<N;i++){if(m[i])continue;var X=i%w,Y=(i/w)|0;if((X>0&&m[i-1])||(X<w-1&&m[i+1])||(Y>0&&m[i-w])||(Y<h-1&&m[i+w])){edge++;if(lum(i)<80&&chr(i)<60)rim++}}
+ if(!edge||rim<edge*0.5)return null;peel(m,function(q){return lum(q)>85&&chr(q)<50});
  /* only the outline is returned : the page lays it over the original photo as a mask, so the food keeps every pixel */
  var mc=document.createElement('canvas');mc.width=w;mc.height=h;var mx=mc.getContext('2d'),md=mx.createImageData(w,h);
  for(i=0;i<N;i++)md.data[i*4+3]=m[i]?0:255;mx.putImageData(md,0,0);return mc}
