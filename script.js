@@ -14,14 +14,14 @@
 }catch(e){}})();
 
 (function(){
-var MAP={'#bundles':'bundles','#meals':'bundles','#plan':'plan','#home-sourced':'home','#how':'how','#delivery':'pack','#packaging':'pack','#pickup':'pick','#gyms':'gyms','#faq':'faq'};
+var MAP={'#bundles':'bundles','#meals':'menu','#plan':'plan','#home-sourced':'home','#how':'how','#delivery':'pack','#packaging':'pack','#pickup':'pick','#gyms':'gyms','#faq':'faq'};
 function item(k){return document.getElementById('hc-'+k)}
 function key(h){h=String(h||'');if(MAP[h])return MAP[h];if(/^#faq-/.test(h))return'faq';return''}
 var mounted=0;
 function mount(){if(mounted)return;mounted=1;
  function put(k,el){var b=item(k);if(b&&el)b.querySelector('.hin').appendChild(el)}
  function $(i){return document.getElementById(i)}
- var hb=item('bundles').querySelector('.hin');if($('bundles'))hb.insertBefore($('bundles'),hb.firstChild);if($('meals'))hb.appendChild($('meals'));put('how',$('how'));
+ var hb=item('bundles').querySelector('.hin');if($('bundles'))hb.insertBefore($('bundles'),hb.firstChild);put('menu',$('meals'));put('how',$('how'));
  var dl=$('delivery');if(dl){var ps=dl.querySelectorAll('.two>.panel');if(ps[1]){var w=document.createElement('div');w.className='wrap hpick';w.appendChild(ps[1]);put('pick',w)}put('pack',dl)}
  put('gyms',$('gyms'));put('faq',$('faq'));
  if(key(location.hash))open(key(location.hash),location.hash)}
@@ -62,9 +62,9 @@ document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&
 window.addEventListener('hashchange',function(){if(key(location.hash))open(key(location.hash),location.hash)});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();
 function wrap(n,f){var o=window[n];if(typeof o!=='function'||o.__hub)return;var w=function(){try{f.apply(null,arguments)}catch(e){}return o.apply(this,arguments)};w.__hub=1;window[n]=w}
-function hook(){wrap('aeGoMeal',function(){open('bundles','#meals')});wrap('aeGoTo',function(h){if(key(h))open(key(h),h)})}
+function hook(){wrap('aeGoMeal',function(){open('menu','#meals')});wrap('aeGoTo',function(h){if(key(h))open(key(h),h)})}
 hook();window.addEventListener('load',hook);
-var ZH={"Order":"下单","Good to Know":"须知","Meal Bundles":"餐点套餐","Chef-Picked for your Goal":"主厨按目标精选","À la Carte":"单点","Build your own week":"自选一周餐点","Vacuum Packed ONLY":"仅限真空包装","Personalised Meal Plan":"个人定制餐单","Built to your Daily Calories":"按您的每日热量定制","Home-Sourced Meals":"自备餐点","Shakes, snacks & home food, counted":"奶昔、零食与家常餐，一并计算","Shakes, Snacks & Home-Food, counted.":"奶昔、零食与家常餐，一并计算。","How it Works":"运作方式","From order to microwave":"从下单到微波加热","Packaging & Delivery":"包装与配送","MAP Bento Box or Vacuum Packed":"MAP 便当盒或真空包装","Delivery & Pick-Up":"配送与自取","Slots, fees and Self Pick-Up":"时段、运费与自取","Gym Fridges":"健身房冰柜","Grab a Meal after your workout":"运动后随手拿一份","FAQ":"常见问题","The questions we are asked most":"最常被问的问题","Counted in your Plan":"计入您的餐单","Chef-Picked or DIY":"主厨精选或自选","Portion Sizes":"自选份量","DIY Meal Bundle":"自选套餐","Build Your Own Bundle":"打造您的专属套餐","Fat Loss DIY":"减脂自选","Mass Gain DIY":"增肌自选","Add Bundle to Cart":"加入购物车","Clear":"清空","The Menu":"菜单","All 29 Meals":"全部29款餐点","Add My Home-Sourced Meals":"添加我的自备餐点"};
+var ZH={"Order":"下单","Good to Know":"须知","Meal Bundles":"餐点套餐","Chef-Picked for your Goal":"主厨按目标精选","À la Carte":"单点","Build your own week":"自选一周餐点","Vacuum Packed ONLY":"仅限真空包装","Personalised Meal Plan":"个人定制餐单","Built to your Daily Calories":"按您的每日热量定制","Home-Sourced Meals":"自备餐点","Shakes, snacks & home food, counted":"奶昔、零食与家常餐，一并计算","Shakes, Snacks & Home-Food, counted.":"奶昔、零食与家常餐，一并计算。","How it Works":"运作方式","From order to microwave":"从下单到微波加热","Packaging & Delivery":"包装与配送","MAP Bento Box or Vacuum Packed":"MAP 便当盒或真空包装","Delivery & Pick-Up":"配送与自取","Slots, fees and Self Pick-Up":"时段、运费与自取","Gym Fridges":"健身房冰柜","Grab a Meal after your workout":"运动后随手拿一份","FAQ":"常见问题","The questions we are asked most":"最常被问的问题","Counted in your Plan":"计入您的餐单","Chef-Picked or DIY":"主厨精选或自选","Portion Sizes":"自选份量","DIY Meal Bundle":"自选套餐","Build Your Own Bundle":"打造您的专属套餐","Fat Loss DIY":"减脂自选","Mass Gain DIY":"增肌自选","Add Bundle to Cart":"加入购物车","Clear":"清空","The Menu":"菜单","All 29 Meals":"全部29款餐点","Browse All Meals":"浏览全部餐点","All 29 Meals, Fat Loss & Mass Gain":"全部29款餐点：减脂与增肌","Add My Home-Sourced Meals":"添加我的自备餐点"};
 if(window.AERA_I18N)for(var z in ZH)if(!(z in window.AERA_I18N))window.AERA_I18N[z]=ZH[z];
 })();
 
