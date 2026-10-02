@@ -13,6 +13,34 @@
  location.replace('https://aeramealprep.net'+(t==='/'?'/':t+'/')+q+(location.hash||''));
 }catch(e){}})();
 
+(function(){
+var V={'#bundles':'bundles','#meals':'meals','#how':'how','#delivery':'pack','#packaging':'pack','#pickup':'pick','#gyms':'gyms','#faq':'faq'};
+var CLS=['hvOpen','hv-bundles','hv-meals','hv-how','hv-pack','hv-pick','hv-gyms','hv-faq'];
+function key(h){h=String(h||'');if(V[h])return V[h];if(/^#faq-/.test(h))return'faq';return''}
+function show(k,h){var b=document.body;CLS.forEach(function(c){b.classList.remove(c)});
+ if(!k){window.scrollTo(0,0);return}
+ try{if(typeof window.aeExpand==='function')window.aeExpand()}catch(e){}
+ b.classList.add('hvOpen','hv-'+k);
+ var t=(h&&!V[h]&&/^#[\w-]+$/.test(h))?document.querySelector(h):null;
+ setTimeout(function(){if(t)t.scrollIntoView({block:'start'});else window.scrollTo(0,0)},30)}
+window.hubRoute=function(h){show(key(h),h)};
+window.hubHome=function(){if(history.state&&history.state.hub){history.back()}else{try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}show('')}};
+document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href]');if(!a)return;var h=a.getAttribute('href');
+ if(h==='#plan'){e.preventDefault();location.href='https://my.chatbees.io/p/SrQzC5m2';return}
+ if(h==='#top'||h==='#'){if(document.body.classList.contains('hvOpen')){e.preventDefault();hubHome()}return}
+ var k=key(h);if(!k)return;e.preventDefault();
+ if(location.hash!==h){try{history.pushState({hub:1},'',h)}catch(x){}}show(k,h)},true);
+window.addEventListener('popstate',function(){show(key(location.hash),location.hash)});
+window.addEventListener('hashchange',function(){show(key(location.hash),location.hash)});
+document.body.classList.add('hubOn');
+if(key(location.hash))show(key(location.hash),location.hash);
+function wrap(n,f){var o=window[n];if(typeof o!=='function'||o.__hub)return;var w=function(){try{f.apply(null,arguments)}catch(e){}return o.apply(this,arguments)};w.__hub=1;window[n]=w}
+function hook(){wrap('aeGoMeal',function(){show('meals')});wrap('aeGoTo',function(h){if(key(h))show(key(h),h)})}
+hook();window.addEventListener('load',hook);
+var ZH={"Order":"下单","Good to Know":"须知","Meal Bundles":"餐点套餐","7 Days, Chef-Picked for your Goal":"7天，主厨按目标精选","À la Carte":"单点","Build your own week from 29 Meals":"从29款餐点自选一周","Personalised Meal Plan":"个人定制餐单","Built to your Daily Calories & Macros":"按您的每日热量与营养素定制","Home-Sourced Meals":"自备餐点","Count shakes, snacks & home food in your plan":"把奶昔、零食和家常餐计入您的餐单","How it Works":"运作方式","From order to microwave":"从下单到微波加热","Packaging & Delivery":"包装与配送","MAP Bento Box or Vacuum Packed":"MAP 便当盒或真空包装","Delivery & Pick-Up":"配送与自取","Slots, fees and Self Pick-Up":"时段、运费与自取","Gym Fridges":"健身房冰柜","AERA chillers in partner gyms":"合作健身房里的 AERA 冰柜","FAQ":"常见问题","The questions we are asked most":"最常被问的问题","← Back":"← 返回"};
+if(window.AERA_I18N)for(var z in ZH)if(!(z in window.AERA_I18N))window.AERA_I18N[z]=ZH[z];
+})();
+
 (function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 /* ---- Hero video -----------------------------------------------------------
    Paste the MP4 address between the quotes and the phone-shaped video replaces
@@ -1206,7 +1234,7 @@ var ART_CSS='@keyframes a-pulse{0%,100%{opacity:.25}50%{opacity:1}}'+
  '@media(prefers-reduced-motion:reduce){.at-art *{animation:none!important}}';
 
 (function(){
- var PAGE='landing',VER='v1',TOURS={"main": [{"sel": "#bundles .sec-head", "title": "1 · 7 Days Meal Bundles", "text": "Chef-Picked Menus for your Goal, labelled with Calories and Macros.", "art": "box"}, {"sel": "#meals .sec-head", "title": "2 · À la Carte Available", "text": "In the Portion Size you choose. ( Vacuum Packed ONLY )", "art": "list"}, {"sel": "#plan h2", "title": "3 · Personalise To Your Daily Intake", "text": "Tell us your Body and your Goal, and we build the week around it.", "art": "macro"}, {"sel": "#how .sec-head", "title": "After Placing Order…", "text": "Kitchen Prep, Weigh and Pack according to your Order.", "art": "cook"}, {"sel": "#delivery .sec-head", "title": "Packaging &amp; Delivery", "text": "Select your Preferred Packaging at Checkout.", "art": "pack"}, {"sel": ["#acctBtn", "#navToggle"], "title": "My Account", "text": "Order History, AERA Points, Saved Meal Plans &amp; AERA Credit live here.", "art": "user", "pad": 6}, {"sel": ["#annBell", "#annBellM", "#navToggle"], "title": "What Is New", "text": "New Dishes, Closures and Promotions show up behind the Bell.", "art": "bell", "pad": 6}, {"sel": "#faq .sec-head", "title": "Few Easy Steps", "text": "Sign Up — Order — Self Pick-Up or Delivery — keep it in the chiller up to 7 Days — reheat in the microwave — Bon Appétit.", "art": "doc"}]},HELP='How It Works';
+ var PAGE='landing',VER='v1',TOURS={"main": [{"sel": "#hc-bundles", "title": "1 · 7 Days Meal Bundles", "text": "Chef-Picked Menus for your Goal, labelled with Calories and Macros.", "art": "box"}, {"sel": "#hc-meals", "title": "2 · À la Carte Available", "text": "In the Portion Size you choose. ( Vacuum Packed ONLY )", "art": "list"}, {"sel": "#hc-plan", "title": "3 · Personalise To Your Daily Intake", "text": "Tell us your Body and your Goal, and we build the week around it.", "art": "macro"}, {"sel": "#hc-how", "title": "After Placing Order…", "text": "Kitchen Prep, Weigh and Pack according to your Order.", "art": "cook"}, {"sel": "#hc-pack", "title": "Packaging &amp; Delivery", "text": "Select your Preferred Packaging at Checkout.", "art": "pack"}, {"sel": ["#acctBtn", "#navToggle"], "title": "My Account", "text": "Order History, AERA Points, Saved Meal Plans &amp; AERA Credit live here.", "art": "user", "pad": 6}, {"sel": ["#annBell", "#annBellM", "#navToggle"], "title": "What Is New", "text": "New Dishes, Closures and Promotions show up behind the Bell.", "art": "bell", "pad": 6}, {"sel": "#faq .sec-head", "title": "Few Easy Steps", "text": "Sign Up — Order — Self Pick-Up or Delivery — keep it in the chiller up to 7 Days — reheat in the microwave — Bon Appétit.", "art": "doc"}]},HELP='How It Works';
  function key(k){return 'aera.tour.'+PAGE+'.'+k+'.'+VER}
  function seen(k){try{return localStorage.getItem(key(k))==='1'}catch(e){return true}}
  function mark(k){try{localStorage.setItem(key(k),'1')}catch(e){}}
