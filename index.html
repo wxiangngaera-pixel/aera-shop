@@ -433,7 +433,7 @@
 
 <section id="meals" data-section="meals" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
   <div class="sec-head"><span class="eyebrow">À la Carte</span><h2>Build Your Own Week</h2><p>Mix and match any Meals. Minimum order applies at Checkout; all prices in RM per box, Packaging included.</p></div>
-  <div class="tabs" role="tablist"><button class="tab on" data-f="all">All 29 Meals</button><button class="tab" data-f="fat">Fat Loss</button><button class="tab" data-f="mass">Mass Gain</button></div>
+  <div class="tabs" role="tablist"><button class="tab on" data-f="all">All 29 Meals</button><button class="tab" data-f="fat">Fat Loss</button><button class="tab" data-f="mass">Mass Gain</button><button class="tab" type="button" onclick="event.stopImmediatePropagation();location.href=/aeramealprep\.net$/.test(location.hostname)?'/checkout/#alc':'https://my.chatbees.io/p/D2pz8bZ#alc'">À la Carte</button></div>
   <div class="mlfind"><input type="search" id="mealQ" autocomplete="off" placeholder="Search a Meal by Name, Goal or Macros" oninput="mealSearch(this.value)"><button type="button" id="mealQX" onclick="mealSearch('')" aria-label="Clear">×</button></div>
   <div class="meals" id="mealGrid"></div>
   <div class="mlnone" id="mealNone">No Meal matches that. Try a shorter word.</div>
