@@ -123,7 +123,7 @@ if(window.aeraRetranslate)window.aeraRetranslate();
 (function(){if(window.__aeraCut)return;window.__aeraCut=1;
 var SKIP='nav,footer,.ibgal,.smth,.iblbsc,.clogo,[data-nocut]',C={},W={},Q=[],busy=0;
 function src(u){return /^https:\/\/my\.chatbees\.io\/objects\//.test(u)||/^data:image\/(webp|jpe?g|png)/.test(u)}
-function cut(img){var w=img.naturalWidth,h=img.naturalHeight;if(w<60||h<60)return null;var sc=Math.min(1,900/Math.max(w,h));w=Math.round(w*sc);h=Math.round(h*sc);
+function cut(img){var W0=img.naturalWidth,H0=img.naturalHeight;if(W0<60||H0<60)return null;var sc=Math.min(1,800/Math.max(W0,H0)),w=Math.round(W0*sc),h=Math.round(H0*sc);
  var c=document.createElement('canvas');c.width=w;c.height=h;var x=c.getContext('2d');x.drawImage(img,0,0,w,h);
  var d=x.getImageData(0,0,w,h),p=d.data,N=w*h,R=[],G=[],B=[],i,k,E=[];
  for(i=0;i<w;i++){E.push(i,(h-1)*w+i)}for(i=0;i<h;i++){E.push(i*w,i*w+w-1)}
@@ -141,20 +141,18 @@ function cut(img){var w=img.naturalWidth,h=img.naturalHeight;if(w<60||h<60)retur
   E.forEach(seed);
   while(qh<qt){k=S[qh++];var X=k%w,Y=(k/w)|0;if(X>0)seed(k-1);if(X<w-1)seed(k+1);if(Y>0)seed(k-w);if(Y<h-1)seed(k+w)}
   return{m:m,n:qt}}
- function peel(m,n,ok){for(var it=0;it<n;it++){var kill=[];for(i=0;i<N;i++){if(m[i])continue;var X=i%w,Y=(i/w)|0;
-   if(!((X>0&&m[i-1])||(X<w-1&&m[i+1])||(Y>0&&m[i-w])||(Y<h-1&&m[i+w])))continue;if(ok(i))kill.push(i)}kill.forEach(function(q){m[q]=1})}}
+ function peel(m,ok){var kill=[];for(i=0;i<N;i++){if(m[i])continue;var X=i%w,Y=(i/w)|0;
+   if(!((X>0&&m[i-1])||(X<w-1&&m[i+1])||(Y>0&&m[i-w])||(Y<h-1&&m[i+w])))continue;if(ok(i))kill.push(i)}kill.forEach(function(q){m[q]=1})}
  /* the gentle cut : only the backdrop colour and its soft shadow */
  var A=flood(function(q){if(Math.max(Math.abs(p[q*4]-r0),Math.abs(p[q*4+1]-g0),Math.abs(p[q*4+2]-b0))<=22)return 1;var L=lum(q);return L<L0&&L>L0-100&&hueOk(q,8)});
  if(A.n>N*0.97)return null;
  /* the deep cut : anything pale and colourless from the edge in, up to a dark rim such as the bento tray's */
  var D=flood(function(q){return lum(q)>70&&chr(q)<50}),m=A.m;
- if((N-D.n)>=(N-A.n)*0.6){m=D.m;peel(m,2,function(q){return lum(q)>50&&chr(q)<50})}
- else peel(m,1,function(q){return lum(q)>95&&hueOk(q,8)});
- for(i=0;i<N;i++)if(m[i])p[i*4+3]=0;
- for(i=0;i<N;i++){if(m[i])continue;var X2=i%w,Y2=(i/w)|0,z=0,n=0;
-  for(var dy=-1;dy<=1;dy++)for(var dx=-1;dx<=1;dx++){var xx=X2+dx,yy=Y2+dy;if(xx<0||yy<0||xx>=w||yy>=h)continue;n++;if(m[yy*w+xx])z++}
-  if(z)p[i*4+3]=Math.round(255*(1-z/n*0.5))}
- x.putImageData(d,0,0);return c}
+ if((N-D.n)>=(N-A.n)*0.6){m=D.m;peel(m,function(q){return lum(q)>85&&chr(q)<50})}
+ else peel(m,function(q){return lum(q)>95&&hueOk(q,8)});
+ /* only the outline is returned : the page lays it over the original photo as a mask, so the food keeps every pixel */
+ var mc=document.createElement('canvas');mc.width=w;mc.height=h;var mx=mc.getContext('2d'),md=mx.createImageData(w,h);
+ for(i=0;i<N;i++)md.data[i*4+3]=m[i]?0:255;mx.putImageData(md,0,0);return mc}
 function get(u,cb){if(u in C)return cb(C[u]);(W[u]=W[u]||[]).push(cb);if(W[u].length>1)return;
  Q.push(u);pump()}
 function pump(){if(busy||!Q.length)return;busy=1;var u=Q.shift(),i=new Image();i.crossOrigin='anonymous';
@@ -162,18 +160,21 @@ function pump(){if(busy||!Q.length)return;busy=1;var u=Q.shift(),i=new Image();i
  i.onload=function(){var c=null;try{c=cut(i)}catch(e){}if(!c)return done(null);
   if(c.toBlob)c.toBlob(function(b){done(b?URL.createObjectURL(b):null)},'image/png');else done(c.toDataURL('image/png'))};
  i.onerror=function(){done(null)};i.src=u}
+function fitSize(f){return f==='cover'||f==='contain'?f:f==='scale-down'?'contain':f==='none'?'auto':'100% 100%'}
+function mask(el,v,size,pos){var s=el.style;s.webkitMaskImage=s.maskImage='url("'+v+'")';s.webkitMaskSize=s.maskSize=size;s.webkitMaskPosition=s.maskPosition=pos;s.webkitMaskRepeat=s.maskRepeat='no-repeat'}
+function unmask(el){var s=el.style;s.webkitMaskImage=s.maskImage=''}
 function doImg(el){if(el.dataset.cut||(el.closest&&el.closest(SKIP)))return;var u=el.getAttribute('src')||'';if(!src(u))return;
- el.dataset.cut='1';get(u,function(v){if(v&&el.getAttribute('src')===u){el.removeAttribute('srcset');el.src=v}else if(el.getAttribute('src')!==u){delete el.dataset.cut;img(el)}})}
+ el.dataset.cut=u;get(u,function(v){if(el.dataset.cut!==u)return;if(v){var cs=getComputedStyle(el);mask(el,v,fitSize(cs.objectFit),cs.objectPosition||'50% 50%');el.style.boxShadow='none'}})}
 function doBg(el){var s=el.style&&el.style.backgroundImage;if(!s||s.indexOf('url(')<0||(el.closest&&el.closest(SKIP)))return;
  var mm=s.match(/url\(["']?([^"')]+)["']?\)/);if(!mm)return;var u=mm[1];if(!src(u)||el.dataset.cutbg===u)return;el.dataset.cutbg=u;
- get(u,function(v){if(v&&el.style.backgroundImage.indexOf(u)>=0){el.style.backgroundImage=s.replace(mm[0],'url("'+v+'")')}})}
+ get(u,function(v){if(el.dataset.cutbg!==u)return;if(v){var cs=getComputedStyle(el);mask(el,v,cs.backgroundSize||'auto',cs.backgroundPosition||'0% 0%')}})}
 function img(el){if(el.complete&&el.naturalWidth)doImg(el);else el.addEventListener('load',function(){doImg(el)},{once:true})}
 function walk(root){if(!root||root.nodeType!==1)return;
  if(root.tagName==='IMG')img(root);else if(root.style&&root.style.backgroundImage)doBg(root);
  root.querySelectorAll&&root.querySelectorAll('img,[style*="background"]').forEach(function(e){e.tagName==='IMG'?img(e):doBg(e)})}
 function start(){walk(document.body);new MutationObserver(function(ms){ms.forEach(function(r){
   if(r.type==='childList')r.addedNodes.forEach(walk);
-  else if(r.attributeName==='src'&&r.target.tagName==='IMG'){if(!/^blob:|^data:image\/png/.test(r.target.getAttribute('src')||'')){delete r.target.dataset.cut;img(r.target)}}
-  else if(r.attributeName==='style')doBg(r.target)})}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['src','style']})}
+  else if(r.attributeName==='src'&&r.target.tagName==='IMG'){var t=r.target;if(t.dataset.cut&&t.dataset.cut!==t.getAttribute('src')){delete t.dataset.cut;unmask(t)}img(t)}
+  else if(r.attributeName==='style'){var e=r.target,b=e.style.backgroundImage||'';if(e.dataset.cutbg&&b.indexOf(e.dataset.cutbg)<0){delete e.dataset.cutbg;unmask(e)}doBg(e)}})}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['src','style']})}
 if(document.body)start();else document.addEventListener('DOMContentLoaded',start);
 })();
