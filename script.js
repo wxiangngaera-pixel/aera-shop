@@ -2029,23 +2029,29 @@ function cut(img){var w=img.naturalWidth,h=img.naturalHeight;if(w<60||h<60)retur
  for(i=0;i<w;i++){E.push(i,(h-1)*w+i)}for(i=0;i<h;i++){E.push(i*w,i*w+w-1)}
  E.forEach(function(q){R.push(p[q*4]);G.push(p[q*4+1]);B.push(p[q*4+2])});
  function med(a){a=a.slice().sort(function(m,n){return m-n});return a[a.length>>1]}
- var r0=med(R),g0=med(G),b0=med(B),L0=(r0+g0+b0)/3,ch0=Math.max(r0,g0,b0)-Math.min(r0,g0,b0);
+ var r0=med(R),g0=med(G),b0=med(B),L0=(r0+g0+b0)/3,ch0=Math.max(r0,g0,b0)-Math.min(r0,g0,b0),rg0=r0-g0,gb0=g0-b0;
  if(L0<170||ch0>40)return null;
  var near=0;for(i=0;i<R.length;i++)if(Math.max(Math.abs(R[i]-r0),Math.abs(G[i]-g0),Math.abs(B[i]-b0))<=22)near++;
  if(near<R.length*0.8)return null;
- function bg(q){var r=p[q*4],g=p[q*4+1],b=p[q*4+2];
-  if(Math.max(Math.abs(r-r0),Math.abs(g-g0),Math.abs(b-b0))<=22)return 1;
-  var ch=Math.max(r,g,b)-Math.min(r,g,b),L=(r+g+b)/3;
-  return(Math.abs(ch-ch0)<=10&&L<L0&&L>L0-100&&Math.abs((r-g)-(r0-g0))<=8&&Math.abs((g-b)-(g0-b0))<=8)?1:0}
- var m=new Uint8Array(N),S=new Int32Array(N),qh=0,qt=0;
- function seed(q){if(!m[q]&&bg(q)){m[q]=1;S[qt++]=q}}
- E.forEach(seed);
- while(qh<qt){k=S[qh++];var X=k%w,Y=(k/w)|0;if(X>0)seed(k-1);if(X<w-1)seed(k+1);if(Y>0)seed(k-w);if(Y<h-1)seed(k+w)}
- if(qt>N*0.97)return null;
+ function hueOk(q,t){var r=p[q*4],g=p[q*4+1],b=p[q*4+2],f=((r+g+b)/3)/L0;return Math.abs((r-g)-rg0*f)<=t&&Math.abs((g-b)-gb0*f)<=t&&Math.max(r,g,b)-Math.min(r,g,b)<=ch0+12}
+ function lum(q){return(p[q*4]+p[q*4+1]+p[q*4+2])/3}
+ function flood(T){var m=new Uint8Array(N),S=new Int32Array(N),qh=0,qt=0;
+  function bg(q){var r=p[q*4],g=p[q*4+1],b=p[q*4+2];if(Math.max(Math.abs(r-r0),Math.abs(g-g0),Math.abs(b-b0))<=22)return 1;var L=(r+g+b)/3;return L<L0&&L>T&&hueOk(q,8)}
+  function seed(q){if(!m[q]&&bg(q)){m[q]=1;S[qt++]=q}}
+  E.forEach(seed);
+  while(qh<qt){k=S[qh++];var X=k%w,Y=(k/w)|0;if(X>0)seed(k-1);if(X<w-1)seed(k+1);if(Y>0)seed(k-w);if(Y<h-1)seed(k+w)}
+  return{m:m,n:qt}}
+ var A=flood(L0-100),Bm=flood(80),m=A.m,deep=0;
+ if(A.n>N*0.97)return null;
+ if((N-Bm.n)>=(N-A.n)*0.6){m=Bm.m;deep=1}
+ /* peel the pale rim the backdrop leaves on the edge */
+ for(var it=0;it<(deep?5:1);it++){var kill=[];for(i=0;i<N;i++){if(m[i])continue;var X3=i%w,Y3=(i/w)|0;
+   if(!((X3>0&&m[i-1])||(X3<w-1&&m[i+1])||(Y3>0&&m[i-w])||(Y3<h-1&&m[i+w])))continue;
+   if(lum(i)>95&&hueOk(i,deep?14:8))kill.push(i)}kill.forEach(function(q){m[q]=1})}
  for(i=0;i<N;i++)if(m[i])p[i*4+3]=0;
  for(i=0;i<N;i++){if(m[i])continue;var X2=i%w,Y2=(i/w)|0,z=0,n=0;
   for(var dy=-1;dy<=1;dy++)for(var dx=-1;dx<=1;dx++){var xx=X2+dx,yy=Y2+dy;if(xx<0||yy<0||xx>=w||yy>=h)continue;n++;if(m[yy*w+xx])z++}
-  if(z)p[i*4+3]=Math.round(255*(1-z/n*0.6))}
+  if(z)p[i*4+3]=Math.round(255*(1-z/n*0.5))}
  x.putImageData(d,0,0);return c}
 function get(u,cb){if(u in C)return cb(C[u]);(W[u]=W[u]||[]).push(cb);if(W[u].length>1)return;
  Q.push(u);pump()}
