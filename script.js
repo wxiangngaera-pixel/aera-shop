@@ -28,10 +28,19 @@ function mount(){if(mounted)return;mounted=1;
 function open(k,h,toggle){mount();var it=item(k);if(!it)return;var was=it.classList.contains('open');
  [].forEach.call(document.querySelectorAll('#hub .hitem.open'),function(x){if(x!==it){x.classList.remove('open');x.querySelector('.hhead').setAttribute('aria-expanded','false')}});
  if(was&&toggle){it.classList.remove('open');it.querySelector('.hhead').setAttribute('aria-expanded','false');return}
- it.classList.add('open');it.querySelector('.hhead').setAttribute('aria-expanded','true');
+ if(k==='home')hsLoad();it.classList.add('open');it.querySelector('.hhead').setAttribute('aria-expanded','true');
  try{if(typeof window.aeExpand==='function')window.aeExpand()}catch(e){}
  var t=(h&&!MAP[h]&&/^#[\w-]+$/.test(h))?document.querySelector(h):null;
  setTimeout(function(){var el=t||it;var y=el.getBoundingClientRect().top+window.pageYOffset-84;window.scrollTo({top:y,behavior:'smooth'})},400)}
+function hsLoad(){var f=document.getElementById('hsFrame');if(!f||f.getAttribute('src'))return;
+ var u=/aeramealprep\.net$/.test(location.hostname)?'/home-sourced-meals/':'https://my.chatbees.io/p/8kZjg8U5XD';
+ f.addEventListener('load',function(){try{var w=f.contentWindow,d=f.contentDocument;if(!d)return;
+  if(!/home-sourced|8kZjg8U5XD/.test(w.location.href)){window.location.href=w.location.href;return}
+  var st=d.createElement('style');st.textContent='body>nav,body>header,.aeralegal,main>h1{display:none!important}html,body{background:transparent!important;margin:0!important}main{padding-top:10px!important}';d.head.appendChild(st);
+  if(!d.querySelector('base')){var b=d.createElement('base');b.target='_top';d.head.appendChild(b)}
+  var fit=function(){var m=d.querySelector('main')||d.body;f.style.height=Math.max(420,Math.ceil(m.getBoundingClientRect().bottom+(w.pageYOffset||0)+16))+'px'};fit();setTimeout(fit,400);
+  if(window.ResizeObserver)new ResizeObserver(fit).observe(d.querySelector('main')||d.body);window.addEventListener('resize',fit)}catch(e){}});
+ f.setAttribute('src',u)}
 window.hubTog=function(k){open(k,'',true)};
 window.hubRoute=function(h){if(key(h))open(key(h),h)};
 document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href]');if(!a)return;var h=a.getAttribute('href'),k=key(h);if(!k)return;e.preventDefault();open(k,h)},true);
