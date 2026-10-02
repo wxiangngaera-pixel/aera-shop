@@ -352,7 +352,7 @@ async function kcStart(){
 /* ---------- open the console ---------- */
 async function kcOpen(){
  kcLoading('Loading the console…');
- var d=await kc.storage.from('kc-app').download('console.html');
+ var d=await kc.storage.from('kc-app').download('console.html?cb='+Date.now());
  if(d.error){kcRoot().innerHTML='<div class="kc-card">'+kcBrand()+'<h2>Could not load</h2><div class="kc-err">'+kcEsc(d.error.message)+'</div><button class="kc-btn full" onclick="kcOpen()">Try again</button></div>';return}
  var app=await d.data.text();
  var S='scr'+'ipt';
