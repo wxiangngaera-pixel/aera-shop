@@ -560,6 +560,7 @@ html[data-lang="zh"] .langsw .l2{background:var(--navy,#16479E);color:#fff}
 .himg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 40%);mask-image:linear-gradient(to right,transparent 0,#000 40%);transition:transform .6s cubic-bezier(.2,.8,.2,1)}
 .himg.cut{filter:drop-shadow(0 14px 18px rgba(0,0,0,.30))}
 .himg.vacimg img{top:6%;height:88%}
+#hc-plan .himg{background:#fff;filter:none;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 22%);mask-image:linear-gradient(to right,transparent 0,#000 22%)}
 .himg.cut.duo img{width:48%;height:auto;aspect-ratio:3/2;max-width:none;top:50%;margin-top:-16%;left:1%;right:auto;bottom:auto}
 .himg.cut.duo img.d2{left:auto;right:1%}
 .himg.cut img{object-fit:contain;-webkit-mask-image:none;mask-image:none;top:8px;left:0;width:calc(100% - 6px);height:calc(100% - 16px)}
