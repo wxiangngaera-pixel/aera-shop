@@ -199,3 +199,5 @@ function setL(l){if(!TX[l])l='en';
   setInterval(counts,4000);inboxLive()}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
+
+/* the browser tab title in Chinese */(function(){try{if((localStorage.getItem("aera_lang")||"en")==="zh")document.title="隐私声明 — AERA Meal Prep"}catch(e){}})();
