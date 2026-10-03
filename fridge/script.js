@@ -48,7 +48,20 @@ async function resetPass(){
  var r=await db.auth.resetPasswordForEmail(em);
  gerr(r.error?r.error.message:'');
  if(!r.error)alert('If that email has an AERA account, a reset link is on its way to it.')}
-async function signOut(){await db.auth.signOut();location.reload()}
+/* Signing in here signs you in across the AERA site too : the Shop's menu reads a small
+   cached copy of the account, the same one the My Account page keeps. */
+async function aeraCacheAccount(merchant){
+ if(!ME||!ME.email)return;var em=String(ME.email).toLowerCase(),old=null;
+ try{old=JSON.parse(localStorage.getItem('aera.account')||'null')}catch(e){}
+ if(old&&String(old.email||'').toLowerCase()===em){
+  if(merchant&&!old.fridge){old.fridge=true;try{localStorage.setItem('aera.account',JSON.stringify(old))}catch(e){}}return}
+ var p={};try{var r=await db.from('profiles').select('name,phone,packaging,seasoning,spice').eq('id',ME.id).maybeSingle();p=(r&&r.data)||{}}catch(e){}
+ var m=ME.user_metadata||{};
+ try{localStorage.setItem('aera.account',JSON.stringify({email:em,name:p.name||m.name||'',phone:p.phone||m.phone||'',
+  packaging:p.packaging||'bento',seasoning:p.seasoning||'normal',spice:p.spice||'normal',address:null,addresses:[],fridge:!!merchant}))}catch(e){}}
+async function signOut(){await db.auth.signOut();
+ try{['aera.account','aera.refLock'].forEach(function(k){localStorage.removeItem(k)})}catch(e){}
+ location.reload()}
 
 /* The database decides what this account may see. The page asks first whether the
    account is a fridge merchant at all, so someone who shops with us and signs in here
@@ -56,6 +69,7 @@ async function signOut(){await db.auth.signOut();location.reload()}
 async function afterSignIn(){
  var u=await db.auth.getUser();ME=(u.data&&u.data.user)||null;
  var ok=await db.rpc('am_i_a_merchant');
+ try{await aeraCacheAccount(!ok.error&&!!ok.data)}catch(e){}
  if(ok.error||!ok.data){
   $('#gate').style.display='block';
   gerr('That account is signed in, but it is not set against a fridge. Ask AERA to put this email on your fridge, then sign in again.');
