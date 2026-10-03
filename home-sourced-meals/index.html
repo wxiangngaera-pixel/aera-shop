@@ -313,21 +313,29 @@
   <a href="https://my.chatbees.io/p/ZQr9fS2jA9" aria-label="AERA Meal Prep"><img src="https://aeramealprep.net/logo/logo_yellow_with_white_text.svg" alt="AERA Meal Prep"></a>
   <a class="homebtn" href="https://my.chatbees.io/p/ZQr9fS2jA9" aria-label="Return to Homepage"><span aria-hidden="true">←</span><span class="hbfull">Return to Homepage</span><span class="hbshort">Home</span></a>
 </div></nav>
-<main class="wrap">
+<header class="hero"><div class="wrap">
+  <span class="eyebrow"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></svg> Personalised Meal Plan</span>
   <h1>My Home-Sourced Meals</h1>
-  <p class="sub">Anything you eat that is not from us, a Shake, Breakfast, a Snack. We look up the Macros, you pick the portion, and your Personalised Meal Plan takes them off your Target so AERA Meals fill only what is left.</p>
-
+  <p class="sub">Log what you eat outside AERA. We find the Macros, and your Plan fills only what is left.</p>
+  <div class="steps">
+    <div class="step"><span class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span>Search what you eat</div>
+    <div class="step"><span class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M7 21h10M5 7h14"/><path d="m5 7-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0z"/></svg></span>Pick your portion</div>
+    <div class="step"><span class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg></span>Send it to your Plan</div>
+  </div>
+</div></header>
+<main class="wrap">
   <div class="card">
-    <h2>Add a Home-Sourced Meal</h2>
-    <p class="hint" style="margin-top:2px">Name it the way you would say it. Keep it simple and the look-up does better.</p>
-    <div class="hmrow" style="margin-top:12px">
-      <input type="text" id="hmName" placeholder="e.g. Nasi Lemak, 2 Boiled Eggs, Milo Ais" autocomplete="off">
-      <button class="btn btn-k" type="button" id="hmBtn" onclick="foodLookup()">Find the Macros</button>
+    <div class="chead"><span class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span><div><h2>Add a Home-Sourced Meal</h2><p>Name it the way you would say it.</p></div></div>
+    <div class="search">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="text" id="hmName" placeholder="e.g. Nasi Lemak, Milo Ais" autocomplete="off">
+      <button class="btn btn-k" type="button" id="hmBtn" onclick="foodLookup()">Find Macros</button>
     </div>
-    <div id="hmMsg" class="hint" style="margin-top:8px"></div>
+    <div class="quick"><button type="button" class="qc" onclick="hmQuick(this)" data-q="Nasi Lemak"><span>🍛</span>Nasi Lemak</button><button type="button" class="qc" onclick="hmQuick(this)" data-q="2 Boiled Eggs"><span>🥚</span>2 Boiled Eggs</button><button type="button" class="qc" onclick="hmQuick(this)" data-q="Protein Shake"><span>🥤</span>Protein Shake</button><button type="button" class="qc" onclick="hmQuick(this)" data-q="Kopi O"><span>☕</span>Kopi O</button><button type="button" class="qc" onclick="hmQuick(this)" data-q="Roti Canai"><span>🫓</span>Roti Canai</button><button type="button" class="qc" onclick="hmQuick(this)" data-q="Banana"><span>🍌</span>Banana</button></div>
+    <div id="hmMsg" class="hint" style="margin-top:10px"></div>
     <div id="hmFound"></div>
-    <div class="hint" style="margin-top:10px" id="hmManualWrap"><a href="#" id="hmManualLink" onclick="hmManual(1);return false">Or enter the numbers myself →</a></div>
-    <div id="hmManualBox" style="display:none;margin-top:10px">
+    <div id="hmManualWrap"><a href="#" class="manual" id="hmManualLink" onclick="hmManual(1);return false"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg> Enter the numbers myself</a></div>
+    <div id="hmManualBox" class="mbox" style="display:none">
       <div class="g4">
         <div><label class="lb" style="margin-top:0">Calories ( KCAL )</label><input type="number" id="hmK" min="0" placeholder="0"></div>
         <div><label class="lb" style="margin-top:0">Protein ( G )</label><input type="number" id="hmP" min="0" placeholder="0"></div>
@@ -342,12 +350,11 @@
   </div>
 
   <div class="card">
-    <h2>Your List</h2>
-    <p class="hint" style="margin-top:2px">Kept on this device. Tick the ones you want counted, then send them to your Personalised Meal Plan.</p>
-    <div id="libList" style="margin-top:10px"></div>
-    <div class="acts">
-      <button class="btn" type="button" id="useBtn" onclick="useSelected()">Use in Personalised Meal Plan →</button>
-      <a class="btn btn-o" href="https://my.chatbees.io/p/dtTMaV#home">My Account</a>
+    <div class="chead"><span class="ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3.5 6 1 1 2-2M3.5 12l1 1 2-2M3.5 18l1 1 2-2"/></svg></span><div><h2>Your List</h2><p>Tick what you want counted, then send it to your Plan.</p></div></div>
+    <div id="libList"></div>
+    <div class="acts2">
+      <button class="btn wide" type="button" id="useBtn" onclick="useSelected()">Use in Personalised Meal Plan <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <a class="btn btn-o wide" href="https://my.chatbees.io/p/dtTMaV#home"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg> My Account</a>
     </div>
     <div id="useMsg" class="hint" style="margin-top:8px"></div>
   </div>
@@ -384,18 +391,22 @@ function pickKey(h){return String(h&&h.n||'').toLowerCase()}
 function isPicked(h){var k=pickKey(h);return PICKED[k]!==false}
 function togglePick(i){var a=loadLib(),h=a[i];if(!h)return;PICKED[pickKey(h)]=!isPicked(h);renderLib()}
 function pickAll(on){loadLib().forEach(function(h){PICKED[pickKey(h)]=!!on});renderLib()}
+var HIC={bowl:'<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11h18a9 9 0 0 1-18 0Z"/><path d="M8 7c0-1.2.8-2 2-2M13 7c0-1.6 1-3 2.6-3"/></svg>',x:'<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>',ck:'<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg>'};
+function hmQuick(b){var n=$('#hmName');n.value=b.getAttribute('data-q');hmManual(0);foodLookup()}
+function mPills(h){return'<div class="pills"><span class="pill k">'+Math.round(h.k||0)+' KCAL</span><span class="pill p">P '+(h.p||0)+'g</span><span class="pill c">C '+(h.c||0)+'g</span><span class="pill f">F '+(h.f||0)+'g</span></div>'}
 function renderLib(){var el=$('#libList');if(!el)return;var a=loadLib();
- if(!a.length){el.innerHTML='<div class="empty">Nothing keyed in yet. Add your first one above and it will be listed here.</div>';
+ if(!a.length){el.innerHTML='<div class="empty"><div class="eic">'+HIC.bowl+'</div><b>Your list is empty</b>Search a meal above and it will show up here.</div>';
   var ub=$('#useBtn');if(ub)ub.disabled=true;return}
  var t={k:0,p:0,c:0,f:0},on=0;
  a.forEach(function(h){if(!isPicked(h))return;on++;t.k+=+h.k||0;t.p+=+h.p||0;t.c+=+h.c||0;t.f+=+h.f||0});
  el.innerHTML='<div class="selbar"><span>'+on+' of '+a.length+' ticked</span><a onclick="pickAll(1)">Tick All</a><a onclick="pickAll(0)">Tick None</a></div>'+
   a.map(function(h,i){var p=isPicked(h);
-  return'<div class="line'+(p?'':' off')+'">'+
+  return'<label class="line'+(p?' on':'')+'">'+
    '<input type="checkbox"'+(p?' checked':'')+' onchange="togglePick('+i+')" aria-label="Use '+esc(h.n)+' in my plan">'+
-   '<span><b>'+esc(h.n)+'</b><br><span class="hint" style="margin:0">'+Math.round(h.k||0)+' KCALs · Protein '+(h.p||0)+' g · Carbs '+(h.c||0)+' g · Fat '+(h.f||0)+' g</span></span>'+
-   '<button class="btn btn-o s" type="button" onclick="libDel('+i+')">Remove</button></div>'}).join('')+
-  '<div class="tot"><span>'+on+' Ticked</span><b>'+Math.round(t.k)+' KCALs · Protein '+r1(t.p)+' g</b></div>';
+   '<span class="ck">'+(p?HIC.ck:'')+'</span><span class="lic">'+HIC.bowl+'</span>'+
+   '<span class="lt"><b>'+esc(h.n)+'</b>'+mPills(h)+'</span>'+
+   '<button class="rm" type="button" title="Remove" aria-label="Remove '+esc(h.n)+'" onclick="event.preventDefault();event.stopPropagation();libDel('+i+')">'+HIC.x+'</button></label>'}).join('')+
+  '<div class="tot"><div><span>'+on+' Ticked</span></div><div><b>'+Math.round(t.k)+' KCAL</b><small>P '+r1(t.p)+'g · C '+r1(t.c)+'g · F '+r1(t.f)+'g</small></div></div>';
  var ub=$('#useBtn');if(ub)ub.disabled=!on;
 }
 /* Hand the ticked items to the plan builder. It picks them up at the Your Week step and clears
@@ -440,21 +451,22 @@ function foodLookup(){
  }).catch(function(){FOOD_BUSY=false;btn.disabled=false;msg.innerHTML=warn('We could not reach the look-up. Enter the numbers yourself below.')});
 }
 function foodQty(v){FOODQ=Math.max(0.25,Math.min(10,+v||1));renderFound()}
+function mxBox(k,p,c,f){return'<div class="k"><b>'+Math.round(k)+'</b><small>KCAL</small></div><div class="p"><b>'+r1(p)+'g</b><small>Protein</small></div><div class="c"><b>'+r1(c)+'g</b><small>Carbs</small></div><div class="f"><b>'+r1(f)+'g</b><small>Fat</small></div>'}
 function renderFound(){
  var el=$('#hmFound');if(!el)return;if(!FOOD){el.innerHTML='';return}
- var q=FOODQ,k=FOOD.kcal*q,pp=FOOD.p*q,cc=FOOD.c*q,ff=FOOD.f*q;
- var opts=[[0.5,'Half'],[1,'1 Serving'],[1.5,'1½'],[2,'2 Servings'],[3,'3 Servings']];
- el.innerHTML='<div class="found"><div class="nm">'+esc(FOOD.name)+'</div><div class="sv">Per Serving : '+esc(servCase(FOOD.serving))+' · '+Math.round(FOOD.kcal)+' KCALs · Protein '+r1(FOOD.p)+' g · Carbs '+r1(FOOD.c)+' g · Fat '+r1(FOOD.f)+' g</div>'+
+ var q=FOODQ;
+ var opts=[[0.5,'Half'],[1,'1 Serving'],[1.5,'1½'],[2,'2'],[3,'3']];
+ el.innerHTML='<div class="found"><div class="fhead"><span class="ic">'+HIC.bowl+'</span><div><div class="nm">'+esc(FOOD.name)+'</div><div class="sv">1 Serving = '+esc(servCase(FOOD.serving))+'</div></div></div>'+
+  '<div class="mx" id="foundTotal">'+mxBox(FOOD.kcal*q,FOOD.p*q,FOOD.c*q,FOOD.f*q)+'</div>'+
   '<label class="lb">How Much Do You Have?</label><div class="portion">'+
   opts.map(function(o){return'<button type="button" class="tog'+(Math.abs(q-o[0])<0.001?' on':'')+'" onclick="foodQty('+o[0]+')">'+o[1]+'</button>'}).join('')+
   '<input type="number" step="0.25" min="0.25" max="10" value="'+q+'" oninput="FOODQ=Math.max(0.25,Math.min(10,+this.value||1));renderFoundTotals()" aria-label="Servings"><span class="hint" style="margin:0">Servings</span></div>'+
-  '<div class="mac2" id="foundTotal">'+Math.round(k)+' KCALs<small>Protein '+r1(pp)+' g · Carbs '+r1(cc)+' g · Fat '+r1(ff)+' g</small></div>'+
   (FOOD.note?'<div class="hint">'+esc(FOOD.note)+'</div>':'')+
-  '<div class="acts"><button class="btn" type="button" onclick="addFound()">Add to My List</button><button class="btn btn-o" type="button" onclick="FOOD=null;renderFound()">Cancel</button><span class="hint" style="margin:0">Estimated Figures. Adjust the Servings to match your portion.</span></div></div>';
+  '<div class="acts"><button class="btn" type="button" onclick="addFound()">'+HIC.ck+' Add to My List</button><button class="btn btn-o" type="button" onclick="FOOD=null;renderFound()">Cancel</button></div></div>';
 }
 function renderFoundTotals(){var e=$('#foundTotal');if(!e||!FOOD)return;var q=FOODQ;
  [].slice.call(document.querySelectorAll('#hmFound .portion .tog')).forEach(function(b){var v=parseFloat((b.getAttribute('onclick')||'').replace(/[^0-9.]/g,''));b.classList.toggle('on',Math.abs(q-v)<0.001)});
- e.innerHTML=Math.round(FOOD.kcal*q)+' KCALs<small>Protein '+r1(FOOD.p*q)+' g · Carbs '+r1(FOOD.c*q)+' g · Fat '+r1(FOOD.f*q)+' g</small>'}
+ e.innerHTML=mxBox(FOOD.kcal*q,FOOD.p*q,FOOD.c*q,FOOD.f*q)}
 function addFound(){
  if(!FOOD)return;var q=FOODQ;
  var nm=FOOD.name+(Math.abs(q-1)<0.001?'':' × '+(q%1?q:q.toFixed(0)));
