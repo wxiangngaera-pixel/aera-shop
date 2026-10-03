@@ -144,6 +144,12 @@ header.top .pnav .out.plink{background:rgba(255,255,255,.06)!important;color:#FD
  .pnav{margin-left:0;width:100%;margin-top:12px;padding-right:0}
  .plink{padding:8px 11px;font-size:12px}}
 
+/* Account page */
+.tabs{grid-template-columns:repeat(5,1fr)!important}
+#vAccount input:disabled{background:#F1F4F9;color:#5A6B87;-webkit-text-fill-color:#5A6B87}
+#vAccount .card+.card{margin-top:14px}
+@media(max-width:520px){#vAccount .f2{grid-template-columns:1fr}.tb{font-size:12.5px}}
+
 /* Lines are AERA navy. Boxes people type into keep their light border so forms stay calm. */
 :root{--line:#16479E!important;--line2:#16479E!important}
 input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),select:not(:focus),textarea:not(:focus){border-color:#C8D2E2!important}
