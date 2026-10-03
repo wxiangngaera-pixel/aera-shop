@@ -321,6 +321,10 @@ select#slot:focus{outline:none;box-shadow:0 0 0 3px rgba(22,71,158,.18)}
 html[data-lang="zh"] .langsw .l1{background:transparent;color:inherit}
 html[data-lang="zh"] .langsw .l2{background:#fff;color:#16479E}
 
+/* the page column may shrink to the screen : a long line ( a message preview, an address ) can no longer push every card off the right edge of a phone */
+.layout{grid-template-columns:minmax(0,1fr) 400px!important}.layout>*{min-width:0!important;max-width:100%}
+@media(max-width:940px){.layout{grid-template-columns:minmax(0,1fr)!important}}
+
 .at-mask{position:fixed;inset:0;z-index:9000;display:none}
 .at-mask.on{display:block}
 .at-mask.at-dim{background:rgba(14,19,28,.62)}
