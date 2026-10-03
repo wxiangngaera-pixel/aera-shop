@@ -641,7 +641,6 @@ function ppOpen(mode,ev){
     ppRow(PP_URL.ref,'\u{1F91D}','Referral Programme','Your Referral Code, your downline and your monthly Cash-Back.')+
     ppRow(PP_URL.fridge,'❄️','AERA Fridge Merchant','For Gyms with an AERA Fridge : what is in it, what sold, and ordering more.')
   : ppRow(PP_URL.acct+'#signup','\u{1F371}','AERA Meal Prep','Order Meals, build a plan and start earning AERA Points.')+
-    ppRow(PP_URL.refnew,'\u{1F91D}','Referral Programme','Become a Referrer and earn Cash-Back on everyone you bring.')+
     ppRow(PP_URL.acct+'#signup-fridge','❄️','AERA Fridge Merchant','Sign up for an AERA Website Account first. The same login opens your Fridge.');
  document.getElementById('ppList').innerHTML=rows;
  document.getElementById('ppNote').innerHTML=login
