@@ -360,6 +360,10 @@ a{text-underline-offset:3px}
 html[data-lang="zh"] .langsw .l1{background:transparent;color:inherit}
 html[data-lang="zh"] .langsw .l2{background:#fff;color:#16479E}
 
+/* the page column may shrink to the screen : a long line ( a message preview, an address ) can no longer push every card off the right edge of a phone */
+.grid2{grid-template-columns:260px minmax(0,1fr)!important}.grid2>*{min-width:0!important;max-width:100%}
+@media(max-width:820px){.grid2{grid-template-columns:minmax(0,1fr)!important}}
+
 /* Lines are AERA navy. Boxes people type into keep their light border so forms stay calm. */
 :root{--line:#16479E!important;--line2:#16479E!important}
 input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),select:not(:focus),textarea:not(:focus){border-color:#C8D2E2!important}
