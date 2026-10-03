@@ -273,6 +273,16 @@ select#slot:focus{outline:none;box-shadow:0 0 0 3px rgba(22,71,158,.18)}
 
 #foName .focap{display:block;font-size:12px;color:#5A6B87;margin-top:2px;line-height:1.4}
 
+/* Top Up amounts in AERA colours : navy with yellow, the picked one yellow with black */
+.tuamt{background:#16479E!important;border:2px solid #16479E!important;color:#FDB913!important;box-shadow:none!important;transition:background .15s,transform .15s}
+.tuamt b{color:#FDB913!important}
+.tuamt span{color:rgba(255,255,255,.85)!important}
+.tuamt:hover{background:#1D57BD!important;border-color:#1D57BD!important}
+.tuamt.on{background:#FDB913!important;border-color:#FDB913!important;color:#0B0B0B!important;transform:scale(1.03);box-shadow:0 6px 18px rgba(253,185,19,.35)!important}
+.tuamt.on b{color:#0B0B0B!important}
+.tuamt.on span{color:#16479E!important}
+.tubtn{color:#FDB913!important}
+
 /* One legal line, the same on every page, so the Terms are never more than a
    glance away wherever a customer happens to be. */
 .aeralegal{max-width:720px;margin:30px auto 0;padding:0 20px 30px;
