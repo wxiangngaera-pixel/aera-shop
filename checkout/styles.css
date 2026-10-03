@@ -142,7 +142,7 @@ a{text-underline-offset:3px}
 .fobox .bar{height:6px;border-radius:3px;background:#DCE5F4;margin-top:9px;overflow:hidden}
 .fobox .bar i{display:block;height:100%;background:var(--y)}
 .fobox .act{margin-top:10px}
-.item.alc .goal{background:var(--navy-soft);color:var(--navy)}
+.item.alc .goal{background:var(--navy);color:var(--y)}
 .alcchips{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:2px}
 .alcchips button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 14px;font:inherit;font-size:13px;font-weight:700;color:var(--mute);cursor:pointer}
 .alcchips button.on{border-color:var(--navy);color:var(--navy);background:var(--navy-soft)}
