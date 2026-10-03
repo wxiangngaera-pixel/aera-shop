@@ -539,6 +539,12 @@ body.signedin #meHome{display:block}
 .inside li.oosout .cap b{opacity:.6}
 .inside li .oosmk{display:block;margin-top:2px;font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#8d6b00}
 
+/* My Account button at the top of the account menu */
+.acctmenu .who a.acctgo{display:flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:10px 12px;border-radius:10px;
+ background:#16479E;color:#FDB913!important;font-size:13.5px;font-weight:700;text-decoration:none;transition:background .15s,transform .15s}
+.acctmenu .who a.acctgo:hover{background:#1D57BD;color:#FDB913!important}
+.acctmenu .who a.acctgo:active{transform:scale(.98)}
+
 .langsw{display:inline-flex;align-items:center;gap:0;border:1px solid var(--navy-line,#CBD9F0);background:#fff;border-radius:99px;padding:2px;cursor:pointer;font-family:inherit;line-height:1;overflow:hidden}
 .langsw span{display:block;padding:5px 9px;font-size:11.5px;font-weight:700;color:var(--navy,#16479E);border-radius:99px;white-space:nowrap}
 .langsw .l1{background:var(--navy,#16479E);color:#fff}
