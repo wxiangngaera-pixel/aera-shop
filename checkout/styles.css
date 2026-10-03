@@ -230,6 +230,21 @@ body.planmode main.layout>section>.tabs,body.planmode #grid{display:none!importa
 .pvback{margin:0 0 6px;background:#16479E;color:#FDB913;border:0;border-radius:999px;padding:9px 16px;font-weight:700;cursor:pointer}
 @media(max-width:560px){.pvdays{grid-template-columns:1fr}.pvhead h2{font-size:19px}}
 
+/* the Plan's Meals as MAP Bento Boxes or Vacuum Bags */
+.pvths.vac{gap:4px}
+.pvbento{position:relative;width:120px;flex:none;aspect-ratio:1536/1024;border-radius:8px;overflow:hidden;background:#E9EEF5 50% 50%/100% 100% no-repeat}
+.pvbento b{position:absolute;display:block;background:#0B2450 50% 50%/cover no-repeat;box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)}
+.pvbento b.empty{background:#0F2D63}
+.pvbento b.pro{left:19.40%;top:20.31%;width:18.23%;height:52.54%;border-radius:7px 2px 2px 7px}
+.pvbento b.pro.h1{height:25.97%}
+.pvbento b.pro.h2{top:46.88%;height:25.97%;border-radius:2px 2px 2px 7px}
+.pvbento b.crb{left:38.93%;top:20.31%;width:40.76%;height:26.76%;border-radius:2px 7px 2px 2px}
+.pvbento b.veg{left:38.93%;top:48.63%;width:40.76%;height:24.22%;border-radius:2px 2px 7px 2px}
+.pvbento b.veg.w1{width:20.08%;border-radius:2px}
+.pvbento b.veg.w2{left:59.61%;width:20.08%}
+.pvbag{display:block;width:38px;height:52px;border-radius:7px;background-color:#EEF2F8;box-shadow:0 1px 4px rgba(11,28,54,.2)}
+@media(max-width:400px){.pvbento{width:96px}.pvbag{width:32px;height:44px}}
+
 /* One legal line, the same on every page, so the Terms are never more than a
    glance away wherever a customer happens to be. */
 .aeralegal{max-width:720px;margin:30px auto 0;padding:0 20px 30px;
