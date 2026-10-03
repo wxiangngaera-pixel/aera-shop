@@ -374,7 +374,6 @@
       <div class="who" id="who"></div><div class="email" id="whoEmail"></div>
       <div class="menu">
         <button class="on" data-t="orders" onclick="setTab('orders')">Orders</button>
-        <button data-t="history" onclick="setTab('history')">Order History</button>
         <button data-t="inbox" onclick="setTab('inbox')">Inbox<span class="ibn" id="ibBadge" style="display:none"></span></button>
         <button data-t="plans" onclick="setTab('plans')">My Meal Plans</button>
         <button data-t="favs" onclick="setTab('favs')">My Favourite Meal Plans</button>
@@ -398,8 +397,8 @@
     </aside>
     <div>
       <div id="welcomeBack"></div>
-    <div id="tOrders" class="card" style="display:none"><h2>Your Orders</h2><div id="ordersList"><div class="empty">Loading…</div></div></div>
-      <div id="tHistory" class="card" style="display:none"><h2>Order History</h2><div id="histList"><div class="empty">Loading…</div></div></div>
+    <div id="tOrders" class="card" style="display:none"><h2>Your Orders</h2><div class="osub">Upcoming</div><div id="ordersList"><div class="empty">Loading…</div></div>
+        <div id="histWrap" style="display:none"><div class="osub" style="margin-top:22px">Order History</div><div id="histList"></div></div></div>
       <div id="tFavs" class="card" style="display:none"><h2>My Favourite Meal Plans</h2><div id="favList"></div></div>
       <div id="tHome" class="card" style="display:none"><h2>My Home-Sourced Meals</h2><p class="hint" style="margin-top:2px">Everything you have keyed in on the Home-Sourced Meals Page. Add them to a plan from the “Your Week” step.</p><div id="homeLib" style="margin-top:10px"></div><div style="margin-top:14px"><a class="btn btn-y" href="https://my.chatbees.io/p/8kZjg8U5XD">Add a Home-Sourced Meal →</a></div></div>
       <div id="tPlans" class="card" style="display:none"><h2>Your Personalised Meal Plans</h2><div id="plansList"><div class="empty">Loading…</div></div><div style="margin-top:14px"><a class="btn btn-y" href="https://my.chatbees.io/p/SrQzC5m2">Build a New Plan →</a></div></div>
@@ -1142,7 +1141,7 @@ function hashTab(){var hh=(location.hash||'').replace('#','').toLowerCase();
 window.addEventListener('hashchange',function(){
  if(!USER)return;var t=hashTab();if(t&&t!==TAB)setTab(t);
  try{obMaybeAsk()}catch(e){}});
-function setTab(t){if(t==='send'&&!IS_ADMIN)t='inbox';TAB=t;if(t==='credit')creditLoad();if(t==='auto')loadAutoSubs();if(t==='inbox'){loadInbox();alLoad()}if(t==='send')smLoad();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();if(t==='history')try{renderHistory()}catch(e){}['orders','history','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===(t==='send'?'inbox':t))});document.querySelectorAll('.ibsw button').forEach(function(b){b.classList.toggle('on',b.dataset.s===t)})}
+function setTab(t){if(t==='send'&&!IS_ADMIN)t='inbox';TAB=t;if(t==='credit')creditLoad();if(t==='auto')loadAutoSubs();if(t==='inbox'){loadInbox();alLoad()}if(t==='send')smLoad();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();if(t==='history'){t='orders';TAB=t;setTimeout(function(){var w=document.getElementById('histWrap');if(w&&w.style.display!=='none')w.scrollIntoView({behavior:'smooth',block:'start'})},300)}['orders','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===(t==='send'?'inbox':t))});document.querySelectorAll('.ibsw button').forEach(function(b){b.classList.toggle('on',b.dataset.s===t)})}
 async function loadProfile(){var r=await sb.from('profiles').select('*').eq('id',USER.id).maybeSingle();PROFILE=r.data||{id:USER.id,email:USER.email};if(!r.data){var meta=USER.user_metadata||{};var seed={id:USER.id,email:USER.email.toLowerCase(),name:meta.name||null,phone:meta.phone||null};
   var w=await sb.from('profiles').upsert(seed);
   if(w.error&&/23505|duplicate|unique/i.test((w.error.message||'')+' '+(w.error.code||''))){delete seed.phone;await sb.from('profiles').upsert(seed)}
@@ -1474,7 +1473,7 @@ function trackBox(o){
 async function loadOrders(){var r=await sb.from('orders').select('*').order('date',{ascending:false}).limit(100);var el=$('#ordersList');if(r.error){el.innerHTML='<div class="msg bad">'+esc(friendly(r.error))+'</div>';return}var rows=r.data||[];ORDERS=rows;ORDERCOUNT=rows.length;cacheAccount();renderOverview();
  if(!rows.length){el.innerHTML='<div class="empty">No Orders yet under '+esc(USER.email)+'. <a href="'+SHOP_URL+'">Order your First Meals →</a></div>';return}
  var cur=rows.filter(orderIsCurrent);
- el.innerHTML=(cur.length?cur.map(orderCard).join(''):'<div class="empty">No upcoming Orders. <a href="#history" onclick="setTab(\'history\');return false">See your Order History →</a></div>')+(cur.length&&cur.length<rows.length?'<div class="hint" style="margin-top:10px"><a href="#history" onclick="setTab(\'history\');return false">Past Orders are in Order History →</a></div>':'');
+ el.innerHTML=cur.length?cur.map(orderCard).join(''):'<div class="empty">No upcoming Orders.</div>';
  try{renderHistory()}catch(e){}}
 function orderCard(o){var st=STATUS[o.status]||[o.status||'—',''];var items=Array.isArray(o.items)?o.items:[];return'<div class="order"><div class="top"><span class="no">'+esc(o.order_no)+'</span><span><span class="chip '+st[1]+'">'+esc(st[0])+'</span>'+'</span></div>'+
  '<div class="meta">'+(o.fulfil==='pickup'?'Self Pick-Up':'Delivery'+(o.courier?' · '+esc(o.courier.charAt(0).toUpperCase()+o.courier.slice(1)):'')+(o.handover==='door'?' · Door-to-Door':o.handover==='drop'?' · Normal Delivery':''))+' · '+fmtDate(o.date)+(o.slot?' · '+esc(slotLabel(o.slot)):'')+(o.address?'<br>'+esc(o.address):'')+'</div>'+
@@ -1491,7 +1490,8 @@ function orderIsCurrent(o){var d=String(o.date||'').slice(0,10);return d>=todayM
 function orderMeals(o){if(+o.boxes>0)return +o.boxes;return (Array.isArray(o.items)?o.items:[]).reduce(function(a,i){return a+(+i.qty||1)},0)}
 function renderHistory(){var el=$('#histList');if(!el)return;
  var rows=(ORDERS||[]).filter(function(o){return !orderIsCurrent(o)});
- if(!rows.length){el.innerHTML='<div class="empty">No past Orders yet. Your Orders move here once they are delivered or collected.</div>';return}
+ var hw=document.getElementById('histWrap');if(hw)hw.style.display=rows.length?'block':'none';
+ if(!rows.length){el.innerHTML='';return}
  var ok=rows.filter(function(o){return o.status!=='cancelled'});
  var spent=ok.reduce(function(a,o){return a+(+o.total||0)},0),meals=ok.reduce(function(a,o){return a+orderMeals(o)},0),ap=ok.reduce(function(a,o){return a+(+o.ap_earned||0)},0);
  var MO=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
