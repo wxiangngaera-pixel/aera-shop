@@ -245,6 +245,11 @@ body.planmode main.layout>section>.tabs,body.planmode #grid{display:none!importa
 .pvbag{display:block;width:38px;height:52px;border-radius:7px;background-color:#EEF2F8;box-shadow:0 1px 4px rgba(11,28,54,.2)}
 @media(max-width:400px){.pvbento{width:96px}.pvbag{width:32px;height:44px}}
 
+/* the paused Points card can be tapped to use Points instead of the First Order Voucher */
+#apBox.aptap{cursor:pointer}
+#apBox.aptap:hover{box-shadow:0 0 0 2px #16479E inset;border-radius:14px}
+.aptapbtn{margin-top:10px;padding:8px 14px!important;border-radius:999px}
+
 /* One legal line, the same on every page, so the Terms are never more than a
    glance away wherever a customer happens to be. */
 .aeralegal{max-width:720px;margin:30px auto 0;padding:0 20px 30px;
