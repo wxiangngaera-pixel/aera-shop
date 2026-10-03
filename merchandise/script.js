@@ -587,6 +587,12 @@ if(window.aeraRetranslate)window.aeraRetranslate();
   hideOld();
   bar=document.createElement('div');bar.id='aeraBar';bar.className='noi18n';bar.setAttribute('role','navigation');
   document.body.insertBefore(bar,document.body.firstChild);paint();
+  /* pages whose body is a centred flex / grid box ( Contact, Thank You ) : the bar goes full width on top, the page's card stays centred below it */
+  try{var bs=getComputedStyle(document.body);if(/flex|grid/.test(bs.display)){var st=document.body.style;
+   if(bs.display.indexOf('flex')>=0){st.flexDirection='column';st.flexWrap='nowrap';st.justifyContent='flex-start'}
+   bar.style.alignSelf='stretch';bar.style.justifySelf='stretch';bar.style.gridColumn='1 / -1';bar.style.width='auto';
+   bar.style.margin='-'+bs.paddingTop+' -'+bs.paddingRight+' 0 -'+bs.paddingLeft;
+   [].forEach.call(document.body.children,function(c){if(c!==bar&&!/^(SCRIPT|STYLE|LINK|NOSCRIPT|TEMPLATE)$/.test(c.tagName)){c.style.marginTop=c.style.marginTop||'auto';c.style.marginBottom=c.style.marginBottom||'auto';c.style.maxWidth=c.style.maxWidth||'100%'}})}}catch(e){}
   document.addEventListener('click',onClick);
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAll()});
   try{new MutationObserver(function(){paint()}).observe(document.documentElement,{attributes:true,attributeFilter:['data-lang']})}catch(e){}
