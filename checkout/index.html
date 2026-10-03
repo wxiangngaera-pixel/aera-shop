@@ -1364,8 +1364,18 @@ function setFul(f){FUL=f;document.getElementById('optPickup').classList.toggle('
 /* Points are paused while the First Order Voucher is on. Tapping the Points card swaps them :
    the Voucher is saved for later ( it is only spent when an Order is paid ) and the most
    points this Order allows are put to use straight away. */
+/* One tap on the Points card uses the most points this Order allows ; a second tap stops.
+   While on, it follows the Cart, so adding or removing Meals keeps it at the most allowed. */
+function apTap(e){if(e&&e.target&&e.target.closest&&e.target.closest('a,input,textarea'))return;
+ if(APS.redeemRM>0){APS.redeemRM=0;APS.useMax=false}else{APS.redeemRM=maxRedeemRM();APS.useMax=true}
+ refee();renderCart()}
+window.apTap=apTap;
+function apTapRow(maxRM){var on=APS.redeemRM>0,rmv=on?APS.redeemRM:maxRM,ap=Math.round(rmv*100/AP.rmPer100);
+ return '<div class="aprow'+(on?' on':'')+'"><span class="apchk" aria-hidden="true">'+(on?'✓':'')+'</span><span class="aptx"><b>'+
+  (on?'Using '+apFmt(ap)+' · RM '+rmv.toFixed(2)+' OFF':'Tap to use '+apFmt(ap)+' · RM '+rmv.toFixed(2)+' OFF')+'</b><small>'+
+  (on?'Tap the card again to keep your points for next time.':'The most this Order allows ( '+AP.capPct+'% of it ).')+'</small></span></div>'}
 function apUseInstead(e){if(e&&e.stopPropagation)e.stopPropagation();if(ccOn())return;
- foToggle(false);APS.redeemRM=maxRedeemRM();refee();renderCart();
+ foToggle(false);APS.redeemRM=maxRedeemRM();APS.useMax=true;refee();renderCart();
  try{var b=document.getElementById('apBox');if(b)b.scrollIntoView({behavior:'smooth',block:'center'})}catch(x){}}
 window.apUseInstead=apUseInstead;
 function renderPoints(){var box=document.getElementById('apBox');if(!box)return;box.classList.remove('aptap');box.onclick=null;if(!count()){box.innerHTML='';return}
@@ -1375,9 +1385,12 @@ function renderPoints(){var box=document.getElementById('apBox');if(!box)return;
  if(firstOrderRM()>0||ccOn()){box.innerHTML='<div class="row"><span><b>AERA Points</b><br><span class="hint" style="margin:0">'+esc(APS.email)+'</span></span><b class="big">'+apFmt(APS.available)+'</b></div><div class="hint">'+(ccOn()?'Paused on this Order while a Cost Price Code is applied. Your points stay in your account for next time.':'Paused on this Order while the First Order Voucher is on. Tap here to use your AERA Points instead, and the Voucher is saved for later.')+'</div>'+(ccOn()?'':'<button class="btn btn-y aptapbtn" type="button" onclick="apUseInstead(event)">Use My Points Instead</button>')+refBonusLine();if(!ccOn()){box.classList.add('aptap');box.onclick=apUseInstead}return}
  var maxRM=maxRedeemRM();var opts=[];for(var v=0;v<=maxRM;v++)opts.push('<option value="'+v+'"'+(v===APS.redeemRM?' selected':'')+'>'+(v===0?'Don\'t use points':'RM '+v+'.00 off ( '+(v*100/AP.rmPer100)+' AP )')+'</option>');
  var hist=APS.mine.slice().sort(function(a,b){return String(b.Date||'').localeCompare(String(a.Date||''))}).slice(0,5).map(function(r){var e=+r.Earned||0,d=+r.Redeemed||0;return'<tr><td>'+esc(String(r.Date||'').slice(0,10))+(e&&r.Expires?'<span class="hint" style="margin:0;display:inline"> · expires '+esc(String(r.Expires).slice(0,10))+'</span>':'')+'</td><td class="r">'+(e?'+'+e:'')+(d?'<span style="color:var(--bad)">−'+d+'</span>':'')+'</td></tr>'}).join('');
+ if(maxRM>0){box.classList.add('aptap');box.onclick=apTap}
+ if(APS.useMax&&maxRM>0&&APS.redeemRM!==maxRM){APS.redeemRM=maxRM;setTimeout(function(){refee();renderCart()},0)}
+ if(APS.redeemRM>maxRM){APS.redeemRM=maxRM;setTimeout(function(){refee();renderCart()},0)}
  box.innerHTML='<div class="row"><span><b>AERA Points</b><br><span class="hint" style="margin:0">'+esc(APS.email)+'</span></span><b class="big">'+apFmt(APS.available)+'</b></div>'+
  '<div class="hint">Worth RM '+(APS.available/100*AP.rmPer100).toFixed(2)+(APS.expiringSoon?' · <span style="color:var(--warn)">'+apFmt(APS.expiringSoon)+' expire on '+esc(APS.expiringDate)+'</span>':'')+'</div>'+
- (maxRM>0?'<div class="row" style="margin-top:8px"><span>Use on this order <span class="hint" style="margin:0">( Max '+AP.capPct+'% = RM '+maxRM+' )</span></span><select onchange="APS.redeemRM=+this.value;renderCart()">'+opts.join('')+'</select></div>':'<div class="hint">You need at least 100 AP to take RM 1.00 off — this order adds '+apFmt(pointsEarned())+'.</div>')+
+ (maxRM>0?apTapRow(maxRM):'<div class="hint">You need at least 100 AP to take RM 1.00 off — this order adds '+apFmt(pointsEarned())+'.</div>')+
  (hist?'<table>'+hist+'</table>':'')+refBonusLine()}
 function refBonusLine(){var b=refBonusAp();if(!b)return '';
  return '<div class="hint" style="margin-top:6px;color:var(--green);font-weight:600">+ '+apFmt(b)+' bonus for using '+esc(REF.name)+' ( '+REF_BONUS_PCT+'% of your meal subtotal ).</div>'}
