@@ -561,6 +561,7 @@ html[data-lang="zh"] .langsw .l2{background:var(--navy,#16479E);color:#fff}
 /* phones : the top bar keeps to one row and never runs off the screen. Log In, Sign Up and My Account move into the ☰ menu. */
 @media(max-width:480px){nav .wrap{width:calc(100vw - 24px)!important;gap:10px!important}#navSignup,#navLogin,.navr .acct{display:none!important}.navr{gap:6px!important}.findbtn,.cartic,.inboxbtn{width:34px!important;height:34px!important}.findbtn{font-size:17px!important}.langsw span{padding:5px 6px!important;font-size:11px!important}.navr .ordbtn{padding:8px 10px!important;font-size:12px!important}.navtoggle{padding:2px!important}nav.signedin .findbtn{display:none!important}}
 @media(max-width:360px){.findbtn{display:none!important}nav img{height:22px!important}}
+/* tablets and small screens : Log In, Sign Up and My Account live in the ☰ menu, the same as the bar on the other pages */@media(max-width:760px){#navSignup,#navLogin,.navr .acct{display:none!important}}
 
 /* phones : the Menu shows two Meals a row, each card compact */
 @media(max-width:600px){
