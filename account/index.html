@@ -902,14 +902,18 @@ async function savePw(e){e.preventDefault();var a=$('#pwNew').value,b=$('#pwNew2
   msg('pwMsg','<div class="msg ok">Password changed. Use your new password next time you sign in.</div>')}
  catch(err){var raw=(err&&err.message)||'';var m=/different from the old/i.test(raw)?'That is already your current password, so nothing needed changing. Choose a different one if you want a new password.':friendly(err);msg('pwMsg','<div class="msg bad">'+esc(m)+'</div>')}
  busy('pwBtn',false);return false}
+var SHOWN_UID=null;
 function init(){if(!configured()){$('#setup').style.display='block';return}
  sb=supabase.createClient(SB.url,SB.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
- sb.auth.onAuthStateChange(function(ev,session){if(ev==='PASSWORD_RECOVERY')RECOVERY=true;if(RECOVERY&&session){USER=session.user;showReset();return}USER=session?session.user:null;if(USER&&!SU.done){var ok=false;try{ok=suFromLink()}catch(e){}
+ sb.auth.onAuthStateChange(function(ev,session){if(ev==='PASSWORD_RECOVERY')RECOVERY=true;
+  /* the same person, already on their account : a token refresh or a return to this tab must not
+     redraw the page and throw them back to Orders */
+  if(session&&session.user&&SHOWN_UID===session.user.id&&!RECOVERY&&ev!=='USER_UPDATED'){USER=session.user;return}if(RECOVERY&&session){USER=session.user;showReset();return}USER=session?session.user:null;if(USER&&!SU.done){var ok=false;try{ok=suFromLink()}catch(e){}
   if(ok){try{suConfirmedScreen();return}catch(e){}}}if(USER)showAccount();else showAuth()});
  if((location.hash||'').toLowerCase().indexOf('logout')>=0){doLogout(true);return}
  sb.auth.getSession().then(function(r){USER=r.data.session?r.data.session.user:null;if(RECOVERY&&USER){showReset();return}if(RESET_ERR&&!USER){history.replaceState(null,'',location.pathname+location.search);showAuth();setAuth('forgot');msg('authMsg','<div class="msg bad">That reset link has expired or was already used. Enter your email below for a fresh one.</div>');return}if(USER){var ok2=false;try{ok2=suFromLink()}catch(e){}
   if(ok2){try{suConfirmedScreen();return}catch(e){}}}if(USER)showAccount();else showAuth()})}
-function showAuth(){$('#acctView').style.display='none';$('#authView').style.display='block';try{localStorage.removeItem('aera.account')}catch(e){}
+function showAuth(){SHOWN_UID=null;$('#acctView').style.display='none';$('#authView').style.display='block';try{localStorage.removeItem('aera.account')}catch(e){}
  var hh=(location.hash||'').replace('#','').toLowerCase();if(hh==='signup-fridge'||hh==='fridge'){setAuth('signup');gymMode()}else if(hh==='signup'||hh==='register')setAuth('signup');else if(hh==='login'||hh==='signin')setAuth('login')}
 /* A gym signing up for a fridge is not a person ordering dinner : the account is the
    studio's, the name on it is the studio's, and AERA Points are beside the point. */
@@ -1089,7 +1093,7 @@ async function legacyClaim(){if(!sb||!USER)return;
   try{await loadProfile()}catch(e){}
   try{loadPoints()}catch(e){}}
  catch(e){}}
-async function showAccount(){var nx=nextTarget();
+async function showAccount(){try{SHOWN_UID=USER&&USER.id||null}catch(e){}var nx=nextTarget();
  /* read and clear in one go, so it fires for this sign-in and no later visit */
  var goHome=false;
  try{goHome=sessionStorage.getItem('aera.goHome')==='1';if(goHome)sessionStorage.removeItem('aera.goHome')}catch(e){}
@@ -1141,7 +1145,7 @@ function hashTab(){var hh=(location.hash||'').replace('#','').toLowerCase();
 window.addEventListener('hashchange',function(){
  if(!USER)return;var t=hashTab();if(t&&t!==TAB)setTab(t);
  try{obMaybeAsk()}catch(e){}});
-function setTab(t){if(t==='send'&&!IS_ADMIN)t='inbox';TAB=t;if(t==='credit')creditLoad();if(t==='auto')loadAutoSubs();if(t==='inbox'){loadInbox();alLoad()}if(t==='send')smLoad();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();if(t==='history'){t='orders';TAB=t;setTimeout(function(){oTab('hist')},0)}['orders','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===(t==='send'?'inbox':t))});document.querySelectorAll('.ibsw button').forEach(function(b){b.classList.toggle('on',b.dataset.s===t)})}
+function setTab(t){if(t==='send'&&!IS_ADMIN)t='inbox';TAB=t;try{var hh0=(location.hash||'').replace('#','');if((t!=='orders'||hh0)&&hh0!==t)history.replaceState(null,'',location.pathname+location.search+'#'+t)}catch(e){}if(t==='credit')creditLoad();if(t==='auto')loadAutoSubs();if(t==='inbox'){loadInbox();alLoad()}if(t==='send')smLoad();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();if(t==='history'){t='orders';TAB=t;setTimeout(function(){oTab('hist')},0)}['orders','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===(t==='send'?'inbox':t))});document.querySelectorAll('.ibsw button').forEach(function(b){b.classList.toggle('on',b.dataset.s===t)})}
 async function loadProfile(){var r=await sb.from('profiles').select('*').eq('id',USER.id).maybeSingle();PROFILE=r.data||{id:USER.id,email:USER.email};if(!r.data){var meta=USER.user_metadata||{};var seed={id:USER.id,email:USER.email.toLowerCase(),name:meta.name||null,phone:meta.phone||null};
   var w=await sb.from('profiles').upsert(seed);
   if(w.error&&/23505|duplicate|unique/i.test((w.error.message||'')+' '+(w.error.code||''))){delete seed.phone;await sb.from('profiles').upsert(seed)}
