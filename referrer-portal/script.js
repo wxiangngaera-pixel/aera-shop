@@ -330,6 +330,11 @@ if(window.aeraRetranslate)window.aeraRetranslate();
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+/* more Chinese for this page : added to the page's own translation list */
+(function(){try{var D=window.AERA_I18N=window.AERA_I18N||{},R=window.AERA_I18N_RE=window.AERA_I18N_RE||[];
+ Object.assign(D,{"Identity Verification": "身份验证", "Please verify your identity to access this page.": "请先验证身份才能查看此页面。", "Send Verification Code": "发送验证码", "Enter your email address": "请输入电邮地址", "Enter 6-digit PIN": "请输入 6 位数验证码", "Verify": "验证", "Verify Code": "验证", "Resend Code": "重新发送验证码", "Back": "返回"});
+ var go=function(){try{if(window.aeraRetranslate)window.aeraRetranslate()}catch(e){}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(go,50)});else setTimeout(go,50)}catch(e){}})();
+
 (function(){
  if(window.__aeraBar)return;window.__aeraBar=1;
  if(window.top!==window)return; /* not inside the homepage's embedded pages */
