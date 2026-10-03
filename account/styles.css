@@ -336,6 +336,8 @@ a{text-underline-offset:3px}
 .hacts{margin-top:10px;display:flex;gap:8px}
 @media(max-width:600px){.htiles{grid-template-columns:repeat(2,1fr)}.hrow .hpics{display:none}}
 
+#tOrders .osub{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:#16479E;padding-bottom:6px;margin-bottom:10px;border-bottom:2px solid #16479E}
+
 /* One legal line, the same on every page, so the Terms are never more than a
    glance away wherever a customer happens to be. */
 .aeralegal{max-width:720px;margin:30px auto 0;padding:0 20px 30px;
