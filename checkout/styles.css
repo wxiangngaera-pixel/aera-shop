@@ -271,6 +271,8 @@ select#slot:focus{outline:none;box-shadow:0 0 0 3px rgba(22,71,158,.18)}
 #foBox.fotap .fobox{transition:box-shadow .15s}
 #foBox.fotap:hover .fobox{box-shadow:0 0 0 2px #16479E inset}
 
+#foName .focap{display:block;font-size:12px;color:#5A6B87;margin-top:2px;line-height:1.4}
+
 /* One legal line, the same on every page, so the Terms are never more than a
    glance away wherever a customer happens to be. */
 .aeralegal{max-width:720px;margin:30px auto 0;padding:0 20px 30px;
