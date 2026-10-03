@@ -49,7 +49,7 @@ function alcLoad(){var f=document.getElementById('alcFrame');if(!f||f.getAttribu
  f.addEventListener('load',function(){try{var w=f.contentWindow,d=f.contentDocument,g=d.getElementById('grid');if(!g)return;
   if(!/checkout|D2pz8bZ/.test(w.location.href)){location.href=w.location.href;return}
   for(var el=g;el&&el!==d.body;el=el.parentElement){[].forEach.call(el.parentElement.children,function(s){if(s!==el&&!/^(SCRIPT|STYLE|LINK)$/.test(s.tagName))s.style.setProperty('display','none','important')})}
-  var st=d.createElement('style');st.textContent='html,body{background:transparent!important;margin:0!important;padding:0!important}#grid{margin:0!important}';d.head.appendChild(st);
+  var st=d.createElement('style');st.textContent='html,body{background:transparent!important;margin:0!important;padding:0!important}#grid{margin:0!important}#planView{display:none!important}body.planmode #grid{display:grid!important}';d.head.appendChild(st);/* a Personalised Meal Plan in the Cart must not take over the À la Carte list */try{w.PV_SHOP=true;if(w.render)w.render()}catch(e){}
   var fit=function(){f.style.height=Math.max(300,Math.ceil(g.getBoundingClientRect().bottom+(w.pageYOffset||0)+12))+'px'};fit();setTimeout(fit,800);if(window.ResizeObserver)new ResizeObserver(fit).observe(g);alcBar()}catch(e){}});
  f.setAttribute('src',u)}
 window.hubAlc=function(b,e){if(e)e.stopImmediatePropagation();var m=document.getElementById('meals');if(!m)return;
