@@ -69,7 +69,7 @@ if(window.AERA_I18N)for(var z in ZH)if(!(z in window.AERA_I18N))window.AERA_I18N
 })();
 
 (function(){var D={g:'fat',n:1,s:[],a:0};
-function meals(){var out=[];(window.MEALS||[]).forEach(function(m){if(m[2]!==D.g)return;var c=document.querySelector('#mealGrid .meal[data-sku="'+m[0]+'"]');if(c&&/oos/.test(c.className))return;var p=c&&c.querySelector('.p');var pr=p?parseFloat(p.textContent.replace(/[^\d.]/g,'')):(+m[3]+1.8);out.push({sku:m[0],name:((typeof window.aeraLangGet==='function'&&window.aeraLangGet()==='zh')&&window.AERA_I18N&&window.AERA_I18N[m[1]])||m[1],kcal:m[4],img:m[8],price:pr})});return out}
+function meals(){var out=[];(window.MEALS||[]).forEach(function(m){if(m[2]!==D.g)return;var c=document.querySelector('#mealGrid .meal[data-sku="'+m[0]+'"]');if(c&&/oos/.test(c.className))return;var p=c&&c.querySelector('.p');var pr=p?parseFloat(p.textContent.replace(/[^\d.]/g,'')):(+m[3]+1.8);out.push({sku:m[0],name:m[1]/* the page translator turns it into Chinese over English on the 中文 site */,kcal:m[4],img:m[8],price:pr})});return out}
 function size(){return 7*D.n}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function draw(){var el=document.getElementById('diy');if(!el)return;var L=meals(),M={};L.forEach(function(x){M[x.sku]=x});
@@ -427,7 +427,7 @@ function aeAsk(q){
  if(!lab.length)lab.push(["Best Match",""]);
  return {list:list.slice(0,8),lab:lab}}
 function aeMealBtn(m){
- var zh=((typeof window.aeraLangGet==='function'&&window.aeraLangGet()==='zh')&&window.AERA_I18N&&window.AERA_I18N[m[1]])||m[1];
+ var zh=m[1];
  return'<button type="button" onclick="aeGoMeal(\'' + m[0] + '\',\'' + String(m[1]).replace(/'/g,"") + '\')">'+
   '<img loading="lazy" src="'+(m[8].indexOf("http")===0?m[8]:IMG+m[8])+'" alt="">'+
   '<span>'+esc(zh).replace(/\n/g,'<br>')+'<small>'+(m[2]==="fat"?"Fat Loss":"Mass Gain")+" · "+m[4]+" KCAL · RM "+(m[3]+PACK_PER_BOX).toFixed(2)+'</small></span></button>'}
