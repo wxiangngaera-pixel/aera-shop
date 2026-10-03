@@ -13,6 +13,8 @@
  location.replace('https://aeramealprep.net'+(t==='/'?'/':t+'/')+q+(location.hash||''));
 }catch(e){}})();
 
+document.addEventListener("pointerdown",function(e){var b=e.target.closest&&e.target.closest(".planacts .btn");if(!b)return;b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop");setTimeout(function(){b.classList.remove("pop")},360)});
+
 (function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 function tourWhich(){var m={1:'intro',2:'week',3:'prefs',4:'plan',5:'order'};for(var i=1;i<=5;i++){var e=document.getElementById('s'+i);if(e&&getComputedStyle(e).display!=='none')return m[i]}return 'intro'}
 
