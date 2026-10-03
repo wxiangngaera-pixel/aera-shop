@@ -551,10 +551,10 @@ function asPlanBtn(p,idx,ordered){var s=asSubFor(p.id);
  if(s)return'<button class="btn btn-o s" type="button" onclick="setTab(\'auto\');location.hash=\'auto\'">Auto Subscription · '+esc(AS_FREQ[s.freq]||'')+(s.status==='paused'?' · Paused':'')+'</button>';
  if(ordered&&ordered[p.id])return'<button class="btn btn-o s" type="button" onclick="asStartOpen('+idx+')">Start Auto Subscription</button>';
  return'<span class="hint" style="align-self:center">Order this Plan once to start an Auto Subscription.</span>'}
-var AS_RULES='<ul class="asrules"><li>Each delivery repeats your Order of this Plan — same address, time slot and packaging — and is paid from your <b>AERA Credit</b>.</li>'+
- '<li>To reschedule, give us <b>4 days\' notice</b>. With less notice, a <b>RM 20</b> late fee comes off your AERA Credit.</li>'+
- '<li>Once Meals are cooked or delivered, that delivery cannot be moved and is <b>not refunded</b>.</li>'+
- '<li>You can switch it off at any time. A delivery already booked in the last 4 days still goes ahead.</li><li>We do not deliver on Sundays.</li></ul>';
+var AS_RULES='<ul class="asrules"><li>Each Delivery repeats your Order of this Plan. Same Address, Time Slot and Packaging, and is paid from your <b>AERA Credit</b>.</li>'+
+ '<li>To reschedule, give us <b>4 Days\' notice</b>. With less notice, a <b>RM 20</b> Late Fee comes OFF your AERA Credit.</li>'+
+ '<li>Once Meals are cooked or delivered, that Delivery cannot be moved and is <b>not refunded</b>.</li>'+
+ '<li>You can switch it OFF at any time. A Delivery already booked in the last 4 days still goes ahead.</li><li>We do not deliver on Sundays.</li></ul>';
 async function asStartOpen(idx){var p=PLANS[idx];if(!p)return;
  asModal('<h3>Start Auto Subscription</h3><p class="asp">Checking your AERA Credit…</p>');
  await asSettings();var bal=await asCredit();
