@@ -588,7 +588,10 @@ function firstOrderRM(){if(ccOn())return 0;return (FOON&&foQualifies())?foAmount
 function foMarkUsed(){try{var k=window.__foUsed;if(k){localStorage.setItem(k,'1');
   var a=JSON.parse(localStorage.getItem('aera.account')||'null');if(a){a.foUsed=true;localStorage.setItem('aera.account',JSON.stringify(a))}}}catch(e){}}
 function foToggle(on){FOON=!!on;if(FOON){APS.redeemRM=0;VOUCHER=null}refee();renderCart()}
-function renderFo(){var el=document.getElementById('foBox');if(!el)return;
+/* One tap on the Voucher card uses it ; another tap saves it for later. */
+function foTap(e){if(e&&e.target&&e.target.closest&&e.target.closest('a,input,textarea'))return;if(!foQualifies())return;foToggle(!(firstOrderRM()>0))}
+window.foTap=foTap;
+function renderFo(){var el=document.getElementById('foBox');if(!el)return;el.classList.remove('fotap');el.onclick=null;if(foQualifies()&&!ccOn()){el.classList.add('fotap');el.onclick=foTap}
  if(!foOffered()||!count()){el.innerHTML='';return}
  var base=mealBase(),on=firstOrderRM()>0,short=Math.max(0,FO.minRm-base);
  el.innerHTML='<div class="fobox'+(on?' on':'')+'"><div class="t"><span>First Order Voucher</span><b>'+foHeadline()+'</b></div>'+
@@ -597,8 +600,7 @@ function renderFo(){var el=document.getElementById('foBox');if(!el)return;
      '<div class="bar"><i style="width:'+Math.round(Math.min(100,base/FO.minRm*100))+'%"></i></div>'
     :'<p>'+(on?'<b>Your First Order Voucher \u2014 '+foShort()+', is applied to this Order.</b> '+'That is '+rm(firstOrderRM())+' OFF your Meals. It stands on its own, so AERA Points, the Birthday Treat and Delivery Vouchers are paused while it is on.'
               :'Ready to Use — '+foHeadline()+'. Using it pauses AERA Points, the Birthday Treat and Delivery Vouchers on this Order.')+'</p>'+
-     '<div class="act">'+(on?'<button class="btn btn-o" type="button" style="padding:7px 13px" onclick="foToggle(false)">Save It For Later</button>'
-                            :'<button class="btn btn-y" type="button" style="padding:7px 13px" onclick="foToggle(true)">Use My First Order Voucher</button>')+'</div>')+
+     '<div class="aprow'+(on?' on':'')+'"><span class="apchk" aria-hidden="true">'+(on?'✓':'')+'</span><span class="aptx"><b>'+(on?'Using Your First Order Voucher · '+rm(firstOrderRM())+' OFF':'Tap to use Your First Order Voucher')+'</b><small>'+(on?'Tap the card again to save it for later.':'Pauses AERA Points, the Birthday Treat and Delivery Vouchers on this Order.')+'</small></span></div>')+
   '</div>'}
 function voucherMarkUsed(){try{var c=localStorage.getItem('aera.voucherPending');localStorage.removeItem('aera.voucherPending');if(c)dropVoucher(String(c).toUpperCase())}catch(e){}}
 function bdayMarkUsed(){voucherMarkUsed();foMarkUsed();try{var bu=window.__bdayUsed||localStorage.getItem('aera.bdayPending');localStorage.removeItem('aera.bdayPending');if(bu){localStorage.setItem('aera.bdayUsed',bu);var a=JSON.parse(localStorage.getItem('aera.account')||'null');if(a){a.bdayUsed=bdayYear();localStorage.setItem('aera.account',JSON.stringify(a))}}}catch(e){}}
