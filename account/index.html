@@ -388,6 +388,11 @@
         <button data-t="prefs" onclick="setTab('prefs')">Meal Preferences</button>
           <button data-t="body" onclick="setTab('body')">Weight Control</button>
       </div>
+      <div class="portals">
+        <span class="eyebrow">Portals</span>
+        <a id="sideFridge" href="https://aeramealprep.net/fridge/" style="display:none"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M5 10h14"/><path d="M8.5 6v1.5M8.5 13v3"/></svg><span>AERA Fridge</span><svg class="pgo" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a href="https://aeramealprep.net/referrer-portal/"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M19 8v6M16 11h6"/></svg><span>Referral Portal</span><svg class="pgo" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></a>
+      </div>
       <button class="btn btn-o s" style="margin-top:16px" onclick="doLogout()">Sign Out</button>
     </aside>
     <div>
@@ -1092,6 +1097,7 @@ async function showAccount(){var nx=nextTarget();
  $('#whoEmail').textContent=USER.email;$('#who').textContent=(USER.user_metadata&&USER.user_metadata.name)||'Welcome';
  await loadProfile();
  try{var fm=await sb.rpc('am_i_a_merchant');FRIDGEOK=!!(fm&&!fm.error&&fm.data===true)}catch(e){FRIDGEOK=false}
+ try{var sf=document.getElementById('sideFridge');if(sf)sf.style.display=FRIDGEOK?'flex':'none'}catch(e){}
  await legacyClaim();
  if(nx){try{await loadAddresses()}catch(e){}cacheAccount();location.replace(nx);return}
  /* signed in and settled — ask for the five numbers if any are still missing */
