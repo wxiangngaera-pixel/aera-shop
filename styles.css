@@ -677,3 +677,13 @@ html[data-lang="zh"] .langsw .l2{background:var(--navy,#16479E);color:#fff}
 
 .inboxbtn{position:relative;display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;flex:none;text-decoration:none}.inboxbtn:hover{background:rgba(255,255,255,.26);color:var(--y)}.inboxbtn svg{width:20px;height:20px;display:block}nav.signedout .inboxbtn{display:none}
 .hbn{display:none;position:absolute;top:-3px;right:-5px;min-width:19px;height:19px;padding:0 5px;border-radius:99px;background:#C8433B;color:#fff;font-size:10.5px;font-weight:800;line-height:19px;text-align:center;box-shadow:0 0 0 2px var(--navy)}
+
+/* Lines are AERA navy. Boxes people type into keep their light border so forms stay calm. */
+:root{--line:#16479E!important;--line2:#16479E!important}
+input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),select:not(:focus),textarea:not(:focus){border-color:#C8D2E2!important}
+.bmtrack{background:#E3E7EE!important}.thumb{background-color:#E3E7EE!important}
+/* Every button is either AERA yellow with black wording, or AERA navy with yellow wording. */
+.aera-yb{background:#FDB913!important;color:#0B0B0B!important;border-color:#FDB913!important}
+.aera-nb{background:#16479E!important;color:#FDB913!important;border-color:#16479E!important;box-shadow:none!important}
+.aera-nb:hover{background:#1D57BD!important;border-color:#1D57BD!important;color:#FDB913!important}
+.aera-nb svg{stroke:currentColor}
