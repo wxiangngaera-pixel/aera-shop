@@ -558,6 +558,10 @@ html[data-lang="zh"] .langsw .l1{background:transparent;color:var(--navy,#16479E
 html[data-lang="zh"] .langsw .l2{background:var(--navy,#16479E);color:#fff}
 @media(max-width:900px){.langsw span{padding:5px 7px;font-size:11px}}
 
+/* phones : the top bar keeps to one row and never runs off the screen. Log In, Sign Up and My Account move into the ☰ menu. */
+@media(max-width:480px){nav .wrap{width:calc(100vw - 24px)!important;gap:10px!important}#navSignup,#navLogin,.navr .acct{display:none!important}.navr{gap:6px!important}.findbtn,.cartic,.inboxbtn{width:34px!important;height:34px!important}.findbtn{font-size:17px!important}.langsw span{padding:5px 6px!important;font-size:11px!important}.navr .ordbtn{padding:8px 10px!important;font-size:12px!important}.navtoggle{padding:2px!important}nav.signedin .findbtn{display:none!important}}
+@media(max-width:360px){.findbtn{display:none!important}nav img{height:22px!important}}
+
 #hub{padding:30px 0 56px}
 #hub .hubg+.hubg{margin-top:34px}
 #hub .hubg>.eyebrow{display:block;margin-bottom:14px}
