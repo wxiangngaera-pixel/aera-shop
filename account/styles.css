@@ -302,6 +302,15 @@ a{text-underline-offset:3px}
 @media(max-width:760px){nav .wrap{height:auto;flex-wrap:wrap;padding:9px 0;row-gap:9px}
  nav .wrap>div,nav .navr{flex-wrap:wrap;row-gap:9px}}
 
+/* Portals : the Gym Fridge and the Referral Portal, one tap from My Account */
+.side .portals{margin-top:16px;padding-top:14px;border-top:1px solid #16479E}
+.side .portals a{display:flex;align-items:center;gap:9px;margin-top:8px;padding:11px 12px;border:1.5px solid #16479E;border-radius:11px;
+ background:#16479E;color:#FDB913;font-weight:700;font-size:14px;text-decoration:none;transition:background .15s,transform .15s}
+.side .portals a:hover{background:#1D57BD}
+.side .portals a:active{transform:scale(.98)}
+.side .portals a span{flex:1}
+.side .portals a .pgo{opacity:.8}
+
 /* One legal line, the same on every page, so the Terms are never more than a
    glance away wherever a customer happens to be. */
 .aeralegal{max-width:720px;margin:30px auto 0;padding:0 20px 30px;
