@@ -526,7 +526,7 @@ function acctState(){try{aeraStrip()}catch(e){}
   if(inn){mhLinks();mhToggleLabel()}
   mhRender()}catch(e){}
  if(top)top.innerHTML=inn
-  ?'<div class="who">Signed in as<b>'+String(a.name||a.email).replace(/[<>&"]/g,'')+'</b></div>'
+  ?'<div class="who">Signed in as<b>'+String(a.name||a.email).replace(/[<>&"]/g,'')+'</b><a class="acctgo" href="'+ACCT_URL+'#orders">My Account <span aria-hidden="true">→</span></a></div>'
   :'<a href="'+ACCT_URL+'#login" onclick="return ppOpen(\'login\',event)">Log In</a><a href="'+ACCT_URL+'#signup" onclick="return ppOpen(\'signup\',event)">Sign Up</a><div class="sep"></div>';
  if(bot)bot.innerHTML=inn
   ?'<div class="sep"></div><a href="#" class="danger" onclick="logout();return false">Log Out</a>'
