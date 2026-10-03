@@ -1730,7 +1730,7 @@ function tuOrderGap(){/* what the card would still pay for the cart as it stands
 function tuPaint(){var el=document.getElementById('tuLine');if(!el){var cr=document.getElementById('crRow');if(!cr||!cr.parentNode)return;el=document.createElement('div');el.id='tuLine';el.className='tuline';cr.parentNode.insertBefore(el,cr.nextSibling)}
  if(!APS.key){el.style.display='none';return}el.style.display='';try{tuLoad().then(tuLowCheck)}catch(e){}
  var bal=crAvail(),gap=tuOrderGap();
- el.innerHTML='<span>AERA Credit balance <b>'+rm(bal)+'</b>'+(gap>0&&Object.keys(CART||{}).length?' · <span class="tusub">Top up instead and pay this Order from your Credit</span>':'')+'</span><button type="button" class="tubtn" onclick="tuOpen()">Top Up</button>'}
+ el.innerHTML='<span>AERA Credit Balance <b>'+rm(bal)+'</b>'+(gap>0&&Object.keys(CART||{}).length?' · <span class="tusub">Top-up to pay this Order from your AERA Credit</span>':'')+'</span><button type="button" class="tubtn" onclick="tuOpen()">Top Up</button>'}
 function tuOpen(pre){tuLoad().then(function(){var o=document.getElementById('tuOverlay');if(!o){o=document.createElement('div');o.id='tuOverlay';o.className='tuov';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.addEventListener('click',function(e){if(e.target===o)tuClose()});document.body.appendChild(o)}
  var gap=tuOrderGap();var amts=TU.amounts.slice();
  if(!TU.pick)TU.pick=pre&&pre>=TU.min?pre:(amts.filter(function(a){return a>=gap})[0]||amts[amts.length-1]);
