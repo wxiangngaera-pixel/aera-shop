@@ -345,6 +345,9 @@ a{text-underline-offset:3px}
 
 .refshare{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 
+.refsend .refsendrow{display:flex;gap:8px;flex-wrap:wrap}
+.refsend .refsendrow input{flex:1;min-width:220px;height:42px;padding:0 12px;border:1px solid #C8D2E2;border-radius:10px;font:inherit}
+
 /* One legal line, the same on every page, so the Terms are never more than a
    glance away wherever a customer happens to be. */
 .aeralegal{max-width:720px;margin:30px auto 0;padding:0 20px 30px;
