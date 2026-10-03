@@ -202,6 +202,34 @@ a{text-underline-offset:3px}
 .inside li.oosout{opacity:.62}
 .inside li .oosmk{display:block;font-style:normal;text-decoration:none;font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#8d6b00;margin-top:2px}
 
+/* Personalised Meal Plan view at Checkout */
+body.planmode main.layout>section>.tabs,body.planmode #grid{display:none!important}
+#planView{margin-top:18px}
+.pvhead{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;padding:18px 20px;border-radius:16px;background:#16479E;color:#fff}
+.pvhead .eyebrow{color:#FDB913}
+.pvhead h2{margin:4px 0 2px;font-size:22px;color:#fff}
+.pvsub{margin:0;color:rgba(255,255,255,.82);font-size:13.5px}
+.pvacts{display:flex;gap:8px;flex-wrap:wrap}
+.pvacts .btn{padding:10px 16px;border-radius:999px;font-weight:700;font-size:13.5px;text-decoration:none;border:0;cursor:pointer}
+.pvacts .pvedit{background:#FDB913!important;color:#0B0B0B!important}
+.pvacts .pvmore{background:transparent!important;color:#FDB913!important;border:1.5px solid #FDB913!important}
+.pvdays{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:14px}
+.pvday{border:2px solid #16479E;border-radius:16px;background:#fff;overflow:hidden}
+.pvdh{background:#16479E;color:#FDB913;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding:9px 14px}
+.pvmeal{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-top:1px solid #E3E9F3}
+.pvmeal:first-of-type{border-top:0}
+.pvths{display:flex;flex:none}
+.pvth{width:44px;height:44px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(11,28,54,.18);background-color:#EEF2F8;display:block}
+.pvth+.pvth{margin-left:-14px}
+.pvm{flex:1;min-width:0}
+.pvm b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#16479E;margin-bottom:4px}
+.pvcs{display:flex;flex-direction:column;gap:2px}
+.pvc{font-size:14px;font-weight:600;color:#0B1C36;line-height:1.35}
+.pvc small{font-weight:600;color:#5A6B87;margin-left:6px;font-size:12px}
+.pvwait{padding:22px;text-align:center;color:#5A6B87}
+.pvback{margin:0 0 6px;background:#16479E;color:#FDB913;border:0;border-radius:999px;padding:9px 16px;font-weight:700;cursor:pointer}
+@media(max-width:560px){.pvdays{grid-template-columns:1fr}.pvhead h2{font-size:19px}}
+
 /* One legal line, the same on every page, so the Terms are never more than a
    glance away wherever a customer happens to be. */
 .aeralegal{max-width:720px;margin:30px auto 0;padding:0 20px 30px;
