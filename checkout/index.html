@@ -1208,7 +1208,10 @@ function pvRender(){var on=pvOn();
  var h='<div class="pvhead"><div><span class="eyebrow">Your Order</span><h2>Your Personalised Meal Plan</h2>'+
   '<p class="pvsub">'+days+' Days · '+mpd+' Meal'+(mpd>1?'s':'')+' a Day · '+meals.length+' Meals</p></div>'+
   '<div class="pvacts"><a class="btn pvedit" href="https://my.chatbees.io/p/SrQzC5m2">Edit Plan</a>'+
-  '<button type="button" class="btn pvmore" onclick="pvShop(true)">Add Other Meals</button></div></div>';
+  '<div class="pvdd"><button type="button" class="btn pvmore" aria-haspopup="true" onclick="pvMenu(event)"><span>Add Other Meals</span> <i aria-hidden="true">▾</i></button>'+
+  '<div class="pvmenu" id="pvMenu"><button type="button" onclick="pvGo(\'bundle\')">Meal Bundles</button><button type="button" onclick="pvGo(\'alc\')">À la Carte</button>'+
+  '<button type="button" onclick="pvGo(\'fat\')">Fat Loss Meals</button><button type="button" onclick="pvGo(\'mass\')">Mass Gain Meals</button><div class="sep"></div>'+
+  '<a href="https://my.chatbees.io/p/dtTMaV#plans">Saved Meal Plan</a><a href="https://my.chatbees.io/p/dtTMaV#favs">My Favourite Meal Plan</a><a href="https://my.chatbees.io/p/dtTMaV#history">Order History</a></div></div></div></div>';
  if(!ALC.loaded)h+='<div class="pvwait">Loading your Meals…</div>';
  else{h+='<div class="pvdays">';
   for(var d=0;d<days;d++){var rows='';
@@ -1235,6 +1238,12 @@ function pvBento(comps){var P=[],C=null,L=[];
 function pvBags(comps){return comps.slice(0,3).map(function(x){
   var st=x.r.sheet?spriteStyle(x.r.sheet):(x.r.img?'background-image:url('+esc(x.r.img)+');background-size:cover;background-position:50% 50%':'');
   return '<i class="pvbag" title="'+esc(x.r.name+' · '+Math.round(x.g)+' g')+'" style="'+st+'"></i>'}).join('')}
+/* Add Other Meals opens a short menu : a shop tab right here, or a saved Plan / past Order in My Account */
+function pvMenu(e){if(e)e.stopPropagation();var m=document.getElementById('pvMenu');if(m)m.classList.toggle('open')}
+function pvGo(f){PV_SHOP=true;pvRender();var t=document.querySelector('.tabs .tab[data-f="'+f+'"]');if(t)t.click();
+ try{var tb=document.querySelector('main.layout>section>.tabs');if(tb)window.scrollTo({top:tb.getBoundingClientRect().top+window.scrollY-90,behavior:'smooth'})}catch(e){}}
+document.addEventListener('click',function(e){var m=document.getElementById('pvMenu');if(m&&m.classList.contains('open')&&!e.target.closest('.pvdd'))m.classList.remove('open')});
+window.pvMenu=pvMenu;window.pvGo=pvGo;
 function pvShop(v){PV_SHOP=!!v;pvRender();try{document.getElementById('planView').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}}
 window.pvShop=pvShop;
 function render(){try{pvRender()}catch(e){}var h='';if(FILTER==='alc'){document.getElementById('grid').innerHTML=alcRender();return}
