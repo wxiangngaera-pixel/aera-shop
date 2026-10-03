@@ -414,7 +414,7 @@ function paintHist(){
    '<div class="pill">'+(+m.total||0)+'</div></div>'}).join('')}
 
 window.signIn=signIn;window.signOut=signOut;window.resetPass=resetPass;window.pickFridge=pickFridge;window.send=send;window.dlBill=dlBill;
-window.mark=mark;window.showView=showView;window.paintOrders=paintOrders;
+window.mark=mark;window.showView=showView;window.saveDetails=saveDetails;window.savePass=savePass;window.paintAccount=paintAccount;window.paintOrders=paintOrders;
 $('#gpass').addEventListener('keydown',function(e){if(e.key==='Enter')signIn()});
 boot();
 })();
