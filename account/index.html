@@ -1494,7 +1494,7 @@ function orderIsCurrent(o){var d=String(o.date||'').slice(0,10);return d>=todayM
 function orderMeals(o){if(+o.boxes>0)return +o.boxes;return (Array.isArray(o.items)?o.items:[]).reduce(function(a,i){return a+(+i.qty||1)},0)}
 function renderHistory(){var el=$('#histList');if(!el)return;
  var rows=(ORDERS||[]).filter(function(o){return !orderIsCurrent(o)});
- if(!rows.length){el.innerHTML='<div class="empty">No past Orders yet. Your Orders move here once they are delivered or collected.</div>';return}
+ if(!rows.length){el.innerHTML='<div class="empty">No past Orders yet. Your Orders move here once they are Delivered or Collected.</div>';return}
  var ok=rows.filter(function(o){return o.status!=='cancelled'});
  var spent=ok.reduce(function(a,o){return a+(+o.total||0)},0),meals=ok.reduce(function(a,o){return a+orderMeals(o)},0),ap=ok.reduce(function(a,o){return a+(+o.ap_earned||0)},0);
  var MO=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
