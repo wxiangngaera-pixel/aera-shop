@@ -15,15 +15,18 @@
 
 (function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 var TX={en:{t:'Privacy Notice',u:'Last updated 21 September 2026',f:'Terms &amp; Conditions'},
- bm:{t:'Notis Privasi',u:'Kemas kini terakhir 21 September 2026',f:'Terma &amp; Syarat'}};
+ bm:{t:'Notis Privasi',u:'Kemas kini terakhir 21 September 2026',f:'Terma &amp; Syarat'},
+ zh:{t:'隐私声明',u:'最后更新：2026年9月21日',f:'条款与条件'}};
 function setL(l){if(!TX[l])l='en';
- document.getElementById('en').hidden=(l!=='en');document.getElementById('bm').hidden=(l!=='bm');
- document.getElementById('bEN').className=l==='en'?'on':'';document.getElementById('bBM').className=l==='bm'?'on':'';
+ ['en','bm','zh'].forEach(function(k){var a=document.getElementById(k);if(a)a.hidden=(l!==k)});
+ [['bEN','en'],['bBM','bm'],['bZH','zh']].forEach(function(x){var e=document.getElementById(x[0]);if(e)e.className=l===x[1]?'on':''});
  document.getElementById('ttl').textContent=TX[l].t;document.getElementById('upd').textContent=TX[l].u;
- document.querySelector('#ft a').innerHTML=TX[l].f;
- document.documentElement.lang=(l==='bm'?'ms':'en');
- try{history.replaceState(null,'',l==='bm'?'#bm':'#en')}catch(e){}}
-(function(){var h=(location.hash||'').toLowerCase();if(h==='#bm'||h==='#ms')setL('bm')})();
+ try{document.querySelector('#ft a').innerHTML=TX[l].f}catch(e){}
+ document.documentElement.lang=(l==='bm'?'ms':l==='zh'?'zh-Hans':'en');
+ try{history.replaceState(null,'',l==='en'?location.pathname+location.search:'#'+l)}catch(e){}}
+/* the site's own language choice opens the Chinese version */
+(function(){var h=(location.hash||'').toLowerCase(),site='';try{site=localStorage.getItem('aera_lang')||''}catch(e){}
+ if(h==='#bm'||h==='#ms')setL('bm');else if(h==='#zh'||(site==='zh'&&h!=='#en'))setL('zh')})();
 
 (function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){
