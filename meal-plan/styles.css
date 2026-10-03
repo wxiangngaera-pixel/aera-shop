@@ -29,3 +29,13 @@ The label shortens to Home on a phone so the header never overflows. */
 /* With the homepage button in it, the header can need a second line on a phone.
 Let it wrap rather than push the page sideways. */
 @media(max-width:760px){nav .wrap{height:auto;flex-wrap:wrap;padding:9px 0;row-gap:9px}nav .wrap>div,nav .navr{flex-wrap:wrap;row-gap:9px}}
+
+/* Lines are AERA navy. Boxes people type into keep their light border so forms stay calm. */
+:root{--line:#16479E!important;--line2:#16479E!important}
+input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),select:not(:focus),textarea:not(:focus){border-color:#C8D2E2!important}
+.bmtrack{background:#E3E7EE!important}.thumb{background-color:#E3E7EE!important}
+/* Every button is either AERA yellow with black wording, or AERA navy with yellow wording. */
+.aera-yb{background:#FDB913!important;color:#0B0B0B!important;border-color:#FDB913!important}
+.aera-nb{background:#16479E!important;color:#FDB913!important;border-color:#16479E!important;box-shadow:none!important}
+.aera-nb:hover{background:#1D57BD!important;border-color:#1D57BD!important;color:#FDB913!important}
+.aera-nb svg{stroke:currentColor}
