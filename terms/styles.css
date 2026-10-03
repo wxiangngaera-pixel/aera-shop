@@ -33,3 +33,13 @@ footer{border-top:1px solid var(--line);margin-top:30px;padding-top:16px;font-si
 @media(max-width:640px){.hero h1{font-size:27px}.toc ol{columns:1}}
 @media print{.top,.draft,.toc{display:none}.hero{background:none;color:#000;border:0}}
 .sw{display:inline-flex;margin-top:18px;background:rgba(255,255,255,.14);border-radius:99px;padding:3px}.sw button{appearance:none;border:0;background:transparent;color:#fff;font:700 12.5px Montserrat,sans-serif;padding:7px 15px;border-radius:99px;cursor:pointer}.sw button.on{background:#fff;color:var(--navy)}article[hidden]{display:none}.znote{background:var(--soft);border-radius:12px;padding:11px 15px;margin:22px 0 4px;font-size:13.5px;color:var(--navy2)}@media print{.sw{display:none}}
+
+/* Lines are AERA navy. Boxes people type into keep their light border so forms stay calm. */
+:root{--line:#16479E!important;--line2:#16479E!important}
+input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),select:not(:focus),textarea:not(:focus){border-color:#C8D2E2!important}
+.bmtrack{background:#E3E7EE!important}.thumb{background-color:#E3E7EE!important}
+/* Every button is either AERA yellow with black wording, or AERA navy with yellow wording. */
+.aera-yb{background:#FDB913!important;color:#0B0B0B!important;border-color:#FDB913!important}
+.aera-nb{background:#16479E!important;color:#FDB913!important;border-color:#16479E!important;box-shadow:none!important}
+.aera-nb:hover{background:#1D57BD!important;border-color:#1D57BD!important;color:#FDB913!important}
+.aera-nb svg{stroke:currentColor}
