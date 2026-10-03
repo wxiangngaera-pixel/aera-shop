@@ -2181,3 +2181,25 @@ if(document.readyState==="complete")setTimeout(load,200);else window.addEventLis
  Object.assign(D,{"Order": "订购", "7 Days": "7 天", "Chef-Picked or DIY": "主厨挑选或自己搭配", "DIY Meal Bundle": "自选套餐", "Build Your Own Bundle": "自己搭配套餐", "Choose your Goal and size, then fill every slot from the Menu. Priced by the Meals you pick.": "先选目标和份量，再从菜单把每一格填满。价格按您挑选的餐点计算。", "Fat Loss DIY": "减脂自选", "Mass Gain DIY": "增肌自选", "Pick a Meal": "选一份餐", "Clear": "清空", "Add Bundle to Cart": "把套餐加入购物车", "The Menu": "菜单", "Portion Sizes": "分量", "Vacuum Packed ONLY": "仅限真空包装", "Your Macros": "您的营养素", "Built to your Daily Calories": "按您每日所需热量设计", "Your Own Food": "您自己的食物", "Home-Sourced Meals": "自备餐点", "Shakes, Snacks & Home-Food, counted.": "奶昔、零食和家常菜，都算进去。", "Step by Step": "一步一步", "How it Works": "运作方式", "From order to microwave": "从下单到微波", "MAP Bento Box or Vacuum Packed": "MAP 保鲜餐盒或真空包装", "Slots, fees and Self Pick-Up": "时段、费用和自取", "Grab a Meal after your workout": "运动完顺手拿一份餐"});
  R.unshift([/^(\d+) Days × (\d+) Meals?$/,'$1 天 × 每天 $2 餐'],[/^Day (\d+)$/,'第 $1 天'],[/^(\d+) \/ (\d+) picked$/,'已选 $1 / $2'],[/^All (\d+) Meals, Fat Loss & Mass Gain$/,'全部 $1 道餐点，减脂与增肌'],[/^RM ([\d.]+) per box$/,'每盒 RM $1']);
  var go=function(){try{if(window.aeraRetranslate)window.aeraRetranslate()}catch(e){}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(go,50)});else setTimeout(go,50)}catch(e){}})();
+
+/* the My AERA overview ( homepage when signed in, and My Account ) in Chinese : status, delivery card, cash-back */
+(function(){try{var D=window.AERA_I18N=window.AERA_I18N||{},R=window.AERA_I18N_RE=window.AERA_I18N_RE||[];
+ Object.assign(D,{"Next Delivery":"下次配送","Preparing":"准备中","In the kitchen":"厨房制作中","Packed · rider booked":"已打包 · 已预约骑手",
+  "On the way":"配送中","Delivered":"已送达","Cancelled":"已取消","item":"项","items":"项","order":"笔订单","orders":"笔订单",
+  "Counted into your plan alongside what our kitchen cooks.":"会和我们厨房烹制的餐点一起计入您的餐单。","Manage":"管理",
+  "Cash-Back":"现金回馈","due":"待付","Referral statements":"推荐结单","Nothing on its way at the moment.":"目前没有正在配送的订单。",
+  "Self Pick-Up":"自取"});
+ var WD={SUN:'日',MON:'一',TUE:'二',WED:'三',THU:'四',FRI:'五',SAT:'六'},MO=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+ function dt(w,d,mo,y){return y+' 年 '+(MO.indexOf(mo)+1)+' 月 '+d+' 日（周'+WD[w]+'）'}
+ var DL=/(SUN|MON|TUE|WED|THU|FRI|SAT), (\d+)(?:st|nd|rd|th) (JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC) (\d{4})/;
+ function hr(s){return s.replace(/(\d+) (AM|PM)/g,function(m,h,p){return (p==='AM'?'上午 ':'下午 ')+h+' 点'})}
+ R.unshift(
+  [/^(SUN|MON|TUE|WED|THU|FRI|SAT), (\d+)(?:st|nd|rd|th) (JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC) (\d{4})$/,function(m,w,d,mo,y){return dt(w,d,mo,y)}],
+  [/^Last on (.+)$/,function(m,x){var k=DL.exec(x);return '最近一次：'+(k?dt(k[1],k[2],k[3],k[4]):x)}],
+  [/^(\d+ (?:AM|PM) - \d+ (?:AM|PM))( · Self Pick-Up)?$/,function(m,s,p){return hr(s)+(p?' · 自取':'')}],
+  [/^ ?· Self Pick-Up$/,' · 自取'],
+  [/^(.+?) · (\d+) Orders all together$/,'$1 · 共 $2 笔订单'],
+  [/^(RM [\d,.]+) earned all together$/,'累计赚取 $1'],
+  [/^([\d.]+)% of the meal subtotal on every order placed with your code\.$/,'每笔使用您推荐码的订单，可获餐点小计的 $1%。']);
+ var go=function(){try{if(window.aeraRetranslate)window.aeraRetranslate()}catch(e){}};
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(go,50)});else setTimeout(go,50)}catch(e){}})();
