@@ -150,6 +150,8 @@ header.top .pnav .out.plink{background:rgba(255,255,255,.06)!important;color:#FD
 #vAccount .card+.card{margin-top:14px}
 @media(max-width:520px){#vAccount .f2{grid-template-columns:1fr}.tb{font-size:12.5px}}
 
+/* a header link that the page has hidden ( Sign out while signed out ) stays hidden */.plink[style*="display:none"],.plink[style*="display: none"]{display:none!important}
+
 /* Lines are AERA navy. Boxes people type into keep their light border so forms stay calm. */
 :root{--line:#16479E!important;--line2:#16479E!important}
 input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),select:not(:focus),textarea:not(:focus){border-color:#C8D2E2!important}
