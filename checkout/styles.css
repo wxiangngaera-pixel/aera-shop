@@ -250,6 +250,17 @@ body.planmode main.layout>section>.tabs,body.planmode #grid{display:none!importa
 #apBox.aptap:hover{box-shadow:0 0 0 2px #16479E inset;border-radius:14px}
 .aptapbtn{margin-top:10px;padding:8px 14px!important;border-radius:999px}
 
+/* Points : one tap uses the most allowed */
+.aprow{display:flex;align-items:center;gap:12px;margin-top:10px;padding:12px 14px;border:2px solid #16479E;border-radius:12px;background:#fff;transition:background .15s}
+.aprow .apchk{flex:none;width:24px;height:24px;border-radius:50%;border:2px solid #16479E;display:grid;place-items:center;font-weight:900;font-size:13px;color:#0B0B0B}
+.aprow .aptx{display:flex;flex-direction:column;gap:2px}
+.aprow .aptx b{font-size:14px;color:#16479E}
+.aprow .aptx small{font-size:12px;color:#5A6B87}
+.aprow.on{background:#16479E}
+.aprow.on .apchk{background:#FDB913;border-color:#FDB913}
+.aprow.on .aptx b{color:#FDB913}
+.aprow.on .aptx small{color:rgba(255,255,255,.8)}
+
 /* One legal line, the same on every page, so the Terms are never more than a
    glance away wherever a customer happens to be. */
 .aeralegal{max-width:720px;margin:30px auto 0;padding:0 20px 30px;
