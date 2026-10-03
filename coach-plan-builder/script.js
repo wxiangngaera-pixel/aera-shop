@@ -811,6 +811,11 @@ if(window.aeraRetranslate)window.aeraRetranslate();
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+/* more Chinese for this page : added to the page's own translation list */
+(function(){try{var D=window.AERA_I18N=window.AERA_I18N||{},R=window.AERA_I18N_RE=window.AERA_I18N_RE||[];
+ Object.assign(D,{"Pick the dishes, set the weights, and hand it over. Nothing is typed up twice and nothing is read by a machine, so nothing can be misread. Keep as many clients here as you like.": "挑选菜色、设定重量，然后交给我们。不用重复输入，也不经机器读取，所以不会读错。客户数量不限，想存多少就存多少。"});
+ var go=function(){try{if(window.aeraRetranslate)window.aeraRetranslate()}catch(e){}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(go,50)});else setTimeout(go,50)}catch(e){}})();
+
 (function(){
  if(window.__aeraBar)return;window.__aeraBar=1;
  if(window.top!==window)return; /* not inside the homepage's embedded pages */
