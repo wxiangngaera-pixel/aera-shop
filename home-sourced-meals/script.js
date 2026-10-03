@@ -221,10 +221,16 @@ if(document.body)start();else document.addEventListener('DOMContentLoaded',start
   if(k==='lang'){e.preventDefault();if(typeof window.aeraLang==='function')window.aeraLang();else{try{localStorage.setItem('aera_lang',zh()?'en':'zh')}catch(x){}location.reload()}setTimeout(paint,60);return}
   if(k==='cart'){if(/\/checkout\/?$/.test(location.pathname)&&typeof window.openCart==='function'){e.preventDefault();window.openCart()}return}
   if(k==='out'){e.preventDefault();try{['aera.account','aera.refLock'].forEach(function(x){localStorage.removeItem(x)})}catch(x){}location.href=ACC+'#logout';return}}
+ /* the page's own top bar : a <nav> first in the page, or a slim header / top strip with no heading or
+    form in it. A hero header keeps its heading and only loses its logo-and-buttons row. */
+ function hideOld(){var b=document.body;var first=[].filter.call(b.children,function(e){return !/^(SCRIPT|STYLE|LINK|NOSCRIPT|TEMPLATE)$/.test(e.tagName)&&e.id!=='aeraBar'})[0];if(!first)return;
+  if(first.tagName==='NAV'){first.classList.add('ab-hidden-nav');return}
+  var row=first.querySelector('.brandrow');if(row&&first.querySelector('h1')){row.classList.add('ab-hidden-nav');return}
+  if((first.tagName==='HEADER'||(first.tagName==='DIV'&&first.classList.contains('top')))&&!first.querySelector('h1,h2,form,input,textarea'))first.classList.add('ab-hidden-nav')}
  function boot(){if(document.getElementById('aeraBar'))return;
   grabLogo();
   /* the page's own top bar steps aside ( it stays in the page, so nothing that reads it breaks ) */
-  var old=document.querySelector('body > nav')||document.querySelector('nav');if(old&&!old.closest('#aeraBar'))old.classList.add('ab-hidden-nav');
+  hideOld();
   bar=document.createElement('div');bar.id='aeraBar';bar.className='noi18n';bar.setAttribute('role','navigation');
   document.body.insertBefore(bar,document.body.firstChild);paint();
   document.addEventListener('click',onClick);
