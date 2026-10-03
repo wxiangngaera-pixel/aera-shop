@@ -1212,13 +1212,27 @@ function pvRender(){var on=pvOn();
   for(var d=0;d<days;d++){var rows='';
    for(var s=0;s<mpd;s++){var i=d*mpd+s;if(i>=meals.length)break;
     var comps=meals[i].split(',').map(function(c){var p=c.split(':');return{r:by[p[0]],g:+p[1]||0}}).filter(function(x){return x.r});
-    var th=comps.filter(function(x){return x.r.sheet}).slice(0,3).map(function(x){return '<i class="pvth" style="'+spriteStyle(x.r.sheet)+'"></i>'}).join('');
+    var th=PACK==='vacuum'?pvBags(comps):pvBento(comps);
     var nm=comps.map(function(x){return '<span class="pvc">'+esc(x.r.name)+'<small>'+Math.round(x.g)+' g</small></span>'}).join('');
-    rows+='<div class="pvmeal"><div class="pvths">'+(th||'<i class="pvth pvth0"></i>')+'</div><div class="pvm"><b>Meal '+(s+1)+'</b><div class="pvcs">'+(nm||'<span class="pvc">Chef-built Meal</span>')+'</div></div></div>'}
+    rows+='<div class="pvmeal"><div class="pvths'+(PACK==='vacuum'?' vac':'')+'">'+(th||'<i class="pvth pvth0"></i>')+'</div><div class="pvm"><b>Meal '+(s+1)+'</b><div class="pvcs">'+(nm||'<span class="pvc">Chef-built Meal</span>')+'</div></div></div>'}
    h+='<div class="pvday"><div class="pvdh">Day '+(d+1)+'</div>'+rows+'</div>'}
   h+='</div>'}
  el.innerHTML=h;
  try{if(window.aeraRetranslate)window.aeraRetranslate()}catch(e){}}
+/* MAP Bento Box : each Meal drawn in the tray, protein left, carbs top right, vegetables below.
+   Vacuum Packed : the Meal's own vacuum bags, the pictures the Kitchen took of each portion. */
+var PV_TRAY='https://my.chatbees.io/objects/generated-images/1302/1788628096238-5f5755c542d808b9.png';
+function pvKind(c){c=String(c||'');if(/chicken|seafood|beef|stir_fried|fish|meat|protein/.test(c))return 'p';if(/rice|pasta|potato|toast|noodle|grain|carb/.test(c))return 'c';return 'v'}
+function pvBento(comps){var P=[],C=null,L=[];
+ comps.forEach(function(x){var k=pvKind(x.r.cat);if(k==='p'){if(P.length<2)P.push(x)}else if(k==='c'){if(!C)C=x;else if(L.length<2)L.push(x)}else if(L.length<2)L.push(x)});
+ var cell=function(x,cls){if(!x)return '<b class="'+cls+' empty"></b>';
+  return '<b class="'+cls+'" title="'+esc(x.r.name+' · '+Math.round(x.g)+' g')+'"'+(x.r.img?' style="background-image:url('+esc(x.r.img)+')"':'')+'></b>'};
+ return '<div class="pvbento" style="background-image:url('+PV_TRAY+')">'+
+  (P.length>1?cell(P[0],'pro h1')+cell(P[1],'pro h2'):cell(P[0],'pro'))+cell(C,'crb')+
+  (L.length>1?cell(L[0],'veg w1')+cell(L[1],'veg w2'):cell(L[0],'veg'))+'</div>'}
+function pvBags(comps){return comps.slice(0,3).map(function(x){
+  var st=x.r.sheet?spriteStyle(x.r.sheet):(x.r.img?'background-image:url('+esc(x.r.img)+');background-size:cover;background-position:50% 50%':'');
+  return '<i class="pvbag" title="'+esc(x.r.name+' · '+Math.round(x.g)+' g')+'" style="'+st+'"></i>'}).join('')}
 function pvShop(v){PV_SHOP=!!v;pvRender();try{document.getElementById('planView').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}}
 window.pvShop=pvShop;
 function render(){try{pvRender()}catch(e){}var h='';if(FILTER==='alc'){document.getElementById('grid').innerHTML=alcRender();return}
