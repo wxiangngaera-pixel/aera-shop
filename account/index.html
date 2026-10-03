@@ -383,7 +383,6 @@
         <button data-t="auto" onclick="setTab('auto')">Auto Subscription</button>
         <button data-t="refs" onclick="setTab('refs')">Referrals</button>
         <button data-t="details" onclick="setTab('details')">Settings</button>
-        <button data-t="pw" onclick="pwFocus()">Change Password</button>
         <button data-t="address" onclick="setTab('address')">Addresses</button>
         <button data-t="prefs" onclick="setTab('prefs')">Meal Preferences</button>
           <button data-t="body" onclick="setTab('body')">Weight Control</button>
@@ -1228,9 +1227,9 @@ function renderPhone(){var el=$('#phoneBox');if(!el)return;
   var can=phoneOk(typed);
   h+='<div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
      '<button class="btn btn-k" type="button" id="pvBtn" onclick="phoneSend()"'+(can?'':' disabled')+'>Send Me A Code</button>'+
-     '<span class="hint" style="margin:0">'+(can?'We email a code to '+esc(USER.email)+' to confirm the change.':'Enter a Malaysian mobile number.')+'</span></div>';
+     '<span class="hint" style="margin:0">'+(can?'We Email a Code to '+esc(USER.email)+' to confirm the change.':'Enter a Malaysian mobile number.')+'</span></div>';
  }
- h+='<div class="hint" style="margin-top:8px">A mobile number can belong to one AERA Account only. It is what our Riders call when they arrive.</div>';
+ h+='<div class="hint" style="margin-top:8px">A Mobile Number can belong to one AERA Account only. It is what our Riders call when they arrive.</div>';
  if(PV.msg)h+='<div style="margin-top:8px"><span class="chip '+(PV.bad?'bad':'ok')+'">'+PV.msg+'</span></div>';
  el.innerHTML=h}
 async function phoneSend(){var typed=PV.phone!==''?PV.phone:(PROFILE.phone||'');
@@ -1446,11 +1445,20 @@ var REF_SHOP='https://aeramealprep.net/checkout/?ref=';
 function refShareText(code,name){return 'Hi,\n\nI order my Meal Preps from AERA Meal Prep. Every Meal is cooked to Order, weighed to the gram and delivered chilled around the Klang Valley.\n\n'+
  'Use my Referral Code '+code+' at Checkout and you earn extra AERA Points on your Meals.\n\nOrder here : '+REF_SHOP+encodeURIComponent(code)+'\n\n'+(name||'')}
 function refShareBar(code,name){if(!code)return '';window.__REFSH={code:code,name:name};
- return '<div class="refshare"><button type="button" class="btn btn-y s" onclick="refShareEmail()">Share by Email</button>'+
-  '<button type="button" class="btn btn-o s" onclick="refShareCopy(\'code\',this)">Copy Code</button>'+
+ return '<div class="refsend"><label class="lb" for="refTo" style="margin-top:12px">Send Your Code To Another AERA Account</label>'+
+  '<div class="refsendrow"><input type="email" id="refTo" placeholder="Their AERA Account Email" autocomplete="off" onkeydown="if(event.key===\'Enter\')refSendInbox()">'+
+  '<button type="button" class="btn btn-y s" id="refSendBtn" onclick="refSendInbox()">Send To Their Inbox</button></div>'+
+  '<div class="hint" id="refSendMsg" style="margin-top:6px">It lands in their AERA Inbox, with a button that puts your Code in at Checkout.</div></div>'+
+  '<div class="refshare"><button type="button" class="btn btn-o s" onclick="refShareCopy(\'code\',this)">Copy Code</button>'+
   '<button type="button" class="btn btn-o s" onclick="refShareCopy(\'link\',this)">Copy Link</button></div>'}
-function refShareEmail(){var w=window.__REFSH;if(!w)return;
- location.href='mailto:?subject='+encodeURIComponent('My AERA Meal Prep Referral Code : '+w.code)+'&body='+encodeURIComponent(refShareText(w.code,w.name))}
+async function refSendInbox(){var el=$('#refTo'),m=$('#refSendMsg'),b=$('#refSendBtn');if(!el)return;
+ var to=String(el.value||'').trim();if(!to){m.textContent='Type their AERA Account Email first.';return}
+ b.disabled=true;b.textContent='Sending…';
+ var r=await sb.rpc('share_referral_code',{p_to:to});
+ b.disabled=false;b.textContent='Send To Their Inbox';
+ if(r.error){m.innerHTML='<span style="color:var(--bad,#B3272D)">'+esc(r.error.message)+'.</span>';return}
+ el.value='';m.innerHTML='<span style="color:var(--green,#127C4A);font-weight:600">Sent. Your Code '+esc(r.data||'')+' is in their AERA Inbox.</span>'}
+window.refSendInbox=refSendInbox;
 function refShareCopy(what,btn){var w=window.__REFSH;if(!w)return;var t=what==='link'?REF_SHOP+encodeURIComponent(w.code):w.code;
  var done=function(){if(!btn)return;var o=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=o},1600)};
  try{navigator.clipboard.writeText(t).then(done,function(){prompt('Copy this',t)})}catch(e){prompt('Copy this',t)}}
