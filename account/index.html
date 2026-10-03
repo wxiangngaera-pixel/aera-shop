@@ -1346,6 +1346,7 @@ async function loadRefs(){var box=$('#refsBox');if(!box||!USER)return;
   var n=rows.length?rows[0]:null;
   h+='<div class="order" style="margin-top:14px"><div class="top"><span class="no">'+esc(code)+'</span><span><span class="chip ok">'+esc(REF_TIER[tier]||REF_TIER.normal)+' · '+rate+'% Cash-Back</span></span></div>'+
    '<div class="meta">'+esc(mine.Name||'')+' · Share this Code and you earn '+rate+'% of the Meal Subtotal on every Order placed with it.</div>'+
+   refShareBar(code,mine.Name||'')+
    '<div class="tiles" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px">'+
     '<div class="order" style="margin:0"><div class="hint" style="margin:0">This Month</div><div class="big">'+(n?rm(+n.Cashback||0):rm(0))+'</div><small>'+(n?esc(monthName(n.Month))+' · '+(+n.Orders||0)+' order'+((+n.Orders||0)===1?'':'s')+' · '+rm(+n.Sales||0)+' in sales':'No sales yet')+'</small></div>'+
     (function(){var np=rows.filter(function(r){return !/^(y|yes|true|1|paid)$/i.test(String(r.Paid||''))}).length;
@@ -1440,6 +1441,19 @@ async function planDelGo(i){asClose();var p=PLANS[i];if(!p)return;
  var r=await sb.rpc('delete_meal_plan',{p_id:String(p.id)});
  if(r.error)return asModal('<h3>Could Not Delete</h3><p class="asp">'+esc(friendly(r.error))+'</p>','<button class="btn btn-y" type="button" onclick="asClose()">Close</button>');
  PLANS.splice(i,1);try{renderOverview()}catch(e){}renderPlans()}
+/* Share the Referral Code : by email, or copy the code / the ordering link that fills it in */
+var REF_SHOP='https://aeramealprep.net/checkout/?ref=';
+function refShareText(code,name){return 'Hi,\n\nI order my Meal Preps from AERA Meal Prep. Every Meal is cooked to Order, weighed to the gram and delivered chilled around the Klang Valley.\n\n'+
+ 'Use my Referral Code '+code+' at Checkout and you earn extra AERA Points on your Meals.\n\nOrder here : '+REF_SHOP+encodeURIComponent(code)+'\n\n'+(name||'')}
+function refShareBar(code,name){if(!code)return '';window.__REFSH={code:code,name:name};
+ return '<div class="refshare"><button type="button" class="btn btn-y s" onclick="refShareEmail()">Share by Email</button>'+
+  '<button type="button" class="btn btn-o s" onclick="refShareCopy(\'code\',this)">Copy Code</button>'+
+  '<button type="button" class="btn btn-o s" onclick="refShareCopy(\'link\',this)">Copy Link</button></div>'}
+function refShareEmail(){var w=window.__REFSH;if(!w)return;
+ location.href='mailto:?subject='+encodeURIComponent('My AERA Meal Prep Referral Code : '+w.code)+'&body='+encodeURIComponent(refShareText(w.code,w.name))}
+function refShareCopy(what,btn){var w=window.__REFSH;if(!w)return;var t=what==='link'?REF_SHOP+encodeURIComponent(w.code):w.code;
+ var done=function(){if(!btn)return;var o=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=o},1600)};
+ try{navigator.clipboard.writeText(t).then(done,function(){prompt('Copy this',t)})}catch(e){prompt('Copy this',t)}}
 var PLANORD={};
 function renderPlans(){var el=$('#plansList');if(!el)return;var rows=PLANS||[],ordered=PLANORD||{};
  if(!rows.length){el.innerHTML='<div class="empty">No Personalised Plans yet. Answer a few questions and we design every Meal to your Calories and Macros.</div>';return}
