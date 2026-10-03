@@ -159,6 +159,28 @@ if(document.body)start();else document.addEventListener('DOMContentLoaded',start
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+/* Chinese for this page : the site's EN / 中文 choice ( aera_lang ) translates every text, label and placeholder */
+(function(){if(window.__aeraZh)return;window.__aeraZh=1;
+ var D=window.AERA_I18N=window.AERA_I18N||{},R=window.AERA_I18N_RE=window.AERA_I18N_RE||[];
+ Object.assign(D,{"Return to Homepage": "返回首页", "Personalised Meal Plan": "个人定制餐单", "My Home-Sourced Meals": "我的自备餐点", "Log what you eat outside AERA. We find the Macros, and your Plan fills only what is left.": "记录您在 AERA 以外吃的食物。我们算出营养素，您的餐单只补足剩下的部分。", "Search what you eat": "搜索您吃的食物", "Pick your portion": "选择分量", "Send it to your Plan": "送到您的餐单", "Add a Home-Sourced Meal": "新增一份自备餐点", "Name it the way you would say it.": "用您平常的说法命名。", "Find Macros": "查营养素", "Enter the numbers myself": "自己输入数字", "Your List": "我的清单", "Tick what you want counted, then send it to your Plan.": "勾选要计算的项目，然后送到您的餐单。", "Your list is empty": "清单是空的", "Search a meal above and it will show up here.": "在上方搜索餐点，它就会出现在这里。", "Use in Personalised Meal Plan": "用在个人定制餐单", "My Account": "我的账户", "Estimated Figures. Adjust the Servings to match your portion.": "估计数字。请调整份数以符合您的分量。", "Terms & Conditions": "条款与条件", "Privacy Notice": "隐私声明", "Home": "首页", "Calories ( KCAL )": "热量（大卡）", "Protein ( G )": "蛋白质（克）", "Carbs ( G )": "碳水（克）", "Fat ( G )": "脂肪（克）", "Save It": "保存", "Cancel": "取消", "e.g. Nasi Lemak, Milo Ais": "例如：椰浆饭、冰美禄", "Ticked": "已勾选", "Tick at least one first.": "请先至少勾选一项。", "This browser will not let us hand them over. Try it without Private Browsing.": "这个浏览器不允许传送。请关闭无痕模式再试。", "Type what you eat first.": "请先输入您吃的食物。", "We could not work that one out. Try naming it more simply, or enter the numbers yourself.": "我们算不出这一项。试试用更简单的名称，或自己输入数字。", "We could not reach the look-up. Enter the numbers yourself below.": "暂时无法查询。请在下方自己输入数字。", "Half": "半份", "Add to My List": "加入我的清单", "Type what you eat first, at the top.": "请先在上方输入您吃的食物。", "Put the Calories in at least.": "至少要填热量。", "Tick All": "全选", "Tick None": "全不选", "Looking up the Macros…": "正在查询营养素…", "KCAL": "大卡", "Protein": "蛋白质", "Carbs": "碳水", "Fat": "脂肪", "How Much Do You Have?": "您吃多少？", "Servings": "份数", "Saved to your list.": "已保存到清单。"});R.unshift([/^(\d+) of (\d+) ticked$/,'已勾选 $1 / $2'],[/^(\d+) Ticked$/,'已勾选 $1 项'],[/^([\d,]+) KCAL$/,'$1 大卡']);
+ function zh(){try{return (localStorage.getItem('aera_lang')||'en')==='zh'}catch(e){return false}}
+ if(typeof window.aeraLang!=='function')window.aeraLang=function(){try{localStorage.setItem('aera_lang',zh()?'en':'zh')}catch(e){}location.reload()};
+ if(!zh())return;document.documentElement.setAttribute('data-lang','zh');
+ function tr(s){var k=String(s).replace(/\s+/g,' ').trim();if(!k)return null;if(Object.prototype.hasOwnProperty.call(D,k))return D[k];
+  for(var i=0;i<R.length;i++){if(R[i][0].test(k))return k.replace(R[i][0],R[i][1])}return null}
+ var done=new WeakSet();
+ function node(n){if(done.has(n))return;var p=n.parentElement;if(!p||/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/.test(p.tagName)||p.closest('#aeraBar,.noi18n'))return;
+  var t=tr(n.nodeValue);if(t===null)return;done.add(n);n.nodeValue=n.nodeValue.replace(/^(\s*)[\s\S]*?(\s*)$/,function(m,a,b){return a+t+b})}
+ function attrs(e){['placeholder','title','aria-label'].forEach(function(a){var v=e.getAttribute&&e.getAttribute(a);if(!v)return;var t=tr(v);if(t!==null&&t!==v)e.setAttribute(a,t)});
+  if(e.tagName==='INPUT'&&/^(submit|button)$/i.test(e.type||'')&&e.value){var t=tr(e.value);if(t!==null)e.value=t}}
+ function walk(r){if(!r)return;if(r.nodeType===3)return node(r);if(r.nodeType!==1||(r.closest&&r.closest('#aeraBar')))return;attrs(r);
+  var w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT),n;while(n=w.nextNode()){if(n.nodeType===3)node(n);else attrs(n)}}
+ function run(){walk(document.body)}window.aeraRetranslate=run;
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();
+ try{new MutationObserver(function(ms){ms.forEach(function(m){if(m.type==='characterData'){done.delete(m.target);node(m.target)}else [].forEach.call(m.addedNodes,walk)})})
+  .observe(document.documentElement,{childList:true,subtree:true,characterData:true})}catch(e){}
+})();
+
 (function(){
  if(window.__aeraBar)return;window.__aeraBar=1;
  if(window.top!==window)return; /* not inside the homepage's embedded pages */
