@@ -343,6 +343,8 @@ a{text-underline-offset:3px}
 #tOrders .otabs button+button{border-left:2px solid #16479E}
 #tOrders .otabs button.on{background:#16479E;color:#FDB913}
 
+.refshare{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
 /* One legal line, the same on every page, so the Terms are never more than a
    glance away wherever a customer happens to be. */
 .aeralegal{max-width:720px;margin:30px auto 0;padding:0 20px 30px;
