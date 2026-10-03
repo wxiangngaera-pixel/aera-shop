@@ -441,6 +441,7 @@
     <label class="lb">Referral Code <span style="font-weight:500;text-transform:none;letter-spacing:0">· Optional</span></label>
     <input type="text" id="refCode" placeholder="e.g. AERA-GYMNAME" autocomplete="off" maxlength="24" oninput="refInput()" style="text-transform:uppercase">
     <div id="refMsg" class="hint" style="margin-top:4px">Have a Code from a Gym, Studio or Coach? Enter it and you earn extra AERA Points on your Meals.</div>
+    <div id="discPick" class="discpick" style="display:none"><span class="dpi" aria-hidden="true">!</span><span><b>Select One Only</b>AERA Points or the First Order Voucher. They cannot be used together on one Order.</span></div>
     <div id="apBox" class="apbox"></div>
     <div id="foBox"></div>
     <label class="lb">Notes for the Kitchen / Rider</label><textarea id="notes" placeholder="e.g. less spicy, leave at guard house, call on arrival"></textarea>
@@ -1397,7 +1398,9 @@ function apUseInstead(e){if(e&&e.stopPropagation)e.stopPropagation();if(ccOn())r
  foToggle(false);APS.redeemRM=maxRedeemRM();APS.useMax=true;refee();renderCart();
  try{var b=document.getElementById('apBox');if(b)b.scrollIntoView({behavior:'smooth',block:'center'})}catch(x){}}
 window.apUseInstead=apUseInstead;
-function renderPoints(){var box=document.getElementById('apBox');if(!box)return;box.classList.remove('aptap');box.onclick=null;if(!count()){box.innerHTML='';return}
+/* both offers on the same Order : say plainly that only one can be picked */
+function discPickPaint(){var el=document.getElementById('discPick');if(!el)return;var both=false;try{both=!!(count()&&!ccOn()&&foQualifies()&&APS.loaded&&APS.available>=100*1)}catch(e){}el.style.display=both?'flex':'none'}
+function renderPoints(){var box=document.getElementById('apBox');if(!box)return;try{discPickPaint()}catch(e){}box.classList.remove('aptap');box.onclick=null;if(!count()){box.innerHTML='';return}
  if(!APS.email){box.innerHTML='<div class="row"><span><b>AERA Points</b><br><span class="hint" style="margin:0">Enter your Email above — If you have AERA Points, they show here and you can take up to '+AP.capPct+'% off this order.</span></span></div>';return}
  if(!APS.loaded){box.innerHTML='<div class="row"><span><b>AERA Points</b><br><span class="hint" style="margin:0">'+(APS.failed?'Points are unavailable right now — you still earn them on this order.':'Checking your balance…')+'</span></span></div>';return}
  if(!APS.mine.length&&!(APS.available>0)){box.innerHTML='<div class="row"><span><b>AERA Points</b><br><span class="hint" style="margin:0">No points yet for '+esc(APS.email)+' — this order earns '+apFmt(pointsEarned())+', ready to use next time.</span></span></div>';return}
