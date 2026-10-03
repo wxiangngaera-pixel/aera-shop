@@ -421,6 +421,12 @@ if(document.body)start();else document.addEventListener('DOMContentLoaded',start
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+/* more Chinese for this page : added to the page's own translation list */
+(function(){try{var D=window.AERA_I18N=window.AERA_I18N||{},R=window.AERA_I18N_RE=window.AERA_I18N_RE||[];
+ Object.assign(D,{"per day": "每天", "Daily Intake": "每日摄取", "KCALs per Day": "每天大卡", ". Adjust it if you know your numbers. Your Macros and Meals follow this figure.": "。如果您知道自己的数字，可以自行调整。您的营养素和餐点会按这个数字计算。"});
+ R.unshift([/^Based on your Daily Intake of ([\d,]+) KCALs · (.+) split (\d+) \/ (\d+) \/ (\d+)$/,function(m,k,g,a,b,c){var G={'Fat Loss':'减脂','Mass Gain':'增肌','Lean Gain':'精瘦增肌','Healthy Eating':'健康饮食','Custom Macros':'自定营养素','Maintain':'维持'};return '按您每日摄取 '+k+' 大卡 · '+(G[g]||g)+'比例 '+a+' / '+b+' / '+c}],[/^BMR ([\d,]+) × ([\d.]+) ([−+-]) ([\d,]+) KCALs for (.+) =$/,function(m,b,x,s,n,g){var G={'Fat Loss':'减脂','Mass Gain':'增肌','Lean Gain':'精瘦增肌','Healthy Eating':'健康饮食','Custom Macros':'自定营养素','Maintain':'维持'};return 'BMR '+b+' × '+x+' '+s+' '+n+' 大卡（'+(G[g]||g)+'）='}],[/^BMR ([\d,]+) × ([\d.]+) =$/,'BMR $1 × $2 =']);
+ var go=function(){try{if(window.aeraRetranslate)window.aeraRetranslate()}catch(e){}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(go,50)});else setTimeout(go,50)}catch(e){}})();
+
 (function(){
  if(window.__aeraBar)return;window.__aeraBar=1;
  if(window.top!==window)return; /* not inside the homepage's embedded pages */
