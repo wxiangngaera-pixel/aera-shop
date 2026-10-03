@@ -1330,7 +1330,8 @@ function renderCart(){var el=document.getElementById('lines');var keys=Object.ke
    :ccOn()?'<div class="msg">Priced at cost — food, packaging and the payment fee. Delivery is charged as normal. Points and credit do not apply on a cost price order. <a href="#" onclick="ccClear();return false">Remove</a></div>':''})();
  document.getElementById('total').textContent=rm(total);document.getElementById('sheetTotal').textContent=rm(total);
  document.getElementById('payBtn').textContent=keys.length?'Pay '+rm(total)+' Securely':'Pay Securely';}
-function openCart(){document.getElementById('side').classList.add('open')}function closeCart(){document.getElementById('side').classList.remove('open')}
+function openCart(){document.getElementById('side').classList.add('open')}
+try{if(location.hash==='#cart')setTimeout(function(){openCart();try{document.getElementById('side').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}},400)}catch(e){}function closeCart(){document.getElementById('side').classList.remove('open')}
 function setPack(p){PACK=p;document.getElementById('pkBento').classList.toggle('on',p==='bento');document.getElementById('pkVacuum').classList.toggle('on',p==='vacuum');renderCart();render()}
 function isDel(){return FUL==='delivery'}
 function ready(){return !!(GEO&&GEO.km!=null&&GEO.km<=MAX_KM)}
