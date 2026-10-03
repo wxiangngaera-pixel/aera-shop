@@ -28,7 +28,7 @@ function monthShort(m){var p=String(m||'').split('-');if(p.length<2)return Strin
 function fmtDate(d){var x=new Date(String(d||'').slice(0,10)+'T00:00:00');return isNaN(x)?String(d||''):x.toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric'})}
 function rows(j){var out=[],hd=j&&Array.isArray(j.headers)?j.headers:null,raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];
  raw.forEach(function(r){if(Array.isArray(r)&&hd){var o={};hd.forEach(function(k,i){o[k]=r[i]});out.push(o)}else if(r&&typeof r==='object')out.push(r)});return out}
-function load(){fetch(DATA_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){R.rows=rows(j);R.loaded=true;render()})
+function load(){fetch(DATA_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){var all=rows(j);R.prof=all.filter(isProf)[0]||null;R.rows=all.filter(function(r){return !isProf(r)});R.loaded=true;render()})
  .catch(function(){R.loaded=true;R.failed=true;render()})}
 function years(){var y={};R.rows.forEach(function(r){var m=String(r.Month||'');if(m)y[m.slice(0,4)]=1});return Object.keys(y).sort().reverse()}
 function monthsIn(y){var m={};R.rows.forEach(function(r){var s=String(r.Month||'');if(s.slice(0,4)===y)m[s]=1});return Object.keys(m).sort().reverse()}
@@ -36,12 +36,33 @@ function inMonth(m){return R.rows.filter(function(r){return String(r.Month||'')=
 function sum(list,k){var t=0;list.forEach(function(r){t+=+r[k]||0});return Math.round(t*100)/100}
 function setYear(y){R.year=y;var ms=monthsIn(y);R.month=ms[0]||'';render()}
 function setMonth(m){R.month=m;render()}
+
+/* ---- Your Referral Code, ready to share ----
+   The Kitchen Console writes one profile row per Referrer ( OrderNo PROFILE-<code> ), so the code
+   shows even before the first referred Order. It is kept out of every figure below. */
+function isProf(r){return /^PROFILE-/i.test(String(r.OrderNo||''))}
+var SHOP_LINK='https://aeramealprep.net/checkout/?ref=';
+function shareText(code,name){return 'Hi,\n\nI order my Meal Preps from AERA Meal Prep. Every Meal is cooked to Order, weighed to the gram and delivered chilled around the Klang Valley.\n\n'+
+ 'Use my Referral Code '+code+' at Checkout and you earn extra AERA Points on your Meals.\n\nOrder here : '+SHOP_LINK+encodeURIComponent(code)+'\n\n'+(name||'')}
+function shareCard(code,name){if(!code)return '';
+ return '<div class="card sharecard"><div class="shl">Your Referral Code</div><div class="shcode">'+esc(code)+'</div>'+
+  '<p class="shhint">Share it with friends, clients and members. Every Order placed with your code earns you Cash-Back, and they earn extra AERA Points.</p>'+
+  '<div class="shacts"><button type="button" class="shbtn y" onclick="shareEmail()"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg><span>Share by Email</span></button>'+
+  '<button type="button" class="shbtn n" onclick="shareCopy(\'code\',this)"><span>Copy Code</span></button>'+
+  '<button type="button" class="shbtn n" onclick="shareCopy(\'link\',this)"><span>Copy Link</span></button></div></div>'}
+function shareWho(){var p=R.prof||R.rows[0]||{};return{code:String(p.Code||'').toUpperCase(),name:String(p.Referrer||'')}}
+function shareEmail(){var w=shareWho();if(!w.code)return;
+ location.href='mailto:?subject='+encodeURIComponent('My AERA Meal Prep Referral Code : '+w.code)+'&body='+encodeURIComponent(shareText(w.code,w.name))}
+function shareCopy(what,btn){var w=shareWho();if(!w.code)return;var t=what==='link'?SHOP_LINK+encodeURIComponent(w.code):w.code;
+ var done=function(){var s=btn&&btn.querySelector('span');if(s){var o=s.textContent;s.textContent='Copied';setTimeout(function(){s.textContent=o},1600)}};
+ try{navigator.clipboard.writeText(t).then(done,function(){prompt('Copy this',t)})}catch(e){prompt('Copy this',t)}}
+window.shareEmail=shareEmail;window.shareCopy=shareCopy;
 function render(){
  var box=$('#state');
  if(!R.loaded)return;
  if(R.failed)return box.innerHTML='<div class="card"><div class="msg bad">We could not load your figures just now. Please refresh the page.</div></div>';
- if(!R.rows.length)return box.innerHTML='<div class="card"><div class="empty">Nothing here yet.<br><br>Once someone orders with your referral code, every order shows up here with the cash-back it earned you.</div></div>';
- var name=String(R.rows[0].Referrer||''),code=String(R.rows[0].Code||'').toUpperCase(),tier=String(R.rows[0].Tier||'normal').toLowerCase(),rate=+R.rows[0].Rate||0;
+ if(!R.rows.length){var w0=shareWho();if(R.prof){$('#hdr').textContent=w0.name||'Your Cash-Back'}return box.innerHTML=shareCard(w0.code,w0.name)+'<div class="card"><div class="empty">Nothing here yet.<br><br>Once someone orders with your referral code, every order shows up here with the cash-back it earned you.</div></div>'}
+ var P0=R.prof||R.rows[0];var name=String(P0.Referrer||''),code=String(P0.Code||'').toUpperCase(),tier=String(P0.Tier||'normal').toLowerCase(),rate=+P0.Rate||0;
  $('#hdr').textContent=name||'Your Cash-Back';
  $('#sub').innerHTML='<span class="chip">'+esc(code)+'</span> <span class="chip ok">'+esc(TIERS[tier]||TIERS.normal)+' · '+rate+'% Cash-Back</span><br>Every order placed with your referral code, month by month — what it earned you, and what has been paid.';
  var ys=years();if(!R.year||ys.indexOf(R.year)<0)R.year=ys[0]||'';
@@ -49,7 +70,7 @@ function render(){
  var mine=inMonth(R.month);
  var pendAll=R.rows.filter(function(r){return !isPaid(r.Paid)}),paidAll=R.rows.filter(function(r){return isPaid(r.Paid)});
  var mPaid=mine.length&&mine.every(function(r){return isPaid(r.Paid)});
- var h='<div class="card">'+
+ var h=shareCard(code,name)+'<div class="card">'+
   '<div class="f2"><div><label class="lb" for="yr">Year</label><select id="yr" onchange="setYear(this.value)">'+ys.map(function(y){return'<option value="'+y+'"'+(R.year===y?' selected':'')+'>'+y+'</option>'}).join('')+'</select></div>'+
   '<div><label class="lb" for="mo">Month</label><select id="mo" onchange="setMonth(this.value)">'+ms.map(function(m){return'<option value="'+m+'"'+(R.month===m?' selected':'')+'>'+monthLabel(m)+'</option>'}).join('')+'</select></div></div>'+
   '<div class="mo">'+ms.map(function(m){return'<button type="button" class="'+(R.month===m?'on':'')+'" onclick="setMonth(\''+m+'\')">'+monthShort(m)+'</button>'}).join('')+'</div>'+
@@ -149,6 +170,7 @@ window.AERA_I18N={};window.AERA_I18N_RE=[];
 
 (function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
+"Your Referral Code":"您的推荐码","Share it with friends, clients and members. Every Order placed with your code earns you Cash-Back, and they earn extra AERA Points.":"分享给朋友、客户和会员。每张用您推荐码下的订单都给您现金回馈，他们也会多赚 AERA 积分。","Share by Email":"用电邮分享","Copy Code":"复制推荐码","Copy Link":"复制链接","Copied":"已复制",
 "Home":"首页","Order Now":"立即订购","Referrer Portal":"推荐人专区","Terms & Conditions":"条款与细则",
 "Your Cash-Back":"您的回扣","Every order placed with your referral code, month by month — what it earned you, and what has been paid.":"每一笔使用您推荐码的订单，按月列出 — 为您赚了多少，以及已经付了多少。","Loading your figures…":"正在载入您的数字…","We could not load your figures just now. Please refresh the page.":"目前无法载入您的数字，请重新整理页面。","Nothing here yet.":"这里还没有内容。","Once someone orders with your referral code, every order shows up here with the cash-back it earned you.":"只要有人使用您的推荐码下单，每一笔订单都会显示在这里，并附上为您赚到的回扣。","Year":"年","Month":"月","Sales This Month":"本月销售额","Cash-Back This Month":"本月回扣","Pending Cash-Back":"待付回扣","Across every month, not yet paid":"所有月份合计，尚未支付","Paid Cash-Back":"已付回扣","Received all time":"历来已收到","Awaiting payment":"等待付款","Date":"日期","Order":"订单","Customer":"顾客","Meal Subtotal":"餐点小计","Rate":"比率","Status":"状态","Total":"合计","Every Month":"所有月份","Orders":"订单数","Sales":"销售额","Cash-Back":"回扣","Receipt":"收据","Cash-Back Receipt":"回扣收据","Normal Referrer":"一般推荐人","Fitness Studio / Gym":"健身工作室 / 健身房","Fitness Influencer":"健身网红","Cashback":"回扣","Pending":"待付","Paid":"已付","Allow pop-ups for this page, then press the receipt button again.":"请允许此页面弹出视窗，然后再按一次收据按钮。","Referrer Portal — AERA Meal Prep":"推荐人专区 — AERA Meal Prep"
 });
