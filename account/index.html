@@ -755,13 +755,13 @@ async function alWallet(){if(AL.row&&AL.row.wallet_url){location.href=AL.row.wal
   AL.row=AL.row||{};AL.row.wallet_url=u;AL.busy=false;renderAlerts();location.href=u}
  catch(e){AL.busy=false;renderAlerts(e.message||String(e),true)}}
 function renderAlerts(msg,bad){var el=document.getElementById('alertBox');if(!el||!USER)return;var R=AL.row||{email_on:true};var p=AL.push,b=AL.busy?' disabled':'';
- var push=p==='on'?'<span class="alon">On for this device</span><button class="btn btn-o s" type="button" onclick="alPushOff()"'+b+'>Turn Off</button>'
+ var push=p==='on'?'<span class="alon">On for this Device</span><button class="btn btn-o s" type="button" onclick="alPushOff()"'+b+'>Turn OFF</button>'
   :p==='ios-home'?'<div class="hint">On iPhone : tap <b>Share</b> → <b>Add to Home Screen</b>, open <b>AERA</b> from your Home Screen, sign in, then turn this on here.</div>'
   :p==='blocked'?'<div class="hint">Notifications are blocked for aeramealprep.net. Allow them in your browser or phone settings, then come back here.</div>'
   :p==='unsupported'?'<div class="hint">This browser cannot show notifications. Try Chrome, or Safari on iPhone ( iOS 16.4 or newer ).</div>'
   :'<button class="btn btn-y s" type="button" onclick="alPushOn()"'+b+'>Turn On Notifications</button>';
- el.innerHTML='<h3 class="crh" style="margin-top:26px">Alerts On Your Phone</h3><p class="hint" style="margin-top:-2px">Know the moment a new message arrives, without signing in to check.</p>'+
-  '<div class="alrow"><div><b>Phone Notifications</b><small>A pop-up on this phone or computer.</small></div><div class="alact">'+push+'</div></div>'+
+ el.innerHTML='<h3 class="crh" style="margin-top:26px">Alerts On Your Phone</h3><p class="hint" style="margin-top:-2px">Know the moment a New Message arrives, without signing in to check.</p>'+
+  '<div class="alrow"><div><b>Phone Notifications</b><small>A pop-up on this Phone or Computer.</small></div><div class="alact">'+push+'</div></div>'+
   '<div class="alrow"><div><b>Email</b><small>To '+esc(String(USER.email||''))+'</small></div><div class="alact"><label class="alsw" aria-label="Email alerts"><input type="checkbox" '+(R.email_on!==false?'checked':'')+' onchange="alEmail(this.checked)"><span></span></label></div></div>'+
   (msg?'<div class="msg '+(bad?'bad':'ok')+'" style="margin-top:10px">'+esc(msg)+'</div>':'')}
 try{if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',function(e){if(e.data&&e.data.aera==='inbox'){try{setTab('inbox')}catch(x){}}})}catch(e){}
@@ -1259,7 +1259,7 @@ function saveFavs(f){try{localStorage.setItem('aera.favs',JSON.stringify(f))}cat
 function loadHomeLib(){try{return JSON.parse(localStorage.getItem('aera.home')||'[]')}catch(e){return[]}}
 function renderHome(){renderOverview();var el=$('#homeLib');if(!el)return;var a=loadHomeLib();
  el.innerHTML=a.length?a.map(function(h,i){return'<div class="line" style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)"><span><b>'+esc(h.n)+'</b><br><span class="hint">'+Math.round(h.k)+' KCALs · Protein '+(h.p||0)+' g · Carbs '+(h.c||0)+' g · Fat '+(h.f||0)+' g</span></span><button class="btn btn-o s" type="button" onclick="homeLibDel('+i+')">Remove</button></div>'}).join(''):
-  '<div class="empty">Nothing here yet. Look one up under Your Week on the plan page and it is kept for next time.</div>'}
+  '<div class="empty">Nothing here yet. Look one up under Your Week on the Plan Page and it is kept for next time.</div>'}
 function homeLibDel(i){var a=loadHomeLib();a.splice(i,1);try{localStorage.setItem('aera.home',JSON.stringify(a))}catch(e){}renderHome()}
 /* A favourite keeps the whole plan, so the Meals can be drawn here exactly as the builder drew
    them : the MAP bento tray with the real photo of each part. The catalogue is fetched only when
@@ -1281,7 +1281,7 @@ function renderFavs(){var el=$('#favList');if(!el)return;var f=loadFavs();
    favBentos(x)+
    ((x.names&&x.names.length)?'<div class="hint" style="margin-top:6px">'+esc(x.names.join('  |  '))+((x.boxes>x.names.length)?'  |  …':'')+'</div>':'')+
    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-y" type="button" onclick="favOpen('+i+')">Repurchase</button><button class="btn btn-k" type="button" onclick="favCart('+i+')">Add To Cart</button><button class="btn btn-o" type="button" onclick="favRemove('+i+')">Remove</button></div></div>'}).join(''):
-  '<div class="empty">No favourites yet. Star a plan on the <a href="'+PLAN_URL+'">Personalised Meal Plan</a> page and it will appear here.</div>')}
+  '<div class="empty">No Favourites yet. Star a Plan on the <a href="'+PLAN_URL+'">Personalised Meal Plan</a> Page and it will appear here.</div>')}
 function favRename(i){var x=loadFavs()[i];var el=document.getElementById('favName'+i);if(!x||!el)return;
  el.innerHTML='<input type="text" id="favNameIn'+i+'" maxlength="60" value="'+esc(x.name||'Personalised Plan')+'" style="width:260px;max-width:100%;padding:6px 10px;font:inherit;font-weight:700" onkeydown="if(event.key===\'Enter\')favRenameSave('+i+');if(event.key===\'Escape\')renderFavs()"> <button class="btn btn-y s" type="button" onclick="favRenameSave('+i+')">Save</button> <button class="btn btn-o s" type="button" onclick="renderFavs()">Cancel</button>';
  var inp=document.getElementById('favNameIn'+i);if(inp){inp.focus();inp.select()}}
@@ -1341,18 +1341,18 @@ async function loadRefs(){var box=$('#refsBox');if(!box||!USER)return;
   REFSUM={isRef:true,code:code,rate:rate,owed:owed,life:life};renderOverview();
   var n=rows.length?rows[0]:null;
   h+='<div class="order" style="margin-top:14px"><div class="top"><span class="no">'+esc(code)+'</span><span><span class="chip ok">'+esc(REF_TIER[tier]||REF_TIER.normal)+' · '+rate+'% Cash-Back</span></span></div>'+
-   '<div class="meta">'+esc(mine.Name||'')+' · Share this code and you earn '+rate+'% of the meal subtotal on every order placed with it.</div>'+
+   '<div class="meta">'+esc(mine.Name||'')+' · Share this Code and you earn '+rate+'% of the Meal Subtotal on every Order placed with it.</div>'+
    '<div class="tiles" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px">'+
     '<div class="order" style="margin:0"><div class="hint" style="margin:0">This Month</div><div class="big">'+(n?rm(+n.Cashback||0):rm(0))+'</div><small>'+(n?esc(monthName(n.Month))+' · '+(+n.Orders||0)+' order'+((+n.Orders||0)===1?'':'s')+' · '+rm(+n.Sales||0)+' in sales':'No sales yet')+'</small></div>'+
     (function(){var np=rows.filter(function(r){return !/^(y|yes|true|1|paid)$/i.test(String(r.Paid||''))}).length;
-     return'<div class="order" style="margin:0"><div class="hint" style="margin:0">Waiting To Be Paid</div><div class="big">'+rm(owed)+'</div><small>'+(np?'Across '+np+' month'+(np===1?'':'s'):'Nothing outstanding')+'</small></div>'})()+
+     return'<div class="order" style="margin:0"><div class="hint" style="margin:0">To be Paid</div><div class="big">'+rm(owed)+'</div><small>'+(np?'Across '+np+' month'+(np===1?'':'s'):'No Outstanding')+'</small></div>'})()+
     '<div class="order" style="margin:0"><div class="hint" style="margin:0">Earned All Time</div><div class="big">'+rm(life)+'</div><small>Since you joined</small></div>'+
    '</div>'+
    (rows.length?'<table style="width:100%;margin-top:12px;font-size:13px;border-collapse:collapse"><thead><tr><th style="text-align:left">Month</th><th class="r">Orders</th><th class="r">Sales</th><th class="r">Cash-Back</th><th>Status</th></tr></thead><tbody>'+
      rows.map(function(r){var paid=/^(y|yes|true|1|paid)$/i.test(String(r.Paid||''));
       return'<tr><td>'+esc(monthName(r.Month))+'</td><td class="r">'+(+r.Orders||0)+'</td><td class="r">'+rm(+r.Sales||0)+'</td><td class="r"><b>'+rm(+r.Cashback||0)+'</b></td><td><span class="chip '+(paid?'ok':'')+'">'+(paid?'Paid'+(r.PaidAt?' · '+esc(String(r.PaidAt).slice(0,10)):''):'Pending')+'</span></td></tr>'}).join('')+
-     '</tbody></table>':'<div class="hint" style="margin-top:10px">Nothing yet. Statements appear here at the end of each month.</div>')+
-   '<div class="hint" style="margin-top:10px">Cash-back is worked out on the meal subtotal only — discounts, delivery and packaging fees are not counted. We settle by bank transfer after each month closes.</div>'+
+     '</tbody></table>':'<div class="hint" style="margin-top:10px">Nothing yet. Statements appear here at the End of each month.</div>')+
+   '<div class="hint" style="margin-top:10px">Cash-Back is worked out on the Meal Subtotal only. Discounts, Delivery and Packaging Fees are not counted. We settle by Bank Transfer after each month closes.</div>'+
    '</div>'}
  box.innerHTML=h}
 /* ===== what a Personalised Meal looks like =====
