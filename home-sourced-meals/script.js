@@ -269,3 +269,5 @@ if(document.body)start();else document.addEventListener('DOMContentLoaded',start
   setInterval(counts,4000);inboxLive()}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
+
+/* the browser tab title in Chinese */(function(){try{if((localStorage.getItem("aera_lang")||"en")==="zh")document.title="我的自备餐点 — AERA Meal Prep"}catch(e){}})();
