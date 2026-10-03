@@ -71,6 +71,7 @@ async function afterSignIn(){
 
 async function pickFridge(id){
  CUR=FRIDGES.filter(function(f){return f.id===id})[0]||FRIDGES[0];
+ try{if($('#vAccount').style.display==='block')paintAccount()}catch(e){}
  $('#fname').textContent=CUR.name;
  var ym=today().slice(0,7);
  var a=await db.from('fridge_stock').select('*').eq('fridge_id',CUR.id).gt('qty',0).order('expires');
@@ -267,8 +268,39 @@ async function send(kind){
   '<div class="sent">Thank you — that is with the kitchen. It shows under Bills.</div>';
  pickFridge(CUR.id)}
 
+
+/* ---- Account : the gym keeps its own details current ----
+   Only its own Gym Name, Contact Person, Phone and Address can be changed, and only on its own
+   fridge : the database checks the signed-in email before it saves anything. */
+function paintAccount(){
+ if(!CUR)return;
+ $('#aPartner').value=CUR.partner||'';$('#aContact').value=CUR.contact||'';
+ $('#aPhone').value=CUR.phone||'';$('#aAddress').value=CUR.address||'';
+ $('#aEmail').value=(ME&&ME.email)||CUR.email||'';
+ $('#aHint').textContent=CUR.details_at?('Last saved '+new Date(CUR.details_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})+'.'):''}
+async function saveDetails(){
+ if(!CUR)return;
+ var d={p_id:CUR.id,p_partner:$('#aPartner').value.trim(),p_contact:$('#aContact').value.trim(),
+  p_phone:$('#aPhone').value.trim(),p_address:$('#aAddress').value.trim()};
+ if(!d.p_partner)return($('#aHint').textContent='Add your Gym Name first.');
+ var b=$('#aSave');b.disabled=true;b.textContent='Saving…';
+ var r=await db.rpc('fridge_save_details',d);
+ b.disabled=false;b.textContent='Save Details';
+ if(r.error){$('#aHint').textContent='That did not save: '+r.error.message;return}
+ CUR.partner=d.p_partner;CUR.contact=d.p_contact;CUR.phone=d.p_phone;CUR.address=d.p_address;CUR.details_at=r.data;
+ paintAccount();$('#aHint').textContent='Saved. Thank you.'}
+async function savePass(){
+ var a=$('#aPw1').value,b=$('#aPw2').value,h=$('#aPwHint');
+ if(a.length<8)return(h.textContent='Use at least 8 characters.');
+ if(a!==b)return(h.textContent='The two passwords do not match.');
+ var x=$('#aPwBtn');x.disabled=true;x.textContent='Changing…';
+ var r=await db.auth.updateUser({password:a});
+ x.disabled=false;x.textContent='Change Password';
+ if(r.error){h.textContent='That did not change: '+r.error.message;return}
+ $('#aPw1').value='';$('#aPw2').value='';h.textContent='Password changed. Use the new one next time you sign in.'}
 function showView(v){
- ['Fridge','Refill','Orders','Bills'].forEach(function(k){
+ if(v==='account')paintAccount();
+ ['Fridge','Refill','Orders','Bills','Account'].forEach(function(k){
   var el=document.getElementById('v'+k),tb=document.getElementById('tb'+k);
   var on=(k.toLowerCase()===v);
   if(el)el.style.display=on?'block':'none';
@@ -421,7 +453,7 @@ window.AERA_I18N={};window.AERA_I18N_RE=[];
 })();
 
 (function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
-Object.assign(window.AERA_I18N,{"Nothing billed yet. Your first Delivery will show here as its own Invoice.":"还没有任何账单。您的第一次送货会在这里显示为一张单独的发票。","Referral Portal":"推荐人入口","AERA Meal Prep":"AERA 备餐","AERA Fridge — Merchant Portal":"AERA 冰箱 — 商户入口","Fridge Merchant Portal":"冰箱商户入口","Your Fridge":"您的冰箱","Sign in to see what is in it.":"登录后即可查看里面有什么。","Sign out":"登出","Sign In":"登录","Use the same email and password as the AERA website. If you shop with us, that account already works here.":"使用与 AERA 网站相同的电邮和密码。若您有在我们这里下单，那个账户在这里就能用。","No account yet?":"还没有账户？","Create one on the AERA website":"到 AERA 网站注册一个","with the email we have on file for your gym, then come back and sign in.":"请用我们记录中您健身房的电邮注册，然后回来登录。","Email":"电邮","Password":"密码","I have forgotten my password":"我忘记密码了","Which Fridge":"哪一台冰箱","In Your Fridge Now":"目前冰箱里的餐点","Loading…":"载入中…","Tell Us What Sold":"告诉我们卖出了什么","Counted By":"清点人","Date":"日期","Anything We Should Know":"有什么需要我们知道的","Send To AERA":"发送给 AERA","Add a number to at least one meal first.":"请先为至少一款餐点填上数量。","Order More Stock":"补货下单","Checking your fridge…":"正在检查您的冰箱…","This is a request, not a Delivery. We confirm it and bring it. You are only billed for what actually arrives.":"这是一份请求，不是配送 — 我们确认后才送过去。只有实际送达的部分才会计费。","Your Name":"您的姓名","Delivery Date":"配送日期","Anything Else":"其他事项","Send The Order":"送出订单","Balance Payable To AERA":"应付 AERA 的余额","What You Have Sent Us":"您传给我们的记录","Anything wrong on this page, tell us and we will fix it at our end.":"这个页面若有任何不对，告诉我们，我们会在后台修正。","This Month":"本月","Type your email and password.":"请输入电邮和密码。","That email and password do not match an AERA account.":"这个电邮和密码与任何 AERA 账户都不相符。","Type your email first, then press this again.":"请先输入电邮，然后再按一次。","If that email has an AERA account, a reset link is on its way to it.":"若这个电邮有 AERA 账户，重设链接已寄出。","That account is signed in, but it is not set against a fridge. Ask AERA to put this email on your fridge, then sign in again.":"这个账户已登录，但尚未绑定任何冰箱。请联系 AERA 将这个电邮绑定到您的冰箱，然后重新登录。","Send us a count when some have sold and the order opens again.":"卖出一些之后传一份清点给我们，补货就会重新开放。","Nothing in the fridge right now":"冰箱现在是空的","No date on file":"没有日期记录","Boxes returned":"退回的餐盒","Boxes delivered":"送达的餐盒","Credit Note":"贷记单","Credit Note No":"贷记单号","Invoice No":"发票号码","Total Credited":"贷记总额","Total Due":"应付总额","These boxes did not sell, whether they came back to us or were thrown away past their date. They were invoiced in full and are credited back here at cost.":"这些餐盒未售出 — 不论是退回给我们，还是过期后丢弃。已全额开票，并在此按成本贷记退还。","Your browser blocked the window. Allow pop-ups for this page and try again.":"浏览器拦截了弹出窗口。请允许此页面的弹出窗口后再试一次。","Front desk":"前台","Your website password":"您的网站密码","Fridge was switched off overnight…":"冰箱昨晚被关掉了…","More Fat Loss than Mass Gain this week…":"这周减脂餐要比增肌餐多一些…"});
+Object.assign(window.AERA_I18N,{"Account":"账户","Your Details":"您的资料","These go on every Invoice and Delivery Order we send you. Change them here and press Save Details.":"这些资料会印在我们给您的每张发票和送货单上。在这里修改后按「保存资料」。","Gym Name":"健身房名称","Contact Person":"联系人","Phone":"电话","Sign-in Email":"登录电邮","To change this, ask AERA.":"如需更改，请联系 AERA。","Address":"地址","Save Details":"保存资料","Saving…":"保存中…","Saved. Thank you.":"已保存，谢谢。","Add your Gym Name first.":"请先填写健身房名称。","Change Password":"更改密码","The same password signs you in to the AERA website.":"这个密码也用来登录 AERA 网站。","New Password":"新密码","Type It Again":"再输入一次","At least 8 characters":"至少 8 个字符","Changing…":"更改中…","Use at least 8 characters.":"请至少用 8 个字符。","The two passwords do not match.":"两次输入的密码不一样。","Password changed. Use the new one next time you sign in.":"密码已更改，下次登录请用新密码。","Nothing billed yet. Your first Delivery will show here as its own Invoice.":"还没有任何账单。您的第一次送货会在这里显示为一张单独的发票。","Referral Portal":"推荐人入口","AERA Meal Prep":"AERA 备餐","AERA Fridge — Merchant Portal":"AERA 冰箱 — 商户入口","Fridge Merchant Portal":"冰箱商户入口","Your Fridge":"您的冰箱","Sign in to see what is in it.":"登录后即可查看里面有什么。","Sign out":"登出","Sign In":"登录","Use the same email and password as the AERA website. If you shop with us, that account already works here.":"使用与 AERA 网站相同的电邮和密码。若您有在我们这里下单，那个账户在这里就能用。","No account yet?":"还没有账户？","Create one on the AERA website":"到 AERA 网站注册一个","with the email we have on file for your gym, then come back and sign in.":"请用我们记录中您健身房的电邮注册，然后回来登录。","Email":"电邮","Password":"密码","I have forgotten my password":"我忘记密码了","Which Fridge":"哪一台冰箱","In Your Fridge Now":"目前冰箱里的餐点","Loading…":"载入中…","Tell Us What Sold":"告诉我们卖出了什么","Counted By":"清点人","Date":"日期","Anything We Should Know":"有什么需要我们知道的","Send To AERA":"发送给 AERA","Add a number to at least one meal first.":"请先为至少一款餐点填上数量。","Order More Stock":"补货下单","Checking your fridge…":"正在检查您的冰箱…","This is a request, not a Delivery. We confirm it and bring it. You are only billed for what actually arrives.":"这是一份请求，不是配送 — 我们确认后才送过去。只有实际送达的部分才会计费。","Your Name":"您的姓名","Delivery Date":"配送日期","Anything Else":"其他事项","Send The Order":"送出订单","Balance Payable To AERA":"应付 AERA 的余额","What You Have Sent Us":"您传给我们的记录","Anything wrong on this page, tell us and we will fix it at our end.":"这个页面若有任何不对，告诉我们，我们会在后台修正。","This Month":"本月","Type your email and password.":"请输入电邮和密码。","That email and password do not match an AERA account.":"这个电邮和密码与任何 AERA 账户都不相符。","Type your email first, then press this again.":"请先输入电邮，然后再按一次。","If that email has an AERA account, a reset link is on its way to it.":"若这个电邮有 AERA 账户，重设链接已寄出。","That account is signed in, but it is not set against a fridge. Ask AERA to put this email on your fridge, then sign in again.":"这个账户已登录，但尚未绑定任何冰箱。请联系 AERA 将这个电邮绑定到您的冰箱，然后重新登录。","Send us a count when some have sold and the order opens again.":"卖出一些之后传一份清点给我们，补货就会重新开放。","Nothing in the fridge right now":"冰箱现在是空的","No date on file":"没有日期记录","Boxes returned":"退回的餐盒","Boxes delivered":"送达的餐盒","Credit Note":"贷记单","Credit Note No":"贷记单号","Invoice No":"发票号码","Total Credited":"贷记总额","Total Due":"应付总额","These boxes did not sell, whether they came back to us or were thrown away past their date. They were invoiced in full and are credited back here at cost.":"这些餐盒未售出 — 不论是退回给我们，还是过期后丢弃。已全额开票，并在此按成本贷记退还。","Your browser blocked the window. Allow pop-ups for this page and try again.":"浏览器拦截了弹出窗口。请允许此页面的弹出窗口后再试一次。","Front desk":"前台","Your website password":"您的网站密码","Fridge was switched off overnight…":"冰箱昨晚被关掉了…","More Fat Loss than Mass Gain this week…":"这周减脂餐要比增肌餐多一些…"});
 window.AERA_I18N_RE.push([/^(\d+) in the fridge$/,"冰箱里有 $1 份"],[/^Best before (.+)$/,"最佳食用期限 $1"]);
 if(window.aeraRetranslate)window.aeraRetranslate();
 
