@@ -14,6 +14,31 @@
 html[data-lang="zh"] .langsw .l1{background:transparent;color:inherit}
 html[data-lang="zh"] .langsw .l2{background:#fff;color:#16479E}
 
+/* AERA phone meal editor : on a phone each item is its own small card ( picture and name, its macros, then weight and price, × top right ) instead of a squeezed 5-column table, and the boxes inside boxes lose their extra frames */
+@media(max-width:640px){
+ .card:has(.dpanel){padding:14px!important}
+ .dpanel{border:0!important;padding:0!important;background:transparent!important}
+ .mcard{padding:12px!important}
+ .tblwrap{overflow:visible!important;border:0!important;border-radius:0!important}
+ .etbl,.etbl tbody{display:block!important;width:100%!important}
+ .etbl thead{display:none!important}
+ .etbl tr{position:relative;display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"item item" "mac mac" "w p";gap:8px 10px;align-items:center;padding:12px;border:1px solid #CBD9F0!important;border-radius:12px;background:#fff;margin-bottom:10px}
+ .etbl tr:last-child{margin-bottom:0}
+ .etbl td{display:block!important;width:auto!important;border:0!important;padding:0!important;min-width:0}
+ .etbl td:nth-child(1){grid-area:item}
+ .etbl tr:has(td:nth-child(5) .x) td:nth-child(1){padding-right:42px!important}
+ .etbl td:nth-child(1) details,.etbl td:nth-child(1) summary{width:100%!important}
+ .etbl td:nth-child(2){grid-area:mac;font-size:12px!important;line-height:1.45}
+ .etbl td:nth-child(3){grid-area:w;display:flex!important;flex-direction:column;align-items:flex-start;gap:4px}
+ .etbl td:nth-child(4){grid-area:p;text-align:right!important;font-size:14px}
+ .etbl td:nth-child(5){position:absolute;top:12px;right:12px}
+ .etbl td:nth-child(5):empty{display:none!important}
+ .etbl .wlab{display:inline!important;margin:0!important;text-align:left}
+ .etbl .qty button{width:34px;height:34px}
+ .etbl .x{width:32px;height:32px}
+ .etbl .swapbtn span{font-size:13.5px;font-weight:700}
+}
+
 /* Plan buttons : AERA navy with yellow wording, and a little pop when tapped */
 .planacts .btn{background:var(--navy)!important;color:var(--y)!important;border-color:var(--navy)!important;box-shadow:none!important;transition:transform .18s ease}
 .planacts .btn:hover{filter:brightness(1.12)}
