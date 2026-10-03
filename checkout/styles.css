@@ -144,8 +144,8 @@ a{text-underline-offset:3px}
 .fobox .act{margin-top:10px}
 .item.alc .goal{display:block;background:var(--navy);color:var(--y);margin:-12px -12px 2px;padding:8px 12px;font-size:12px;letter-spacing:.04em}
 .alcchips{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:2px}
-.alcchips button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 14px;font:inherit;font-size:13px;font-weight:700;color:var(--mute);cursor:pointer}
-.alcchips button.on{border-color:var(--navy);color:var(--navy);background:var(--navy-soft)}
+.alcchips button{border:1.5px solid var(--navy);background:#fff;border-radius:99px;padding:7px 14px;font:inherit;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;transition:background .15s,color .15s}.alcchips button:hover{background:var(--navy-soft)}
+.alcchips button.on{border-color:var(--navy);color:var(--y);background:var(--navy)}
 .alcnote{grid-column:1/-1;font-size:13px;color:var(--y);background:var(--navy);border-radius:10px;padding:12px 15px;margin-bottom:4px}.alcnote b{color:var(--y)}
 .item.alc .per{font-size:12px;color:var(--mute);margin-top:2px}
 .item.alc .sz{display:flex;align-items:center;gap:10px;justify-content:space-between;border-top:1px dashed var(--line);padding-top:9px;margin-top:9px}
