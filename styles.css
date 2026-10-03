@@ -168,7 +168,7 @@ section{padding:76px 0}
 /* meals */
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
 .tab{padding:9px 18px;border-radius:999px;border:2px solid var(--ink);background:transparent;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit}
-.tab.on{background:var(--navy);color:#fff}
+.tab.on{background:var(--navy);color:var(--y)}
 .findbtn{width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;
  font-size:19px;line-height:1;cursor:pointer;flex:none}
 .findbtn:hover{background:rgba(255,255,255,.26)}
