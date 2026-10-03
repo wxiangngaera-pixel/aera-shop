@@ -2172,3 +2172,6 @@ if(document.readyState==="complete")setTimeout(load,200);else window.addEventLis
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',n);else n();
  window.addEventListener('pageshow',n);window.addEventListener('focus',n);
  window.addEventListener('storage',function(e){if(!e.key||e.key==='aera.cart')n()});setInterval(n,4000)})();
+
+/* the Search button on every other page lands here with ?find=1 and opens the search straight away */
+(function(){try{if(!/[?&]find=1(&|$)/.test(location.search))return;var n=0;(function tryOpen(){if(typeof window.aeFindOpen==='function'){window.aeFindOpen();try{var u=new URL(location.href);u.searchParams.delete('find');history.replaceState(null,'',u.toString())}catch(e){}return}if(++n<40)setTimeout(tryOpen,150)})()}catch(e){}})();
