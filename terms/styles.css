@@ -38,6 +38,9 @@ footer{border-top:1px solid var(--line);margin-top:30px;padding-top:16px;font-si
 :root{--line:#16479E!important;--line2:#16479E!important}
 input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),select:not(:focus),textarea:not(:focus){border-color:#C8D2E2!important}
 .bmtrack{background:#E3E7EE!important}.thumb{background-color:#E3E7EE!important}
+/* the outer card on a page carries a bolder navy line, the boxes inside it stay fine */
+.card{border-width:2px!important;border-color:#16479E!important}
+.card .card{border-width:1px!important}
 /* Every button is either AERA yellow with black wording, or AERA navy with yellow wording. */
 .aera-yb{background:#FDB913!important;color:#0B0B0B!important;border-color:#FDB913!important}
 .aera-nb{background:#16479E!important;color:#FDB913!important;border-color:#16479E!important;box-shadow:none!important}
