@@ -55,3 +55,13 @@ html[data-lang="zh"] .langsw .l2{background:#fff;color:#16479E}
 #pin-gate input:focus{border-color:#2563eb !important;box-shadow:0 0 0 3px rgba(37,99,235,0.25) !important;outline:none !important;}
 
 '+css+'
+
+/* Lines are AERA navy. Boxes people type into keep their light border so forms stay calm. */
+:root{--line:#16479E!important;--line2:#16479E!important}
+input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),select:not(:focus),textarea:not(:focus){border-color:#C8D2E2!important}
+.bmtrack{background:#E3E7EE!important}.thumb{background-color:#E3E7EE!important}
+/* Every button is either AERA yellow with black wording, or AERA navy with yellow wording. */
+.aera-yb{background:#FDB913!important;color:#0B0B0B!important;border-color:#FDB913!important}
+.aera-nb{background:#16479E!important;color:#FDB913!important;border-color:#16479E!important;box-shadow:none!important}
+.aera-nb:hover{background:#1D57BD!important;border-color:#1D57BD!important;color:#FDB913!important}
+.aera-nb svg{stroke:currentColor}
