@@ -338,6 +338,11 @@ a{text-underline-offset:3px}
 
 #tOrders .osub{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:#16479E;padding-bottom:6px;margin-bottom:10px;border-bottom:2px solid #16479E}
 
+#tOrders .otabs{display:grid;grid-template-columns:1fr 1fr;border:2px solid #16479E;border-radius:12px;overflow:hidden;margin:4px 0 14px}
+#tOrders .otabs button{height:46px;border:0;background:#fff;color:#16479E;font:inherit;font-weight:800;font-size:14px;cursor:pointer}
+#tOrders .otabs button+button{border-left:2px solid #16479E}
+#tOrders .otabs button.on{background:#16479E;color:#FDB913}
+
 /* One legal line, the same on every page, so the Terms are never more than a
    glance away wherever a customer happens to be. */
 .aeralegal{max-width:720px;margin:30px auto 0;padding:0 20px 30px;
