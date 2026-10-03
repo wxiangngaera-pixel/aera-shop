@@ -19,7 +19,7 @@ h1{letter-spacing:-.02em;font-size:34px;font-weight:800;margin:8px 0 8px;line-he
 .step{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:10px 12px;font-size:13px;font-weight:600;line-height:1.25}
 .step .ic{width:34px;height:34px;border-radius:10px;background:var(--y);color:var(--navy3);display:grid;place-items:center;font-size:18px;flex:none}
 @media(max-width:560px){h1{font-size:28px}.hero{padding:26px 0 58px}.steps{gap:8px}.step{flex-direction:column;text-align:center;gap:7px;padding:12px 6px;font-size:11.5px}.step .ic{width:32px;height:32px;font-size:16px}}
-main.wrap{margin-top:-40px;padding-bottom:60px;position:relative;z-index:2}
+main.wrap{margin-top:-40px;padding-bottom:110px;position:relative;z-index:2}
 .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;margin-bottom:16px;box-shadow:0 1px 2px rgba(11,20,38,.04),0 10px 30px -12px rgba(11,20,38,.12)}
 .chead{display:flex;align-items:center;gap:12px;margin-bottom:14px}
 .chead .ic{width:42px;height:42px;border-radius:13px;background:var(--navy-soft);color:var(--navy);display:grid;place-items:center;font-size:21px;flex:none}
