@@ -374,6 +374,7 @@
       <div class="who" id="who"></div><div class="email" id="whoEmail"></div>
       <div class="menu">
         <button class="on" data-t="orders" onclick="setTab('orders')">Orders</button>
+        <button data-t="history" onclick="setTab('history')">Order History</button>
         <button data-t="inbox" onclick="setTab('inbox')">Inbox<span class="ibn" id="ibBadge" style="display:none"></span></button>
         <button data-t="plans" onclick="setTab('plans')">My Meal Plans</button>
         <button data-t="favs" onclick="setTab('favs')">My Favourite Meal Plans</button>
@@ -398,6 +399,7 @@
     <div>
       <div id="welcomeBack"></div>
     <div id="tOrders" class="card" style="display:none"><h2>Your Orders</h2><div id="ordersList"><div class="empty">Loading…</div></div></div>
+      <div id="tHistory" class="card" style="display:none"><h2>Order History</h2><div id="histList"><div class="empty">Loading…</div></div></div>
       <div id="tFavs" class="card" style="display:none"><h2>My Favourite Meal Plans</h2><div id="favList"></div></div>
       <div id="tHome" class="card" style="display:none"><h2>My Home-Sourced Meals</h2><p class="hint" style="margin-top:2px">Everything you have keyed in on the Home-Sourced Meals Page. Add them to a plan from the “Your Week” step.</p><div id="homeLib" style="margin-top:10px"></div><div style="margin-top:14px"><a class="btn btn-y" href="https://my.chatbees.io/p/8kZjg8U5XD">Add a Home-Sourced Meal →</a></div></div>
       <div id="tPlans" class="card" style="display:none"><h2>Your Personalised Meal Plans</h2><div id="plansList"><div class="empty">Loading…</div></div><div style="margin-top:14px"><a class="btn btn-y" href="https://my.chatbees.io/p/SrQzC5m2">Build a New Plan →</a></div></div>
@@ -1136,11 +1138,11 @@ function acctReveal(){acctHold(false);var v=$('#acctView');if(v)v.style.display=
 function hashTab(){var hh=(location.hash||'').replace('#','').toLowerCase();
  if(hh==='addresses')hh='address';if(hh==='settings')hh='details';if(hh==='referrals')hh='refs';if(hh==='topup'||hh==='aera-credit')hh='credit';if(hh==='auto-subscription'||hh==='subscription')hh='auto';
  if(hh==='track'||hh==='tracking')hh='orders';
- return ['orders','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].indexOf(hh)>=0?hh:''}
+ if(hh==='order-history'||hh==='past-orders')hh='history';return ['orders','history','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].indexOf(hh)>=0?hh:''}
 window.addEventListener('hashchange',function(){
  if(!USER)return;var t=hashTab();if(t&&t!==TAB)setTab(t);
  try{obMaybeAsk()}catch(e){}});
-function setTab(t){if(t==='send'&&!IS_ADMIN)t='inbox';TAB=t;if(t==='credit')creditLoad();if(t==='auto')loadAutoSubs();if(t==='inbox'){loadInbox();alLoad()}if(t==='send')smLoad();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();['orders','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===(t==='send'?'inbox':t))});document.querySelectorAll('.ibsw button').forEach(function(b){b.classList.toggle('on',b.dataset.s===t)})}
+function setTab(t){if(t==='send'&&!IS_ADMIN)t='inbox';TAB=t;if(t==='credit')creditLoad();if(t==='auto')loadAutoSubs();if(t==='inbox'){loadInbox();alLoad()}if(t==='send')smLoad();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();if(t==='history')try{renderHistory()}catch(e){}['orders','history','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===(t==='send'?'inbox':t))});document.querySelectorAll('.ibsw button').forEach(function(b){b.classList.toggle('on',b.dataset.s===t)})}
 async function loadProfile(){var r=await sb.from('profiles').select('*').eq('id',USER.id).maybeSingle();PROFILE=r.data||{id:USER.id,email:USER.email};if(!r.data){var meta=USER.user_metadata||{};var seed={id:USER.id,email:USER.email.toLowerCase(),name:meta.name||null,phone:meta.phone||null};
   var w=await sb.from('profiles').upsert(seed);
   if(w.error&&/23505|duplicate|unique/i.test((w.error.message||'')+' '+(w.error.code||''))){delete seed.phone;await sb.from('profiles').upsert(seed)}
@@ -1471,12 +1473,54 @@ function trackBox(o){
  return ''}
 async function loadOrders(){var r=await sb.from('orders').select('*').order('date',{ascending:false}).limit(100);var el=$('#ordersList');if(r.error){el.innerHTML='<div class="msg bad">'+esc(friendly(r.error))+'</div>';return}var rows=r.data||[];ORDERS=rows;ORDERCOUNT=rows.length;cacheAccount();renderOverview();
  if(!rows.length){el.innerHTML='<div class="empty">No Orders yet under '+esc(USER.email)+'. <a href="'+SHOP_URL+'">Order your First Meals →</a></div>';return}
- el.innerHTML=rows.map(function(o){var st=STATUS[o.status]||[o.status||'—',''];var items=Array.isArray(o.items)?o.items:[];return'<div class="order"><div class="top"><span class="no">'+esc(o.order_no)+'</span><span><span class="chip '+st[1]+'">'+esc(st[0])+'</span>'+'</span></div>'+
+ var cur=rows.filter(orderIsCurrent);
+ el.innerHTML=(cur.length?cur.map(orderCard).join(''):'<div class="empty">No upcoming Orders. <a href="#history" onclick="setTab(\'history\');return false">See your Order History →</a></div>')+(cur.length&&cur.length<rows.length?'<div class="hint" style="margin-top:10px"><a href="#history" onclick="setTab(\'history\');return false">Past Orders are in Order History →</a></div>':'');
+ try{renderHistory()}catch(e){}}
+function orderCard(o){var st=STATUS[o.status]||[o.status||'—',''];var items=Array.isArray(o.items)?o.items:[];return'<div class="order"><div class="top"><span class="no">'+esc(o.order_no)+'</span><span><span class="chip '+st[1]+'">'+esc(st[0])+'</span>'+'</span></div>'+
  '<div class="meta">'+(o.fulfil==='pickup'?'Self Pick-Up':'Delivery'+(o.courier?' · '+esc(o.courier.charAt(0).toUpperCase()+o.courier.slice(1)):'')+(o.handover==='door'?' · Door-to-Door':o.handover==='drop'?' · Normal Delivery':''))+' · '+fmtDate(o.date)+(o.slot?' · '+esc(slotLabel(o.slot)):'')+(o.address?'<br>'+esc(o.address):'')+'</div>'+
  trackBox(o)+
  '<div class="items ipics">'+items.map(function(i){var u=mealPic(i);return'<span class="ipic">'+(u?'<img src="'+esc(u)+'" alt="" loading="lazy" onerror="this.remove()">':'')+esc((i.qty||1)+'× '+(i.name||i.sku||''))+'</span>'}).join('')+'</div>'+
  '<div style="margin-top:8px;max-width:360px"><div class="tot"><span>Meals</span><b>'+rm(o.subtotal)+'</b></div>'+(+o.packaging_fee?'<div class="tot"><span>Packaging fee</span><b>'+rm(o.packaging_fee)+'</b></div>':'')+(+o.delivery_fee?'<div class="tot"><span>Delivery</span><b>'+rm(o.delivery_fee)+'</b></div>':'')+(+o.discount?'<div class="tot" style="color:var(--green)"><span>AERA Points Discount</span><b>− '+rm(o.discount)+'</b></div>':'')+'<div class="tot" style="font-weight:700;border-top:1px solid var(--line)"><span>Paid</span><b>'+rm(o.total)+'</b></div>'+(o.ap_earned?'<div class="hint">Earned '+o.ap_earned+' AP'+(o.ap_redeemed?' · used '+o.ap_redeemed+' AP':'')+'</div>':'')+'</div>'+
- '<div class="hint">Placed '+(o.paid_at?fmtWhen(o.paid_at):'')+'</div></div>'}).join('')}
+ '<div class="hint">Placed '+(o.paid_at?fmtWhen(o.paid_at):'')+'</div></div>'}
+/* ===== Order History =====
+   Orders splits in two : what is still coming ( Orders ) and everything already delivered,
+   collected, cancelled or past its day ( Order History ). History adds up what the customer has
+   spent and earned, groups by month, and can put any past Order straight back in the Cart. */
+function todayMY(){return new Date(Date.now()+8*3600e3).toISOString().slice(0,10)}
+function orderIsCurrent(o){var d=String(o.date||'').slice(0,10);return d>=todayMY()&&o.status!=='delivered'&&o.status!=='cancelled'}
+function orderMeals(o){if(+o.boxes>0)return +o.boxes;return (Array.isArray(o.items)?o.items:[]).reduce(function(a,i){return a+(+i.qty||1)},0)}
+function renderHistory(){var el=$('#histList');if(!el)return;
+ var rows=(ORDERS||[]).filter(function(o){return !orderIsCurrent(o)});
+ if(!rows.length){el.innerHTML='<div class="empty">No past Orders yet. Your Orders move here once they are delivered or collected.</div>';return}
+ var ok=rows.filter(function(o){return o.status!=='cancelled'});
+ var spent=ok.reduce(function(a,o){return a+(+o.total||0)},0),meals=ok.reduce(function(a,o){return a+orderMeals(o)},0),ap=ok.reduce(function(a,o){return a+(+o.ap_earned||0)},0);
+ var MO=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+ var by={},keys=[];rows.forEach(function(o){var k=String(o.date||'').slice(0,7)||'—';if(!by[k]){by[k]=[];keys.push(k)}by[k].push(o)});
+ var hd='<div class="htiles"><div><small>Orders</small><b>'+ok.length+'</b></div><div><small>Meals</small><b>'+meals+'</b></div><div><small>Spent</small><b>'+rm(spent)+'</b></div><div><small>AP Earned</small><b>'+ap.toLocaleString('en-MY')+'</b></div></div>'+
+  '<input type="search" class="hsearch" placeholder="Search by Order No or Meal" oninput="histFilter(this.value)">';
+ var body=keys.map(function(k){var list=by[k],mt=list.filter(function(o){return o.status!=='cancelled'}).reduce(function(a,o){return a+(+o.total||0)},0);
+  var lab=/^\d{4}-\d{2}$/.test(k)?MO[+k.slice(5,7)-1]+' '+k.slice(0,4):k;
+  return '<div class="hmonth"><div class="hmh"><span>'+lab+'</span><b>'+rm(mt)+'</b></div>'+list.map(function(o){
+   var st=STATUS[o.status]||[o.status||'—',''],items=Array.isArray(o.items)?o.items:[];
+   var q=(String(o.order_no||'')+' '+items.map(function(i){return i.name||i.sku||''}).join(' ')).toLowerCase();
+   var pics=items.slice(0,4).map(function(i){var u=mealPic(i);return u?'<img src="'+esc(u)+'" alt="" loading="lazy" onerror="this.remove()">':''}).join('');
+   return '<details class="hrow" data-q="'+esc(q)+'"><summary><span class="hl"><span class="hno">'+esc(o.order_no)+'</span><span class="hdt">'+fmtDate(o.date)+' · '+orderMeals(o)+' Meal'+(orderMeals(o)===1?'':'s')+'</span></span>'+
+    '<span class="hpics">'+pics+'</span><span class="chip '+st[1]+'">'+esc(st[0])+'</span><b class="htot">'+rm(o.total)+'</b></summary>'+
+    '<div class="hbody">'+orderCard(o)+'<div class="hacts"><button class="btn btn-y s" type="button" onclick="orderAgain(\''+esc(o.order_no)+'\')">Order Again</button></div></div></details>'}).join('')+'</div>'}).join('');
+ el.innerHTML=hd+body}
+function histFilter(v){v=String(v||'').trim().toLowerCase();
+ document.querySelectorAll('#histList .hrow').forEach(function(r){r.style.display=!v||r.dataset.q.indexOf(v)>=0?'':'none'});
+ document.querySelectorAll('#histList .hmonth').forEach(function(m){m.style.display=[].some.call(m.querySelectorAll('.hrow'),function(r){return r.style.display!=='none'})?'':'none'})}
+/* Order Again : the same Meals go back in the Cart ; a Personalised Plan goes back if it is still saved */
+function orderAgain(no){var o=(ORDERS||[]).filter(function(x){return x.order_no===no})[0];if(!o)return;
+ var items=Array.isArray(o.items)?o.items:[],cart={};try{cart=JSON.parse(localStorage.getItem('aera.cart')||'{}')||{}}catch(e){}
+ var n=0,plan='';items.forEach(function(i){var s=String(i.sku||'');if(!s)return;if(s.indexOf('PLAN-')===0){plan=s.slice(5);return}cart[s]=(cart[s]||0)+(+i.qty||1);n++});
+ try{localStorage.setItem('aera.cart',JSON.stringify(cart))}catch(e){}
+ if(plan){var pi=-1;(PLANS||[]).forEach(function(p,i){if(String(p.id)===plan)pi=i});if(pi>=0)return planCart(pi);
+  if(!n)return asModal('<h3>That Plan Is No Longer Saved</h3><p class="asp">Build it again on the Personalised Meal Plan page, then add it to your Cart.</p>','<a class="btn btn-y" href="'+PLAN_URL+'">Build A Plan</a><button class="btn btn-o" type="button" onclick="asClose()">Close</button>')}
+ if(!n&&!plan)return asModal('<h3>Nothing To Add</h3><p class="asp">These Meals are no longer on the menu.</p>','<button class="btn btn-y" type="button" onclick="asClose()">Close</button>');
+ location.href=SHOP_URL+'#cart'}
+
 /* ===== Points ===== */
 async function loadBirthday(){try{var y=new Date().getFullYear();var r=await sb.from('birthday_rewards').select('year,value,kind,order_no').eq('year',y).maybeSingle();BDAY.used=r.data?y:null;BDAY.row=r.data||null}catch(e){}try{var s=await fetch('https://my.chatbees.io/api/public/landing-pages/6938/sheet-data',{cache:'no-store'}).then(function(x){return x.json()});(s&&s.data||[]).forEach(function(x){if(String(x.Key).trim()==='birthday_pct')BDAY.pct=+x.Value||0})}catch(e){}BDAY.loaded=true;cacheAccount()}
 function birthdayNote(){var dob=PROFILE.birth_date?String(PROFILE.birth_date).slice(0,10):'';if(!BDAY.pct)return'';var months=['January','February','March','April','May','June','July','August','September','October','November','December'];if(!dob)return'<div class="msg" style="background:#FFF1CD;color:#6B4A00">🎂 Add your date of birth under Details &amp; Addresses to unlock a Birthday Treat : '+BDAY.pct+'% OFF Meals during your birthday month, once a year.</div>';var m=months[+dob.slice(5,7)-1];var now=new Date();var thisMonth=(+dob.slice(5,7))===now.getMonth()+1;if(BDAY.used)return'<div class="msg" style="background:#F2F6FB;color:var(--green)">🎂 Birthday Treat for '+now.getFullYear()+' used'+(BDAY.row&&BDAY.row.order_no?' on Order '+esc(BDAY.row.order_no):'')+' — see you next '+m+'!</div>';return'<div class="msg" style="background:#FFF1CD;color:#6B4A00">🎂 Birthday Treat : '+BDAY.pct+'% OFF Meals on one Order in '+m+(thisMonth?' — that is this month! It is applied automatically at Checkout while you are signed in.':', applied automatically at Checkout while you are signed in. Once a year.')+'</div>'}
