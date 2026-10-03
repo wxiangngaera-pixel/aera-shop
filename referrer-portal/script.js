@@ -277,3 +277,33 @@ if(window.aeraRetranslate)window.aeraRetranslate();
   try{ new MutationObserver(function(ms){ for(var i=0;i<ms.length;i++){ var n=ms[i].addedNodes; for(var j=0;j<n.length;j++) if(n[j].nodeType===1) fix(n[j]); } })
     .observe(document.documentElement,{childList:true,subtree:true}); }catch(e){}
 })();
+
+(function(){if(window.__aeraTheme)return;window.__aeraTheme=1;
+ var SEL='.btn,.at-btn';
+ function rgb(s){var m=String(s).match(/rgba?\(([^)]+)\)/);if(!m)return null;var p=m[1].split(',').map(parseFloat);return{r:p[0],g:p[1],b:p[2],a:p.length>3?p[3]:1}}
+ /* what the button was before the theme touched it : yellow stays yellow, red and green keep their warning colours, everything else turns navy */
+ function base(el){var c=el.className||'';
+  if(el.closest('.noaera')||/\b(ghost|btn-line|btn-w)\b/.test(c))return'x';
+  if(/\b(d|danger|del)\b/.test(c))return'x';
+  var cs=getComputedStyle(el),b=rgb(cs.backgroundColor),tc=rgb(cs.color);
+  if(tc&&tc.r>170&&tc.g<110&&tc.b<110)return'x';
+  if(b&&b.a>0.2){
+   if(b.r>230&&b.g>150&&b.g<215&&b.b<110)return'yb';
+   if(b.r>170&&b.g<110&&b.b<110)return'x';
+   if(b.g>150&&b.r<90&&b.b<140)return'x'}
+  /* a navy button would vanish on a navy band, so there it is AERA yellow instead */
+  for(var p=el.parentElement;p&&p!==document.documentElement;p=p.parentElement){var ps=getComputedStyle(p),pb=rgb(ps.backgroundColor);
+   if(!(pb&&pb.a>0.5)&&/gradient/.test(ps.backgroundImage))pb=rgb(ps.backgroundImage);
+   if(pb&&pb.a>0.5){if((0.299*pb.r+0.587*pb.g+0.114*pb.b)<110)return'yb';break}}
+  return'nb'}
+ function paint(){document.querySelectorAll(SEL).forEach(function(el){
+  var k=el.getAttribute('data-aera');if(!k){k=base(el);el.setAttribute('data-aera',k)}
+  if(k==='x')return;
+  /* a picked option ( .on ) is shown the other way round, so the choice still stands out */
+  var on=el.classList.contains('on')||el.classList.contains('active')||el.getAttribute('aria-pressed')==='true';
+  var want=(k==='yb')!==on?'aera-yb':'aera-nb',drop=want==='aera-yb'?'aera-nb':'aera-yb';
+  if(!el.classList.contains(want))el.classList.add(want);if(el.classList.contains(drop))el.classList.remove(drop)})}
+ var busy=0;function later(){if(busy)return;busy=1;try{paint()}finally{busy=0}}
+ function boot(){paint();new MutationObserver(later).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class','aria-pressed']})}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
