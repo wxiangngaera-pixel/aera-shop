@@ -1244,6 +1244,11 @@ function pvGo(f){PV_SHOP=true;pvRender();var t=document.querySelector('.tabs .ta
  try{var tb=document.querySelector('main.layout>section>.tabs');if(tb)window.scrollTo({top:tb.getBoundingClientRect().top+window.scrollY-90,behavior:'smooth'})}catch(e){}}
 document.addEventListener('click',function(e){var m=document.getElementById('pvMenu');if(m&&m.classList.contains('open')&&!e.target.closest('.pvdd'))m.classList.remove('open')});
 window.pvMenu=pvMenu;window.pvGo=pvGo;
+/* a Referrer's shared link ( ?ref=CODE ) fills the Referral Code box, and is remembered on this device */
+(function(){try{var q=new URLSearchParams(location.search).get('ref');if(q){q=String(q).toUpperCase().replace(/[^A-Z0-9-]/g,'').slice(0,24);if(q)localStorage.setItem('aera.refInvite',q)}
+ var v=localStorage.getItem('aera.refInvite');if(!v)return;
+ var go=function(){var el=document.getElementById('refCode');if(!el||el.value)return;el.value=v;try{refInput()}catch(e){}};
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(go,1200)});else setTimeout(go,1200)}catch(e){}})();
 function pvShop(v){PV_SHOP=!!v;pvRender();try{document.getElementById('planView').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}}
 window.pvShop=pvShop;
 function render(){try{pvRender()}catch(e){}var h='';if(FILTER==='alc'){document.getElementById('grid').innerHTML=alcRender();return}
