@@ -1169,8 +1169,8 @@ function alcRender(){
  if(!ALC.loaded)return '<div class="alcnote">Loading the a la carte list…</div>';
  var chips='<div class="alcchips">'+ALC.cats.map(function(c){
    return '<button type="button" class="'+(ALC.cat===c[0]?'on':'')+'" onclick="alcPick(\''+c[0]+'\')">'+esc(c[1])+'</button>'}).join('')+'</div>';
- var note='<div class="alcnote">Single portions to add to your order — sized to the gram, priced by weight. '+
-  '<b>À la Carte is packed in a vacuum bag</b>, not a bento box, and carries RM '+ALC_PACK.toFixed(2)+' of packaging per portion.</div>';
+ var note='<div class="alcnote">Single portions to add to your Order, sized to the gram, priced by weight. '+
+  '<b>À la Carte is packed in a Vacuum Bag</b>, not a Bento Box, and carries RM '+ALC_PACK.toFixed(2)+' of Packaging per portion.</div>';
  var cards=ALC.rows.filter(function(x){return x.cat===ALC.cat}).map(alcCard).join('');
  return chips+note+(cards||'<div class="alcnote">Nothing in this group yet.</div>')}
 function alcPick(c){ALC.cat=c;render();window.scrollTo({top:document.getElementById('grid').offsetTop-90,behavior:'smooth'})}
