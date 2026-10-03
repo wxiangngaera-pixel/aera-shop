@@ -210,6 +210,11 @@ if(document.body)start();else document.addEventListener('DOMContentLoaded',start
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+/* more Chinese for this page : added to the page's own translation list */
+(function(){try{var D=window.AERA_I18N=window.AERA_I18N||{},R=window.AERA_I18N_RE=window.AERA_I18N_RE||[];
+ Object.assign(D,{"MONDAY Breakfast: 3 egg whites, 2 slices wholemeal toast Lunch: 150 g grilled chicken breast, 1 cup cooked brown rice, 100 g broccoli Dinner: 120 g salmon, 200 g sweet potato, salad TUESDAY ...": "星期一\n早餐：3 个蛋白、2 片全麦吐司\n午餐：150 克烤鸡胸、1 杯熟糙米饭、100 克西兰花\n晚餐：120 克三文鱼、200 克番薯、沙拉\n\n星期二\n..."});
+ var go=function(){try{if(window.aeraRetranslate)window.aeraRetranslate()}catch(e){}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(go,50)});else setTimeout(go,50)}catch(e){}})();
+
 (function(){
  if(window.__aeraBar)return;window.__aeraBar=1;
  if(window.top!==window)return; /* not inside the homepage's embedded pages */
