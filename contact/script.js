@@ -216,3 +216,5 @@
   setInterval(counts,4000);inboxLive()}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
+
+/* the browser tab title in Chinese */(function(){try{if((localStorage.getItem("aera_lang")||"en")==="zh")document.title="联系我们 — AERA Meal Prep"}catch(e){}})();
