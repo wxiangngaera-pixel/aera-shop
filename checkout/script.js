@@ -496,7 +496,9 @@ if(window.aeraRetranslate)window.aeraRetranslate();
       v=String(v||"").slice(0,10);
       if(!/^\d{4}-\d{2}-\d{2}$/.test(v))return "";
       var p=v.split("-"),d=new Date(+p[0],+p[1]-1,+p[2],12);
-      try{return d.toLocaleDateString("en-MY",{weekday:"short",day:"numeric",month:"short"})}catch(e){return p[2]+"/"+p[1]+"/"+p[0]}
+      /* Peter's date format : WED, 7th OCT */
+      var dn=d.getDate(),sf=(dn%100>=11&&dn%100<=13)?"th":({1:"st",2:"nd",3:"rd"}[dn%10]||"th");
+      return ["SUN","MON","TUE","WED","THU","FRI","SAT"][d.getDay()]+", "+dn+sf+" "+["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][d.getMonth()]
     }
     var last=null;
     function sync(){
