@@ -541,6 +541,8 @@ function acctState(){try{aeraStrip()}catch(e){}
  if(pf)pf.innerHTML=hasF?'<a href="'+FRIDGE_URL+'">AERA Fridge</a>':'';
  var lf=document.getElementById('navFridge');
  if(lf)lf.style.display=hasF?'':'none';
+ var af=document.getElementById('acctFridge');
+ if(af)af.style.display=hasF?'':'none';
  if(hasF&&window.aeraRetranslate)window.aeraRetranslate();}
 function logout(){
  try{['aera.account','aera.refLock'].forEach(function(k){localStorage.removeItem(k)})}catch(e){}
