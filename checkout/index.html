@@ -1317,7 +1317,10 @@ function renderCart(){var el=document.getElementById('lines');var keys=Object.ke
  var fr=document.getElementById('foRow');if(fr){fr.style.display=fo>0?'flex':'none';
   document.getElementById('foName').textContent='First Order Voucher · '+rm(FO.minRm)+'+ of meals';
   document.getElementById('foAmt').textContent='− '+rm(fo);
- var fn=document.getElementById('foName');if(fn)fn.textContent='First Order Voucher · '+foShort()}
+ var fn=document.getElementById('foName');if(fn){
+  /* a percentage Voucher with a ceiling : say why the saving stops at the ceiling */
+  var full=FO.mode==='pct'?Math.round(mealBase()*FO.pct)/100:0,capped=FO.mode==='pct'&&FO.cap>0&&full>FO.cap;
+  fn.innerHTML=esc('First Order Voucher · '+foHeadline())+(capped?'<small class="focap">'+esc(FO.pct+'% of your '+rm(mealBase())+' of Meals is '+rm(full)+'. The First Order Voucher takes off up to '+rm(FO.cap)+'.')+'</small>':'')}}
  var vr=document.getElementById('vouchRow');if(vr){vr.style.display=vsave>0?'flex':'none';
   document.getElementById('vouchName').textContent=VOUCHER?VOUCHER.name+' · '+apFmt(VOUCHER.ap):'';
   document.getElementById('vouchAmt').textContent='− '+rm(vsave)}
