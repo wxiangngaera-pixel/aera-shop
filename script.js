@@ -2164,3 +2164,11 @@ if(document.readyState==="complete")setTimeout(load,200);else window.addEventLis
  function boot(){paint();new MutationObserver(later).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class','aria-pressed']})}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
+
+/* how many things are in the Cart, on the Cart button */
+(function(){function n(){var t=0;try{var c=JSON.parse(localStorage.getItem('aera.cart')||'{}')||{};Object.keys(c).forEach(function(k){t+=Math.max(0,+c[k]||0)})}catch(e){}
+ var el=document.getElementById('hbCart');if(el){el.textContent=t>9?'9+':(t?String(t):'');el.style.display=t?'inline-block':'none'}
+ var a=document.getElementById('cartTop');if(a)a.setAttribute('aria-label',t?'Cart, '+t+' item'+(t===1?'':'s'):'Cart')}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',n);else n();
+ window.addEventListener('pageshow',n);window.addEventListener('focus',n);
+ window.addEventListener('storage',function(e){if(!e.key||e.key==='aera.cart')n()});setInterval(n,4000)})();
