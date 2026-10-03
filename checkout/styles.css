@@ -293,6 +293,11 @@ select#slot:focus{outline:none;box-shadow:0 0 0 3px rgba(22,71,158,.18)}
 .pvmenu .sep{height:1px;background:#16479E;opacity:.35;margin:6px 8px}
 @media(max-width:560px){.pvmenu{right:auto;left:0}}
 
+/* Select One Only : Points or the First Order Voucher */
+.discpick{display:flex;align-items:flex-start;gap:10px;margin:12px 0 -2px;padding:11px 13px;border-radius:12px;background:#16479E;color:#fff;font-size:13px;line-height:1.45}
+.discpick .dpi{flex:none;width:22px;height:22px;border-radius:50%;background:#FDB913;color:#0B0B0B;display:grid;place-items:center;font-weight:900;font-size:13px;margin-top:1px}
+.discpick b{display:block;color:#FDB913;font-size:13.5px;letter-spacing:.02em}
+
 /* One legal line, the same on every page, so the Terms are never more than a
    glance away wherever a customer happens to be. */
 .aeralegal{max-width:720px;margin:30px auto 0;padding:0 20px 30px;
