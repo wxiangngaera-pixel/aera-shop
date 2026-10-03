@@ -1408,8 +1408,33 @@ function planPics(el){
   try{var op=[];document.querySelectorAll('#plansList details').forEach(function(x,i){if(x.open)op.push(i)});
    renderPlans();
    document.querySelectorAll('#plansList details').forEach(function(x,i){if(op.indexOf(i)>=0)x.open=true})}catch(e){}})}
-async function loadPlans(){var el=$('#plansList');var r=await sb.from('meal_plans').select('id,name,created_at,days,meals_per_day,targets,prefs,meals,price,boxes,status').order('created_at',{ascending:false}).limit(20);if(r.error){el.innerHTML='<div class="msg bad">'+esc(friendly(r.error))+'</div>';return}var rows=r.data||[];PLANS=rows;renderOverview();var ordered={};try{var ro=await sb.from('orders').select('order_no,items').limit(200);(ro.data||[]).forEach(function(o){var s=JSON.stringify(o.items||[]);rows.forEach(function(p){if(s.indexOf('PLAN-'+p.id)>=0)ordered[p.id]=o.order_no})})}catch(e){}
+async function loadPlans(){var el=$('#plansList');var r=await sb.from('meal_plans').select('id,name,created_at,days,meals_per_day,targets,prefs,meals,price,boxes,status').or('status.is.null,status.neq.deleted').order('created_at',{ascending:false}).limit(20);if(r.error){el.innerHTML='<div class="msg bad">'+esc(friendly(r.error))+'</div>';return}var rows=r.data||[];PLANS=rows;renderOverview();var ordered={};try{var ro=await sb.from('orders').select('order_no,items').limit(200);(ro.data||[]).forEach(function(o){var s=JSON.stringify(o.items||[]);rows.forEach(function(p){if(s.indexOf('PLAN-'+p.id)>=0)ordered[p.id]=o.order_no})})}catch(e){}
  PLANORD=ordered;renderPlans();}
+/* A saved Plan goes straight into the Cart, the same way the Plan page's own button puts it there. */
+function planCart(i){var p=PLANS[i];if(!p)return;
+ var meals=(Array.isArray(p.meals)?p.meals:[]).slice().sort(function(a,b){return (a.day||1)-(b.day||1)||(a.slot||0)-(b.slot||0)});
+ if(!meals.length)return asModal('<h3>This Plan Has No Meals</h3><p class="asp">Open & Tune This Plan first, then add it to your Cart.</p>','<button class="btn btn-y" type="button" onclick="asClose()">Close</button>');
+ var pr=p.prefs||{},days=+p.days||1,mpd=+p.meals_per_day||1;
+ var item={id:p.id,name:'Personalised Plan · '+days+' Days x '+mpd+' Meals',boxes:+p.boxes||meals.length,price:+p.price||0,
+  pl:meals.map(function(m){return (m.comps||[]).map(function(c){return c.code+':'+c.grams}).join(',')}).join('|'),
+  prefs:(pr.seasoning||'normal')+'/'+(pr.spice||'normal'),days:days,mpd:mpd,at:Date.now()};
+ var cart={};try{cart=JSON.parse(localStorage.getItem('aera.cart')||'{}')||{}}catch(e){}
+ var other=Object.keys(cart).some(function(k){return k.indexOf('PLAN-')===0&&k!=='PLAN-'+p.id});
+ window.__planGo=function(){Object.keys(cart).forEach(function(k){if(k.indexOf('PLAN-')===0)delete cart[k]});cart['PLAN-'+p.id]=1;
+  try{localStorage.setItem('aera.plan',JSON.stringify(item));localStorage.setItem('aera.cart',JSON.stringify(cart))}catch(e){}
+  location.href='https://my.chatbees.io/p/D2pz8bZ'};
+ if(other)return asModal('<h3>Replace The Plan In Your Cart?</h3><p class="asp">Your Cart already has a Personalised Plan. Only one Plan fits in an Order, so this one takes its place.</p>',
+  '<button class="btn btn-y" type="button" onclick="asClose();window.__planGo()">Replace</button><button class="btn btn-o" type="button" onclick="asClose()">Keep The Old One</button>');
+ window.__planGo()}
+/* Delete takes the Plan off this list. The database keeps it, marked deleted, so an Order
+   already placed with it still has its Plan behind it. */
+function planDelAsk(i){var p=PLANS[i];if(!p)return;
+ asModal('<h3>Delete This Plan?</h3><p class="asp">'+esc(p.name||p.id)+' will be removed from My Meal Plans. Orders you already placed with it are not affected.</p>',
+  '<button class="btn btn-y" type="button" onclick="planDelGo('+i+')">Delete</button><button class="btn btn-o" type="button" onclick="asClose()">Keep It</button>')}
+async function planDelGo(i){asClose();var p=PLANS[i];if(!p)return;
+ var r=await sb.rpc('delete_meal_plan',{p_id:String(p.id)});
+ if(r.error)return asModal('<h3>Could Not Delete</h3><p class="asp">'+esc(friendly(r.error))+'</p>','<button class="btn btn-y" type="button" onclick="asClose()">Close</button>');
+ PLANS.splice(i,1);try{renderOverview()}catch(e){}renderPlans()}
 var PLANORD={};
 function renderPlans(){var el=$('#plansList');if(!el)return;var rows=PLANS||[],ordered=PLANORD||{};
  if(!rows.length){el.innerHTML='<div class="empty">No Personalised Plans yet. Answer a few questions and we design every Meal to your Calories and Macros.</div>';return}
@@ -1419,7 +1444,7 @@ function renderPlans(){var el=$('#plansList');if(!el)return;var rows=PLANS||[],o
   '<div class="meta">'+esc(GOAL[pr.goal]||'')+(pr.goal?' · ':'')+(p.days||'?')+' Days x '+(p.meals_per_day||'?')+' Meal'+(p.meals_per_day===1?'':'s')+' a day · '+(p.boxes||meals.length)+' Boxes'+(p.created_at?' · '+fmtDate(String(p.created_at).slice(0,10)):'')+'</div>'+
   (t.kcal?'<div class="hint" style="margin-top:6px">AERA Meals Target ≈ '+Math.round(t.kcal)+' KCALs · Protein '+Math.round(t.p||0)+' g · Carbs '+Math.round(t.c||0)+' g · Fat '+Math.round(t.f||0)+' g per Day</div>':'')+planStrip(meals)+
   '<details style="margin-top:8px" ontoggle="planPics(this)"><summary style="cursor:pointer;font-weight:600;font-size:13px">Show Meals</summary><div class="items" style="margin-top:6px">'+Object.keys(byDay).sort(function(a,b){return a-b}).map(function(d){return'<div class="daywrap"><b>Day '+d+'</b>'+byDay[d].map(function(m){return'<div class="mealrow">'+planBento(m)+'<span class="mtxt">'+esc(m.name||(m.comps||[]).map(function(c){return c.name}).join(' · '))+((m.comps||[]).length?'<br><span style="color:var(--mute)">'+esc((m.comps||[]).map(function(c){return c.name+' '+c.grams+' g'}).join(' · '))+'</span>':'')+'</span></div>'}).join('')+'</div>'}).join('')+'</div></details>'+
-  '<div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-y s" type="button" onclick="planOpen('+idx+')">Open &amp; Tune This Plan</button>'+asPlanBtn(p,idx,ordered)+'</div>'+
+  '<div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-y s" type="button" onclick="planOpen('+idx+')">Open &amp; Tune This Plan</button>'+'<button class="btn btn-y s" type="button" onclick="planCart('+idx+')">Add to Cart</button>'+'<button class="btn btn-o s" type="button" onclick="planDelAsk('+idx+')">Delete</button>'+asPlanBtn(p,idx,ordered)+'</div>'+
   '<div style="margin-top:8px;max-width:360px"><div class="tot" style="font-weight:700"><span>Plan Price</span><b>'+rm(p.price)+'</b></div><div class="hint">≈ '+rm((+p.boxes||meals.length)?p.price/(+p.boxes||meals.length):0)+' per Meal · Packaging Included</div></div></div>'}).join('')}
 /* Customers name their saved plans; the name lives on the plan row ( rename_meal_plan checks it is theirs ) */
 function planRename(i){var p=PLANS[i];var el=document.getElementById('planName'+i);if(!p||!el)return;
