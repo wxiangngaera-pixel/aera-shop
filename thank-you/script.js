@@ -96,6 +96,28 @@
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
+/* Chinese for this page : the site's EN / 中文 choice ( aera_lang ) translates every text, label and placeholder */
+(function(){if(window.__aeraZh)return;window.__aeraZh=1;
+ var D=window.AERA_I18N=window.AERA_I18N||{},R=window.AERA_I18N_RE=window.AERA_I18N_RE||[];
+ Object.assign(D,{"Thank You": "谢谢您", "We've received your information and are excited to connect with you.": "我们已收到您的资料，期待与您联系。", "We have your contact details:": "我们已记下您的联系资料：", "Our team will reach out to you within 24 hours to discuss how we can help you achieve your goals.": "我们的团队会在 24 小时内联系您，讨论如何帮助您达成目标。", "This page was personalized just for you using your submitted information.": "此页面根据您提交的资料为您定制。"});
+ function zh(){try{return (localStorage.getItem('aera_lang')||'en')==='zh'}catch(e){return false}}
+ if(typeof window.aeraLang!=='function')window.aeraLang=function(){try{localStorage.setItem('aera_lang',zh()?'en':'zh')}catch(e){}location.reload()};
+ if(!zh())return;document.documentElement.setAttribute('data-lang','zh');
+ function tr(s){var k=String(s).replace(/\s+/g,' ').trim();if(!k)return null;if(Object.prototype.hasOwnProperty.call(D,k))return D[k];
+  for(var i=0;i<R.length;i++){if(R[i][0].test(k))return k.replace(R[i][0],R[i][1])}return null}
+ var done=new WeakSet();
+ function node(n){if(done.has(n))return;var p=n.parentElement;if(!p||/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/.test(p.tagName)||p.closest('#aeraBar,.noi18n'))return;
+  var t=tr(n.nodeValue);if(t===null)return;done.add(n);n.nodeValue=n.nodeValue.replace(/^(\s*)[\s\S]*?(\s*)$/,function(m,a,b){return a+t+b})}
+ function attrs(e){['placeholder','title','aria-label'].forEach(function(a){var v=e.getAttribute&&e.getAttribute(a);if(!v)return;var t=tr(v);if(t!==null&&t!==v)e.setAttribute(a,t)});
+  if(e.tagName==='INPUT'&&/^(submit|button)$/i.test(e.type||'')&&e.value){var t=tr(e.value);if(t!==null)e.value=t}}
+ function walk(r){if(!r)return;if(r.nodeType===3)return node(r);if(r.nodeType!==1||(r.closest&&r.closest('#aeraBar')))return;attrs(r);
+  var w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT),n;while(n=w.nextNode()){if(n.nodeType===3)node(n);else attrs(n)}}
+ function run(){walk(document.body)}window.aeraRetranslate=run;
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();
+ try{new MutationObserver(function(ms){ms.forEach(function(m){if(m.type==='characterData'){done.delete(m.target);node(m.target)}else [].forEach.call(m.addedNodes,walk)})})
+  .observe(document.documentElement,{childList:true,subtree:true,characterData:true})}catch(e){}
+})();
+
 (function(){
  if(window.__aeraBar)return;window.__aeraBar=1;
  if(window.top!==window)return; /* not inside the homepage's embedded pages */
