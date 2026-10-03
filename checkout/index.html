@@ -384,6 +384,7 @@
   <section>
     <span class="eyebrow">Order online</span>
     <p style="color:var(--ink2);margin:8px 0 0;max-width:62ch">Everything is cooked to Order, weighed to the gram and MAP-Packed to stay fresh for 7 Days in the chiller. Choose Self Pick-Up or Rider Delivery ( Lalamove or Grab ) at Checkout.</p>
+    <div id="planView" style="display:none"></div>
     <div class="tabs" role="tablist"><button class="tab on" data-f="bundle">Meal Bundles</button><button class="tab" data-f="fat">Fat Loss Meals</button><button class="tab" data-f="mass">Mass Gain Meals</button><button class="tab" data-f="all">All Meals</button><button class="tab" data-f="alc">À la Carte</button></div>
     <div class="grid" id="grid"></div>
     <p class="hint" style="margin-top:16px">Prices in Malaysian Ringgit, packaging included. Serving weights are Raw ( Before cooking ). That's how our Kitchen weighs every portion. Each Meal carries badges for Beef, Dairy, Nuts, Prawn and how Spicy it is. They cover our own Kitchen. Everything is cooked in one Kitchen, so we cannot promise a Meal is free of traces. If you have a serious Allergy, message us on WhatsApp before ordering.</p>
@@ -1185,7 +1186,42 @@ function alcVacNotice(){var seen='';try{seen=sessionStorage.getItem('aera.alcVac
  w.addEventListener('click',function(e){if(e.target===w)w.remove()});
  document.body.appendChild(w)}
 var FILTER='bundle';
-function render(){var h='';if(FILTER==='alc'){document.getElementById('grid').innerHTML=alcRender();return}
+/* ---- a Personalised Meal Plan in the Cart : show the Plan itself, not the shop ----
+   The Plan travels as recipe codes and grams, meal by meal ( aera.plan .pl ). The names and
+   pictures come from the same recipe list À la Carte uses, so nothing extra is fetched. */
+var PV_SHOP=false;
+function pvOn(){return !!(PLANITEM&&PLANITEM.id&&CART['PLAN-'+PLANITEM.id])}
+function pvRender(){var on=pvOn();
+ document.body.classList.toggle('planmode',on&&!PV_SHOP);
+ var el=document.getElementById('planView');if(!el)return;
+ if(!on){el.style.display='none';el.innerHTML='';return}
+ el.style.display='block';
+ if(PV_SHOP){el.innerHTML='<button type="button" class="pvback" onclick="pvShop(false)">← Back to My Meal Plan</button>';return}
+ var by={};(ALC.rows||[]).forEach(function(x){by[x.code]=x});
+ var meals=String(PLANITEM.pl||'').split('|').filter(Boolean);
+ var mm=/(\d+)\s*Days?\s*x\s*(\d+)\s*Meals?/i.exec(PLANITEM.name||'');
+ var days=+PLANITEM.days||(mm?+mm[1]:0),mpd=+PLANITEM.mpd||(mm?+mm[2]:0);
+ if(!mpd)mpd=days?Math.max(1,Math.round(meals.length/days)):1;
+ if(!days)days=Math.max(1,Math.ceil(meals.length/mpd));
+ var h='<div class="pvhead"><div><span class="eyebrow">Your Order</span><h2>Your Personalised Meal Plan</h2>'+
+  '<p class="pvsub">'+days+' Days · '+mpd+' Meal'+(mpd>1?'s':'')+' a Day · '+meals.length+' Meals</p></div>'+
+  '<div class="pvacts"><a class="btn pvedit" href="https://my.chatbees.io/p/SrQzC5m2">Edit Plan</a>'+
+  '<button type="button" class="btn pvmore" onclick="pvShop(true)">Add Other Meals</button></div></div>';
+ if(!ALC.loaded)h+='<div class="pvwait">Loading your Meals…</div>';
+ else{h+='<div class="pvdays">';
+  for(var d=0;d<days;d++){var rows='';
+   for(var s=0;s<mpd;s++){var i=d*mpd+s;if(i>=meals.length)break;
+    var comps=meals[i].split(',').map(function(c){var p=c.split(':');return{r:by[p[0]],g:+p[1]||0}}).filter(function(x){return x.r});
+    var th=comps.filter(function(x){return x.r.sheet}).slice(0,3).map(function(x){return '<i class="pvth" style="'+spriteStyle(x.r.sheet)+'"></i>'}).join('');
+    var nm=comps.map(function(x){return '<span class="pvc">'+esc(x.r.name)+'<small>'+Math.round(x.g)+' g</small></span>'}).join('');
+    rows+='<div class="pvmeal"><div class="pvths">'+(th||'<i class="pvth pvth0"></i>')+'</div><div class="pvm"><b>Meal '+(s+1)+'</b><div class="pvcs">'+(nm||'<span class="pvc">Chef-built Meal</span>')+'</div></div></div>'}
+   h+='<div class="pvday"><div class="pvdh">Day '+(d+1)+'</div>'+rows+'</div>'}
+  h+='</div>'}
+ el.innerHTML=h;
+ try{if(window.aeraRetranslate)window.aeraRetranslate()}catch(e){}}
+function pvShop(v){PV_SHOP=!!v;pvRender();try{document.getElementById('planView').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}}
+window.pvShop=pvShop;
+function render(){try{pvRender()}catch(e){}var h='';if(FILTER==='alc'){document.getElementById('grid').innerHTML=alcRender();return}
 if(FILTER==='bundle')BUNDLES.forEach(function(b){h+=card({sku:b[0],name:b[1],goal:b[2],price:CAT[b[0]].price,bul:b[5],img:b[6],boxes:b[4],bundle:true})});else MEALS.forEach(function(m){if(FILTER!=='all'&&m[2]!==FILTER)return;h+=card({sku:m[0],name:m[1],goal:m[2],price:CAT[m[0]].price,kcal:m[4],p:m[5],c:m[6],f:m[7],img:m[8],serving:m[9],raw:m[10]})});document.getElementById('grid').innerHTML=h}
 document.querySelectorAll('.tab').forEach(function(t){t.addEventListener('click',function(){document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});t.classList.add('on');FILTER=t.dataset.f;render()})});
 /* the Shop menu on the other pages links here with a hash — honour it */
