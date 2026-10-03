@@ -1194,6 +1194,20 @@ var FILTER='bundle';
    pictures come from the same recipe list À la Carte uses, so nothing extra is fetched. */
 var PV_SHOP=false;
 function pvOn(){return !!(PLANITEM&&PLANITEM.id&&CART['PLAN-'+PLANITEM.id])}
+/* Other items in the Cart ( Meal Bundles, Meals, À la Carte ) show under the Plan, so nothing added is out of sight */
+function pvImgOf(k){var i;for(i=0;i<BUNDLES.length;i++)if(BUNDLES[i][0]===k)return BUNDLES[i][6]||'';
+ for(i=0;i<MEALS.length;i++)if(MEALS[i][0]===k)return MEALS[i][8]||'';
+ var r=(ALC.rows||[]).filter(function(x){try{return alcSku(x.code,'S')===k||alcSku(x.code,'L')===k}catch(e){return false}})[0];
+ return r?(r.bagUrl||r.img||''):''}
+function pvExtras(){var zh=false;try{zh=(localStorage.getItem('aera_lang')||'en')==='zh'}catch(e){}
+ var ks=Object.keys(CART).filter(function(k){return CAT[k]&&!CAT[k].plan&&CART[k]>0});if(!ks.length)return '';
+ var rows=ks.map(function(k){var x=CAT[k],q=CART[k],up=uPrice(k),im=pvImgOf(k);
+  var meals=x.boxes*q;
+  return '<div class="pvx"><div class="pvxi"'+(im?' style="background-image:url('+esc(im)+')"':'')+'></div>'+
+   '<div class="pvxn"><b>'+esc(x.name)+'</b><small>'+(zh?(meals+' 份餐 · 每份 '+rm(up)):(meals+' Meal'+(meals>1?'s':'')+' · '+rm(up)+' each'))+'</small></div>'+
+   '<span class="qty"><button type="button" aria-label="Less" onclick="add(\''+k+'\',-1)">−</button><span>'+q+'</span><button type="button" aria-label="More" onclick="add(\''+k+'\',1)">+</button></span>'+
+   '<b class="pvxp">'+rm(up*q)+'</b></div>'}).join('');
+ return '<div class="pvextra"><div class="pvxh">'+(zh?'订单里还有':'Also In Your Order')+'</div>'+rows+'</div>'}
 function pvRender(){var on=pvOn();
  document.body.classList.toggle('planmode',on&&!PV_SHOP);
  var el=document.getElementById('planView');if(!el)return;
@@ -1213,7 +1227,7 @@ function pvRender(){var on=pvOn();
   '<div class="pvmenu" id="pvMenu"><button type="button" onclick="pvGo(\'bundle\')">Meal Bundles</button><button type="button" onclick="pvGo(\'alc\')">À la Carte</button>'+
   '<button type="button" onclick="pvGo(\'fat\')">Fat Loss Meals</button><button type="button" onclick="pvGo(\'mass\')">Mass Gain Meals</button><div class="sep"></div>'+
   '<a href="https://my.chatbees.io/p/dtTMaV#plans">Saved Meal Plan</a><a href="https://my.chatbees.io/p/dtTMaV#favs">My Favourite Meal Plan</a><a href="https://my.chatbees.io/p/dtTMaV#history">Order History</a></div></div></div></div>';
- if(!ALC.loaded)h+='<div class="pvwait">Loading your Meals…</div>';
+ h+=pvExtras();if(!ALC.loaded)h+='<div class="pvwait">Loading your Meals…</div>';
  else{h+='<div class="pvdays">';
   for(var d=0;d<days;d++){var rows='';
    for(var s=0;s<mpd;s++){var i=d*mpd+s;if(i>=meals.length)break;
