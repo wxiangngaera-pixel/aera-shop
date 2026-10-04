@@ -55,6 +55,8 @@
  .etbl .x{width:32px;height:32px}
  .etbl .swapbtn span{font-size:13.5px;font-weight:700}
 }
+/* Chinese : each Item's Per Portion figures stack one per line */
+html[data-lang="zh"] .etbl td.mac{white-space:pre-line}
 </style>
 <!-- AERA phone meal editor : end -->
 
@@ -1360,7 +1362,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
   [/^Today's (Protein|Carbs|Fat) ([\d.]+) \/ ([\d.]+) g$/,function(m,k,a,b){return '今日'+MAC[k]+' '+a+' / '+b+' 克'}],
   [/^(Calories|Protein|Carbs|Fat) ([\d.]+) \/ ([\d.]+)( g)?$/,function(m,k,a,b,g){return MAC[k]+' '+a+' / '+b+(g?' 克':' 大卡')}],
   [/^([\d.]+) KCALs · Protein ([\d.]+) · Carbs ([\d.]+) · Fat ([\d.]+) per (\d+) g$/,'每 $5 克：$1 大卡 · 蛋白质 $2 · 碳水 $3 · 脂肪 $4'],
-  [/^([\d.]+) KCALs · Protein ([\d.]+) g · Carbs ([\d.]+) g · Fat ([\d.]+) g( ·)?$/,function(m,k,p,c,f,d){return k+' 大卡 · 蛋白质 '+p+' 克 · 碳水 '+c+' 克 · 脂肪 '+f+' 克'+(d?' ·':'')}],
+  [/^([\d.]+) KCALs · Protein ([\d.]+) g · Carbs ([\d.]+) g · Fat ([\d.]+) g( ·)?$/,function(m,k,p,c,f,d){return d?(k+' 大卡 · 蛋白质 '+p+' 克 · 碳水 '+c+' 克 · 脂肪 '+f+' 克 ·'):(k+' 大卡\n蛋白质 '+p+' 克\n碳水 '+c+' 克\n脂肪 '+f+' 克')}],
   [/^\+ (Protein|Vegetable|Carbs|Garnish|Sauce) \( \+ (RM [\d.]+) \)$/,function(m,k,p){return '+ '+(MAC[k]||k)+'（+ '+p+'）'}],
   [/^(\d+) extra packaging · \+ (RM [\d.]+)$/,'$1 份额外包装 · + $2'],
   [/^(\d+) Meals · Packaging Included · ≈ (RM [\d.]+) per Meal$/,'$1 餐 · 含包装 · 每餐约 $2'],
