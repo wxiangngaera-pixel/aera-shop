@@ -1524,9 +1524,9 @@ async function loadOrders(){var r=await sb.from('orders').select('*').order('dat
  el.innerHTML=cur.length?cur.map(orderCard).join(''):'<div class="empty">No upcoming Orders.</div>';
  try{renderHistory()}catch(e){}}
 function orderCard(o){var st=STATUS[o.status]||[o.status||'—',''];var items=Array.isArray(o.items)?o.items:[];return'<div class="order"><div class="top"><span class="no">'+esc(o.order_no)+'</span><span><span class="chip '+st[1]+'">'+esc(st[0])+'</span>'+'</span></div>'+
- '<div class="meta">'+(o.fulfil==='pickup'?'Self Pick-Up':'Delivery'+(o.courier?' · '+esc(o.courier.charAt(0).toUpperCase()+o.courier.slice(1)):'')+(o.handover==='door'?' · Door-to-Door':o.handover==='drop'?' · Normal Delivery':''))+' · '+fmtDate(o.date)+(o.slot?' · '+esc(slotLabel(o.slot)):'')+(o.address?'<br>'+esc(o.address):'')+'</div>'+
+ '<div class="meta">'+(o.fulfil==='pickup'?'Self Pick-Up':'Delivery'+(o.courier?' · '+esc(o.courier.charAt(0).toUpperCase()+o.courier.slice(1)):'')+(o.handover==='door'?' · Door-to-Door':o.handover==='drop'?' · Normal Delivery':''))+' · '+fmtDate(o.date)+(o.slot?' · '+esc(slotLabel(o.slot)):'')+(o.packaging?' · <span class="pkchip">'+(o.packaging==='vacuum'?'Vacuum Packed':'MAP Bento Box')+'</span>':'')+(o.address?'<br>'+esc(o.address):'')+'</div>'+
  trackBox(o)+
- '<div class="items ipics">'+items.map(function(i){var u=mealPic(i);return'<span class="ipic">'+(u?'<img src="'+esc(u)+'" alt="" loading="lazy" onerror="this.remove()">':'')+esc((i.qty||1)+'× '+(i.name||i.sku||''))+'</span>'}).join('')+'</div>'+
+ (String(o.gateway||'').toLowerCase()==='legacy'?legItems(o):'<div class="items ipics">'+items.map(function(i){var u=mealPic(i);return'<span class="ipic">'+(u?'<img src="'+esc(u)+'" alt="" loading="lazy" onerror="this.remove()">':'')+esc((i.qty||1)+'× '+(i.name||i.sku||''))+'</span>'}).join('')+'</div>')+
  '<div style="margin-top:8px;max-width:360px"><div class="tot"><span>Meals</span><b>'+rm(o.subtotal)+'</b></div>'+(+o.packaging_fee?'<div class="tot"><span>Packaging fee</span><b>'+rm(o.packaging_fee)+'</b></div>':'')+(+o.delivery_fee?'<div class="tot"><span>Delivery</span><b>'+rm(o.delivery_fee)+'</b></div>':'')+(+o.discount?'<div class="tot" style="color:var(--green)"><span>AERA Points Discount</span><b>− '+rm(o.discount)+'</b></div>':'')+'<div class="tot" style="font-weight:700;border-top:1px solid var(--line)"><span>Paid</span><b>'+rm(o.total)+'</b></div>'+(o.ap_earned?'<div class="hint">Earned '+o.ap_earned+' AP'+(o.ap_redeemed?' · used '+o.ap_redeemed+' AP':'')+'</div>':'')+'</div>'+
  '<div class="hint">Placed '+(o.paid_at?fmtWhen(o.paid_at):'')+'</div></div>'}
 /* ===== Order History =====
@@ -1563,6 +1563,50 @@ function histFilter(v){v=String(v||'').trim().toLowerCase();
  document.querySelectorAll('#histList .hrow').forEach(function(r){r.style.display=!v||r.dataset.q.indexOf(v)>=0?'':'none'});
  document.querySelectorAll('#histList .hmonth').forEach(function(m){m.style.display=[].some.call(m.querySelectorAll('.hrow'),function(r){return r.style.display!=='none'})?'':'none'})}
 /* Order Again : the same Meals go back in the Cart ; a Personalised Plan goes back if it is still saved */
+/* ===== Old-website orders, shown meal by meal =====
+   Each Meal of a carried-over Plan or Bundle gets its own row : a picture built from its parts'
+   photos inside the packaging it came in ( MAP Bento Box or Vacuum Pack ), then every part on its
+   own line with its grams. The parts' photos come from the kitchen list the Meal Plan page uses. */
+var LEGCAT=null;
+function legN(s){return String(s||'').toLowerCase().replace(/\[/g,'(').replace(/\]/g,')').replace(/&/g,' and ').replace(/\bw\//g,'with ').replace(/[^a-z0-9()]+/g,' ').replace(/\s+/g,' ').trim()}
+function legN2(s){return legN(s).replace(/\([^)]*\)/g,' ').replace(/\s+/g,' ').trim()}
+function legQual(s){return (legN(s).match(/\(([^)]*)\)/g)||[]).map(function(x){return x.replace(/[()]/g,'').trim()}).filter(function(x){return x&&x!=='oil free'}).sort().join('|')}
+function legFind(name){var L=LEGCAT||[];if(!L.length)return null;var n=legN(name),n2=legN2(name),q=legQual(name);
+ return L.filter(function(x){return legN(x.n)===n})[0]||L.filter(function(x){return legN2(x.n)===n2&&legQual(x.n)===q})[0]||L.filter(function(x){return legN2(x.n)===n2})[0]||null}
+function legUnpack(d){return d.r.map(function(v){var o={};d.k.forEach(function(k,i){o[k]=v[i]});var im=d.i[o.img];o.img=im?d.p[im[0]]+im[1]+(im[2]||'.jpg'):'';var nm=o.n[1];d.t.forEach(function(t){nm=nm.split(t[0]).join(t[1])});o.n=d.n[o.n[0]]+nm;o.cat='pcvgs'.charAt(o.cat);return o})}
+function legCat(){if(LEGCAT||legCat.busy)return;legCat.busy=1;
+ try{var raw=localStorage.getItem('aera.cat');if(raw){var c=JSON.parse(raw);if(c&&c.d){LEGCAT=legUnpack(c.d);legRepaint();return}}}catch(e){}
+ fetch('https://aeramealprep.net/data/kitchen-list/',{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var a=t.indexOf('/*CAT*/'),b=t.indexOf('/*ENDCAT*/');LEGCAT=(a>=0&&b>a)?legUnpack(JSON.parse(t.slice(a+7,b))):[];legRepaint()}).catch(function(){LEGCAT=[]})}
+function legRepaint(){try{if(document.getElementById('histWrap')&&document.getElementById('histWrap').style.display==='block')renderHistory()}catch(e){}
+ try{var el=document.getElementById('ordersList');if(el&&ORDERS&&ORDERS.some(function(o){return o.gateway==='legacy'&&orderIsCurrent(o)}))el.innerHTML=ORDERS.filter(orderIsCurrent).map(orderCard).join('')}catch(e){}}
+function legPackName(p){return p==='vacuum'?'Vacuum Packed':'MAP Bento Box'}
+function legParts(txt){return String(txt||'').split(' · ').map(function(s){var m=/^(.*?)\s+(\d+(?:\.\d+)?)\s*g$/.exec(s.trim());return m?{n:m[1],g:+m[2]}:{n:s.trim(),g:0}}).filter(function(x){return x.n})}
+function legPic(parts,pack){var by={};parts.forEach(function(p){var r=legFind(p.n);if(r&&r.img&&!by[r.cat])by[r.cat]=r.img});
+ var p=by.p||by.g,c=by.c,v=by.v||by.s;var cls='lgimg '+(pack==='vacuum'?'vac':'bento');
+ if(!p&&!c&&!v)return '<div class="'+cls+' none"><span>'+legPackName(pack)+'</span></div>';
+ return '<div class="'+cls+'">'+(p?'<img class="p" src="'+esc(p)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<i class="p"></i>')+(c?'<img src="'+esc(c)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<i></i>')+(v?'<img src="'+esc(v)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<i></i>')+'<em>'+(pack==='vacuum'?'Vacuum':'MAP Bento')+'</em></div>'}
+function legItems(o){if(!LEGCAT)legCat();var items=Array.isArray(o.items)?o.items:[],pack=o.packaging==='vacuum'?'vacuum':'bento',h='',slot={},rows=[];
+ items.forEach(function(i){var nm=String(i.name||'');var m=/^Day (\d+) · (.*)$/.exec(nm);
+  if(m){var d=+m[1];slot[d]=(slot[d]||0)+1;var parts=legParts(m[2]);
+   rows.push('<div class="lgrow">'+legPic(parts,pack)+'<div class="lgtx"><b>Day '+d+' · Meal '+slot[d]+'</b><ul>'+parts.map(function(p){return'<li><span class="n">'+esc(p.n)+'</span><span class="g">'+(p.g?p.g+' g':'')+'</span></li>'}).join('')+'</ul></div>'+(i.price?'<div class="lgpr">'+rm(i.price)+'</div>':'')+'</div>')}
+  else if(!i.price&&!i.sku&&rows.length===0&&/meal|bundle|days/i.test(nm)){h+='<div class="lghd">'+esc(nm)+'</div>'}
+  else{var k=legNorm(nm),gl=/mass gain/i.test(nm)?'mass':'fat';var sku=LEG_MEALS[k+'|'+gl]||LEG_MEALS[k+'|'+(gl==='fat'?'mass':'fat')];var u=sku?mealPic({sku:sku}):'';
+   rows.push('<div class="lgrow">'+(u?'<div class="lgimg one '+(pack==='vacuum'?'vac':'bento')+'"><img src="'+esc(u)+'" alt="" loading="lazy"><em>'+(pack==='vacuum'?'Vacuum':'MAP Bento')+'</em></div>':legPic([],pack))+'<div class="lgtx"><b>'+esc(nm)+'</b><ul><li><span class="n">Quantity</span><span class="g">× '+(+i.qty||1)+'</span></li></ul></div>'+(i.price?'<div class="lgpr">'+rm(i.price*(+i.qty||1))+'</div>':'')+'</div>')}});
+ return '<div class="lglist">'+h+rows.join('')+'</div>'}
+(function(){var c=document.createElement('style');c.textContent='.pkchip{display:inline-block;background:#EEF0F7;color:#16479E;font-weight:700;font-size:11.5px;padding:2px 9px;border-radius:999px}'+
+ '.lglist{display:flex;flex-direction:column;gap:10px;margin-top:10px}.lghd{font-weight:800;color:#0B1C36;font-size:14px}'+
+ '.lgrow{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:12px;align-items:start;padding:10px;border:1px solid rgba(22,71,158,.25);border-radius:12px;background:#fff}'+
+ '.lgimg{position:relative;width:96px;height:72px;border-radius:10px;display:grid;grid-template-columns:1.25fr 1fr;grid-template-rows:1fr 1fr;gap:2px;padding:4px;overflow:hidden}'+
+ '.lgimg.bento{background:#141414}.lgimg.vac{background:linear-gradient(135deg,#f3f6fb,#d6deec);border:1px solid #b8c5dc;border-radius:16px;padding:6px}'+
+ '.lgimg img,.lgimg i{width:100%;height:100%;object-fit:cover;border-radius:4px;display:block;background:rgba(255,255,255,.08)}.lgimg .p{grid-row:1/3}'+
+ '.lgimg.vac img{border-radius:8px;filter:saturate(.95)}.lgimg.one{display:block;padding:4px}.lgimg.one img{height:100%}'+
+ '.lgimg em{position:absolute;left:4px;bottom:4px;font-style:normal;font-size:9px;font-weight:800;letter-spacing:.04em;background:#16479E;color:#FDB913;padding:1px 5px;border-radius:5px}'+
+ '.lgimg.none{display:flex;align-items:center;justify-content:center;text-align:center;font-size:10px;font-weight:800;color:#FDB913}.lgimg.vac.none{color:#16479E}'+
+ '.lgtx b{display:block;font-size:13px;color:#16479E;margin-bottom:2px}.lgtx ul{list-style:none;margin:0;padding:0;font-size:13px}'+
+ '.lgtx li{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border-bottom:1px dotted #E3E9F3}.lgtx li:last-child{border-bottom:0}.lgtx .n{color:#0B1C36}.lgtx .g{white-space:nowrap;color:#5A6B87;font-weight:600}'+
+ '.lgpr{font-weight:800;font-size:13px;white-space:nowrap;color:#0B1C36}'+
+ '@media(max-width:560px){.lgrow{grid-template-columns:80px minmax(0,1fr)}.lgimg{width:80px;height:60px}.lgpr{grid-column:2;justify-self:end}}';document.head.appendChild(c);
+ try{var D=window.AERA_I18N,R=window.AERA_I18N_RE;if(D)Object.assign(D,{'MAP Bento Box':'MAP 保鲜餐盒','Vacuum Packed':'真空包装','MAP Bento':'MAP 餐盒','Vacuum':'真空','Quantity':'数量'});if(R)R.unshift([/^Day (\d+) · Meal (\d+)$/,'第 $1 天 · 第 $2 餐']);}catch(e){}})();
 /* ===== Order Again for an order carried over from the old website =====
    Old-site meals have no shop code. A Plan or Bundle order goes to Bring Your Own Plan with every
    Meal written out ( raw weights ), where each item is matched to today's menu and opened in the
@@ -1575,10 +1619,11 @@ function legacyAgain(o){var items=Array.isArray(o.items)?o.items:[],zh=legZh();
  var days=items.filter(function(i){return /^Day \d+ · /.test(i.name||'')});
  if(days.length){var lines=['Weights: RAW','AERA order '+o.order_no+' ( '+days.length+' Meals )'],cur=0,n=0;
   days.forEach(function(i){var m=/^Day (\d+) · (.*)$/.exec(i.name);var d=+m[1];if(d!==cur){cur=d;n=0;lines.push('');lines.push('DAY '+d)}n++;lines.push('Meal '+n+': '+m[2].split(' · ').join(', '))});
-  try{localStorage.setItem('aera.byopPrefill',JSON.stringify({text:lines.join('\n'),from:o.order_no,at:Date.now()}))}catch(e){}
-  return asModal(zh?'<h3>重新生成这 '+days.length+' 份餐点</h3><p class="asp">这张订单来自旧网站。我们会把同样的餐点载入餐点生成器，逐项对应今天的菜单，并算出营养素。您可以检查、随意修改，再加入购物车。</p>':
-   '<h3>Rebuild These '+days.length+' Meals</h3><p class="asp">This Order is from our old website. We load the same Meals into our Meal Builder, match each item to today\'s menu and work out the Macros. Check it, change anything you like, then add it to your Cart.</p>',
-   '<a class="btn btn-y" href="'+BYOP_URL2+'?again=1">'+(zh?'重新生成我的餐点':'Rebuild My Meals')+'</a><button class="btn btn-o" type="button" onclick="asClose()">'+(zh?'关闭':'Close')+'</button>')}
+  var RM_=[];days.forEach(function(i){var mm=/^Day (\d+) · (.*)$/.exec(i.name);RM_.push({day:+mm[1],comps:legParts(mm[2]).map(function(p){return[p.n,p.g]})})});
+  try{localStorage.setItem('aera.reorder',JSON.stringify({from:o.order_no,packaging:o.packaging||'',meals:RM_,at:Date.now()}))}catch(e){}
+  return asModal(zh?'<h3>重新生成这 '+days.length+' 份餐点</h3><p class="asp">这张订单来自旧网站。回答几个关于您和您这一周的简单问题，我们就把同样的 '+days.length+' 份餐点、同样的分量放回去。餐点偏好可以之后再填。</p>':
+   '<h3>Rebuild These '+days.length+' Meals</h3><p class="asp">This Order is from our old website. Answer a few quick questions about you and your week, and we put the same '+days.length+' Meals back with the same portions. Your Meal Preferences can wait, fill them in later.</p>',
+   '<a class="btn btn-y" href="https://aeramealprep.net/meal-plan/?reorder=1">'+(zh?'重新生成我的餐点':'Rebuild My Meals')+'</a><button class="btn btn-o" type="button" onclick="asClose()">'+(zh?'关闭':'Close')+'</button>')}
  var cart={};try{cart=JSON.parse(localStorage.getItem('aera.cart')||'{}')||{}}catch(e){}
  var added=0,miss=[];items.forEach(function(i){var nm=String(i.name||'');var gl=/mass gain/i.test(nm)?'mass':'fat';var k=legNorm(nm);var sku=LEG_MEALS[k+'|'+gl]||LEG_MEALS[k+'|'+(gl==='fat'?'mass':'fat')];if(sku){cart[sku]=(cart[sku]||0)+(+i.qty||1);added+=(+i.qty||1)}else if(nm)miss.push(nm)});
  if(!added)return asModal(zh?'<h3>没有可加入的餐点</h3><p class="asp">这些餐点已不在菜单上。</p>':'<h3>Nothing To Add</h3><p class="asp">These Meals are no longer on the menu.</p>','<button class="btn btn-y" type="button" onclick="asClose()">'+(zh?'关闭':'Close')+'</button>');
