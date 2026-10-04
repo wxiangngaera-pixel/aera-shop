@@ -3168,6 +3168,24 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
   "· the kitchen has started cooking, so this delivery can no longer be moved.":"· 厨房已开始烹煮，这次配送不能再改期。","· the kitchen is preparing it.":"· 厨房正在准备。",
   "Your delivery is less than 4 days away. Moving it now is late notice and":"距离配送不到 4 天，现在改期属于迟通知，","comes off your AERA Credit.":"将从您的 AERA 储值金扣除。"});
  R.unshift([/^in (\d+) days?$/,"$1 天后"],[/^Move (.+) To$/,function(m,x){return '把 '+dz(x)+' 改到'}]);
+ /* Referrals : the Referrer's card, tiles and statements */
+ Object.assign(D,{"This Month":"本月","No sales yet":"还没有销售","To be Paid":"待付款","No Outstanding":"没有待付款项","Earned All Time":"累计获得","Since you joined":"自加入以来",
+  "Nothing yet. Statements appear here at the End of each month.":"还没有记录。每月底结单会出现在这里。",
+  "Cash-Back is worked out on the Meal Subtotal only. Discounts, Delivery and Packaging Fees are not counted. We settle by Bank Transfer after each month closes.":"现金回馈只按餐点小计计算，不包括折扣、运费和包装费。每月结束后，我们以银行转账结算。",
+  "Month":"月份","Orders":"订单","Sales":"销售额","Cash-Back":"现金回馈","Pending":"待付","Your Referrer":"您的推荐人",
+  "You are registered under":"您已登记在","You are registered under Code":"您已登记在推荐码",
+  "Every Order you place earns you an extra 3% of your Meal Subtotal in AERA Points, on top of the usual 5 AP per RM 1. A Referral Code stays with your Account and cannot be swapped for another one.":"您的每笔订单，除了一般的每 RM 1 得 5 AP，还会额外获得餐点小计 3% 的 AERA 积分。推荐码会一直绑定您的账户，不能更换。"});
+ var RT={"Referral Partner":"推荐伙伴","Fitness Studio / Gym":"健身工作室 / 健身房","Fitness Influencer":"健身网红"},
+     MN={January:1,February:2,March:3,April:4,May:5,June:6,July:7,August:8,September:9,October:10,November:11,December:12};
+ function mz(s){return String(s).replace(/^(January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})$/,function(m,mo,y){return y+' 年 '+MN[mo]+' 月'})}
+ R.unshift(
+  [/^(Referral Partner|Fitness Studio \/ Gym|Fitness Influencer) · ([\d.]+)% Cash-Back$/,function(m,t,p){return RT[t]+' · '+p+'% 现金回馈'}],
+  [/^(.*?)\s*·\s*Share this Code and you earn ([\d.]+)% of the Meal Subtotal on every Order placed with it\.$/,function(m,n,p){return (n?n+' · ':'')+'分享这个推荐码，每笔使用它的订单，您可获得餐点小计的 '+p+'%。'}],
+  [/^\( (\S+) \)\.$/,'（$1）名下。'],
+  [/^Across (\d+) months?$/,'共 $1 个月'],
+  [/^(.+) · (\d+) orders? · (RM [\d,.]+) in sales$/,function(m,mo,n,s){return mz(mo)+' · '+n+' 笔订单 · 销售额 '+s}],
+  [/^(January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})$/,function(m){return mz(m)}],
+  [/^Paid · (\S+)$/,'已付款 · $1']);
  /* mobile number verification */
  Object.assign(D,{"Verified":"已验证","Not verified yet":"尚未验证","6-Digit Code":"6 位数验证码","Send Me A Code":"发送验证码","Sending…":"发送中…",
   "Enter a Malaysian mobile number.":"请输入马来西亚手机号码。","That does not look like a Malaysian mobile number.":"这看起来不像马来西亚手机号码。",
