@@ -33,6 +33,7 @@
 /* the page column may shrink to the screen : a long line ( a message preview, an address ) can no longer push every card off the right edge of a phone */
 .layout{grid-template-columns:minmax(0,1fr) 400px!important}.layout>*{min-width:0!important;max-width:100%}
 @media(max-width:940px){.layout{grid-template-columns:minmax(0,1fr)!important}}
+/* Chinese : each dish name reads Chinese on top, English underneath */html[data-lang="zh"] .pvc,html[data-lang="zh"] .pvxn b{white-space:pre-line}
 </style>
 <!-- AERA phone fit : end -->
 
