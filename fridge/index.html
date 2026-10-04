@@ -20,11 +20,70 @@
 
 
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
 
 
 <style id="aera-plink-hide">/* a header link that the page has hidden ( Sign out while signed out ) stays hidden */.plink[style*="display:none"],.plink[style*="display: none"]{display:none!important}</style>
+<!-- AERA fridge app : start -->
+<meta name="theme-color" content="#16479E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AERA Fridge">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="application-name" content="AERA Fridge">
+<link rel="apple-touch-icon" href="https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push?icon=180">
+<script>/* The Merchant Portal as a phone app : a Gym adds it to the Home Screen and it opens full screen
+   with its own icon, straight onto their fridge. The manifest is written here so it always points
+   at aeramealprep.net/fridge/ — no App Store, nothing to update. */
+(function(){try{
+ if(window.top!==window||!/aeramealprep\.net$/i.test(location.hostname))return;
+ var I='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push?icon=';
+ var M={name:'AERA Fridge — Merchant Portal',short_name:'AERA Fridge',id:'/fridge/',
+  start_url:'https://aeramealprep.net/fridge/?app=1',scope:'https://aeramealprep.net/fridge/',
+  display:'standalone',orientation:'portrait',background_color:'#16479E',theme_color:'#16479E',
+  description:'Your AERA fridge : stock, orders, bills and invoices.',
+  icons:[{src:I+'192',sizes:'192x192',type:'image/png',purpose:'any'},{src:I+'512',sizes:'512x512',type:'image/png',purpose:'any'},{src:I+'512',sizes:'512x512',type:'image/png',purpose:'maskable'}]};
+ var l=document.createElement('link');l.rel='manifest';
+ l.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(M));
+ document.head.appendChild(l);
+}catch(e){}})();</script>
+<style id="aera-fridge-app">
+.tabs .tb{--ic:none}
+#tbFridge{--ic:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='6' y='2' width='12' height='20' rx='2'/><path d='M6 10h12M9 5v2M9 13v3'/></svg>")}
+#tbRefill{--ic:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 4h2l2.4 11h10.2L20 8H7'/><circle cx='10' cy='19.5' r='1.5'/><circle cx='17' cy='19.5' r='1.5'/></svg>")}
+#tbOrders{--ic:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/></svg>")}
+#tbBills{--ic:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 2h12v20l-3-2-3 2-3-2-3 2z'/><path d='M9 7h6M9 11h6M9 15h4'/></svg>")}
+#tbAccount{--ic:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='8' r='4'/><path d='M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6'/></svg>")}
+/* installed on a phone : the tabs become the app's bottom bar */
+@media (display-mode: standalone){
+ html,body{overscroll-behavior-y:none}
+ body{padding-bottom:calc(74px + env(safe-area-inset-bottom))}
+ .top{padding-top:calc(14px + env(safe-area-inset-top))!important}
+ .tabs{position:fixed!important;left:0;right:0;bottom:0;z-index:60;margin:0!important;border:0!important;border-top:1px solid #16479E!important;
+  border-radius:0!important;background:#fff;padding:0 0 env(safe-area-inset-bottom);box-shadow:0 -6px 18px rgba(14,53,118,.12);grid-template-columns:repeat(5,1fr)!important}
+ .tabs .tb{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:60px;padding:8px 2px 7px!important;
+  font-size:10.5px!important;line-height:1.15;border:0!important;border-radius:0!important;color:#16479E;background:#fff}
+ .tabs .tb::before{content:'';display:block;width:23px;height:23px;background:currentColor;-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
+ .tabs .tb.on{background:#16479E!important;color:#FDB913!important}
+}
+#appBar{display:none;background:#0E3576;color:#fff;padding:10px 14px;gap:12px;align-items:center;font-size:13px;line-height:1.35}
+#appBar.show{display:flex}
+#appBar img{width:40px;height:40px;border-radius:10px;flex:0 0 40px;background:#16479E}
+#appBar .t{flex:1 1 auto;min-width:0}
+#appBar b{display:block;font-size:14px;color:#FDB913}
+#appBar button{border:0;border-radius:10px;font:inherit;font-weight:800;cursor:pointer;padding:9px 14px}
+#appBar .go{background:#FDB913;color:#0B1C36}
+#appBar .x{background:transparent;color:#fff;opacity:.75;padding:9px 6px;font-size:18px;line-height:1}
+#appHow{position:fixed;inset:0;z-index:90;background:rgba(11,28,54,.55);display:none;align-items:flex-end;justify-content:center;padding:16px}
+#appHow.show{display:flex}
+#appHow .sh{background:#fff;color:#0B1C36;border:1px solid #16479E;border-radius:18px;max-width:420px;width:100%;padding:20px 18px calc(18px + env(safe-area-inset-bottom))}
+#appHow h3{margin:0 0 8px;font-size:17px;color:#16479E}
+#appHow ol{margin:0 0 14px;padding-left:20px;font-size:14.5px}
+#appHow li{margin:6px 0}
+#appHow .ok{width:100%;background:#16479E;color:#FDB913;border:0;border-radius:12px;padding:12px;font:inherit;font-weight:800;cursor:pointer}
+</style>
+<!-- AERA fridge app : end -->
 
 <!-- SEO Meta Tags -->
 <title>AERA Fridge — Merchant Portal</title>
@@ -1187,5 +1246,43 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),selec
 })();
 </script>
 <!-- AERA theme : end -->
+<!-- AERA fridge app bar : start -->
+<script id="aera-fridge-app-js">
+(function(){try{
+ if(window.top!==window)return;
+ var D=window.AERA_I18N=window.AERA_I18N||{};
+ Object.assign(D,{"Get The AERA Fridge App":"AERA 冰柜 App","Add it to your Home Screen. It opens full screen, no App Store needed.":"加到手机主屏幕，全屏打开，无需 App Store。",
+  "Install":"安装","Add AERA Fridge To Your Home Screen":"把 AERA 冰柜加到主屏幕","Got It":"知道了",
+  "Tap the Share button at the bottom of Safari ( the square with an arrow ).":"点 Safari 底部的分享按钮（带箭头的方框）。",
+  "Scroll down and tap Add to Home Screen.":"往下滑，点「添加到主屏幕」。","Tap Add. The AERA Fridge icon appears on your Home Screen.":"点「添加」，主屏幕就会出现 AERA 冰柜图标。",
+  "Open your browser menu ( ⋮ at the top right ).":"打开浏览器菜单（右上角的 ⋮）。","Tap Install app or Add to Home screen.":"点「安装应用」或「添加到主屏幕」。",
+  "Open the AERA Fridge icon on your Home Screen from now on.":"以后直接点主屏幕上的 AERA 冰柜图标打开。"});
+ var SA=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+ if(SA){document.documentElement.classList.add('aera-app');
+  var sv=window.showView;if(typeof sv==='function')window.showView=function(v){sv(v);try{window.scrollTo(0,0)}catch(e){}};return}
+ var K='aera.fridgeApp.hide',P=null;
+ window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();P=e;show()});
+ var ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ var phone=ios||/Android/i.test(navigator.userAgent)||(window.innerWidth<=760&&'ontouchstart' in window);
+ function hidden(){try{return localStorage.getItem(K)==='1'}catch(e){return false}}
+ function show(){if(!phone||hidden())return;var b=document.getElementById('appBar');if(b)b.classList.add('show')}
+ var bar=document.createElement('div');bar.id='appBar';
+ bar.innerHTML='<img src="https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push?icon=192" alt="">'+
+  '<div class="t"><b>Get The AERA Fridge App</b><span>Add it to your Home Screen. It opens full screen, no App Store needed.</span></div>'+
+  '<button type="button" class="go">Install</button><button type="button" class="x" aria-label="Close">×</button>';
+ var how=document.createElement('div');how.id='appHow';
+ how.innerHTML='<div class="sh"><h3>Add AERA Fridge To Your Home Screen</h3><ol>'+(ios?
+  '<li>Tap the Share button at the bottom of Safari ( the square with an arrow ).</li><li>Scroll down and tap Add to Home Screen.</li><li>Tap Add. The AERA Fridge icon appears on your Home Screen.</li>':
+  '<li>Open your browser menu ( ⋮ at the top right ).</li><li>Tap Install app or Add to Home screen.</li><li>Open the AERA Fridge icon on your Home Screen from now on.</li>')+
+  '</ol><button type="button" class="ok">Got It</button></div>';
+ document.body.insertBefore(bar,document.body.firstChild);document.body.appendChild(how);
+ bar.querySelector('.x').onclick=function(){bar.classList.remove('show');try{localStorage.setItem(K,'1')}catch(e){}};
+ bar.querySelector('.go').onclick=function(){if(P){P.prompt();P.userChoice.then(function(c){if(c&&c.outcome==='accepted')bar.classList.remove('show');P=null})}else how.classList.add('show')};
+ how.onclick=function(e){if(e.target===how||e.target.classList.contains('ok'))how.classList.remove('show')};
+ window.addEventListener('appinstalled',function(){bar.classList.remove('show')});
+ show();
+}catch(e){}})();
+</script>
+<!-- AERA fridge app bar : end -->
 </body>
 </html>
