@@ -2,7 +2,20 @@
 <html lang="en">
 <head>
 <!-- AERA host redirect : start -->
-
+<script>/* Customers always stay on aeramealprep.net : a customer page opened on my.chatbees.io ( an old
+   email, a bookmark, a link we missed ) moves itself across straight away, keeping everything after
+   the address. Not inside the Chatbees editor preview, and not with ?stay=1 ( for testing ). */
+(function(){try{
+ if(!/(^|\.)my\.chatbees\.io$/i.test(location.hostname))return;
+ if(window.top!==window)return;
+ var q=location.search||'';
+ if(/[?&]stay=1(&|$)/.test(q)){try{sessionStorage.setItem('aera.stay','1')}catch(e){}return}
+ try{if(sessionStorage.getItem('aera.stay')==='1')return}catch(e){}
+ var M={"ZQr9fS2jA9":"/","xR3Dfd9n":"/fridge","D2pz8bZ":"/checkout","dtTMaV":"/account","SrQzC5m2":"/meal-plan","DSBcJ9bN4":"/bring-your-own-plan","8s4Xd6h":"/track","VMrvEw":"/merchandise","TVRk6bqam":"/corporate","G7mXL4RMz2":"/terms","xXH4dXALg":"/privacy","B2WjrKhnz":"/contact","DiB2ZadptP":"/thank-you","HkKJuxBS":"/referrer-portal","H9H32i9ShW":"/referrer-signup","ZmQYknnnM":"/points-checkout","8kZjg8U5XD":"/home-sourced-meals","vP2uvq":"/coach-plan-builder"};
+ var m=location.pathname.match(/\/p\/([A-Za-z0-9]+)\/?$/);if(!m)return;
+ var t=M[m[1]];if(!t)return;
+ location.replace('https://aeramealprep.net'+(t==='/'?'/':t+'/')+q+(location.hash||''));
+}catch(e){}})();</script>
 <!-- AERA host redirect : end -->
 
 
@@ -68,7 +81,7 @@
   if(pinPassed){document.addEventListener('DOMContentLoaded',function(){document.body.style.visibility='visible';});return;}
   document.addEventListener('DOMContentLoaded',function(){
   var currentMethod='email';var currentIdentifier='';
-  var gateHtml='<div id="pin-gate" style="position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;padding:16px;"><div style="background:white;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.15);width:100%;max-width:420px;padding:32px;text-align:center;"><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Identity Verification</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">Please verify your identity to access this page.</p><form id="pin-request-form"><input type="email" id="pin-identifier" placeholder="Enter your email address" required style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:16px;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" /><div id="pin-req-error" style="display:none;color:#ef4444;font-size:14px;margin-bottom:12px;"></div><button type="submit" id="pin-send-btn" style="width:100%;height:48px;font-size:16px;font-weight:600;color:white;border:none;border-radius:8px;cursor:pointer;background:#2563eb;">Send Verification Code</button></form><form id="pin-verify-form" style="display:none;"><p id="pin-sent-msg" style="font-size:14px;color:#6b7280;margin-bottom:12px;"></p><input type="text" id="pin-code" placeholder="Enter 6-digit PIN" maxlength="6" style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:20px;text-align:center;letter-spacing:8px;font-family:monospace;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" required /><div id="pin-ver-error" style="display:none;color:#ef4444;font-size:14px;margin-bottom:12px;"></div><button type="submit" id="pin-verify-btn" style="width:100%;height:48px;font-size:16px;font-weight:600;color:white;border:none;border-radius:8px;cursor:pointer;background:#2563eb;">Verify PIN</button><button type="button" id="pin-resend-btn" style="width:100%;margin-top:8px;padding:8px;background:none;border:none;color:#6b7280;cursor:pointer;font-size:14px;">Resend PIN</button><button type="button" id="pin-back-btn" style="width:100%;padding:8px;background:none;border:none;color:#9ca3af;cursor:pointer;font-size:14px;">Use different contact</button></form></div></div>';
+  var gateHtml='<style>#pin-gate input:focus{border-color:#2563eb !important;box-shadow:0 0 0 3px rgba(37,99,235,0.25) !important;outline:none !important;}</style><div id="pin-gate" style="position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;padding:16px;"><div style="background:white;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.15);width:100%;max-width:420px;padding:32px;text-align:center;"><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Identity Verification</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">Please verify your identity to access this page.</p><form id="pin-request-form"><input type="email" id="pin-identifier" placeholder="Enter your email address" required style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:16px;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" /><div id="pin-req-error" style="display:none;color:#ef4444;font-size:14px;margin-bottom:12px;"></div><button type="submit" id="pin-send-btn" style="width:100%;height:48px;font-size:16px;font-weight:600;color:white;border:none;border-radius:8px;cursor:pointer;background:#2563eb;">Send Verification Code</button></form><form id="pin-verify-form" style="display:none;"><p id="pin-sent-msg" style="font-size:14px;color:#6b7280;margin-bottom:12px;"></p><input type="text" id="pin-code" placeholder="Enter 6-digit PIN" maxlength="6" style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:20px;text-align:center;letter-spacing:8px;font-family:monospace;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" required /><div id="pin-ver-error" style="display:none;color:#ef4444;font-size:14px;margin-bottom:12px;"></div><button type="submit" id="pin-verify-btn" style="width:100%;height:48px;font-size:16px;font-weight:600;color:white;border:none;border-radius:8px;cursor:pointer;background:#2563eb;">Verify PIN</button><button type="button" id="pin-resend-btn" style="width:100%;margin-top:8px;padding:8px;background:none;border:none;color:#6b7280;cursor:pointer;font-size:14px;">Resend PIN</button><button type="button" id="pin-back-btn" style="width:100%;padding:8px;background:none;border:none;color:#9ca3af;cursor:pointer;font-size:14px;">Use different contact</button></form></div></div>';
   document.body.insertAdjacentHTML('beforeend',gateHtml);document.body.style.visibility='visible';
   var reqForm=document.getElementById('pin-request-form');var verForm=document.getElementById('pin-verify-form');var idInput=document.getElementById('pin-identifier');var codeInput=document.getElementById('pin-code');var sendBtn=document.getElementById('pin-send-btn');var verifyBtn=document.getElementById('pin-verify-btn');var reqError=document.getElementById('pin-req-error');var verError=document.getElementById('pin-ver-error');var sentMsg=document.getElementById('pin-sent-msg');
   
@@ -343,7 +356,8 @@
     }
   });
 })();
-</script>  <link rel="stylesheet" href="styles.css">
+</script>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <nav data-section="nav"><div class="wrap">
@@ -359,31 +373,609 @@
   <div id="state"><div class="card"><div class="empty">Loading your figures…</div></div></div>
 </div></main>
 
+<script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
+var DATA_URL='/api/public/landing-pages/6950/sheet-data';
+var TIERS={normal:'Normal Referrer',gym:'Fitness Studio / Gym',influencer:'Fitness Influencer'};
+var R={rows:[],loaded:false,year:'',month:''};
+function $(s){return document.querySelector(s)}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function rm(v){return 'RM '+(Math.round((+v||0)*100)/100).toFixed(2)}
+function isPaid(v){return /^(y|yes|true|1|paid)$/i.test(String(v||''))}
+function monthLabel(m){var p=String(m||'').split('-');if(p.length<2)return String(m||'');
+ var d=new Date(+p[0],+p[1]-1,1);return isNaN(d)?String(m):d.toLocaleDateString('en-MY',{month:'long',year:'numeric'})}
+function monthShort(m){var p=String(m||'').split('-');if(p.length<2)return String(m||'');
+ var d=new Date(+p[0],+p[1]-1,1);return isNaN(d)?String(m):d.toLocaleDateString('en-MY',{month:'short'})}
+function fmtDate(d){var x=new Date(String(d||'').slice(0,10)+'T00:00:00');return isNaN(x)?String(d||''):x.toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric'})}
+function rows(j){var out=[],hd=j&&Array.isArray(j.headers)?j.headers:null,raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];
+ raw.forEach(function(r){if(Array.isArray(r)&&hd){var o={};hd.forEach(function(k,i){o[k]=r[i]});out.push(o)}else if(r&&typeof r==='object')out.push(r)});return out}
+/* Inside the Kitchen Console the page is fed by the console ( Peter picks any Referrer there ) instead of the sheet. */
+window.aeraRefReload=function(){R.year='';R.month='';load()};
+function load(){var F=null;try{if(window.top!==window&&typeof window.parent.aeraRefFeed==='function')F=window.parent.aeraRefFeed}catch(e){}
+ if(F){var all=F()||[];R.prof=all.filter(isProf)[0]||null;R.rows=all.filter(function(r){return !isProf(r)});R.loaded=true;R.failed=false;render();return}
+ fetch(DATA_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){var all=rows(j);R.prof=all.filter(isProf)[0]||null;R.rows=all.filter(function(r){return !isProf(r)});R.loaded=true;render()})
+ .catch(function(){R.loaded=true;R.failed=true;render()})}
+function years(){var y={};R.rows.forEach(function(r){var m=String(r.Month||'');if(m)y[m.slice(0,4)]=1});return Object.keys(y).sort().reverse()}
+function monthsIn(y){var m={};R.rows.forEach(function(r){var s=String(r.Month||'');if(s.slice(0,4)===y)m[s]=1});return Object.keys(m).sort().reverse()}
+function inMonth(m){return R.rows.filter(function(r){return String(r.Month||'')===m})}
+function sum(list,k){var t=0;list.forEach(function(r){t+=+r[k]||0});return Math.round(t*100)/100}
+function setYear(y){R.year=y;var ms=monthsIn(y);R.month=ms[0]||'';render()}
+function setMonth(m){R.month=m;render()}
 
+/* ---- Your Referral Code, ready to share ----
+   The Kitchen Console writes one profile row per Referrer ( OrderNo PROFILE-<code> ), so the code
+   shows even before the first referred Order. It is kept out of every figure below. */
+function isProf(r){return /^PROFILE-/i.test(String(r.OrderNo||''))}
+var SHOP_LINK='https://aeramealprep.net/checkout/?ref=';
+function shareText(code,name){return 'Hi,\n\nI order my Meal Preps from AERA Meal Prep. Every Meal is cooked to Order, weighed to the gram and delivered chilled around the Klang Valley.\n\n'+
+ 'Use my Referral Code '+code+' at Checkout and you earn extra AERA Points on your Meals.\n\nOrder here : '+SHOP_LINK+encodeURIComponent(code)+'\n\n'+(name||'')}
+function shareCard(code,name){if(!code)return '';
+ return '<div class="card sharecard"><div class="shl">Your Referral Code</div><div class="shcode">'+esc(code)+'</div>'+
+  '<p class="shhint">Share it with friends, clients and members. Every Order placed with your code earns you Cash-Back, and they earn extra AERA Points.</p>'+
+  '<div class="shacts"><button type="button" class="shbtn y" onclick="location.href=\'https://my.chatbees.io/p/dtTMaV#refs\'"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg><span>Send To An AERA Account</span></button>'+
+  '<button type="button" class="shbtn n" onclick="shareCopy(\'code\',this)"><span>Copy Code</span></button>'+
+  '<button type="button" class="shbtn n" onclick="shareCopy(\'link\',this)"><span>Copy Link</span></button></div></div>'}
+function shareWho(){var p=R.prof||R.rows[0]||{};return{code:String(p.Code||'').toUpperCase(),name:String(p.Referrer||'')}}
+function shareEmail(){var w=shareWho();if(!w.code)return;
+ location.href='mailto:?subject='+encodeURIComponent('My AERA Meal Prep Referral Code : '+w.code)+'&body='+encodeURIComponent(shareText(w.code,w.name))}
+function shareCopy(what,btn){var w=shareWho();if(!w.code)return;var t=what==='link'?SHOP_LINK+encodeURIComponent(w.code):w.code;
+ var done=function(){var s=btn&&btn.querySelector('span');if(s){var o=s.textContent;s.textContent='Copied';setTimeout(function(){s.textContent=o},1600)}};
+ try{navigator.clipboard.writeText(t).then(done,function(){prompt('Copy this',t)})}catch(e){prompt('Copy this',t)}}
+window.shareEmail=shareEmail;window.shareCopy=shareCopy;
+function render(){
+ var box=$('#state');
+ if(!R.loaded)return;
+ if(R.failed)return box.innerHTML='<div class="card"><div class="msg bad">We could not load your figures just now. Please refresh the page.</div></div>';
+ if(!R.rows.length){var w0=shareWho();if(R.prof){$('#hdr').textContent=w0.name||'Your Cash-Back'}return box.innerHTML=shareCard(w0.code,w0.name)+'<div class="card"><div class="empty">Nothing here yet.<br><br>Once someone orders with your Referral Code, every Order shows up here with the Cash-Back it earned you.</div></div>'}
+ var P0=R.prof||R.rows[0];var name=String(P0.Referrer||''),code=String(P0.Code||'').toUpperCase(),tier=String(P0.Tier||'normal').toLowerCase(),rate=+P0.Rate||0;
+ $('#hdr').textContent=name||'Your Cash-Back';
+ $('#sub').innerHTML='<span class="chip">'+esc(code)+'</span> <span class="chip ok">'+esc(TIERS[tier]||TIERS.normal)+' · '+rate+'% Cash-Back</span><br>Every Order placed with your Referral Code, month by month. What it earned you, and what has been paid.';
+ var ys=years();if(!R.year||ys.indexOf(R.year)<0)R.year=ys[0]||'';
+ var ms=monthsIn(R.year);if(!R.month||ms.indexOf(R.month)<0)R.month=ms[0]||'';
+ var mine=inMonth(R.month);
+ var pendAll=R.rows.filter(function(r){return !isPaid(r.Paid)}),paidAll=R.rows.filter(function(r){return isPaid(r.Paid)});
+ var mPaid=mine.length&&mine.every(function(r){return isPaid(r.Paid)});
+ var h=shareCard(code,name)+'<div class="card">'+
+  '<div class="f2"><div><label class="lb" for="yr">Year</label><select id="yr" onchange="setYear(this.value)">'+ys.map(function(y){return'<option value="'+y+'"'+(R.year===y?' selected':'')+'>'+y+'</option>'}).join('')+'</select></div>'+
+  '<div><label class="lb" for="mo">Month</label><select id="mo" onchange="setMonth(this.value)">'+ms.map(function(m){return'<option value="'+m+'"'+(R.month===m?' selected':'')+'>'+monthLabel(m)+'</option>'}).join('')+'</select></div></div>'+
+  '<div class="mo">'+ms.map(function(m){return'<button type="button" class="'+(R.month===m?'on':'')+'" onclick="setMonth(\''+m+'\')">'+monthShort(m)+'</button>'}).join('')+'</div>'+
+  '<div class="tiles">'+
+   '<div class="tile"><div class="l">Sales This Month</div><div class="v">'+rm(sum(mine,'Sales'))+'</div><small>'+mine.length+' order'+(mine.length===1?'':'s')+' · '+monthLabel(R.month)+'</small></div>'+
+   '<div class="tile"><div class="l">Cash-Back This Month</div><div class="v">'+rm(sum(mine,'Cashback'))+'</div><small>'+rate+'% of the meal subtotal</small></div>'+
+   '<div class="tile pend"><div class="l">Pending Cash-Back</div><div class="v">'+rm(sum(pendAll,'Cashback'))+'</div><small>Across every month, not yet paid</small></div>'+
+   '<div class="tile paid"><div class="l">Paid Cash-Back</div><div class="v">'+rm(sum(paidAll,'Cashback'))+'</div><small>Received all time</small></div>'+
+  '</div>'+
+  '<div class="row" style="margin-top:14px">'+
+   (mPaid?'<button class="btn btn-y" type="button" onclick="receipt()">Download Receipt For '+esc(monthLabel(R.month))+'</button>':'<span class="hint" style="margin:0">A receipt is available once '+esc(monthLabel(R.month))+' has been paid out.</span>')+
+   (mPaid?'<span class="chip ok">Paid'+(mine[0].PaidAt?' · '+esc(fmtDate(mine[0].PaidAt)):'')+'</span>':'<span class="chip warn">Awaiting payment</span>')+
+  '</div>'+
+ '</div>';
+ h+='<div class="card"><h2>Orders In '+esc(monthLabel(R.month))+'</h2>'+
+  (mine.length?'<div class="tblwrap"><table><thead><tr><th>Date</th><th>Order</th><th>Customer</th><th class="r">Meal Subtotal</th><th class="r">Rate</th><th class="r">Your Cash-Back</th><th>Status</th></tr></thead><tbody>'+
+   mine.slice().sort(function(a,b){return String(b.Date||'').localeCompare(String(a.Date||''))}).map(function(r){
+    return'<tr><td>'+esc(fmtDate(r.Date))+'</td><td>'+esc(r.OrderNo||'')+'</td><td><b>'+esc(r.Customer||'Customer')+'</b>'+(r.CustomerMasked?'<div class="hint" style="margin:0">'+esc(r.CustomerMasked)+'</div>':'')+'</td>'+
+     '<td class="r">'+rm(r.Sales)+'</td><td class="r">'+(+r.Rate||0)+'%</td><td class="r"><b>'+rm(r.Cashback)+'</b></td>'+
+     '<td><span class="chip '+(isPaid(r.Paid)?'ok':'warn')+'">'+(isPaid(r.Paid)?'Paid':'Pending')+'</span></td></tr>'}).join('')+
+   '<tr><td colspan="3"><b>Total</b></td><td class="r"><b>'+rm(sum(mine,'Sales'))+'</b></td><td></td><td class="r"><b>'+rm(sum(mine,'Cashback'))+'</b></td><td></td></tr>'+
+   '</tbody></table></div>'
+  :'<div class="empty">No orders with your code in '+esc(monthLabel(R.month))+'.</div>')+
+  '<div class="hint">Cash-back is worked out on the meal subtotal after any discount. Delivery, packaging and processing fees are never counted. We settle by bank transfer after each month closes.</div>'+
+ '</div>';
+ h+='<div class="card"><h2>Every Month</h2><div class="tblwrap"><table><thead><tr><th>Month</th><th class="r">Orders</th><th class="r">Sales</th><th class="r">Cash-Back</th><th>Status</th><th></th></tr></thead><tbody>'+
+  allMonths().map(function(m){var L=inMonth(m),p=L.length&&L.every(function(r){return isPaid(r.Paid)});
+   return'<tr><td>'+esc(monthLabel(m))+'</td><td class="r">'+L.length+'</td><td class="r">'+rm(sum(L,'Sales'))+'</td><td class="r"><b>'+rm(sum(L,'Cashback'))+'</b></td>'+
+    '<td><span class="chip '+(p?'ok':'warn')+'">'+(p?'Paid'+(L[0].PaidAt?' · '+esc(fmtDate(L[0].PaidAt)):''):'Pending')+'</span></td>'+
+    '<td class="r">'+(p?'<button class="btn btn-o s" type="button" onclick="receipt(\''+m+'\')">Receipt</button>':'')+'</td></tr>'}).join('')+
+  '</tbody></table></div></div>';
+ box.innerHTML=h}
+function allMonths(){var m={};R.rows.forEach(function(r){var s=String(r.Month||'');if(s)m[s]=1});return Object.keys(m).sort().reverse()}
+function receipt(mo){mo=mo||R.month;var L=inMonth(mo);if(!L.length)return;
+ var name=String(L[0].Referrer||''),code=String(L[0].Code||'').toUpperCase(),rate=+L[0].Rate||0;
+ var paidAt=L[0].PaidAt?fmtDate(L[0].PaidAt):'',ref=L[0].PaidRef||'';
+ var w=window.open('','_blank');
+ if(!w)return alert('Allow pop-ups for this page, then press the receipt button again.');
+ var css='*{box-sizing:border-box}body{margin:0;font:13px Montserrat,system-ui,sans-serif;color:#0B0B0B;background:#fff;padding:36px}'+
+  '.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:3px solid #16479E;padding-bottom:14px}'+
+  'h1{font-size:24px;margin:0 0 4px;letter-spacing:-.02em}.mut{color:#6B7280;font-size:12px}'+
+  '.big{font-size:30px;font-weight:800;letter-spacing:-.02em;color:#16479E}'+
+  'table{width:100%;border-collapse:collapse;margin-top:20px;font-size:12px}'+
+  'th{text-align:left;background:#EDF3FD;color:#16479E;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;padding:7px 8px;border-bottom:2px solid #CBD9F0}'+
+  'td{padding:7px 8px;border-bottom:1px solid #E3E7EE}td.r,th.r{text-align:right}'+
+  'tfoot td{font-weight:800;border-top:2px solid #0B0B0B;border-bottom:0}'+
+  '.box{margin-top:18px;border:1px solid #E3E7EE;border-radius:10px;padding:14px;background:#F5F8FD}'+
+  '.ft{margin-top:26px;color:#6B7280;font-size:11px;border-top:1px solid #E3E7EE;padding-top:12px}'+
+  '@media print{body{padding:0}}';
+ var html='<!DOCTYPE html><html><head><meta charset="utf-8">'+
+  '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap"><style>'+css+'</style></head><body>'+
+  '<div class="hd"><div><h1>Cash-Back Receipt</h1><div class="mut">AERA Meal Preparation SDN BHD · 202001037122 ( 1393443-P )<br>35, Jalan Equine 9A, Taman Equine, 43300 Seri Kembangan, Selangor</div></div>'+
+  '<div style="text-align:right"><div class="mut">'+esc(monthLabel(mo))+'</div><div class="big">'+rm(sum(L,'Cashback'))+'</div><div class="mut">'+(paidAt?'Paid '+esc(paidAt):'Pending')+(ref?' · Ref '+esc(ref):'')+'</div></div></div>'+
+  '<div class="box"><b>'+esc(name)+'</b><div class="mut">Referral Code '+esc(code)+' · '+rate+'% of the meal subtotal · '+L.length+' order'+(L.length===1?'':'s')+' in '+esc(monthLabel(mo))+'</div></div>'+
+  '<table><thead><tr><th>Date</th><th>Order</th><th>Customer</th><th class="r">Meal Subtotal</th><th class="r">Rate</th><th class="r">Cash-Back</th></tr></thead><tbody>'+
+  L.slice().sort(function(a,b){return String(a.Date||'').localeCompare(String(b.Date||''))}).map(function(r){
+   return'<tr><td>'+esc(fmtDate(r.Date))+'</td><td>'+esc(r.OrderNo||'')+'</td><td>'+esc(r.Customer||'Customer')+'</td><td class="r">'+rm(r.Sales)+'</td><td class="r">'+(+r.Rate||0)+'%</td><td class="r">'+rm(r.Cashback)+'</td></tr>'}).join('')+
+  '</tbody><tfoot><tr><td colspan="3">Total</td><td class="r">'+rm(sum(L,'Sales'))+'</td><td></td><td class="r">'+rm(sum(L,'Cashback'))+'</td></tr></tfoot></table>'+
+  '<div class="ft">Cash-back is worked out on the meal subtotal after any discount. Delivery, packaging and processing fees are not included. Generated '+esc(fmtDate(new Date().toISOString()))+'.</div>'+
+  '</body></html>';
+ w.document.open();w.document.write(html);w.document.close();
+ setTimeout(function(){try{w.focus();w.print()}catch(e){}},600)}
+load();
+</script>
 <div class="aera-legal-foot" style="text-align:center;font-size:12px;opacity:.7;padding:24px 16px 40px;line-height:1.6">© 2026 AERA Meal Preparation SDN BHD · Seri Kembangan · <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a> · <a href="https://my.chatbees.io/p/xXH4dXALg" target="_blank" rel="noopener">Privacy Notice</a></div>
 <!-- AERA language switch : start -->
-
-
-
-
-
+<script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
+window.AERA_I18N={};window.AERA_I18N_RE=[];
+(function(){
+ var KEY='aera_lang',lang='en';
+ try{lang=localStorage.getItem(KEY)||'en'}catch(e){}
+ window.aeraLang=function(){var n=(lang==='zh')?'en':'zh';try{localStorage.setItem(KEY,n)}catch(e){}location.reload()};
+ if(lang!=='zh')return;
+ document.documentElement.setAttribute('data-lang','zh');
+ var D=window.AERA_I18N,R=window.AERA_I18N_RE,done=new WeakSet();
+ function tr(s){var k=String(s).replace(/\s+/g,' ').trim();if(!k)return null;
+  if(Object.prototype.hasOwnProperty.call(D,k))return D[k];
+  for(var i=0;i<R.length;i++){if(R[i][0].test(k))return k.replace(R[i][0],R[i][1])}
+  return null}
+ var SKIP={SCRIPT:1,STYLE:1,NOSCRIPT:1,TEXTAREA:1};
+ function node(n){if(done.has(n))return;var p=n.parentElement;if(!p||SKIP[p.tagName])return;if(p.closest('#langSw'))return;
+  var t=tr(n.nodeValue);if(t===null)return;done.add(n);
+  n.nodeValue=n.nodeValue.replace(/^(\s*)[\s\S]*?(\s*)$/,'$1'+t.replace(/\$/g,'$$')+'$2')}
+ var ATTR=['placeholder','title','aria-label','alt','value'];
+ function attrs(el){if(!el.getAttribute)return;if(el.closest&&el.closest('#langSw'))return;
+  for(var i=0;i<ATTR.length;i++){var a=ATTR[i];if(!el.hasAttribute(a))continue;
+   if(a==='value'&&!/^(button|submit|reset)$/i.test(el.type||''))continue;
+   var t=tr(el.getAttribute(a));if(t!==null)el.setAttribute(a,t)}}
+ function walk(root){if(root.nodeType===3){node(root);return}if(root.nodeType!==1)return;
+  attrs(root);root.querySelectorAll('*').forEach(attrs);
+  var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),n;while(n=w.nextNode())node(n)}
+ var q=false;
+ function run(){q=false;walk(document.body);var t=tr(document.title);if(t!==null)document.title=t}
+ function queue(){if(q)return;q=true;requestAnimationFrame(run)}
+ window.aeraRetranslate=queue;
+ function boot(){run();new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){if(ms[i].addedNodes.length||ms[i].type==='characterData'){queue();return}}}).observe(document.body,{childList:true,subtree:true,characterData:true});setInterval(queue,1200)}
+ if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
+})();
+</script>
+<script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
+Object.assign(window.AERA_I18N,{
+"Your Referral Code":"您的推荐码","Share it with friends, clients and members. Every Order placed with your code earns you Cash-Back, and they earn extra AERA Points.":"分享给朋友、客户和会员。每张用您推荐码下的订单都给您现金回馈，他们也会多赚 AERA 积分。","Send To An AERA Account":"发给 AERA 账户","Copy Code":"复制推荐码","Copy Link":"复制链接","Copied":"已复制",
+"Home":"首页","Order Now":"立即订购","Referrer Portal":"推荐人专区","Terms & Conditions":"条款与细则",
+"Your Cash-Back":"您的回扣","Every Order placed with your Referral Code, month by month. What it earned you, and what has been paid.":"每一笔使用您推荐码的订单，按月列出 — 为您赚了多少，以及已经付了多少。","Loading your figures…":"正在载入您的数字…","We could not load your figures just now. Please refresh the page.":"目前无法载入您的数字，请重新整理页面。","Nothing here yet.":"这里还没有内容。","Once someone orders with your Referral Code, every Order shows up here with the Cash-Back it earned you.":"只要有人使用您的推荐码下单，每一笔订单都会显示在这里，并附上为您赚到的回扣。","Year":"年","Month":"月","Sales This Month":"本月销售额","Cash-Back This Month":"本月回扣","Pending Cash-Back":"待付回扣","Across every month, not yet paid":"所有月份合计，尚未支付","Paid Cash-Back":"已付回扣","Received all time":"历来已收到","Awaiting payment":"等待付款","Date":"日期","Order":"订单","Customer":"顾客","Meal Subtotal":"餐点小计","Rate":"比率","Status":"状态","Total":"合计","Every Month":"所有月份","Orders":"订单数","Sales":"销售额","Cash-Back":"回扣","Receipt":"收据","Cash-Back Receipt":"回扣收据","Normal Referrer":"一般推荐人","Fitness Studio / Gym":"健身工作室 / 健身房","Fitness Influencer":"健身网红","Cashback":"回扣","Pending":"待付","Paid":"已付","Allow pop-ups for this page, then press the receipt button again.":"请允许此页面弹出视窗，然后再按一次收据按钮。","Referrer Portal — AERA Meal Prep":"推荐人专区 — AERA Meal Prep"
+});
+window.AERA_I18N_RE.push([/^([\d.]+)% of the meal subtotal$/,"餐点小计的 $1%"]);
+if(window.aeraRetranslate)window.aeraRetranslate();
+</script>
+<script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
+/* AERA-DATE-ZH : English dates -> Chinese, only when the page is in Chinese mode.
+   Dates come out of toLocaleDateString('en-MY',...) at render time, so they arrive
+   inside sentences the dictionary has already translated. This rewrites the date
+   wherever it sits in a text node and leaves the rest of the node alone. */
+(function(){
+ var M={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,sept:9,oct:10,nov:11,dec:12,
+  january:1,february:2,march:3,april:4,june:6,july:7,august:8,september:9,october:10,november:11,december:12};
+ var W={sun:'周日',mon:'周一',tue:'周二',tues:'周二',wed:'周三',thu:'周四',thur:'周四',thurs:'周四',fri:'周五',sat:'周六',
+  sunday:'星期日',monday:'星期一',tuesday:'星期二',wednesday:'星期三',thursday:'星期四',friday:'星期五',saturday:'星期六'};
+ function m(x){return M[String(x).toLowerCase()]}
+ function w(x){return W[String(x).toLowerCase()]}
+ var R=[
+  [/\b(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday), (\d{1,2}) (January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})\b/g,
+   function(_,a,d,mo,y){return y+'年'+m(mo)+'月'+d+'日 '+w(a)}],
+  [/\b(Sun|Mon|Tues|Tue|Thurs|Thur|Thu|Wed|Fri|Sat), (\d{1,2}) (Sept|Sep|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Nov|Dec) (\d{4})\b/g,
+   function(_,a,d,mo,y){return y+'年'+m(mo)+'月'+d+'日 '+w(a)}],
+  [/\b(Sun|Mon|Tues|Tue|Thurs|Thur|Thu|Wed|Fri|Sat), (\d{1,2}) (Sept|Sep|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Nov|Dec)\b/g,
+   function(_,a,d,mo){return m(mo)+'月'+d+'日 '+w(a)}],
+  [/\b(\d{1,2}) (January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})\b/g,
+   function(_,d,mo,y){return y+'年'+m(mo)+'月'+d+'日'}],
+  [/\b(\d{1,2}) (Sept|Sep|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Nov|Dec) (\d{4})\b/g,
+   function(_,d,mo,y){return y+'年'+m(mo)+'月'+d+'日'}],
+  [/\b(\d{1,2}) (January|February|March|April|May|June|July|August|September|October|November|December)\b/g,
+   function(_,d,mo){return m(mo)+'月'+d+'日'}],
+  [/\b(\d{1,2}) (Sept|Sep|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Nov|Dec)\b/g,
+   function(_,d,mo){return m(mo)+'月'+d+'日'}],
+  [/\b(January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})\b/g,
+   function(_,mo,y){return y+'年'+m(mo)+'月'}]
+ ];
+ var MO={jan:'1月',feb:'2月',mar:'3月',apr:'4月',may:'5月',jun:'6月',jul:'7月',aug:'8月',sep:'9月',sept:'9月',oct:'10月',nov:'11月',dec:'12月',
+  january:'1月',february:'2月',march:'3月',april:'4月',june:'6月',july:'7月',august:'8月',september:'9月',october:'10月',november:'11月',december:'12月'};
+ function conv(s){var o=s;for(var i=0;i<R.length;i++)o=o.replace(R[i][0],R[i][1]);return o}
+ window.__aeraDateZh=conv;
+ if(document.documentElement.getAttribute('data-lang')!=='zh')return;
+ var SKIP={SCRIPT:1,STYLE:1,NOSCRIPT:1,TEXTAREA:1},seen=new WeakMap();
+ function pass(){
+  var tw=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null),n;
+  while(n=tw.nextNode()){
+   var p=n.parentElement;if(!p||SKIP[p.tagName])continue;
+   if(p.closest&&p.closest('#langSw'))continue;
+   var v=n.nodeValue;if(seen.get(n)===v)continue;
+   var k=v.trim(),z=k&&MO[k.toLowerCase()];
+   if(z){if(z!==k)n.nodeValue=v.replace(k,z);seen.set(n,n.nodeValue);continue}
+   if(!/\d/.test(v)){seen.set(n,v);continue}
+   var t=conv(v);if(t!==v)n.nodeValue=t;
+   seen.set(n,n.nodeValue)}}
+ var q=false;
+ function queue(){if(q)return;q=true;requestAnimationFrame(function(){q=false;pass()})}
+ function boot(){pass();
+  new MutationObserver(queue).observe(document.body,{childList:true,subtree:true,characterData:true});
+  setInterval(queue,1200);
+  var prev=window.aeraRetranslate;
+  window.aeraRetranslate=function(){if(prev)prev();queue()}}
+ if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
+})();
+</script>
+<script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
+/* AERA-LEGAL-ZH */
+Object.assign(window.AERA_I18N||{},{"Terms & Conditions":"条款与条件","Privacy Notice":"隐私声明"});
+if(window.aeraRetranslate)window.aeraRetranslate();
+</script>
+<script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
+if(window.AERA_I18N)Object.assign(window.AERA_I18N,{"Date":"日期","Order":"订单","Customer":"客户","Meal Subtotal":"餐点小计","Rate":"比例","Your Cash-Back":"您的现金回馈","Status":"状态","Month":"月份","Orders":"订单数","Sales":"销售额","Cash-Back":"现金回馈","Cashback":"现金回馈","Pending":"待付款","Paid":"已付款","Normal Referrer":"一般推荐人","Fitness Studio / Gym":"健身工作室 / 健身房","Fitness Influencer":"健身网红","Allow pop-ups for this page, then press the receipt button again.":"请允许此页面的弹出窗口，然后再按一次收据按钮。","Loading your figures…":"正在载入您的数据…","Referrer Portal":"推荐人入口","Home":"首页","Order Now":"立即订购"});
+if(window.AERA_I18N_RE)window.AERA_I18N_RE.push([/^Paid (.+) · Ref (.+)$/,"已付款 $1 · 参考 $2"],
+ [/^Paid (.+)$/,"已付款 $1"],
+ [/^([\d.]+)% of the meal subtotal · (.+)$/,"餐点小计的 $1% · $2"],
+ [/^(\d+) orders?$/,"$1 笔订单"]);
+if(window.aeraRetranslate)window.aeraRetranslate();
+</script>
 <!-- AERA language switch : end -->
 
 <!-- AERA host map : start -->
-
+<script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
+(function(){
+  if(window.__AERA_HOSTMAP) return; window.__AERA_HOSTMAP=1;
+  if(/my\.chatbees\.io$/i.test(location.hostname)) return;
+  var MAP={"ZQr9fS2jA9":"/","xR3Dfd9n":"/fridge","D2pz8bZ":"/checkout","dtTMaV":"/account","SrQzC5m2":"/meal-plan",
+  "DSBcJ9bN4":"/bring-your-own-plan","8s4Xd6h":"/track","VMrvEw":"/merchandise","TVRk6bqam":"/corporate",
+  "G7mXL4RMz2":"/terms","xXH4dXALg":"/privacy","B2WjrKhnz":"/contact","DiB2ZadptP":"/thank-you",
+  "HkKJuxBS":"/referrer-portal","H9H32i9ShW":"/referrer-signup","ZmQYknnnM":"/points-checkout",
+  "8kZjg8U5XD":"/home-sourced-meals","vP2uvq":"/coach-plan-builder"};
+  function baseOf(){
+    var p=location.pathname.replace(/\/+$/,"");
+    for(var k in MAP){ var t=MAP[k];
+      if(t!=="/" && p.length>=t.length && p.slice(-t.length)===t) return p.slice(0,p.length-t.length); }
+    return p;
+  }
+  var BASE=baseOf();
+  function conv(u){
+    if(!u) return u;
+    var m=String(u).match(/^(?:https?:\/\/my\.chatbees\.io)?\/p\/([A-Za-z0-9]+)\/?(\?[^#]*)?(#.*)?$/);
+    if(!m) return u;
+    var t=MAP[m[1]]; if(!t) return u;
+    return location.origin+BASE+(t==="/"?"/":t+"/")+(m[2]||"")+(m[3]||"");
+  }
+  function fix(root){
+    if(!root||!root.querySelectorAll) return;
+    var a=root.querySelectorAll("a[href]");
+    for(var i=0;i<a.length;i++){ var o=a[i].getAttribute("href"), n=conv(o); if(n!==o) a[i].setAttribute("href",n); }
+  }
+  document.addEventListener("click",function(e){
+    var a=e.target&&e.target.closest?e.target.closest("a[href]"):null; if(!a) return;
+    var o=a.getAttribute("href"), n=conv(o); if(n!==o) a.setAttribute("href",n);
+  },true);
+  try{ var _o=window.open; window.open=function(u){ var x=[].slice.call(arguments); x[0]=conv(u); return _o.apply(window,x) }; }catch(e){}
+  try{ var la=Location.prototype.assign, lr=Location.prototype.replace;
+    Location.prototype.assign=function(u){ return la.call(this,conv(u)) };
+    Location.prototype.replace=function(u){ return lr.call(this,conv(u)) }; }catch(e){}
+  /* Chrome and Safari ignore the two lines above ( location.replace / .href cannot be re-wired ), so : */
+  window.aeraUrl=conv;
+  /* 1. re-point the page's own address settings ( HOME_URL, SHOP_URL, NEXT … ) at this site */
+  function sweep(){ try{ for(var k in window){ var v; try{ v=window[k] }catch(e){ continue }
+      if(typeof v==="string"){ var n=conv(v); if(n!==v) try{ window[k]=n }catch(e){} }
+      else if(v&&typeof v==="object"&&Object.getPrototypeOf(v)===Object.prototype){ for(var j in v){ if(typeof v[j]==="string"){ var n2=conv(v[j]); if(n2!==v[j]) try{ v[j]=n2 }catch(e){} } } } } }catch(e){} }
+  sweep(); document.addEventListener("DOMContentLoaded",sweep); window.addEventListener("load",sweep);
+  /* 2. last net : any jump to a my.chatbees.io page that has a home here lands here instead */
+  try{ if(window.navigation) navigation.addEventListener("navigate",function(e){
+      if(e.navigationType==="traverse"||!e.cancelable) return;
+      var u=e.destination&&e.destination.url, n=conv(u); if(u&&n!==u){ e.preventDefault(); location.href=n } }); }catch(e){}
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",function(){fix(document)});
+  else fix(document);
+  try{ new MutationObserver(function(ms){ for(var i=0;i<ms.length;i++){ var n=ms[i].addedNodes; for(var j=0;j<n.length;j++) if(n[j].nodeType===1) fix(n[j]); } })
+    .observe(document.documentElement,{childList:true,subtree:true}); }catch(e){}
+})();
+</script>
 <!-- AERA host map : end -->
 
 <!-- AERA theme : start -->
-
-
+<style id="aera-theme">
+/* Lines are AERA navy. Boxes people type into keep their light border so forms stay calm. */
+:root{--line:#16479E!important;--line2:#16479E!important}
+input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),select:not(:focus),textarea:not(:focus){border-color:#C8D2E2!important}
+.bmtrack{background:#E3E7EE!important}.thumb{background-color:#E3E7EE!important}
+/* the outer card on a page carries a bolder navy line, the boxes inside it stay fine */
+.card{border-width:2px!important;border-color:#16479E!important}
+.card .card{border-width:1px!important}
+/* Every button is either AERA yellow with black wording, or AERA navy with yellow wording. */
+.aera-yb{background:#FDB913!important;color:#0B0B0B!important;border-color:#FDB913!important}
+.aera-nb{background:#16479E!important;color:#FDB913!important;border-color:#16479E!important;box-shadow:none!important}
+.aera-nb:hover{background:#1D57BD!important;border-color:#1D57BD!important;color:#FDB913!important}
+.aera-nb svg{stroke:currentColor}
+</style>
+<script id="aera-theme-js">
+(function(){if(window.__aeraTheme)return;window.__aeraTheme=1;
+ var SEL='.btn,.at-btn';
+ function rgb(s){var m=String(s).match(/rgba?\(([^)]+)\)/);if(!m)return null;var p=m[1].split(',').map(parseFloat);return{r:p[0],g:p[1],b:p[2],a:p.length>3?p[3]:1}}
+ /* what the button was before the theme touched it : yellow stays yellow, red and green keep their warning colours, everything else turns navy */
+ function base(el){var c=el.className||'';
+  if(el.closest('.noaera')||/\b(ghost|btn-line|btn-w)\b/.test(c))return'x';
+  if(/\b(d|danger|del)\b/.test(c))return'x';
+  var cs=getComputedStyle(el),b=rgb(cs.backgroundColor),tc=rgb(cs.color);
+  if(tc&&tc.r>170&&tc.g<110&&tc.b<110)return'x';
+  if(b&&b.a>0.2){
+   if(b.r>230&&b.g>150&&b.g<215&&b.b<110)return'yb';
+   if(b.r>170&&b.g<110&&b.b<110)return'x';
+   if(b.g>150&&b.r<90&&b.b<140)return'x'}
+  /* a navy button would vanish on a navy band, so there it is AERA yellow instead */
+  for(var p=el.parentElement;p&&p!==document.documentElement;p=p.parentElement){var ps=getComputedStyle(p),pb=rgb(ps.backgroundColor);
+   if(!(pb&&pb.a>0.5)&&/gradient/.test(ps.backgroundImage))pb=rgb(ps.backgroundImage);
+   if(pb&&pb.a>0.5){if((0.299*pb.r+0.587*pb.g+0.114*pb.b)<110)return'yb';break}}
+  return'nb'}
+ function paint(){document.querySelectorAll(SEL).forEach(function(el){
+  var k=el.getAttribute('data-aera');if(!k){k=base(el);el.setAttribute('data-aera',k)}
+  if(k==='x')return;
+  /* a picked option ( .on ) is shown the other way round, so the choice still stands out */
+  var on=el.classList.contains('on')||el.classList.contains('active')||el.getAttribute('aria-pressed')==='true';
+  var want=(k==='yb')!==on?'aera-yb':'aera-nb',drop=want==='aera-yb'?'aera-nb':'aera-yb';
+  if(!el.classList.contains(want))el.classList.add(want);if(el.classList.contains(drop))el.classList.remove(drop)})}
+ var busy=0;function later(){if(busy)return;busy=1;try{paint()}finally{busy=0}}
+ function boot(){paint();new MutationObserver(later).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class','aria-pressed']})}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
+</script>
 <!-- AERA theme : end -->
 <!-- AERA zh extra : start -->
-
+<script id="aera-zh-extra">
+/* more Chinese for this page : added to the page's own translation list */
+(function(){try{var D=window.AERA_I18N=window.AERA_I18N||{},R=window.AERA_I18N_RE=window.AERA_I18N_RE||[];
+ Object.assign(D,{"Identity Verification": "身份验证", "Please verify your identity to access this page.": "请先验证身份才能查看此页面。", "Send Verification Code": "发送验证码", "Enter your email address": "请输入电邮地址", "Enter 6-digit PIN": "请输入 6 位数验证码", "Verify": "验证", "Verify Code": "验证", "Resend Code": "重新发送验证码", "Back": "返回"});
+ var go=function(){try{if(window.aeraRetranslate)window.aeraRetranslate()}catch(e){}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(go,50)});else setTimeout(go,50)}catch(e){}})();
+</script>
 <!-- AERA zh extra : end -->
 <!-- AERA site bar : start -->
-
-
+<style id="aera-bar-css">
+/* The homepage menu bar, on every customer page. Self-contained : every class starts ab-, so no
+   page's own styles reach it, and the page's own top bar is hidden underneath. */
+#aeraBar{position:sticky;top:0;z-index:900;background:#16479E;color:#fff;font-family:Montserrat,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;box-shadow:0 1px 0 rgba(255,255,255,.08) inset}
+#aeraBar *{box-sizing:border-box}
+#aeraBar button,#aeraBar a{width:auto;min-width:0;max-width:none;margin:0;text-transform:none;letter-spacing:normal;transform:none}
+#aeraBar .ab-in{display:flex;align-items:center;justify-content:space-between;gap:12px;height:66px;width:min(1400px,94vw);margin:0 auto}
+#aeraBar .ab-logo{flex:none;display:flex;align-items:center}
+#aeraBar .ab-logo img{height:34px;width:auto;display:block}
+#aeraBar .ab-r{display:flex;align-items:center;gap:12px;margin-left:auto}
+#aeraBar .ab-ic{position:relative;display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;border:0;cursor:pointer;text-decoration:none;flex:none;font-size:15px;line-height:1;transition:background .15s,color .15s;padding:0}
+#aeraBar .ab-ic:hover{background:rgba(255,255,255,.26);color:#FDB913}
+#aeraBar .ab-ic svg{width:20px;height:20px;display:block}
+#aeraBar .ab-badge{display:none;position:absolute;top:-3px;right:-5px;min-width:19px;height:19px;padding:0 5px;border-radius:99px;font-size:10.5px;font-weight:800;line-height:19px;text-align:center;box-shadow:0 0 0 2px #16479E}
+#aeraBar .ab-badge.red{background:#C8433B;color:#fff}
+#aeraBar .ab-badge.yel{background:#FDB913;color:#0B0B0B}
+#aeraBar .ab-lang{display:inline-flex;align-items:center;border:1px solid #CBD9F0;background:#fff;border-radius:99px;padding:2px;cursor:pointer;font:inherit;line-height:1;flex:none}
+#aeraBar .ab-lang span{display:block;padding:5px 9px;font-size:11.5px;font-weight:700;color:#16479E;border-radius:99px;white-space:nowrap}
+#aeraBar .ab-lang .l1{background:#16479E;color:#fff}
+html[data-lang="zh"] #aeraBar .ab-lang .l1{background:transparent;color:#16479E}
+html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
+#aeraBar .ab-txt{background:none;border:0;color:#fff;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;padding:0;opacity:.9;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;text-decoration:none}
+#aeraBar .ab-txt:hover,#aeraBar .ab-dd.open>.ab-txt{opacity:1;color:#FDB913}
+#aeraBar .ab-pill{display:inline-flex;align-items:center;padding:8px 15px;border-radius:999px;border:1.5px solid rgba(255,255,255,.6);color:#fff;font-size:12.5px;font-weight:700;text-decoration:none;white-space:nowrap}
+#aeraBar .ab-pill:hover{border-color:#FDB913;color:#FDB913}
+#aeraBar .ab-dd{position:relative}
+#aeraBar .ab-order{display:inline-flex;align-items:center;gap:6px;cursor:pointer;border:0;font:inherit;font-size:13px;font-weight:700;padding:10px 18px;border-radius:999px;background:#FDB913;color:#0B0B0B;box-shadow:0 6px 18px rgba(253,185,19,.28);white-space:nowrap}
+#aeraBar .ab-order:hover{background:#FFC93C}
+#aeraBar .ab-menu{display:none;position:absolute;right:0;top:calc(100% + 14px);min-width:246px;background:#fff;border:1px solid #E3E9F3;border-radius:14px;padding:7px;box-shadow:0 18px 44px rgba(11,40,81,.20);z-index:950;color:#0B1C36}
+#aeraBar .ab-dd.open>.ab-menu{display:block}
+#aeraBar .ab-menu a{display:block;padding:9px 12px;border-radius:9px;color:#0B1C36;font-size:13.5px;font-weight:600;text-decoration:none;white-space:nowrap}
+#aeraBar .ab-menu a:hover{background:#EEF3FB;color:#16479E}
+#aeraBar .ab-menu a small{display:block;font-weight:500;font-size:11.5px;color:#5A6B87;margin-top:1px}
+#aeraBar .ab-menu .ab-sep{height:1px;background:#E3E9F3;margin:6px 8px}
+#aeraBar .ab-menu .ab-who{padding:9px 12px 9px;font-size:12px;color:#5A6B87;font-weight:600;border-bottom:1px solid #E3E9F3;margin-bottom:5px}
+#aeraBar .ab-menu .ab-who b{display:block;color:#0B1C36;font-size:13.5px}
+#aeraBar .ab-menu .ab-go{display:flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 2px;padding:10px 12px;border-radius:10px;background:#16479E;color:#FDB913!important;font-weight:700}
+#aeraBar .ab-menu .ab-go:hover{background:#1D57BD}
+#aeraBar .ab-menu a.ab-out{color:#C8433B}
+#aeraBar .ab-menu a.ab-out:hover{background:#FBE5E3;color:#C8433B}
+#aeraBar .ab-burger{background:none;border:0;color:#fff;font-size:22px;line-height:1;cursor:pointer;padding:2px 4px;flex:none}
+#aeraBar .ab-panel{display:none;background:#0E3576;border-top:1px solid rgba(255,255,255,.14)}
+#aeraBar .ab-panel.open{display:block}
+#aeraBar .ab-panel .ab-pin{width:min(1400px,94vw);margin:0 auto;padding:10px 0 14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:24px}
+#aeraBar .ab-panel a{display:block;padding:9px 0;font-size:13.5px;font-weight:600;color:#fff;text-decoration:none;opacity:.92;border-bottom:1px solid rgba(255,255,255,.10)}
+#aeraBar .ab-panel a:hover{color:#FDB913}
+#aeraBar .ab-panel a.ab-out{color:#FFD9D4}
+#aeraBar .ab-guest{display:inline-flex;gap:12px;align-items:center}
+#aeraBar .ab-mobonly,#aeraBar .ab-panel a.ab-mobonly{display:none}
+@media(max-width:760px){#aeraBar .ab-acct,#aeraBar .ab-guest{display:none!important}#aeraBar .ab-mobonly,#aeraBar .ab-panel a.ab-mobonly{display:block}
+ #aeraBar .ab-in{gap:8px}#aeraBar .ab-r{gap:8px}#aeraBar .ab-order{padding:9px 13px;font-size:12.5px}
+ #aeraBar .ab-panel .ab-pin{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){#aeraBar .ab-in{width:calc(100vw - 24px);gap:10px}#aeraBar .ab-r{gap:6px}#aeraBar .ab-r:has(#abInbox) .ab-find{display:none}#aeraBar .ab-logo img{height:26px}#aeraBar .ab-lang span{padding:5px 6px;font-size:11px}
+ #aeraBar .ab-ic{width:34px;height:34px}#aeraBar .ab-find{font-size:17px}#aeraBar .ab-order{padding:8px 10px;font-size:12px}#aeraBar .ab-burger{padding:2px}#aeraBar .ab-menu{right:-40px;min-width:min(246px,calc(100vw - 24px))}
+ #aeraBar .ab-panel .ab-pin{grid-template-columns:1fr}}
+@media(max-width:360px){#aeraBar .ab-find{display:none}#aeraBar .ab-logo img{height:22px}}
+/* the page's own top bar steps aside */
+.ab-hidden-nav{display:none!important}
+</style>
+<script id="aera-bar-js">
+(function(){
+ if(window.__aeraBar)return;window.__aeraBar=1;
+ if(window.top!==window)return; /* not inside the homepage's embedded pages */
+ var H='https://aeramealprep.net',ACC=H+'/account/',CO=H+'/checkout/';
+ var SBU="https://swpprjvubgcdsojapaad.supabase.co",KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0";
+ var ZH={"My Account":"我的账户","Log In":"登录","Sign Up":"注册","Order Now":"立即订购","Signed in as":"已登录：","Order History":"订单记录","My Favourite Meal Plans":"我收藏的餐单","My Home-Sourced Meals":"我的自备餐点","AERA Points":"AERA 积分","Addresses":"收件地址","Settings":"账户设置","Referrer Portal":"推荐人专区","AERA Fridge":"AERA 冰柜","Log Out":"登出","Meal Bundles":"一周套餐","7 Days, Chef-Picked for your Goal":"7 天，主厨按您的目标挑选","À la Carte":"单点","Any Meals, your portion sizes":"任何餐点，按您的分量","Personalised Meal Plan":"个人定制餐单","Built to your Calories and Macros":"按您的热量和营养素设计","Merchandise":"周边商品","Spend your AERA Points":"用 AERA 积分兑换","Bundles":"套餐","Meals":"餐点","Personalised Plan":"个人定制计划","How It Works":"运作方式","Delivery":"配送","Gym Fridges":"健身房冰柜","FAQ":"常见问题","Track My Order":"追踪订单","Home":"首页"};
+ function zh(){try{return document.documentElement.getAttribute('data-lang')==='zh'||(localStorage.getItem('aera_lang')||'en')==='zh'}catch(e){return false}}
+ function t(s){return zh()&&ZH[s]?ZH[s]:s}
+ function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+ function acct(){try{var a=JSON.parse(localStorage.getItem('aera.account')||'null');return a&&a.email?a:null}catch(e){return null}}
+ var IC={find:'⌕',inbox:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-6.5A8 8 0 0 1 11 4h2a8 8 0 0 1 8 8z"/><path d="M8 11h8M8 15h5"/></svg>',
+  cart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2.5 3.5h2.6l2.3 11.2a1.6 1.6 0 0 0 1.6 1.3h8.7a1.6 1.6 0 0 0 1.6-1.2l1.7-7.3H6.1"/></svg>'};
+ function html(){var a=acct(),inn=!!a,fr=!!(a&&a.fridge);
+  var am='<div class="ab-who">'+t('Signed in as')+'<b>'+esc(a?(a.name||a.email):'')+'</b><a class="ab-go" href="'+ACC+'#orders">'+t('My Account')+' <span aria-hidden="true">→</span></a></div>'+
+   '<a href="'+ACC+'#orders">'+t('Order History')+'</a><a href="'+ACC+'#favs">'+t('My Favourite Meal Plans')+'</a><a href="'+ACC+'#home">'+t('My Home-Sourced Meals')+'</a>'+
+   '<a href="'+ACC+'#points">'+t('AERA Points')+'</a><a href="'+ACC+'#addresses">'+t('Addresses')+'</a><a href="'+ACC+'#details">'+t('Settings')+'</a>'+
+   '<div class="ab-sep"></div><a href="'+H+'/referrer-portal/">'+t('Referrer Portal')+'</a>'+(fr?'<a href="'+H+'/fridge/">'+t('AERA Fridge')+'</a>':'')+
+   '<div class="ab-sep"></div><a href="#" class="ab-out" data-ab="out">'+t('Log Out')+'</a>';
+  var om='<a href="'+H+'/#bundles">'+t('Meal Bundles')+'<small>'+t('7 Days, Chef-Picked for your Goal')+'</small></a><a href="'+H+'/#meals">'+t('À la Carte')+'<small>'+t('Any Meals, your portion sizes')+'</small></a>'+
+   '<a href="'+H+'/meal-plan/">'+t('Personalised Meal Plan')+'<small>'+t('Built to your Calories and Macros')+'</small></a><a href="'+H+'/merchandise/">'+t('Merchandise')+'<small>'+t('Spend your AERA Points')+'</small></a>';
+  var pn=[['/#bundles','Bundles'],['/#meals','Meals'],['/meal-plan/','Personalised Plan'],['/merchandise/','Merchandise'],['/#how','How It Works'],['/#delivery','Delivery'],['/#gyms','Gym Fridges'],['/#faq','FAQ'],['/#faq-points','AERA Points'],['/track/','Track My Order'],['/referrer-portal/','Referrer Portal']]
+   .map(function(x){return '<a href="'+H+x[0]+'">'+t(x[1])+'</a>'}).join('')+(fr?'<a href="'+H+'/fridge/">'+t('AERA Fridge')+'</a>':'')+
+   (inn?'<a class="ab-mobonly" href="'+ACC+'#orders">'+t('My Account')+'</a><a class="ab-mobonly ab-out" href="#" data-ab="out">'+t('Log Out')+'</a>'
+       :'<a class="ab-mobonly" href="'+ACC+'#login">'+t('Log In')+'</a><a class="ab-mobonly" href="'+ACC+'#signup">'+t('Sign Up')+'</a>');
+  return '<div class="ab-in"><a class="ab-logo" href="'+H+'/" aria-label="AERA Meal Prep">'+LOGOIMG+'</a><div class="ab-r">'+
+   '<a class="ab-ic ab-find" href="'+H+'/?find=1" aria-label="Search">'+IC.find+'</a>'+
+   '<button type="button" class="ab-lang" data-ab="lang" aria-label="Language / 语言"><span class="l1">EN</span><span class="l2">中文</span></button>'+
+   (inn?'<div class="ab-dd ab-acct"><button type="button" class="ab-txt" data-ab="acct" aria-haspopup="true">'+t('My Account')+' <span aria-hidden="true">▾</span></button><div class="ab-menu">'+am+'</div></div>'+
+        '<a class="ab-ic" id="abInbox" href="'+ACC+'#inbox" aria-label="Inbox">'+IC.inbox+'<span class="ab-badge red" id="abInboxN"></span></a>'
+       :'<span class="ab-guest"><a class="ab-txt" href="'+ACC+'#login">'+t('Log In')+'</a><a class="ab-pill" href="'+ACC+'#signup">'+t('Sign Up')+'</a></span>')+
+   '<a class="ab-ic" id="abCart" href="'+CO+'#cart" aria-label="Cart" data-ab="cart">'+IC.cart+'<span class="ab-badge yel" id="abCartN"></span></a>'+
+   '<div class="ab-dd ab-ord"><button type="button" class="ab-order" data-ab="ord" aria-haspopup="true">'+t('Order Now')+' <span aria-hidden="true">▾</span></button><div class="ab-menu">'+om+'</div></div>'+
+   '<button type="button" class="ab-burger" data-ab="burger" aria-label="Menu">☰</button></div></div>'+
+   '<div class="ab-panel"><div class="ab-pin">'+pn+'</div></div>'}
+ var LOGOIMG='';
+ function grabLogo(){/* the page's own AERA logo, so nothing extra is downloaded */
+  var im=document.querySelector('body > nav img, nav img[alt*="AERA"], header img[alt*="AERA"]');
+  LOGOIMG=im?'<img src="'+esc(im.getAttribute('src'))+'" alt="AERA Meal Prep">':'<b style="font-weight:900;letter-spacing:.12em;color:#fff">AERA</b>'}
+ var bar=null;
+ function paint(){if(!bar)return;bar.innerHTML=html();counts()}
+ function counts(){var n=0;try{var c=JSON.parse(localStorage.getItem('aera.cart')||'{}')||{};Object.keys(c).forEach(function(k){n+=Math.max(0,+c[k]||0)})}catch(e){}
+  var cb=document.getElementById('abCartN');if(cb){cb.textContent=n>9?'9+':(n?String(n):'');cb.style.display=n?'inline-block':'none'}
+  var u=0;try{u=+localStorage.getItem('aera.inboxUnread')||0}catch(e){}var ib=document.getElementById('abInboxN');if(ib){ib.textContent=u>9?'9+':(u?String(u):'');ib.style.display=u?'inline-block':'none'}}
+ function inboxLive(){var tok=null,uid=null,em='';try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var o=JSON.parse(localStorage.getItem(k)||'null');if(o&&o.access_token){tok=o.access_token;uid=o.user&&o.user.id;em=String(o.user&&o.user.email||'').toLowerCase()}}}}catch(e){}
+  if(!tok||!uid)return;var hd={apikey:KEY,Authorization:'Bearer '+tok};
+  var d=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kuala_Lumpur'}));var td=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+  Promise.all([fetch(SBU+'/rest/v1/inbox_messages?select=id,to_email,ends_at&withdrawn_at=is.null&limit=150',{headers:hd}).then(function(r){return r.ok?r.json():null}),
+   fetch(SBU+'/rest/v1/inbox_reads?select=message_id&user_id=eq.'+uid,{headers:hd}).then(function(r){return r.ok?r.json():null}),
+   fetch(SBU+'/rest/v1/inbox_hidden?select=message_id&user_id=eq.'+uid,{headers:hd}).then(function(r){return r.ok?r.json():[]}).catch(function(){return []})])
+  .then(function(a){if(!a[0]||!a[1])return;var rd={};a[1].concat(a[2]||[]).forEach(function(x){rd[x.message_id]=1});
+   var n=a[0].filter(function(m){return (!m.ends_at||m.ends_at>=td)&&(!m.to_email||String(m.to_email).toLowerCase()===em)&&!rd[m.id]}).length;
+   try{localStorage.setItem('aera.inboxUnread',String(n))}catch(e){}counts()}).catch(function(){})}
+ function closeAll(keep){[].forEach.call(bar.querySelectorAll('.ab-dd.open'),function(d){if(d!==keep)d.classList.remove('open')});
+  if(keep!=='panel'){var p=bar.querySelector('.ab-panel');if(p)p.classList.remove('open')}}
+ function onClick(e){var b=e.target.closest('[data-ab]');
+  if(!b){if(!e.target.closest('#aeraBar .ab-menu')&&!e.target.closest('#aeraBar .ab-panel'))closeAll();return}
+  var k=b.getAttribute('data-ab');
+  if(k==='acct'||k==='ord'){e.preventDefault();var dd=b.parentNode;var was=dd.classList.contains('open');closeAll(dd);dd.classList.toggle('open',!was);return}
+  if(k==='burger'){e.preventDefault();var pp=bar.querySelector('.ab-panel'),op=pp.classList.contains('open');closeAll();pp.classList.toggle('open',!op);return}
+  if(k==='lang'){e.preventDefault();if(typeof window.aeraLang==='function')window.aeraLang();else{try{localStorage.setItem('aera_lang',zh()?'en':'zh')}catch(x){}location.reload()}setTimeout(paint,60);return}
+  if(k==='cart'){if(/\/checkout\/?$/.test(location.pathname)&&typeof window.openCart==='function'){e.preventDefault();window.openCart()}return}
+  if(k==='out'){e.preventDefault();try{['aera.account','aera.refLock'].forEach(function(x){localStorage.removeItem(x)})}catch(x){}location.href=ACC+'#logout';return}}
+ /* the page's own top bar : a <nav> first in the page, or a slim header / top strip with no heading or
+    form in it. A hero header keeps its heading and only loses its logo-and-buttons row. */
+ function hideOld(){var b=document.body;var first=[].filter.call(b.children,function(e){return !/^(SCRIPT|STYLE|LINK|NOSCRIPT|TEMPLATE)$/.test(e.tagName)&&e.id!=='aeraBar'})[0];if(!first)return;
+  if(first.tagName==='NAV'){first.classList.add('ab-hidden-nav');return}
+  var row=first.querySelector('.brandrow');if(row&&first.querySelector('h1')){row.classList.add('ab-hidden-nav');return}
+  if((first.tagName==='HEADER'||(first.tagName==='DIV'&&first.classList.contains('top')))&&!first.querySelector('h1,h2,form,input,textarea'))first.classList.add('ab-hidden-nav')}
+ function boot(){if(document.getElementById('aeraBar'))return;
+  grabLogo();
+  /* the page's own top bar steps aside ( it stays in the page, so nothing that reads it breaks ) */
+  hideOld();
+  bar=document.createElement('div');bar.id='aeraBar';bar.className='noi18n';bar.setAttribute('role','navigation');
+  document.body.insertBefore(bar,document.body.firstChild);paint();
+  /* pages whose body is a centred flex / grid box ( Contact, Thank You ) : the bar goes full width on top, the page's card stays centred below it */
+  try{var bs=getComputedStyle(document.body);if(/flex|grid/.test(bs.display)){var st=document.body.style;
+   if(bs.display.indexOf('flex')>=0){st.flexDirection='column';st.flexWrap='nowrap';st.justifyContent='flex-start'}
+   bar.style.alignSelf='stretch';bar.style.justifySelf='stretch';bar.style.gridColumn='1 / -1';bar.style.width='auto';
+   bar.style.margin='-'+bs.paddingTop+' -'+bs.paddingRight+' 0 -'+bs.paddingLeft;
+   [].forEach.call(document.body.children,function(c){if(c!==bar&&!/^(SCRIPT|STYLE|LINK|NOSCRIPT|TEMPLATE)$/.test(c.tagName)){c.style.marginTop=c.style.marginTop||'auto';c.style.marginBottom=c.style.marginBottom||'auto';c.style.maxWidth=c.style.maxWidth||'100%'}})}}catch(e){}
+  document.addEventListener('click',onClick);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAll()});
+  try{new MutationObserver(function(){paint()}).observe(document.documentElement,{attributes:true,attributeFilter:['data-lang']})}catch(e){}
+  window.addEventListener('storage',function(e){if(!e.key||/^aera\.(cart|account|inboxUnread)$/.test(e.key))paint()});
+  window.addEventListener('pageshow',paint);window.addEventListener('focus',function(){counts()});
+  setInterval(counts,4000);inboxLive()}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
+</script>
 <!-- AERA site bar : end -->
-  <script src="script.js"></script>
+<script>window.AERA_APP={"key": "ref", "name": "AERA Referrer Portal", "short": "AERA Referrer", "scopePath": "/referrer-portal/", "link": "https://aeramealprep.net/referrer-portal/?install=1", "mount": "#aeraBar .ab-r", "barTitle": "Get The AERA Referrer App", "howTitle": "Add AERA Referrer To Your Home Screen", "done": "That is it. Open AERA Referrer from your Home Screen to see your Cash-Back.", "zh": {"Get The AERA Referrer App": "AERA 推荐人 App", "Add AERA Referrer To Your Home Screen": "把 AERA 推荐人加到主屏幕", "That is it. Open AERA Referrer from your Home Screen to see your Cash-Back.": "完成！以后从主屏幕打开 AERA 推荐人，查看您的回馈金。"}};</script>
+<!-- AERA app kit : start -->
+<style id="aera-app-kit">
+.aera-getapp{display:inline-flex;align-items:center;gap:6px;background:#FDB913!important;color:#0B1C36!important;border:0!important;border-radius:999px!important;padding:8px 14px!important;font:inherit;font-size:12.5px!important;font-weight:800!important;cursor:pointer;white-space:nowrap;line-height:1.2;text-decoration:none;flex:none;box-shadow:none}
+.aera-getapp svg{flex:0 0 auto;width:15px;height:15px}
+@media(max-width:600px){.aera-getapp span{display:none}.aera-getapp{padding:0!important;width:38px;height:38px;justify-content:center}.aera-getapp svg{width:19px;height:19px}}
+@media (display-mode: standalone){.aera-getapp,#aaBar{display:none!important}}
+#aaBar{display:none;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:2147483000;background:#0E3576;color:#fff;padding:12px 12px 12px 14px;gap:12px;align-items:center;font:13px/1.35 Montserrat,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;border:1px solid #FDB913;border-radius:16px;box-shadow:0 10px 30px rgba(11,28,54,.35)}
+#aaBar.show{display:flex}
+#aaBar img{width:40px;height:40px;border-radius:10px;flex:0 0 40px;background:#16479E}
+#aaBar .t{flex:1 1 auto;min-width:0}
+#aaBar b{display:block;font-size:14px;color:#FDB913}
+#aaBar button{border:0;border-radius:10px;font:inherit;font-weight:800;cursor:pointer;padding:9px 14px;width:auto;margin:0}
+#aaBar .go{background:#FDB913;color:#0B1C36}
+#aaBar .x{background:transparent;color:#fff;opacity:.75;padding:9px 6px;font-size:18px;line-height:1}
+#aaHow{position:fixed;inset:0;z-index:2147483001;background:rgba(11,28,54,.55);display:none;align-items:flex-end;justify-content:center;padding:16px;font:14px/1.45 Montserrat,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+#aaHow.show{display:flex}
+#aaHow .sh{background:#fff;color:#0B1C36;border:1px solid #16479E;border-radius:18px;max-width:420px;width:100%;padding:20px 18px calc(18px + env(safe-area-inset-bottom));text-align:left}
+#aaHow h3{margin:0 0 8px;font-size:17px;color:#16479E}
+#aaHow p{margin:0 0 10px}
+#aaHow ol{margin:0 0 14px;padding-left:20px;font-size:14.5px}
+#aaHow li{margin:6px 0}
+#aaHow .ok{width:100%;background:#16479E;color:#FDB913;border:0;border-radius:12px;padding:12px;font:inherit;font-weight:800;cursor:pointer}
+#aaHow .qr{display:flex;justify-content:center;margin:6px 0 12px}
+#aaHow .qr img,#aaHow .qr canvas{border:8px solid #fff;border-radius:10px;outline:1px solid #16479E}
+#aaHow .lnk{display:block;text-align:center;font-weight:700;color:#16479E;word-break:break-all;margin:0 0 12px}
+#aaArrow{position:fixed;z-index:2147483002;left:50%;bottom:calc(6px + env(safe-area-inset-bottom));transform:translateX(-50%);display:none;flex-direction:column;align-items:center;color:#FDB913;font:800 13px Montserrat,sans-serif;text-shadow:0 1px 3px rgba(0,0,0,.5);pointer-events:none}
+#aaArrow.show{display:flex;animation:aaBob 1s ease-in-out infinite}
+#aaArrow.top{bottom:auto;top:calc(6px + env(safe-area-inset-top));left:auto;right:64px;transform:none;flex-direction:column-reverse}
+@keyframes aaBob{0%,100%{margin-bottom:0}50%{margin-bottom:10px}}
+</style>
+<script id="aera-app-kit-js">
+/* "Get The App" : one button that puts this page on the phone's Home Screen as an app.
+   Android installs in one tap; iPhone gets Safari's two Share steps with an arrow; a computer
+   gets a QR code to scan. Each page sets window.AERA_APP ( name, link, manifest, where the
+   button sits ). */
+(function(){try{
+ var C=window.AERA_APP;if(!C||window.top!==window)return;
+ var I='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push?icon=';
+ var D=window.AERA_I18N=window.AERA_I18N||{};
+ Object.assign(D,{"Get The App":"下载 App","Install":"安装","Got It":"知道了",
+  "Add it to your Home Screen. It opens full screen, no App Store needed.":"加到手机主屏幕，全屏打开，无需 App Store。",
+  "Tap the Share button below ( the square with an arrow ).":"点下方的分享按钮（带箭头的方框）。",
+  "Tap the Share button at the top ( the square with an arrow ).":"点上方的分享按钮（带箭头的方框）。",
+  "Choose Add to Home Screen, then tap Add.":"选择「添加到主屏幕」，再点「添加」。",
+  "Open your browser menu ( ⋮ at the top right ).":"打开浏览器菜单（右上角的 ⋮）。","Tap Install app or Add to Home screen.":"点「安装应用」或「添加到主屏幕」。",
+  "Scan With Your Phone":"用手机扫描","Point your phone camera at this code, open the link, then press Get The App.":"用手机相机扫这个二维码，打开链接，再点「下载 App」。",
+  "Open This Page In Safari":"请用 Safari 打开","Adding to the Home Screen only works in Safari on iPhone. Copy this link into Safari, then press Get The App.":"iPhone 只能在 Safari 添加到主屏幕。请把这个链接复制到 Safari，再点「下载 App」。",
+  "Share":"分享"});
+ if(C.zh)Object.assign(D,C.zh);
+ function meta(n,v){if(document.querySelector('meta[name="'+n+'"]'))return;var m=document.createElement('meta');m.name=n;m.content=v;document.head.appendChild(m)}
+ meta('theme-color','#16479E');meta('mobile-web-app-capable','yes');meta('apple-mobile-web-app-capable','yes');
+ meta('apple-mobile-web-app-title',C.short);meta('apple-mobile-web-app-status-bar-style','default');
+ if(!document.querySelector('link[rel="apple-touch-icon"]')){var ti=document.createElement('link');ti.rel='apple-touch-icon';ti.href=I+'180';document.head.appendChild(ti)}
+ if(!document.querySelector('link[rel="manifest"]')){var ml=document.createElement('link');ml.rel='manifest';
+  ml.href=C.manifestUrl||('data:application/manifest+json,'+encodeURIComponent(JSON.stringify({name:C.name,short_name:C.short,id:C.scopePath,
+   start_url:'https://aeramealprep.net'+C.scopePath+'?app=1',scope:'https://aeramealprep.net'+C.scopePath,display:'standalone',background_color:'#16479E',theme_color:'#16479E',
+   icons:[{src:I+'192',sizes:'192x192',type:'image/png',purpose:'any'},{src:I+'512',sizes:'512x512',type:'image/png',purpose:'any'},{src:I+'512',sizes:'512x512',type:'image/png',purpose:'maskable'}]})));
+  document.head.appendChild(ml)}
+ var SA=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;if(SA)return;
+ var P=null,K='aera.app.hide.'+C.key,ua=navigator.userAgent;
+ var ios=/iP(hone|ad|od)/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ var ipad=/iPad/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ var iosOther=ios&&/CriOS|FxiOS|EdgiOS|OPiOS|GSA|FBAN|FBAV|Instagram|Line|WhatsApp/i.test(ua);
+ var phone=ios||/Android/i.test(ua);
+ function el(id){return document.getElementById(id)}
+ function sheet(on,html){var s=el('aaHow');if(!s)return;if(html)s.querySelector('.sh').innerHTML=html;s.classList.toggle('show',!!on);var a=el('aaArrow');if(a&&!on)a.classList.remove('show')}
+ function bar(on){var b=el('aaBar');if(!b)return;if(on){if(!phone)return;try{if(localStorage.getItem(K)==='1')return}catch(e){}}b.classList.toggle('show',!!on)}
+ function steps(l){return'<h3>'+C.howTitle+'</h3><ol>'+l.map(function(s){return'<li>'+s+'</li>'}).join('')+'</ol><button type="button" class="ok">Got It</button>'}
+ function qr(){sheet(true,'<h3>Scan With Your Phone</h3><p>Point your phone camera at this code, open the link, then press Get The App.</p><div class="qr" id="aaQr"></div><span class="lnk">'+C.link.replace(/^https:\/\//,'').replace(/\?.*$/,'')+'</span><button type="button" class="ok">Got It</button>');
+  function draw(){try{new window.QRCode(el('aaQr'),{text:C.link,width:210,height:210,colorDark:'#0B1C36',colorLight:'#ffffff'})}catch(e){el('aaQr').innerHTML='<span class="lnk">'+C.link+'</span>'}}
+  if(window.QRCode)return draw();var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';s.onload=draw;s.onerror=draw;document.head.appendChild(s)}
+ function go(e){if(e&&e.preventDefault)e.preventDefault();
+  if(P){var p=P;P=null;p.prompt();p.userChoice.then(function(c){if(c&&c.outcome==='accepted')bar(false)});return}
+  if(!phone)return qr();
+  if(iosOther)return sheet(true,'<h3>Open This Page In Safari</h3><p>Adding to the Home Screen only works in Safari on iPhone. Copy this link into Safari, then press Get The App.</p><span class="lnk">'+C.link.replace(/^https:\/\//,'').replace(/\?.*$/,'')+'</span><button type="button" class="ok">Got It</button>');
+  if(ios){sheet(true,steps([ipad?'Tap the Share button at the top ( the square with an arrow ).':'Tap the Share button below ( the square with an arrow ).','Choose Add to Home Screen, then tap Add.',C.done]));
+   var a=el('aaArrow');if(a){a.classList.toggle('top',ipad);a.classList.add('show')}return}
+  sheet(true,steps(['Open your browser menu ( ⋮ at the top right ).','Tap Install app or Add to Home screen.',C.done]))}
+ window.aeraGetApp=go;
+ window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();P=e;bar(true)});
+ window.addEventListener('appinstalled',function(){bar(false);sheet(false)});
+ var BTN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M12 7v7M9 11l3 3 3-3"/></svg><span>Get The App</span>';
+ function mount(){if(el('aaGetApp'))return true;var host=document.querySelector(C.mount);if(!host)return false;
+  var b=document.createElement('button');b.type='button';b.id='aaGetApp';b.className='aera-getapp';b.setAttribute('aria-label','Get The App');b.innerHTML=BTN;b.onclick=go;
+  host.insertBefore(b,host.firstChild);return true}
+ function build(){
+  if(!mount()){var n=0,iv=setInterval(function(){if(mount()||++n>60)clearInterval(iv)},250)}
+  if(!el('aaHow')){var h=document.createElement('div');h.id='aaHow';h.innerHTML='<div class="sh"></div>';document.body.appendChild(h);
+   h.onclick=function(e){if(e.target===h||e.target.classList.contains('ok'))sheet(false)}}
+  if(!el('aaArrow')){var a=document.createElement('div');a.id='aaArrow';a.innerHTML='<span>Share</span><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v15M5 12l7 7 7-7"/></svg>';document.body.appendChild(a)}
+  if(phone&&!el('aaBar')){var r=document.createElement('div');r.id='aaBar';
+   r.innerHTML='<img src="'+I+'192" alt=""><div class="t"><b>'+C.barTitle+'</b><span>Add it to your Home Screen. It opens full screen, no App Store needed.</span></div><button type="button" class="go">Install</button><button type="button" class="x" aria-label="Close">×</button>';
+   document.body.appendChild(r);r.querySelector('.go').onclick=go;
+   r.querySelector('.x').onclick=function(){r.classList.remove('show');try{localStorage.setItem(K,'1')}catch(e){}};bar(true)}
+  if(/[?&]install=1/.test(location.search)&&ios)setTimeout(go,600)}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build);else build();
+}catch(e){}})();
+</script>
+<!-- AERA app kit : end -->
 </body>
 </html>
