@@ -1241,7 +1241,7 @@ function renderPhone(){var el=$('#phoneBox');if(!el)return;
     saved&&same?'<span class="chip">Not verified yet</span>':'')+
   '</div></div>';
  if(PV.stage==='sent'){
-  h+='<div class="f2" style="margin-top:10px"><div><label class="lb">8-Digit Code</label><input type="text" id="pCode" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="12345678"></div>'+
+  h+='<div class="f2" style="margin-top:10px"><div><label class="lb">6-Digit Code</label><input type="text" id="pCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456"></div>'+
      '<div style="display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap"><button class="btn btn-k" type="button" id="pvBtn" onclick="phoneVerify()">Confirm '+esc(phonePretty(PV.phone||saved))+'</button>'+
      '<button class="btn btn-o" type="button" onclick="PV.stage=\'idle\';pvMsg(\'\')">Cancel</button></div></div>'+
      '<div class="hint">We sent a code to '+esc(USER.email)+'. It is good for one hour.</div>';
@@ -3169,7 +3169,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
   "Your delivery is less than 4 days away. Moving it now is late notice and":"距离配送不到 4 天，现在改期属于迟通知，","comes off your AERA Credit.":"将从您的 AERA 储值金扣除。"});
  R.unshift([/^in (\d+) days?$/,"$1 天后"],[/^Move (.+) To$/,function(m,x){return '把 '+dz(x)+' 改到'}]);
  /* mobile number verification */
- Object.assign(D,{"Verified":"已验证","Not verified yet":"尚未验证","8-Digit Code":"8 位数验证码","Send Me A Code":"发送验证码","Sending…":"发送中…",
+ Object.assign(D,{"Verified":"已验证","Not verified yet":"尚未验证","6-Digit Code":"6 位数验证码","Send Me A Code":"发送验证码","Sending…":"发送中…",
   "Enter a Malaysian mobile number.":"请输入马来西亚手机号码。","That does not look like a Malaysian mobile number.":"这看起来不像马来西亚手机号码。",
   "That mobile number is already on another AERA account.":"这个手机号码已绑定另一个 AERA 账户。"});
  R.unshift([/^Confirm (\+\d+)$/,"确认 $1"],[/^We sent a code to (.+)\. It is good for one hour\.$/,"验证码已发送到 $1，一小时内有效。"]);
