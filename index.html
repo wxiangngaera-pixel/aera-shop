@@ -2898,7 +2898,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),selec
   var b=document.createElement('button');b.type='button';b.id='aaGetApp';b.className='aera-getapp';b.setAttribute('aria-label','Get The App');b.innerHTML=BTN;b.onclick=go;
   host.insertBefore(b,host.firstChild);return true}
  function build(){
-  if(!mount()){var n=0,iv=setInterval(function(){if(mount()||++n>60)clearInterval(iv)},250)}
+  mount();try{new MutationObserver(function(){if(!el('aaGetApp'))mount()}).observe(document.body,{childList:true,subtree:true})}catch(e){}
   if(!el('aaHow')){var h=document.createElement('div');h.id='aaHow';h.innerHTML='<div class="sh"></div>';document.body.appendChild(h);
    h.onclick=function(e){if(e.target===h||e.target.classList.contains('ok'))sheet(false)}}
   if(!el('aaArrow')){var a=document.createElement('div');a.id='aaArrow';a.innerHTML='<span>Share</span><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v15M5 12l7 7 7-7"/></svg>';document.body.appendChild(a)}
