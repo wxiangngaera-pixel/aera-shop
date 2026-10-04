@@ -558,27 +558,6 @@ html[data-lang="zh"] .langsw .l1{background:transparent;color:var(--navy,#16479E
 html[data-lang="zh"] .langsw .l2{background:var(--navy,#16479E);color:#fff}
 @media(max-width:900px){.langsw span{padding:5px 7px;font-size:11px}}
 
-/* phones : the top bar keeps to one row and never runs off the screen. Log In, Sign Up and My Account move into the ☰ menu. */
-@media(max-width:480px){nav .wrap{width:calc(100vw - 24px)!important;gap:10px!important}#navSignup,#navLogin,.navr .acct{display:none!important}.navr{gap:6px!important}.findbtn,.cartic,.inboxbtn{width:34px!important;height:34px!important}.findbtn{font-size:17px!important}.langsw span{padding:5px 6px!important;font-size:11px!important}.navr .ordbtn{padding:8px 10px!important;font-size:12px!important}.navtoggle{padding:2px!important}nav.signedin .findbtn{display:none!important}}
-@media(max-width:360px){.findbtn{display:none!important}nav img{height:22px!important}}
-/* tablets and small screens : Log In, Sign Up and My Account live in the ☰ menu, the same as the bar on the other pages */@media(max-width:760px){#navSignup,#navLogin,.navr .acct{display:none!important}}
-
-/* phones : the Menu shows two Meals a row, each card compact */
-@media(max-width:600px){
-#mealGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
-#mealGrid .meal{border-radius:12px}
-#mealGrid .meal img{aspect-ratio:4/3;object-fit:cover;transform:scale(1.25);transform-origin:50% 50%}
-#mealGrid .meal .body{position:relative;z-index:1;background:var(--card,#fff);padding:9px 9px 11px;gap:6px}
-#mealGrid .meal .goal{font-size:10.5px}
-#mealGrid .meal .name{font-size:12.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
-#mealGrid .macros{gap:0;font-size:8.5px;padding:5px 0;letter-spacing:0}
-#mealGrid .macros b{font-size:11.5px}
-#mealGrid .meal .row{flex-direction:column;align-items:stretch;gap:7px}
-#mealGrid .meal .p{font-size:15.5px}
-#mealGrid .meal .btn{width:100%;padding:8px 6px!important;font-size:12px!important;text-align:center;justify-content:center}
-#mealGrid .meal .oosnote{font-size:10.5px;padding:6px 8px}
-}
-
 #hub{padding:30px 0 56px}
 #hub .hubg+.hubg{margin-top:34px}
 #hub .hubg>.eyebrow{display:block;margin-bottom:14px}
@@ -710,16 +689,3 @@ html[data-lang="zh"] .langsw .l2{background:var(--navy,#16479E);color:#fff}
 
 .inboxbtn{position:relative;display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;flex:none;text-decoration:none}.inboxbtn:hover{background:rgba(255,255,255,.26);color:var(--y)}.inboxbtn svg{width:20px;height:20px;display:block}nav.signedout .inboxbtn{display:none}
 .hbn{display:none;position:absolute;top:-3px;right:-5px;min-width:19px;height:19px;padding:0 5px;border-radius:99px;background:#C8433B;color:#fff;font-size:10.5px;font-weight:800;line-height:19px;text-align:center;box-shadow:0 0 0 2px var(--navy)}
-
-/* Lines are AERA navy. Boxes people type into keep their light border so forms stay calm. */
-:root{--line:#16479E!important;--line2:#16479E!important}
-input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),select:not(:focus),textarea:not(:focus){border-color:#C8D2E2!important}
-.bmtrack{background:#E3E7EE!important}.thumb{background-color:#E3E7EE!important}
-/* the outer card on a page carries a bolder navy line, the boxes inside it stay fine */
-.card{border-width:2px!important;border-color:#16479E!important}
-.card .card{border-width:1px!important}
-/* Every button is either AERA yellow with black wording, or AERA navy with yellow wording. */
-.aera-yb{background:#FDB913!important;color:#0B0B0B!important;border-color:#FDB913!important}
-.aera-nb{background:#16479E!important;color:#FDB913!important;border-color:#16479E!important;box-shadow:none!important}
-.aera-nb:hover{background:#1D57BD!important;border-color:#1D57BD!important;color:#FDB913!important}
-.aera-nb svg{stroke:currentColor}
