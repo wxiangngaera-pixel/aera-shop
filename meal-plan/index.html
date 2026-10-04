@@ -1387,5 +1387,52 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(go,50)});else setTimeout(go,50)}catch(e){}})();
 </script>
 <!-- AERA zh plan : end -->
+<!-- AERA reorder : start -->
+<script id="aera-reorder">
+/* Order Again from the old website. The account page leaves the old Order's Meals in aera.reorder.
+   The customer answers About You and Your Week as usual ( so the day's targets are theirs ), Meal
+   Preferences is skipped, and Your Plan opens with the same Meals at the same grams — nothing is
+   generated or rounded. Preferences can be filled in later from step 3. */
+(function(){try{
+ var RO=null;try{RO=JSON.parse(localStorage.getItem('aera.reorder')||'null')}catch(e){}
+ if(!RO||!RO.meals||!RO.meals.length||Date.now()-(+RO.at||0)>86400000)return;
+ var zh=false;try{zh=localStorage.getItem('aera_lang')==='zh'}catch(e){}
+ function N(s){return String(s||'').toLowerCase().replace(/\[/g,'(').replace(/\]/g,')').replace(/&/g,' and ').replace(/\bw\//g,'with ').replace(/[^a-z0-9()]+/g,' ').replace(/\s+/g,' ').trim()}
+ function N2(s){return N(s).replace(/\([^)]*\)/g,' ').replace(/\s+/g,' ').trim()}
+ function QL(s){return (N(s).match(/\(([^)]*)\)/g)||[]).map(function(x){return x.replace(/[()]/g,'').trim()}).filter(function(x){return x&&x!=='oil free'}).sort().join('|')}
+ function find(name){var L=window.CATALOG||[],n=N(name),n2=N2(name),q=QL(name);
+  return L.filter(function(x){return N(x.n)===n})[0]||L.filter(function(x){return N2(x.n)===n2&&QL(x.n)===q})[0]||L.filter(function(x){return N2(x.n)===n2})[0]||null}
+ var dset={};RO.meals.forEach(function(m){dset[m.day]=1});var dcount=Object.keys(dset).length||1,mpd=Math.max(1,Math.round(RO.meals.length/dcount));
+ function banner(){var s=document.getElementById('s1');if(!s||document.getElementById('roNote'))return;var d=document.createElement('div');d.id='roNote';d.className='noi18n';
+  d.style.cssText='background:#FFF1CD;border:1px solid #FDB913;color:#0B1C36;border-radius:12px;padding:12px 14px;margin:0 0 14px;font-size:14px;line-height:1.45';
+  d.innerHTML=zh?'<b>正在重新生成旧网站订单 '+RO.from+'（'+RO.meals.length+' 份餐点）。</b>请填写「关于您」和「您的一周」，我们就把同样的餐点、同样的分量放回您的餐单。餐点偏好可以之后再填。':
+   '<b>Rebuilding your old-website Order '+RO.from+' ( '+RO.meals.length+' Meals ).</b> Fill in About You and Your Week, and we put the same Meals back in your Plan with the same portions. Your Meal Preferences can wait, fill them in later.';
+  s.insertBefore(d,s.firstChild)}
+ var miss=[];
+ function build(){var T=planTargets();if(!T)return false;var meals=[],slot={};miss=[];
+  RO.meals.slice().sort(function(a,b){return a.day-b.day}).forEach(function(m){var comps=[];(m.comps||[]).forEach(function(c){var r=find(c[0]);if(r&&+c[1]>0)comps.push({r:r.c,g:+c[1]});else if(miss.indexOf(c[0])<0)miss.push(c[0])});
+   if(!comps.length)return;slot[m.day]=(slot[m.day]||0)+1;meals.push({day:m.day,slot:slot[m.day],comps:comps})});
+  if(!meals.length)return false;
+  PLAN={id:'PL-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase(),days:dcount,mpd:mpd,meals:meals,targets:T,q:JSON.parse(JSON.stringify(Q)),reorder:RO.from};
+  try{if(typeof renumber==='function')renumber()}catch(e){}
+  try{SELD=1;TUNED={};MH={};BASE=JSON.stringify(PLAN)}catch(e){}
+  RO.done=true;try{localStorage.removeItem('aera.reorder')}catch(e){}try{saveDraft()}catch(e){}return true}
+ function after(){setTimeout(function(){var t=zh?'您的餐点回来了':'Your Meals Are Back',m=zh?('旧订单 '+RO.from+' 的 '+PLAN.meals.length+' 份餐点已放回，分量和以前一样。'+(miss.length?'以下项目已不在菜单上，所以没有放进去：'+miss.join('、')+'。':'')+'餐点偏好已跳过，您可以随时在第 3 步填写；它只影响您之后新增或更换的餐点。'):
+   (PLAN.meals.length+' Meals from your old Order '+RO.from+' are back, at the same portions as before. '+(miss.length?'These are no longer on our menu, so they were left out : '+miss.join(' · ')+'. ':'')+'We skipped your Meal Preferences. Fill them in any time at Step 3, they only shape the Meals you add or swap from now on.');
+   try{say(t,m)}catch(e){}},700)}
+ function ready(cb,n){n=n||0;if(window.CATALOG&&CATALOG.length&&typeof window.goStep==='function'&&typeof window.planTargets==='function')return cb();if(n>200)return;setTimeout(function(){ready(cb,n+1)},250)}
+ ready(function(){
+  try{PLAN=null;Q.days=Math.min(7,Math.max(5,dcount));Q.mpd=Math.min(3,Math.max(1,mpd));if(Q.total<Q.mpd)Q.total=Q.mpd;Q.picked=Q.picked||{};Q.picked.week=1;saveDraft()}catch(e){}
+  banner();
+  var orig=window.goStep;
+  window.goStep=function(n){if(RO&&!RO.done&&(n===3||n===4)){
+    if(n===3){var r=orig.call(this,2);if(STEP!==2)return r}
+    if(build()){orig.call(this,4);if(PLAN&&PLAN.reorder&&STEP===4)after();return}}
+   return orig.apply(this,arguments)};
+  try{if(STEP!==1)orig(1)}catch(e){}
+ });
+}catch(e){}})();
+</script>
+<!-- AERA reorder : end -->
 </body>
 </html>
