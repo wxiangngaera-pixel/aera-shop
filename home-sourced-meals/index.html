@@ -680,7 +680,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),selec
 <!-- AERA zh food : start -->
 <script id="aera-zh-food">
 (function(){var D=window.AERA_I18N=window.AERA_I18N||{},R=window.AERA_I18N_RE=window.AERA_I18N_RE||[];
- Object.assign(D,{"1 Serving":"1 份","1½":"1½","Use":"使用"});
+ Object.assign(D,{"1 Serving":"1 份","Use":"使用"});
  var U={plate:'盘',plates:'盘',bowl:'碗',bowls:'碗',cup:'杯',cups:'杯',glass:'杯',glasses:'杯',piece:'块',pieces:'块',slice:'片',slices:'片',scoop:'勺',scoops:'勺',packet:'包',packets:'包',pack:'包',can:'罐',bottle:'瓶',serving:'份',servings:'份',egg:'颗',eggs:'颗',stick:'串',sticks:'串',tbsp:'汤匙',tsp:'茶匙',portion:'份',set:'套',sandwich:'个',bun:'个',buns:'个',roll:'卷'};
  function sv(s){return String(s).replace(/\s*\(\s*about\s+([\d.,]+)\s*(g|ml|kg|l)\s*\)/ig,function(m,n,u){return'（约 '+n+' '+({g:'克',ml:'毫升',kg:'公斤',l:'升'})[u.toLowerCase()]+'）'})
   .replace(/\s*\(\s*([\d.,]+)\s*(g|ml)\s*\)/ig,function(m,n,u){return'（'+n+' '+(u.toLowerCase()==='g'?'克':'毫升')+'）'})
