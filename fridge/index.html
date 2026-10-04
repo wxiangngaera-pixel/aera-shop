@@ -67,7 +67,7 @@
  .tabs .tb::before{content:'';display:block;width:23px;height:23px;background:currentColor;-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
  .tabs .tb.on{background:#16479E!important;color:#FDB913!important}
 }
-#appBar{display:none;background:#0E3576;color:#fff;padding:10px 14px;gap:12px;align-items:center;font-size:13px;line-height:1.35}
+#appBar{display:none;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:70;background:#0E3576;color:#fff;padding:12px 12px 12px 14px;gap:12px;align-items:center;font-size:13px;line-height:1.35;border:1px solid #FDB913;border-radius:16px;box-shadow:0 10px 30px rgba(11,28,54,.35)}
 #appBar.show{display:flex}
 #appBar img{width:40px;height:40px;border-radius:10px;flex:0 0 40px;background:#16479E}
 #appBar .t{flex:1 1 auto;min-width:0}
