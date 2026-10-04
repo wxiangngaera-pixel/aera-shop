@@ -1247,40 +1247,78 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),selec
 </script>
 <!-- AERA theme : end -->
 <!-- AERA fridge app bar : start -->
+<style id="aera-fridge-app-2">
+.pnav .getapp{display:inline-flex;align-items:center;gap:6px;background:#FDB913!important;color:#0B1C36!important;border:0!important;border-radius:999px;padding:8px 14px;font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
+.pnav .getapp svg{flex:0 0 auto}
+@media (display-mode: standalone){.pnav .getapp{display:none!important}}
+#appHow .qr{display:flex;justify-content:center;margin:6px 0 12px}
+#appHow .qr img,#appHow .qr canvas{border:8px solid #fff;border-radius:10px;outline:1px solid #16479E}
+#appHow .lnk{display:block;text-align:center;font-weight:700;color:#16479E;word-break:break-all;margin:0 0 12px}
+#appArrow{position:fixed;z-index:95;left:50%;bottom:calc(6px + env(safe-area-inset-bottom));transform:translateX(-50%);display:none;flex-direction:column;align-items:center;color:#FDB913;font-weight:800;font-size:13px;text-shadow:0 1px 3px rgba(0,0,0,.5);pointer-events:none}
+#appArrow.show{display:flex;animation:aeraBob 1s ease-in-out infinite}
+#appArrow.top{bottom:auto;top:calc(6px + env(safe-area-inset-top));left:auto;right:64px;transform:none;flex-direction:column-reverse}
+@keyframes aeraBob{0%,100%{margin-bottom:0}50%{margin-bottom:10px}}
+</style>
 <script id="aera-fridge-app-js">
+/* One button gets the app.
+   Android ( Chrome / Samsung ) : the button installs it in one tap.
+   iPhone / iPad : Apple lets only Safari's own Share menu add an app, so the button opens two
+   pictured steps and an arrow pointing at the Share button.
+   Computer : the button shows a QR code; scan it with the phone and press the same button there. */
 (function(){try{
- if(window.top!==window)return;
  var D=window.AERA_I18N=window.AERA_I18N||{};
  Object.assign(D,{"Get The AERA Fridge App":"AERA 冰柜 App","Add it to your Home Screen. It opens full screen, no App Store needed.":"加到手机主屏幕，全屏打开，无需 App Store。",
-  "Install":"安装","Add AERA Fridge To Your Home Screen":"把 AERA 冰柜加到主屏幕","Got It":"知道了",
-  "Tap the Share button at the bottom of Safari ( the square with an arrow ).":"点 Safari 底部的分享按钮（带箭头的方框）。",
-  "Scroll down and tap Add to Home Screen.":"往下滑，点「添加到主屏幕」。","Tap Add. The AERA Fridge icon appears on your Home Screen.":"点「添加」，主屏幕就会出现 AERA 冰柜图标。",
+  "Install":"安装","Get The App":"下载 App","Add AERA Fridge To Your Home Screen":"把 AERA 冰柜加到主屏幕","Got It":"知道了",
+  "Tap the Share button below ( the square with an arrow ).":"点下方的分享按钮（带箭头的方框）。",
+  "Tap the Share button at the top ( the square with an arrow ).":"点上方的分享按钮（带箭头的方框）。",
+  "Choose Add to Home Screen, then tap Add.":"选择「添加到主屏幕」，再点「添加」。",
+  "That is it. Open AERA Fridge from your Home Screen from now on.":"完成！以后直接从主屏幕打开 AERA 冰柜。",
   "Open your browser menu ( ⋮ at the top right ).":"打开浏览器菜单（右上角的 ⋮）。","Tap Install app or Add to Home screen.":"点「安装应用」或「添加到主屏幕」。",
-  "Open the AERA Fridge icon on your Home Screen from now on.":"以后直接点主屏幕上的 AERA 冰柜图标打开。"});
+  "Scan With Your Phone":"用手机扫描","Point your phone camera at this code, open the link, then press Get The App.":"用手机相机扫这个二维码，打开链接，再点「下载 App」。",
+  "Open This Page In Safari":"请用 Safari 打开","Adding to the Home Screen only works in Safari on iPhone. Copy this link into Safari, then press Get The App.":"iPhone 只能在 Safari 添加到主屏幕。请把这个链接复制到 Safari，再点「下载 App」。",
+  "Share":"分享"});
+ var URL_='https://aeramealprep.net/fridge/?install=1';
  var SA=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+ var top_=window.top===window,P=null,K='aera.fridgeApp.hide';
+ var ua=navigator.userAgent;
+ var ios=/iP(hone|ad|od)/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ var ipad=/iPad/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ var iosOther=ios&&/CriOS|FxiOS|EdgiOS|OPiOS|GSA|FBAN|FBAV|Instagram|Line|WhatsApp/i.test(ua);
+ var android=/Android/i.test(ua);
+ var phone=ios||android;
  if(SA){document.documentElement.classList.add('aera-app');
   var sv=window.showView;if(typeof sv==='function')window.showView=function(v){sv(v);try{window.scrollTo(0,0)}catch(e){}};return}
- var K='aera.fridgeApp.hide',P=null;
- window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();P=e;show()});
- var ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
- var phone=ios||/Android/i.test(navigator.userAgent)||(window.innerWidth<=760&&'ontouchstart' in window);
- function hidden(){try{return localStorage.getItem(K)==='1'}catch(e){return false}}
- function show(){if(!phone||hidden())return;var b=document.getElementById('appBar');if(b)b.classList.add('show')}
- var bar=document.createElement('div');bar.id='appBar';
- bar.innerHTML='<img src="https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push?icon=192" alt="">'+
-  '<div class="t"><b>Get The AERA Fridge App</b><span>Add it to your Home Screen. It opens full screen, no App Store needed.</span></div>'+
-  '<button type="button" class="go">Install</button><button type="button" class="x" aria-label="Close">×</button>';
- var how=document.createElement('div');how.id='appHow';
- how.innerHTML='<div class="sh"><h3>Add AERA Fridge To Your Home Screen</h3><ol>'+(ios?
-  '<li>Tap the Share button at the bottom of Safari ( the square with an arrow ).</li><li>Scroll down and tap Add to Home Screen.</li><li>Tap Add. The AERA Fridge icon appears on your Home Screen.</li>':
-  '<li>Open your browser menu ( ⋮ at the top right ).</li><li>Tap Install app or Add to Home screen.</li><li>Open the AERA Fridge icon on your Home Screen from now on.</li>')+
-  '</ol><button type="button" class="ok">Got It</button></div>';
- document.body.insertBefore(bar,document.body.firstChild);document.body.appendChild(how);
- bar.querySelector('.x').onclick=function(){bar.classList.remove('show');try{localStorage.setItem(K,'1')}catch(e){}};
- bar.querySelector('.go').onclick=function(){if(P){P.prompt();P.userChoice.then(function(c){if(c&&c.outcome==='accepted')bar.classList.remove('show');P=null})}else how.classList.add('show')};
- how.onclick=function(e){if(e.target===how||e.target.classList.contains('ok'))how.classList.remove('show')};
- window.addEventListener('appinstalled',function(){bar.classList.remove('show')});
- show();
+ window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();P=e;if(top_)bar(true)});
+ window.addEventListener('appinstalled',function(){bar(false);sheet(false)});
+ function el(id){return document.getElementById(id)}
+ function sheet(on,html){var s=el('appHow');if(!s)return;if(html)s.querySelector('.sh').innerHTML=html;s.classList.toggle('show',!!on);var a=el('appArrow');if(a&&!on)a.classList.remove('show')}
+ function bar(on){var b=el('appBar');if(!b)return;if(on){if(!phone)return;try{if(localStorage.getItem(K)==='1')return}catch(e){}}b.classList.toggle('show',!!on)}
+ function steps(list){return'<h3>Add AERA Fridge To Your Home Screen</h3><ol>'+list.map(function(s){return'<li>'+s+'</li>'}).join('')+'</ol><button type="button" class="ok">Got It</button>'}
+ function qr(){sheet(true,'<h3>Scan With Your Phone</h3><p style="margin:0 0 10px;font-size:14px">Point your phone camera at this code, open the link, then press Get The App.</p><div class="qr" id="appQr"></div><span class="lnk">aeramealprep.net/fridge</span><button type="button" class="ok">Got It</button>');
+  function draw(){try{new window.QRCode(el('appQr'),{text:URL_,width:210,height:210,colorDark:'#0B1C36',colorLight:'#ffffff'})}catch(e){el('appQr').innerHTML='<span class="lnk">'+URL_+'</span>'}}
+  if(window.QRCode)return draw();var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';s.onload=draw;s.onerror=draw;document.head.appendChild(s)}
+ function go(){
+  if(P){var p=P;P=null;p.prompt();p.userChoice.then(function(c){if(c&&c.outcome==='accepted')bar(false)});return}
+  if(!top_||!phone)return qr();
+  if(iosOther)return sheet(true,'<h3>Open This Page In Safari</h3><p style="margin:0 0 10px;font-size:14px">Adding to the Home Screen only works in Safari on iPhone. Copy this link into Safari, then press Get The App.</p><span class="lnk">aeramealprep.net/fridge</span><button type="button" class="ok">Got It</button>');
+  if(ios){sheet(true,steps([ipad?'Tap the Share button at the top ( the square with an arrow ).':'Tap the Share button below ( the square with an arrow ).','Choose Add to Home Screen, then tap Add.','That is it. Open AERA Fridge from your Home Screen from now on.']));
+   var a=el('appArrow');if(a){a.classList.toggle('top',ipad);a.classList.add('show')}return}
+  sheet(true,steps(['Open your browser menu ( ⋮ at the top right ).','Tap Install app or Add to Home screen.','That is it. Open AERA Fridge from your Home Screen from now on.']))}
+ window.aeraGetApp=go;
+ function build(){
+  var nav=document.querySelector('.top .pnav');
+  if(nav&&!el('getAppBtn')){var b=document.createElement('button');b.type='button';b.id='getAppBtn';b.className='getapp plink';
+   b.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M12 7v7M9 11l3 3 3-3"/></svg><span>Get The App</span>';
+   b.onclick=go;nav.insertBefore(b,nav.firstChild)}
+  if(!el('appHow')){var h=document.createElement('div');h.id='appHow';h.innerHTML='<div class="sh"></div>';document.body.appendChild(h);
+   h.onclick=function(e){if(e.target===h||e.target.classList.contains('ok'))sheet(false)}}
+  if(!el('appArrow')){var a=document.createElement('div');a.id='appArrow';a.innerHTML='<span>Share</span><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v15M5 12l7 7 7-7"/></svg>';document.body.appendChild(a)}
+  if(top_&&phone&&!el('appBar')){var r=document.createElement('div');r.id='appBar';
+   r.innerHTML='<img src="https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push?icon=192" alt=""><div class="t"><b>Get The AERA Fridge App</b><span>Add it to your Home Screen. It opens full screen, no App Store needed.</span></div><button type="button" class="go">Install</button><button type="button" class="x" aria-label="Close">×</button>';
+   document.body.appendChild(r);r.querySelector('.go').onclick=go;
+   r.querySelector('.x').onclick=function(){r.classList.remove('show');try{localStorage.setItem(K,'1')}catch(e){}};bar(true)}
+  if(top_&&/[?&]install=1/.test(location.search)&&phone&&ios)setTimeout(go,600)}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build);else build();
 }catch(e){}})();
 </script>
 <!-- AERA fridge app bar : end -->
