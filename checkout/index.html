@@ -34,6 +34,7 @@
 .layout{grid-template-columns:minmax(0,1fr) 400px!important}.layout>*{min-width:0!important;max-width:100%}
 @media(max-width:940px){.layout{grid-template-columns:minmax(0,1fr)!important}}
 /* Chinese : each dish name reads Chinese on top, English underneath */html[data-lang="zh"] .pvc,html[data-lang="zh"] .pvxn b{white-space:pre-line}
+/* a Bundle's meals list : picture on the left, the name full width beside it and its KCALs underneath ( no squeezed name column ) */.inside ol li{display:grid!important;grid-template-columns:56px minmax(0,1fr);column-gap:10px;row-gap:2px;align-items:center}.inside ol li .insidepic{grid-row:1 / span 2}.inside ol li>span,.inside ol li>em{grid-column:2;min-width:0}.inside ol li>em{white-space:normal!important}.inside ol li>:not(.insidepic):not(span):not(em){grid-column:1 / -1}.inside ol li:not(:has(.insidepic)){grid-template-columns:minmax(0,1fr)}.inside ol li:not(:has(.insidepic))>span,.inside ol li:not(:has(.insidepic))>em{grid-column:1}html[data-lang="zh"] .inside ol li>span{white-space:pre-line}
 </style>
 <!-- AERA phone fit : end -->
 
