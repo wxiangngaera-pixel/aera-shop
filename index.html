@@ -2811,5 +2811,105 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),selec
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(go,50)});else setTimeout(go,50)}catch(e){}})();
 </script>
 <!-- AERA zh overview : end -->
+<script>window.AERA_APP={"key": "aera", "name": "AERA Meal Prep", "short": "AERA", "manifestUrl": "https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push?manifest", "link": "https://aeramealprep.net/?install=1", "mount": ".navr", "barTitle": "Get The AERA App", "howTitle": "Add AERA To Your Home Screen", "done": "That is it. Open AERA from your Home Screen to order, track and read your Inbox.", "zh": {"Get The AERA App": "AERA App", "Add AERA To Your Home Screen": "把 AERA 加到主屏幕", "That is it. Open AERA from your Home Screen to order, track and read your Inbox.": "完成！以后从主屏幕打开 AERA，下单、追踪订单、看收件箱。"}};</script>
+<!-- AERA app kit : start -->
+<style id="aera-app-kit">
+.aera-getapp{display:inline-flex;align-items:center;gap:6px;background:#FDB913!important;color:#0B1C36!important;border:0!important;border-radius:999px!important;padding:8px 14px!important;font:inherit;font-size:12.5px!important;font-weight:800!important;cursor:pointer;white-space:nowrap;line-height:1.2;text-decoration:none;flex:none;box-shadow:none}
+.aera-getapp svg{flex:0 0 auto;width:15px;height:15px}
+@media(max-width:600px){.aera-getapp span{display:none}.aera-getapp{padding:0!important;width:38px;height:38px;justify-content:center}.aera-getapp svg{width:19px;height:19px}}
+@media (display-mode: standalone){.aera-getapp,#aaBar{display:none!important}}
+#aaBar{display:none;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:2147483000;background:#0E3576;color:#fff;padding:12px 12px 12px 14px;gap:12px;align-items:center;font:13px/1.35 Montserrat,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;border:1px solid #FDB913;border-radius:16px;box-shadow:0 10px 30px rgba(11,28,54,.35)}
+#aaBar.show{display:flex}
+#aaBar img{width:40px;height:40px;border-radius:10px;flex:0 0 40px;background:#16479E}
+#aaBar .t{flex:1 1 auto;min-width:0}
+#aaBar b{display:block;font-size:14px;color:#FDB913}
+#aaBar button{border:0;border-radius:10px;font:inherit;font-weight:800;cursor:pointer;padding:9px 14px;width:auto;margin:0}
+#aaBar .go{background:#FDB913;color:#0B1C36}
+#aaBar .x{background:transparent;color:#fff;opacity:.75;padding:9px 6px;font-size:18px;line-height:1}
+#aaHow{position:fixed;inset:0;z-index:2147483001;background:rgba(11,28,54,.55);display:none;align-items:flex-end;justify-content:center;padding:16px;font:14px/1.45 Montserrat,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+#aaHow.show{display:flex}
+#aaHow .sh{background:#fff;color:#0B1C36;border:1px solid #16479E;border-radius:18px;max-width:420px;width:100%;padding:20px 18px calc(18px + env(safe-area-inset-bottom));text-align:left}
+#aaHow h3{margin:0 0 8px;font-size:17px;color:#16479E}
+#aaHow p{margin:0 0 10px}
+#aaHow ol{margin:0 0 14px;padding-left:20px;font-size:14.5px}
+#aaHow li{margin:6px 0}
+#aaHow .ok{width:100%;background:#16479E;color:#FDB913;border:0;border-radius:12px;padding:12px;font:inherit;font-weight:800;cursor:pointer}
+#aaHow .qr{display:flex;justify-content:center;margin:6px 0 12px}
+#aaHow .qr img,#aaHow .qr canvas{border:8px solid #fff;border-radius:10px;outline:1px solid #16479E}
+#aaHow .lnk{display:block;text-align:center;font-weight:700;color:#16479E;word-break:break-all;margin:0 0 12px}
+#aaArrow{position:fixed;z-index:2147483002;left:50%;bottom:calc(6px + env(safe-area-inset-bottom));transform:translateX(-50%);display:none;flex-direction:column;align-items:center;color:#FDB913;font:800 13px Montserrat,sans-serif;text-shadow:0 1px 3px rgba(0,0,0,.5);pointer-events:none}
+#aaArrow.show{display:flex;animation:aaBob 1s ease-in-out infinite}
+#aaArrow.top{bottom:auto;top:calc(6px + env(safe-area-inset-top));left:auto;right:64px;transform:none;flex-direction:column-reverse}
+@keyframes aaBob{0%,100%{margin-bottom:0}50%{margin-bottom:10px}}
+</style>
+<script id="aera-app-kit-js">
+/* "Get The App" : one button that puts this page on the phone's Home Screen as an app.
+   Android installs in one tap; iPhone gets Safari's two Share steps with an arrow; a computer
+   gets a QR code to scan. Each page sets window.AERA_APP ( name, link, manifest, where the
+   button sits ). */
+(function(){try{
+ var C=window.AERA_APP;if(!C||window.top!==window)return;
+ var I='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push?icon=';
+ var D=window.AERA_I18N=window.AERA_I18N||{};
+ Object.assign(D,{"Get The App":"下载 App","Install":"安装","Got It":"知道了",
+  "Add it to your Home Screen. It opens full screen, no App Store needed.":"加到手机主屏幕，全屏打开，无需 App Store。",
+  "Tap the Share button below ( the square with an arrow ).":"点下方的分享按钮（带箭头的方框）。",
+  "Tap the Share button at the top ( the square with an arrow ).":"点上方的分享按钮（带箭头的方框）。",
+  "Choose Add to Home Screen, then tap Add.":"选择「添加到主屏幕」，再点「添加」。",
+  "Open your browser menu ( ⋮ at the top right ).":"打开浏览器菜单（右上角的 ⋮）。","Tap Install app or Add to Home screen.":"点「安装应用」或「添加到主屏幕」。",
+  "Scan With Your Phone":"用手机扫描","Point your phone camera at this code, open the link, then press Get The App.":"用手机相机扫这个二维码，打开链接，再点「下载 App」。",
+  "Open This Page In Safari":"请用 Safari 打开","Adding to the Home Screen only works in Safari on iPhone. Copy this link into Safari, then press Get The App.":"iPhone 只能在 Safari 添加到主屏幕。请把这个链接复制到 Safari，再点「下载 App」。",
+  "Share":"分享"});
+ if(C.zh)Object.assign(D,C.zh);
+ function meta(n,v){if(document.querySelector('meta[name="'+n+'"]'))return;var m=document.createElement('meta');m.name=n;m.content=v;document.head.appendChild(m)}
+ meta('theme-color','#16479E');meta('mobile-web-app-capable','yes');meta('apple-mobile-web-app-capable','yes');
+ meta('apple-mobile-web-app-title',C.short);meta('apple-mobile-web-app-status-bar-style','default');
+ if(!document.querySelector('link[rel="apple-touch-icon"]')){var ti=document.createElement('link');ti.rel='apple-touch-icon';ti.href=I+'180';document.head.appendChild(ti)}
+ if(!document.querySelector('link[rel="manifest"]')){var ml=document.createElement('link');ml.rel='manifest';
+  ml.href=C.manifestUrl||('data:application/manifest+json,'+encodeURIComponent(JSON.stringify({name:C.name,short_name:C.short,id:C.scopePath,
+   start_url:'https://aeramealprep.net'+C.scopePath+'?app=1',scope:'https://aeramealprep.net'+C.scopePath,display:'standalone',background_color:'#16479E',theme_color:'#16479E',
+   icons:[{src:I+'192',sizes:'192x192',type:'image/png',purpose:'any'},{src:I+'512',sizes:'512x512',type:'image/png',purpose:'any'},{src:I+'512',sizes:'512x512',type:'image/png',purpose:'maskable'}]})));
+  document.head.appendChild(ml)}
+ var SA=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;if(SA)return;
+ var P=null,K='aera.app.hide.'+C.key,ua=navigator.userAgent;
+ var ios=/iP(hone|ad|od)/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ var ipad=/iPad/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ var iosOther=ios&&/CriOS|FxiOS|EdgiOS|OPiOS|GSA|FBAN|FBAV|Instagram|Line|WhatsApp/i.test(ua);
+ var phone=ios||/Android/i.test(ua);
+ function el(id){return document.getElementById(id)}
+ function sheet(on,html){var s=el('aaHow');if(!s)return;if(html)s.querySelector('.sh').innerHTML=html;s.classList.toggle('show',!!on);var a=el('aaArrow');if(a&&!on)a.classList.remove('show')}
+ function bar(on){var b=el('aaBar');if(!b)return;if(on){if(!phone)return;try{if(localStorage.getItem(K)==='1')return}catch(e){}}b.classList.toggle('show',!!on)}
+ function steps(l){return'<h3>'+C.howTitle+'</h3><ol>'+l.map(function(s){return'<li>'+s+'</li>'}).join('')+'</ol><button type="button" class="ok">Got It</button>'}
+ function qr(){sheet(true,'<h3>Scan With Your Phone</h3><p>Point your phone camera at this code, open the link, then press Get The App.</p><div class="qr" id="aaQr"></div><span class="lnk">'+C.link.replace(/^https:\/\//,'').replace(/\?.*$/,'')+'</span><button type="button" class="ok">Got It</button>');
+  function draw(){try{new window.QRCode(el('aaQr'),{text:C.link,width:210,height:210,colorDark:'#0B1C36',colorLight:'#ffffff'})}catch(e){el('aaQr').innerHTML='<span class="lnk">'+C.link+'</span>'}}
+  if(window.QRCode)return draw();var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';s.onload=draw;s.onerror=draw;document.head.appendChild(s)}
+ function go(e){if(e&&e.preventDefault)e.preventDefault();
+  if(P){var p=P;P=null;p.prompt();p.userChoice.then(function(c){if(c&&c.outcome==='accepted')bar(false)});return}
+  if(!phone)return qr();
+  if(iosOther)return sheet(true,'<h3>Open This Page In Safari</h3><p>Adding to the Home Screen only works in Safari on iPhone. Copy this link into Safari, then press Get The App.</p><span class="lnk">'+C.link.replace(/^https:\/\//,'').replace(/\?.*$/,'')+'</span><button type="button" class="ok">Got It</button>');
+  if(ios){sheet(true,steps([ipad?'Tap the Share button at the top ( the square with an arrow ).':'Tap the Share button below ( the square with an arrow ).','Choose Add to Home Screen, then tap Add.',C.done]));
+   var a=el('aaArrow');if(a){a.classList.toggle('top',ipad);a.classList.add('show')}return}
+  sheet(true,steps(['Open your browser menu ( ⋮ at the top right ).','Tap Install app or Add to Home screen.',C.done]))}
+ window.aeraGetApp=go;
+ window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();P=e;bar(true)});
+ window.addEventListener('appinstalled',function(){bar(false);sheet(false)});
+ var BTN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M12 7v7M9 11l3 3 3-3"/></svg><span>Get The App</span>';
+ function mount(){if(el('aaGetApp'))return true;var host=document.querySelector(C.mount);if(!host)return false;
+  var b=document.createElement('button');b.type='button';b.id='aaGetApp';b.className='aera-getapp';b.setAttribute('aria-label','Get The App');b.innerHTML=BTN;b.onclick=go;
+  host.insertBefore(b,host.firstChild);return true}
+ function build(){
+  if(!mount()){var n=0,iv=setInterval(function(){if(mount()||++n>60)clearInterval(iv)},250)}
+  if(!el('aaHow')){var h=document.createElement('div');h.id='aaHow';h.innerHTML='<div class="sh"></div>';document.body.appendChild(h);
+   h.onclick=function(e){if(e.target===h||e.target.classList.contains('ok'))sheet(false)}}
+  if(!el('aaArrow')){var a=document.createElement('div');a.id='aaArrow';a.innerHTML='<span>Share</span><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v15M5 12l7 7 7-7"/></svg>';document.body.appendChild(a)}
+  if(phone&&!el('aaBar')){var r=document.createElement('div');r.id='aaBar';
+   r.innerHTML='<img src="'+I+'192" alt=""><div class="t"><b>'+C.barTitle+'</b><span>Add it to your Home Screen. It opens full screen, no App Store needed.</span></div><button type="button" class="go">Install</button><button type="button" class="x" aria-label="Close">×</button>';
+   document.body.appendChild(r);r.querySelector('.go').onclick=go;
+   r.querySelector('.x').onclick=function(){r.classList.remove('show');try{localStorage.setItem(K,'1')}catch(e){}};bar(true)}
+  if(/[?&]install=1/.test(location.search)&&ios)setTimeout(go,600)}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build);else build();
+}catch(e){}})();
+</script>
+<!-- AERA app kit : end -->
 </body>
 </html>
