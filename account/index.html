@@ -1581,19 +1581,32 @@ function legRepaint(){try{if(document.getElementById('histWrap')&&document.getEl
  try{var el=document.getElementById('ordersList');if(el&&ORDERS&&ORDERS.some(function(o){return o.gateway==='legacy'&&orderIsCurrent(o)}))el.innerHTML=ORDERS.filter(orderIsCurrent).map(orderCard).join('')}catch(e){}}
 function legPackName(p){return p==='vacuum'?'Vacuum Packed':'MAP Bento Box'}
 function legParts(txt){return String(txt||'').split(' · ').map(function(s){var m=/^(.*?)\s+(\d+(?:\.\d+)?)\s*g$/.exec(s.trim());return m?{n:m[1],g:+m[2]}:{n:s.trim(),g:0}}).filter(function(x){return x.n})}
-function legPic(parts,pack){var by={};parts.forEach(function(p){var r=legFind(p.n);if(r&&r.img&&!by[r.cat])by[r.cat]=r.img});
- var p=by.p||by.g,c=by.c,v=by.v||by.s;var cls='lgimg '+(pack==='vacuum'?'vac':'bento');
- if(!p&&!c&&!v)return '<div class="'+cls+' none"><span>'+legPackName(pack)+'</span></div>';
- return '<div class="'+cls+'">'+(p?'<img class="p" src="'+esc(p)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<i class="p"></i>')+(c?'<img src="'+esc(c)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<i></i>')+(v?'<img src="'+esc(v)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<i></i>')+'<em>'+(pack==='vacuum'?'Vacuum':'MAP Bento')+'</em></div>'}
+var LEG_TRAY='https://my.chatbees.io/objects/generated-images/1302/1788628096238-5f5755c542d808b9.png';
+function legPic(parts,pack){var P=[],C=null,V=[];parts.forEach(function(p){var r=legFind(p.n);if(!r)return;var x={r:r,g:p.g};if(r.cat==='p'){if(P.length<2)P.push(x)}else if(r.cat==='c'){if(!C)C=x}else if(r.cat==='v'||r.cat==='g'){if(V.length<2)V.push(x)}});
+ var cell=function(x,cls){return'<b class="'+cls+(x&&x.r.img?'':' empty')+'"'+(x&&x.r.img?' style="background-image:url('+esc(x.r.img)+')"':'')+'></b>'};
+ var vac=pack==='vacuum';
+ var inner=(P.length>1?cell(P[0],'pro h1')+cell(P[1],'pro h2'):cell(P[0],'pro'))+cell(C,'crb')+(V.length>1?cell(V[0],'veg w1')+cell(V[1],'veg w2'):cell(V[0],'veg'));
+ return '<div class="lgb'+(vac?' vac':'')+'"'+(vac?'':' style="background-image:url('+LEG_TRAY+')"')+'>'+inner+(vac?'<i class="sheen"></i><i class="seal t"></i><i class="seal b"></i>':'')+'<em>'+(vac?'Vacuum Packed':'MAP Bento Box')+'</em></div>'}
 function legItems(o){if(!LEGCAT)legCat();var items=Array.isArray(o.items)?o.items:[],pack=o.packaging==='vacuum'?'vacuum':'bento',h='',slot={},rows=[];
  items.forEach(function(i){var nm=String(i.name||'');var m=/^Day (\d+) · (.*)$/.exec(nm);
   if(m){var d=+m[1];slot[d]=(slot[d]||0)+1;var parts=legParts(m[2]);
    rows.push('<div class="lgrow">'+legPic(parts,pack)+'<div class="lgtx"><b>Day '+d+' · Meal '+slot[d]+'</b><ul>'+parts.map(function(p){return'<li><span class="n">'+esc(p.n)+'</span><span class="g">'+(p.g?p.g+' g':'')+'</span></li>'}).join('')+'</ul></div>'+(i.price?'<div class="lgpr">'+rm(i.price)+'</div>':'')+'</div>')}
   else if(!i.price&&!i.sku&&rows.length===0&&/meal|bundle|days/i.test(nm)){h+='<div class="lghd">'+esc(nm)+'</div>'}
   else{var k=legNorm(nm),gl=/mass gain/i.test(nm)?'mass':'fat';var sku=LEG_MEALS[k+'|'+gl]||LEG_MEALS[k+'|'+(gl==='fat'?'mass':'fat')];var u=sku?mealPic({sku:sku}):'';
-   rows.push('<div class="lgrow">'+(u?'<div class="lgimg one '+(pack==='vacuum'?'vac':'bento')+'"><img src="'+esc(u)+'" alt="" loading="lazy"><em>'+(pack==='vacuum'?'Vacuum':'MAP Bento')+'</em></div>':legPic([],pack))+'<div class="lgtx"><b>'+esc(nm)+'</b><ul><li><span class="n">Quantity</span><span class="g">× '+(+i.qty||1)+'</span></li></ul></div>'+(i.price?'<div class="lgpr">'+rm(i.price*(+i.qty||1))+'</div>':'')+'</div>')}});
+   rows.push('<div class="lgrow">'+(u?'<div class="lgb'+(pack==='vacuum'?' vac':'')+'"><b style="left:0;top:0;width:100%;height:100%;border-radius:8px;background-image:url('+esc(u)+')"></b>'+(pack==='vacuum'?'<i class="sheen"></i>':'')+'<em>'+(pack==='vacuum'?'Vacuum Packed':'MAP Bento Box')+'</em></div>':legPic([],pack))+'<div class="lgtx"><b>'+esc(nm)+'</b><ul><li><span class="n">Quantity</span><span class="g">× '+(+i.qty||1)+'</span></li></ul></div>'+(i.price?'<div class="lgpr">'+rm(i.price*(+i.qty||1))+'</div>':'')+'</div>')}});
  return '<div class="lglist">'+h+rows.join('')+'</div>'}
-(function(){var c=document.createElement('style');c.textContent='.pkchip{display:inline-block;background:#EEF0F7;color:#16479E;font-weight:700;font-size:11.5px;padding:2px 9px;border-radius:999px}'+
+(function(){var c=document.createElement('style');c.textContent='.lgb{position:relative;width:150px;aspect-ratio:1536/1024;border-radius:8px;overflow:hidden;background:#E9EEF5 50% 50%/cover no-repeat;container-type:inline-size;flex:none}'+
+ '.lgb b{position:absolute;display:block;background:#0B2450 50% 50%/cover no-repeat;box-shadow:inset 0 0 0 1px rgba(0,0,0,.35);border-radius:2.2cqw;filter:saturate(1.2) contrast(1.13) brightness(1.07)}'+
+ '.lgb b.pro{left:19.40%;top:20.31%;width:18.23%;height:52.54%}.lgb b.crb{left:38.93%;top:20.31%;width:40.76%;height:26.76%}.lgb b.veg{left:38.93%;top:48.63%;width:40.76%;height:24.22%}'+
+ '.lgb b.pro.h1{height:25.97%}.lgb b.pro.h2{top:46.88%;height:25.97%}.lgb b.veg.w1{width:20.08%}.lgb b.veg.w2{left:59.61%;width:20.08%}.lgb b.empty{background:#0F2D63}'+
+ '.lgb.vac{background:linear-gradient(160deg,#eef3fa,#cdd8ea)}.lgb.vac b{box-shadow:none;border-radius:1.2cqw}'+
+ '.lgb.vac b.pro{left:12%;top:16%;width:26%;height:64%}.lgb.vac b.crb{left:40%;top:16%;width:48%;height:31%}.lgb.vac b.veg{left:40%;top:49%;width:48%;height:31%}.lgb.vac b.pro.h1{height:31%}.lgb.vac b.pro.h2{top:49%;height:31%}.lgb.vac b.veg.w1{width:23.5%}.lgb.vac b.veg.w2{left:64.5%;width:23.5%}'+
+ '.lgb.vac:before{content:"";position:absolute;inset:7% 5%;border-radius:12px;border:1px solid rgba(255,255,255,.9);box-shadow:inset 0 0 14px rgba(255,255,255,.55),0 2px 6px rgba(11,28,54,.25);z-index:2;pointer-events:none}'+
+ '.lgb .sheen{position:absolute;inset:7% 5%;border-radius:12px;background:linear-gradient(120deg,rgba(255,255,255,.55) 0,rgba(255,255,255,0) 32%,rgba(255,255,255,0) 62%,rgba(255,255,255,.35) 80%,rgba(255,255,255,0) 100%);z-index:3;pointer-events:none}'+
+ '.lgb .seal{position:absolute;left:5%;right:5%;height:5%;z-index:3;background:repeating-linear-gradient(90deg,rgba(255,255,255,.95) 0 2px,rgba(200,210,226,.9) 2px 4px)}.lgb .seal.t{top:4%}.lgb .seal.b{bottom:4%}'+
+ '.lgb em{position:absolute;left:4px;bottom:4px;z-index:4;font-style:normal;font-size:9px;font-weight:800;letter-spacing:.03em;background:#16479E;color:#FDB913;padding:1px 6px;border-radius:5px}'+
+ '.lgrow{grid-template-columns:150px minmax(0,1fr) auto!important}'+
+ '@media(max-width:560px){.lgrow{grid-template-columns:120px minmax(0,1fr)!important}.lgb{width:120px}}'+'.pkchip{display:inline-block;background:#EEF0F7;color:#16479E;font-weight:700;font-size:11.5px;padding:2px 9px;border-radius:999px}'+
  '.lglist{display:flex;flex-direction:column;gap:10px;margin-top:10px}.lghd{font-weight:800;color:#0B1C36;font-size:14px}'+
  '.lgrow{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:12px;align-items:start;padding:10px;border:1px solid rgba(22,71,158,.25);border-radius:12px;background:#fff}'+
  '.lgimg{position:relative;width:96px;height:72px;border-radius:10px;display:grid;grid-template-columns:1.25fr 1fr;grid-template-rows:1fr 1fr;gap:2px;padding:4px;overflow:hidden}'+
