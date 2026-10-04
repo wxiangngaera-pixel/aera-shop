@@ -480,7 +480,7 @@ function mount(){if(mounted)return;mounted=1;
 function open(k,h,toggle){mount();var it=item(k);if(!it)return;var was=it.classList.contains('open');
  [].forEach.call(document.querySelectorAll('#hub .hitem.open'),function(x){if(x!==it){x.classList.remove('open');x.querySelector('.hhead').setAttribute('aria-expanded','false')}});
  if(was&&toggle){it.classList.remove('open');it.querySelector('.hhead').setAttribute('aria-expanded','false');return}
- if(k==='meals')alcLoad();if(k==='home')hsLoad();if(k==='plan')hsLoad('planFrame','/meal-plan/','https://my.chatbees.io/p/SrQzC5m2',/meal-plan|SrQzC5m2/);it.classList.add('open');it.querySelector('.hhead').setAttribute('aria-expanded','true');
+ if(k==='meals')alcLoad();if(k==='home')hsLoad();if(k==='plan')hsLoad('planFrame','/meal-plan/?v='+Math.floor(Date.now()/600000),'https://my.chatbees.io/p/SrQzC5m2',/meal-plan|SrQzC5m2/);it.classList.add('open');it.querySelector('.hhead').setAttribute('aria-expanded','true');
  try{if(typeof window.aeExpand==='function')window.aeExpand()}catch(e){}
  var t=(h&&(!MAP[h]||h==='#meals')&&/^#[\w-]+$/.test(h))?document.querySelector(h):null;
  setTimeout(function(){var el=t||it;var y=el.getBoundingClientRect().top+window.pageYOffset-84;window.scrollTo({top:y,behavior:'smooth'})},400)}
@@ -497,7 +497,7 @@ function hsLoad(fid,lp,rp,rx){fid=fid||'hsFrame';var f=document.getElementById(f
 function alcBar(){var c={};try{c=JSON.parse(localStorage.getItem('aera.cart')||'{}')}catch(e){}var n=0;for(var k in c)n+=typeof c[k]==='number'?c[k]:1;var b=document.getElementById('alcGo');if(!b){if(!n)return;b=document.createElement('a');b.id='alcGo';b.className='btn btn-y';b.href=/aeramealprep\.net$/.test(location.hostname)?'/checkout/':'https://my.chatbees.io/p/D2pz8bZ';document.body.appendChild(b)}b.textContent='Checkout · '+n+' item'+(n===1?'':'s')+' →';b.style.display=n?'':'none'}
 window.addEventListener('storage',function(e){if(e.key==='aera.cart')alcBar()});
 function alcLoad(){var f=document.getElementById('alcFrame');if(!f||f.getAttribute('src'))return;
- var u=/aeramealprep\.net$/.test(location.hostname)?'/checkout/#alc':'https://my.chatbees.io/p/D2pz8bZ#alc';
+ var u=/aeramealprep\.net$/.test(location.hostname)?'/checkout/?v='+Math.floor(Date.now()/600000)+'#alc':'https://my.chatbees.io/p/D2pz8bZ#alc';
  f.addEventListener('load',function(){try{var w=f.contentWindow,d=f.contentDocument,g=d.getElementById('grid');if(!g)return;
   if(!/checkout|D2pz8bZ/.test(w.location.href)){location.href=w.location.href;return}
   for(var el=g;el&&el!==d.body;el=el.parentElement){[].forEach.call(el.parentElement.children,function(s){if(s!==el&&!/^(SCRIPT|STYLE|LINK)$/.test(s.tagName))s.style.setProperty('display','none','important')})}
