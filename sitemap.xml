@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://aeramealprep.net/referrer-portal/</loc>
-    <lastmod>2026-10-04T10:05:22.185Z</lastmod>
+    <loc>https://aeramealprep.net/account/</loc>
+    <lastmod>2026-10-04T10:09:51.384Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/account/</loc>
-    <lastmod>2026-10-04T10:05:14.327Z</lastmod>
+    <loc>https://aeramealprep.net/referrer-portal/</loc>
+    <lastmod>2026-10-04T10:09:44.225Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://aeramealprep.net/</loc>
-    <lastmod>2026-10-04T10:05:08.139Z</lastmod>
+    <lastmod>2026-10-04T10:09:38.414Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
+    <lastmod>2026-10-04T10:08:50.438Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://aeramealprep.net/fridge/</loc>
     <lastmod>2026-10-04T09:52:38.859Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
-    <lastmod>2026-10-04T08:22:57.923Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
