@@ -1563,7 +1563,29 @@ function histFilter(v){v=String(v||'').trim().toLowerCase();
  document.querySelectorAll('#histList .hrow').forEach(function(r){r.style.display=!v||r.dataset.q.indexOf(v)>=0?'':'none'});
  document.querySelectorAll('#histList .hmonth').forEach(function(m){m.style.display=[].some.call(m.querySelectorAll('.hrow'),function(r){return r.style.display!=='none'})?'':'none'})}
 /* Order Again : the same Meals go back in the Cart ; a Personalised Plan goes back if it is still saved */
-function orderAgain(no){var o=(ORDERS||[]).filter(function(x){return x.order_no===no})[0];if(!o)return;
+/* ===== Order Again for an order carried over from the old website =====
+   Old-site meals have no shop code. A Plan or Bundle order goes to Bring Your Own Plan with every
+   Meal written out ( raw weights ), where each item is matched to today's menu and opened in the
+   Meal Builder. A single-meal order is matched to today's shop Meals by name and goes to the Cart. */
+var LEG_MEALS={"aglio olio|fat":"MEAL-10","assam fettuccine|mass":"MEAL-23","black pepper chicken sliced|mass":"MEAL-13","black pepper pasta|fat":"MEAL-58","bolognese|fat":"MEAL-25","cajun spiced fusilli|mass":"MEAL-27","cauliflower fried rice|fat":"MEAL-59","classic meal prep chicken sliced homemade sambal|mass":"MEAL-15","creamy mushroom pasta|mass":"MEAL-8","curry chicken sliced|fat":"MEAL-19","egg fried brown rice|mass":"MEAL-34","gam hiong chicken breast|mass":"MEAL-30","garlic mashed potato with grilled chicken chop brown sauce|fat":"MEAL-14","gingered spring onion toman fish sliced|mass":"MEAL-21","green curry chicken sliced|fat":"MEAL-9","grilled teriyaki chicken breast sweet sour sauce|fat":"MEAL-16","imitation salted egg yolk chicken thigh|mass":"MEAL-22","imitation salted egg yolk pasta|mass":"MEAL-33","japanese curry chicken katsu with rice|mass":"MEAL-26","pad krapow chicken breast|fat":"MEAL-24","pan seared barramundi fillet with homemade sambal|fat":"MEAL-11","pan seared salmon with mushroom gravy|fat":"MEAL-18","pan seared smoked paprika chicken breast tomato concasse|fat":"MEAL-12","pan seared spicy chicken breast with pesto sauce|fat":"MEAL-20","quinoa fried rice|mass":"MEAL-32","soy garlic chicken sliced|fat":"MEAL-17","stir fried kung pao chicken breast|mass":"MEAL-28","stir fried mushroom chicken casserole|mass":"MEAL-36","sweet sour chicken breast|mass":"MEAL-31"};
+var BYOP_URL2='https://aeramealprep.net/bring-your-own-plan/';
+function legNorm(s){return String(s).toLowerCase().replace(/\(.*?\)/g,' ').replace(/[^a-z0-9]+/g,' ').trim()}
+function legZh(){try{return localStorage.getItem('aera_lang')==='zh'}catch(e){return false}}
+function legacyAgain(o){var items=Array.isArray(o.items)?o.items:[],zh=legZh();
+ var days=items.filter(function(i){return /^Day \d+ · /.test(i.name||'')});
+ if(days.length){var lines=['Weights: RAW','AERA order '+o.order_no+' ( '+days.length+' Meals )'],cur=0,n=0;
+  days.forEach(function(i){var m=/^Day (\d+) · (.*)$/.exec(i.name);var d=+m[1];if(d!==cur){cur=d;n=0;lines.push('');lines.push('DAY '+d)}n++;lines.push('Meal '+n+': '+m[2].split(' · ').join(', '))});
+  try{localStorage.setItem('aera.byopPrefill',JSON.stringify({text:lines.join('\n'),from:o.order_no,at:Date.now()}))}catch(e){}
+  return asModal(zh?'<h3>重新生成这 '+days.length+' 份餐点</h3><p class="asp">这张订单来自旧网站。我们会把同样的餐点载入餐点生成器，逐项对应今天的菜单，并算出营养素。您可以检查、随意修改，再加入购物车。</p>':
+   '<h3>Rebuild These '+days.length+' Meals</h3><p class="asp">This Order is from our old website. We load the same Meals into our Meal Builder, match each item to today\'s menu and work out the Macros. Check it, change anything you like, then add it to your Cart.</p>',
+   '<a class="btn btn-y" href="'+BYOP_URL2+'?again=1">'+(zh?'重新生成我的餐点':'Rebuild My Meals')+'</a><button class="btn btn-o" type="button" onclick="asClose()">'+(zh?'关闭':'Close')+'</button>')}
+ var cart={};try{cart=JSON.parse(localStorage.getItem('aera.cart')||'{}')||{}}catch(e){}
+ var added=0,miss=[];items.forEach(function(i){var nm=String(i.name||'');var gl=/mass gain/i.test(nm)?'mass':'fat';var k=legNorm(nm);var sku=LEG_MEALS[k+'|'+gl]||LEG_MEALS[k+'|'+(gl==='fat'?'mass':'fat')];if(sku){cart[sku]=(cart[sku]||0)+(+i.qty||1);added+=(+i.qty||1)}else if(nm)miss.push(nm)});
+ if(!added)return asModal(zh?'<h3>没有可加入的餐点</h3><p class="asp">这些餐点已不在菜单上。</p>':'<h3>Nothing To Add</h3><p class="asp">These Meals are no longer on the menu.</p>','<button class="btn btn-y" type="button" onclick="asClose()">'+(zh?'关闭':'Close')+'</button>');
+ try{localStorage.setItem('aera.cart',JSON.stringify(cart))}catch(e){}
+ if(miss.length)return asModal((zh?'<h3>已把 '+added+' 份餐点加入购物车</h3><p class="asp">以下餐点已不在菜单上，所以没有加入：':'<h3>'+added+' Meal'+(added===1?'':'s')+' Added To Your Cart</h3><p class="asp">These are no longer on the menu, so they were left out : ')+esc(miss.join(' · '))+'</p>','<a class="btn btn-y" href="'+SHOP_URL+'#cart">'+(zh?'前往购物车':'Go To My Cart')+'</a><button class="btn btn-o" type="button" onclick="asClose()">'+(zh?'关闭':'Close')+'</button>');
+ location.href=SHOP_URL+'#cart'}
+function orderAgain(no){var o=(ORDERS||[]).filter(function(x){return x.order_no===no})[0];if(!o)return;if(String(o.gateway||'').toLowerCase()==='legacy')return legacyAgain(o);
  var items=Array.isArray(o.items)?o.items:[],cart={};try{cart=JSON.parse(localStorage.getItem('aera.cart')||'{}')||{}}catch(e){}
  var n=0,plan='';items.forEach(function(i){var s=String(i.sku||'');if(!s)return;if(s.indexOf('PLAN-')===0){plan=s.slice(5);return}cart[s]=(cart[s]||0)+(+i.qty||1);n++});
  try{localStorage.setItem('aera.cart',JSON.stringify(cart))}catch(e){}
