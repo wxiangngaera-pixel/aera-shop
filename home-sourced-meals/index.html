@@ -468,8 +468,9 @@ function foodLookup(){
 function foodQty(v){FOODQ=Math.max(0.25,Math.min(10,+v||1));renderFound()}
 function mxBox(k,p,c,f){return'<div class="k"><b>'+Math.round(k)+'</b><small>KCAL</small></div><div class="p"><b>'+r1(p)+'g</b><small>Protein</small></div><div class="c"><b>'+r1(c)+'g</b><small>Carbs</small></div><div class="f"><b>'+r1(f)+'g</b><small>Fat</small></div>'}
 function zhOn(){try{return localStorage.getItem('aera_lang')==='zh'}catch(e){return false}}
+function zhName(){var D=window.AERA_I18N||{};return Object.prototype.hasOwnProperty.call(D,FOOD.name)?D[FOOD.name]:(FOOD.zh&&FOOD.zh.name)}
 function foundHead(){var z=zhOn()&&FOOD.zh;
- if(z&&z.name)return'<div class="nm noi18n">'+esc(z.name)+'</div><div class="sv noi18n" style="font-weight:600">'+esc(FOOD.name)+'</div><div class="sv noi18n">1 份 = '+esc(z.serving||servCase(FOOD.serving))+'</div>';
+ if(z&&z.name)return'<div class="nm noi18n">'+esc(zhName())+'</div><div class="sv noi18n" style="font-weight:600">'+esc(FOOD.name)+'</div><div class="sv noi18n">1 份 = '+esc(z.serving||servCase(FOOD.serving))+'</div>';
  return'<div class="nm">'+esc(FOOD.name)+'</div><div class="sv">1 Serving = '+esc(servCase(FOOD.serving))+'</div>'}
 function foundNote(){if(!FOOD)return'';var z=zhOn()&&FOOD.zh;return(z&&FOOD.note&&z.note)?z.note:FOOD.note}
 function renderFound(){
@@ -490,7 +491,7 @@ function renderFoundTotals(){var e=$('#foundTotal');if(!e||!FOOD)return;var q=FO
 function addFound(){
  if(!FOOD)return;var q=FOODQ;
  var nm=FOOD.name+(Math.abs(q-1)<0.001?'':' × '+(q%1?q:q.toFixed(0)));
- saveLib({n:nm,nz:(FOOD.zh&&FOOD.zh.name)?FOOD.zh.name+(Math.abs(q-1)<0.001?'':' × '+(q%1?q:q.toFixed(0))):undefined,k:Math.round(FOOD.kcal*q),p:r1(FOOD.p*q),c:r1(FOOD.c*q),f:r1(FOOD.f*q)});
+ saveLib({n:nm,nz:(FOOD.zh&&FOOD.zh.name)?zhName()+(Math.abs(q-1)<0.001?'':' × '+(q%1?q:q.toFixed(0))):undefined,k:Math.round(FOOD.kcal*q),p:r1(FOOD.p*q),c:r1(FOOD.c*q),f:r1(FOOD.f*q)});
  FOOD=null;$('#hmName').value='';renderFound();
  $('#hmMsg').innerHTML='<span class="msg ok">Saved to your list.</span>';
  setTimeout(function(){if($('#hmMsg'))$('#hmMsg').innerHTML=''},2600);
