@@ -703,7 +703,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),selec
   for(var i=0;i<R.length;i++){if(R[i][0].test(k))return k.replace(R[i][0],R[i][1])}return null}
  var done=new WeakSet();
  function node(n){if(done.has(n))return;var p=n.parentElement;if(!p||/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/.test(p.tagName)||p.closest('#aeraBar,.noi18n'))return;
-  var t=tr(n.nodeValue);if(t===null)return;done.add(n);n.nodeValue=n.nodeValue.replace(/^(\s*)[\s\S]*?(\s*)$/,function(m,a,b){return a+t+b})}
+  var t=tr(n.nodeValue);if(t===null||t===String(n.nodeValue).replace(/\s+/g,' ').trim())return;done.add(n);n.nodeValue=n.nodeValue.replace(/^(\s*)[\s\S]*?(\s*)$/,function(m,a,b){return a+t+b})}
  function attrs(e){['placeholder','title','aria-label'].forEach(function(a){var v=e.getAttribute&&e.getAttribute(a);if(!v)return;var t=tr(v);if(t!==null&&t!==v)e.setAttribute(a,t)});
   if(e.tagName==='INPUT'&&/^(submit|button)$/i.test(e.type||'')&&e.value){var t=tr(e.value);if(t!==null)e.value=t}}
  function walk(r){if(!r)return;if(r.nodeType===3)return node(r);if(r.nodeType!==1||(r.closest&&r.closest('#aeraBar')))return;attrs(r);
