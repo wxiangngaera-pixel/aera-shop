@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://aeramealprep.net/referrer-portal/</loc>
+    <lastmod>2026-10-05T06:18:15.076Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://aeramealprep.net/fridge/</loc>
     <lastmod>2026-10-05T06:09:28.550Z</lastmod>
     <changefreq>weekly</changefreq>
@@ -28,11 +33,6 @@
   <url>
     <loc>https://aeramealprep.net/referrer-signup/</loc>
     <lastmod>2026-10-04T20:51:14.539Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/referrer-portal/</loc>
-    <lastmod>2026-10-04T18:31:00.009Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
