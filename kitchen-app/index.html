@@ -514,7 +514,7 @@ window.addEventListener('hashchange',function(){if(location.hash==='#setup'&&KCS
 kcStart().catch(function(e){KCS.err=e.message||String(e);kcLogin()});
 </script>
 <!-- AERA Face ID -->
-<script>window.AERAPK_CFG={sb:function(){return kc},btn:'#kcGo',after:function(){kcStart()}};</script>
+<script>window.AERAPK_CFG={sb:function(){return kc},btn:'#kcGo',after:function(){kcStart()},offer:false};</script>
 <script>/* AERA Face ID : passkey sign-in, shared by every aeramealprep.net app */
 (function(){
 if(window.__AERAPK_T){clearInterval(window.__AERAPK_T);window.__AERAPK_T=0}
@@ -528,6 +528,7 @@ function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null
 function b2u(b){b=new Uint8Array(b);var s='';for(var i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
 function u2b(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';var t=atob(s),o=new Uint8Array(t.length);for(var i=0;i<t.length;i++)o[i]=t.charCodeAt(i);return o.buffer}
 function SB(){try{return C.sb&&C.sb()}catch(e){return null}}
+function sess(){var sb=SB();if(!sb||!sb.auth)return null;try{var v=JSON.parse(localStorage.getItem(sb.auth.storageKey)||'null');if(v&&v.currentSession)v=v.currentSession;if(v&&v.access_token&&v.user&&(!v.expires_at||v.expires_at*1000>Date.now()+60000))return v}catch(e){}return null}
 async function call(action,body,token){var sb=SB(),key=sb&&sb.supabaseKey;if(!key)throw new Error('Not ready yet. Try again.');
  var r=await fetch(FN,{method:'POST',headers:{'Content-Type':'application/json',apikey:key,Authorization:'Bearer '+(token||key)},body:JSON.stringify(Object.assign({action:action},body||{}))});
  var j={};try{j=await r.json()}catch(e){}if(!j.ok)throw new Error(j.error||('HTTP '+r.status));return j}
@@ -566,7 +567,7 @@ function mountLogin(){if(!C.btn||DEAD)return;var t=document.querySelector(C.btn)
 /* ---- offer to turn it on after a normal sign-in ---- */
 var RO=null,offering=false;
 async function offer(){if(C.offer===false||offering||document.getElementById('aerapkCard'))return;var sb=SB();if(!sb)return;
- var s=(await sb.auth.getSession()).data.session;if(!s)return;var uid=s.user.id;
+ var s=sess();if(!s)return;var uid=s.user.id;
  if(TRIED[uid]||ls('aera.pk.u.'+uid)||+(ls('aera.pk.skip.'+uid)||0)>Date.now())return;TRIED[uid]=1;
  offering=true;try{
  if(!(await platform))return;
@@ -578,7 +579,7 @@ async function offer(){if(C.offer===false||offering||document.getElementById('ae
  d.querySelector('.go').onclick=function(){enable(d,uid)};
  }finally{offering=false}}
 async function enable(d,uid){var m=d.querySelector('.aerapk-msg'),g=d.querySelector('.go');g.disabled=true;m.textContent='';
- try{var sb=SB(),s=(await sb.auth.getSession()).data.session;if(!RO)RO=await call('reg-options',{},s.access_token);var o=RO,p=o.options;RO=null;
+ try{var s=sess();if(!s)throw new Error('signin');if(!RO)RO=await call('reg-options',{},s.access_token);var o=RO,p=o.options;RO=null;
   var c=await navigator.credentials.create({publicKey:{challenge:u2b(p.challenge),rp:p.rp,user:{id:u2b(p.user.id),name:p.user.name,displayName:p.user.displayName},
    pubKeyCredParams:p.pubKeyCredParams,timeout:p.timeout,attestation:p.attestation,authenticatorSelection:p.authenticatorSelection,
    excludeCredentials:(p.excludeCredentials||[]).map(function(x){return{type:'public-key',id:u2b(x.id),transports:x.transports}})}});
