@@ -351,9 +351,12 @@ async function kcStart(){
 }
 
 /* ---------- open the console ---------- */
+function kcDL(){var p=kc.storage.from('kc-app').download('console.html?cb='+Date.now());var t=new Promise(function(res){setTimeout(function(){res(null)},8000)});
+ return Promise.race([p,t]).then(function(r){if(r)return r;var s=null;try{s=JSON.parse(localStorage.getItem(KC_KEY)||'null')}catch(e){}if(s&&s.currentSession)s=s.currentSession;var tok=s&&s.access_token;
+  return fetch(KC_URL+'/storage/v1/object/authenticated/kc-app/console.html?cb='+Date.now(),{headers:{apikey:KC_ANON,Authorization:'Bearer '+(tok||KC_ANON)},cache:'no-store'}).then(function(x){if(!x.ok)return{error:{message:'HTTP '+x.status}};return x.blob().then(function(b){return{data:b,error:null}})})})}
 async function kcOpen(){
  kcLoading('Loading the console…');
- var d=await kc.storage.from('kc-app').download('console.html?cb='+Date.now());
+ var d=await kcDL();
  if(d.error){kcRoot().innerHTML='<div class="kc-card">'+kcBrand()+'<h2>Could not load</h2><div class="kc-err">'+kcEsc(d.error.message)+'</div><button class="kc-btn full" onclick="kcOpen()">Try again</button></div>';return}
  var app=await d.data.text();
  var S='scr'+'ipt';
@@ -361,6 +364,7 @@ async function kcOpen(){
  var html='<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">'+
   '<'+S+' src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></'+S+'>'+
   '<'+S+'>'+boot+'</'+S+'>'+app+'</html>';
+ kcLoading('Starting the console…');await new Promise(function(r){setTimeout(r,30)});
  document.open();document.write(html);document.close();
 }
 
