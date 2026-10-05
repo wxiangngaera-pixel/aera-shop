@@ -1306,7 +1306,7 @@ function favPics(){
 function renderFavs(){var el=$('#favList');if(!el)return;var f=loadFavs();
  el.innerHTML=(f.length?f.map(function(x,i){
   return'<div class="order"><div class="top"><span class="no" id="favName'+i+'">'+esc(x.name||'Personalised Plan')+' '+'<button class="btn btn-o s renbtn" type="button" onclick="favRename('+i+')">Rename</button>'+'</span><span class="chip">'+(x.at?fmtDate(new Date(x.at).toISOString().slice(0,10)):'')+'</span></div>'+
-   '<div class="meta">'+(x.boxes||0)+' Boxes · '+rm(x.price||0)+((x.boxes)?' · ≈ '+rm(x.price/x.boxes)+' per Meal':'')+'</div>'+
+   '<div class="meta">'+(x.boxes||0)+' Meals · '+rm(x.price||0)+((x.boxes)?' · ≈ '+rm(x.price/x.boxes)+' per Meal':'')+'</div>'+
    favBentos(x)+
    ((x.names&&x.names.length)?'<div class="hint" style="margin-top:6px">'+esc(x.names.join('  |  '))+((x.boxes>x.names.length)?'  |  …':'')+'</div>':'')+
    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-y" type="button" onclick="favOpen('+i+')">Repurchase</button><button class="btn btn-k" type="button" onclick="favCart('+i+')">Add To Cart</button><button class="btn btn-o" type="button" onclick="favRemove('+i+')">Remove</button></div></div>'}).join(''):
@@ -1494,7 +1494,7 @@ function renderPlans(){var el=$('#plansList');if(!el)return;var rows=PLANS||[],o
  var GOAL={fat_loss:'Fat Loss',lean_gain:'Lean Gain',mass_gain:'Mass Gain',healthy:'Healthy Eating',custom:'Custom Macros'};
  el.innerHTML=rows.map(function(p,idx){var t=p.targets||{},pr=p.prefs||{},meals=Array.isArray(p.meals)?p.meals:[];var byDay={};meals.forEach(function(m){(byDay[m.day||1]=byDay[m.day||1]||[]).push(m)});
   return'<div class="order"><div class="top"><span class="no" id="planName'+idx+'">'+(p.name?esc(p.name)+'<small style="display:block;font-weight:500;font-size:11px;letter-spacing:.02em;color:var(--mute)">'+esc(String(p.id))+' '+'<button class="btn btn-o s renbtn" type="button" onclick="planRename('+idx+')">Rename</button>'+'</small>':esc(String(p.id))+' '+'<button class="btn btn-o s renbtn" type="button" onclick="planRename('+idx+')">Rename</button>')+'</span><span><span class="chip '+(ordered[p.id]?'ok':'')+'">'+esc(ordered[p.id]?'Ordered · '+ordered[p.id]:'Saved, not ordered yet')+'</span></span></div>'+
-  '<div class="meta">'+esc(GOAL[pr.goal]||'')+(pr.goal?' · ':'')+(p.days||'?')+' Days x '+(p.meals_per_day||'?')+' Meal'+(p.meals_per_day===1?'':'s')+' a day · '+(p.boxes||meals.length)+' Boxes'+(p.created_at?' · '+fmtDate(String(p.created_at).slice(0,10)):'')+'</div>'+
+  '<div class="meta">'+esc(GOAL[pr.goal]||'')+(pr.goal?' · ':'')+(p.days||'?')+' Days x '+(p.meals_per_day||'?')+' Meal'+(p.meals_per_day===1?'':'s')+' a day · '+(p.boxes||meals.length)+' Meals'+(p.created_at?' · '+fmtDate(String(p.created_at).slice(0,10)):'')+'</div>'+
   (t.kcal?'<div class="hint" style="margin-top:6px">AERA Meals Target ≈ '+Math.round(t.kcal)+' KCALs · Protein '+Math.round(t.p||0)+' g · Carbs '+Math.round(t.c||0)+' g · Fat '+Math.round(t.f||0)+' g per Day</div>':'')+planStrip(meals)+
   '<details style="margin-top:8px" ontoggle="planPics(this)"><summary style="cursor:pointer;font-weight:600;font-size:13px">Show Meals</summary><div class="items" style="margin-top:6px">'+Object.keys(byDay).sort(function(a,b){return a-b}).map(function(d){return'<div class="daywrap"><b>Day '+d+'</b>'+byDay[d].map(function(m){return'<div class="mealrow">'+planBento(m)+'<span class="mtxt">'+esc(m.name||(m.comps||[]).map(function(c){return c.name}).join(' · '))+((m.comps||[]).length?'<br><span style="color:var(--mute)">'+esc((m.comps||[]).map(function(c){return c.name+' '+c.grams+' g'}).join(' · '))+'</span>':'')+'</span></div>'}).join('')+'</div>'}).join('')+'</div></details>'+
   '<div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-y s" type="button" onclick="planOpen('+idx+')">Open &amp; Tune This Plan</button>'+'<button class="btn btn-y s" type="button" onclick="planCart('+idx+')">Add to Cart</button>'+'<button class="btn btn-o s" type="button" onclick="planDelAsk('+idx+')">Delete</button>'+asPlanBtn(p,idx,ordered)+'</div>'+
@@ -2327,7 +2327,7 @@ function ovPlanRow(){
  var head='<button type="button" class="ovplanhead" onclick="ovToggle()" aria-expanded="'+(OVPLAN?'true':'false')+'">'+
   '<span class="ovlabel">My Meal Plan</span>'+
   '<span class="ovplanline"><b>'+(+p.days||0)+' Days x '+(+p.meals_per_day||0)+' Meals</b>'+
-   '<span>'+(+p.boxes||meals.length||0)+' Boxes'+(+p.price?' · '+rm(p.price):'')+'</span></span>'+
+   '<span>'+(+p.boxes||meals.length||0)+' Meals'+(+p.price?' · '+rm(p.price):'')+'</span></span>'+
   '<span class="ovcaret" aria-hidden="true">'+(OVPLAN?'▴':'▾')+'</span></button>';
  if(!OVPLAN)return'<div class="ovplan">'+head+'</div>';
  var byDay={};meals.forEach(function(m){(byDay[m.day||1]=byDay[m.day||1]||[]).push(m)});
@@ -2529,8 +2529,8 @@ window.AERA_I18N_RE.push(
  [/^(RM [\d,.]+) earned all together$/,"累计赚取 $1"],
  [/^([\d.]+)% of the meal subtotal on every order placed with your code\.$/,"使用您的推荐码下单，可获餐点小计的 $1%。"],
  [/^(\d+) Days x (\d+) Meals$/,"$1 天 × 每天 $2 餐"],
- [/^(\d+) Boxes$/,"$1 盒"],
- [/^(\d+) Boxes · (RM [\d,.]+)$/,"$1 盒 · $2"],
+ [/^(\d+) Meals$/,"$1 份"],
+ [/^(\d+) Meals · (RM [\d,.]+)$/,"$1 份 · $2"],
  [/^Day (\d+)$/,"第 $1 天"],
  [/^(\d+) g$/,"$1 克"],
  [/^kcal a day · P (\d+) g · C (\d+) g · F (\d+) g$/,"大卡/天 · 蛋白质 $1 克 · 碳水 $2 克 · 脂肪 $3 克"],
@@ -2652,10 +2652,10 @@ if(window.AERA_I18N&&window.AERA_I18N_RE)(function(){var D=window.AERA_I18N,R=wi
   "Open & Tune This Plan":"打开并调整这份餐单","Plan Price":"餐单价格"});
  var G={"Fat Loss":"减脂","Lean Gain":"增肌减脂","Mass Gain":"增肌","Healthy Eating":"健康饮食","Custom Macros":"自定义营养比例"};
  Object.keys(G).forEach(function(g){
-  R.push([new RegExp("^"+rx(g)+" · (\\d+) Days x (\\d+) Meals? a day · (\\d+) Boxes · (.+)$"),
-   G[g]+" · $1 天 × 每天 $2 餐 · $3 盒 · $4"]);
-  R.push([new RegExp("^"+rx(g)+" · (\\d+) Days x (\\d+) Meals? a day · (\\d+) Boxes$"),
-   G[g]+" · $1 天 × 每天 $2 餐 · $3 盒"])});
+  R.push([new RegExp("^"+rx(g)+" · (\\d+) Days x (\\d+) Meals? a day · (\\d+) Meals · (.+)$"),
+   G[g]+" · $1 天 × 每天 $2 餐 · $3 份 · $4"]);
+  R.push([new RegExp("^"+rx(g)+" · (\\d+) Days x (\\d+) Meals? a day · (\\d+) Meals$"),
+   G[g]+" · $1 天 × 每天 $2 餐 · $3 份"])});
  R.push([/^Ordered · (.+)$/,"已下单 · $1"]);
  R.push([/^AERA Meals Target ≈ ([\d,]+) KCALs · Protein ([\d.]+) g · Carbs ([\d.]+) g · Fat ([\d.]+) g per Day$/,
   "AERA 餐点目标 ≈ 每日 $1 大卡 · 蛋白质 $2 克 · 碳水 $3 克 · 脂肪 $4 克"]);
