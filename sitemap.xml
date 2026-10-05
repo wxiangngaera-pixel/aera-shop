@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://aeramealprep.net/fridge/</loc>
+    <lastmod>2026-10-05T07:45:14.709Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://aeramealprep.net/kitchen-app/</loc>
     <lastmod>2026-10-05T07:45:08.573Z</lastmod>
     <changefreq>weekly</changefreq>
@@ -8,11 +13,6 @@
   <url>
     <loc>https://aeramealprep.net/kitchen/</loc>
     <lastmod>2026-10-05T07:45:02.616Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/fridge/</loc>
-    <lastmod>2026-10-05T07:44:50.390Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
