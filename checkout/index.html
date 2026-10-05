@@ -636,7 +636,7 @@ var AP={perRM:5,rmPer100:1,capPct:10,expiryMonths:6}; // 5 AP per RM 1 on meals;
 var ROAD_FACTOR=1.25,MAX_KM=60;
 var COURIERS={lalamove:{name:'Lalamove',rate:{base:6,baseKm:10,perKm:1.0,cap:25,freeAbove:0}},grab:{name:'Grab',rate:{base:7,baseKm:10,perKm:1.1,cap:27,freeAbove:0}}}; // Normal delivery rate per courier (RM): base covers baseKm, then perKm per extra km, capped at cap; freeAbove = free delivery for subtotals ≥ this (0 = never). PLACEHOLDER numbers until AERA confirms.
 var DOOR_SURCHARGE={motorcycle:2,car:5}; // Door-to-Door Service = Normal Delivery + this, by vehicle (both couriers)
-var MOTO_MAX_BOXES=1; // orders up to this many boxes go by motorcycle, bigger orders by car (keep in step with the Lalamove booking flow)
+var MOTO_MAX_BOXES=17; // MEALS, not boxes : up to 17 meals go by motorcycle ( with a Thermal bag ), 18 or more by car — same rule as the live Lalamove quote
 function vehicle(){return boxes()<=MOTO_MAX_BOXES?'motorcycle':'car'}
 function doorExtra(){return DOOR_SURCHARGE[vehicle()]}
 var PACK_PER_BOX=1.8; // RM per box, already INCLUDED in every displayed meal/bundle price (BUNDLES/MEALS below hold the food price before packaging)
@@ -1358,7 +1358,7 @@ function renderVouchers(){var el=document.getElementById('vouchBox');if(!el)retu
 alcLoad();
 function renderCart(){var el=document.getElementById('lines');var keys=Object.keys(CART).filter(function(k){return !!CAT[k]});
  el.innerHTML=keys.length?keys.map(function(k){var x=CAT[k];if(x.plan)return'<div class="line"><span class="n">'+esc(x.name)+'<small>'+x.boxes+' Meals · Packaging included · <a href="https://my.chatbees.io/p/SrQzC5m2">Edit plan</a></small></span><button class="btn btn-o" type="button" style="padding:6px 10px" onclick="add(\''+k+'\',-1)">Remove</button><b>'+rm(x.price)+'</b></div>';var up=uPrice(k),cut=up<x.price-0.004;
-  return'<div class="line"><span class="n">'+esc(x.name)+'<small>'+(cut?'<s style="opacity:.55">'+rm(x.price)+'</s> ':'')+rm(up)+' × '+CART[k]+(x.boxes>1?' · '+(x.boxes*CART[k])+' boxes':'')+'</small></span><span class="qty"><button type="button" onclick="add(\''+k+'\',-1)">−</button><span>'+CART[k]+'</span><button type="button" onclick="add(\''+k+'\',1)">+</button></span><b>'+rm(up*CART[k])+'</b></div>'}).join(''):'<div class="empty">Your Cart is empty. Add Meals from the Menu.</div>';
+  return'<div class="line"><span class="n">'+esc(x.name)+'<small>'+(cut?'<s style="opacity:.55">'+rm(x.price)+'</s> ':'')+rm(up)+' × '+CART[k]+(x.boxes>1?' · '+(x.boxes*CART[k])+' meals':'')+'</small></span><span class="qty"><button type="button" onclick="add(\''+k+'\',-1)">−</button><span>'+CART[k]+'</span><button type="button" onclick="add(\''+k+'\',1)">+</button></span><b>'+rm(up*CART[k])+'</b></div>'}).join(''):'<div class="empty">Your Cart is empty. Add Meals from the Menu.</div>';
  document.getElementById('cartCount').textContent=count();document.getElementById('sheetCount').textContent=count()+' item'+(count()===1?'':'s');
  var sub=subtotal();var fee=isDel()?FEE_RM:0;var pk=packFee();var bday=birthdayRM();var disc=discountRM();
  var vsave=voucherSaved();var fo=firstOrderRM();var total=Math.max(0,sub+pk+(fee||0)-vsave-bday-disc-fo);
@@ -1381,7 +1381,7 @@ function renderCart(){var el=document.getElementById('lines');var keys=Object.ke
  var dr=document.getElementById('discRow');dr.style.display=disc>0?'flex':'none';document.getElementById('discName').textContent='AERA Points discount · '+apFmt(disc*100/AP.rmPer100);document.getElementById('discAmt').textContent='− '+rm(disc);
  document.getElementById('earnHint').textContent=keys.length?'You earn '+apFmt(pointsEarned())+' with this Order ( '+AP.perRM+' AP per RM 1 on Meals · 100 AP = RM '+AP.rmPer100.toFixed(2)+' OFF future Orders ).':'';
  renderPoints();
- document.getElementById('pkName').textContent='Packaging Fee · '+PACKAGING[PACK].name+' · '+boxes()+' Box'+(boxes()===1?'':'es');document.getElementById('pkAmt').textContent=rm(pk);
+ document.getElementById('pkName').textContent='Packaging Fee · '+PACKAGING[PACK].name+' · '+boxes()+' Meal'+(boxes()===1?'':'s');document.getElementById('pkAmt').textContent=rm(pk);
  document.getElementById('feeName').textContent=isDel()?(COURIER?COURIERS[COURIER].name+(HANDOVER?(HANDOVER==='drop'?' · Normal Delivery':' · Door-to-Door ( '+vehUp()+' )'):''):'Delivery')+(GEO&&GEO.km?' · '+GEO.km.toFixed(1)+' km':''):'Self Pick-Up';
  document.getElementById('feeAmt').textContent=isDel()?(FEE_RM==null?(!GEO?'Check address':!COURIER?'Choose courier':!HANDOVER?'Choose service':'—'):(FEE_RM===0?'FREE':rm(FEE_RM))):'FREE';
  updateRates();
@@ -2221,7 +2221,7 @@ Object.assign(window.AERA_I18N,{
 "Start typing your address…":"开始输入您的地址…","Your Name":"您的姓名","Email":"电邮","Mobile":"手机号码","e.g. AERA-GYMNAME":"例如 AERA-GYMNAME","e.g. less spicy, leave at guard house, call on arrival":"例如：少辣、放在警卫室、抵达时来电","Enter code":"输入代码","Order — AERA Meal Prep":"订购 — AERA Meal Prep"
 });
 window.AERA_I18N_RE.push(
-[/^(\d+) KCALs · (\d+) g P$/,"$1 大卡 · 蛋白质 $2 克"],[/^(\d+) kcal$/,"$1 大卡"],[/^(\d+) g protein$/,"蛋白质 $1 克"],[/^RM ([\d,.]+) per Meal$/,"每餐 RM $1"],[/^See the (\d+) Meals Inside$/,"查看内含的 $1 道餐点"],[/^7 Days x (\d+) Meals?$/,"7 天 × 每天 $1 餐"],[/^Fat Loss Bundle · 7 Days x (\d+) Meals?$/,"减脂套餐 · 7 天 × 每天 $1 餐"],[/^Mass Gain Bundle · 7 Days x (\d+) Meals?$/,"增肌套餐 · 7 天 × 每天 $1 餐"],[/^(.+) \( Fat Loss \)$/,"$1（减脂）"],[/^(.+) \( Mass Gain \)$/,"$1（增肌）"],[/^RM ([\d,.]+) × (\d+) · (\d+) boxes$/,"RM $1 × $2 · $3 盒"],[/^Packaging Fee · (.+) · (\d+) Boxes$/,"包装费 · $1 · $2 盒"],[/^AERA Points discount · ([\d,]+) AP$/,"AERA 积分折抵 · $1 AP"],[/^Pay RM ([\d,.]+) Securely$/,"安全支付 RM $1"],[/^(\d+) items?$/,"$1 件"],[/^My Account · (.+)$/,"我的账户 · $1"],[/^Cart · (\d+)$/,"购物车 · $1"],[/^· Signed in as (.+)$/,"· 已登录：$1"],[/^Order before 12:45 PM for the earliest slot 2 Days later\. Earliest available : (.+)$/,"中午 12:45 前下单，最早可选 2 天后的时段。最早可选：$1"],[/^No points yet for (.+) — this order earns ([\d,]+) AP, ready to use next time\.$/,"$1 目前还没有积分 — 这笔订单可获得 $2 AP，下次即可使用。"],[/^You earn ([\d,]+) AP with this Order \( 5 AP per RM 1 on Meals · 100 AP = RM 1\.00 OFF future Orders \)\.$/,"这笔订单可获得 $1 AP（餐点每 RM 1 得 5 AP · 100 AP = 下次订单折抵 RM 1.00）。"],[/^That is RM ([\d,.]+) OFF your Meals\. It stands on its own, so AERA Points, the Birthday Treat and Delivery Vouchers are paused while it is on\.$/,"相当于餐点折抵 RM $1。此优惠单独使用，启用期间 AERA 积分、生日礼遇与配送优惠券会暂停。"]
+[/^(\d+) KCALs · (\d+) g P$/,"$1 大卡 · 蛋白质 $2 克"],[/^(\d+) kcal$/,"$1 大卡"],[/^(\d+) g protein$/,"蛋白质 $1 克"],[/^RM ([\d,.]+) per Meal$/,"每餐 RM $1"],[/^See the (\d+) Meals Inside$/,"查看内含的 $1 道餐点"],[/^7 Days x (\d+) Meals?$/,"7 天 × 每天 $1 餐"],[/^Fat Loss Bundle · 7 Days x (\d+) Meals?$/,"减脂套餐 · 7 天 × 每天 $1 餐"],[/^Mass Gain Bundle · 7 Days x (\d+) Meals?$/,"增肌套餐 · 7 天 × 每天 $1 餐"],[/^(.+) \( Fat Loss \)$/,"$1（减脂）"],[/^(.+) \( Mass Gain \)$/,"$1（增肌）"],[/^RM ([\d,.]+) × (\d+) · (\d+) meals$/,"RM $1 × $2 · $3 份"],[/^Packaging Fee · (.+) · (\d+) Meals?$/,"包装费 · $1 · $2 份"],[/^AERA Points discount · ([\d,]+) AP$/,"AERA 积分折抵 · $1 AP"],[/^Pay RM ([\d,.]+) Securely$/,"安全支付 RM $1"],[/^(\d+) items?$/,"$1 件"],[/^My Account · (.+)$/,"我的账户 · $1"],[/^Cart · (\d+)$/,"购物车 · $1"],[/^· Signed in as (.+)$/,"· 已登录：$1"],[/^Order before 12:45 PM for the earliest slot 2 Days later\. Earliest available : (.+)$/,"中午 12:45 前下单，最早可选 2 天后的时段。最早可选：$1"],[/^No points yet for (.+) — this order earns ([\d,]+) AP, ready to use next time\.$/,"$1 目前还没有积分 — 这笔订单可获得 $2 AP，下次即可使用。"],[/^You earn ([\d,]+) AP with this Order \( 5 AP per RM 1 on Meals · 100 AP = RM 1\.00 OFF future Orders \)\.$/,"这笔订单可获得 $1 AP（餐点每 RM 1 得 5 AP · 100 AP = 下次订单折抵 RM 1.00）。"],[/^That is RM ([\d,.]+) OFF your Meals\. It stands on its own, so AERA Points, the Birthday Treat and Delivery Vouchers are paused while it is on\.$/,"相当于餐点折抵 RM $1。此优惠单独使用，启用期间 AERA 积分、生日礼遇与配送优惠券会暂停。"]
 );
 if(window.aeraRetranslate)window.aeraRetranslate();
 </script>
@@ -2683,7 +2683,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),selec
 /* more Chinese for this page : added to the page's own translation list */
 (function(){try{var D=window.AERA_I18N=window.AERA_I18N||{},R=window.AERA_I18N_RE=window.AERA_I18N_RE||[];
  Object.assign(D,{"Your Cart is empty. Add Meals from the Menu.": "购物车是空的。请从菜单加入餐点。", "Sign in to place your order": "登录后即可下单", "Your Order, AERA Points and Delivery Addresses all live in your Account. It takes a moment to create one, and your Cart is kept while you do.": "您的订单、AERA 积分和收件地址都保存在账户里。注册只需片刻，购物车会为您保留。", "Your Order, AERA Points and Delivery Addresses all live in your Account. It takes a moment to create one, and your Cart is kept while you do": "您的订单、AERA 积分和收件地址都保存在账户里。注册只需片刻，购物车会为您保留。", "Create An Account": "注册账户", "Log In": "登录", "· We only ask what the Order needs": "· 我们只问订单需要的资料", "Pay Securely": "安全付款", "Ordering for a company with an AERA account? No login needed — just type your company email under Your Details.": "替有 AERA 账户的公司下单？不用登录，只要在「您的资料」里输入公司电邮即可。"});
- R.unshift([/^(SUN|MON|TUE|WED|THU|FRI|SAT), (\d+)(?:st|nd|rd|th) (JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)$/,function(m,w,d,mo){return (['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'].indexOf(mo)+1)+' 月 '+d+' 日（周'+{SUN:'日',MON:'一',TUE:'二',WED:'三',THU:'四',FRI:'五',SAT:'六'}[w]+'）'}],[/^(\d+) (AM|PM) - (\d+) (AM|PM)$/,function(m,a,ap,b,bp){var z=function(h,p){return (p==='AM'?'上午 ':'下午 ')+h+' 点'};return z(a,ap)+' - '+z(b,bp)}],[/^(\d+) (AM|PM) - (\d+) (AM|PM) \( Full After 1 PM \)$/,function(m,a,ap,b,bp){var z=function(h,p){return (p==='AM'?'上午 ':'下午 ')+h+' 点'};return z(a,ap)+' - '+z(b,bp)+'（下午 1 点后已满）'}],[/^Packaging Fee · (MAP Bento Box|Vacuum Packed) · (\d+) Boxes$/,function(m,p,n){return '包装费 · '+(p==='Vacuum Packed'?'真空包装':'MAP 保鲜餐盒')+' · '+n+' 盒'}],[/^Normal from (RM [\d.]+) · Door-to-Door from (RM [\d.]+)$/,'普通配送 $1 起 · 送到门口 $2 起']);
+ R.unshift([/^(SUN|MON|TUE|WED|THU|FRI|SAT), (\d+)(?:st|nd|rd|th) (JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)$/,function(m,w,d,mo){return (['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'].indexOf(mo)+1)+' 月 '+d+' 日（周'+{SUN:'日',MON:'一',TUE:'二',WED:'三',THU:'四',FRI:'五',SAT:'六'}[w]+'）'}],[/^(\d+) (AM|PM) - (\d+) (AM|PM)$/,function(m,a,ap,b,bp){var z=function(h,p){return (p==='AM'?'上午 ':'下午 ')+h+' 点'};return z(a,ap)+' - '+z(b,bp)}],[/^(\d+) (AM|PM) - (\d+) (AM|PM) \( Full After 1 PM \)$/,function(m,a,ap,b,bp){var z=function(h,p){return (p==='AM'?'上午 ':'下午 ')+h+' 点'};return z(a,ap)+' - '+z(b,bp)+'（下午 1 点后已满）'}],[/^Packaging Fee · (MAP Bento Box|Vacuum Packed) · (\d+) Meals?$/,function(m,p,n){return '包装费 · '+(p==='Vacuum Packed'?'真空包装':'MAP 保鲜餐盒')+' · '+n+' 份'}],[/^Normal from (RM [\d.]+) · Door-to-Door from (RM [\d.]+)$/,'普通配送 $1 起 · 送到门口 $2 起']);
  var go=function(){try{if(window.aeraRetranslate)window.aeraRetranslate()}catch(e){}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(go,50)});else setTimeout(go,50)}catch(e){}})();
 </script>
 <!-- AERA zh extra : end -->
@@ -2853,5 +2853,35 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(go,50)});else setTimeout(go,50)}catch(e){}})();
 </script>
 <!-- AERA zh dates : end -->
+<!-- AERA Lalamove live price : start -->
+<script id="aera-lm-live">
+/* Lalamove delivery fee = the live Lalamove price for this address ( motorcycle + Thermal bag up to 17 meals, car above ),
+   fetched from our Supabase function lalamove-quote. Grab stays on the estimate ( no Grab price API ).
+   If Lalamove can't be reached the old estimate is used so checkout never gets stuck. */
+(function(){try{
+ var QURL='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/lalamove-quote';
+ var Q={key:'',price:null,busy:false,failed:false};
+ function key(){try{return (GEO&&GEO.lat!=null)?(Number(GEO.lat).toFixed(5)+','+Number(GEO.lng).toFixed(5)+','+vehicle()):''}catch(e){return''}}
+ var est=window.feeFor,origRefee=window.refee,origRate=window.rateText;
+ function fetchQ(){var k=key();if(!k||(Q.key===k&&(Q.busy||Q.price!=null||Q.failed)))return;
+  Q.key=k;Q.busy=true;Q.price=null;Q.failed=false;
+  var addr='';try{addr=addrFull()}catch(e){}
+  fetch(QURL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lat:GEO.lat,lng:GEO.lng,address:addr||GEO.label||'',meals:boxes()})})
+   .then(function(r){return r.json()}).then(function(j){if(Q.key!==k)return;if(j&&j.ok&&isFinite(j.price))Q.price=Math.round(j.price*100)/100;else Q.failed=true})
+   .catch(function(){if(Q.key===k)Q.failed=true})
+   .then(function(){if(Q.key!==k)return;Q.busy=false;try{origRefee()}catch(e){}try{updateRates()}catch(e){}});
+ }
+ window.feeFor=function(km,sub,c,hh){c=c||COURIER||'lalamove';
+  if(c==='lalamove'&&ready()){var k=key();if(Q.key!==k)fetchQ();
+   if(Q.key===k&&Q.price!=null){var F=COURIERS.lalamove.rate,f=(F.freeAbove&&sub>=F.freeAbove)?0:Q.price;if((hh||HANDOVER||'drop')==='door')f+=doorExtra();return Math.round(f*100)/100}}
+  return est(km,sub,c,hh)};
+ window.rateText=function(c,hh){if(c==='lalamove'&&ready()&&Q.key===key()&&Q.busy)return 'checking…';return origRate(c,hh)};
+ window.refee=function(){if(typeof isDel==='function'&&isDel()&&ready()){var k=key();if(Q.key!==k)fetchQ();
+   if(COURIER==='lalamove'&&Q.key===k&&Q.busy){FEE_RM=null;var fm=document.getElementById('feeMsg');
+    if(fm)fm.innerHTML='<div class="msg ok">Matched: '+esc(GEO.label||'')+'<br>Getting the live Lalamove price…</div>';try{updateRates()}catch(e){}renderCart();return}}
+  return origRefee.apply(this,arguments)};
+}catch(e){}})();
+</script>
+<!-- AERA Lalamove live price : end -->
 </body>
 </html>
