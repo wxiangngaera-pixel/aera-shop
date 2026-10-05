@@ -533,7 +533,7 @@ function gerr(msg){var e=$('#gerr');if(!msg){e.style.display='none';return}e.tex
 
 /* ---- who is signed in ---- */
 async function boot(){
- db=window.supabase.createClient(SB.url,SB.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ db=window.supabase.createClient(SB.url,SB.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});window.__AERA_DB=db;window.__AERA_AFTER=afterSignIn;
  var s=await db.auth.getSession();
  if(s.data&&s.data.session)return afterSignIn();
  $('#gate').style.display='block'}
@@ -1323,7 +1323,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),selec
 </script>
 <!-- AERA fridge app bar : end -->
 <!-- AERA Face ID -->
-<script>window.AERAPK_CFG={sb:function(){return db},btn:'#gbtn',after:function(){afterSignIn()}};</script>
+<script>window.AERAPK_CFG={sb:function(){return window.__AERA_DB||null},btn:'#gbtn',after:function(){if(window.__AERA_AFTER)window.__AERA_AFTER();else location.reload()}};</script>
 <script>/* AERA Face ID : passkey sign-in, shared by every aeramealprep.net app */
 (function(){
 if(window.__AERAPK_T){clearInterval(window.__AERAPK_T);window.__AERAPK_T=0}
