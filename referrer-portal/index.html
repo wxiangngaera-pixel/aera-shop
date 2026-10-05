@@ -878,7 +878,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 })();
 </script>
 <!-- AERA site bar : end -->
-<script>window.AERA_APP={"key": "ref", "name": "AERA Referrer Portal", "short": "AERA Referrer", "scopePath": "/referrer-portal/", "link": "https://aeramealprep.net/referrer-portal/?install=1", "mount": "#aeraBar .ab-r", "barTitle": "Get The AERA Referrer App", "howTitle": "Add AERA Referrer To Your Home Screen", "done": "That is it. Open AERA Referrer from your Home Screen to see your Cash-Back.", "zh": {"Get The AERA Referrer App": "AERA 推荐人 App", "Add AERA Referrer To Your Home Screen": "把 AERA 推荐人加到主屏幕", "That is it. Open AERA Referrer from your Home Screen to see your Cash-Back.": "完成！以后从主屏幕打开 AERA 推荐人，查看您的回馈金。"}};</script>
+<script>window.AERA_APP={"key": "ref", "icons": {"180":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/sign/kc-app/icons/referrer-180.png?token=eyJraWQiOiJjNjRlYTIxMi01YmFiLTRjNmMtODcwNS00ZGE3Y2U5YmZiMTYiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJrYy1hcHAvaWNvbnMvcmVmZXJyZXItMTgwLnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3OTExODEwMTIsImV4cCI6MjEwNjU0MTAxMn0.UWdhmJSBTRNTwYOmeiNgdqeMmhamvSfVZocpnr2nWbl6exmLJ4Fc1pvJbLjPTHJsjXt0tMiRF2Kj6IHIYUX03A","192":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/sign/kc-app/icons/referrer-192.png?token=eyJraWQiOiJjNjRlYTIxMi01YmFiLTRjNmMtODcwNS00ZGE3Y2U5YmZiMTYiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJrYy1hcHAvaWNvbnMvcmVmZXJyZXItMTkyLnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3OTExODEwMTEsImV4cCI6MjEwNjU0MTAxMX0.McGZbY1apeIAxqhhWwtIkEq9waHme-FEQPFObklSGK1whs3NjzFetzLxMnxG19fHs-FPRuyqanc8bU6-QzOF2A","512":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/sign/kc-app/icons/referrer-512.png?token=eyJraWQiOiJjNjRlYTIxMi01YmFiLTRjNmMtODcwNS00ZGE3Y2U5YmZiMTYiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJrYy1hcHAvaWNvbnMvcmVmZXJyZXItNTEyLnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3OTExODEwMTEsImV4cCI6MjEwNjU0MTAxMX0.xSM5NWzX1VTZyoeCUUcDfJ1oAOTzbmjr5Zbq2Ta8CKe3uo0V_5Payggr1k76t51VKLG0rKBZQ17958mJJY6avg"}, "name": "AERA Referrer Portal", "short": "AERA Referrer", "scopePath": "/referrer-portal/", "link": "https://aeramealprep.net/referrer-portal/?install=1", "mount": "#aeraBar .ab-r", "barTitle": "Get The AERA Referrer App", "howTitle": "Add AERA Referrer To Your Home Screen", "done": "That is it. Open AERA Referrer from your Home Screen to see your Cash-Back.", "zh": {"Get The AERA Referrer App": "AERA 推荐人 App", "Add AERA Referrer To Your Home Screen": "把 AERA 推荐人加到主屏幕", "That is it. Open AERA Referrer from your Home Screen to see your Cash-Back.": "完成！以后从主屏幕打开 AERA 推荐人，查看您的回馈金。"}};</script>
 <!-- AERA app kit : start -->
 <style id="aera-app-kit">
 .aera-getapp{display:inline-flex;align-items:center;gap:6px;background:#FDB913!important;color:#0B1C36!important;border:0!important;border-radius:999px!important;padding:8px 14px!important;font:inherit;font-size:12.5px!important;font-weight:800!important;cursor:pointer;white-space:nowrap;line-height:1.2;text-decoration:none;flex:none;box-shadow:none}
@@ -916,7 +916,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
    button sits ). */
 (function(){try{
  var C=window.AERA_APP;if(!C||window.top!==window)return;
- var I='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push?icon=';
+ var I='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-push?icon='; var IC=function(n){return (C.icons&&C.icons[n])||I+n};
  var D=window.AERA_I18N=window.AERA_I18N||{};
  Object.assign(D,{"Get The App":"下载 App","Install":"安装","Got It":"知道了",
   "Add it to your Home Screen. It opens full screen, no App Store needed.":"加到手机主屏幕，全屏打开，无需 App Store。",
@@ -931,11 +931,11 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  function meta(n,v){if(document.querySelector('meta[name="'+n+'"]'))return;var m=document.createElement('meta');m.name=n;m.content=v;document.head.appendChild(m)}
  meta('theme-color','#16479E');meta('mobile-web-app-capable','yes');meta('apple-mobile-web-app-capable','yes');
  meta('apple-mobile-web-app-title',C.short);meta('apple-mobile-web-app-status-bar-style','default');
- if(!document.querySelector('link[rel="apple-touch-icon"]')){var ti=document.createElement('link');ti.rel='apple-touch-icon';ti.href=I+'180';document.head.appendChild(ti)}
+ if(!document.querySelector('link[rel="apple-touch-icon"]')){var ti=document.createElement('link');ti.rel='apple-touch-icon';ti.href=IC('180');document.head.appendChild(ti)}
  if(!document.querySelector('link[rel="manifest"]')){var ml=document.createElement('link');ml.rel='manifest';
   ml.href=C.manifestUrl||('data:application/manifest+json,'+encodeURIComponent(JSON.stringify({name:C.name,short_name:C.short,id:C.scopePath,
    start_url:'https://aeramealprep.net'+C.scopePath+'?app=1',scope:'https://aeramealprep.net'+C.scopePath,display:'standalone',background_color:'#16479E',theme_color:'#16479E',
-   icons:[{src:I+'192',sizes:'192x192',type:'image/png',purpose:'any'},{src:I+'512',sizes:'512x512',type:'image/png',purpose:'any'},{src:I+'512',sizes:'512x512',type:'image/png',purpose:'maskable'}]})));
+   icons:[{src:IC('192'),sizes:'192x192',type:'image/png',purpose:'any'},{src:IC('512'),sizes:'512x512',type:'image/png',purpose:'any'}]})));
   document.head.appendChild(ml)}
  var SA=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;if(SA)return;
  var P=null,K='aera.app.hide.'+C.key,ua=navigator.userAgent;
