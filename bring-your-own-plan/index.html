@@ -851,7 +851,7 @@ function paintOpen(){
   return}
  $('#open').disabled=false;
  var boxes=d.plan.meals.length,T=d.plan.targets;
- h+='<div class="tot"><div><div class="l">Boxes</div><div class="v">'+boxes+'</div></div>'+
+ h+='<div class="tot"><div><div class="l">Meals</div><div class="v">'+boxes+'</div></div>'+
   '<div><div class="l">A Day</div><div class="v">'+Math.round(T.kcal)+' KCAL</div></div>'+
   '<div><div class="l">Protein A Day</div><div class="v">'+T.p+' g</div></div></div>';
  if(d.waiting)h+='<div class="note warn" style="margin-top:12px"><b>'+d.waiting+' item'+
