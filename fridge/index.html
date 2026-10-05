@@ -1322,5 +1322,86 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),selec
 }catch(e){}})();
 </script>
 <!-- AERA fridge app bar : end -->
+<!-- AERA Face ID -->
+<script>window.AERAPK_CFG={sb:function(){return db},btn:'#gbtn',after:function(){afterSignIn()}};</script>
+<script>/* AERA Face ID : passkey sign-in, shared by every aeramealprep.net app */
+(function(){
+if(window.__AERAPK_T){clearInterval(window.__AERAPK_T);window.__AERAPK_T=0}
+var FN='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/passkey';
+var C=window.AERAPK_CFG||{};
+var PKC=window.PublicKeyCredential;
+if(!PKC||!navigator.credentials)return;
+var APPLE=/iP(hone|ad|od)|Macintosh/.test(navigator.userAgent);
+var LBL=APPLE?'Face ID':'Fingerprint / Face';
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}}
+function b2u(b){b=new Uint8Array(b);var s='';for(var i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function u2b(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';var t=atob(s),o=new Uint8Array(t.length);for(var i=0;i<t.length;i++)o[i]=t.charCodeAt(i);return o.buffer}
+function SB(){try{return C.sb&&C.sb()}catch(e){return null}}
+async function call(action,body,token){var sb=SB(),key=sb&&sb.supabaseKey;if(!key)throw new Error('Not ready yet. Try again.');
+ var r=await fetch(FN,{method:'POST',headers:{'Content-Type':'application/json',apikey:key,Authorization:'Bearer '+(token||key)},body:JSON.stringify(Object.assign({action:action},body||{}))});
+ var j={};try{j=await r.json()}catch(e){}if(!j.ok)throw new Error(j.error||('HTTP '+r.status));return j}
+var platform=PKC.isUserVerifyingPlatformAuthenticatorAvailable?PKC.isUserVerifyingPlatformAuthenticatorAvailable().catch(function(){return false}):Promise.resolve(false);
+var css=document.getElementById('aerapk-css')||document.createElement('style');css.id='aerapk-css';css.textContent='.aerapk-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;padding:12px;border-radius:12px;border:2px solid #16479E;background:#fff;color:#16479E;font:700 15px/1.2 inherit;font-family:inherit;cursor:pointer}.aerapk-btn svg{width:20px;height:20px}.aerapk-btn[disabled]{opacity:.6}.aerapk-msg{font-size:13px;margin-top:8px;text-align:center;color:#b42318}.aerapk-msg.ok{color:#16479E}#aerapkCard{position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:2147483000;max-width:420px;margin:0 auto;background:#fff;color:#14213d;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.25);padding:16px;font-family:inherit;display:flex;gap:12px;align-items:flex-start}#aerapkCard .ic{flex:none;width:44px;height:44px;border-radius:12px;background:#16479E;display:flex;align-items:center;justify-content:center}#aerapkCard .ic svg{width:26px;height:26px}#aerapkCard b{display:block;font-size:15px;margin-bottom:2px}#aerapkCard p{margin:0 0 10px;font-size:13px;color:#555}#aerapkCard .row{display:flex;gap:8px}#aerapkCard button{border:0;border-radius:10px;padding:9px 14px;font:700 14px/1 inherit;font-family:inherit;cursor:pointer}#aerapkCard .go{background:#16479E;color:#FDB913}#aerapkCard .no{background:#eef1f7;color:#16479E}';
+(document.head||document.documentElement).appendChild(css);
+var FACE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2M9 9v1M15 9v1M12 9v4h-1M9 16c1.7 1.3 4.3 1.3 6 0"/></svg>';
+
+/* ---- sign in with a passkey ---- */
+var AO=null,AOt=0,DEAD=false,TRIED={};
+async function authOpts(){if(AO&&Date.now()-AOt<240000)return AO;AO=await call('auth-options');AOt=Date.now();return AO}
+async function login(btn,msg){
+ msg.className='aerapk-msg';msg.textContent='';btn.disabled=true;
+ try{var o=await authOpts();AO=null;var p=o.options;
+  var a=await navigator.credentials.get({publicKey:{challenge:u2b(p.challenge),rpId:p.rpId,timeout:p.timeout,userVerification:p.userVerification,allowCredentials:[]}});
+  var resp={id:a.id,rawId:b2u(a.rawId),type:a.type,clientExtensionResults:a.getClientExtensionResults?a.getClientExtensionResults():{},authenticatorAttachment:a.authenticatorAttachment||undefined,
+   response:{clientDataJSON:b2u(a.response.clientDataJSON),authenticatorData:b2u(a.response.authenticatorData),signature:b2u(a.response.signature),userHandle:a.response.userHandle?b2u(a.response.userHandle):undefined}};
+  var v=await call('auth-verify',{flowId:o.flowId,response:resp});
+  msg.className='aerapk-msg ok';msg.textContent='Signing you in…';
+  try{C.before&&C.before()}catch(e){}
+  var r=await SB().auth.verifyOtp({token_hash:v.token_hash,type:'email'});if(r.error)throw r.error;
+  var uid=r.data&&r.data.user&&r.data.user.id;if(uid)ls('aera.pk.u.'+uid,'1');
+  try{C.after&&C.after()}catch(e){}
+ }catch(e){try{C.fail&&C.fail()}catch(_){}
+  var m=String(e&&e.message||e);
+  msg.textContent=(e&&e.name==='NotAllowedError')?'Cancelled. Try again, or use your password.':
+   /unknown_passkey/.test(m)?LBL+' is not set up for this account yet. Sign in with your password once, then tap "Turn on '+LBL+'".':
+   /expired/.test(m)?'That took too long. Try again.':'Could not sign in with '+LBL+'. Use your password.';
+ }btn.disabled=false;authOpts().catch(function(){})}
+function mountLogin(){if(!C.btn||DEAD)return;var t=document.querySelector(C.btn);if(!t||t.nextElementSibling&&t.nextElementSibling.classList.contains('aerapk-btn'))return;
+ var b=document.createElement('button');b.type='button';b.className='aerapk-btn';b.innerHTML=FACE+'<span>Sign in with '+LBL+'</span>';
+ var m=document.createElement('div');m.className='aerapk-msg';
+ b.onclick=function(){login(b,m)};t.insertAdjacentElement('afterend',b);b.insertAdjacentElement('afterend',m);
+ authOpts().catch(function(){DEAD=true;b.remove();m.remove()})}
+
+/* ---- offer to turn it on after a normal sign-in ---- */
+var RO=null,offering=false;
+async function offer(){if(C.offer===false||offering||document.getElementById('aerapkCard'))return;var sb=SB();if(!sb)return;
+ var s=(await sb.auth.getSession()).data.session;if(!s)return;var uid=s.user.id;
+ if(TRIED[uid]||ls('aera.pk.u.'+uid)||+(ls('aera.pk.skip.'+uid)||0)>Date.now())return;TRIED[uid]=1;
+ offering=true;try{
+ if(!(await platform))return;
+ try{RO=await call('reg-options',{},s.access_token)}catch(e){return}
+ var d=document.createElement('div');d.id='aerapkCard';
+ d.innerHTML='<div class="ic" style="color:#FDB913">'+FACE+'</div><div><b>Sign in with '+LBL+'</b><p>Skip the email and password next time. Works on every AERA app on this phone.</p><div class="row"><button class="go">Turn on '+LBL+'</button><button class="no">Not now</button></div><div class="aerapk-msg" style="text-align:left"></div></div>';
+ document.body.appendChild(d);
+ d.querySelector('.no').onclick=function(){ls('aera.pk.skip.'+uid,String(Date.now()+30*864e5));d.remove()};
+ d.querySelector('.go').onclick=function(){enable(d,uid)};
+ }finally{offering=false}}
+async function enable(d,uid){var m=d.querySelector('.aerapk-msg'),g=d.querySelector('.go');g.disabled=true;m.textContent='';
+ try{var sb=SB(),s=(await sb.auth.getSession()).data.session;if(!RO)RO=await call('reg-options',{},s.access_token);var o=RO,p=o.options;RO=null;
+  var c=await navigator.credentials.create({publicKey:{challenge:u2b(p.challenge),rp:p.rp,user:{id:u2b(p.user.id),name:p.user.name,displayName:p.user.displayName},
+   pubKeyCredParams:p.pubKeyCredParams,timeout:p.timeout,attestation:p.attestation,authenticatorSelection:p.authenticatorSelection,
+   excludeCredentials:(p.excludeCredentials||[]).map(function(x){return{type:'public-key',id:u2b(x.id),transports:x.transports}})}});
+  var resp={id:c.id,rawId:b2u(c.rawId),type:c.type,clientExtensionResults:c.getClientExtensionResults?c.getClientExtensionResults():{},authenticatorAttachment:c.authenticatorAttachment||undefined,
+   response:{clientDataJSON:b2u(c.response.clientDataJSON),attestationObject:b2u(c.response.attestationObject),transports:c.response.getTransports?c.response.getTransports():[]}};
+  await call('reg-verify',{flowId:o.flowId,response:resp,device:navigator.userAgent},s.access_token);
+  ls('aera.pk.u.'+uid,'1');m.className='aerapk-msg ok';m.textContent=LBL+' is on. Next time tap "Sign in with '+LBL+'".';g.style.display='none';d.querySelector('.no').textContent='Done';
+ }catch(e){if(e&&e.name==='InvalidStateError'){ls('aera.pk.u.'+uid,'1');d.remove();return}
+  m.className='aerapk-msg';m.textContent=(e&&e.name==='NotAllowedError')?'Cancelled.':'Could not turn on '+LBL+'. Try again later.';g.disabled=false}}
+
+var tick=0;function loop(){mountLogin();if(tick++%3===0)offer().catch(function(){})}
+window.__AERAPK_T=setInterval(loop,1500);if(document.readyState!=='loading')loop();else document.addEventListener('DOMContentLoaded',loop);
+window.AERAPK={offer:offer,login:login};
+})();
+</script>
 </body>
 </html>
