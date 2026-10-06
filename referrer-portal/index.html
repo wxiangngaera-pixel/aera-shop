@@ -43,7 +43,8 @@ html.rf-acct #pin-gate,html.rf-login #pin-gate{display:none!important}html.rf-ac
 #rfGo{width:100%;height:50px;margin-top:18px;border:0;border-radius:12px;background:#16479E;color:#FDB913;font:inherit;font-weight:800;font-size:16px;cursor:pointer}#rfGo[disabled]{opacity:.6}
 .rf-alt{display:block;width:100%;margin-top:12px;background:none;border:0;color:#16479E;font:inherit;font-weight:700;font-size:14px;text-align:center;text-decoration:underline;cursor:pointer}.rf-err{color:#C8433B;font-size:13px;margin-top:10px}
 #pin-gate{background:linear-gradient(160deg,#16479E,#0E2F72)!important}#pin-gate button{background:#16479E!important;color:#FDB913!important}#pin-gate .rf-back{background:none!important;color:#16479E!important;text-decoration:underline;font-weight:700;margin-top:12px;width:100%;border:0;font-size:14px;cursor:pointer}
-.chip.ok{background:#EDF3FD!important;color:#16479E!important}.chip.warn{background:#FFF2C2!important;color:#7A5A00!important}
+.chip.ok{background:#EDF3FD!important;color:#16479E!important}
+#state .tblwrap{border:1.5px solid #16479E!important}#state .tblwrap thead th{background:#16479E!important;color:#FDB913!important;border-bottom:0!important}#state .tblwrap tbody td{border-color:#DCE5F5}#state .tblwrap tbody td b{color:#16479E}#state .tblwrap tfoot td{background:#FDB913!important;color:#0B0B0B!important;font-weight:800}.chip.warn{background:#FFF2C2!important;color:#7A5A00!important}
 </style>
 <script id="aera-ref-auth">
 (function(){var U="https://swpprjvubgcdsojapaad.supabase.co",K="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0",RF=U+"/functions/v1/referrer-feed",SK="sb-swpprjvubgcdsojapaad-auth-token",LP="lp-mtswk8m9-vu96j";
@@ -1088,7 +1089,7 @@ function mountLogin(){if(!C.btn||DEAD)return;var t=document.querySelector(C.btn)
  var b=document.createElement('button');b.type='button';b.className='aerapk-btn';b.innerHTML=FACE+'<span>Sign in with '+LBL+'</span>';
  var m=document.createElement('div');m.className='aerapk-msg';
  b.onclick=function(){login(b,m)};t.insertAdjacentElement('afterend',b);b.insertAdjacentElement('afterend',m);
- authOpts().then(function(){if(!AUTO&&ls('aera.pk.dev')){AUTO=1;login(b,m,true)}}).catch(function(){DEAD=true;b.remove();m.remove()})}
+ authOpts().then(function(){if(!AUTO&&ls('aera.pk.dev')&&t.offsetParent!==null&&!sess()){AUTO=1;login(b,m,true)}}).catch(function(){DEAD=true;b.remove();m.remove()})}
 
 /* ---- offer to turn it on after a normal sign-in ---- */
 var RO=null,offering=false;
