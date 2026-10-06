@@ -2898,7 +2898,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  var q=new URLSearchParams(location.search),SA=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
  var on=q.get('app')==='corp'||(SA&&ls('aera.corp.app')==='1');if(!on)return;if(q.get('app')==='corp')ls('aera.corp.app','1');
  var H=document.documentElement;H.classList.add('corp');var IC={"180":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/sign/kc-app/icons/corporate-180.png?token=eyJraWQiOiJjNjRlYTIxMi01YmFiLTRjNmMtODcwNS00ZGE3Y2U5YmZiMTYiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJrYy1hcHAvaWNvbnMvY29ycG9yYXRlLTE4MC5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzkxMjU3NDcxLCJleHAiOjIxMDY2MTc0NzF9.osCyv62HIEOcoV_y7HyyHvnmO84aKCv-c9xFodR_tdUzGwzJUAmtEdvZ-9jXE0P5Mz2d6lW_ahB6JHkBVVTzsQ","192":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/sign/kc-app/icons/corporate-192.png?token=eyJraWQiOiJjNjRlYTIxMi01YmFiLTRjNmMtODcwNS00ZGE3Y2U5YmZiMTYiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJrYy1hcHAvaWNvbnMvY29ycG9yYXRlLTE5Mi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzkxMjU3NDcyLCJleHAiOjIxMDY2MTc0NzJ9.Iq6YxLno4r5Q_n2AKixVugwnzCCONK6Wzo9hvlcpzLqg7rJmOdxUFcWK56p_VzQNMEBLu2sKT-W8_Sezce13Sg","512":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/sign/kc-app/icons/corporate-512.png?token=eyJraWQiOiJjNjRlYTIxMi01YmFiLTRjNmMtODcwNS00ZGE3Y2U5YmZiMTYiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJrYy1hcHAvaWNvbnMvY29ycG9yYXRlLTUxMi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzkxMjU3NDc0LCJleHAiOjIxMDY2MTc0NzR9.DQJlbF3TUBEM1EvL7jhSXJjvZBDmEm-U6UNkZvjqkXrh6LzOR4W9CLyJPDGIMQMP7IkKHNMfZpTemLoFuyZJvQ"},SK='sb-swpprjvubgcdsojapaad-auth-token';
- var cli=null;try{cli=window.supabase.createClient("https://swpprjvubgcdsojapaad.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0",{auth:{persistSession:true,autoRefreshToken:false,detectSessionInUrl:false}})}catch(e){}
+ var cli=null;try{cli=window.supabase.createClient("https://swpprjvubgcdsojapaad.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0",{auth:{persistSession:true,autoRefreshToken:false,detectSessionInUrl:false}})}catch(e){}window.__CORP_SB=cli;
  function el(t,a){var e=document.createElement(t);for(var k in a)e.setAttribute(k,a[k]);document.head.appendChild(e);return e}
  document.querySelectorAll('link[rel="manifest"],link[rel="apple-touch-icon"],meta[name="apple-mobile-web-app-title"]').forEach(function(x){x.remove()});
  el('link',{rel:'apple-touch-icon',href:IC['180']});el('meta',{name:'apple-mobile-web-app-title',content:'AERA Corporate'});el('meta',{name:'apple-mobile-web-app-capable',content:'yes'});el('meta',{name:'mobile-web-app-capable',content:'yes'});el('meta',{name:'theme-color',content:'#16479E'});
@@ -2920,7 +2920,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
   var g=document.createElement('div');g.id='corpGate';var lg=document.querySelector('#aeraBar .ab-logo img');
   g.innerHTML='<img alt="AERA" src="'+(lg?lg.src:'')+'"><div class="cg"><form class="lg"><h2>Corporate Ordering</h2><p>Log in with your company email and password. Your agreed prices and payment terms load straight away.</p>'+
    '<label for="corpEm">Company Email</label><input id="corpEm" type="email" required autocomplete="username" placeholder="orders@yourcompany.com"><label for="corpPw">Password</label><input id="corpPw" type="password" required autocomplete="current-password" placeholder="Your password">'+
-   '<button class="go" type="submit" id="corpGo">Log In</button><div class="er" id="corpErr"></div><a class="fp" href="https://aeramealprep.net/account/">Forgot password? / Create the account</a></form>'+
+   '<button class="go" type="submit" id="corpGo">Log In</button><div class="er" id="corpErr"></div><a class="fp" href="https://aeramealprep.net/account/">Forgot password?</a></form>'+
    '<div class="no" style="display:none"><h2>Not A Corporate Account</h2><div class="who">Signed in as <b id="corpNoWho"></b></div><p>This AERA account is not linked to a corporate account. Log in with the company email AERA has on file, or ask AERA to add this one.</p><button class="go" type="button" id="corpOut">Use A Different Account</button></div>'+
    '<button type="button" class="x" id="corpRetail">Order as a regular customer instead</button></div>';
   document.body.appendChild(g);
@@ -2937,6 +2937,109 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  function boot(){mount();title();paint();var n=0;var t=setInterval(function(){n++;if(loaded()||n>40){clearInterval(t);try{coChanged()}catch(e){}paint()}},400)}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
  setInterval(function(){title();paint()},3000);
+})();</script>
+<!-- AERA Create Account -->
+<script>window.AERASU_CFG={sb:function(){return window.__CORP_SB},after:function(u){u=u||{};var md=u.user_metadata||{};try{localStorage.setItem('aera.account',JSON.stringify({email:String(u.email||'').toLowerCase(),name:md.name||'',phone:md.phone||''}))}catch(e){}location.reload()},box:'#corpGate form.lg',email:'#corpEm',app:'corp',note:'Use the company email AERA has on file for your company, so your agreed prices load straight away.',nameLabel:'Contact Person',emailLabel:'Company Email',emailPh:'orders@yourcompany.com'};</script>
+<script>/* AERA Create Account : one AERA account for every AERA app */
+(function(){
+if(window.__AERASU)return;window.__AERASU=1;
+var C=window.AERASU_CFG||{};
+function $(i){return document.getElementById(i)}
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}}
+function SB(){try{return C.sb&&C.sb()}catch(e){return null}}
+function E(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function norm(p){var x=String(p||'').replace(/[^0-9]/g,'');if(!x)return'';if(x.indexOf('60')===0)return x;if(x.charAt(0)==='0')return '60'+x.slice(1);if(x.length>=9&&x.length<=11)return '60'+x;return x}
+var APPS='AERA Meal Prep, AERA Fridge Portal, AERA Referral Portal and AERA Corporate';
+var css=document.createElement('style');css.id='aerasu-css';css.textContent=
+'.aerasu-open{display:block;width:100%;margin-top:12px;padding:12px;border-radius:12px;border:2px dashed #16479E;background:#F4F7FD;color:#16479E;font-weight:700;font-size:15px;line-height:1.2;font-family:inherit;cursor:pointer}'+
+'.aerasu-open small{display:block;font-weight:500;font-size:12px;color:#555;margin-top:3px}'+
+'#aeraSU{position:fixed;inset:0;z-index:2147482000;background:rgba(11,25,60,.62);display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:24px 14px calc(24px + env(safe-area-inset-bottom));font-family:inherit}'+
+'#aeraSU .su{background:#fff;color:#14213d;width:100%;max-width:420px;border-radius:18px;box-shadow:0 18px 50px rgba(0,0,0,.3);overflow:hidden}'+
+'#aeraSU .hd{background:#16479E;color:#fff;padding:18px 20px}#aeraSU .hd h2{margin:0;font-size:20px;color:#FDB913}#aeraSU .hd p{margin:6px 0 0;font-size:13px;line-height:1.45;color:#E6ECF8}'+
+'#aeraSU form,#aeraSU .wait{padding:16px 20px 20px}#aeraSU label{display:block;font-size:13px;font-weight:700;margin:12px 0 5px;color:#16479E}'+
+'#aeraSU input{width:100%;box-sizing:border-box;padding:12px;border:1.5px solid #CBD5E8;border-radius:10px;font-size:16px;font-family:inherit;color:#14213d;background:#fff}#aeraSU input:focus{outline:none;border-color:#16479E}'+
+'#aeraSU .go{display:block;width:100%;margin-top:16px;padding:13px;border:0;border-radius:12px;background:#16479E;color:#FDB913;font-weight:800;font-size:16px;line-height:1.2;font-family:inherit;cursor:pointer}#aeraSU .go[disabled]{opacity:.6}'+
+'#aeraSU .bk{display:block;width:100%;margin-top:10px;padding:10px;border:0;background:none;color:#16479E;font-weight:700;font-size:14px;line-height:1.2;font-family:inherit;cursor:pointer;text-decoration:underline}'+
+'#aeraSU .er{color:#b42318;font-size:13px;margin-top:10px;line-height:1.4}#aeraSU .er:empty{display:none}#aeraSU .ok{color:#16479E}'+
+'#aeraSU .note{background:#FFF6D6;border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.45;margin-top:4px;color:#5a4500}'+
+'#aeraSU .wait p{font-size:14px;line-height:1.5;margin:0 0 10px}#aeraSU .spin{display:inline-block;width:14px;height:14px;border:2px solid #CBD5E8;border-top-color:#16479E;border-radius:50%;animation:aerasu 1s linear infinite;vertical-align:-2px;margin-right:6px}@keyframes aerasu{to{transform:rotate(360deg)}}';
+(document.head||document.documentElement).appendChild(css);
+
+var W={email:'',pass:'',t:null,n:0,busy:false};
+function close(){var d=$('aeraSU');if(d)d.remove();if(W.t){clearInterval(W.t);W.t=null}}
+function open(){close();var d=document.createElement('div');d.id='aeraSU';
+ d.innerHTML='<div class="su"><div class="hd"><h2>Create Your AERA Account</h2><p>One account for every AERA app: '+APPS+'. Sign up once here and use the same email and password everywhere.</p></div>'+
+ '<form novalidate><div class="note">'+E(C.note||'Use the email AERA has on file for you.')+'</div>'+
+ '<label for="suName">'+E(C.nameLabel||'Your Name')+'</label><input id="suName" autocomplete="name" required placeholder="'+E(C.namePh||'Full name')+'">'+
+ '<label for="suPhone">Mobile Number</label><input id="suPhone" type="tel" autocomplete="tel" placeholder="01x-xxx xxxx">'+
+ '<label for="suEmail">'+E(C.emailLabel||'Email')+'</label><input id="suEmail" type="email" autocomplete="username" required placeholder="'+E(C.emailPh||'you@example.com')+'">'+
+ '<label for="suPass">Password</label><input id="suPass" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters">'+
+ '<button class="go" type="submit" id="suGo">Create Account</button><div class="er" id="suErr"></div>'+
+ '<button class="bk" type="button" id="suBack">I already have an account. Sign In</button></form></div>';
+ document.body.appendChild(d);
+ d.addEventListener('click',function(e){if(e.target===d)close()});
+ $('suBack').onclick=close;
+ var em=C.email&&document.querySelector(C.email);if(em&&em.value)$('suEmail').value=em.value;
+ d.querySelector('form').addEventListener('submit',submit);
+ setTimeout(function(){try{$('suName').focus()}catch(e){}},50)}
+
+function err(t,ok){var e=$('suErr');if(e){e.className='er'+(ok?' ok':'');e.innerHTML=t||''}}
+async function submit(ev){ev.preventDefault();var sb=SB();if(!sb)return err('Please refresh the page and try again.');
+ var name=$('suName').value.trim(),ph=$('suPhone').value.trim(),email=$('suEmail').value.trim().toLowerCase(),pw=$('suPass').value;
+ if(!name)return err('Type your name.');
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return err('Type a valid email.');
+ if(pw.length<8)return err('Password needs at least 8 characters.');
+ if(ph&&!/^60[0-9]{8,10}$/.test(norm(ph)))return err('That does not look like a Malaysian mobile number.');
+ var b=$('suGo');b.disabled=true;b.textContent='Creating…';err('');
+ try{
+  if(ph){var t=await sb.rpc('phone_taken',{p:ph});if(!t.error&&t.data===true)throw new Error('That mobile number already has an AERA account. Sign in with it instead. It works on every AERA app.')}
+  var back=location.origin+location.pathname+location.search.replace(/([?&])install=1&?/,'$1').replace(/[?&]$/,'');
+  var r=await sb.auth.signUp({email:email,password:pw,options:{data:{name:name,phone:ph,signup_app:C.app||''},emailRedirectTo:back}});
+  if(r.error)throw r.error;
+  var u=r.data&&r.data.user;
+  if(u&&u.identities&&u.identities.length===0){close();var f=C.email&&document.querySelector(C.email);if(f)f.value=email;
+   alertBox('That email already has an AERA account. Sign in with it here. It works on every AERA app. Forgot the password? Use Forgot Password.');return}
+  if(r.data&&r.data.session){close();done(r.data.user);return}
+  waiting(email,pw)}
+ catch(x){var m=String(x&&x.message||x);
+  err(/rate|security purposes/i.test(m)?'Too many tries. Wait a minute, then try again.':/password/i.test(m)&&/weak|short|least/i.test(m)?'Choose a longer password.':E(m));
+  b.disabled=false;b.textContent='Create Account'}}
+
+function waiting(email,pw){W.email=email;W.pass=pw;W.n=0;var d=$('aeraSU');if(!d)return;
+ d.querySelector('.su').innerHTML='<div class="hd"><h2>Check Your Email</h2><p>Almost done.</p></div><div class="wait">'+
+ '<p>We sent a confirmation link to <b>'+E(email)+'</b>. Open it and tap <b>Confirm</b>. You can open it on any phone or computer.</p>'+
+ '<p><span class="spin"></span>This page signs you in by itself as soon as you confirm.</p>'+
+ '<div class="note">Not in your inbox? Check Spam or Promotions. The email comes from AERA Meal Prep.</div>'+
+ '<button class="go" type="button" id="suChk">I Have Confirmed</button><div class="er" id="suErr"></div>'+
+ '<button class="bk" type="button" id="suBack">Close</button></div>';
+ $('suBack').onclick=close;$('suChk').onclick=function(){check(true)};
+ W.t=setInterval(function(){check(false)},15000)}
+async function check(manual){if(W.busy||!W.email)return;var sb=SB();if(!sb)return;W.busy=true;W.n++;
+ try{var r=await sb.auth.signInWithPassword({email:W.email,password:W.pass});
+  if(!r.error&&r.data&&r.data.session){var u=r.data.user;W.email=W.pass='';close();done(u);return}
+  if(manual)err('Not confirmed yet. Tap the link in the email first.')}
+ catch(e){if(manual)err('Could not check just now. Try again.')}
+ finally{W.busy=false;if(W.n>=40&&W.t){clearInterval(W.t);W.t=null}}}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&W.email)check(false)});
+
+function alertBox(t){var d=document.createElement('div');d.id='aeraSU';d.innerHTML='<div class="su"><div class="hd"><h2>Already Signed Up</h2></div><div class="wait"><p>'+E(t)+'</p><button class="go" type="button">OK</button></div></div>';
+ document.body.appendChild(d);d.querySelector('.go').onclick=close}
+function done(u){try{C.after&&C.after(u)}catch(e){location.reload()}}
+
+/* the confirmation link comes back here : sign straight in */
+(async function(){var h=String(location.hash||'');if(!/access_token=|error_code=/.test(h)||C.hash===false)return;
+ var p=new URLSearchParams(h.replace(/^#/,''));
+ if(p.get('error_code')){history.replaceState(null,'',location.pathname+location.search);
+  setTimeout(function(){alertBox(/expired/i.test(p.get('error_code')+' '+p.get('error_description'))?'That confirmation link has expired. Sign in with your email and password. If it says the email is not confirmed, tap Create Account again to get a new link.':'That link did not work. Sign in with your email and password.')},600);return}
+ var n=0;while(!SB()&&n++<40)await new Promise(function(r){setTimeout(r,250)});var sb=SB();if(!sb)return;
+ try{var r=await sb.auth.setSession({access_token:p.get('access_token'),refresh_token:p.get('refresh_token')});
+  history.replaceState(null,'',location.pathname+location.search);if(!r.error&&r.data&&r.data.session)done(r.data.user)}catch(e){}})();
+
+function mount(){if(!C.box)return;var box=document.querySelector(C.box);if(!box||box.querySelector('.aerasu-open'))return;
+ var b=document.createElement('button');b.type='button';b.className='aerasu-open';b.innerHTML='New here? Create An Account<small>One AERA account works on every AERA app</small>';
+ b.onclick=open;box.appendChild(b)}
+setInterval(mount,1200);if(document.readyState!=='loading')mount();else document.addEventListener('DOMContentLoaded',mount);
+window.aeraSignup=open;
 })();</script>
 </body>
 </html>
