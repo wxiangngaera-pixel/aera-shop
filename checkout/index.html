@@ -2883,5 +2883,49 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 }catch(e){}})();
 </script>
 <!-- AERA Lalamove live price : end -->
+<!-- AERA Corporate app : /checkout/?app=corp -->
+<style id="aera-corp-app">html.corp #aeraBar .ab-find,html.corp #aeraBar .ab-acct,html.corp #aeraBar #abInbox,html.corp #aeraBar .ab-ord,html.corp #aeraBar .ab-burger,html.corp .ab-panel,html.corp body>nav,html.corp .aera-legal-foot,html.corp #aaBar,html.corp .aera-getapp{display:none!important}
+#corpTop{display:none}html.corp #corpTop{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#16479E;color:#fff;border-radius:14px;padding:14px 16px;margin:14px auto 6px;max-width:1100px;width:calc(100% - 32px);box-sizing:border-box;font-family:Montserrat,system-ui,sans-serif}
+#corpTop .ct{flex:1;min-width:0}#corpTop b{display:block;color:#FDB913;font-size:17px;letter-spacing:.01em}#corpTop span{display:block;font-size:13px;opacity:.95;margin-top:2px}#corpTop button{border:0;border-radius:999px;background:#FDB913;color:#0B0B0B;font:inherit;font-weight:800;padding:9px 16px;cursor:pointer}
+#corpGate{display:none;position:fixed;inset:0;z-index:999997;background:linear-gradient(160deg,#16479E,#0E2F72);align-items:center;justify-content:center;flex-direction:column;gap:18px;padding:16px;font-family:Montserrat,system-ui,sans-serif;overflow:auto}html.corp-gate #corpGate{display:flex}html.corp-gate{overflow:hidden}
+#corpGate img{height:40px}#corpGate .cg{background:#fff;border-radius:18px;max-width:420px;width:100%;box-sizing:border-box;padding:24px 22px;box-shadow:0 20px 60px rgba(0,0,0,.35)}#corpGate h2{margin:0 0 6px;font-size:22px;color:#0B0B0B}#corpGate p{margin:0 0 12px;color:#6B7280;font-size:14px;line-height:1.45}
+#corpGate label{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#16479E;margin:10px 0 6px}#corpGate input{width:100%;box-sizing:border-box;height:48px;border:1.5px solid #CBD2DE;border-radius:12px;padding:0 14px;font:inherit;font-size:16px}
+#corpGate input:focus{outline:none;border-color:#16479E;box-shadow:0 0 0 3px rgba(22,71,158,.15)}#corpGate .go{width:100%;height:50px;margin-top:16px;border:0;border-radius:12px;background:#16479E;color:#FDB913;font:inherit;font-weight:800;font-size:16px;cursor:pointer}
+#corpGate .er{color:#C8433B;font-size:13px;margin-top:10px;min-height:1em}#corpGate .x{display:block;width:100%;margin-top:10px;background:none;border:0;color:#16479E;font:inherit;font-weight:700;text-decoration:underline;cursor:pointer}
+#corpGuide{position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:999996;max-width:440px;margin:0 auto;background:#16479E;color:#fff;border-radius:16px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.3);font-family:Montserrat,system-ui,sans-serif;font-size:14px;line-height:1.45}#corpGuide b{color:#FDB913}#corpGuide button{margin-top:10px;width:100%;border:0;border-radius:10px;padding:10px;background:#FDB913;color:#0B0B0B;font:inherit;font-weight:800}</style>
+<script id="aera-corp-app-js">(function(){
+ function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}}
+ var q=new URLSearchParams(location.search),SA=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+ var on=q.get('app')==='corp'||(SA&&ls('aera.corp.app')==='1');if(!on)return;if(q.get('app')==='corp')ls('aera.corp.app','1');
+ var H=document.documentElement;H.classList.add('corp');var IC={"180":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/sign/kc-app/icons/corporate-180.png?token=eyJraWQiOiJjNjRlYTIxMi01YmFiLTRjNmMtODcwNS00ZGE3Y2U5YmZiMTYiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJrYy1hcHAvaWNvbnMvY29ycG9yYXRlLTE4MC5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzkxMjU3NDcxLCJleHAiOjIxMDY2MTc0NzF9.osCyv62HIEOcoV_y7HyyHvnmO84aKCv-c9xFodR_tdUzGwzJUAmtEdvZ-9jXE0P5Mz2d6lW_ahB6JHkBVVTzsQ","192":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/sign/kc-app/icons/corporate-192.png?token=eyJraWQiOiJjNjRlYTIxMi01YmFiLTRjNmMtODcwNS00ZGE3Y2U5YmZiMTYiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJrYy1hcHAvaWNvbnMvY29ycG9yYXRlLTE5Mi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzkxMjU3NDcyLCJleHAiOjIxMDY2MTc0NzJ9.Iq6YxLno4r5Q_n2AKixVugwnzCCONK6Wzo9hvlcpzLqg7rJmOdxUFcWK56p_VzQNMEBLu2sKT-W8_Sezce13Sg","512":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/sign/kc-app/icons/corporate-512.png?token=eyJraWQiOiJjNjRlYTIxMi01YmFiLTRjNmMtODcwNS00ZGE3Y2U5YmZiMTYiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJrYy1hcHAvaWNvbnMvY29ycG9yYXRlLTUxMi5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzkxMjU3NDc0LCJleHAiOjIxMDY2MTc0NzR9.DQJlbF3TUBEM1EvL7jhSXJjvZBDmEm-U6UNkZvjqkXrh6LzOR4W9CLyJPDGIMQMP7IkKHNMfZpTemLoFuyZJvQ"};
+ function el(t,a){var e=document.createElement(t);for(var k in a)e.setAttribute(k,a[k]);document.head.appendChild(e);return e}
+ document.querySelectorAll('link[rel="manifest"],link[rel="apple-touch-icon"],meta[name="apple-mobile-web-app-title"]').forEach(function(x){x.remove()});
+ el('link',{rel:'apple-touch-icon',href:IC['180']});el('meta',{name:'apple-mobile-web-app-title',content:'AERA Corporate'});el('meta',{name:'apple-mobile-web-app-capable',content:'yes'});el('meta',{name:'mobile-web-app-capable',content:'yes'});el('meta',{name:'theme-color',content:'#16479E'});
+ var M={name:'AERA Corporate Ordering',short_name:'AERA Corporate',id:'/checkout/?app=corp',start_url:'https://aeramealprep.net/checkout/?app=corp',scope:'https://aeramealprep.net/checkout/',display:'standalone',background_color:'#16479E',theme_color:'#16479E',icons:[{src:IC['192'],sizes:'192x192',type:'image/png',purpose:'any'},{src:IC['512'],sizes:'512x512',type:'image/png',purpose:'any'}]};
+ el('link',{rel:'manifest',href:'data:application/manifest+json,'+encodeURIComponent(JSON.stringify(M))});
+ function title(){if(document.title!=='AERA Corporate Ordering')document.title='AERA Corporate Ordering'}title();
+ function E(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+ function loaded(){try{return CO&&CO.accts&&CO.accts.length>0}catch(e){return false}}
+ function put(email){var i=document.getElementById('email');if(i){i.value=email;try{i.dispatchEvent(new Event('input',{bubbles:true}))}catch(e){}}try{coChanged()}catch(e){}}
+ function paint(){var t=document.getElementById('corpTop'),w=document.getElementById('corpWho'),em=ls('aera.corp.email')||'';
+  var hit=null;try{hit=CO.on}catch(e){}
+  if(hit){H.classList.remove('corp-gate');if(w)w.innerHTML='Ordering for <b style="display:inline;color:#fff;font-size:inherit">'+E(hit.name||'your company')+'</b> · '+E((typeof coTermText==='function')?coTermText():'')+' · '+E(em);return}
+  if(!em){H.classList.add('corp-gate');return}
+  if(loaded()){H.classList.add('corp-gate');var er=document.getElementById('corpErr');if(er)er.textContent=em+' is not on an AERA corporate account. Check the email, or ask AERA to add it.'}}
+ function mount(){if(document.getElementById('corpTop'))return;var top=document.createElement('div');top.id='corpTop';top.innerHTML='<div class="ct"><b>AERA Corporate Ordering</b><span id="corpWho">Checking your company account…</span></div><button type="button" id="corpChg">Change Company</button>';
+  var bar=document.getElementById('aeraBar');if(bar&&bar.nextSibling)bar.parentNode.insertBefore(top,bar.nextSibling);else document.body.insertBefore(top,document.body.firstChild);
+  var g=document.createElement('div');g.id='corpGate';var lg=document.querySelector('#aeraBar .ab-logo img');
+  g.innerHTML='<img alt="AERA" src="'+(lg?lg.src:'')+'"><form class="cg"><h2>Corporate Ordering</h2><p>Enter the company email AERA has on your corporate account. Your agreed prices and payment terms load straight away.</p><label for="corpEm">Company Email</label><input id="corpEm" type="email" required autocomplete="email" placeholder="orders@yourcompany.com"><button class="go" type="submit">Continue</button><div class="er" id="corpErr"></div><button type="button" class="x" id="corpRetail">Order as a regular customer instead</button></form>';
+  document.body.appendChild(g);
+  g.querySelector('form').addEventListener('submit',function(ev){ev.preventDefault();var v=String(document.getElementById('corpEm').value||'').trim().toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))return;ls('aera.corp.email',v);document.getElementById('corpErr').textContent='Checking…';put(v);setTimeout(paint,400)});
+  document.getElementById('corpRetail').onclick=function(){ls('aera.corp.app',null);location.href=location.pathname};
+  document.getElementById('corpChg').onclick=function(){var i=document.getElementById('corpEm');i.value=ls('aera.corp.email')||'';document.getElementById('corpErr').textContent='';H.classList.add('corp-gate');i.focus()};
+  if(q.get('install')==='1'&&!SA){var gd=document.createElement('div');gd.id='corpGuide';var ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+   gd.innerHTML=ios?'<b>Add AERA Corporate to your Home Screen</b><br>1. Tap the <b>Share</b> button ( square with an arrow ) at the bottom of Safari.<br>2. Tap <b>Add to Home Screen</b>, then <b>Add</b>.<button type="button">Got It</button>':'<b>Install AERA Corporate</b><br>Open the browser menu ( ⋮ ) and tap <b>Install app</b> or <b>Add to Home screen</b>.<button type="button">Got It</button>';
+   gd.querySelector('button').onclick=function(){gd.remove()};document.body.appendChild(gd)}}
+ function boot(){mount();title();var em=ls('aera.corp.email');var n=0;var t=setInterval(function(){n++;if(loaded()||n>40){clearInterval(t);if(em)put(em);paint()}},400);if(!em)paint()}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+ setInterval(function(){title();paint()},3000);
+})();</script>
 </body>
 </html>
