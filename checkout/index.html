@@ -2907,13 +2907,14 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  function title(){if(document.title!=='AERA Corporate Ordering')document.title='AERA Corporate Ordering'}title();
  function E(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
  function me(){try{var v=JSON.parse(ls(SK)||'null');if(v&&v.currentSession)v=v.currentSession;if(v&&v.user&&v.user.email)return String(v.user.email).toLowerCase()}catch(e){}return ''}
+ function pend(){try{var v=JSON.parse(ls(SK)||'null');if(v&&v.currentSession)v=v.currentSession;return String((v&&v.user&&v.user.user_metadata&&v.user.user_metadata.corp_pending)||'')}catch(e){return ''}}
  function loaded(){try{return CO&&CO.accts&&CO.accts.length>0}catch(e){return false}}
  function $(i){return document.getElementById(i)}
- function mode(m){var g=$('corpGate');if(!g)return;g.querySelector('.lg').style.display=m==='login'?'':'none';g.querySelector('.no').style.display=m==='no'?'':'none'}
+ function mode(m){var g=$('corpGate');if(!g)return;g.querySelector('.lg').style.display=m==='login'?'':'none';g.querySelector('.no').style.display=m==='no'?'':'none';var w=g.querySelector('.wt');if(w)w.style.display=m==='wait'?'':'none'}
  function paint(){var w=$('corpWho'),em=me(),hit=null;try{hit=CO.on}catch(e){}
   if(!em){H.classList.add('corp-gate');return mode('login')}
   if(hit){H.classList.remove('corp-gate');if(w)w.innerHTML='Ordering for <b style="display:inline;color:#fff;font-size:inherit">'+E(hit.name||'your company')+'</b> · '+E((typeof coTermText==='function')?coTermText():'')+' · '+E(em);return}
-  if(loaded()){H.classList.add('corp-gate');mode('no');var x=$('corpNoWho');if(x)x.textContent=em}}
+  if(loaded()){H.classList.add('corp-gate');var pn=pend();mode(pn?'wait':'no');if(pn){var y=$('corpWaitCo');if(y)y.textContent=pn;var y2=$('corpWaitWho');if(y2)y2.textContent=em}var x=$('corpNoWho');if(x)x.textContent=em}}
  async function out(){try{if(getCli())await cli.auth.signOut()}catch(e){}ls(SK,null);ls('aera.account',null);location.replace(location.pathname+'?app=corp')}
  function mount(){if($('corpTop'))return;var top=document.createElement('div');top.id='corpTop';top.innerHTML='<div class="ct"><b>AERA Corporate Ordering</b><span id="corpWho">Checking your company account…</span></div><button type="button" id="corpChg">Switch Account</button>';
   var bar=$('aeraBar');if(bar&&bar.nextSibling)bar.parentNode.insertBefore(top,bar.nextSibling);else document.body.insertBefore(top,document.body.firstChild);
@@ -2922,6 +2923,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
    '<label for="corpEm">Company Email</label><input id="corpEm" type="email" required autocomplete="username" placeholder="orders@yourcompany.com"><label for="corpPw">Password</label><input id="corpPw" type="password" required autocomplete="current-password" placeholder="Your password">'+
    '<button class="go" type="submit" id="corpGo">Log In</button><div class="er" id="corpErr"></div><a class="fp" href="https://aeramealprep.net/account/">Forgot password?</a></form>'+
    '<div class="no" style="display:none"><h2>Not A Corporate Account</h2><div class="who">Signed in as <b id="corpNoWho"></b></div><p>This AERA account is not linked to a corporate account. Log in with the company email AERA has on file, or ask AERA to add this one.</p><button class="go" type="button" id="corpOut">Use A Different Account</button></div>'+
+   '<div class="wt" style="display:none"><h2>Waiting For Approval</h2><div class="who">Signed in as <b id="corpWaitWho"></b></div><p>Thank you. <b id="corpWaitCo"></b> is registered and AERA has been notified. Once AERA approves your company and sets your prices, this app opens your corporate ordering.</p><button class="go" type="button" id="corpWaitChk">Check Again</button><button type="button" class="x" id="corpWaitOut">Log Out</button></div>'+
    '<button type="button" class="x" id="corpRetail">Order as a regular customer instead</button></div>';
   document.body.appendChild(g);
   g.querySelector('form').addEventListener('submit',async function(ev){ev.preventDefault();var b=$('corpGo'),er=$('corpErr');if(!getCli()){er.textContent='Please refresh the page and try again.';return}
@@ -2929,7 +2931,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
    try{var r=await cli.auth.signInWithPassword({email:$('corpEm').value.trim().toLowerCase(),password:$('corpPw').value});if(r.error)throw r.error;var u=r.data.user||{},md=u.user_metadata||{};
     ls('aera.account',JSON.stringify({email:String(u.email||'').toLowerCase(),name:md.name||md.full_name||'',phone:md.phone||''}));location.reload()}
    catch(x){er.textContent=/invalid/i.test(String(x&&x.message))?'That email and password did not match an AERA account.':String(x&&x.message||x);b.disabled=false;b.textContent='Log In'}});
-  $('corpOut').onclick=out;$('corpChg').onclick=out;
+  $('corpOut').onclick=out;$('corpChg').onclick=out;$('corpWaitOut').onclick=out;$('corpWaitChk').onclick=function(){location.reload()};
   $('corpRetail').onclick=function(){ls('aera.corp.app',null);location.href=location.pathname};
   if(q.get('install')==='1'&&!SA){var gd=document.createElement('div');gd.id='corpGuide';var ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
    gd.innerHTML=ios?'<b>Add AERA Corporate to your Home Screen</b><br>1. Tap the <b>Share</b> button ( square with an arrow ) at the bottom of Safari.<br>2. Tap <b>Add to Home Screen</b>, then <b>Add</b>.<button type="button">Got It</button>':'<b>Install AERA Corporate</b><br>Open the browser menu ( ⋮ ) and tap <b>Install app</b> or <b>Add to Home screen</b>.<button type="button">Got It</button>';
@@ -2939,7 +2941,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  setInterval(function(){title();paint()},3000);
 })();</script>
 <!-- AERA Create Account -->
-<script>window.AERASU_CFG={sb:function(){return window.__CORP_SB},after:function(u){u=u||{};var md=u.user_metadata||{};try{localStorage.setItem('aera.account',JSON.stringify({email:String(u.email||'').toLowerCase(),name:md.name||'',phone:md.phone||''}))}catch(e){}location.reload()},box:'#corpGate form.lg',email:'#corpEm',app:'corp',note:false,nameLabel:'Contact Person',emailLabel:'Company Email',emailPh:'orders@yourcompany.com'};</script>
+<script>window.AERASU_CFG={sb:function(){return window.__CORP_SB},after:function(u){u=u||{};var md=u.user_metadata||{};try{localStorage.setItem('aera.account',JSON.stringify({email:String(u.email||'').toLowerCase(),name:md.name||'',phone:md.phone||''}))}catch(e){}location.reload()},box:'#__none',email:'#corpEm',app:'corp',note:false,nameLabel:'Contact Person',emailLabel:'Company Email',emailPh:'orders@yourcompany.com'};</script>
 <script>/* AERA Create Account : one AERA account for every AERA app */
 (function(){
 if(window.__AERASU)return;window.__AERASU=1;
@@ -3041,61 +3043,79 @@ function mount(){if(!C.box)return;var box=document.querySelector(C.box);if(!box|
 setInterval(mount,1200);if(document.readyState!=='loading')mount();else document.addEventListener('DOMContentLoaded',mount);
 window.aeraSignup=open;
 })();</script>
-<!-- AERA Corporate Request -->
-<script>/* AERA Corporate : a company asks for a corporate account */
+<!-- AERA Corporate Sign Up -->
+<script>/* AERA Corporate : companies sign up here ( one step, no email code ) and wait for AERA to approve */
 (function(){
 var FN='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/corp-request';
 var K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0';
 function $(i){return document.getElementById(i)}
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}}
 function E(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-var css=document.createElement('style');css.textContent=
-'.corpreq-open{display:block;width:100%;margin-top:10px;padding:12px;border-radius:12px;border:0;background:#FDB913;color:#16479E;font-weight:800;font-size:15px;line-height:1.2;font-family:inherit;cursor:pointer}'+
-'.corpreq-open small{display:block;font-weight:600;font-size:12px;color:#16479E;opacity:.8;margin-top:3px}'+
-'#aeraSU textarea{width:100%;box-sizing:border-box;padding:12px;border:1.5px solid #CBD5E8;border-radius:10px;font-size:16px;font-family:inherit;color:#14213d;min-height:80px;resize:vertical}'+
-'#aeraSU .opt{font-weight:500;color:#667;font-size:12px}#aeraSU .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}';
+function norm(p){var x=String(p||'').replace(/[^0-9]/g,'');if(!x)return'';if(x.indexOf('60')===0)return x;if(x.charAt(0)==='0')return '60'+x.slice(1);if(x.length>=9&&x.length<=11)return '60'+x;return x}
+function SB(){return window.__CORP_SB||null}
+var css=document.createElement('style');css.textContent='#aeraSU .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}#corpGate .wt .who{margin:6px 0 10px}';
 (document.head||document.documentElement).appendChild(css);
 function close(){var d=$('aeraSU');if(d)d.remove()}
 function shell(inner){close();var d=document.createElement('div');d.id='aeraSU';d.innerHTML='<div class="su">'+inner+'</div>';
  d.addEventListener('click',function(e){if(e.target===d)close()});document.body.appendChild(d);return d}
-function done(title,text){var d=shell('<div class="hd"><h2>'+title+'</h2></div><div class="wait"><p>'+text+'</p><button class="go" type="button" id="crOk">OK</button></div>');$('crOk').onclick=close}
-function open(){var em=$('corpEm');
- var d=shell('<div class="hd"><h2>Request A Corporate Account</h2><p>Tell us about your company. AERA sets up your agreed prices and payment terms, then lets you know when you can start ordering.</p></div>'+
- '<form novalidate>'+
- '<label for="crName">Company Name</label><input id="crName" autocomplete="organization" placeholder="Your company">'+
- '<label for="crReg">Company Registration No. (optional)</label><input id="crReg" placeholder="e.g. 202301012345">'+
- '<label for="crContact">Contact Person</label><input id="crContact" autocomplete="name" placeholder="Full name">'+
- '<label for="crEmail">Company Email</label><input id="crEmail" type="email" autocomplete="email" placeholder="orders@yourcompany.com">'+
- '<label for="crPhone">Mobile Number</label><input id="crPhone" type="tel" autocomplete="tel" placeholder="01x-xxx xxxx">'+
- '<label for="crAddr">Delivery Address</label><textarea id="crAddr" autocomplete="street-address" placeholder="Office address"></textarea>'+
- '<label for="crNote">Anything Else (optional)</label><textarea id="crNote" placeholder="e.g. about 40 meals every weekday for our staff"></textarea>'+
- '<div class="hp"><label for="crWeb">Website</label><input id="crWeb" tabindex="-1" autocomplete="off"></div>'+
- '<button class="go" type="submit" id="crGo">Send Request</button><div class="er" id="crErr"></div>'+
- '<button class="bk" type="button" id="crBack">Back</button></form>');
- if(em&&em.value)$('crEmail').value=em.value;
- $('crBack').onclick=close;
- d.querySelector('form').addEventListener('submit',send);
- setTimeout(function(){try{$('crName').focus()}catch(e){}},50)}
-async function send(ev){ev.preventDefault();var b=$('crGo'),er=$('crErr');er.textContent='';
- var body={name:$('crName').value,reg:$('crReg').value,contactName:$('crContact').value,email:$('crEmail').value,phone:$('crPhone').value,address:$('crAddr').value,note:$('crNote').value,website:$('crWeb').value};
- if(!body.name.trim())return er.textContent='Type the company name.';
- if(!body.contactName.trim())return er.textContent='Type the contact person.';
- if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(body.email.trim()))return er.textContent='Type a valid company email.';
- if(body.phone.replace(/\D/g,'').length<9)return er.textContent='Type a valid mobile number.';
- if(!body.address.trim())return er.textContent='Type the delivery address.';
- b.disabled=true;b.textContent='Sending…';
+function msg(title,text){shell('<div class="hd"><h2>'+title+'</h2></div><div class="wait"><p>'+text+'</p><button class="go" type="button" id="crOk">OK</button></div>');$('crOk').onclick=close}
+function field(id,label,type,ph,ac){return '<label for="'+id+'">'+label+'</label><input id="'+id+'" type="'+(type||'text')+'"'+(ac?' autocomplete="'+ac+'"':'')+' placeholder="'+E(ph||'')+'">'}
+
+/* ---- new company : one form, logged straight in ---- */
+function openSignup(){var em=$('corpEm');
+ var d=shell('<div class="hd"><h2>Create A Corporate Account</h2><p>Sign up in one step. You are logged in straight away, and AERA is notified to approve your company.</p></div>'+
+ '<form novalidate>'+field('csCo','Company Name','text','Your company','organization')+field('csName','Contact Person','text','Full name','name')+
+ field('csPhone','Mobile Number','tel','01x-xxx xxxx','tel')+field('csEmail','Company Email','email','orders@yourcompany.com','username')+
+ field('csPass','Password','password','At least 8 characters','new-password')+
+ '<div class="hp"><label for="csWeb">Website</label><input id="csWeb" tabindex="-1" autocomplete="off"></div>'+
+ '<button class="go" type="submit" id="csGo">Create Account</button><div class="er" id="csErr"></div>'+
+ '<button class="bk" type="button" id="csBack">I already have an account. Log In</button></form>');
+ if(em&&em.value)$('csEmail').value=em.value;$('csBack').onclick=close;
+ d.querySelector('form').addEventListener('submit',signup);setTimeout(function(){try{$('csCo').focus()}catch(e){}},50)}
+async function signup(ev){ev.preventDefault();var b=$('csGo'),er=$('csErr');er.textContent='';
+ var body={action:'signup',name:$('csCo').value.trim(),contactName:$('csName').value.trim(),phone:$('csPhone').value.trim(),email:$('csEmail').value.trim().toLowerCase(),password:$('csPass').value,website:$('csWeb').value};
+ if(!body.name)return er.textContent='Type the company name.';
+ if(!body.contactName)return er.textContent='Type the contact person.';
+ if(!/^60[0-9]{8,10}$/.test(norm(body.phone)))return er.textContent='Type a valid Malaysian mobile number.';
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(body.email))return er.textContent='Type a valid company email.';
+ if(body.password.length<8)return er.textContent='Password needs at least 8 characters.';
+ var sb=SB();if(!sb)return er.textContent='Still loading. Try again in a moment.';
+ b.disabled=true;b.textContent='Creating…';
  try{var r=await fetch(FN,{method:'POST',headers:{'Content-Type':'application/json',apikey:K,Authorization:'Bearer '+K},body:JSON.stringify(body)});
   var j={};try{j=await r.json()}catch(e){}
-  if(!j.ok)throw new Error(j.error||'Could not send the request. Please try again.');
-  var em=E(body.email.trim().toLowerCase());
-  if(j.already&&j.pending)return done('Already Requested','We already have a request for <b>'+em+'</b>. AERA will be in touch soon.');
-  if(j.already)return done('Already With AERA','<b>'+em+'</b> is already a corporate account. Log in with it. If you have not made a password yet, tap <b>New here? Create An Account</b> and use this email.');
-  done('Request Sent','Thank you. AERA will set up your prices and payment terms and let you know, usually within 1 working day.<br><br>Once approved, tap <b>New here? Create An Account</b> with <b>'+em+'</b> to start ordering.')}
- catch(x){er.textContent=String(x&&x.message||x);b.disabled=false;b.textContent='Send Request'}}
-function mount(){var f=document.querySelector('#corpGate form.lg');if(!f||f.querySelector('.corpreq-open'))return;
- var b=document.createElement('button');b.type='button';b.className='corpreq-open';b.innerHTML='Not a corporate customer yet? Request An Account<small>For companies ordering for their staff or events</small>';b.onclick=open;
- var s=f.querySelector('.aerasu-open');if(s&&s.nextSibling)f.insertBefore(b,s.nextSibling);else if(s)f.appendChild(b);else return}
-setInterval(mount,1200);if(document.readyState!=='loading')mount();else document.addEventListener('DOMContentLoaded',mount);
-window.aeraCorpRequest=open;
+  if(j.exists){close();var f=$('corpEm');if(f)f.value=body.email;msg('Already Have An Account',E(j.error||'This email already has an AERA account.')+' After you log in, tap <b>Register My Company</b>.');return}
+  if(!j.ok)throw new Error(j.error||'Could not create the account. Please try again.');
+  b.textContent='Logging in…';
+  var s=await sb.auth.signInWithPassword({email:body.email,password:body.password});if(s.error)throw s.error;
+  ls('aera.account',JSON.stringify({email:body.email,name:body.contactName,phone:body.phone}));location.reload()}
+ catch(x){er.textContent=String(x&&x.message||x);b.disabled=false;b.textContent='Create Account'}}
+
+/* ---- an AERA login that is not a company yet ---- */
+function openRegister(){var sess=null;try{var v=JSON.parse(ls('sb-swpprjvubgcdsojapaad-auth-token')||'null');if(v&&v.currentSession)v=v.currentSession;sess=v}catch(e){}
+ var md=(sess&&sess.user&&sess.user.user_metadata)||{};
+ var d=shell('<div class="hd"><h2>Register My Company</h2><p>For <b style="color:#FDB913">'+E(sess&&sess.user&&sess.user.email||'')+'</b>. AERA is notified to approve your company.</p></div>'+
+ '<form novalidate>'+field('crCo','Company Name','text','Your company','organization')+field('crName','Contact Person','text','Full name','name')+field('crPhone','Mobile Number','tel','01x-xxx xxxx','tel')+
+ '<button class="go" type="submit" id="crGo">Register</button><div class="er" id="crErr"></div><button class="bk" type="button" id="crBack">Back</button></form>');
+ $('crName').value=md.name||'';$('crPhone').value=md.phone||'';$('crBack').onclick=close;
+ d.querySelector('form').addEventListener('submit',async function(ev){ev.preventDefault();var b=$('crGo'),er=$('crErr');er.textContent='';
+  var body={action:'register',name:$('crCo').value.trim(),contactName:$('crName').value.trim(),phone:$('crPhone').value.trim()};
+  if(!body.name)return er.textContent='Type the company name.';if(!body.contactName)return er.textContent='Type the contact person.';
+  if(!/^60[0-9]{8,10}$/.test(norm(body.phone)))return er.textContent='Type a valid Malaysian mobile number.';
+  if(!sess||!sess.access_token)return er.textContent='Please log in again.';
+  b.disabled=true;b.textContent='Registering…';
+  try{var sb=SB();if(sb){try{var rs=await sb.auth.refreshSession({refresh_token:sess.refresh_token});if(rs&&rs.data&&rs.data.session)sess=rs.data.session}catch(e){}}
+   var r=await fetch(FN,{method:'POST',headers:{'Content-Type':'application/json',apikey:K,Authorization:'Bearer '+sess.access_token},body:JSON.stringify(body)});
+   var j={};try{j=await r.json()}catch(e){}if(!j.ok)throw new Error(j.error||'Could not register. Please try again.');
+   if(sb){try{await sb.auth.refreshSession()}catch(e){}}location.reload()}
+  catch(x){er.textContent=String(x&&x.message||x);b.disabled=false;b.textContent='Register'}})}
+
+function mount(){var g=$('corpGate');if(!g)return;
+ var f=g.querySelector('form.lg');if(f&&!f.querySelector('.corpsu-open')){var b=document.createElement('button');b.type='button';b.className='aerasu-open corpsu-open';
+  b.innerHTML='New here? Create A Corporate Account<small>One step. You are logged in straight away.</small>';b.onclick=openSignup;f.appendChild(b)}
+ var no=g.querySelector('.no');if(no&&!$('corpReg')){var r=document.createElement('button');r.type='button';r.className='go';r.id='corpReg';r.textContent='Register My Company';r.onclick=openRegister;
+  var o=$('corpOut');if(o){no.insertBefore(r,o);o.className='x';o.textContent='Log Out'}else no.appendChild(r)}}
+setInterval(mount,1000);if(document.readyState!=='loading')mount();else document.addEventListener('DOMContentLoaded',mount);
+window.aeraCorpSignup=openSignup;window.aeraCorpRegister=openRegister;
 })();</script>
 </body>
 </html>
