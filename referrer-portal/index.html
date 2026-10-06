@@ -443,12 +443,15 @@ function render(){
   '<div class="f2"><div><label class="lb" for="yr">Year</label><select id="yr" onchange="setYear(this.value)">'+ys.map(function(y){return'<option value="'+y+'"'+(R.year===y?' selected':'')+'>'+y+'</option>'}).join('')+'</select></div>'+
   '<div><label class="lb" for="mo">Month</label><select id="mo" onchange="setMonth(this.value)">'+ms.map(function(m){return'<option value="'+m+'"'+(R.month===m?' selected':'')+'>'+monthLabel(m)+'</option>'}).join('')+'</select></div></div>'+
   '<div class="mo">'+ms.map(function(m){return'<button type="button" class="'+(R.month===m?'on':'')+'" onclick="setMonth(\''+m+'\')">'+monthShort(m)+'</button>'}).join('')+'</div>'+
-  '<div class="tiles">'+
-   '<div class="tile"><div class="l">Sales This Month</div><div class="v">'+rm(sum(mine,'Sales'))+'</div><small>'+mine.length+' order'+(mine.length===1?'':'s')+' · '+monthLabel(R.month)+'</small></div>'+
-   '<div class="tile"><div class="l">Cash-Back This Month</div><div class="v">'+rm(sum(mine,'Cashback'))+'</div><small>'+rate+'% of the meal subtotal</small></div>'+
-   '<div class="tile pend"><div class="l">Pending Cash-Back</div><div class="v">'+rm(sum(pendAll,'Cashback'))+'</div><small>Across every month, not yet paid</small></div>'+
-   '<div class="tile paid"><div class="l">Paid Cash-Back</div><div class="v">'+rm(sum(paidAll,'Cashback'))+'</div><small>Received all time</small></div>'+
-  '</div>'+
+  (function(){var pM=mine.filter(function(r){return !isPaid(r.Paid)}),dM=mine.filter(function(r){return isPaid(r.Paid)});
+   function tr(lbl,m,all,st){return '<tr'+(st?' style="'+st+'"':'')+'><td><b>'+lbl+'</b></td><td class="r num">'+m+'</td><td class="r num">'+all+'</td></tr>'}
+   return '<div class="tblwrap" style="margin-top:14px"><table><thead><tr><th></th><th class="r">'+esc(monthLabel(R.month))+'</th><th class="r">All Time</th></tr></thead><tbody>'+
+    tr('Orders',mine.length,R.rows.length)+
+    tr('Sales',rm(sum(mine,'Sales')),rm(sum(R.rows,'Sales')))+
+    tr('Cash-Back Earned',rm(sum(mine,'Cashback')),rm(sum(R.rows,'Cashback')))+
+    tr('Pending Cash-Back',rm(sum(pM,'Cashback')),rm(sum(pendAll,'Cashback')),'background:#FFF6DC')+
+    tr('Paid Cash-Back',rm(sum(dM,'Cashback')),rm(sum(paidAll,'Cashback')),'background:#E6F4EC')+
+   '</tbody></table></div><p class="hint" style="margin:8px 0 0">Cash-Back is '+rate+'% of the meal subtotal.</p>'})()+
   '<div class="row" style="margin-top:14px">'+
    (mPaid?'<button class="btn btn-y" type="button" onclick="receipt()">Download Receipt For '+esc(monthLabel(R.month))+'</button>':'<span class="hint" style="margin:0">A receipt is available once '+esc(monthLabel(R.month))+' has been paid out.</span>')+
    (mPaid?'<span class="chip ok">Paid'+(mine[0].PaidAt?' · '+esc(fmtDate(mine[0].PaidAt)):'')+'</span>':'<span class="chip warn">Awaiting payment</span>')+
@@ -982,6 +985,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 }catch(e){}})();
 </script>
 <!-- AERA app kit : end -->
+<script>try{Object.assign(window.AERA_I18N||{},{'All Time':'全部','Orders':'订单','Sales':'销售额','Cash-Back Earned':'已赚回馈金','Pending Cash-Back':'待付回馈金','Paid Cash-Back':'已付回馈金'})}catch(e){}</script>
 <script>/* Referrer Portal : who is signed in, and Log Out */
 (function(){var S='lp-mtswk8m9-vu96j';function zh(){try{return document.documentElement.getAttribute('data-lang')==='zh'||localStorage.getItem('aera_lang')==='zh'}catch(e){return false}}
  function tok(){try{return sessionStorage.getItem('lp_access_'+S)||localStorage.getItem('lp_pin_'+S)}catch(e){return null}}
