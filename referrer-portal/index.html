@@ -28,6 +28,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap">
 
 
+<style id="aera-phone-kit">@media(max-width:480px){#aeraBar .aera-getapp{display:none!important}}</style>
 
 <!-- SEO Meta Tags -->
 <title>Referrer Portal — AERA Meal Prep</title>
@@ -485,8 +486,7 @@ function receipt(mo){mo=mo||R.month;var L=inMonth(mo);if(!L.length)return;
   '.ft{margin-top:26px;color:#6B7280;font-size:11px;border-top:1px solid #E3E7EE;padding-top:12px}'+
   '@media print{body{padding:0}}';
  var html='<!DOCTYPE html><html><head><meta charset="utf-8">'+
-  '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap"><style>'+css+'</style><style id="aera-phone-kit">@media(max-width:480px){#aeraBar .aera-getapp{display:none!important}}</style>
-</head><body>'+
+  '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap"><style>'+css+'</style></head><body>'+
   '<div class="hd"><div><h1>Cash-Back Receipt</h1><div class="mut">AERA Meal Preparation SDN BHD · 202001037122 ( 1393443-P )<br>35, Jalan Equine 9A, Taman Equine, 43300 Seri Kembangan, Selangor</div></div>'+
   '<div style="text-align:right"><div class="mut">'+esc(monthLabel(mo))+'</div><div class="big">'+rm(sum(L,'Cashback'))+'</div><div class="mut">'+(paidAt?'Paid '+esc(paidAt):'Pending')+(ref?' · Ref '+esc(ref):'')+'</div></div></div>'+
   '<div class="box"><b>'+esc(name)+'</b><div class="mut">Referral Code '+esc(code)+' · '+rate+'% of the meal subtotal · '+L.length+' order'+(L.length===1?'':'s')+' in '+esc(monthLabel(mo))+'</div></div>'+
