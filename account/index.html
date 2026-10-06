@@ -506,7 +506,7 @@ var HOME_URL='https://my.chatbees.io/p/ZQr9fS2jA9';
 /* Set when a sign-in is meant to end at the homepage but the five-numbers prompt is in
    the way; obLater() carries on to it once the prompt is answered. */
 var GOHOME='';
-var STATUS={new:['Preparing','cat'],in_kitchen:['In the kitchen','warn'],packed:['Packed · rider booked','warn'],out_for_delivery:['On the way','warn'],delivered:['Delivered','ok'],cancelled:['Cancelled','bad']};
+var STATUS={new:['Preparing','cat'],paid:['Paid · Preparing','cat'],payfail:['Payment Failed','bad'],in_kitchen:['In the kitchen','warn'],packed:['Packed · rider booked','warn'],out_for_delivery:['On the way','warn'],delivered:['Delivered','ok'],cancelled:['Cancelled','bad']};
 /* ===== Helpers ===== */
 function $(s){return document.querySelector(s)}
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
@@ -1513,7 +1513,7 @@ async function planRenameSave(i){var p=PLANS[i];if(!p)return;var v=String((docum
    second time to see this : the Kitchen Console sends the rider's link straight onto the order
    and it shows up here. Before a rider is booked the box says so rather than sitting empty, and
    a pick-up order has no rider at all, so it gets nothing. */
-var TRACK_WAIT={new:1,in_kitchen:1,packed:1};
+var TRACK_WAIT={new:1,paid:1,in_kitchen:1,packed:1};
 function trackBox(o){
  if(o.fulfil==='pickup')return '';
  if(o.tracking_link)
