@@ -2939,7 +2939,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  setInterval(function(){title();paint()},3000);
 })();</script>
 <!-- AERA Create Account -->
-<script>window.AERASU_CFG={sb:function(){return window.__CORP_SB},after:function(u){u=u||{};var md=u.user_metadata||{};try{localStorage.setItem('aera.account',JSON.stringify({email:String(u.email||'').toLowerCase(),name:md.name||'',phone:md.phone||''}))}catch(e){}location.reload()},box:'#corpGate form.lg',email:'#corpEm',app:'corp',note:'Use the company email AERA has on file for your company, so your agreed prices load straight away.',nameLabel:'Contact Person',emailLabel:'Company Email',emailPh:'orders@yourcompany.com'};</script>
+<script>window.AERASU_CFG={sb:function(){return window.__CORP_SB},after:function(u){u=u||{};var md=u.user_metadata||{};try{localStorage.setItem('aera.account',JSON.stringify({email:String(u.email||'').toLowerCase(),name:md.name||'',phone:md.phone||''}))}catch(e){}location.reload()},box:'#corpGate form.lg',email:'#corpEm',app:'corp',note:false,nameLabel:'Contact Person',emailLabel:'Company Email',emailPh:'orders@yourcompany.com'};</script>
 <script>/* AERA Create Account : one AERA account for every AERA app */
 (function(){
 if(window.__AERASU)return;window.__AERASU=1;
@@ -2969,7 +2969,7 @@ var W={email:'',pass:'',t:null,n:0,busy:false};
 function close(){var d=$('aeraSU');if(d)d.remove();if(W.t){clearInterval(W.t);W.t=null}}
 function open(){close();var d=document.createElement('div');d.id='aeraSU';
  d.innerHTML='<div class="su"><div class="hd"><h2>Create Your AERA Account</h2><p>One account for every AERA app: '+APPS+'. Sign up once here and use the same email and password everywhere.</p></div>'+
- '<form novalidate><div class="note">'+E(C.note||'Use the email AERA has on file for you.')+'</div>'+
+ '<form novalidate>'+(C.note===false?'':'<div class="note">'+E(C.note||'Use the email AERA has on file for you.')+'</div>')+
  '<label for="suName">'+E(C.nameLabel||'Your Name')+'</label><input id="suName" autocomplete="name" required placeholder="'+E(C.namePh||'Full name')+'">'+
  '<label for="suPhone">Mobile Number</label><input id="suPhone" type="tel" autocomplete="tel" placeholder="01x-xxx xxxx">'+
  '<label for="suEmail">'+E(C.emailLabel||'Email')+'</label><input id="suEmail" type="email" autocomplete="username" required placeholder="'+E(C.emailPh||'you@example.com')+'">'+
