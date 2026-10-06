@@ -2,7 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aeramealprep.net/referrer-portal/</loc>
-    <lastmod>2026-10-06T02:06:15.646Z</lastmod>
+    <lastmod>2026-10-06T02:10:55.905Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
+    <lastmod>2026-10-06T02:09:50.167Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -28,11 +33,6 @@
   <url>
     <loc>https://aeramealprep.net/kitchen/</loc>
     <lastmod>2026-10-06T01:43:02.880Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
-    <lastmod>2026-10-06T01:32:31.764Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
