@@ -1371,7 +1371,7 @@ function mountLogin(){if(!C.btn||DEAD)return;var t=document.querySelector(C.btn)
  var b=document.createElement('button');b.type='button';b.className='aerapk-btn';b.innerHTML=FACE+'<span>Sign in with '+LBL+'</span>';
  var m=document.createElement('div');m.className='aerapk-msg';
  b.onclick=function(){login(b,m)};t.insertAdjacentElement('afterend',b);b.insertAdjacentElement('afterend',m);
- authOpts().then(function(){if(!AUTO&&ls('aera.pk.dev')){AUTO=1;login(b,m,true)}}).catch(function(){DEAD=true;b.remove();m.remove()})}
+ authOpts().then(function(){if(!AUTO&&ls('aera.pk.dev')&&t.offsetParent!==null&&!sess()){AUTO=1;login(b,m,true)}}).catch(function(){DEAD=true;b.remove();m.remove()})}
 
 /* ---- offer to turn it on after a normal sign-in ---- */
 var RO=null,offering=false;
