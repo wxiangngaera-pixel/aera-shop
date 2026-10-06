@@ -985,7 +985,14 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  window.aeraRefLogout=function(){if(!confirm(zh()?'退出推荐人入口？':'Log out of the Referrer Portal?'))return;try{['lp_pin_','lp_pw_','lp_al_','lp_paid_'].forEach(function(p){localStorage.removeItem(p+S)});sessionStorage.removeItem('lp_access_'+S);sessionStorage.removeItem('lp_fresh_'+S)}catch(e){}location.replace(location.pathname)};
  function show(){var t=tok(),w=document.getElementById('refWho');if(!w||!t)return;var em='';try{em=atob(String(t).split('.')[0]).split(':').filter(function(x){return x.indexOf('@')>0})[0]||''}catch(e){}
   document.getElementById('refWhoE').textContent=em?((zh()?'已登录：':'Signed in as ')+em):(zh()?'已登录':'Signed in');document.getElementById('refOut').textContent=zh()?'退出登录':'Log Out';w.style.display='flex'}
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',show);else show()})();
+ function clr(){try{['lp_pin_','lp_pw_','lp_al_','lp_paid_'].forEach(function(p){localStorage.removeItem(p+S)});sessionStorage.removeItem('lp_access_'+S);sessionStorage.removeItem('lp_fresh_'+S)}catch(e){}}
+ /* the menu : signed in with the email code means Log Out, not Log In / Sign Up */
+ function fixBar(){if(!tok())return;var bar=document.getElementById('aeraBar');if(!bar)return;[].forEach.call(bar.querySelectorAll('a,button'),function(a){if(a.dataset.refx)return;var t=a.textContent.replace(/\s+/g,' ').trim();
+  if(/^(sign ?up|注册)$/i.test(t)){a.dataset.refx='1';a.style.display='none'}
+  else if(/^(log ?in|登录|登入)$/i.test(t)){a.dataset.refx='1';a.textContent=zh()?'退出登录':'Log Out';a.setAttribute('href','#');a.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();window.aeraRefLogout()},true)}})}
+ document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('#aeraBar [data-ab="out"]');if(a)clr()},true);
+ function boot(){show();fixBar();var bar=document.getElementById('aeraBar');if(bar)new MutationObserver(fixBar).observe(bar,{childList:true,subtree:true});else setTimeout(boot,400)}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot()})();
 </script>
 </body>
 </html>
