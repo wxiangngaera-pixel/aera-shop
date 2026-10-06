@@ -573,7 +573,7 @@ async function offer(){if(C.offer===false||offering||document.getElementById('ae
  var s=sess();if(!s)return;var uid=s.user.id;
  if(TRIED[uid]||ls('aera.pk.u.'+uid)||+(ls('aera.pk.skip.'+uid)||0)>Date.now())return;TRIED[uid]=1;
  offering=true;try{
- if(!(await platform))return;
+ if(!(await platform)&&!/iPhone|iPad|iPod|Android/.test(navigator.userAgent))return;
  try{RO=await call('reg-options',{},s.access_token)}catch(e){return}
  var d=document.createElement('div');d.id='aerapkCard';
  d.innerHTML='<div class="ic" style="color:#FDB913">'+FACE+'</div><div><b>Sign in with '+LBL+'</b><p>Skip the email and password next time. Works on every AERA app on this phone.</p><div class="row"><button class="go">Turn on '+LBL+'</button><button class="no">Not now</button></div><div class="aerapk-msg" style="text-align:left"></div></div>';
