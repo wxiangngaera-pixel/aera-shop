@@ -32,6 +32,33 @@
 <style id="aera-ref-only">/* Referrer Portal shows only the Referral Programme : no shop menu, cart, search or footer */
 #aeraBar .ab-find,#aeraBar .ab-acct,#aeraBar #abInbox,#aeraBar #abCart,#aeraBar .ab-ord,#aeraBar .ab-burger,.ab-panel,.ab-hidden-nav,.aera-legal-foot{display:none!important}
 #aeraBar .ab-logo{pointer-events:none}</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<style id="aera-ref-login">
+html.rf-acct #pin-gate,html.rf-login #pin-gate{display:none!important}html.rf-acct body,html.rf-login body{visibility:visible!important}
+#rfLogin{display:none;position:fixed;inset:0;z-index:999998;background:linear-gradient(160deg,#16479E,#0E2F72);flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:16px;font-family:Montserrat,system-ui,sans-serif;overflow:auto}html.rf-login #rfLogin{display:flex}html.rf-login{overflow:hidden}
+#rfLogo{height:40px;width:auto}.rf-card{background:#fff;border-radius:18px;max-width:400px;width:100%;box-sizing:border-box;padding:26px 22px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.rf-card h2{margin:0 0 4px;font-size:22px;color:#0B0B0B}.rf-card p{margin:0 0 8px;color:#6B7280;font-size:14px;line-height:1.45}
+.rf-card label{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#16479E;margin:14px 0 6px}
+.rf-card input{width:100%;box-sizing:border-box;height:48px;border:1.5px solid #CBD2DE;border-radius:12px;padding:0 14px;font:inherit;font-size:16px;background:#fff;color:#0B0B0B}.rf-card input:focus{outline:none;border-color:#16479E;box-shadow:0 0 0 3px rgba(22,71,158,.15)}
+#rfGo{width:100%;height:50px;margin-top:18px;border:0;border-radius:12px;background:#16479E;color:#FDB913;font:inherit;font-weight:800;font-size:16px;cursor:pointer}#rfGo[disabled]{opacity:.6}
+.rf-alt{display:block;width:100%;margin-top:12px;background:none;border:0;color:#16479E;font:inherit;font-weight:700;font-size:14px;text-align:center;text-decoration:underline;cursor:pointer}.rf-err{color:#C8433B;font-size:13px;margin-top:10px}
+#pin-gate{background:linear-gradient(160deg,#16479E,#0E2F72)!important}#pin-gate button{background:#16479E!important;color:#FDB913!important}#pin-gate .rf-back{background:none!important;color:#16479E!important;text-decoration:underline;font-weight:700;margin-top:12px;width:100%;border:0;font-size:14px;cursor:pointer}
+.chip.ok{background:#EDF3FD!important;color:#16479E!important}.chip.warn{background:#FFF2C2!important;color:#7A5A00!important}
+</style>
+<script id="aera-ref-auth">
+(function(){var U="https://swpprjvubgcdsojapaad.supabase.co",K="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0",RF=U+"/functions/v1/referrer-feed",SK="sb-swpprjvubgcdsojapaad-auth-token",LP="lp-mtswk8m9-vu96j";
+ var c=null;try{c=window.supabase.createClient(U,K,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}})}catch(e){}window.__REF_SB=c;
+ function sess(){try{var v=JSON.parse(localStorage.getItem(SK)||"null");if(v&&v.currentSession)v=v.currentSession;if(v&&v.access_token&&v.user)return v}catch(e){}return null}
+ function pin(){try{return sessionStorage.getItem("lp_access_"+LP)||localStorage.getItem("lp_pin_"+LP)}catch(e){return null}}
+ window.aeraRefSess=sess;var H=document.documentElement,emb=false;try{emb=window.top!==window&&typeof window.parent.aeraRefFeed==="function"}catch(e){}H.classList.add(emb?"rf-acct":(sess()&&c?"rf-acct":(pin()?"rf-pin":"rf-login")));
+ window.aeraRefData=async function(){
+  if(H.classList.contains("rf-acct")){var s=null;try{s=(await c.auth.getSession()).data.session}catch(e){}
+   if(s){var r=await fetch(RF,{method:"POST",headers:{"Content-Type":"application/json",apikey:K,Authorization:"Bearer "+s.access_token},body:"{}"});var j=await r.json().catch(function(){return{}});if(r.ok&&j.ok!==false)return j;throw new Error(j.error||("HTTP "+r.status))}
+   H.classList.remove("rf-acct");H.classList.add(pin()?"rf-pin":"rf-login");if(!pin())return{headers:[],data:[]}}
+  if(H.classList.contains("rf-login"))return{headers:[],data:[]};
+  return fetch(window.DATA_URL||"/api/public/landing-pages/6950/sheet-data",{cache:"no-store"}).then(function(r){return r.json()})};
+})();
+</script>
 
 <!-- SEO Meta Tags -->
 <title>Referrer Portal — AERA Meal Prep</title>
@@ -364,6 +391,8 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div id="rfLogin"><img id="rfLogo" alt="AERA"><form class="rf-card" onsubmit="return aeraRefLogin(event)"><h2>Referrer Portal</h2><p>Sign in with your AERA email and password.</p><label for="rfE">Email</label><input id="rfE" type="email" autocomplete="username webauthn" required placeholder="you@example.com"><label for="rfP">Password</label><input id="rfP" type="password" autocomplete="current-password" required placeholder="Your password"><button id="rfGo" type="submit">Sign In</button><div class="rf-err" id="rfErr"></div><button type="button" class="rf-alt" onclick="aeraRefUseCode()">Email me a one-time code instead</button><a class="rf-alt" href="https://aeramealprep.net/account/">Forgot password?</a></form></div>
+
 <nav data-section="nav"><div class="wrap">
   <a href="https://my.chatbees.io/p/ZQr9fS2jA9"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTM5IiBoZWlnaHQ9IjU5IiB2aWV3Qm94PSIwIDAgMTM5IDU5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik02NS40MTI1IDIzLjQ3OTJDNjYuMTQ0OCAyNS41MjQxIDY2Ljg4NDUgMjcuNTU3MyA2Ny42MDcyIDI5LjU3NDdDNjguMzI1IDMxLjU3OTUgNjkuMDM4OCAzMy41NzI3IDY5Ljc3MjQgMzUuNTUyNkM2OS44MzggMzUuNzYzNSA2OS43OTA5IDM2LjAwODYgNjkuNjIzNSAzNi4yMjI4QzY5LjQ1NjIgMzYuNDM3OSA2OS4yMDY5IDM2LjU2MDQgNjguOTczOSAzNi41NTk2QzY3LjE1MjkgMzYuNTUyOSA2NS4zNDU2IDM2LjU0NjIgNjMuNTM5NiAzNi41Mzg3QzYzLjMwOCAzNi41Mzc5IDYzLjEyODQgMzYuNDIzNyA2My4wNjA4IDM2LjIyMkM2Mi45MjQyIDM1Ljg4NiA2Mi43OTkyIDM1LjU0NzYgNjIuNjczNSAzNS4yMDkxQzYyLjYyNSAzNS4yMDkxIDYyLjU4ODEgMzUuMjA5MSA2Mi41NTEyIDM1LjIwOTFDNTkuNzMxNiAzNS4xOTkxIDU2LjkyODQgMzUuMTg5OSA1NC4xMTc2IDM1LjE3OTlDNTQuMDgxNCAzNS4xNzk5IDU0LjA0NDUgMzUuMTc5OSA1NC4wMDgzIDM1LjE3OTlDNTMuNzEyNiAzNS41MTU5IDUzLjQ1MyAzNS44NTI3IDUzLjE3MDIgMzYuMTg2MUM1Mi45OTg4IDM2LjM4NjIgNTIuNzkwNCAzNi40OTg3IDUyLjU2MDMgMzYuNDk3OUM1MC43NjY2IDM2LjQ5MTIgNDguOTYzMyAzNi40ODQ2IDQ3LjE3MyAzNi40Nzc5QzQ2Ljk0MzUgMzYuNDc3MSA0Ni43NTAyIDM2LjM1MzcgNDYuNjY1NSAzNi4xMzg2QzQ2LjYxNyAzNS45MjUyIDQ2LjY2NTUgMzUuNjgwOSA0Ni44MzQ5IDM1LjQ3MjVDNDguNDI3MSAzMy41MTE5IDUwLjA0NDYgMzEuNTM1MyA1MS42NzM3IDI5LjU0NDZDNTMuMzE1IDI3LjUzODkgNTQuOTU3MSAyNS41MTQ5IDU2LjYzNiAyMy40Nzc1QzU3LjI4MzUgMjIuNjc4OSA1OC4xNTAzIDIyLjIyODggNTkuMDYwMiAyMi4yMjg4QzYwLjU0MzcgMjIuMjI4OCA2Mi4wNDAzIDIyLjIyODggNjMuNTM4OSAyMi4yMjg4QzY0LjQ1MDggMjIuMjI4OCA2NS4xMjQzIDIyLjY4MDYgNjUuNDExOCAyMy40OEw2NS40MTI1IDIzLjQ3OTJaTTU2LjcxNTkgMzEuOTcyMkM1OC4yODM1IDMxLjk3NjMgNTkuODUzMiAzMS45ODA1IDYxLjQzNTggMzEuOTg0N0M2MS40NjA0IDMxLjk4NDcgNjEuNDg1IDMxLjk4NDcgNjEuNTA4OSAzMS45ODQ3QzYxLjI1NTUgMzEuMzA5NCA2MS4wMDE0IDMwLjYzMjUgNjAuNzU5NiAyOS45NTQ4QzYwLjUxNzEgMjkuMjc1NCA2MC4yNjE2IDI4LjU5MjYgNjAuMDE3OCAyNy45MDkxVjI3Ljg4NTdDNjAuMDA2MiAyNy44OTQxIDU5Ljk5MzIgMjcuOTAxNiA1OS45ODA5IDI3LjkwODJDNTkuNDIyOSAyOC41OTEgNTguODQ2NCAyOS4yNjU0IDU4LjI4NjkgMjkuOTQ5QzU3LjczODUgMzAuNjE4NCA1Ny4xODExIDMxLjI5ODYgNTYuNjQyOCAzMS45NzEzQzU2LjY2NzQgMzEuOTcxMyA1Ni42OTIgMzEuOTcxMyA1Ni43MTY2IDMxLjk3MTNMNTYuNzE1OSAzMS45NzIyWiIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNNzYuNjQzMSAyMi4yMjc2QzgyLjA4NDMgMjIuMjI3NiA4Ny41NjU4IDIyLjIyNzYgOTMuMDUwNyAyMi4yMjc2QzkzLjQxODEgMjIuMjI3NiA5My42MzUzIDIyLjU0MTEgOTMuNTI4OCAyMi45MjQ1QzkzLjMzODIgMjMuNTgxNCA5My4xNjA2IDI0LjIzNjcgOTIuOTcxNCAyNC44OTExQzkyLjg2NjIgMjUuMjcxMiA5Mi40NjM5IDI1LjU4MTMgOTIuMDk4NSAyNS41ODA1Qzg4LjIzMTEgMjUuNTc3MSA4NC4zODQ4IDI1LjU3MzggODAuNTQ1NCAyNS41NzA1QzgwLjI4MjQgMjUuNTcwNSA4MC4wMjE1IDI1Ljc1MyA3OS44OTQ0IDI2LjAwODFDNzkuODc5NCAyNi4wNDk4IDc5Ljg2NTEgMjYuMDkyMyA3OS44NSAyNi4xMzRDNzkuNzA1OSAyNi43MDkyIDc5LjU0ODggMjcuMjgyNyA3OS4zOTI0IDI3Ljg1MzhDODMuMDI2OSAyNy44NTg4IDg2LjY1NTkgMjcuODY0NiA5MC4zMTcxIDI3Ljg2OTZDOTAuNjkzNCAyNy44Njk2IDkwLjkwOTMgMjguMTc4IDkwLjgwNjIgMjguNTU0QzkwLjYyMDQgMjkuMjAwMSA5MC40NDgyIDI5Ljg0MiA5MC4yNjMxIDMwLjQ4M0M5MC4xNjA3IDMwLjg1NjUgODkuNzYzOCAzMS4xNTkxIDg5LjM4OTUgMzEuMTU4M0M4NS43NTAyIDMxLjE0OTkgODIuMTQyMyAzMS4xNDE2IDc4LjUyOTcgMzEuMTMyNEM3OC4zODc2IDMxLjY5NzYgNzguMjMzOSAzMi4yNjExIDc4LjA5MjUgMzIuODIzQzc4LjA3ODIgMzIuODY0NyA3OC4wNjMyIDMyLjkwNTUgNzguMDczNCAzMi45NDY0Qzc4LjA2MDQgMzMuMTk0OCA3OC4yMzYgMzMuMzc0IDc4LjQ5NTUgMzMuMzc0OUM4Mi4yODEgMzMuMzg1NyA4Ni4wNzMzIDMzLjM5NzQgODkuODg2MSAzMy40MDgyQzkwLjI0NjcgMzMuNDA5IDkwLjQ0ODIgMzMuNzExNiA5MC4zNDY1IDM0LjA4MDFDOTAuMTYyNyAzNC43MTIgODkuOTkyNiAzNS4zNDMgODkuODEwMyAzNS45NzE2Qzg5LjcwOTIgMzYuMzM3NiA4OS4zMjg3IDM2LjYzNDMgODguOTcwMSAzNi42MzM1QzgzLjYyNTkgMzYuNjEzNSA3OC4yODUyIDM2LjU5MjYgNzIuOTgzMyAzNi41NzI2QzcxLjgzMTcgMzYuNTY4NSA3MS4xMjQ3IDM1LjYxNDggNzEuNDE4NSAzNC40NTAyQzcxLjgzMzEgMzIuODA0NyA3Mi4yNDk3IDMxLjE0OTkgNzIuNjY4NCAyOS40ODZDNzMuMDg5OSAyNy44MTIxIDczLjUxNDEgMjYuMTI4MiA3My45NDEgMjQuNDMyNkM3NC4yNDcgMjMuMjIyMiA3NS40NjA3IDIyLjIyNjggNzYuNjQzMSAyMi4yMjY4VjIyLjIyNzZaIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik05Ny4xODEzIDIyLjIyNkgxMTUuMDAyQzExNi4xOTUgMjIuMjI2IDExNi44NjMgMjMuMjMzOSAxMTYuNDczIDI0LjQ1ODVDMTE2LjE1OCAyNS40MjU1IDExNS44NDQgMjYuMzkwOCAxMTUuNTMxIDI3LjM0ODdDMTE1LjIxOSAyOC4zMDQgMTE0LjkwNyAyOS4yNjAxIDExNC41OTcgMzAuMjA4OEMxMTQuMjE3IDMxLjQwNTEgMTEyLjkxOSAzMi4zNzc5IDExMS43NDggMzIuMzc0NkMxMTEuMjc3IDMyLjM3MzcgMTEwLjgwNiAzMi4zNzIxIDExMC4zMzUgMzIuMzcxMkMxMTEuMDAyIDMzLjQ0OTEgMTExLjY4MiAzNC41MjIgMTEyLjM2IDM1LjU5MTVDMTEyLjQ5NSAzNS43ODk5IDExMi40NjMgMzYuMDY2NyAxMTIuMjY1IDM2LjMxNzZDMTEyLjA2NyAzNi41Njg1IDExMS43OTQgMzYuNzIxOSAxMTEuNTI1IDM2LjcyMTFDMTA5Ljk1MyAzNi43MTUyIDEwOC4zODEgMzYuNzA5NCAxMDYuODExIDM2LjcwMzZDMTA2LjYyNyAzNi43MDM2IDEwNi40NzkgMzYuNjMzNSAxMDYuMzk0IDM2LjQ5ODVDMTA1LjkzOSAzNS44MTE2IDEwNS40OTkgMzUuMTIzIDEwNS4wNTcgMzQuNDMzNkMxMDQuNjE0IDMzLjc0MjUgMTA0LjE1NyAzMy4wNDk4IDEwMy43MjYgMzIuMzUzN0MxMDIuNDQ3IDMyLjM1MDQgMTAxLjE4MyAzMi4zNDcxIDk5LjkxOTYgMzIuMzQzN0M5OS41Mzk4IDMzLjU3MTYgOTkuMTc1OCAzNC43OTIxIDk4LjgxMzggMzYuMDA3NUM5OC43MTA2IDM2LjM3NDMgOTguMzE3OSAzNi42NzE5IDk3Ljk1MjQgMzYuNjcwMkM5Ni4yOTI2IDM2LjY2MzYgOTQuNjQ3OCAzNi42NTc3IDkzLjAwNDQgMzYuNjUxMUM5Mi42Mzk3IDM2LjY0OTQgOTIuNDM4MiAzNi4zNTEgOTIuNTM3MiAzNS45ODQyQzkzLjE1NTQgMzMuODUwMSA5My43NzgzIDMxLjY5NiA5NC40MDYgMjkuNTI4NkM5NS4wMzc5IDI3LjM0NTMgOTUuNjc1MSAyNS4xNDIgOTYuMzAyOSAyMi45MjI5Qzk2LjQyMSAyMi41Mzk1IDk2LjgwNyAyMi4yMjQ0IDk3LjE4MiAyMi4yMjQ0TDk3LjE4MTMgMjIuMjI2Wk0xMDcuOTk0IDI5LjA3MjZDMTA4LjMxIDI5LjA3MjYgMTA4LjYyMiAyOC44MjA4IDEwOC43MjYgMjguNTA5OUMxMDguOTY2IDI3LjczMDQgMTA5LjIyIDI2Ljk0OTMgMTA5LjQ2IDI2LjE2NDFDMTA5LjU1MSAyNS44NTIzIDEwOS4zOTEgMjUuNTk0NyAxMDkuMDg4IDI1LjU5MzlDMTA2LjY5NSAyNS41OTE0IDEwNC4zMDYgMjUuNTg5NyAxMDEuOTM0IDI1LjU4NzJDMTAxLjU4MyAyNi43NTAxIDEwMS4yNDcgMjcuOTA3MiAxMDAuODk5IDI5LjA1OTJDMTAzLjI1NiAyOS4wNjM0IDEwNS42MyAyOS4wNjc2IDEwNy45OTMgMjkuMDcxN0wxMDcuOTk0IDI5LjA3MjZaIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0xMzUuMjI0IDIzLjUwMjRDMTM1Ljc0MyAyNS41ODQ4IDEzNi4yNyAyNy42NTU1IDEzNi43ODIgMjkuNzA5NkMxMzcuMjkgMzEuNzUwMyAxMzcuNzk2IDMzLjc3OTMgMTM4LjMyMyAzNS43OTQyQzEzOC4zNjYgMzYuMDA4NCAxMzguMjg5IDM2LjI1ODUgMTM4LjA5IDM2LjQ3NjFDMTM3Ljg5MSAzNi42OTUzIDEzNy42MTggMzYuODE5NSAxMzcuMzc3IDM2LjgxODdDMTM1LjQ4OSAzNi44MTEyIDEzMy42MTYgMzYuODA0NSAxMzEuNzQ1IDM2Ljc5N0MxMzEuNTA1IDM2Ljc5NjIgMTMxLjMzMiAzNi42ODAzIDEzMS4yODUgMzYuNDc1MkMxMzEuMTgzIDM2LjEzMjYgMTMxLjA5MyAzNS43ODgzIDEzMS4wMDMgMzUuNDQ0MUMxMzAuOTUyIDM1LjQ0NDEgMTMwLjkxNCAzNS40NDQxIDEzMC44NzcgMzUuNDQ0MUMxMjcuOTU0IDM1LjQzNDEgMTI1LjA0OSAzNS40MjQgMTIyLjEzNSAzNS40MTRDMTIyLjA5NyAzNS40MTQgMTIyLjA1OSAzNS40MTQgMTIyLjAyMiAzNS40MTRDMTIxLjY3NSAzNS43NTU4IDEyMS4zNjcgMzYuMDk4NSAxMjEuMDM1IDM2LjQzNzdDMTIwLjgzMyAzNi42NDExIDEyMC42MDQgMzYuNzU1MyAxMjAuMzY2IDM2Ljc1NDVDMTE4LjUwNyAzNi43NDc4IDExNi42MzggMzYuNzQwMyAxMTQuNzgzIDM2LjczMzdDMTE0LjU0NiAzNi43MzI4IDExNC4zNTkgMzYuNjA3IDExNC4yOTcgMzYuMzg4NkMxMTQuMjcyIDM2LjE3MTggMTE0LjM1IDM1LjkyMzQgMTE0LjU1MSAzNS43MTA4QzExNi40MzIgMzMuNzE2IDExOC4zNDEgMzEuNzAzNiAxMjAuMjYzIDI5LjY3NzlDMTIyLjIwMSAyNy42MzYzIDEyNC4xNDIgMjUuNTc1NiAxMjYuMTIzIDIzLjQ5OTlDMTI2Ljg4OSAyMi42ODcxIDEyNy44NDEgMjIuMjI3OCAxMjguNzg0IDIyLjIyNzhDMTMwLjMyMyAyMi4yMjc4IDEzMS44NzYgMjIuMjI3OCAxMzMuNDMgMjIuMjI3OEMxMzQuMzc2IDIyLjIyNzggMTM1LjAyMSAyMi42ODc5IDEzNS4yMjUgMjMuNTAyNEgxMzUuMjI0Wk0xMjUuMjA1IDMyLjE0ODdDMTI2LjgzMSAzMi4xNTI5IDEyOC40NTcgMzIuMTU3MSAxMzAuMDk5IDMyLjE2MTJDMTMwLjEyNCAzMi4xNjEyIDEzMC4xNDkgMzIuMTYxMiAxMzAuMTc0IDMyLjE2MTJDMTI5Ljk5MSAzMS40NzM1IDEyOS44MDcgMzAuNzg0OSAxMjkuNjM2IDMwLjA5NDdDMTI5LjQ2NSAyOS40MDI4IDEyOS4yOCAyOC43MDg0IDEyOS4xMDggMjguMDExNUMxMjkuMTA4IDI4LjAwNCAxMjkuMTEgMjcuOTk3MyAxMjkuMTExIDI3Ljk4ODFDMTI5LjA5NyAyNy45OTczIDEyOS4wODMgMjguMDA0OCAxMjkuMDY5IDI4LjAxMTVDMTI4LjQxIDI4LjcwNjcgMTI3LjczMyAyOS4zOTI4IDEyNy4wNzIgMzAuMDg4OUMxMjYuNDI0IDMwLjc3MDggMTI1Ljc2NyAzMS40NjI3IDEyNS4xMjkgMzIuMTQ3MUMxMjUuMTU0IDMyLjE0NzEgMTI1LjE4IDMyLjE0NzEgMTI1LjIwNSAzMi4xNDcxVjMyLjE0ODdaIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik00Ni4yODE2IDIuNDE0ODhDNDUuNzQwNiAwLjYyNzU5MSA0My43MDk5IC0wLjE2MTg1IDQyLjQ0NyAxLjQ3MDM5TDM5Ljk5NjkgNC42MzU2NUwxMS44MTQyIDQxLjA0NzVMOS4zMDE5NiAxNi45Mjk5QzkuNDA3ODQgMTcuMDI5MSAxNS4wNTUzIDIzLjYwNTYgMTYuODgzMSAyNS43MzM4QzE3LjIwMDEgMjYuMTAyMyAxNy4yMjUzIDI2LjcwOTIgMTYuOTQxOSAyNy4xMTZMMTYuMDc5OSAyOC4zNTMxTDE1LjQ2OTIgMzIuMjc0NUwyMS40ODgzIDI0Ljk1NjlDMjEuOTYwOSAyNC4zODI1IDIxLjk2NzggMjMuNDUxNCAyMS41MDQgMjIuODY2Mkw0LjI3MTMgMS4xNDE5NEw0LjI1ODMyIDEuMTI1MjZDMi44NDAzMSAtMC42NjQ1MjUgMC4zNzc5MTQgMC44MzE4MjkgMC42OTI4IDMuMjkwMTlMMS4wNTE0IDYuMDkxMTZMMS4xOTU1MiA3LjIxNDA1TDcuNDkwNTEgNTYuMzU3QzcuNzk2NTIgNTguNzQ3OCAxMC4yODkgNTkuNTQ4MSAxMS41MTk4IDU3LjY1MDhMMTMuMjY0MyA1NC45NjA3TDM4Ljg5ODUgMTUuNDM0NEwzNi41MTA2IDM4LjkxMjZMMzIuMDMxMSAzNC44MTI4QzMxLjc4MzkgMzQuNTg2MSAzMS43MTA4IDM0LjE3MTggMzEuODYwNCAzMy44NDE3TDMyLjUxMTMgMzIuNDAzN0wzMi42ODI4IDI4LjY4ODJMMjcuODIwOCAzNi42NTkzQzI3LjQ0NzIgMzcuMjcyIDI3LjUwNTkgMzguMTI4MiAyNy45NTgxIDM4LjY1NjdMMzUuNjI1MyA0Ny42MDczTDM2Ljk3OTEgNDkuMTg3OEMzNy43MTgyIDUwLjA1MDYgMzguOTQ2MyA0OS41NzcxIDM5LjE0NTggNDguMzUyNkwzOS4zODA4IDQ2LjkwODdMNDAuMTQwMyA0Mi4yMzYzTDQwLjUyMjEgMzkuODg3MUw0NC4zNTk1IDE2LjI5MTRMNDQuODMzNSAxMy4zNzU0QzQ0LjgzNyAxMy40MDg3IDQ0LjgzOTcgMTMuNDQyOSA0NC44NDE3IDEzLjQ3NzFMNDYuMzc1OSAzLjk2NzkyQzQ2LjQxMDcgMy43NTExOCA0Ni40MjU3IDMuNTQxMTEgNDYuNDIzIDMuMzM3N0M0Ni40MTg5IDMuMDA4NDIgNDYuMzY3NyAyLjY5OTE1IDQ2LjI3OTYgMi40MTU3MUw0Ni4yODE2IDIuNDE0ODhaIiBmaWxsPSIjRkRCOTEzIi8+PC9zdmc+" alt="AERA Meal Prep"></a>
   <div class="row"><button type="button" class="langsw" id="langSw" onclick="aeraLang()" aria-label="Language"><span class="l1">EN</span><span class="l2">中文</span></button><a href="https://my.chatbees.io/p/ZQr9fS2jA9">Home</a><a href="https://my.chatbees.io/p/D2pz8bZ">Order Now</a></div>
@@ -397,7 +426,7 @@ function rows(j){var out=[],hd=j&&Array.isArray(j.headers)?j.headers:null,raw=Ar
 window.aeraRefReload=function(){R.year='';R.month='';load()};
 function load(){var F=null;try{if(window.top!==window&&typeof window.parent.aeraRefFeed==='function')F=window.parent.aeraRefFeed}catch(e){}
  if(F){var all=F()||[];R.prof=all.filter(isProf)[0]||null;R.rows=all.filter(function(r){return !isProf(r)});R.loaded=true;R.failed=false;render();return}
- fetch(DATA_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){var all=rows(j);R.prof=all.filter(isProf)[0]||null;R.rows=all.filter(function(r){return !isProf(r)});R.loaded=true;render()})
+ window.aeraRefData().then(function(j){var all=rows(j);R.prof=all.filter(isProf)[0]||null;R.rows=all.filter(function(r){return !isProf(r)});R.loaded=true;render()})
  .catch(function(){R.loaded=true;R.failed=true;render()})}
 function years(){var y={};R.rows.forEach(function(r){var m=String(r.Month||'');if(m)y[m.slice(0,4)]=1});return Object.keys(y).sort().reverse()}
 function monthsIn(y){var m={};R.rows.forEach(function(r){var s=String(r.Month||'');if(s.slice(0,4)===y)m[s]=1});return Object.keys(m).sort().reverse()}
@@ -449,8 +478,8 @@ function render(){
     tr('Orders',mine.length,R.rows.length)+
     tr('Sales',rm(sum(mine,'Sales')),rm(sum(R.rows,'Sales')))+
     tr('Cash-Back Earned',rm(sum(mine,'Cashback')),rm(sum(R.rows,'Cashback')))+
-    tr('Pending Cash-Back',rm(sum(pM,'Cashback')),rm(sum(pendAll,'Cashback')),'background:#FFF6DC')+
-    tr('Paid Cash-Back',rm(sum(dM,'Cashback')),rm(sum(paidAll,'Cashback')),'background:#E6F4EC')+
+    tr('Pending Cash-Back',rm(sum(pM,'Cashback')),rm(sum(pendAll,'Cashback')),'background:#FFF2C2')+
+    tr('Paid Cash-Back',rm(sum(dM,'Cashback')),rm(sum(paidAll,'Cashback')),'background:#EDF3FD')+
    '</tbody></table></div><p class="hint" style="margin:8px 0 0">Cash-Back is '+rate+'% of the meal subtotal.</p>'})()+
   '<div class="row" style="margin-top:14px">'+
    (mPaid?'<button class="btn btn-y" type="button" onclick="receipt()">Download Receipt For '+esc(monthLabel(R.month))+'</button>':'<span class="hint" style="margin:0">A receipt is available once '+esc(monthLabel(R.month))+' has been paid out.</span>')+
@@ -989,17 +1018,108 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 <script>/* Referrer Portal : who is signed in, and Log Out */
 (function(){var S='lp-mtswk8m9-vu96j';function zh(){try{return document.documentElement.getAttribute('data-lang')==='zh'||localStorage.getItem('aera_lang')==='zh'}catch(e){return false}}
  function tok(){try{return sessionStorage.getItem('lp_access_'+S)||localStorage.getItem('lp_pin_'+S)}catch(e){return null}}
- window.aeraRefLogout=function(){if(!confirm(zh()?'退出推荐人入口？':'Log out of the Referrer Portal?'))return;try{['lp_pin_','lp_pw_','lp_al_','lp_paid_'].forEach(function(p){localStorage.removeItem(p+S)});sessionStorage.removeItem('lp_access_'+S);sessionStorage.removeItem('lp_fresh_'+S)}catch(e){}location.replace(location.pathname)};
- function show(){var t=tok(),w=document.getElementById('refWho');if(!w||!t)return;var em='';try{em=atob(String(t).split('.')[0]).split(':').filter(function(x){return x.indexOf('@')>0})[0]||''}catch(e){}
+ window.aeraRefLogout=function(){if(!confirm(zh()?'退出推荐人入口？':'Log out of the Referrer Portal?'))return;try{['lp_pin_','lp_pw_','lp_al_','lp_paid_'].forEach(function(p){localStorage.removeItem(p+S)});sessionStorage.removeItem('lp_access_'+S);sessionStorage.removeItem('lp_fresh_'+S)}catch(e){}var go=function(){try{localStorage.removeItem('sb-swpprjvubgcdsojapaad-auth-token')}catch(e){}location.replace(location.pathname)};try{window.__REF_SB?window.__REF_SB.auth.signOut().then(go,go):go()}catch(e){go()}};
+ function show(){var t=tok(),w=document.getElementById('refWho'),as=window.aeraRefSess&&aeraRefSess();if(!w||!(t||as))return;var em=(as&&as.user&&as.user.email)||'';if(!em)try{em=atob(String(t).split('.')[0]).split(':').filter(function(x){return x.indexOf('@')>0})[0]||''}catch(e){}
   document.getElementById('refWhoE').textContent=em?((zh()?'已登录：':'Signed in as ')+em):(zh()?'已登录':'Signed in');document.getElementById('refOut').textContent=zh()?'退出登录':'Log Out';w.style.display='flex'}
  function clr(){try{['lp_pin_','lp_pw_','lp_al_','lp_paid_'].forEach(function(p){localStorage.removeItem(p+S)});sessionStorage.removeItem('lp_access_'+S);sessionStorage.removeItem('lp_fresh_'+S)}catch(e){}}
  /* the menu : signed in with the email code means Log Out, not Log In / Sign Up */
- function fixBar(){if(!tok())return;var bar=document.getElementById('aeraBar');if(!bar)return;[].forEach.call(bar.querySelectorAll('a,button'),function(a){if(a.dataset.refx)return;var t=a.textContent.replace(/\s+/g,' ').trim();
+ function fixBar(){if(!tok()&&!(window.aeraRefSess&&aeraRefSess()))return;var bar=document.getElementById('aeraBar');if(!bar)return;[].forEach.call(bar.querySelectorAll('a,button'),function(a){if(a.dataset.refx)return;var t=a.textContent.replace(/\s+/g,' ').trim();
   if(/^(sign ?up|注册)$/i.test(t)){a.dataset.refx='1';a.style.display='none'}
   else if(/^(log ?in|登录|登入)$/i.test(t)){a.dataset.refx='1';a.textContent=zh()?'退出登录':'Log Out';a.setAttribute('href','#');a.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();window.aeraRefLogout()},true)}})}
  document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('#aeraBar [data-ab="out"]');if(a)clr()},true);
  function boot(){show();fixBar();var bar=document.getElementById('aeraBar');if(bar)new MutationObserver(fixBar).observe(bar,{childList:true,subtree:true});else setTimeout(boot,400)}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot()})();
+</script>
+<script>/* Referrer Portal : AERA email + password sign in */
+(function(){var H=document.documentElement;function $i(i){return document.getElementById(i)}
+ window.aeraRefLogin=async function(e){e.preventDefault();var b=$i("rfGo"),er=$i("rfErr");b.disabled=true;b.textContent="Signing in…";er.textContent="";
+  try{var r=await window.__REF_SB.auth.signInWithPassword({email:$i("rfE").value.trim(),password:$i("rfP").value});if(r.error)throw r.error;location.reload()}
+  catch(x){er.textContent=/invalid/i.test(String(x&&x.message))?"That email and password did not match an AERA account.":String(x&&x.message||x);b.disabled=false;b.textContent="Sign In"}return false};
+ window.aeraRefUseCode=function(){H.classList.remove("rf-login");H.classList.add("rf-pin");var g=$i("pin-gate");if(g&&!g.querySelector(".rf-back")){var bk=document.createElement("button");bk.type="button";bk.className="rf-back";bk.textContent="Back to email and password";bk.onclick=function(){H.classList.remove("rf-pin");H.classList.add("rf-login")};var f=g.querySelector("form#pin-verify-form")||g.querySelector("form");(f&&f.parentNode||g).appendChild(bk)}};
+ function logo(){var l=document.querySelector("#aeraBar .ab-logo img");if(l&&$i("rfLogo"))$i("rfLogo").src=l.src;else setTimeout(logo,300)}logo();
+})();
+</script>
+<!-- AERA Face ID -->
+<script>window.AERAPK_CFG={sb:function(){return window.__REF_SB},btn:"#rfGo",after:function(){location.reload()}};</script>
+<script>/* AERA Face ID : passkey sign-in, shared by every aeramealprep.net app */
+(function(){
+if(window.__AERAPK_T){clearInterval(window.__AERAPK_T);window.__AERAPK_T=0}
+var FN='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/passkey';
+var C=window.AERAPK_CFG||{};
+var PKC=window.PublicKeyCredential;
+if(!PKC||!navigator.credentials)return;
+var APPLE=/iP(hone|ad|od)|Macintosh/.test(navigator.userAgent);
+var LBL=APPLE?'Face ID':'Fingerprint / Face';
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}}
+function b2u(b){b=new Uint8Array(b);var s='';for(var i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function u2b(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';var t=atob(s),o=new Uint8Array(t.length);for(var i=0;i<t.length;i++)o[i]=t.charCodeAt(i);return o.buffer}
+function SB(){try{return C.sb&&C.sb()}catch(e){return null}}
+function sess(){var sb=SB();if(!sb||!sb.auth)return null;try{var v=JSON.parse(localStorage.getItem(sb.auth.storageKey)||'null');if(v&&v.currentSession)v=v.currentSession;if(v&&v.access_token&&v.user&&(!v.expires_at||v.expires_at*1000>Date.now()+60000))return v}catch(e){}return null}
+async function call(action,body,token){var sb=SB(),key=sb&&sb.supabaseKey;if(!key)throw new Error('Not ready yet. Try again.');
+ var r=await fetch(FN,{method:'POST',headers:{'Content-Type':'application/json',apikey:key,Authorization:'Bearer '+(token||key)},body:JSON.stringify(Object.assign({action:action},body||{}))});
+ var j={};try{j=await r.json()}catch(e){}if(!j.ok)throw new Error(j.error||('HTTP '+r.status));return j}
+var platform=PKC.isUserVerifyingPlatformAuthenticatorAvailable?PKC.isUserVerifyingPlatformAuthenticatorAvailable().catch(function(){return false}):Promise.resolve(false);
+var css=document.getElementById('aerapk-css')||document.createElement('style');css.id='aerapk-css';css.textContent='.aerapk-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;padding:12px;border-radius:12px;border:2px solid #16479E;background:#fff;color:#16479E;font:700 15px/1.2 inherit;font-family:inherit;cursor:pointer}.aerapk-btn svg{width:20px;height:20px}.aerapk-btn[disabled]{opacity:.6}.aerapk-msg{font-size:13px;margin-top:8px;text-align:center;color:#b42318}.aerapk-msg.ok{color:#16479E}#aerapkCard{position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:2147483000;max-width:420px;margin:0 auto;background:#fff;color:#14213d;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.25);padding:16px;font-family:inherit;display:flex;gap:12px;align-items:flex-start}#aerapkCard .ic{flex:none;width:44px;height:44px;border-radius:12px;background:#16479E;display:flex;align-items:center;justify-content:center}#aerapkCard .ic svg{width:26px;height:26px}#aerapkCard b{display:block;font-size:15px;margin-bottom:2px}#aerapkCard p{margin:0 0 10px;font-size:13px;color:#555}#aerapkCard .row{display:flex;gap:8px}#aerapkCard button{border:0;border-radius:10px;padding:9px 14px;font:700 14px/1 inherit;font-family:inherit;cursor:pointer}#aerapkCard .go{background:#16479E;color:#FDB913}#aerapkCard .no{background:#eef1f7;color:#16479E}';
+(document.head||document.documentElement).appendChild(css);
+var FACE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2M9 9v1M15 9v1M12 9v4h-1M9 16c1.7 1.3 4.3 1.3 6 0"/></svg>';
+
+/* ---- sign in with a passkey ---- */
+var AO=null,AOt=0,DEAD=false,TRIED={},AUTO=0;
+async function authOpts(){if(AO&&Date.now()-AOt<240000)return AO;AO=await call('auth-options');AOt=Date.now();return AO}
+async function login(btn,msg,auto){
+ msg.className='aerapk-msg';msg.textContent='';btn.disabled=true;
+ try{var o=await authOpts();AO=null;var p=o.options;
+  var a=await navigator.credentials.get({publicKey:{challenge:u2b(p.challenge),rpId:p.rpId,timeout:p.timeout,userVerification:p.userVerification,allowCredentials:[]}});
+  var resp={id:a.id,rawId:b2u(a.rawId),type:a.type,clientExtensionResults:a.getClientExtensionResults?a.getClientExtensionResults():{},authenticatorAttachment:a.authenticatorAttachment||undefined,
+   response:{clientDataJSON:b2u(a.response.clientDataJSON),authenticatorData:b2u(a.response.authenticatorData),signature:b2u(a.response.signature),userHandle:a.response.userHandle?b2u(a.response.userHandle):undefined}};
+  var v=await call('auth-verify',{flowId:o.flowId,response:resp});
+  msg.className='aerapk-msg ok';msg.textContent='Signing you in…';
+  try{C.before&&C.before()}catch(e){}
+  var r=await SB().auth.verifyOtp({token_hash:v.token_hash,type:'email'});if(r.error)throw r.error;
+  var uid=r.data&&r.data.user&&r.data.user.id;if(uid)ls('aera.pk.u.'+uid,'1');ls('aera.pk.dev','1');
+  try{C.after&&C.after()}catch(e){}
+ }catch(e){try{C.fail&&C.fail()}catch(_){}
+  var m=String(e&&e.message||e);
+  msg.textContent=(e&&e.name==='NotAllowedError')?(auto?'':'Cancelled. Try again, or use your password.'):
+   /unknown_passkey/.test(m)?LBL+' is not set up for this account yet. Sign in with your password once, then tap "Turn on '+LBL+'".':
+   /expired/.test(m)?'That took too long. Try again.':'Could not sign in with '+LBL+'. Use your password.';
+ }btn.disabled=false;authOpts().catch(function(){})}
+function mountLogin(){if(!C.btn||DEAD)return;var t=document.querySelector(C.btn);if(!t||t.nextElementSibling&&t.nextElementSibling.classList.contains('aerapk-btn'))return;
+ var b=document.createElement('button');b.type='button';b.className='aerapk-btn';b.innerHTML=FACE+'<span>Sign in with '+LBL+'</span>';
+ var m=document.createElement('div');m.className='aerapk-msg';
+ b.onclick=function(){login(b,m)};t.insertAdjacentElement('afterend',b);b.insertAdjacentElement('afterend',m);
+ authOpts().then(function(){if(!AUTO&&ls('aera.pk.dev')){AUTO=1;login(b,m,true)}}).catch(function(){DEAD=true;b.remove();m.remove()})}
+
+/* ---- offer to turn it on after a normal sign-in ---- */
+var RO=null,offering=false;
+async function offer(){if(C.offer===false||offering||document.getElementById('aerapkCard'))return;var sb=SB();if(!sb)return;
+ var s=sess();if(!s)return;var uid=s.user.id;
+ if(TRIED[uid]||ls('aera.pk.u.'+uid)||+(ls('aera.pk.skip.'+uid)||0)>Date.now())return;TRIED[uid]=1;
+ offering=true;try{
+ if(!(await platform)&&!/iPhone|iPad|iPod|Android/.test(navigator.userAgent))return;
+ try{RO=await call('reg-options',{},s.access_token)}catch(e){return}
+ var d=document.createElement('div');d.id='aerapkCard';
+ d.innerHTML='<div class="ic" style="color:#FDB913">'+FACE+'</div><div><b>Sign in with '+LBL+'</b><p>Skip the email and password next time. Works on every AERA app on this phone.</p><div class="row"><button class="go">Turn on '+LBL+'</button><button class="no">Not now</button></div><div class="aerapk-msg" style="text-align:left"></div></div>';
+ document.body.appendChild(d);
+ d.querySelector('.no').onclick=function(){ls('aera.pk.skip.'+uid,String(Date.now()+30*864e5));d.remove()};
+ d.querySelector('.go').onclick=function(){enable(d,uid)};
+ }finally{offering=false}}
+async function enable(d,uid){var m=d.querySelector('.aerapk-msg'),g=d.querySelector('.go');g.disabled=true;m.textContent='';
+ try{var s=sess();if(!s)throw new Error('signin');if(!RO)RO=await call('reg-options',{},s.access_token);var o=RO,p=o.options;RO=null;
+  var c=await navigator.credentials.create({publicKey:{challenge:u2b(p.challenge),rp:p.rp,user:{id:u2b(p.user.id),name:p.user.name,displayName:p.user.displayName},
+   pubKeyCredParams:p.pubKeyCredParams,timeout:p.timeout,attestation:p.attestation,authenticatorSelection:p.authenticatorSelection,
+   excludeCredentials:(p.excludeCredentials||[]).map(function(x){return{type:'public-key',id:u2b(x.id),transports:x.transports}})}});
+  var resp={id:c.id,rawId:b2u(c.rawId),type:c.type,clientExtensionResults:c.getClientExtensionResults?c.getClientExtensionResults():{},authenticatorAttachment:c.authenticatorAttachment||undefined,
+   response:{clientDataJSON:b2u(c.response.clientDataJSON),attestationObject:b2u(c.response.attestationObject),transports:c.response.getTransports?c.response.getTransports():[]}};
+  await call('reg-verify',{flowId:o.flowId,response:resp,device:navigator.userAgent},s.access_token);
+  ls('aera.pk.u.'+uid,'1');ls('aera.pk.dev','1');m.className='aerapk-msg ok';m.textContent=LBL+' is on. Next time tap "Sign in with '+LBL+'".';g.style.display='none';d.querySelector('.no').textContent='Done';
+ }catch(e){if(e&&e.name==='InvalidStateError'){ls('aera.pk.u.'+uid,'1');ls('aera.pk.dev','1');d.remove();return}
+  m.className='aerapk-msg';m.textContent=(e&&e.name==='NotAllowedError')?'Cancelled.':'Could not turn on '+LBL+'. Try again later.';g.disabled=false}}
+
+var tick=0;function loop(){mountLogin();if(tick++%3===0)offer().catch(function(){})}
+window.__AERAPK_T=setInterval(loop,1500);if(document.readyState!=='loading')loop();else document.addEventListener('DOMContentLoaded',loop);
+window.AERAPK={offer:offer,login:login};
+})();
 </script>
 </body>
 </html>
