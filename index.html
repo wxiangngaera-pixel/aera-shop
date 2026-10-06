@@ -1411,7 +1411,7 @@ function mhDateLong(d){if(!d)return'';var x=new Date(String(d).slice(0,10)+'T00:
   ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][x.getMonth()]+' '+x.getFullYear()}
 function mhSlot(v){var m={'09:00-11:00':'9 AM - 11 AM','11:00-13:00':'11 AM - 1 PM',
  '13:00-15:00':'1 PM - 3 PM','15:00-17:00':'3 PM - 5 PM'};return m[v]||v||''}
-var MEH_STATUS={new:['Preparing','cat'],in_kitchen:['In the kitchen','warn'],
+var MEH_STATUS={new:['Preparing','cat'],paid:['Paid · Preparing','cat'],payfail:['Payment Failed','bad'],in_kitchen:['In the kitchen','warn'],
  packed:['Packed · rider booked','warn'],out_for_delivery:['On the way','warn'],
  delivered:['Delivered','ok'],cancelled:['Cancelled','bad']};
 
