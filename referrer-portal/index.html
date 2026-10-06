@@ -371,6 +371,7 @@
   <h1 id="hdr">Your Cash-Back</h1>
   <p class="hint" id="sub" style="max-width:70ch">Every Order placed with your Referral Code, month by month. What it earned you, and what has been paid.</p>
 
+  <div id="refWho" style="display:none;align-items:center;gap:10px;flex-wrap:wrap;margin:4px 0 14px;font-size:13px;color:#6B7280"><span id="refWhoE"></span><button type="button" id="refOut" onclick="aeraRefLogout()" style="border:0;border-radius:999px;background:#16479E;color:#FDB913;font:inherit;font-weight:700;padding:7px 16px;cursor:pointer">Log Out</button></div>
   <div id="state"><div class="card"><div class="empty">Loading your figures…</div></div></div>
 </div></main>
 
@@ -978,5 +979,13 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 }catch(e){}})();
 </script>
 <!-- AERA app kit : end -->
+<script>/* Referrer Portal : who is signed in, and Log Out */
+(function(){var S='lp-mtswk8m9-vu96j';function zh(){try{return document.documentElement.getAttribute('data-lang')==='zh'||localStorage.getItem('aera_lang')==='zh'}catch(e){return false}}
+ function tok(){try{return sessionStorage.getItem('lp_access_'+S)||localStorage.getItem('lp_pin_'+S)}catch(e){return null}}
+ window.aeraRefLogout=function(){if(!confirm(zh()?'退出推荐人入口？':'Log out of the Referrer Portal?'))return;try{['lp_pin_','lp_pw_','lp_al_','lp_paid_'].forEach(function(p){localStorage.removeItem(p+S)});sessionStorage.removeItem('lp_access_'+S);sessionStorage.removeItem('lp_fresh_'+S)}catch(e){}location.replace(location.pathname)};
+ function show(){var t=tok(),w=document.getElementById('refWho');if(!w||!t)return;var em='';try{em=atob(String(t).split('.')[0]).split(':').filter(function(x){return x.indexOf('@')>0})[0]||''}catch(e){}
+  document.getElementById('refWhoE').textContent=em?((zh()?'已登录：':'Signed in as ')+em):(zh()?'已登录':'Signed in');document.getElementById('refOut').textContent=zh()?'退出登录':'Log Out';w.style.display='flex'}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',show);else show()})();
+</script>
 </body>
 </html>
