@@ -3477,9 +3477,9 @@ var css=document.getElementById('aerapk-css')||document.createElement('style');c
 var FACE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2M9 9v1M15 9v1M12 9v4h-1M9 16c1.7 1.3 4.3 1.3 6 0"/></svg>';
 
 /* ---- sign in with a passkey ---- */
-var AO=null,AOt=0,DEAD=false,TRIED={};
+var AO=null,AOt=0,DEAD=false,TRIED={},AUTO=0;
 async function authOpts(){if(AO&&Date.now()-AOt<240000)return AO;AO=await call('auth-options');AOt=Date.now();return AO}
-async function login(btn,msg){
+async function login(btn,msg,auto){
  msg.className='aerapk-msg';msg.textContent='';btn.disabled=true;
  try{var o=await authOpts();AO=null;var p=o.options;
   var a=await navigator.credentials.get({publicKey:{challenge:u2b(p.challenge),rpId:p.rpId,timeout:p.timeout,userVerification:p.userVerification,allowCredentials:[]}});
@@ -3489,11 +3489,11 @@ async function login(btn,msg){
   msg.className='aerapk-msg ok';msg.textContent='Signing you in…';
   try{C.before&&C.before()}catch(e){}
   var r=await SB().auth.verifyOtp({token_hash:v.token_hash,type:'email'});if(r.error)throw r.error;
-  var uid=r.data&&r.data.user&&r.data.user.id;if(uid)ls('aera.pk.u.'+uid,'1');
+  var uid=r.data&&r.data.user&&r.data.user.id;if(uid)ls('aera.pk.u.'+uid,'1');ls('aera.pk.dev','1');
   try{C.after&&C.after()}catch(e){}
  }catch(e){try{C.fail&&C.fail()}catch(_){}
   var m=String(e&&e.message||e);
-  msg.textContent=(e&&e.name==='NotAllowedError')?'Cancelled. Try again, or use your password.':
+  msg.textContent=(e&&e.name==='NotAllowedError')?(auto?'':'Cancelled. Try again, or use your password.'):
    /unknown_passkey/.test(m)?LBL+' is not set up for this account yet. Sign in with your password once, then tap "Turn on '+LBL+'".':
    /expired/.test(m)?'That took too long. Try again.':'Could not sign in with '+LBL+'. Use your password.';
  }btn.disabled=false;authOpts().catch(function(){})}
@@ -3501,7 +3501,7 @@ function mountLogin(){if(!C.btn||DEAD)return;var t=document.querySelector(C.btn)
  var b=document.createElement('button');b.type='button';b.className='aerapk-btn';b.innerHTML=FACE+'<span>Sign in with '+LBL+'</span>';
  var m=document.createElement('div');m.className='aerapk-msg';
  b.onclick=function(){login(b,m)};t.insertAdjacentElement('afterend',b);b.insertAdjacentElement('afterend',m);
- authOpts().catch(function(){DEAD=true;b.remove();m.remove()})}
+ authOpts().then(function(){if(!AUTO&&ls('aera.pk.dev')){AUTO=1;login(b,m,true)}}).catch(function(){DEAD=true;b.remove();m.remove()})}
 
 /* ---- offer to turn it on after a normal sign-in ---- */
 var RO=null,offering=false;
@@ -3525,8 +3525,8 @@ async function enable(d,uid){var m=d.querySelector('.aerapk-msg'),g=d.querySelec
   var resp={id:c.id,rawId:b2u(c.rawId),type:c.type,clientExtensionResults:c.getClientExtensionResults?c.getClientExtensionResults():{},authenticatorAttachment:c.authenticatorAttachment||undefined,
    response:{clientDataJSON:b2u(c.response.clientDataJSON),attestationObject:b2u(c.response.attestationObject),transports:c.response.getTransports?c.response.getTransports():[]}};
   await call('reg-verify',{flowId:o.flowId,response:resp,device:navigator.userAgent},s.access_token);
-  ls('aera.pk.u.'+uid,'1');m.className='aerapk-msg ok';m.textContent=LBL+' is on. Next time tap "Sign in with '+LBL+'".';g.style.display='none';d.querySelector('.no').textContent='Done';
- }catch(e){if(e&&e.name==='InvalidStateError'){ls('aera.pk.u.'+uid,'1');d.remove();return}
+  ls('aera.pk.u.'+uid,'1');ls('aera.pk.dev','1');m.className='aerapk-msg ok';m.textContent=LBL+' is on. Next time tap "Sign in with '+LBL+'".';g.style.display='none';d.querySelector('.no').textContent='Done';
+ }catch(e){if(e&&e.name==='InvalidStateError'){ls('aera.pk.u.'+uid,'1');ls('aera.pk.dev','1');d.remove();return}
   m.className='aerapk-msg';m.textContent=(e&&e.name==='NotAllowedError')?'Cancelled.':'Could not turn on '+LBL+'. Try again later.';g.disabled=false}}
 
 var tick=0;function loop(){mountLogin();if(tick++%3===0)offer().catch(function(){})}
