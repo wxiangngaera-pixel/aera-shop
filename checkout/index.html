@@ -3118,5 +3118,16 @@ function mount(){var g=$('corpGate');if(!g)return;
 setInterval(mount,1000);if(document.readyState!=='loading')mount();else document.addEventListener('DOMContentLoaded',mount);
 window.aeraCorpSignup=openSignup;window.aeraCorpRegister=openRegister;
 })();</script>
+<style id="aera-side-under-bar-css">@media(max-width:940px){.side.open{top:var(--aera-bar-h,66px)!important;bottom:0!important;overscroll-behavior:contain;padding-bottom:calc(24px + env(safe-area-inset-bottom))!important}html:has(.side.open),body:has(.side.open){overflow:hidden!important}}</style>
+<script id="aera-side-under-bar">/* Your Order panel on the phone : starts below the AERA bar, so Back to Menu is never hidden */
+(function(){
+function set(){var b=document.getElementById('aeraBar'),h=0;try{if(b&&getComputedStyle(b).display!=='none')h=Math.round(b.getBoundingClientRect().bottom)}catch(e){}
+ if(h<0)h=0;document.documentElement.style.setProperty('--aera-bar-h',h+'px')}
+function watch(){var s=document.getElementById('side');if(!s)return setTimeout(watch,300);
+ var was=s.classList.contains('open');
+ new MutationObserver(function(){var on=s.classList.contains('open');if(on){set();if(!was)try{s.scrollTop=0}catch(e){}}was=on}).observe(s,{attributes:true,attributeFilter:['class']});set()}
+window.addEventListener('resize',set);window.addEventListener('orientationchange',function(){setTimeout(set,300)});
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',watch);else watch();
+})();</script>
 </body>
 </html>
