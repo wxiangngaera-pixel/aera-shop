@@ -774,6 +774,8 @@ function tally(kind,sel){
  $('#ohint').textContent=total?(total+' box'+(total===1?'':'es')+' to ask for, for delivery on '+niceDate($('#odate').value||earliest())+'.')
   :'Add a number to at least one meal first.'}
 
+async function aeraNotifyFridge(){try{var q=await db.from('fridge_messages').select('id').eq('fridge_id',CUR.id).eq('kind','order').order('created_at',{ascending:false}).limit(1);var id=q.data&&q.data[0]&&q.data[0].id;if(!id)return;var s=(await db.auth.getSession()).data.session;if(!s)return;
+ fetch('https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-notify',{method:'POST',headers:{'Content-Type':'application/json',apikey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0',Authorization:'Bearer '+s.access_token},body:JSON.stringify({kind:'fridge',id:id})}).catch(function(){})}catch(e){}}
 async function send(kind){
  var q=QTY[kind]||{};if(!q.total)return;
  var btn=$('#osend');btn.disabled=true;btn.textContent='Sending…';
@@ -783,6 +785,7 @@ async function send(kind){
   status:'open',sent_by:(ME&&ME.email)||''});
  btn.textContent='Send The Order';
  if(r.error){btn.disabled=false;alert('That did not send: '+r.error.message);return}
+ aeraNotifyFridge();
  var card=btn.closest('.card');
  card.innerHTML='<h2>Order More Stock</h2>'+
   '<div class="sent">Thank you — that is with the kitchen. It shows under Bills.</div>';
