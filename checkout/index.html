@@ -903,6 +903,7 @@ async function coBill(){
     total:total.toFixed(2),terms:coTerms(),notes:String(notes||'').slice(0,400)}})});
   var j=await r.json();
   if(!j||!j.success)throw new Error('The kitchen did not confirm it');
+  try{var _t=JSON.parse(localStorage.getItem('sb-swpprjvubgcdsojapaad-auth-token')||'null');if(_t&&_t.currentSession)_t=_t.currentSession;if(_t&&_t.access_token)fetch('https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-notify',{method:'POST',headers:{'Content-Type':'application/json',apikey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0',Authorization:'Bearer '+_t.access_token},body:JSON.stringify({kind:'corp',orderNo:no,total:total,boxes:boxes(),date:date})}).catch(function(){})}catch(_e){}
   CO.done='<b>Order '+esc(no)+' is with the kitchen.</b> Nothing has been charged — your invoice for '+
    rm(total)+' follows on your account terms ( '+esc(coTermText())+' ).';
   CART={};save();render();renderCart()}
