@@ -936,6 +936,89 @@ function paintHist(){
    '<small>'+(ls||'—')+(m.by_name?' · '+esc(m.by_name):'')+'</small></div>'+
    '<div class="pill">'+(+m.total||0)+'</div></div>'}).join('')}
 
+/* AERA Fridge : Order More works like a shop. Tap Add To Cart on the meals, open the Cart, pick the
+   Delivery Date and tap Send Order To Kitchen. No payment : the gym is billed on its statement only for what arrives. */
+(function(){
+if(window.__FCART)return;window.__FCART=1;
+function $(s){return document.querySelector(s)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+var BAR,CART,LAST=0;
+function setup(){
+ var card=$('#vRefill .card');if(!card||BAR)return!!BAR;
+ var send=$('#osend'),hint=$('#ohint'),dt=$('#odate'),note=$('#onote');if(!send||!hint||!dt||!note)return false;
+ BAR=document.createElement('div');BAR.id='fcBar';
+ BAR.innerHTML='<span class="ic">🛒</span><span class="tx"><span id="fcCount">0 Boxes</span><small>In your cart</small></span><button type="button" id="fcOpen">View Cart & Checkout</button>';
+ document.body.appendChild(BAR);$('#fcOpen').onclick=openCart;
+ CART=document.createElement('div');CART.id='fcCart';
+ CART.innerHTML='<div class="pan" role="dialog" aria-modal="true" aria-label="Your Cart"><div class="hd"><h2>Your Cart</h2><button type="button" class="x" aria-label="Close">✕</button></div>'+
+  '<div id="fcBody"><div id="fcLines"></div><div id="fcTot"><span>Total</span><span id="fcTotN">0 Boxes</span></div><div id="fcForm"></div>'+
+  '<div class="fcfree">No payment needed. This goes straight to the Kitchen, and you are only billed on your statement for what actually arrives.</div></div>'+
+  '<div id="fcDone" style="display:none"></div></div>';
+ document.body.appendChild(CART);
+ CART.addEventListener('click',function(e){if(e.target===CART||e.target.closest('.x'))closeCart()});
+ var form=$('#fcForm');
+ [dt.closest('.f2'),note.parentNode,send.parentNode,hint].forEach(function(el){if(el&&el!==card)form.appendChild(el)});
+ send.textContent='Send Order To Kitchen';send.removeAttribute('onclick');send.onclick=sendCart;
+ $('#fcLines').addEventListener('click',function(e){var b=e.target.closest('button[data-i]');if(!b)return;var i=+b.dataset.i,d=b.dataset.d;
+  var box=$('#olines');if(!box)return;
+  if(d==='x'){var inp=box.querySelector('input[data-i="'+i+'"]');if(inp)inp.value='';tally('order','#olines');return}
+  var gb=box.querySelector('button[data-i="'+i+'"][data-d="'+d+'"]');if(gb)gb.click()});
+ return true}
+function decorate(){
+ var box=$('#olines');if(!box||!setup())return;
+ box.classList.add('fcgrid');var v=$('#vRefill');if(v)v.classList.add('fcpad');
+ [].slice.call(box.querySelectorAll('.row')).forEach(function(r){if(r.querySelector('.fcadd'))return;
+  var i=(r.querySelector('input[data-i]')||{}).dataset;if(!i)return;i=i.i;
+  var add=document.createElement('button');add.type='button';add.className='fcadd';add.textContent='Add To Cart';
+  add.onclick=function(){var p=box.querySelector('button[data-i="'+i+'"][data-d="1"]');if(p)p.click()};
+  var bd=document.createElement('span');bd.className='fcbadge';r.appendChild(add);r.appendChild(bd)});
+ update()}
+function lines(){var box=$('#olines'),out=[];if(!box)return out;
+ (ORDERL||[]).forEach(function(m,i){var inp=box.querySelector('input[data-i="'+i+'"]');var q=Math.max(0,Math.round(+((inp||{}).value)||0));if(q)out.push({i:i,m:m,q:q})});return out}
+function update(){
+ var box=$('#olines');if(!box||!BAR)return;
+ var L=lines(),tot=0;L.forEach(function(x){tot+=x.q});
+ [].slice.call(box.querySelectorAll('.row')).forEach(function(r){var inp=r.querySelector('input[data-i]');var q=Math.max(0,Math.round(+((inp||{}).value)||0));
+  r.classList.toggle('in',q>0);var b=r.querySelector('.fcbadge');if(b)b.textContent=q?('×'+q):''});
+ var vis=$('#vRefill')&&$('#vRefill').style.display==='block';
+ BAR.classList.toggle('on',vis&&tot>0&&!CART.classList.contains('on'));
+ $('#fcCount').textContent=tot+' Box'+(tot===1?'':'es');
+ if(tot>LAST){BAR.classList.remove('bump');void BAR.offsetWidth;BAR.classList.add('bump')}LAST=tot;
+ $('#fcTotN').textContent=tot+' Box'+(tot===1?'':'es');
+ $('#fcLines').innerHTML=L.length?L.map(function(x){var m=x.m;
+  return '<div class="ln">'+(m.img?'<img src="'+esc(m.img)+'" alt="" loading="lazy">':'<span class="noimg"></span>')+'<div class="nm">'+esc(m.label)+'</div>'+
+   '<div class="st"><button type="button" data-i="'+x.i+'" data-d="-1" aria-label="One fewer">−</button><b>'+x.q+'</b><button type="button" data-i="'+x.i+'" data-d="1" aria-label="One more">+</button>'+
+   '<button type="button" data-i="'+x.i+'" data-d="x" aria-label="Remove">🗑</button></div></div>'}).join('')
+  :'<div class="empty">Your cart is empty. Tap Add To Cart on a meal.</div>'}
+function openCart(){if(!CART)return;$('#fcBody').style.display='block';$('#fcDone').style.display='none';CART.classList.add('on');update();try{if(window.aeraRetranslate)aeraRetranslate()}catch(e){}}
+function closeCart(){if(!CART)return;CART.classList.remove('on');update()}
+async function sendCart(){
+ var q=(typeof QTY!=='undefined'&&QTY.order)||{};if(!q.total||!CUR)return;
+ var btn=$('#osend');btn.disabled=true;btn.textContent='Sending…';
+ var when=$('#odate').value||today();
+ var r=await db.from('fridge_messages').insert({fridge_id:CUR.id,kind:'order',on_date:when,lines:q.lines,total:q.total,
+  by_name:$('#oby').value.trim(),note:$('#onote').value.trim(),status:'open',sent_by:(ME&&ME.email)||''});
+ btn.textContent='Send Order To Kitchen';
+ if(r.error){btn.disabled=false;$('#ohint').textContent='That did not send: '+r.error.message+' Please try again.';return}
+ try{aeraNotifyFridge()}catch(e){}
+ var d=$('#fcDone');$('#fcBody').style.display='none';d.style.display='block';
+ d.innerHTML='<div class="fcok"><div class="big">✅</div><h3>Sent To The Kitchen</h3><p>'+q.total+' Box'+(q.total===1?'':'es')+' for delivery on '+esc(typeof niceDate==='function'?niceDate(when):when)+
+  '. We confirm it and bring it. It shows under Order History.</p><button type="button" class="btn" id="fcOk">Done</button></div>';
+ $('#fcOk').onclick=closeCart;
+ try{await pickFridge(CUR.id)}catch(e){}
+ update()}
+window.sendCart=sendCart;
+/* hook into the portal : every repaint of the menu, every count, every tab change */
+function hook(){
+ if(typeof paintLines!=='function'||typeof tally!=='function'||typeof showView!=='function')return false;
+ var pl=paintLines,ta=tally,sv=showView;
+ paintLines=function(k,s){var x=pl.apply(this,arguments);if(s==='#olines')decorate();return x};
+ tally=function(k){var x=ta.apply(this,arguments);if(k==='order')update();return x};
+ showView=function(v){var x=sv.apply(this,arguments);if(v!=='refill')closeCart();update();return x};
+ if($('#olines .row'))decorate();
+ return true}
+hook();
+})();
 window.signIn=signIn;window.signOut=signOut;window.resetPass=resetPass;window.pickFridge=pickFridge;window.send=send;window.dlBill=dlBill;
 window.mark=mark;window.showView=showView;window.saveDetails=saveDetails;window.savePass=savePass;window.paintAccount=paintAccount;window.paintOrders=paintOrders;
 $('#gpass').addEventListener('keydown',function(e){if(e.key==='Enter')signIn()});
@@ -1559,90 +1642,6 @@ window.aeraSignup=open;
 .fcok p{margin:0 0 18px;color:var(--ink2);font-size:14px;line-height:1.45}
 html:has(#fcCart.on),body:has(#fcCart.on){overflow:hidden}
 </style>
-<script id="aera-fridge-cart">/* AERA Fridge : Order More works like a shop. Tap Add To Cart on the meals, open the Cart, pick the
-   Delivery Date and tap Send Order To Kitchen. No payment : the gym is billed on its statement only for what arrives. */
-(function(){
-if(window.__FCART)return;window.__FCART=1;
-function $(s){return document.querySelector(s)}
-function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-var BAR,CART,LAST=0;
-function setup(){
- var card=$('#vRefill .card');if(!card||BAR)return!!BAR;
- var send=$('#osend'),hint=$('#ohint'),dt=$('#odate'),note=$('#onote');if(!send||!hint||!dt||!note)return false;
- BAR=document.createElement('div');BAR.id='fcBar';
- BAR.innerHTML='<span class="ic">🛒</span><span class="tx"><span id="fcCount">0 Boxes</span><small>In your cart</small></span><button type="button" id="fcOpen">View Cart & Checkout</button>';
- document.body.appendChild(BAR);$('#fcOpen').onclick=openCart;
- CART=document.createElement('div');CART.id='fcCart';
- CART.innerHTML='<div class="pan" role="dialog" aria-modal="true" aria-label="Your Cart"><div class="hd"><h2>Your Cart</h2><button type="button" class="x" aria-label="Close">✕</button></div>'+
-  '<div id="fcBody"><div id="fcLines"></div><div id="fcTot"><span>Total</span><span id="fcTotN">0 Boxes</span></div><div id="fcForm"></div>'+
-  '<div class="fcfree">No payment needed. This goes straight to the Kitchen, and you are only billed on your statement for what actually arrives.</div></div>'+
-  '<div id="fcDone" style="display:none"></div></div>';
- document.body.appendChild(CART);
- CART.addEventListener('click',function(e){if(e.target===CART||e.target.closest('.x'))closeCart()});
- var form=$('#fcForm');
- [dt.closest('.f2'),note.parentNode,send.parentNode,hint].forEach(function(el){if(el&&el!==card)form.appendChild(el)});
- send.textContent='Send Order To Kitchen';send.removeAttribute('onclick');send.onclick=sendCart;
- $('#fcLines').addEventListener('click',function(e){var b=e.target.closest('button[data-i]');if(!b)return;var i=+b.dataset.i,d=b.dataset.d;
-  var box=$('#olines');if(!box)return;
-  if(d==='x'){var inp=box.querySelector('input[data-i="'+i+'"]');if(inp)inp.value='';tally('order','#olines');return}
-  var gb=box.querySelector('button[data-i="'+i+'"][data-d="'+d+'"]');if(gb)gb.click()});
- return true}
-function decorate(){
- var box=$('#olines');if(!box||!setup())return;
- box.classList.add('fcgrid');var v=$('#vRefill');if(v)v.classList.add('fcpad');
- [].slice.call(box.querySelectorAll('.row')).forEach(function(r){if(r.querySelector('.fcadd'))return;
-  var i=(r.querySelector('input[data-i]')||{}).dataset;if(!i)return;i=i.i;
-  var add=document.createElement('button');add.type='button';add.className='fcadd';add.textContent='Add To Cart';
-  add.onclick=function(){var p=box.querySelector('button[data-i="'+i+'"][data-d="1"]');if(p)p.click()};
-  var bd=document.createElement('span');bd.className='fcbadge';r.appendChild(add);r.appendChild(bd)});
- update()}
-function lines(){var box=$('#olines'),out=[];if(!box)return out;
- (ORDERL||[]).forEach(function(m,i){var inp=box.querySelector('input[data-i="'+i+'"]');var q=Math.max(0,Math.round(+((inp||{}).value)||0));if(q)out.push({i:i,m:m,q:q})});return out}
-function update(){
- var box=$('#olines');if(!box||!BAR)return;
- var L=lines(),tot=0;L.forEach(function(x){tot+=x.q});
- [].slice.call(box.querySelectorAll('.row')).forEach(function(r){var inp=r.querySelector('input[data-i]');var q=Math.max(0,Math.round(+((inp||{}).value)||0));
-  r.classList.toggle('in',q>0);var b=r.querySelector('.fcbadge');if(b)b.textContent=q?('×'+q):''});
- var vis=$('#vRefill')&&$('#vRefill').style.display==='block';
- BAR.classList.toggle('on',vis&&tot>0&&!CART.classList.contains('on'));
- $('#fcCount').textContent=tot+' Box'+(tot===1?'':'es');
- if(tot>LAST){BAR.classList.remove('bump');void BAR.offsetWidth;BAR.classList.add('bump')}LAST=tot;
- $('#fcTotN').textContent=tot+' Box'+(tot===1?'':'es');
- $('#fcLines').innerHTML=L.length?L.map(function(x){var m=x.m;
-  return '<div class="ln">'+(m.img?'<img src="'+esc(m.img)+'" alt="" loading="lazy">':'<span class="noimg"></span>')+'<div class="nm">'+esc(m.label)+'</div>'+
-   '<div class="st"><button type="button" data-i="'+x.i+'" data-d="-1" aria-label="One fewer">−</button><b>'+x.q+'</b><button type="button" data-i="'+x.i+'" data-d="1" aria-label="One more">+</button>'+
-   '<button type="button" data-i="'+x.i+'" data-d="x" aria-label="Remove">🗑</button></div></div>'}).join('')
-  :'<div class="empty">Your cart is empty. Tap Add To Cart on a meal.</div>'}
-function openCart(){if(!CART)return;$('#fcBody').style.display='block';$('#fcDone').style.display='none';CART.classList.add('on');update();try{if(window.aeraRetranslate)aeraRetranslate()}catch(e){}}
-function closeCart(){if(!CART)return;CART.classList.remove('on');update()}
-async function sendCart(){
- var q=(typeof QTY!=='undefined'&&QTY.order)||{};if(!q.total||!CUR)return;
- var btn=$('#osend');btn.disabled=true;btn.textContent='Sending…';
- var when=$('#odate').value||today();
- var r=await db.from('fridge_messages').insert({fridge_id:CUR.id,kind:'order',on_date:when,lines:q.lines,total:q.total,
-  by_name:$('#oby').value.trim(),note:$('#onote').value.trim(),status:'open',sent_by:(ME&&ME.email)||''});
- btn.textContent='Send Order To Kitchen';
- if(r.error){btn.disabled=false;$('#ohint').textContent='That did not send: '+r.error.message+' Please try again.';return}
- try{aeraNotifyFridge()}catch(e){}
- var d=$('#fcDone');$('#fcBody').style.display='none';d.style.display='block';
- d.innerHTML='<div class="fcok"><div class="big">✅</div><h3>Sent To The Kitchen</h3><p>'+q.total+' Box'+(q.total===1?'':'es')+' for delivery on '+esc(typeof niceDate==='function'?niceDate(when):when)+
-  '. We confirm it and bring it. It shows under Order History.</p><button type="button" class="btn" id="fcOk">Done</button></div>';
- $('#fcOk').onclick=closeCart;
- try{await pickFridge(CUR.id)}catch(e){}
- update()}
-window.sendCart=sendCart;
-/* hook into the portal : every repaint of the menu, every count, every tab change */
-function hook(){
- if(typeof paintLines!=='function'||typeof tally!=='function'||typeof showView!=='function')return false;
- var pl=paintLines,ta=tally,sv=showView;
- paintLines=function(k,s){var x=pl.apply(this,arguments);if(s==='#olines')decorate();return x};
- tally=function(k){var x=ta.apply(this,arguments);if(k==='order')update();return x};
- showView=function(v){var x=sv.apply(this,arguments);if(v!=='refill')closeCart();update();return x};
- if($('#olines .row'))decorate();
- return true}
-if(!hook()){var n=0,t=setInterval(function(){if(hook()||++n>40)clearInterval(t)},250)}
-})();
-</script>
 <!-- aera-fridge-cart : end -->
 </body>
 </html>
