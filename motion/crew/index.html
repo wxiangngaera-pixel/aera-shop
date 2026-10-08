@@ -544,7 +544,7 @@ function moversFrame(now,t){if(now-slotT>1000)slotsRefresh();
 
 /* ---------- loop ---------- */
 var t0=performance.now(),vis=!D.hidden;D.addEventListener('visibilitychange',function(){vis=!D.hidden});
-var lastF=0;function loop(now){requestAnimationFrame(loop);if(!vis)return;if(MOB&&now-lastF<30)return;lastF=now;var t=(now-t0)/1000;svel*=.9;
+var lastF=0;function loop(now){requestAnimationFrame(loop);if(!vis)return;if(now-lastF<30)return;lastF=now;var t=(now-t0)/1000;svel*=.9;
  try{pixFrame(now,t)}catch(e){}try{lifeFrame(now,t)}catch(e){}try{moversFrame(now,t)}catch(e){}
  talkFrame(now);R.render(S,C)}
 var rz;WN.addEventListener('resize',function(){clearTimeout(rz);rz=setTimeout(function(){VW=innerWidth;VH=innerHeight;PPU=VW<760?34:44;R.setSize(VW,VH);
