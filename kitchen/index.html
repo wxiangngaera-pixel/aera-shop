@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script id="aera-motion-loader">/* AERA Motion 2030 : loads the shared motion engine ( aeramealprep.net/motion/ ) before the page draws.
+<script id="aera-motion-loader">/* AERA Motion 2030 : runs the shared motion engine ( aeramealprep.net/motion/ ) before the page draws.
+   It keeps a copy in this browser so pages open instantly, and quietly picks up a newer engine for next time.
    Preview only until launch : ?scrolly=1 turns it on for this browser, ?scrolly=0 turns it off. */
 (function(){var LIVE=false;try{var q=location.search,L=window.localStorage;
 if(/[?&]scrolly=1/.test(q))L.setItem('aera.scrolly','1');if(/[?&]scrolly=0/.test(q))L.removeItem('aera.scrolly');
 if(!(LIVE||L.getItem('aera.scrolly')==='1'))return;
 if(/(^|\.)my\.chatbees\.io$/i.test(location.hostname))return;
 if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-var v=L.getItem('aera.motion.v'),x=new XMLHttpRequest();x.open('GET','https://aeramealprep.net/motion/'+(v?'?v='+v:''),false);x.send(null);
-if(x.status!==200)return;var t=x.responseText,a=t.indexOf('/*AERA-MOTION-START*/'),b=t.indexOf('/*AERA-MOTION-END*/');if(a<0||b<a)return;
-(new Function(t.slice(a,b)))();}catch(e){}})();</script>
+var v=L.getItem('aera.motion.v')||'',U='https://aeramealprep.net/motion/'+(v?'?v='+v:''),A='/*AERA-MOTION-START*/',B='/*AERA-MOTION-END*/';
+function cut(t){var a=t.indexOf(A),b=t.indexOf(B);return a<0||b<a?'':t.slice(a,b)}
+var c=L.getItem('aera.motion.code')||'',cv=L.getItem('aera.motion.cv');
+if(c&&cv===v){(new Function(c))();setTimeout(function(){try{fetch(U,{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var k=cut(t);if(k&&k!==c)L.setItem('aera.motion.code',k)})}catch(e){}},4000);return}
+var x=new XMLHttpRequest();x.open('GET',U,false);x.send(null);if(x.status!==200)return;var k=cut(x.responseText);if(!k)return;
+try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
+(new Function(k))();}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
