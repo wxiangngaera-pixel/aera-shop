@@ -2954,6 +2954,8 @@ html.sx .sx-r{opacity:0;transform:translate3d(0,46px,0) scale(.97);transition:op
 html.sx .sx-r.sx-l{transform:translate3d(-70px,0,0) rotate(-1.2deg)}
 html.sx .sx-r.sx-rr{transform:translate3d(70px,0,0) rotate(1.2deg)}
 html.sx .sx-r.sx-z{transform:scale(.86);filter:blur(6px);transition-property:opacity,transform,filter}
+html.sx .sx-r.sx-up:not(.sx-on){transform:translate3d(0,-46px,0) scale(.97)}
+html.sx .sx-h.sx-up:not(.sx-on){transform:translate3d(0,-.75em,0) skewY(-2.5deg)}
 html.sx .sx-r.sx-on{opacity:1;transform:none;filter:none}
 html.sx .sx-h{opacity:0;transform:translate3d(0,.75em,0) skewY(2.5deg);filter:blur(8px);transition:opacity .8s ease,transform 1.05s cubic-bezier(.16,.84,.24,1),filter .9s ease;transition-delay:var(--d,0ms)}
 html.sx .sx-h.sx-on{opacity:1;transform:none;filter:none}
@@ -2985,10 +2987,12 @@ if(!(LIVE||on))return;
 if(!('IntersectionObserver' in window))return;
 if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
 var H=document.documentElement;H.classList.add('sx');
-var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('sx-on');io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
-function watch(el,cls,d){if(!el||el.__sx)return;el.__sx=1;el.classList.add('sx-r');if(cls)el.classList.add(cls);if(d)el.style.setProperty('--d',d+'ms');io.observe(el)}
+/* every time : in as it comes into view, quietly reset once it is fully off screen, so it animates again on the way back ( from above when scrolling up ) */
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('sx-on')})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting){var t=e.target;t.classList.toggle('sx-up',e.boundingClientRect.top<0);t.classList.remove('sx-on')}})},{threshold:0});
+function watch(el,cls,d){if(!el||el.__sx)return;el.__sx=1;el.classList.add('sx-r');if(cls)el.classList.add(cls);if(d)el.style.setProperty('--d',d+'ms');io.observe(el);io2.observe(el)}
 /* headings : each one rises out of an invisible window ( the text itself is never touched, so EN / 中文 keeps working ) */
-function words(h,d){if(!h||h.__sx)return;h.__sx=1;h.classList.add('sx-h');if(d)h.style.setProperty('--d',d+'ms');io.observe(h)}
+function words(h,d){if(!h||h.__sx)return;h.__sx=1;h.classList.add('sx-h');if(d)h.style.setProperty('--d',d+'ms');io.observe(h);io2.observe(h)}
 /* card groups : any row or grid of look-alike blocks cascades in */
 function cardsIn(root){var marked=0;
  (function walk(el,depth){if(depth>7||marked>160)return;[].slice.call(el.children).forEach(function(c){
@@ -3001,8 +3005,8 @@ function cardsIn(root){var marked=0;
 function counter(el){if(!el||el.__sxc)return;var m=/(\d[\d,]*)/.exec(el.textContent||'');if(!m)return;var end=+m[1].replace(/,/g,'');if(!(end>1)||end>99999)return;el.__sxc=1;
  var tn=null;(function find(n){[].slice.call(n.childNodes).some(function(c){if(c.nodeType===3&&c.textContent.indexOf(m[1])>=0){tn=c;return true}return c.nodeType===1&&find(c)&&tn})})(el);if(!tn)return;
  var pre=tn.textContent.split(m[1])[0],post=tn.textContent.slice(pre.length+m[1].length);
- var ob=new IntersectionObserver(function(es){if(!es[0].isIntersecting)return;ob.disconnect();var t0=performance.now(),dur=1400;
-  (function step(t){var p=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-p,3);tn.textContent=p<1?pre+Math.round(end*e)+post:pre+m[1]+post;if(p<1)requestAnimationFrame(step)})(t0)},{threshold:.6});ob.observe(el)}
+ var armed=true,run=false;var ob=new IntersectionObserver(function(es){var e=es[0];if(e.intersectionRatio===0){armed=true;return}if(!armed||run||e.intersectionRatio<.6)return;armed=false;run=true;var t0=performance.now(),dur=1400;
+  (function step(t){var p=Math.min(1,(t-t0)/dur),k=1-Math.pow(1-p,3);tn.textContent=p<1?pre+Math.round(end*k)+post:pre+m[1]+post;if(p<1)requestAnimationFrame(step);else run=false})(t0)},{threshold:[0,.6]});ob.observe(el)}
 function tag(){
  /* hero : the copy arrives line by line, the picture zooms in */
  var hero=document.getElementById('top');if(hero){var col=hero.querySelector('.wrap > div:not(.pic)');
