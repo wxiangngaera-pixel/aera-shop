@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script id="aera-motion-loader">/* AERA Motion 2030 : loads the shared motion engine ( aeramealprep.net/motion/ ) before the page draws.
+   Preview only until launch : ?scrolly=1 turns it on for this browser, ?scrolly=0 turns it off. */
+(function(){var LIVE=false;try{var q=location.search,L=window.localStorage;
+if(/[?&]scrolly=1/.test(q))L.setItem('aera.scrolly','1');if(/[?&]scrolly=0/.test(q))L.removeItem('aera.scrolly');
+if(!(LIVE||L.getItem('aera.scrolly')==='1'))return;
+if(/(^|\.)my\.chatbees\.io$/i.test(location.hostname))return;
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var v=L.getItem('aera.motion.v'),x=new XMLHttpRequest();x.open('GET','https://aeramealprep.net/motion/'+(v?'?v='+v:''),false);x.send(null);
+if(x.status!==200)return;var t=x.responseText,a=t.indexOf('/*AERA-MOTION-START*/'),b=t.indexOf('/*AERA-MOTION-END*/');if(a<0||b<a)return;
+(new Function(t.slice(a,b)))();}catch(e){}})();</script>
 <!-- AERA host redirect : start -->
 <script>/* Customers always stay on aeramealprep.net : a customer page opened on my.chatbees.io ( an old
    email, a bookmark, a link we missed ) moves itself across straight away, keeping everything after
@@ -3012,7 +3022,7 @@ html.sx .cartic.sx-bump{animation:sxBump .6s cubic-bezier(.34,1.56,.64,1)}
 @keyframes sxBump{0%{scale:1}35%{scale:1.35;rotate:-8deg}65%{scale:.92;rotate:4deg}100%{scale:1;rotate:0deg}}
 html.sx .bnslide{overflow:hidden}
 html.sx .bnslide.sx-cur .bnpic{animation:sxKen 9s ease-out both}
-@keyframes sxKen{from{transform:scale(1.2) translate3d(2%,1.5%,0)}to{transform:scale(1.03) translate3d(-1%,-1%,0)}}
+@keyframes sxKen{from{transform:scale(1.05)}to{transform:scale(1)}}
 #sxBanShine{position:absolute;top:0;bottom:0;left:0;width:50%;z-index:2;pointer-events:none;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:translateX(-130%) skewX(-16deg);opacity:0}
 #sxBanShine.go{animation:sxBanSweep 1s cubic-bezier(.4,0,.2,1)}
 @keyframes sxBanSweep{0%{opacity:1;transform:translateX(-130%) skewX(-16deg)}100%{opacity:1;transform:translateX(260%) skewX(-16deg)}}
