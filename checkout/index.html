@@ -3129,5 +3129,42 @@ function watch(){var s=document.getElementById('side');if(!s)return setTimeout(w
 window.addEventListener('resize',set);window.addEventListener('orientationchange',function(){setTimeout(set,300)});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',watch);else watch();
 })();</script>
+<!-- AERA notifications on by default : start -->
+<style id="aera-push-auto-css">#aeraPushAsk{position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:99990;max-width:460px;margin:0 auto;background:#16479E;color:#fff;border-radius:18px;padding:16px;box-shadow:0 12px 34px rgba(0,0,0,.32);font-family:Montserrat,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px;line-height:1.45}
+#aeraPushAsk b{display:block;color:#FDB913;font-size:16px;margin-bottom:4px}#aeraPushAsk .r{display:flex;gap:8px;margin-top:12px}#aeraPushAsk button{flex:1;border:0;border-radius:12px;padding:11px;font:inherit;font-weight:800;cursor:pointer;width:auto;margin:0;text-transform:none}
+#aeraPushAsk .go{background:#FDB913;color:#16479E}#aeraPushAsk .no{background:rgba(255,255,255,.15);color:#fff}#aeraPushAsk .m{margin-top:8px;font-size:12.5px;color:#FDE68A}</style>
+<script id="aera-push-auto">/* AERA Inbox notifications are on by default for signed-in customers : anyone who has allowed them is connected
+   quietly, everyone else is asked once with a single tap. Turning them off in My Account keeps them off. */
+(function(){if(window.__AERA_PUSH_AUTO)return;window.__AERA_PUSH_AUTO=1;
+var SB='https://swpprjvubgcdsojapaad.supabase.co',ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0',SK='sb-swpprjvubgcdsojapaad-auth-token',FN=SB+'/functions/v1/aera-push';
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){return null}}
+function sess(){try{var v=JSON.parse(ls(SK)||'null');if(v&&v.currentSession)v=v.currentSession;if(!v||!v.access_token||!v.user)return null;if(v.expires_at&&v.expires_at*1000<Date.now()-60000)return null;return{tok:v.access_token,uid:v.user.id}}catch(e){return null}}
+function ok(){return 'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window}
+function day(){return new Date().toISOString().slice(0,10)}
+function key(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return Uint8Array.from(atob(s),function(c){return c.charCodeAt(0)})}
+async function connect(s){var reg=await navigator.serviceWorker.register('/push/script.js',{scope:'/push/'});var w=reg.installing||reg.waiting||reg.active;
+ if(w&&w.state!=='activated')await new Promise(function(res){var t=setTimeout(res,8000);w.addEventListener('statechange',function(){if(w.state==='activated'){clearTimeout(t);res()}})});
+ var k=await fetch(FN+'?vapid').then(function(r){return r.json()});if(!k||!k.key)throw new Error('The notification service did not answer. Please try again.');
+ var sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:key(k.key)});
+ var j=sub.toJSON();var r=await fetch(SB+'/rest/v1/rpc/push_save',{method:'POST',headers:{'Content-Type':'application/json',apikey:ANON,Authorization:'Bearer '+s.tok},body:JSON.stringify({p_endpoint:j.endpoint,p_p256dh:j.keys.p256dh,p_auth:j.keys.auth,p_ua:navigator.userAgent})});
+ if(!r.ok)throw new Error('Could not save this device. Please try again.');ls('aera.push.sync.'+s.uid,day())}
+function ask(s){if(document.getElementById('aeraPushAsk'))return;var d=document.createElement('div');d.id='aeraPushAsk';d.setAttribute('role','dialog');
+ d.innerHTML='<b>\ud83d\udd14 Turn On Notifications</b>Know the moment AERA messages you : order updates, your rider on the way, and offers.<div class="r"><button type="button" class="go">Turn On</button><button type="button" class="no">Not Now</button></div><div class="m"></div>';
+ document.body.appendChild(d);
+ d.querySelector('.no').onclick=function(){ls('aera.push.ask',String(Date.now()+7*864e5));d.remove()};
+ d.querySelector('.go').onclick=async function(){var b=this,m=d.querySelector('.m');b.disabled=true;b.textContent='Turning on…';
+  try{var p=await Notification.requestPermission();if(p!=='granted'){ls('aera.push.ask',String(Date.now()+30*864e5));d.remove();return}
+   await connect(s);ls('aera.push.off',null);m.textContent='Done. You will get a notification for every new AERA message.';b.remove();setTimeout(function(){d.remove()},2500)}
+  catch(e){m.textContent=String(e&&e.message||e);b.disabled=false;b.textContent='Try Again'}}}
+async function run(){var s=sess();if(!s||!ok())return;if(ls('aera.push.off')==='1')return;var P=Notification.permission;if(P==='denied')return;
+ if(P==='granted'){if(ls('aera.push.sync.'+s.uid)!==day()){try{await connect(s)}catch(e){}}return}
+ if(Date.now()<(+ls('aera.push.ask')||0))return;
+ if(document.getElementById('corpGate')&&getComputedStyle(document.getElementById('corpGate')).display!=='none')return;
+ ask(s)}
+function later(){setTimeout(function(){run().catch(function(){})},4500)}
+if(document.readyState==='complete')later();else window.addEventListener('load',later);
+})();
+</script>
+<!-- AERA notifications on by default : end -->
 </body>
 </html>
