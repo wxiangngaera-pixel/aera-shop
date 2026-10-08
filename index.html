@@ -2948,5 +2948,105 @@ if(document.readyState==='complete')later();else window.addEventListener('load',
 })();
 </script>
 <!-- AERA notifications on by default : end -->
+<!-- AERA scrolly-telling : start -->
+<style id="aera-scrolly-css">
+html.sx .sx-r{opacity:0;transform:translate3d(0,46px,0) scale(.97);transition:opacity .85s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.16,.84,.24,1);transition-delay:var(--d,0ms);will-change:opacity,transform}
+html.sx .sx-r.sx-l{transform:translate3d(-70px,0,0) rotate(-1.2deg)}
+html.sx .sx-r.sx-rr{transform:translate3d(70px,0,0) rotate(1.2deg)}
+html.sx .sx-r.sx-z{transform:scale(.86);filter:blur(6px);transition-property:opacity,transform,filter}
+html.sx .sx-r.sx-on{opacity:1;transform:none;filter:none}
+html.sx .sx-h{opacity:0;transform:translate3d(0,.9em,0) skewY(3deg);clip-path:inset(0 0 100% 0);transition:opacity .7s ease,transform 1s cubic-bezier(.16,.84,.24,1),clip-path 1s cubic-bezier(.16,.84,.24,1);transition-delay:var(--d,0ms)}
+html.sx .sx-h.sx-on{opacity:1;transform:none;clip-path:inset(-20% -5% -20% -5%)}
+html.sx #top .sx-hero{will-change:transform,opacity}
+html.sx #heroPic{will-change:transform}
+html.sx #heroPic .phonewrap{animation:sxFloat 6s ease-in-out infinite}
+@keyframes sxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+#sxBar{position:fixed;left:0;top:0;height:4px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,#FDB913,#FFD666);z-index:2147483000;pointer-events:none;box-shadow:0 0 12px rgba(253,185,19,.6)}
+html.sx .step.sx-step{transition:transform .6s cubic-bezier(.16,.84,.24,1),box-shadow .6s,background-color .6s,opacity .6s;opacity:.45}
+html.sx .step.sx-step.sx-done{opacity:1}
+html.sx .step.sx-step.sx-act{transform:translateY(-6px) scale(1.035);box-shadow:0 18px 40px rgba(22,71,158,.22);opacity:1}
+html.sx .step.sx-step .n{transition:background-color .5s,color .5s,transform .5s}
+html.sx .step.sx-step.sx-done .n{background:#16479E!important;color:#FDB913!important;transform:scale(1.12)}
+#sxHow{position:sticky;top:calc(var(--sxTop,66px) + 8px);z-index:20;display:flex;align-items:center;gap:10px;margin:0 auto 18px;width:max-content;max-width:100%;padding:8px 14px;border-radius:999px;background:#16479E;color:#fff;font:800 13px/1 Montserrat,system-ui,sans-serif;box-shadow:0 10px 26px rgba(22,71,158,.28)}
+#sxHow i{display:block;width:22px;height:6px;border-radius:99px;background:rgba(255,255,255,.25);transition:background .4s,width .4s}
+#sxHow i.on{background:#FDB913}#sxHow i.cur{width:34px}
+#sxHow b{color:#FDB913;min-width:74px}
+#sxBadge{position:fixed;right:12px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:2147483001;background:#0B0B0B;color:#fff;border-radius:999px;padding:8px 12px;font:700 12px/1 Montserrat,system-ui,sans-serif;box-shadow:0 8px 20px rgba(0,0,0,.3);display:flex;gap:8px;align-items:center}
+#sxBadge a{color:#FDB913;text-decoration:none;font-weight:800}
+@media (prefers-reduced-motion:reduce){html.sx .sx-r,html.sx .sx-h{transition:none!important;clip-path:none!important;opacity:1!important;transform:none!important;filter:none!important}}
+</style>
+<script id="aera-scrolly">/* AERA homepage scrolly-telling : headings rise word by word, cards cascade in as you scroll, the hero drifts away
+   in parallax, "From Order to Microwave" steps light up one by one with a progress pill, numbers count up, and a
+   yellow bar tracks how far down the page you are. Nothing is hidden if the browser cannot animate. */
+(function(){
+var LIVE=false;var q=location.search,on=false;
+try{if(/[?&]scrolly=1/.test(q))localStorage.setItem('aera.scrolly','1');if(/[?&]scrolly=0/.test(q))localStorage.removeItem('aera.scrolly');on=localStorage.getItem('aera.scrolly')==='1'}catch(e){on=/[?&]scrolly=1/.test(q)}
+if(!(LIVE||on))return;
+if(!('IntersectionObserver' in window))return;
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var H=document.documentElement;H.classList.add('sx');
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('sx-on');io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+function watch(el,cls,d){if(!el||el.__sx)return;el.__sx=1;el.classList.add('sx-r');if(cls)el.classList.add(cls);if(d)el.style.setProperty('--d',d+'ms');io.observe(el)}
+/* headings : each one rises out of an invisible window ( the text itself is never touched, so EN / 中文 keeps working ) */
+function words(h,d){if(!h||h.__sx)return;h.__sx=1;h.classList.add('sx-h');if(d)h.style.setProperty('--d',d+'ms');io.observe(h)}
+/* card groups : any row or grid of look-alike blocks cascades in */
+function cardsIn(root){var marked=0;
+ (function walk(el,depth){if(depth>7||marked>160)return;[].slice.call(el.children).forEach(function(c){
+  if(c.__sx||/^(SCRIPT|STYLE|SVG|BR)$/i.test(c.tagName)||c.id==='sxHow')return;
+  var kids=[].slice.call(c.children).filter(function(k){return k.offsetHeight>48&&k.offsetWidth>60&&!/^(SCRIPT|STYLE|BR)$/i.test(k.tagName)});
+  var cs=getComputedStyle(c),grid=cs.display==='grid'||cs.display==='inline-grid'||(cs.display==='flex'&&(cs.flexWrap==='wrap'||cs.flexDirection==='column'));
+  if(grid&&kids.length>=2){kids.forEach(function(k,i){if(k.__sx)return;watch(k,null,(i%6)*90);marked++});return}
+  walk(c,depth+1)})})(root,0)}
+/* numbers count up the first time they are seen */
+function counter(el){if(!el||el.__sxc)return;var m=/(\d[\d,]*)/.exec(el.textContent||'');if(!m)return;var end=+m[1].replace(/,/g,'');if(!(end>1)||end>99999)return;el.__sxc=1;
+ var tn=null;(function find(n){[].slice.call(n.childNodes).some(function(c){if(c.nodeType===3&&c.textContent.indexOf(m[1])>=0){tn=c;return true}return c.nodeType===1&&find(c)&&tn})})(el);if(!tn)return;
+ var pre=tn.textContent.split(m[1])[0],post=tn.textContent.slice(pre.length+m[1].length);
+ var ob=new IntersectionObserver(function(es){if(!es[0].isIntersecting)return;ob.disconnect();var t0=performance.now(),dur=1400;
+  (function step(t){var p=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-p,3);tn.textContent=p<1?pre+Math.round(end*e)+post:pre+m[1]+post;if(p<1)requestAnimationFrame(step)})(t0)},{threshold:.6});ob.observe(el)}
+function tag(){
+ /* hero : the copy arrives line by line, the picture zooms in */
+ var hero=document.getElementById('top');if(hero){var col=hero.querySelector('.wrap > div:not(.pic)');
+  if(col&&!col.__sxh){col.__sxh=1;col.classList.add('sx-hero');[].slice.call(col.children).forEach(function(k,i){if(/^H1$/i.test(k.tagName))words(k,120);else watch(k,null,150+i*120)})}
+  watch(document.getElementById('heroPic'),'sx-z',250);[].slice.call(hero.querySelectorAll('.tag b')).forEach(counter)}
+ [].slice.call(document.querySelectorAll('main section, body > section, body > footer, section[id]')).forEach(function(s){
+  if(s.id==='banBand')return;
+  [].slice.call(s.querySelectorAll('.sec-head')).forEach(function(sh){[].slice.call(sh.children).forEach(function(k,i){if(/^H[1-3]$/i.test(k.tagName))words(k,i*110);else watch(k,null,i*110)})});
+  [].slice.call(s.querySelectorAll('h2')).forEach(function(h){if(!h.closest('.sec-head'))words(h)});
+  if(s.id==='delivery'){[].slice.call(s.querySelectorAll('.pk')).forEach(function(p,i){watch(p,i%2?'sx-rr':'sx-l',i*120)})}
+  if(s.id==='gyms'){[].slice.call(s.querySelectorAll('img')).forEach(function(im,i){if(im.offsetWidth>80)watch(im,'sx-z',i*120)})}
+  cardsIn(s);
+  [].slice.call(s.querySelectorAll('h2,h3,.count,.num,b,strong')).forEach(function(el){if(/^\D{0,12}\d{2,5}\D{0,14}$/.test((el.textContent||'').trim())&&el.children.length<2)counter(el)})});
+ howSetup()}
+/* "From Order to Microwave" : the steps light up in order as you scroll, with a pill that follows you */
+var HOW=null;
+function howSetup(){var s=document.getElementById('how');if(!s||HOW)return;var st=[].slice.call(s.querySelectorAll('.step'));if(st.length<2)return;
+ var pill=document.createElement('div');pill.id='sxHow';pill.innerHTML='<b>Step 1 of '+st.length+'</b>'+st.map(function(){return'<i></i>'}).join('');
+ var box=s.querySelector('.steps');if(box&&box.parentNode)box.parentNode.insertBefore(pill,box);
+ st.forEach(function(x){x.classList.add('sx-step')});HOW={s:s,st:st,pill:pill,dots:[].slice.call(pill.querySelectorAll('i')),lab:pill.querySelector('b')}}
+function howTick(vh){if(!HOW)return;var mid=vh*.62,cur=-1;HOW.st.forEach(function(x,i){var r=x.getBoundingClientRect();var done=r.top<mid;x.classList.toggle('sx-done',done);if(done)cur=i});
+ HOW.st.forEach(function(x,i){x.classList.toggle('sx-act',i===cur)});HOW.dots.forEach(function(d,i){d.classList.toggle('on',i<=cur);d.classList.toggle('cur',i===cur)});
+ HOW.lab.textContent=cur<0?'How it works':(cur===HOW.st.length-1?'Ready to Eat!':'Step '+(cur+1)+' of '+HOW.st.length)}
+/* scroll : progress bar, hero parallax, steps */
+var bar=document.createElement('div');bar.id='sxBar';document.body.appendChild(bar);
+var tick=false;function frame(){tick=false;var y=window.scrollY||0,vh=window.innerHeight,dh=document.documentElement.scrollHeight-vh;
+ bar.style.transform='scaleX('+(dh>0?Math.min(1,y/dh):0)+')';
+ var ab=document.getElementById('aeraBar');H.style.setProperty('--sxTop',(ab?ab.offsetHeight:66)+'px');
+ var hero=document.getElementById('top');if(hero){var hh=hero.offsetHeight||vh,p=Math.max(0,Math.min(1,y/hh));
+  var col=hero.querySelector('.sx-hero');if(col&&p>0.001){col.style.transform='translate3d(0,'+(-p*70)+'px,0)';col.style.opacity=String(1-p*.85)}else if(col){col.style.transform='';col.style.opacity=''}
+  var pic=document.getElementById('heroPic');if(pic&&pic.classList.contains('sx-on')&&!pic.__sxt){pic.__sxt=1;setTimeout(function(){pic.style.transition='none';pic.__sxp=1},1300)}
+  if(pic&&pic.__sxp)pic.style.transform=p>0.001?'translate3d(0,'+(p*90)+'px,0) scale('+(1+p*.08)+')':''}
+ howTick(vh)}
+function onScroll(){if(!tick){tick=true;requestAnimationFrame(frame)}}
+window.addEventListener('scroll',onScroll,{passive:true});window.addEventListener('resize',onScroll);
+/* content that arrives later ( meals, bundles, banners ) is picked up too */
+var mq=0;new MutationObserver(function(){if(mq)return;mq=setTimeout(function(){mq=0;try{tag()}catch(e){}},250)}).observe(document.body,{childList:true,subtree:true});
+function boot(){try{tag()}catch(e){}frame();
+ if(!LIVE){var b=document.createElement('div');b.id='sxBadge';b.innerHTML='✨ Animation Preview <a href="?scrolly=0">Exit</a>';document.body.appendChild(b)}}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+/* safety : nothing stays invisible */
+setTimeout(function(){[].slice.call(document.querySelectorAll('.sx-r:not(.sx-on)')).forEach(function(el){var r=el.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)el.classList.add('sx-on')})},3500);
+})();
+</script>
+<!-- AERA scrolly-telling : end -->
 </body>
 </html>
