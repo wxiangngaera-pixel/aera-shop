@@ -3210,5 +3210,71 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 setInterval(check,8000);setTimeout(check,1500);setInterval(acts,5000);setTimeout(acts,2500);
 })();
 </script>
+<style id="aera-corp-only-css">
+html.corp #aeraBar .ab-txt,html.corp #aeraBar .ab-pill,html.corp #aeraBar .ab-mobonly,html.corp #aeraBar .ab-order,html.corp #aeraBar .ab-panel{display:none!important}
+#abCorpAcct{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border:1.5px solid rgba(255,255,255,.55);border-radius:999px;background:transparent;color:#fff;font:inherit;font-weight:800;font-size:13px;cursor:pointer;white-space:nowrap}
+#abCorpAcct svg{width:16px;height:16px}html.corp-gate #abCorpAcct{display:none}
+#corpAcct{position:fixed;inset:0;z-index:99980;background:#F4F6FB;overflow:auto;overscroll-behavior:contain;font-family:Montserrat,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#0B0B0B}
+#corpAcct .in{max-width:620px;margin:0 auto;padding:16px 16px calc(28px + env(safe-area-inset-bottom))}
+#corpAcct .hd{position:sticky;top:0;z-index:2;background:#16479E;color:#fff;padding:calc(12px + env(safe-area-inset-top)) 16px 12px;display:flex;align-items:center;gap:10px}
+#corpAcct .hd b{font-size:17px;flex:1}#corpAcct .hd button{border:0;border-radius:999px;background:#FDB913;color:#16479E;font:inherit;font-weight:800;padding:8px 14px;cursor:pointer;width:auto;margin:0}
+#corpAcct .cd{background:#fff;border:1.5px solid #16479E;border-radius:16px;padding:14px 16px;margin:0 0 14px}
+#corpAcct h3{margin:0 0 8px;font-size:15px;color:#16479E;text-transform:uppercase;letter-spacing:.04em}
+#corpAcct .row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid #EEF1F7;font-size:14px}#corpAcct .row:first-of-type{border-top:0}#corpAcct .row span{color:#6B7280}#corpAcct .row b{text-align:right}
+#corpAcct .ord{padding:10px 0;border-top:1px solid #EEF1F7;font-size:13.5px}#corpAcct .ord:first-of-type{border-top:0}#corpAcct .ord .t{display:flex;justify-content:space-between;gap:8px}#corpAcct .ord .s{display:inline-block;margin-top:4px;padding:2px 10px;border-radius:999px;background:#EEF2FA;color:#16479E;font-size:11.5px;font-weight:800}
+#corpAcct .ord .s.delivered{background:#E7F6EC;color:#067647}#corpAcct .ord .s.out{background:#FFF4D6;color:#8A5A00}
+#corpAcct .bt{display:block;width:100%;border:0;border-radius:12px;padding:12px;margin:8px 0 0;font:inherit;font-weight:800;cursor:pointer;text-align:center;text-decoration:none;box-sizing:border-box}
+#corpAcct .bt.y{background:#FDB913;color:#16479E}#corpAcct .bt.n{background:#16479E;color:#FDB913}#corpAcct .bt.l{background:#EEF1F7;color:#16479E}#corpAcct .hint{font-size:12.5px;color:#6B7280;margin-top:6px}
+</style>
+<script id="aera-corp-only">/* AERA Corporate is only for corporate ordering : the logo and cart stay inside the app, the shop's other links are hidden,
+   and My Account shows the company, its orders, the app and notifications, and Log Out. */
+(function(){var H=document.documentElement;if(!H.classList.contains('corp'))return;
+var SB='https://swpprjvubgcdsojapaad.supabase.co',ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0',SK='sb-swpprjvubgcdsojapaad-auth-token',HOME=location.pathname+'?app=corp';
+function E(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function sess(){try{var v=JSON.parse(localStorage.getItem(SK)||'null');if(v&&v.currentSession)v=v.currentSession;return v&&v.access_token?v:null}catch(e){return null}}
+function closeCart(){var s=document.getElementById('side');if(s)s.classList.remove('open')}
+/* logo and cart never leave the app */
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('#aeraBar a.ab-logo,#aeraBar #abCart');if(!a)return;e.preventDefault();e.stopPropagation();
+ var acc=document.getElementById('corpAcct');if(acc)acc.remove();
+ if(a.id==='abCart'){try{openCart()}catch(x){}var s=document.getElementById('side');if(s)s.scrollTop=0;try{window.scrollTo(0,0)}catch(x){}return}
+ closeCart();try{window.scrollTo({top:0,behavior:'smooth'})}catch(x){window.scrollTo(0,0)}},true);
+function fixBar(){var bar=document.getElementById('aeraBar');if(!bar)return;var lg=bar.querySelector('a.ab-logo');if(lg&&lg.getAttribute('href')!==HOME){lg.setAttribute('href',HOME);lg.setAttribute('aria-label','AERA Corporate')}
+ var c=bar.querySelector('#abCart');if(c&&c.getAttribute('href')!=='#cart')c.setAttribute('href','#cart');
+ if(!document.getElementById('abCorpAcct')){var r=bar.querySelector('.ab-r')||(c&&c.parentNode);if(r){var b=document.createElement('button');b.type='button';b.id='abCorpAcct';
+  b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>My Account';b.onclick=openAcct;r.insertBefore(b,c||null)}}}
+var ST={new:'Order Placed',paid:'Order Placed',in_kitchen:'Prepping',packed:'Packed',out:'Out for Delivery',delivered:'Delivered',cancelled:'Cancelled'};
+function rm(n){return'RM '+(Number(n)||0).toFixed(2)}
+function day(d){try{return new Date(d+'T00:00:00+08:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric',timeZone:'Asia/Kuala_Lumpur'})}catch(e){return d||''}}
+async function orders(s){var r=await fetch(SB+'/rest/v1/orders?select=order_no,date,slot,status,total,boxes,fulfil&order=date.desc&limit=30',{headers:{apikey:ANON,Authorization:'Bearer '+s.access_token}});if(!r.ok)throw new Error('Could not load your orders');return r.json()}
+async function pushOn(){try{var reg=await navigator.serviceWorker.getRegistration('/push/');var x=reg&&await reg.pushManager.getSubscription();return !!x}catch(e){return false}}
+function sa(){return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}
+async function openAcct(){var s=sess();var old=document.getElementById('corpAcct');if(old)old.remove();closeCart();
+ var co=(typeof CO!=='undefined'&&CO.on)||{},u=(s&&s.user)||{},md=u.user_metadata||{};
+ var d=document.createElement('div');d.id='corpAcct';
+ d.innerHTML='<div class="hd"><b>My Account</b><button type="button" data-a="x">\u2190 Back to Ordering</button></div><div class="in">'+
+  '<div class="cd"><h3>Company</h3><div class="row"><span>Company</span><b>'+E(co.name||md.corp_pending||'—')+'</b></div>'+
+   '<div class="row"><span>Payment</span><b>'+E(typeof coTermText==='function'?coTermText():'')+'</b></div>'+
+   '<div class="row"><span>Logged in as</span><b>'+E(u.email||'')+'</b></div>'+(md.name?'<div class="row"><span>Contact</span><b>'+E(md.name)+'</b></div>':'')+(md.phone?'<div class="row"><span>Mobile</span><b>'+E(md.phone)+'</b></div>':'')+'</div>'+
+  '<div class="cd"><h3>My Orders</h3><div id="caOrd" class="hint">Loading your orders…</div></div>'+
+  '<div class="cd"><h3>The App</h3><div id="caApp"></div></div>'+
+  '<div class="cd"><h3>Help</h3><a class="bt l" href="https://wa.me/60166630205" target="_blank" rel="noopener">WhatsApp AERA</a><div class="hint">For invoices, prices or changes to an order.</div></div>'+
+  '<button type="button" class="bt l" data-a="out">Log Out</button></div>';
+ document.body.appendChild(d);
+ d.addEventListener('click',async function(e){var b=e.target.closest&&e.target.closest('[data-a]');if(!b)return;var w=b.getAttribute('data-a');
+  if(w==='x')d.remove();
+  if(w==='out'){var o=document.getElementById('corpOut')||document.getElementById('corpChg');if(o)o.click()}
+  if(w==='app'||w==='push'){var t=document.querySelector('#corpTop .cact button[data-a="'+w+'"]');d.remove();if(t)t.click()}});
+ var on=await pushOn(),can=('Notification' in window)&&('PushManager' in window);
+ document.getElementById('caApp').innerHTML=(sa()?'<div class="hint">You are using the AERA Corporate app.</div>':'<button type="button" class="bt n" data-a="app">\ud83d\udcf2 Download The App</button>')+
+  (on?'<div class="hint" style="margin-top:10px">\ud83d\udd14 Notifications are on for this device.</div>':(can&&Notification.permission==='denied'?'<div class="hint" style="margin-top:10px">Notifications are blocked for aeramealprep.net in this phone\u2019s settings.</div>':'<button type="button" class="bt y" data-a="push">\ud83d\udd14 Turn On Notifications</button>'));
+ if(!s){document.getElementById('caOrd').textContent='Log in to see your orders.';return}
+ try{var L=await orders(s);var el=document.getElementById('caOrd');if(!el)return;
+  el.className='';el.innerHTML=L.length?L.map(function(o){var st=String(o.status||'new');return'<div class="ord"><div class="t"><b>'+E(o.order_no)+'</b><b>'+rm(o.total)+'</b></div><div class="hint" style="margin-top:2px">'+E(day(o.date))+' \u00b7 '+(o.boxes||0)+' meal'+((o.boxes||0)===1?'':'s')+' \u00b7 '+(o.fulfil==='pickup'?'Self Pick-Up':'Delivery')+'</div><span class="s '+E(st)+'">'+E(ST[st]||st)+'</span></div>'}).join('')+'<div class="hint" style="margin-top:8px">A new order shows here a few minutes after it is placed.</div>'
+   :'<div class="hint">No orders yet. Your corporate orders will show here.</div>'}
+ catch(e){var el2=document.getElementById('caOrd');if(el2)el2.textContent=String(e.message||e)}}
+window.corpAccount=openAcct;
+setInterval(fixBar,1500);if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fixBar);else fixBar();
+})();
+</script>
 </body>
 </html>
