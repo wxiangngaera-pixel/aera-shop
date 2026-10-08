@@ -3161,10 +3161,54 @@ async function run(){var s=sess();if(!s||!ok())return;if(ls('aera.push.off')==='
  if(Date.now()<(+ls('aera.push.ask')||0))return;
  if(document.getElementById('corpGate')&&getComputedStyle(document.getElementById('corpGate')).display!=='none')return;
  ask(s)}
+window.aeraPush={ask:function(){var s=sess();if(s&&ok())ask(s)},on:ok};
 function later(){setTimeout(function(){run().catch(function(){})},4500)}
 if(document.readyState==='complete')later();else window.addEventListener('load',later);
 })();
 </script>
 <!-- AERA notifications on by default : end -->
+<style id="aera-corp-instant-css">#corpTop .cact{display:flex;gap:8px;flex-wrap:wrap;width:100%}#corpTop .cact button{border:0;border-radius:10px;padding:9px 14px;font:inherit;font-weight:800;font-size:13px;cursor:pointer;background:#FDB913;color:#16479E;width:auto;margin:0;text-transform:none}
+#corpTop .cact button.on{background:rgba(255,255,255,.16);color:#fff;cursor:default}
+#corpAppGuide{position:fixed;inset:0;z-index:99995;background:rgba(10,20,40,.55);display:flex;align-items:flex-end;justify-content:center;padding:16px}#corpAppGuide .g{background:#16479E;color:#fff;border-radius:18px;max-width:440px;width:100%;padding:18px;font-size:14px;line-height:1.5;font-family:Montserrat,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+#corpAppGuide b{color:#FDB913}#corpAppGuide button{display:block;width:100%;margin-top:12px;border:0;border-radius:12px;padding:11px;font:inherit;font-weight:800;background:#FDB913;color:#16479E;cursor:pointer}
+#corpOk{position:fixed;left:50%;top:18px;transform:translateX(-50%);z-index:99996;background:#067647;color:#fff;border-radius:999px;padding:10px 18px;font-weight:800;font-family:Montserrat,system-ui,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25)}</style>
+<script id="aera-corp-instant">/* AERA Corporate : the moment AERA taps Approve, the waiting company is let in ( no reload, no waiting for the shop
+   settings to catch up ), and the app offers its Home Screen install and phone notifications. */
+(function(){var H=document.documentElement;if(!H.classList.contains('corp'))return;
+var FN='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/corp-request',ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0',SK='sb-swpprjvubgcdsojapaad-auth-token';
+var INJ=null,busy=false;
+function tok(){try{var v=JSON.parse(localStorage.getItem(SK)||'null');if(v&&v.currentSession)v=v.currentSession;return v&&v.access_token||''}catch(e){return''}}
+try{var P=coParseAccts;coParseAccts=function(v){P(v);if(INJ&&!CO.accts.some(function(a){return a.who.indexOf(INJ.who[0])>=0}))CO.accts.push(INJ)}}catch(e){}
+async function check(){if(busy||!H.classList.contains('corp-gate'))return;var t=tok(),em='';try{em=coWhoAmI()}catch(e){}if(!t||!em)return;busy=true;
+ try{var r=await fetch(FN,{method:'POST',headers:{'Content-Type':'application/json',apikey:ANON,Authorization:'Bearer '+t},body:JSON.stringify({action:'status'})});var j=await r.json();
+  if(j&&j.active&&j.account){var k=coKey(em);INJ={who:[k],name:j.account.name,terms:j.account.terms,pct:+j.account.pct||0,id:j.account.id};
+   if(!CO.accts.some(function(a){return a.who.indexOf(k)>=0}))CO.accts.push(INJ);
+   try{var sv=JSON.parse(localStorage.getItem(SK)||'null'),s2=sv&&sv.currentSession?sv.currentSession:sv;if(s2&&s2.user&&s2.user.user_metadata){delete s2.user.user_metadata.corp_pending;localStorage.setItem(SK,JSON.stringify(sv))}}catch(e){}
+   try{coChanged()}catch(e){}H.classList.remove('corp-gate');
+   var ok=document.createElement('div');ok.id='corpOk';ok.textContent='\u2705 Approved \u00b7 Welcome, '+(j.account.name||'')+'!';document.body.appendChild(ok);setTimeout(function(){ok.remove()},4000);
+   try{loadSettings()}catch(e){}setTimeout(acts,600)}}
+ catch(e){}busy=false}
+function sa(){return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}
+function ios(){return /iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}
+function guide(html){var g=document.getElementById('corpAppGuide');if(g)g.remove();g=document.createElement('div');g.id='corpAppGuide';g.innerHTML='<div class="g">'+html+'<button type="button">Got It</button></div>';
+ g.onclick=function(e){if(e.target===g||e.target.tagName==='BUTTON')g.remove()};document.body.appendChild(g)}
+var BIP=null;window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();BIP=e;acts()});
+async function pushOn(){try{if(!('serviceWorker' in navigator)||!('PushManager' in window))return false;var reg=await navigator.serviceWorker.getRegistration('/push/');var s=reg&&await reg.pushManager.getSubscription();return !!s}catch(e){return false}}
+async function acts(){var top=document.getElementById('corpTop');if(!top||H.classList.contains('corp-gate'))return;var a=top.querySelector('.cact');if(!a){a=document.createElement('div');a.className='cact';top.appendChild(a)}
+ var h='';if(!sa())h+='<button type="button" data-a="app">\ud83d\udcf2 Download The App</button>';
+ var on=await pushOn();var can=('Notification' in window)&&('PushManager' in window);
+ if(on)h+='<button type="button" class="on" disabled>\ud83d\udd14 Notifications On</button>';
+ else if(!(can&&Notification.permission==='denied'))h+='<button type="button" data-a="push">\ud83d\udd14 Turn On Notifications</button>';
+ if(a.getAttribute('data-h')!==h){a.innerHTML=h;a.setAttribute('data-h',h)}a.style.display=h?'':'none'}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#corpTop .cact button[data-a]');if(!b)return;var w=b.getAttribute('data-a');
+ if(w==='app'){if(BIP){BIP.prompt();BIP.userChoice.finally(function(){BIP=null;acts()});return}
+  guide(ios()?'<b>Add AERA Corporate to your Home Screen</b><br>1. Tap the <b>Share</b> button ( the square with an arrow ) at the bottom of Safari.<br>2. Tap <b>Add to Home Screen</b>, then <b>Add</b>.<br>3. Open <b>AERA Corporate</b> from your Home Screen.':'<b>Install AERA Corporate</b><br>Open the browser menu ( \u22ee ) and tap <b>Install app</b> or <b>Add to Home screen</b>.')}
+ if(w==='push'){var can=('Notification' in window)&&('PushManager' in window);
+  if(!can){guide(ios()&&!sa()?'<b>Notifications on iPhone</b><br>iPhone only shows notifications from the app on your Home Screen.<br>1. Tap <b>\ud83d\udcf2 Download The App</b> and add it to your Home Screen.<br>2. Open <b>AERA Corporate</b> from there and tap <b>\ud83d\udd14 Turn On Notifications</b>.':'<b>Notifications</b><br>This browser cannot show notifications. Use Chrome, or Safari on iPhone with the Home Screen app.');return}
+  try{localStorage.removeItem('aera.push.off');localStorage.removeItem('aera.push.ask')}catch(x){}
+  if(window.aeraPush&&window.aeraPush.ask){window.aeraPush.ask();var t=setInterval(function(){if(!document.getElementById('aeraPushAsk')){clearInterval(t);acts()}},800)}}});
+setInterval(check,8000);setTimeout(check,1500);setInterval(acts,5000);setTimeout(acts,2500);
+})();
+</script>
 </body>
 </html>
