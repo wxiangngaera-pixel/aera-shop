@@ -3276,5 +3276,22 @@ window.corpAccount=openAcct;
 setInterval(fixBar,1500);if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fixBar);else fixBar();
 })();
 </script>
+<style id="aera-cart-img-css">#lines .line .limg{flex:none;width:56px;height:56px;border-radius:10px;object-fit:cover;background:#F4F6FB;border:1px solid #E3E8F2}#lines .line .limg.ph{display:inline-grid;place-items:center;font-size:22px}</style>
+<script id="aera-cart-img">/* Your Order : a picture beside every item */
+(function(){
+function src(sku){sku=String(sku||'');try{
+ if(/^BUNDLE-/.test(sku)){var b=(typeof BUNDLES!=='undefined'?BUNDLES:[]).filter(function(x){return x[0]===sku})[0];return b&&b[6]||''}
+ if(/^MEAL-/.test(sku)){var m=(typeof MEALS!=='undefined'?MEALS:[]).filter(function(x){return x[0]===sku})[0];return m&&m[8]||''}
+ if(/^ALC-/.test(sku)){var code=sku.split('-')[1];var a=((typeof ALC!=='undefined'&&ALC.rows)||[]).filter(function(x){return x.code===code})[0];return a&&a.img||''}}catch(e){}return''}
+function paint(){[].forEach.call(document.querySelectorAll('#lines .line'),function(l){if(l.querySelector('.limg'))return;
+ var b=l.querySelector('[onclick*="add("]');var m=b&&/add\('([^']+)'/.exec(b.getAttribute('onclick')||'');var u=m?src(m[1]):'';
+ var el;if(u){el=document.createElement('img');el.className='limg';el.alt='';el.loading='lazy';el.src=u;el.onerror=function(){this.remove()}}
+ else{el=document.createElement('span');el.className='limg ph';el.textContent='\ud83c\udf71'}
+ l.insertBefore(el,l.firstChild)})}
+try{var R=renderCart;renderCart=function(){var r=R.apply(this,arguments);try{paint()}catch(e){}return r}}catch(e){}
+var q=0;new MutationObserver(function(){if(q)return;q=setTimeout(function(){q=0;try{paint()}catch(e){}},50)}).observe(document.documentElement,{childList:true,subtree:true});
+setTimeout(paint,800);
+})();
+</script>
 </body>
 </html>
