@@ -373,7 +373,7 @@ async function kcOpen(){
  var boot='window.__KC_ROLE='+JSON.stringify(KCS.role)+';window.__KC_EMAIL='+JSON.stringify(KCS.user.email||'')+';('+KC_SHIM.toString()+')('+JSON.stringify(KC_URL)+','+JSON.stringify(KC_ANON)+','+JSON.stringify(KC_KEY)+');';
  var html='<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">'+
   '<'+S+' src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></'+S+'>'+
-  '<'+S+'>'+boot+'</'+S+'>'+app+'</html>';
+  '<'+S+'>'+boot+'</'+S+'>'+(function(){var l=document.getElementById('aera-motion-loader');return l?'<'+S+'>window.__AERA_MOTION=0;'+l.textContent+'</'+S+'>':''})()+app+'</html>';
  kcLoading('Starting the console…');await new Promise(function(r){setTimeout(r,30)});
  document.open();document.write(html);document.close();
 }
