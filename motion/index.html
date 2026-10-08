@@ -353,7 +353,9 @@ css([
 'html.sx30 .sx30-glass{background:transparent!important;box-shadow:none!important}',
 'html.sx30 .sx30-glass::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-color:var(--sxBg);background-image:var(--sxImg);border-radius:0;transition:inset .55s var(--sxE),border-radius .55s var(--sxE),background-color .5s,box-shadow .5s}',
 '@media (hover:none){html.sx30 .sx30-glass.sx30-sc::before{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background-color:color-mix(in srgb,var(--sxBg) 95%,transparent)!important}}',
-'html.sx30 #top h1{will-change:scale}',
+'.sx30-sky i{animation:none!important}',
+'html.sx30.sx #heroPic .phonewrap::before{filter:none!important;background:radial-gradient(closest-side,rgba(253,185,19,.4),rgba(22,71,158,.22) 60%,rgba(22,71,158,0) 100%)!important;animation:sx30Halo 4.5s ease-in-out infinite!important;transform:translate(-50%,-50%)!important}',
+'@keyframes sx30Halo{0%,100%{opacity:.55}50%{opacity:1}}',
 'html.sx30 .sx30-glass.sx30-sc::before{inset:6px 8px;border-radius:22px;background-color:color-mix(in srgb,var(--sxBg) 66%,transparent);background-image:none;-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),inset 0 1px 0 rgba(255,255,255,.38),0 14px 34px rgba(11,28,54,.32)}',
 /* shine on the main buttons */
 'html.sx30 .sx30-shine{position:relative;overflow:hidden;isolation:isolate}',
@@ -364,9 +366,9 @@ css([
 /* cursor light + film grain ( desktop ) */
 '#sx30Cur{position:fixed;left:0;top:0;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;z-index:2147483645;transition:width .45s var(--sxS),height .45s var(--sxS),margin .45s var(--sxS),opacity .3s;opacity:0}',
 '#sx30Cur.on{opacity:1}#sx30Cur.big{width:96px;height:96px;margin:-48px 0 0 -48px}',
-'#sx30Glow{position:fixed;left:0;top:0;width:600px;height:600px;margin:-300px 0 0 -300px;border-radius:50%;pointer-events:none;z-index:2147483640;background:radial-gradient(closest-side,rgba(253,185,19,.38),rgba(253,185,19,0));mix-blend-mode:soft-light;opacity:0;transition:opacity .4s}',
+'#sx30Glow{position:fixed;left:0;top:0;width:600px;height:600px;margin:-300px 0 0 -300px;border-radius:50%;pointer-events:none;z-index:2147483640;background:radial-gradient(closest-side,rgba(253,185,19,.12),rgba(253,185,19,0));opacity:0;transition:opacity .4s}',
 '#sx30Glow.on{opacity:1}',
-'#sx30Grain{position:fixed;inset:-60px;z-index:2147483639;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("'+GRAIN+'");background-size:180px 180px;animation:sx30Grain 1.1s steps(5) infinite}',
+'#sx30Grain{position:fixed;inset:-60px;z-index:2147483639;pointer-events:none;opacity:.035;background-image:url("'+GRAIN+'");background-size:180px 180px}',
 '@keyframes sx30Grain{0%{transform:translate(0,0)}20%{transform:translate(-22px,14px)}40%{transform:translate(18px,-26px)}60%{transform:translate(-12px,-8px)}80%{transform:translate(26px,20px)}100%{transform:translate(0,0)}}',
 '#sx30Bar{position:fixed;left:0;top:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,#FDB913,#FFE08A,#FDB913);box-shadow:0 0 12px rgba(253,185,19,.7);z-index:2147483000;pointer-events:none}',
 /* footer wordmark */
@@ -656,8 +658,6 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
  if(STRIP&&Math.abs(dy)>1)STRIP.dir=dy>0?-1:1;
  if(BAR){var sc=y>12;if(BAR.__sc!==sc){BAR.__sc=sc;BAR.classList.toggle('sx30-sc',sc)}}
  if(PBAR)PBAR.style.transform='scaleX('+(GEO.dh>vh?clamp(y/(GEO.dh-vh),0,1):0).toFixed(4)+')';
- if(HERO){var p=clamp(y/(GEO.hh||vh),0,1);if(p<1.01){HERO.style.scale=p>0.002?(1-p*.06).toFixed(4):'';var h1=HERO.__h1||(HERO.__h1=$('h1',HERO));if(h1){h1.style.transformOrigin='0 60%';h1.style.scale=p>0.002?(1+p*.45).toFixed(4):''}}}
- if(BANNER&&GEO.bH>40){var bt=GEO.bTop-y,bp=clamp((GEO.bar-bt)/GEO.bH,0,1);BANNER.style.scale=bp>0.002?(1-bp*.08).toFixed(4):'';BANNER.style.opacity=bp>0.002?(1-bp*.75).toFixed(3):''}
  if(HUB.length&&GEO.hub){var best=null,bd=1e9;HUB.forEach(function(c,i){var g=GEO.hub[i];if(!g)return;var top=g.top-y,h=g.h;if(top+h<-50||top>vh+50)return;
    var d=Math.abs(top+h/2-vh*.5);if(d<bd&&h<vh*.8){bd=d;best=c}
    if(W.__SX30_CREW)return;
