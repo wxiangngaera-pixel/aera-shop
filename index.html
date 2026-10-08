@@ -3117,14 +3117,24 @@ function howTick(vh){if(!HOW)return;var mid=vh*.62,cur=-1;HOW.st.forEach(functio
  HOW.lab.textContent=cur<0?'How it works':(cur===HOW.st.length-1?'Ready to Eat!':'Step '+(cur+1)+' of '+HOW.st.length)}
 /* scroll : progress bar, hero parallax, steps */
 var bar=document.createElement('div');bar.id='sxBar';document.body.appendChild(bar);
-var tick=false;function frame(){tick=false;var y=window.scrollY||0,vh=window.innerHeight,dh=document.documentElement.scrollHeight-vh;
- bar.style.transform='scaleX('+(dh>0?Math.min(1,y/dh):0)+')';
- var ab=document.getElementById('aeraBar');H.style.setProperty('--sxTop',(ab?ab.offsetHeight:66)+'px');
- var hero=document.getElementById('top');if(hero){var hh=hero.offsetHeight||vh,p=Math.max(0,Math.min(1,y/hh));
-  var col=hero.querySelector('.sx-hero');if(col&&p>0.001){col.style.transform='translate3d(0,'+(-p*70)+'px,0)';col.style.opacity=String(1-p*.85)}else if(col){col.style.transform='';col.style.opacity=''}
-  var pic=document.getElementById('heroPic');if(pic&&pic.classList.contains('sx-on')&&!pic.__sxt){pic.__sxt=1;setTimeout(function(){pic.style.transition='none';pic.__sxp=1},1300)}
-  if(pic&&pic.__sxp)pic.style.transform=p>0.001?'translate3d(0,'+(p*90)+'px,0) scale('+(1+p*.08)+')':''}
- howTick(vh);if(PH&&hero)PH.hp.style.setProperty('--sxT',Math.max(0,Math.min(1,y/(hero.offsetHeight||vh))).toFixed(3));if(NAV){NAV.classList.toggle('sx-navs',y>30);if(y>400)navDeep=true;else if(y<8&&navDeep){navDeep=false;navReplay()}}}
+/* every scroll frame only writes : sizes are measured at most once a second, and nothing is rewritten unless it changed */
+var tick=false,FG={t:0};
+function frame(){tick=false;var y=window.scrollY||0,vh=window.innerHeight,now=performance.now();
+ if(now-FG.t>1000){FG.t=now;FG.dh=document.documentElement.scrollHeight-vh;var ab=document.getElementById('aeraBar'),tp=(ab?ab.offsetHeight:66)+'px';if(FG.tp!==tp){FG.tp=tp;H.style.setProperty('--sxTop',tp)}
+  FG.hero=document.getElementById('top');FG.hh=FG.hero?FG.hero.offsetHeight:vh;FG.col=FG.hero&&FG.hero.querySelector('.sx-hero');FG.pic=document.getElementById('heroPic');
+  FG.how=(HOW&&HOW.s.offsetParent)?HOW.st.map(function(x){var t=0,el=x;while(el){t+=el.offsetTop;el=el.offsetParent}return t}):null}
+ var dh=FG.dh,hero=FG.hero,hh=FG.hh||vh;
+ bar.style.transform='scaleX('+(dh>0?Math.min(1,y/dh):0).toFixed(4)+')';
+ if(hero){var p=Math.max(0,Math.min(1,y/hh)),col=FG.col,pic=FG.pic;
+  if(col){if(p>0.001&&p<1){col.style.transform='translate3d(0,'+(-p*70).toFixed(1)+'px,0)';col.style.opacity=(1-p*.85).toFixed(3);col.__z=0}else if(p<=0.001&&!col.__z){col.__z=1;col.style.transform='';col.style.opacity=''}}
+  if(pic&&pic.classList.contains('sx-on')&&!pic.__sxt){pic.__sxt=1;setTimeout(function(){pic.style.transition='none';pic.__sxp=1},1300)}
+  if(pic&&pic.__sxp&&p<1)pic.style.transform=p>0.001?'translate3d(0,'+(p*90).toFixed(1)+'px,0) scale('+(1+p*.08).toFixed(4)+')':''}
+ if(HOW&&FG.how){var mid=vh*.62,cur=-1;FG.how.forEach(function(t,i){if(t-y<mid)cur=i});
+  if(HOW.__cur!==cur){HOW.__cur=cur;HOW.st.forEach(function(x,i){x.classList.toggle('sx-done',i<=cur);x.classList.toggle('sx-act',i===cur)});
+   HOW.dots.forEach(function(d,i){d.classList.toggle('on',i<=cur);d.classList.toggle('cur',i===cur)});
+   HOW.lab.textContent=cur<0?'How it works':(cur===HOW.st.length-1?'Ready to Eat!':'Step '+(cur+1)+' of '+HOW.st.length)}}
+ if(PH&&hero){var sT=Math.max(0,Math.min(1,y/hh)).toFixed(2);if(PH.__sT!==sT){PH.__sT=sT;PH.hp.style.setProperty('--sxT',sT)}}
+ if(NAV){var ns=y>30;if(NAV.__ns!==ns){NAV.__ns=ns;NAV.classList.toggle('sx-navs',ns)}if(y>400)navDeep=true;else if(y<8&&navDeep){navDeep=false;navReplay()}}}
 function onScroll(){if(!tick){tick=true;requestAnimationFrame(frame)}}
 window.addEventListener('scroll',onScroll,{passive:true});window.addEventListener('resize',onScroll);
 /* content that arrives later ( meals, bundles, banners ) is picked up too */
