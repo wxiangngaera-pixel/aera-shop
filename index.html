@@ -2961,7 +2961,6 @@ html.sx .sx-h{opacity:0;transform:translate3d(0,.75em,0) skewY(2.5deg);filter:bl
 html.sx .sx-h.sx-on{opacity:1;transform:none;filter:none}
 html.sx #top .sx-hero{will-change:transform,opacity}
 html.sx #heroPic{will-change:transform}
-html.sx #heroPic .phonewrap{animation:sxFloat 6s ease-in-out infinite}
 @keyframes sxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 #sxBar{position:fixed;left:0;top:0;height:4px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,#FDB913,#FFD666);z-index:2147483000;pointer-events:none;box-shadow:0 0 12px rgba(253,185,19,.6)}
 html.sx .step.sx-step{transition:transform .6s cubic-bezier(.16,.84,.24,1),box-shadow .6s,background-color .6s,opacity .6s;opacity:.45}
@@ -2975,6 +2974,52 @@ html.sx .step.sx-step.sx-done .n{background:#16479E!important;color:#FDB913!impo
 #sxHow b{color:#FDB913;min-width:74px}
 #sxBadge{position:fixed;right:12px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:2147483001;background:#0B0B0B;color:#fff;border-radius:999px;padding:8px 12px;font:700 12px/1 Montserrat,system-ui,sans-serif;box-shadow:0 8px 20px rgba(0,0,0,.3);display:flex;gap:8px;align-items:center}
 #sxBadge a{color:#FDB913;text-decoration:none;font-weight:800}
+html.sx #heroPic{perspective:1100px}
+html.sx #heroPic .phonewrap{position:relative;perspective:900px}
+html.sx #heroPic .phonewrap:not(.sx-pin){opacity:0}
+html.sx #heroPic .phonewrap.sx-pin{animation:sxPhoneIn 1.5s cubic-bezier(.16,.84,.24,1) .25s backwards,sxSway 8s ease-in-out 1.75s infinite}
+@keyframes sxPhoneIn{0%{opacity:0;transform:translate3d(0,120px,-220px) rotateY(-38deg) rotateX(18deg) rotateZ(-6deg) scale(.72)}55%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes sxSway{0%,100%{transform:none}25%{transform:translate3d(0,-10px,0) rotateY(-9deg) rotateX(3deg) rotateZ(-1deg)}50%{transform:translate3d(0,-16px,0) rotateX(-2deg)}75%{transform:translate3d(0,-8px,0) rotateY(9deg) rotateX(3deg) rotateZ(1deg)}}
+html.sx #heroPic .phonewrap::before{content:"";position:absolute;left:50%;top:50%;width:min(380px,86vw);height:112%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(253,185,19,.6),rgba(22,71,158,.38) 58%,transparent 78%);filter:blur(26px);z-index:-1;pointer-events:none;animation:sxHalo 4.5s ease-in-out infinite}
+@keyframes sxHalo{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(.88)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
+html.sx #vFrame{transform:rotateX(calc(var(--sxT,0)*14deg - var(--sxMy,0)*8deg)) rotateY(calc(var(--sxMx,0)*12deg - var(--sxT,0)*10deg)) scale(calc(1 - var(--sxT,0)*.06));transition:transform .25s ease-out;animation:sxGlow 3.2s ease-in-out infinite}
+@keyframes sxGlow{0%,100%{box-shadow:0 30px 60px rgba(0,0,0,.5),0 0 0 0 rgba(253,185,19,0),0 0 0 0 rgba(253,185,19,0)}50%{box-shadow:0 30px 60px rgba(0,0,0,.5),0 0 0 3px rgba(253,185,19,.9),0 0 46px 8px rgba(253,185,19,.45)}}
+html.sx #vFrame::after{content:"";position:absolute;top:-10%;bottom:-10%;left:0;width:55%;z-index:4;pointer-events:none;background:linear-gradient(105deg,transparent,rgba(255,255,255,.26) 50%,transparent);transform:translateX(-140%) skewX(-12deg);animation:sxGlare 5.5s ease-in-out 2s infinite}
+@keyframes sxGlare{0%,58%{transform:translateX(-140%) skewX(-12deg)}84%,100%{transform:translateX(260%) skewX(-12deg)}}
+html.sx .phonewrap.sx-pin #vSound,html.sx .phonewrap.sx-pin #vDots,html.sx .phonewrap.sx-pin .vnav{animation:sxChip .6s cubic-bezier(.34,1.56,.64,1) 1.45s backwards}
+html.sx .phonewrap.sx-pin #vDots{animation-delay:1.6s}
+html.sx .phonewrap.sx-pin #vSwipe{animation:sxChip .6s cubic-bezier(.34,1.56,.64,1) 1.75s backwards,sxNudge 2.6s ease-in-out 2.6s infinite}
+@keyframes sxChip{0%{opacity:0;scale:.3}100%{opacity:1;scale:1}}
+@keyframes sxNudge{0%,55%,100%{translate:0 0}68%{translate:-10px 0}82%{translate:7px 0}}
+html.sx #heroPic.sx-on .tag{animation:sxChip .7s cubic-bezier(.34,1.56,.64,1) 1.3s backwards}
+html.sx #vFrame.sx-vflip .vslide video{animation:sxVid .8s cubic-bezier(.16,.84,.24,1)}
+@keyframes sxVid{0%{scale:1.14;filter:brightness(1.35) saturate(1.35)}100%{scale:1;filter:none}}
+html.sx nav.sx-nav{animation:sxNavIn .9s cubic-bezier(.16,.84,.24,1) backwards;transition:box-shadow .35s}
+@keyframes sxNavIn{from{transform:translateY(-110%);opacity:0}to{transform:none;opacity:1}}
+html.sx nav.sx-nav.sx-navs{box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 10px 28px rgba(11,27,54,.35)}
+html.sx nav.sx-nav>.wrap>a:first-child img{transition:scale .35s cubic-bezier(.16,.84,.24,1)}
+html.sx nav.sx-nav.sx-navs>.wrap>a:first-child img{scale:.9}
+html.sx nav.sx-navin>.wrap>a:first-child img{animation:sxLogo .95s cubic-bezier(.34,1.56,.64,1) .25s backwards}
+@keyframes sxLogo{0%{opacity:0;transform:scale(.4) rotate(-12deg)}70%{opacity:1;transform:scale(1.08) rotate(2deg)}100%{opacity:1;transform:none}}
+html.sx nav.sx-navin .navr>*,html.sx nav.sx-navin>.wrap>ul>li{animation:sxDrop .6s cubic-bezier(.34,1.4,.64,1) backwards;animation-delay:calc(.35s + var(--i,0)*70ms)}
+@keyframes sxDrop{from{opacity:0;transform:translateY(-18px) scale(.85)}to{opacity:1;transform:none}}
+html.sx .ordbtn{position:relative;overflow:hidden;isolation:isolate;animation:sxRing 2.8s ease-out 2s infinite}
+html.sx .ordbtn::after{content:"";position:absolute;top:0;bottom:0;left:0;width:45%;pointer-events:none;background:linear-gradient(100deg,transparent,rgba(255,255,255,.8),transparent);transform:translateX(-160%) skewX(-20deg);animation:sxShine 4.2s ease-in-out 1.6s infinite}
+@keyframes sxShine{0%,62%{transform:translateX(-160%) skewX(-20deg)}82%,100%{transform:translateX(330%) skewX(-20deg)}}
+@keyframes sxRing{0%{box-shadow:0 0 0 0 rgba(253,185,19,.55)}70%,100%{box-shadow:0 0 0 12px rgba(253,185,19,0)}}
+html.sx .aera-getapp svg{animation:sxBob 2.6s ease-in-out 1.2s infinite}
+@keyframes sxBob{0%,60%,100%{translate:0 0}70%{translate:0 3px}80%{translate:0 -2px}}
+html.sx .cartic.sx-bump{animation:sxBump .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes sxBump{0%{scale:1}35%{scale:1.35;rotate:-8deg}65%{scale:.92;rotate:4deg}100%{scale:1;rotate:0deg}}
+html.sx .bnslide{overflow:hidden}
+html.sx .bnslide.sx-cur .bnpic{animation:sxKen 9s ease-out both}
+@keyframes sxKen{from{transform:scale(1.2) translate3d(2%,1.5%,0)}to{transform:scale(1.03) translate3d(-1%,-1%,0)}}
+#sxBanShine{position:absolute;top:0;bottom:0;left:0;width:50%;z-index:2;pointer-events:none;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:translateX(-130%) skewX(-16deg);opacity:0}
+#sxBanShine.go{animation:sxBanSweep 1s cubic-bezier(.4,0,.2,1)}
+@keyframes sxBanSweep{0%{opacity:1;transform:translateX(-130%) skewX(-16deg)}100%{opacity:1;transform:translateX(260%) skewX(-16deg)}}
+html.sx #banDots i{transition:width .45s cubic-bezier(.16,.84,.24,1),background-color .45s}
+html.sx #banDots i.on{animation:sxDotGlow 1.8s ease-in-out infinite}
+@keyframes sxDotGlow{0%,100%{box-shadow:0 0 0 0 rgba(253,185,19,0)}50%{box-shadow:0 0 10px 2px rgba(253,185,19,.85)}}
 @media (prefers-reduced-motion:reduce){html.sx .sx-r,html.sx .sx-h{transition:none!important;clip-path:none!important;opacity:1!important;transform:none!important;filter:none!important}}
 </style>
 <script id="aera-scrolly">/* AERA homepage scrolly-telling : headings rise word by word, cards cascade in as you scroll, the hero drifts away
@@ -3007,6 +3052,32 @@ function counter(el){if(!el||el.__sxc)return;var m=/(\d[\d,]*)/.exec(el.textCont
  var pre=tn.textContent.split(m[1])[0],post=tn.textContent.slice(pre.length+m[1].length);
  var armed=true,run=false;var ob=new IntersectionObserver(function(es){var e=es[0];if(e.intersectionRatio===0){armed=true;return}if(!armed||run||e.intersectionRatio<.6)return;armed=false;run=true;var t0=performance.now(),dur=1400;
   (function step(t){var p=Math.min(1,(t-t0)/dur),k=1-Math.pow(1-p,3);tn.textContent=p<1?pre+Math.round(end*k)+post:pre+m[1]+post;if(p<1)requestAnimationFrame(step);else run=false})(t0)},{threshold:[0,.6]});ob.observe(el)}
+/* title bar : drops in, the logo pops, the buttons follow one by one ; it tightens with a shadow on scroll ; Order Now shines ; the cart bounces when it changes */
+var NAV=null,navDeep=false;
+function navSetup(){if(NAV)return;var n=document.querySelector('nav[data-section="nav"]')||document.querySelector('body > nav');if(!n)return;NAV=n;
+ [].slice.call(n.querySelectorAll('.wrap > ul > li, .navr > *')).forEach(function(k,i){k.style.setProperty('--i',i)});n.classList.add('sx-nav','sx-navin');
+ var c=n.querySelector('.cartic');if(c){var last=c.textContent;new MutationObserver(function(){if(c.textContent===last)return;last=c.textContent;c.classList.remove('sx-bump');void c.offsetWidth;c.classList.add('sx-bump')}).observe(c,{childList:true,subtree:true,characterData:true})}}
+function navReplay(){if(!NAV)return;NAV.classList.remove('sx-navin');void NAV.offsetWidth;NAV.classList.add('sx-navin')}
+/* banner : drops in, the picture slowly zooms ( Ken Burns ), a light sweeps across on every slide change */
+var BAN=null;
+function banCur(){if(!BAN)return;var idx=-1;[].slice.call(BAN.d.children).forEach(function(x,k){if(x.classList.contains('on'))idx=k});
+ var sl=[].slice.call(BAN.w.querySelectorAll('.bnslide'));if(idx<0||!sl[idx]||BAN.i===idx)return;var prev=BAN.i;BAN.i=idx;var cur=sl[idx];
+ cur.classList.remove('sx-cur');void cur.offsetWidth;cur.classList.add('sx-cur');setTimeout(function(){sl.forEach(function(s){if(s!==cur)s.classList.remove('sx-cur')})},650);
+ if(prev!=null){BAN.sh.classList.remove('go');void BAN.sh.offsetWidth;BAN.sh.classList.add('go')}}
+function banSetup(){if(BAN)return;var w=document.querySelector('#banBand .bnwrap'),d=document.getElementById('banDots');if(!w||!d||!w.querySelector('.bnslide'))return;
+ var sh=document.createElement('span');sh.id='sxBanShine';w.appendChild(sh);BAN={w:w,d:d,sh:sh};watch(w,'sx-z',0);
+ new MutationObserver(banCur).observe(d,{attributes:true,subtree:true,childList:true});banCur();
+ new IntersectionObserver(function(es){if(!es[0].isIntersecting)return;if(BAN.seen){BAN.i=-2;banCur()}BAN.seen=1},{threshold:.3}).observe(w)}
+/* phone : flies in in 3D, sways and floats, glows, a light glints across the screen, tilts as you scroll ( and follows the mouse ) */
+var PH=null;
+function phoneSetup(){if(PH)return;var hp=document.getElementById('heroPic'),pw=hp&&hp.querySelector('.phonewrap'),vf=document.getElementById('vFrame');if(!pw||!vf)return;PH={hp:hp,pw:pw,vf:vf};
+ new IntersectionObserver(function(es){es.forEach(function(e){pw.classList.toggle('sx-pin',e.isIntersecting)})},{threshold:0}).observe(pw);
+ setTimeout(function(){var r=pw.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)pw.classList.add('sx-pin')},3500);
+ hp.addEventListener('mousemove',function(ev){var r=vf.getBoundingClientRect();var x=(ev.clientX-(r.left+r.width/2))/(r.width*1.5),y=(ev.clientY-(r.top+r.height/2))/(r.height*1.2);
+  vf.style.setProperty('--sxMx',Math.max(-1,Math.min(1,x)).toFixed(3));vf.style.setProperty('--sxMy',Math.max(-1,Math.min(1,y)).toFixed(3))});
+ hp.addEventListener('mouseleave',function(){vf.style.setProperty('--sxMx','0');vf.style.setProperty('--sxMy','0')});
+ var vd=document.getElementById('vDots');if(vd){var on=function(){var k=-1;[].slice.call(vd.children).forEach(function(x,j){if(x.classList.contains('on'))k=j});return k},vi=on();
+  new MutationObserver(function(){var k=on();if(k<0||k===vi)return;vi=k;vf.classList.remove('sx-vflip');void vf.offsetWidth;vf.classList.add('sx-vflip')}).observe(vd,{attributes:true,subtree:true,childList:true})}}
 function tag(){
  /* hero : the copy arrives line by line, the picture zooms in */
  var hero=document.getElementById('top');if(hero){var col=hero.querySelector('.wrap > div:not(.pic)');
@@ -3020,7 +3091,7 @@ function tag(){
   if(s.id==='gyms'){[].slice.call(s.querySelectorAll('img')).forEach(function(im,i){if(im.offsetWidth>80)watch(im,'sx-z',i*120)})}
   cardsIn(s);
   [].slice.call(s.querySelectorAll('h2,h3,.count,.num,b,strong')).forEach(function(el){if(/^\D{0,12}\d{2,5}\D{0,14}$/.test((el.textContent||'').trim())&&el.children.length<2)counter(el)})});
- howSetup()}
+ howSetup();navSetup();banSetup();phoneSetup()}
 /* "From Order to Microwave" : the steps light up in order as you scroll, with a pill that follows you */
 var HOW=null;
 function howSetup(){var s=document.getElementById('how');if(!s||HOW)return;var st=[].slice.call(s.querySelectorAll('.step'));if(st.length<2)return;
@@ -3039,7 +3110,7 @@ var tick=false;function frame(){tick=false;var y=window.scrollY||0,vh=window.inn
   var col=hero.querySelector('.sx-hero');if(col&&p>0.001){col.style.transform='translate3d(0,'+(-p*70)+'px,0)';col.style.opacity=String(1-p*.85)}else if(col){col.style.transform='';col.style.opacity=''}
   var pic=document.getElementById('heroPic');if(pic&&pic.classList.contains('sx-on')&&!pic.__sxt){pic.__sxt=1;setTimeout(function(){pic.style.transition='none';pic.__sxp=1},1300)}
   if(pic&&pic.__sxp)pic.style.transform=p>0.001?'translate3d(0,'+(p*90)+'px,0) scale('+(1+p*.08)+')':''}
- howTick(vh)}
+ howTick(vh);if(PH&&hero)PH.hp.style.setProperty('--sxT',Math.max(0,Math.min(1,y/(hero.offsetHeight||vh))).toFixed(3));if(NAV){NAV.classList.toggle('sx-navs',y>30);if(y>400)navDeep=true;else if(y<8&&navDeep){navDeep=false;navReplay()}}}
 function onScroll(){if(!tick){tick=true;requestAnimationFrame(frame)}}
 window.addEventListener('scroll',onScroll,{passive:true});window.addEventListener('resize',onScroll);
 /* content that arrives later ( meals, bundles, banners ) is picked up too */
