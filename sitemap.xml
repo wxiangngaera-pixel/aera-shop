@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://aeramealprep.net/motion/crew/</loc>
-    <lastmod>2026-10-08T10:36:28.701Z</lastmod>
+    <loc>https://aeramealprep.net/motion/</loc>
+    <lastmod>2026-10-08T10:42:50.415Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/motion/</loc>
-    <lastmod>2026-10-08T10:34:48.259Z</lastmod>
+    <loc>https://aeramealprep.net/motion/crew/</loc>
+    <lastmod>2026-10-08T10:42:40.107Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
+    <lastmod>2026-10-08T10:42:22.181Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -103,11 +108,6 @@
   <url>
     <loc>https://aeramealprep.net/</loc>
     <lastmod>2026-10-08T10:02:03.970Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
-    <lastmod>2026-10-08T09:51:54.180Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
