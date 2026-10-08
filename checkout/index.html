@@ -1094,7 +1094,7 @@ var BUNDLE_MEALS={
    reshuffled in the Console shows up here without the page being rebuilt. */
 var BUNDLES_URL='/api/public/landing-pages/7004/sheet-data';
 function bundleFeed(after){
- fetch(BUNDLES_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
+ fetch(BUNDLES_URL||'/api/public/landing-pages/7004/sheet-data',{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
   var got=0;(j&&j.data||[]).forEach(function(r){
    var sku=String(r.Sku==null?'':r.Sku).trim();
    var meals=String(r.Meals==null?'':r.Meals).split('|').map(function(x){return x.trim().toUpperCase()}).filter(Boolean);
