@@ -2974,15 +2974,14 @@ html.sx .step.sx-step.sx-done .n{background:#16479E!important;color:#FDB913!impo
 #sxHow b{color:#FDB913;min-width:74px}
 #sxBadge{position:fixed;right:12px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:2147483001;background:#0B0B0B;color:#fff;border-radius:999px;padding:8px 12px;font:700 12px/1 Montserrat,system-ui,sans-serif;box-shadow:0 8px 20px rgba(0,0,0,.3);display:flex;gap:8px;align-items:center}
 #sxBadge a{color:#FDB913;text-decoration:none;font-weight:800}
-html.sx #heroPic{perspective:1100px}
-html.sx #heroPic .phonewrap{position:relative;perspective:900px}
+html.sx #heroPic .phonewrap{position:relative}
 html.sx #heroPic .phonewrap:not(.sx-pin){opacity:0}
 html.sx #heroPic .phonewrap.sx-pin{animation:sxPhoneIn 1.5s cubic-bezier(.16,.84,.24,1) .25s backwards,sxSway 8s ease-in-out 1.75s infinite}
-@keyframes sxPhoneIn{0%{opacity:0;transform:translate3d(0,120px,-220px) rotateY(-38deg) rotateX(18deg) rotateZ(-6deg) scale(.72)}55%{opacity:1}100%{opacity:1;transform:none}}
-@keyframes sxSway{0%,100%{transform:none}25%{transform:translate3d(0,-10px,0) rotateY(-9deg) rotateX(3deg) rotateZ(-1deg)}50%{transform:translate3d(0,-16px,0) rotateX(-2deg)}75%{transform:translate3d(0,-8px,0) rotateY(9deg) rotateX(3deg) rotateZ(1deg)}}
+@keyframes sxPhoneIn{0%{opacity:0;transform:translate3d(0,110px,0) rotate(-9deg) scale(.7)}55%{opacity:1}75%{transform:translate3d(0,-8px,0) rotate(1.5deg) scale(1.03)}100%{opacity:1;transform:none}}
+@keyframes sxSway{0%,100%{transform:none}25%{transform:translate3d(0,-9px,0) rotate(-2deg)}50%{transform:translate3d(0,-16px,0) rotate(0deg)}75%{transform:translate3d(0,-8px,0) rotate(2deg)}}
 html.sx #heroPic .phonewrap::before{content:"";position:absolute;left:50%;top:50%;width:min(380px,86vw);height:112%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(253,185,19,.6),rgba(22,71,158,.38) 58%,transparent 78%);filter:blur(26px);z-index:-1;pointer-events:none;animation:sxHalo 4.5s ease-in-out infinite}
 @keyframes sxHalo{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(.88)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
-html.sx #vFrame{transform:rotateX(calc(var(--sxT,0)*14deg - var(--sxMy,0)*8deg)) rotateY(calc(var(--sxMx,0)*12deg - var(--sxT,0)*10deg)) scale(calc(1 - var(--sxT,0)*.06));transition:transform .25s ease-out;animation:sxGlow 3.2s ease-in-out infinite}
+html.sx #vFrame{isolation:isolate;transform:rotate(calc(var(--sxMx,0)*3deg - var(--sxT,0)*4deg)) scale(calc(1 - var(--sxT,0)*.06));transition:transform .25s ease-out;animation:sxGlow 3.2s ease-in-out infinite}
 @keyframes sxGlow{0%,100%{box-shadow:0 30px 60px rgba(0,0,0,.5),0 0 0 0 rgba(253,185,19,0),0 0 0 0 rgba(253,185,19,0)}50%{box-shadow:0 30px 60px rgba(0,0,0,.5),0 0 0 3px rgba(253,185,19,.9),0 0 46px 8px rgba(253,185,19,.45)}}
 html.sx #vFrame::after{content:"";position:absolute;top:-10%;bottom:-10%;left:0;width:55%;z-index:4;pointer-events:none;background:linear-gradient(105deg,transparent,rgba(255,255,255,.26) 50%,transparent);transform:translateX(-140%) skewX(-12deg);animation:sxGlare 5.5s ease-in-out 2s infinite}
 @keyframes sxGlare{0%,58%{transform:translateX(-140%) skewX(-12deg)}84%,100%{transform:translateX(260%) skewX(-12deg)}}
@@ -2993,7 +2992,7 @@ html.sx .phonewrap.sx-pin #vSwipe{animation:sxChip .6s cubic-bezier(.34,1.56,.64
 @keyframes sxNudge{0%,55%,100%{translate:0 0}68%{translate:-10px 0}82%{translate:7px 0}}
 html.sx #heroPic.sx-on .tag{animation:sxChip .7s cubic-bezier(.34,1.56,.64,1) 1.3s backwards}
 html.sx #vFrame.sx-vflip .vslide video{animation:sxVid .8s cubic-bezier(.16,.84,.24,1)}
-@keyframes sxVid{0%{scale:1.14;filter:brightness(1.35) saturate(1.35)}100%{scale:1;filter:none}}
+@keyframes sxVid{0%{filter:brightness(1.4) saturate(1.35)}100%{filter:none}}
 html.sx nav.sx-nav{animation:sxNavIn .9s cubic-bezier(.16,.84,.24,1) backwards;transition:box-shadow .35s}
 @keyframes sxNavIn{from{transform:translateY(-110%);opacity:0}to{transform:none;opacity:1}}
 html.sx nav.sx-nav.sx-navs{box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 10px 28px rgba(11,27,54,.35)}
