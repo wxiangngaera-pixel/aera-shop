@@ -3197,8 +3197,7 @@ async function pushOn(){try{if(!('serviceWorker' in navigator)||!('PushManager' 
 async function acts(){var top=document.getElementById('corpTop');if(!top||H.classList.contains('corp-gate'))return;var a=top.querySelector('.cact');if(!a){a=document.createElement('div');a.className='cact';top.appendChild(a)}
  var h='';if(!sa())h+='<button type="button" data-a="app">\ud83d\udcf2 Download The App</button>';
  var on=await pushOn();var can=('Notification' in window)&&('PushManager' in window);
- if(on)h+='<button type="button" class="on" disabled>\ud83d\udd14 Notifications On</button>';
- else if(!(can&&Notification.permission==='denied'))h+='<button type="button" data-a="push">\ud83d\udd14 Turn On Notifications</button>';
+ if(!on&&!(can&&Notification.permission==='denied'))h+='<button type="button" data-a="push">\ud83d\udd14 Turn On Notifications</button>';
  if(a.getAttribute('data-h')!==h){a.innerHTML=h;a.setAttribute('data-h',h)}a.style.display=h?'':'none'}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#corpTop .cact button[data-a]');if(!b)return;var w=b.getAttribute('data-a');
  if(w==='app'){if(BIP){BIP.prompt();BIP.userChoice.finally(function(){BIP=null;acts()});return}
