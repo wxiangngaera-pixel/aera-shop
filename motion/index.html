@@ -365,6 +365,11 @@ css([
 '.sx30-mark span{display:inline-block;font:900 clamp(84px,27vw,380px)/.82 Montserrat,system-ui,sans-serif;letter-spacing:-.045em;background:linear-gradient(180deg,rgba(253,185,19,.95) 0%,rgba(253,185,19,.38) 55%,rgba(253,185,19,0) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;will-change:transform}',
 /* page morphs between AERA pages and when a homepage card opens */
 '::view-transition-group(*){animation-duration:.55s;animation-timing-function:'+EASE+'}',
+'@view-transition{navigation:auto}',
+'::view-transition-old(root){animation:.38s cubic-bezier(.4,0,1,1) both sx30VtOut}',
+'::view-transition-new(root){animation:.62s '+EASE+' both sx30VtIn}',
+'@keyframes sx30VtOut{to{opacity:0;filter:blur(8px);transform:scale(.97)}}',
+'@keyframes sx30VtIn{from{opacity:0;filter:blur(10px);transform:translateY(26px) scale(1.01)}}',
 /* ---- homepage ---- */
 '#sx30Intro{position:fixed;inset:0;z-index:2147483600;display:grid;place-items:center;background:radial-gradient(120% 80% at 50% 38%,#2a63c9 0%,#16479E 38%,#0a2654 100%);clip-path:inset(0 0 0 0);transition:clip-path .9s cubic-bezier(.76,0,.24,1)}',
 '#sx30Intro.go{clip-path:inset(0 0 100% 0)}',
