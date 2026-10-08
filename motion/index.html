@@ -324,6 +324,7 @@ function modeOf(){
  if(/^\/(checkout|account|fridge|referrer-portal|track|coach-plan-builder|points-checkout)$/.test(P))return 'app';
  return 'full'}
 var MODE=modeOf(),HOME=(P==='/'),HOMEPAGE=false;
+if(HOME&&MODE==='full')W.__AERA_BENTO=1; /* the robot crew takes over from the single mascot */
 H.classList.add('sx30','sx30-'+MODE);
 
 /* ---------------- styles ---------------- */
@@ -632,6 +633,10 @@ function hub(){
  if(typeof W.hubTog==='function'&&D.startViewTransition&&!W.hubTog.__sx){var o=W.hubTog;
   W.hubTog=function(){var a=arguments,self=this;try{D.startViewTransition(function(){o.apply(self,a)})}catch(e){o.apply(self,a)}};W.hubTog.__sx=1}}
 
+/* the robot crew ( homepage ) : loaded once the page is up */
+function crew(){try{var v='';try{v=localStorage.getItem('aera.motion.v')||''}catch(e){}
+ fetch('https://aeramealprep.net/motion/crew/'+(v?'?v='+v:''),{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var a=t.indexOf('/*AERA-CREW-START*/'),b=t.indexOf('/*AERA-CREW-END*/');if(a<0||b<a)return;(new Function(t.slice(a,b)))()}).catch(function(){})}catch(e){}}
+
 /* ---------------- one scroll loop for everything that follows the scroll ---------------- */
 var lastY=W.scrollY||0,tick=false,PBAR=null;
 function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y;VEL=VEL*.8+dy*.2;
@@ -642,6 +647,7 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
   var h1=HERO.__h1||(HERO.__h1=$('h1',HERO));if(h1){h1.style.transformOrigin='0 60%';h1.style.scale=p>0.002?String(1+p*.55):'';h1.style.filter=p>0.03?'blur('+(p*12).toFixed(1)+'px)':''}}
  if(BANNER){var br=BANNER.getBoundingClientRect(),bp=br.height>40?clamp(((BAR?BAR.offsetHeight:66)-br.top)/br.height,0,1):0;BANNER.style.scale=bp>0.002?String(1-bp*.08):'';BANNER.style.opacity=bp>0.002?String(1-bp*.75):''}
  if(HUB.length){var best=null,bd=1e9;HUB.forEach(function(c){var r=c.getBoundingClientRect();if(r.bottom<-50||r.top>vh+50){return}
+   if(W.__SX30_CREW){var d0=Math.abs(r.top+r.height/2-vh*.5);if(d0<bd&&r.height<vh*.8){bd=d0;best=c}return}
    if(r.height>vh*.8){c.style.transform='';c.style.opacity='';return}
    var e=clamp((vh-r.top)/(vh*.5),0,1);e=1-Math.pow(1-e,3);var sd=HUB.indexOf(c)%2?1:-1,q=1-e;
    c.style.transform='translate3d('+(sd*q*120).toFixed(1)+'px,'+(q*90).toFixed(1)+'px,0) rotate('+(sd*q*8).toFixed(2)+'deg) scale('+(.76+.24*e).toFixed(4)+') skewY(var(--sxV,0deg))';c.style.opacity=e<.999?(.05+.95*e).toFixed(3):'';
@@ -687,7 +693,7 @@ function start(){if(started)return;started=true;T0=Date.now();
  if(HOMEPAGE){
   var top=$('#top');HERO=top;BANNER=$('#banBand');
   [function(){sky(top)},phone,marquee,hub].forEach(function(f){safe(f)()});
-  intro(function(shown){if(shown)replayHero();go()})}
+  intro(function(shown){if(shown)replayHero();go();setTimeout(crew,shown?300:600)})}
  else go();
  W.addEventListener('scroll',onScroll,{passive:true});W.addEventListener('resize',onScroll)}
 ready(function(){setTimeout(start,0)});
