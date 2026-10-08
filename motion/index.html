@@ -426,7 +426,7 @@ css([
 '@keyframes sx30PhoneIn{0%{opacity:0;transform:translate3d(0,70vh,0) rotate(-24deg) scale(.45)}55%{opacity:1;transform:translate3d(0,-26px,0) rotate(5deg) scale(1.07)}78%{transform:translate3d(0,6px,0) rotate(-1.5deg) scale(.99)}100%{opacity:1;transform:none}}',
 '.sx30-pt{position:fixed;left:0;top:0;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;pointer-events:none;z-index:2147483646;background:#FDB913;box-shadow:0 0 10px rgba(253,185,19,.9)}',
 '.sx30-big{position:relative;overflow:hidden;padding:clamp(30px,7vw,80px) 0;background:linear-gradient(180deg,#0e3576,#092851);user-select:none;-webkit-user-select:none}',
-'.sx30-big .r{white-space:nowrap;transform:skewX(calc(var(--sxV,0deg) * -1.6));transition:transform .2s}',
+'.sx30-big .r{white-space:nowrap;will-change:transform}',
 '.sx30-big .t{display:inline-flex;align-items:center;will-change:transform}',
 '.sx30-big span{display:inline-block;font:900 clamp(58px,15vw,200px)/1.02 Montserrat,system-ui,sans-serif;letter-spacing:-.035em;text-transform:uppercase;padding:0 .16em}',
 '.sx30-big .f{color:#FDB913}.sx30-big .o{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.9)}',
@@ -663,11 +663,12 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
    if(W.__SX30_CREW)return;
    if(h>vh*.8){c.style.transform='';c.style.opacity='';return}
    var e=clamp((vh-top)/(vh*.5),0,1);e=1-Math.pow(1-e,3);var sd=i%2?1:-1,q=1-e;
-   c.style.transform='translate3d('+(sd*q*120).toFixed(1)+'px,'+(q*90).toFixed(1)+'px,0) rotate('+(sd*q*8).toFixed(2)+'deg) scale('+(.76+.24*e).toFixed(4)+') skewY(var(--sxV,0deg))';c.style.opacity=e<.999?(.05+.95*e).toFixed(3):''});
+   c.style.transform='translate3d('+(sd*q*120).toFixed(1)+'px,'+(q*90).toFixed(1)+'px,0) rotate('+(sd*q*8).toFixed(2)+'deg) scale('+(.76+.24*e).toFixed(4)+') skewY('+SKV+'deg)';c.style.opacity=e<.999?(.05+.95*e).toFixed(3):''});
   if(!FINE&&HUB.__best!==best){if(HUB.__best)HUB.__best.classList.remove('sx30-focus');if(best)best.classList.add('sx30-focus');HUB.__best=best}}
  if(MARK&&GEO.mTop!=null){var mt=GEO.mTop-y,mp=clamp((vh-mt)/(GEO.mH+vh*.35),0,1);MARK.style.transform='translate3d(0,'+((1-mp)*55).toFixed(1)+'%,0) scale('+(.82+.18*mp).toFixed(3)+')';MARK.style.opacity=(.15+.85*mp).toFixed(3)}}
 /* the scroll speed lean only touches the cards and the giant type, never the whole page */
-var vRun=false,SK=null,lastSk=null;function skSet(v){var s=v.toFixed(2);if(s===lastSk)return;lastSk=s;if(!SK||SK.length<2)SK=[$('#hub'),$('.sx30-big')].filter(Boolean);SK.forEach(function(el){el.style.setProperty('--sxV',s+'deg')})}
+/* a custom property on a big block makes the browser restyle everything inside it, so the lean is written straight onto the two type rows */
+var vRun=false,SK=null,lastSk=null,SKV=0;function skSet(v){var s=v.toFixed(1);if(s===lastSk)return;lastSk=s;SKV=+s;if(!SK||!SK.length)SK=$$('.sx30-big .r');var k=(-1.6*SKV).toFixed(1);SK.forEach(function(el){el.style.transform='skewX('+k+'deg)'})}
 function vel(){skSet(clamp(VEL*.12,-7,7));
  if(!vRun&&Math.abs(VEL)>.05){vRun=true;requestAnimationFrame(function st(){VEL*=.88;skSet(clamp(VEL*.12,-7,7));if(Math.abs(VEL)>.05)requestAnimationFrame(st);else{VEL=0;skSet(0);vRun=false}})}}
 function onScroll(){if(!tick){tick=true;requestAnimationFrame(function(){frame();vel()})}}
