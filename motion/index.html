@@ -354,6 +354,8 @@ css([
 'html.sx30 .sx30-glass::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-color:var(--sxBg);background-image:var(--sxImg);border-radius:0;transition:inset .55s var(--sxE),border-radius .55s var(--sxE),background-color .5s,box-shadow .5s}',
 '@media (hover:none){html.sx30 .sx30-glass.sx30-sc::before{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background-color:color-mix(in srgb,var(--sxBg) 95%,transparent)!important}}',
 '.sx30-sky i{animation:none!important}',
+'html.sx30 .ordbtn{animation:none!important}',
+'html.sx30 #banDots i.on{animation:none!important}',
 'html.sx30.sx #heroPic .phonewrap::before{filter:none!important;background:radial-gradient(closest-side,rgba(253,185,19,.4),rgba(22,71,158,.22) 60%,rgba(22,71,158,0) 100%)!important;animation:sx30Halo 4.5s ease-in-out infinite!important;transform:translate(-50%,-50%)!important}',
 '@keyframes sx30Halo{0%,100%{opacity:.55}50%{opacity:1}}',
 'html.sx30 .sx30-glass.sx30-sc::before{inset:6px 8px;border-radius:22px;background-color:color-mix(in srgb,var(--sxBg) 66%,transparent);background-image:none;-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),inset 0 1px 0 rgba(255,255,255,.38),0 14px 34px rgba(11,28,54,.32)}',
@@ -409,7 +411,7 @@ css([
 '@keyframes sx30B1{to{transform:translate3d(20vmax,14vmax,0) scale(1.18)}}',
 '@keyframes sx30B2{to{transform:translate3d(-16vmax,18vmax,0) scale(1.25)}}',
 '@keyframes sx30B3{to{transform:translate3d(-14vmax,-16vmax,0) scale(.9)}}',
-'html.sx30 #top h1.sx30-done span{background:linear-gradient(100deg,#FDB913 30%,#FFF6D2 46%,#FDB913 62%) 0 0/300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:sx30Txt 5.5s linear infinite}',
+'html.sx30 #top h1.sx30-done span{background:linear-gradient(100deg,#FDB913 30%,#FFF6D2 46%,#FDB913 62%) 0 0/300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:sx30Txt 2.4s linear 2}',
 '@keyframes sx30Txt{from{background-position:100% 0}to{background-position:-200% 0}}',
 'html.sx30 #heroPic .phonewrap::after{content:"";position:absolute;left:50%;top:50%;width:calc(var(--fw,252px) + 14px);height:calc(var(--fh,448px) + 14px);transform:translate(-50%,-50%);border-radius:39px;padding:2.5px;box-sizing:border-box;background:conic-gradient(from 200deg,rgba(253,185,19,0) 0deg,rgba(253,185,19,0) 210deg,rgba(253,185,19,.9) 290deg,#fff 322deg,rgba(253,185,19,0) 360deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);pointer-events:none;z-index:2;animation:sx30RingP 2.8s ease-in-out infinite}',
 '@keyframes sx30RingP{0%,100%{opacity:.45}50%{opacity:1}}',
@@ -502,7 +504,7 @@ function glass(){if(MODE==='kitchen')return;
 
 /* ---------------- shine on the main buttons ---------------- */
 function shine(){if(MODE==='kitchen')return;
- $$('.btn-y,.aera-yb,#top .ctas .btn,.ordbtn').forEach(function(b,i){if(b.__sh||!vis(b))return;b.__sh=1;
+ var L_=$$(HOMEPAGE?'.ordbtn,#top .ctas .btn':'.ordbtn,.btn-y,.aera-yb').filter(vis).slice(0,3);L_.forEach(function(b,i){if(b.__sh)return;b.__sh=1;
   var cs=getComputedStyle(b);if(!/static|relative/.test(cs.position)||getComputedStyle(b,'::after').content!=='none')return;
   b.classList.add('sx30-shine');b.style.setProperty('--shd',(1.2+(i%4)*.7)+'s')})}
 
