@@ -2989,7 +2989,7 @@ if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)ret
 var H=document.documentElement;H.classList.add('sx');
 /* every time : in as it comes into view, quietly reset once it is fully off screen, so it animates again on the way back ( from above when scrolling up ) */
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('sx-on')})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
-var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting){var t=e.target;t.classList.toggle('sx-up',e.boundingClientRect.top<0);t.classList.remove('sx-on')}})},{threshold:0});
+var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting&&e.target.id!=='heroPic'){var t=e.target;t.classList.toggle('sx-up',e.boundingClientRect.top<0);t.classList.remove('sx-on')}})},{threshold:0});
 function watch(el,cls,d){if(!el||el.__sx)return;el.__sx=1;el.classList.add('sx-r');if(cls)el.classList.add(cls);if(d)el.style.setProperty('--d',d+'ms');io.observe(el);io2.observe(el)}
 /* headings : each one rises out of an invisible window ( the text itself is never touched, so EN / 中文 keeps working ) */
 function words(h,d){if(!h||h.__sx)return;h.__sx=1;h.classList.add('sx-h');if(d)h.style.setProperty('--d',d+'ms');io.observe(h);io2.observe(h)}
