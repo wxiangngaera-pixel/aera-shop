@@ -792,9 +792,9 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
    c.style.transform='translate3d('+(sd*q*120).toFixed(1)+'px,'+(q*90).toFixed(1)+'px,0) rotate('+(sd*q*8).toFixed(2)+'deg) scale('+(.76+.24*e).toFixed(4)+') skewY('+SKV+'deg)';c.style.opacity=e<.999?(.05+.95*e).toFixed(3):''});
   if(!FINE&&HUB.__best!==best){if(HUB.__best)HUB.__best.classList.remove('sx30-focus');if(best)best.classList.add('sx30-focus');HUB.__best=best}}
  if(MPOP&&MPOP.el&&GEO.mp){var open=!!(MPOP.card&&MPOP.card.classList.contains('open'));if(open!==MPOP.open){MPOP.open=open;MPOP.st='';if(open){MPOP.src='0';MPOP.im.src=MPOP.src0;MPOP.shown=false;MPOP.el.style.display='none'}}
-  if(!open){var mp=clamp((vh*.48-(GEO.mp.ht-y))/(vh*.36),0,1),ms=mp.toFixed(3);if(ms!==MPOP.st){MPOP.st=ms;mpSet(mp)}}}
+  if(!open){var mp=clamp((vh*.5-(GEO.mp.ht-y))/(vh*.22),0,1) /* finishes before the next card starts packing */,ms=mp.toFixed(3);if(ms!==MPOP.st){MPOP.st=ms;mpSet(mp)}}}
  if(VPOP&&VPOP.el&&GEO.vp){var vo=!!(VPOP.card&&VPOP.card.classList.contains('open'));if(vo!==VPOP.open){VPOP.open=vo;VPOP.st='';if(vo){VPOP.im.style.visibility='';VPOP.hid=false;VPOP.shown=false;VPOP.el.style.display='none'}}
-  if(!vo){var vq=clamp((vh*.5-(GEO.vp.ht-y))/(vh*.4),0,1),vs=vq.toFixed(3);if(vs!==VPOP.st){VPOP.st=vs;vpSet(vq)}}}
+  if(!vo){var vq=clamp((vh*.5-(GEO.vp.ht-y))/(vh*.26),0,1),vs=vq.toFixed(3);if(vs!==VPOP.st){VPOP.st=vs;vpSet(vq)}}}
  if(MARK&&GEO.mTop!=null){var mt=GEO.mTop-y,mp=clamp((vh-mt)/(GEO.mH+vh*.35),0,1);MARK.style.transform='translate3d(0,'+((1-mp)*55).toFixed(1)+'%,0) scale('+(.82+.18*mp).toFixed(3)+')';MARK.style.opacity=(.15+.85*mp).toFixed(3)}}
 /* the scroll speed lean only touches the cards and the giant type, never the whole page */
 /* a custom property on a big block makes the browser restyle everything inside it, so the lean is written straight onto the two type rows */
