@@ -423,6 +423,14 @@ css([
 '#sx30MenuPop .mp-st{transform-origin:50% 100%;will-change:transform}',
 '#sx30MenuPop .mp-b{transform-origin:88% 0;will-change:transform}',
 '#sx30MenuPop img{position:absolute;left:0;top:0;width:100%;height:100%;max-width:none;display:block}',
+/* the vacuum packs : empty bags open up, the food drops in, the air is pulled out and the bags seal, then they land in the card */
+'#sx30VacPop{position:absolute;left:0;top:0;width:10px;height:10px;z-index:30;pointer-events:none;display:none}',
+'#sx30VacPop .vp-in{position:absolute;inset:0;transform-origin:50% 100%;will-change:transform}',
+'#sx30VacPop .vf,#sx30VacPop svg,#sx30VacPop .vr{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}',
+'#sx30VacPop .vf img,#sx30VacPop .vr{max-width:none;display:block}',
+'#sx30VacPop .vf img{position:absolute;left:0;top:0;width:100%;height:100%}',
+'#sx30VacPop .vf{will-change:transform}',
+'#sx30VacPop svg g{transform-box:fill-box;transform-origin:50% 50%}',
 'html.sx30 #heroPic .phonewrap::after{content:none!important}',
 '#vFrame .vslide,#vFrame .sx30-scan,#vFrame .sx30-dim,#vFrame .sx30-load{clip-path:inset(0 round 27px)}',
 '@keyframes sx30RingP{0%,100%{opacity:.45}50%{opacity:1}}',
@@ -653,7 +661,7 @@ function hub(){
  HUB=$$('#hub .hitem');HUB.forEach(function(c,i){c.classList.remove('sx-r','sx-on','sx-up');c.style.viewTransitionName='sxhub'+i});
  if(typeof W.hubTog==='function'&&D.startViewTransition&&!W.hubTog.__sx){var o=W.hubTog;
   W.hubTog=function(){var a=arguments,self=this;try{D.startViewTransition(function(){o.apply(self,a)})}catch(e){o.apply(self,a)}};W.hubTog.__sx=1}
- safe(menuFold)()}
+ safe(menuFold)();safe(vacPack)()}
 var MPOP=null;
 function docLeft(el){var l=0;while(el){l+=el.offsetLeft;el=el.offsetParent}return l}
 function menuFold(){if(MPOP)return;var hi=$('#hc-menu .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
@@ -716,6 +724,45 @@ function mpSet(p){var g=GEO.mp,el=MPOP.el,show=p>0&&p<1;
  el.style.opacity=ap.toFixed(3);MPOP.inn.style.transform='translate3d('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px,0) scale('+sc.toFixed(4)+')';
  MPOP.stand.style.transform=tilt?'rotateX('+tilt.toFixed(2)+'deg)':'';
  MPOP.leg.style.transform=leg<1||leg>1?'scaleX('+Math.max(.001,leg).toFixed(4)+')':'';MPOP.leg.style.opacity=leg<.02?'0':''}
+var VPOP=null;
+/* the three bags in the picture (picture pixels, 520 x 359) : outline of each bag, back to front */
+var VBAGS=[{n:'rice',o:[[177,3],[343,10],[328,295],[188,279]]},{n:'broc',o:[[332,6],[510,62],[455,343],[278,304]]},{n:'chick',o:[[5,83],[170,19],[271,271],[96,356]]}];
+function vacPack(){if(VPOP)return;var hi=$('#hc-meals .himg'),im=hi&&$('img',hi);if(!hi||!im)return;VPOP={hi:hi,im:im,card:$('#hc-meals'),st:'',open:null,shown:null,hid:null};
+ var tries=0,last='';(function wait(){var s=im.getAttribute('src')||'';if(im.complete&&im.naturalWidth>=400&&s&&s===last){vpBuild(s);return}last=s;if(++tries<40)setTimeout(wait,600)})()}
+function vpBuild(src){var IW=VPOP.im.naturalWidth,IH=VPOP.im.naturalHeight,sx=IW/520,sy=IH/359,o=D.createElement('div'),h='<div class="vp-in">';o.id='sx30VacPop';o.setAttribute('aria-hidden','true');
+ VBAGS.forEach(function(b,i){var pts=b.o.map(function(p){return[p[0]*sx,p[1]*sy]}),cx=0,cy=0;pts.forEach(function(p){cx+=p[0]/4;cy+=p[1]/4});
+  var inner=pts.map(function(p){return[cx+(p[0]-cx)*.84,cy+(p[1]-cy)*.84]});b.c=[cx/IW*100,cy/IH*100];
+  var cp='polygon('+inner.map(function(p){return(p[0]/IW*100).toFixed(2)+'% '+(p[1]/IH*100).toFixed(2)+'%'}).join(',')+')';
+  var poly=pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1)}).join(' '),sh=pts.map(function(p){return(cx+(p[0]-cx)*.9).toFixed(1)+','+(cy+(p[1]-cy)*.9).toFixed(1)}).join(' ');
+  h+='<div class="vf" data-b="'+i+'" style="clip-path:'+cp+';-webkit-clip-path:'+cp+';transform-origin:'+b.c[0].toFixed(1)+'% '+b.c[1].toFixed(1)+'%"><img alt="" src="'+src+'"></div>';
+  h+='<svg viewBox="0 0 '+IW+' '+IH+'" preserveAspectRatio="none" data-b="'+i+'"><g class="vb"><polygon points="'+poly+'" fill="rgba(226,236,248,.30)" stroke="rgba(255,255,255,.95)" stroke-width="'+(4*sx).toFixed(1)+'" stroke-linejoin="round"/>'+
+   '<polyline points="'+sh+'" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="'+(2*sx).toFixed(1)+'" stroke-dasharray="'+(30*sx).toFixed(0)+' '+(18*sx).toFixed(0)+'"/>'+
+   '<line class="vs" x1="'+pts[0][0].toFixed(1)+'" y1="'+pts[0][1].toFixed(1)+'" x2="'+pts[1][0].toFixed(1)+'" y2="'+pts[1][1].toFixed(1)+'" stroke="#FFF3C4" stroke-width="'+(9*sx).toFixed(1)+'" stroke-linecap="round" opacity="0"/></g></svg>'});
+ h+='<img class="vr" alt="" src="'+src+'" style="opacity:0"></div>';o.innerHTML=h;D.body.appendChild(o);
+ VPOP.el=o;VPOP.inn=o.firstChild;VPOP.food=[].slice.call(o.querySelectorAll('.vf'));VPOP.bag=[].slice.call(o.querySelectorAll('svg g.vb'));VPOP.seal=[].slice.call(o.querySelectorAll('.vs'));VPOP.real=o.querySelector('.vr');VPOP.IW=IW;VPOP.IH=IH;
+ GEO.t=0;onScroll()}
+function vpGeo(){var im=VPOP.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){GEO.vp=null;return}
+ var fit=getComputedStyle(im).objectFit,s=fit==='cover'?Math.max(w/VPOP.IW,h/VPOP.IH):Math.min(w/VPOP.IW,h/VPOP.IH),dw=VPOP.IW*s,dh=VPOP.IH*s,t=docTop(im),l=docLeft(im);
+ GEO.vp={ht:docTop(VPOP.hi),l:l+(w-dw)/2,t:t+(h-dh)/2,w:dw,h:dh,cx:VPOP.card?docLeft(VPOP.card)+VPOP.card.offsetWidth/2:l+w/2}}
+function vpSet(p){var g=GEO.vp,el=VPOP.el,show=p>0&&p<1,hid=p<1;
+ /* before : the card waits empty ; after : the untouched original picture */
+ if(hid!==VPOP.hid){VPOP.hid=hid;VPOP.im.style.visibility=hid?'hidden':''}
+ if(show!==VPOP.shown){VPOP.shown=show;el.style.display=show?'block':'none'}if(!show)return;
+ var gk=Math.round(g.l)+','+Math.round(g.t)+','+Math.round(g.w)+','+Math.round(g.h);if(gk!==VPOP.gk){VPOP.gk=gk;el.style.transform='translate3d('+g.l.toFixed(1)+'px,'+g.t.toFixed(1)+'px,0)';el.style.width=g.w.toFixed(1)+'px';el.style.height=g.h.toFixed(1)+'px'}
+ function eo(u){return 1-Math.pow(1-u,3)}function bounce(u){var n=7.5625,d=2.75;if(u<1/d)return n*u*u;if(u<2/d)return n*(u-=1.5/d)*u+.75;if(u<2.5/d)return n*(u-=2.25/d)*u+.9375;return n*(u-=2.625/d)*u+.984375}
+ var ap=clamp(p/.05,0,1),bagIn=eo(clamp((p-.02)/.16,0,1)),vac=clamp((p-.5)/.16,0,1),ve=vac*vac*(3-2*vac);
+ /* 1. the empty bags puff open */
+ var bs=(.8+.32*bagIn)-.12*ve;
+ VPOP.bag.forEach(function(b,i){b.style.transform='scale('+bs.toFixed(4)+')';b.style.opacity=(bagIn*(1-ve*.85)).toFixed(3)});
+ /* 2. the food drops in, one bag after another   3. the air is pulled out : everything tightens */
+ VPOP.food.forEach(function(f,i){var u=clamp((p-(.1+.08*i))/.26,0,1),d=u>=1?1:bounce(u),dy=(1-d)*-135,rot=(1-d)*(i===1?18:-16),fs=1.1-.1*ve;
+  f.style.transform='translate3d(0,'+dy.toFixed(1)+'%,0) rotate('+rot.toFixed(2)+'deg) scale('+fs.toFixed(4)+')';f.style.opacity=u>0?'1':'0'});
+ /* 4. the heat seal flashes along the top of each bag */
+ VPOP.seal.forEach(function(s,i){var u=clamp((p-(.6+.03*i))/.1,0,1);s.setAttribute('opacity',(Math.sin(Math.PI*u)).toFixed(3))});
+ VPOP.real.style.opacity=ve.toFixed(3);
+ /* 5. the whole set rises out of the card while packing, then lands back in its place */
+ var k=Math.sin(Math.PI*clamp((p-.02)/.84,0,1)),dx=k*(g.cx-(g.l+g.w/2))*.45,dyy=-k*Math.min(60,g.h*.45),sc=1+k*.55,land=Math.sin(Math.PI*clamp((p-.84)/.1,0,1));
+ el.style.opacity=ap.toFixed(3);VPOP.inn.style.transform='translate3d('+dx.toFixed(1)+'px,'+(dyy+land*5).toFixed(1)+'px,0) scale('+sc.toFixed(4)+','+(sc*(1-land*.06)).toFixed(4)+')'}
 
 /* the robot crew ( homepage ) : loaded once the page is up */
 function crew(){try{var v='';try{v=localStorage.getItem('aera.motion.v')||''}catch(e){}
@@ -729,7 +776,8 @@ function geoRefresh(){GEO.t=performance.now();GEO.hh=HERO?HERO.offsetHeight:0;GE
  if(BANNER){GEO.bTop=docTop(BANNER);GEO.bH=BANNER.offsetHeight}
  GEO.hub=HUB.map(function(c){return{top:docTop(c),h:c.offsetHeight}});
  if(MARK){GEO.mTop=docTop(MARK.parentNode);GEO.mH=MARK.parentNode.offsetHeight}
- if(MPOP&&MPOP.r)mpGeo()}
+ if(MPOP&&MPOP.r)mpGeo();
+ if(VPOP&&VPOP.el)vpGeo()}
 D.addEventListener('click',function(){GEO.t=0;setTimeout(function(){GEO.t=0;onScroll()},450)},true);W.addEventListener('resize',function(){GEO.t=0});W.addEventListener('load',function(){GEO.t=0});
 /* every scroll frame only writes : all sizes come from GEO, measured at most once a second */
 function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y;VEL=VEL*.8+dy*.2;if(performance.now()-GEO.t>1000)geoRefresh();
@@ -745,6 +793,8 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
   if(!FINE&&HUB.__best!==best){if(HUB.__best)HUB.__best.classList.remove('sx30-focus');if(best)best.classList.add('sx30-focus');HUB.__best=best}}
  if(MPOP&&MPOP.el&&GEO.mp){var open=!!(MPOP.card&&MPOP.card.classList.contains('open'));if(open!==MPOP.open){MPOP.open=open;MPOP.st='';if(open){MPOP.src='0';MPOP.im.src=MPOP.src0;MPOP.shown=false;MPOP.el.style.display='none'}}
   if(!open){var mp=clamp((vh*.48-(GEO.mp.ht-y))/(vh*.36),0,1),ms=mp.toFixed(3);if(ms!==MPOP.st){MPOP.st=ms;mpSet(mp)}}}
+ if(VPOP&&VPOP.el&&GEO.vp){var vo=!!(VPOP.card&&VPOP.card.classList.contains('open'));if(vo!==VPOP.open){VPOP.open=vo;VPOP.st='';if(vo){VPOP.im.style.visibility='';VPOP.hid=false;VPOP.shown=false;VPOP.el.style.display='none'}}
+  if(!vo){var vq=clamp((vh*.5-(GEO.vp.ht-y))/(vh*.4),0,1),vs=vq.toFixed(3);if(vs!==VPOP.st){VPOP.st=vs;vpSet(vq)}}}
  if(MARK&&GEO.mTop!=null){var mt=GEO.mTop-y,mp=clamp((vh-mt)/(GEO.mH+vh*.35),0,1);MARK.style.transform='translate3d(0,'+((1-mp)*55).toFixed(1)+'%,0) scale('+(.82+.18*mp).toFixed(3)+')';MARK.style.opacity=(.15+.85*mp).toFixed(3)}}
 /* the scroll speed lean only touches the cards and the giant type, never the whole page */
 /* a custom property on a big block makes the browser restyle everything inside it, so the lean is written straight onto the two type rows */
