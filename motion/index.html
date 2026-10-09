@@ -686,7 +686,7 @@ function hub(){
  HUB=$$('#hub .hitem');HUB.forEach(function(c,i){c.classList.remove('sx-r','sx-on','sx-up');c.style.viewTransitionName='sxhub'+i});
  if(typeof W.hubTog==='function'&&D.startViewTransition&&!W.hubTog.__sx){var o=W.hubTog;
   W.hubTog=function(){var a=arguments,self=this;try{D.startViewTransition(function(){o.apply(self,a)})}catch(e){o.apply(self,a)}};W.hubTog.__sx=1}
- safe(pins)();safe(menuFold)();safe(scrubs)()}
+ safe(pins)();safe(menuFold)();safe(mealVid)();safe(bentoPlate)();safe(homeSlide)()}
 /* the two picture animations follow the scroll, but never faster than a set pace : a quick flick up or down still plays every step (fold, unseal) */
 var ANIM={m:{q:null,t:0,rate:.8},v:{q:null,t:0,rate:.55},b:{q:null,t:0,rate:.24},run:false,last:0};
 /* forward only : scrolling back up never folds or unseals ; a started animation simply finishes ;
@@ -918,7 +918,7 @@ function seqP(k,y,vh){var i=HSEQ[k];if(!HOLD||!HOLD.X||i==null)return 0;var g=(H
 function holdBelow(y,vh){return !!HOLD&&HOLD.top-y>vh*.95}
 function pinSize(){var vh=innerHeight;PINT=0;PINX=0;for(var k in PINW){var P=PINW[k];P.sp.style.height=(P.open?0:PINX)+'px';P.c.style.top=PINT+'px'}GEO.t=0}
 function pins(){['menu','meals','plan','home'].forEach(function(k){var c=$('#hc-'+k);if(!c||!c.parentNode||(c.parentNode.classList&&c.parentNode.classList.contains('sx30-pw')))return;var w=D.createElement('div');w.className='sx30-pw';c.parentNode.insertBefore(w,c);var pc=D.createElement('div');pc.className='sx30-pc'+(k==='menu'?' sx30-pm':'');w.appendChild(pc);pc.appendChild(c);var ov=D.createElement('div');ov.className='sx30-pov';pc.appendChild(ov);var sp=D.createElement('div');sp.className='sx30-psp';w.appendChild(sp);PINW[k]={w:w,c:pc,card:c,ov:ov,sp:sp,top:0,open:c.classList.contains('open')}});
- var acc=$('#hub .hacc');if(acc&&!HOLD&&acc.parentNode){var hw=D.createElement('div');hw.className='sx30-hh';acc.parentNode.insertBefore(hw,acc);hw.appendChild(acc);var hs=D.createElement('div');hs.className='sx30-hsp';hw.appendChild(hs);HOLD={w:hw,el:acc,sp:hs,top:0,T:null,X:0,H:0}}
+ var acc=$('#hub .hacc');if(false&&acc&&!HOLD&&acc.parentNode){var hw=D.createElement('div');hw.className='sx30-hh';acc.parentNode.insertBefore(hw,acc);hw.appendChild(acc);var hs=D.createElement('div');hs.className='sx30-hsp';hw.appendChild(hs);HOLD={w:hw,el:acc,sp:hs,top:0,T:null,X:0,H:0}}
  pinSize();holdSize();var lw=innerWidth;W.addEventListener('resize',function(){if(innerWidth!==lw){lw=innerWidth;pinSize();holdSize()}})}
 function pinTop(k,y,fb){var P=PINW[k];return (P&&P.top?P.top:fb)-y}
 /* 0 when the card is just coming up from the bottom of the screen, 1 when its pinned stay is over */
@@ -944,6 +944,18 @@ function scrubTick(y,vh){SCR.forEach(function(o){if(o.ht==null)return;var top=o.
  if(o.card&&o.card.classList.contains('open')){o.p=1;scrubShow(o);return}
  if((HOLD?holdBelow(y,vh):top>vh*.95)&&o.p>0)o.p=0;
  var t=HOLD?seqP(o.pk,y,vh):pinP(o.pk,y,vh,o.ht);if(t>o.p)o.p=t;scrubShow(o)})}
+/* endless loop : while a picture card is on screen its clip plays, rests on the finished photo for a moment, then fades back to the start and plays again ; off screen it pauses */
+function loopGo(o,restart){var v=o.v;if(restart){try{v.currentTime=0}catch(e){}}o.st='playing';o.w.style.opacity='1';try{var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}catch(e){}}
+function loopTick(o,g,url,y,vh){if(!o||!o.v||!g)return;var top=g.ht-y,v=o.v,hh=o.hi.offsetHeight||150;
+ if(o.card&&o.card.classList.contains('open')){if(o.lp){o.lp=0;try{v.pause()}catch(e){}}o.w.style.opacity='0';return}
+ if(!o.loaded&&top<vh*2.2){o.loaded=true;v.preload='auto';v.src=url;try{v.load()}catch(e){}
+  v.addEventListener('ended',function(){setTimeout(function(){if(o.lp)loopGo(o,true)},1500)})}
+ var vis=top<vh&&top>-hh;
+ if(vis&&!o.lp){o.lp=1;loopGo(o,v.ended||o.st==='done')}else if(!vis&&o.lp){o.lp=0;try{v.pause()}catch(e){}}}
+/* the menu stand loops the same way : unfolds over 3.4 s, rests 1.6 s, the finished picture fades back to the empty board, again */
+var ML={on:false,t0:0,pe:0,raf:0,held:0};
+function mlStep(now){if(!ML.on||!MPOP||!MPOP.el||!GEO.mp){ML.raf=0;return}ML.raf=requestAnimationFrame(mlStep);var e=(now-ML.t0)/1000,D1=3.4,H1=1.6;
+ if(e<D1){ML.held=0;try{mpSet(e/D1)}catch(x){}}else if(e<D1+H1){if(!ML.held){ML.held=1;try{mpSet(1)}catch(x){}}}else{try{fadeAway(MPOP.im);mpSet(0)}catch(x){}ML.t0=now;ML.held=0}}
 
 
 /* the robot crew ( homepage ) : loaded once the page is up */
@@ -962,7 +974,10 @@ function geoRefresh(){GEO.t=performance.now();GEO.hh=HERO?HERO.offsetHeight:0;GE
  if(HOLD){HOLD.top=docTop(HOLD.w);holdSize()}
  if(MPOP&&MPOP.r)mpGeo();
  if(VPOP&&VPOP.el)vpGeo();
- if(SCR.length)scrubGeo()}
+ if(SCR.length)scrubGeo();
+ if(BPOP&&BPOP.v)bpGeo();
+ if(HPOP&&HPOP.v)hpGeo();
+ if(MVP&&MVP.v)mvGeo()}
 D.addEventListener('click',function(){GEO.t=0;setTimeout(function(){GEO.t=0;onScroll()},450)},true);W.addEventListener('resize',function(){GEO.t=0});W.addEventListener('load',function(){GEO.t=0});
 /* every scroll frame only writes : all sizes come from GEO, measured at most once a second */
 function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y;VEL=VEL*.8+dy*.2;for(var pk in PINW){var PP=PINW[pk],po=PP.card.classList.contains('open');if(po!==PP.open){PP.open=po;PP.sp.style.height=(po?0:PINX)+'px';GEO.t=0}}
@@ -978,10 +993,12 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
    c.style.transform='translate3d('+(sd*q*120).toFixed(1)+'px,'+(q*90).toFixed(1)+'px,0) rotate('+(sd*q*8).toFixed(2)+'deg) scale('+(.76+.24*e).toFixed(4)+') skewY('+SKV+'deg)';c.style.opacity=e<.999?(.05+.95*e).toFixed(3):''});
   if(!FINE&&HUB.__best!==best){if(HUB.__best)HUB.__best.classList.remove('sx30-focus');if(best)best.classList.add('sx30-focus');HUB.__best=best}}
  if(MPOP&&MPOP.el&&GEO.mp){var open=!!(MPOP.card&&MPOP.card.classList.contains('open'));if(open!==MPOP.open){MPOP.open=open;MPOP.st='';if(open){ANIM.m.q=null;MPOP.src='0';MPOP.im.src=MPOP.src0;MPOP.shown=false;MPOP.el.style.display='none'}}
-  if(!open){var mp=HOLD?seqP('menu',y,vh):pinP('menu',y,vh,GEO.mp.ht),ms=mp.toFixed(3);animGo('m',mp,HOLD?holdBelow(y,vh):pinTop('menu',y,GEO.mp.ht)>vh*.85,mpSet,MPOP.im)}}
+  if(!open){var mt=GEO.mp.ht-y,mv=mt<vh&&mt>-(MPOP.hi.offsetHeight||150);if(mv&&!ML.on){ML.on=true;ML.t0=performance.now()-ML.pe;if(!ML.raf)ML.raf=requestAnimationFrame(mlStep)}else if(!mv&&ML.on){ML.on=false;ML.pe=performance.now()-ML.t0}}
+  else if(ML.on){ML.on=false;ML.pe=0}}
  if(VPOP&&VPOP.el&&GEO.vp){var vo=!!(VPOP.card&&VPOP.card.classList.contains('open'));if(vo!==VPOP.open){VPOP.open=vo;VPOP.st='';if(vo){ANIM.v.q=null;VPOP.im.style.visibility='';VPOP.hid=false;VPOP.shown=false;VPOP.el.style.display='none'}}
   if(!vo){var vq=clamp((vh*.67-(GEO.vp.ht-y))/(vh*.41),0,1) /* all done while the card is still in the lower half, well clear of the title bar */,vs=vq.toFixed(3);animGo('v',vq,GEO.vp.ht-y>vh*.85,vpSet,VPOP.im)}}
  if(SCR.length)scrubTick(y,vh);
+ loopTick(BPOP,GEO.bp,BVID,y,vh);loopTick(HPOP,GEO.hp,HVID,y,vh);loopTick(MVP,GEO.mv,MVID,y,vh);
  if(MARK&&GEO.mTop!=null){var mt=GEO.mTop-y,mp=clamp((vh-mt)/(GEO.mH+vh*.35),0,1);MARK.style.transform='translate3d(0,'+((1-mp)*55).toFixed(1)+'%,0) scale('+(.82+.18*mp).toFixed(3)+')';MARK.style.opacity=(.15+.85*mp).toFixed(3)}}
 /* the scroll speed lean only touches the cards and the giant type, never the whole page */
 /* a custom property on a big block makes the browser restyle everything inside it, so the lean is written straight onto the two type rows */
