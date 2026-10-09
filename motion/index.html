@@ -704,7 +704,7 @@ function mpSet(p){var g=GEO.mp,el=MPOP.el,show=p>0&&p<1;
  if(show!==MPOP.shown){MPOP.shown=show;el.style.display=show?'block':'none'}if(!show)return;
  var gk=Math.round(g.l)+','+Math.round(g.t)+','+Math.round(g.w)+','+Math.round(g.h);if(gk!==MPOP.gk){MPOP.gk=gk;el.style.transform='translate3d('+g.l.toFixed(1)+'px,'+g.t.toFixed(1)+'px,0)';el.style.width=g.w.toFixed(1)+'px';el.style.height=g.h.toFixed(1)+'px'}
  var ap=clamp(p/.08,0,1),u=clamp((p-.06)/.6,0,1),a=88*Math.pow(1-u,3),rd=a*Math.PI/180,X=100*(1-Math.cos(rd)),sn=Math.sin(rd);
- var k=Math.sin(Math.PI*clamp((p-.04)/.96,0,1)),dx=k*(g.cx-(g.l+g.w/2))*.55,dy=-k*Math.min(70,g.h*.4),sc=1+k*.65;
+ var k=Math.sin(Math.PI*clamp((p-.04)/.84,0,1)) /* back in its slot by 88%, so the hand-over to the picture is seamless */,dx=k*(g.cx-(g.l+g.w/2))*.55,dy=-k*Math.min(70,g.h*.4),sc=1+k*.65;
  el.style.opacity=ap.toFixed(3);MPOP.inn.style.transform='translate3d('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px,0) scale('+sc.toFixed(4)+')';
  var N=MPOP.n;MPOP.fp.forEach(function(f,i){var ev=i%2===0,m=ev?(N/2-i):(N/2-i-1);
   f.style.transform='translateX('+(m*X).toFixed(2)+'%) rotateY('+(ev?a:-a).toFixed(2)+'deg)';f.style.filter=sn>.01?'brightness('+(ev?1-.45*sn:1+.12*sn).toFixed(3)+')':''})}
