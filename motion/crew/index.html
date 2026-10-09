@@ -532,11 +532,18 @@ function pixFrame(now,t){var r=PIX;if(!vf||!pw||!DIM){show(r,false);return}
  var key=x0+','+y0+','+path;if(key!==X.key){X.key=key;beam.style.left=x0+'px';beam.style.top=y0+'px';beam.style.width=Math.ceil(x1-x0)+'px';beam.style.height=Math.ceil(y1-y0)+'px';
   beam.style.clipPath=path;beam.style.setProperty('--ex',Math.round(e.x-x0)+'px');beam.style.setProperty('--ey',Math.round(e.y-y0)+'px')}}
 
-/* ---------- the haulers : one robot per card group drags every card in on a rope, driven by scroll ----------
-   The group scrolls past slowly while it is being hauled in, so the robot gets a long stretch of scrolling to do the work. */
-var GROUPS=[].slice.call(D.querySelectorAll('#hub .hubg')).map(function(el,i){var cs=[].slice.call(el.querySelectorAll('.hitem'));return{el:el,cards:cs,bot:MOV[i]||MOV[0],mb0:parseFloat(getComputedStyle(el).marginBottom)||0,said:false,ps:'',op:''}}).filter(function(g){return g.cards.length});
-var PANF=.75,DRAG=0,DW=0,PULL=/[\u4e00-\u9fff]/.test(SAY.carry||'')?'拉过来啦！':'Heave-ho!';
+/* ---------- the haulers : a tug of war over the cards, driven by scroll ----------
+   Scrolling down : the robot on the left plants his feet and drags every card in on a rope, tug by tug.
+   Scrolling up   : a second robot on the right drags the cards back out to the right, and the left robot,
+                    still holding his rope, gets dragged away to the right along with them.
+   The group scrolls past slowly while this happens, so there is a long stretch of scrolling for the work. */
+var ZH=/[\u4e00-\u9fff]/.test(SAY.carry||''),PULL=ZH?'拉过来啦！':'Heave-ho!',BACK=ZH?'拉回去！':'Back you go!',WHOA=ZH?'哇——！':'Whoa—!';
+var GROUPS=[].slice.call(D.querySelectorAll('#hub .hubg')).map(function(el,i,all){var cs=[].slice.call(el.querySelectorAll('.hitem'));
+ return{el:el,cards:cs,L:MOV[i%2],R:MOV[(i%2)+2],mb0:parseFloat(getComputedStyle(el).marginBottom)||0,ps:'',mode:'down',q:null,lx:-90,rx:9999,la:0,ra:0,oL:'',oR:'',sd:'',talked:{}}}).filter(function(g){return g.cards.length});
+var PANF=.75,DRAG=0,DW=0;
 function easeIO(u){return u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2}
+function pPull(t,st,o){o=pBrace(t,1,o);o.lsz=.22;o.rsz=-.22;o.lsx=-1.2+st*.6;o.rsx=-1.2+st*.6;o.lex=-.45-st*.95;o.rex=-.45-st*.95;o.lez=0;o.rez=0;o.bx=-.16-st*.12;o.hx=-.1+st*.06;o.by=(o.by||0)-st*.03;return o}
+function pDragged(t,o){o=pBrace(t,1,o);o.lsx=-1.45;o.rsx=-1.45;o.lsz=.15;o.rsz=-.15;o.lex=0;o.rex=0;o.bx=-.34;o.hx=-.25;o.hz=Math.sin(t*20)*.08;o.by=Math.abs(Math.sin(t*16))*.04;return o}
 function margins(){if(innerWidth===DW)return;DW=innerWidth;DRAG=Math.max(innerHeight*1.8,1100);GROUPS.forEach(function(g){g.el.style.marginBottom=Math.round(g.mb0+DRAG*PANF)+'px'})}
 var slotT=0;function docPos(el){var t=0,l=0;while(el){t+=el.offsetTop;l+=el.offsetLeft;el=el.offsetParent}return[t,l]}
 function grpRefresh(){slotT=performance.now();GROUPS.forEach(function(g){var d=docPos(g.el);g.top=d[0];g.h=g.el.offsetHeight;g.cards.forEach(function(c){var p=docPos(c);c.__dt=p[0];c.__dl=p[1];c.__dw=c.offsetWidth;c.__dh=c.offsetHeight})})}
@@ -546,44 +553,62 @@ var mz;WN.addEventListener('resize',function(){clearTimeout(mz);mz=setTimeout(fu
 var NS='http://www.w3.org/2000/svg',RS=D.createElementNS(NS,'svg');RS.setAttribute('class','sx30-rope');RS.setAttribute('aria-hidden','true');
 RS.style.cssText='position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:43;overflow:visible';D.body.appendChild(RS);
 function el(n,a){var e=D.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);return e}
-GROUPS.forEach(function(g){g.svg=el('g',{});g.svg.style.display='none';RS.appendChild(g.svg);g.cards.forEach(function(c){c.classList.add('sx-on');
-  c.__r1=el('path',{fill:'none',stroke:'#A87A3E','stroke-width':'3.4','stroke-linecap':'round'});
-  c.__r2=el('path',{fill:'none',stroke:'#6E4B1F','stroke-width':'3.4','stroke-linecap':'round','stroke-dasharray':'2 5',opacity:'.75'});
-  c.__kn=el('circle',{r:'4.5',fill:'#6E4B1F'});c.__rd='';g.svg.appendChild(c.__r1);g.svg.appendChild(c.__r2);g.svg.appendChild(c.__kn)})});
+function rope(parent){var a=el('path',{fill:'none',stroke:'#A87A3E','stroke-width':'3.4','stroke-linecap':'round'}),b=el('path',{fill:'none',stroke:'#6E4B1F','stroke-width':'3.4','stroke-linecap':'round','stroke-dasharray':'2 5',opacity:'.75'}),k=el('circle',{r:'4.5',fill:'#6E4B1F'});
+ parent.appendChild(a);parent.appendChild(b);parent.appendChild(k);return{a:a,b:b,k:k,d:''}}
+function ropeTo(R,hx,hy,ex,ey,sag){var d='M'+hx.toFixed(1)+' '+hy.toFixed(1)+'Q'+((hx+ex)/2).toFixed(1)+' '+((hy+ey)/2+sag).toFixed(1)+' '+ex.toFixed(1)+' '+ey.toFixed(1);
+ if(d===R.d)return;R.d=d;R.a.setAttribute('d',d);R.b.setAttribute('d',d);R.k.setAttribute('cx',ex.toFixed(1));R.k.setAttribute('cy',ey.toFixed(1))}
+GROUPS.forEach(function(g){g.gL=el('g',{});g.gR=el('g',{});g.gL.style.opacity=g.gR.style.opacity='0';RS.appendChild(g.gL);RS.appendChild(g.gR);
+ g.cards.forEach(function(c){c.classList.add('sx-on');c.__rl=rope(g.gL);c.__rr=rope(g.gR)})});
 margins();grpRefresh();
+function say(g,r,k,txt){if(g.talked[k])return;g.talked[k]=1;if(performance.now()-lastTalk>1500)talk(r,txt,1600)}
 function moversFrame(now,t){if(now-slotT>1000)grpRefresh();var s=WN.scrollY||0;
- MOV.forEach(function(r,i){if(i>=GROUPS.length)show(r,false)});
- GROUPS.forEach(function(g){var r=g.bot,free=g.cards.some(function(c){return c.classList.contains('open')});
+ GROUPS.forEach(function(g){var L=g.L,R=g.R,free=g.cards.some(function(c){return c.classList.contains('open')});
   var s0=g.top-VH*.62,p=clamp((s-s0)/DRAG,0,1),pan=clamp(s-s0,0,DRAG)*PANF;
   var ps=pan>0?pan.toFixed(1):'';if(ps!==g.ps){g.ps=ps;g.el.style.transform=ps?'translate3d(0,'+ps+'px,0)':''}
-  if(free)p=1;if(p<=0)g.said=false;
-  /* the cards : each one slides in from the right a little after the one above it */
-  g.cards.forEach(function(c,i){var u=clamp((p-i*.11)/.42,0,1),off=(1-easeIO(u))*(VW-c.__dl+40);c.__off=off;c.__u=u;
+  if(free)p=1;
+  /* the cards follow the scroll in tugs : they move on each pull of the rope, not smoothly */
+  var st=Math.max(0,Math.sin(t*7));
+  if(g.q===null)g.q=p;
+  var dq=p-g.q;if(Math.abs(dq)<.0015){g.q=p}else{g.q+=dq*(.05+.4*st);var m=dq>0?'down':'up';if(m!==g.mode){g.mode=m;g.talked={}}}
+  var q=g.q,up=g.mode==='up';
+  var lead=1e9,rmost=-1e9;
+  g.cards.forEach(function(c,i){var u=clamp((q-i*.11)/.42,0,1),full=VW-c.__dl+40,off=(1-easeIO(u))*full;c.__off=off;c.__u=u;
+   if(off>.5&&off<full-.5){rmost=Math.max(rmost,c.__dl+c.__dw+off)}
    var key=off<.5?'':off.toFixed(1);if(key===c.__k)return;
    if(c.__tr0===undefined)c.__tr0=c.style.transition;c.__k=key;
    if(key===''){c.style.transform='';c.style.transition=c.__tr0}
    else{var rot=u>0?Math.sin(off/38+i)*1.2:0;c.style.transition='none';c.style.transform='translate3d('+key+'px,0,0) rotate('+rot.toFixed(2)+'deg)'}});
-  var gt=g.top-s+pan,gb=gt+g.h,inV=!free&&p>0&&p<1&&gb>40&&gt<VH-40;
-  if(!inV){show(r,false);if(g.svg.style.display!=='none')g.svg.style.display='none';return}
-  show(r,true);if(g.svg.style.display)g.svg.style.display='';
-  if(!g.said&&p>.03){g.said=true;if(now-lastTalk>3000)talk(r,PULL,1700)}
-  /* the robot : walks in ahead of the first card, then plants his feet and hauls the rest in hand over hand */
-  var c0=g.cards[0],BX0=VW<560?30:Math.max(44,c0.__dl-46),lead=c0.__dl+c0.__off-28,bx,yaw,o={},walking=lead>BX0+1;
-  if(p<.86){bx=Math.max(BX0,lead)}else if(p<.93){bx=BX0}else{bx=BX0-((p-.93)/.07)*(BX0+90)}
-  if(p<.86&&walking){pWalk(bx/24,false,o);yaw=-.6}
-  else if(p<.86){pBrace(t,1,o);o.by=(o.by||0)+Math.abs(Math.sin(t*5))*.05;yaw=.6}
-  else if(p<.93){pCheer(t,o);yaw=0}
-  else{pWalk(bx/16,true,o);yaw=-.6}
-  r.sc=VW<560?.9:1.05;
-  var vt=Math.max(gt,90),vb=Math.min(gb,VH-12),feet=clamp((vt+vb)/2+70,160,VH-24);
-  pose(r,o,.3);place(r,bx,feet,yaw,.3);blink(r,now);
-  /* the rope : one hand, one rope to every card ; slack and fading once the job is done */
-  var a=p<.86?1:clamp(1-(p-.86)/.05,0,1),op=a.toFixed(2);if(op!==g.op){g.op=op;g.svg.style.opacity=op}
-  if(a<=0)return;
-  var hx=sxOf(r.x)+PPU*r.sc*.55,hy=feet-1.75*PPU*r.sc;
-  g.cards.forEach(function(c){var ex=c.__dl+c.__off+5,ey=c.__dt-s+pan+c.__dh/2,sag=(c.__u<1?8:22)+(1-a)*30;
-   var d='M'+hx.toFixed(1)+' '+hy.toFixed(1)+'Q'+((hx+ex)/2).toFixed(1)+' '+((hy+ey)/2+sag).toFixed(1)+' '+ex.toFixed(1)+' '+ey.toFixed(1);
-   if(d===c.__rd)return;c.__rd=d;c.__r1.setAttribute('d',d);c.__r2.setAttribute('d',d);c.__kn.setAttribute('cx',ex.toFixed(1));c.__kn.setAttribute('cy',ey.toFixed(1))})})}
+  var c0=g.cards[0],c0l=c0.__dl+c0.__off;
+  var gt=g.top-s+pan,gb=gt+g.h,inV=!free&&gb>40&&gt<VH-40&&q>.001&&q<.999;
+  var vt=Math.max(gt,90),vb=Math.min(gb,VH-12),feet=clamp((vt+vb)/2+70,160,VH-24),sc=VW<560?.9:1.05;
+  var BX0=VW<560?30:Math.max(44,c0.__dl-46),RX0=VW<560?VW-30:Math.min(VW-44,c0.__dl+c0.__dw+46);
+  /* ---- the left robot ---- */
+  var lt,dragged=false;
+  if(up){lt=Math.max(BX0,c0l-28);dragged=lt>BX0+1}else{lt=q<.93?BX0:BX0-((q-.93)/.07)*(BX0+90)}
+  if(!inV){g.lx=up?lt:(q>=.999?-90:lt)}
+  var ld=lt-g.lx,lstep=dragged?120:18;g.lx+=clamp(ld,-lstep,lstep);var lmove=!dragged&&Math.abs(ld)>1.5;
+  var showL=inV&&g.lx>-80&&g.lx<VW+80;show(L,showL);
+  var oL={},yL=.6;
+  if(showL){
+   if(lmove){pWalk(g.lx/16,true,oL);yL=ld>0?.6:-.6}
+   else if(dragged){pDragged(t,oL);say(g,L,'whoa',WHOA)}
+   else if(up||q<.86){pPull(t,st,oL);if(!up)say(g,L,'pull',PULL)}
+   else if(q<.93){pCheer(t,oL);yL=0}
+   else{pWalk(g.lx/16,true,oL);yL=-.6}
+   L.sc=sc;pose(L,oL,.35);place(L,g.lx,feet,yL,.3);blink(L,now)}
+  /* ---- the right robot : only when scrolling back up ---- */
+  var showR=inV&&up,rt=Math.max(RX0,rmost+26);
+  if(!showR){g.rx=VW+70}else{var rd=rt-g.rx,rstep=rd>0?120:18;g.rx+=clamp(rd,-rstep,rstep);
+   var rmv=rd<-1.5,oR={};if(rmv)pWalk(g.rx/16,true,oR);else{pPull(t,st,oR);say(g,R,'back',BACK)}
+   showR=g.rx<VW+80}
+  show(R,showR);if(showR){R.sc=sc;pose(R,oR,.35);place(R,g.rx,feet,-.6,.3);blink(R,now)}
+  /* ---- the ropes ---- */
+  var laT=showL&&!lmove?(up?1:(q<.86?1:clamp(1-(q-.86)/.05,0,1))):0,raT=showR&&g.rx<VW+40?1:0;
+  g.la+=(laT-g.la)*.3;g.ra+=(raT-g.ra)*.3;if(g.la<.01)g.la=0;if(g.ra<.01)g.ra=0;
+  var oa=g.la.toFixed(2),ob=g.ra.toFixed(2);if(oa!==g.oL){g.oL=oa;g.gL.style.opacity=oa}if(ob!==g.oR){g.oR=ob;g.gR.style.opacity=ob}
+  var hy=feet-1.75*PPU*sc,tense=up&&g.ra>.5;
+  if(g.la>0){var hx=sxOf(L.x)+PPU*sc*.55;g.cards.forEach(function(c){ropeTo(c.__rl,hx,hy,c.__dl+c.__off+5,c.__dt-s+pan+c.__dh/2,(tense||c.__u<1?6:22)+(1-g.la)*30)})}
+  if(g.ra>0){var rx=sxOf(R.x)-PPU*sc*.55;g.cards.forEach(function(c){ropeTo(c.__rr,rx,hy,c.__dl+c.__dw+c.__off-5,c.__dt-s+pan+c.__dh/2,6)})}})}
 
 /* ---------- loop ---------- */
 var t0=performance.now(),vis=!D.hidden;D.addEventListener('visibilitychange',function(){vis=!D.hidden});
