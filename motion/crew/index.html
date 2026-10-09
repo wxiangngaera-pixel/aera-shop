@@ -587,7 +587,8 @@ function moversFrame(now,t){if(now-slotT>1000)grpRefresh();var s=WN.scrollY||0;
   if(up){lt=Math.max(BX0,c0l-28);dragged=lt>BX0+1}else{lt=q<.93?BX0:BX0-((q-.93)/.07)*(BX0+90)}
   if(!inV){g.lx=up?lt:(q>=.999?-90:lt)}
   var ld=lt-g.lx,lstep=dragged?120:18;g.lx+=clamp(ld,-lstep,lstep);var lmove=!dragged&&Math.abs(ld)>1.5;
-  var showL=inV&&g.lx>-80&&g.lx<VW+80;show(L,showL);
+  if(up)g.lx=-90; /* scrolling back up : the left robot is gone, only the right one pulls */
+  var showL=inV&&!up&&g.lx>-80&&g.lx<VW+80;show(L,showL);
   var oL={},yL=.6;
   if(showL){
    if(lmove){pWalk(g.lx/16,true,oL);yL=ld>0?.6:-.6}
