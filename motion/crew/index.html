@@ -533,9 +533,8 @@ function pixFrame(now,t){var r=PIX;if(!vf||!pw||!DIM){show(r,false);return}
   beam.style.clipPath=path;beam.style.setProperty('--ex',Math.round(e.x-x0)+'px');beam.style.setProperty('--ey',Math.round(e.y-y0)+'px')}}
 
 /* ---------- the haulers : a tug of war over the cards, driven by scroll ----------
-   Scrolling down : the robot on the left plants his feet and drags every card in on a rope, tug by tug.
-   Scrolling up   : a second robot on the right drags the cards back out to the right, and the left robot,
-                    still holding his rope, gets dragged away to the right along with them.
+   Scrolling down : a robot comes in from the right with the cards, walking ahead of them and dragging them in on a rope, tug by tug.
+   Scrolling up   : that robot is gone ; a second robot on the right drags the cards back out to the right.
    The group scrolls past slowly while this happens, so there is a long stretch of scrolling for the work. */
 var ZH=/[\u4e00-\u9fff]/.test(SAY.carry||''),PULL=ZH?'拉过来啦！':'Heave-ho!',BACK=ZH?'拉回去！':'Back you go!',WHOA=ZH?'哇——！':'Whoa—!';
 var GROUPS=[].slice.call(D.querySelectorAll('#hub .hubg')).map(function(el,i,all){var cs=[].slice.call(el.querySelectorAll('.hitem'));
@@ -543,6 +542,7 @@ var GROUPS=[].slice.call(D.querySelectorAll('#hub .hubg')).map(function(el,i,all
 var PANF=.75,DRAG=0,DW=0;
 function easeIO(u){return u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2}
 function pPull(t,st,o){o=pBrace(t,1,o);o.lsz=.22;o.rsz=-.22;o.lsx=-1.2+st*.6;o.rsx=-1.2+st*.6;o.lex=-.45-st*.95;o.rex=-.45-st*.95;o.lez=0;o.rez=0;o.bx=-.16-st*.12;o.hx=-.1+st*.06;o.by=(o.by||0)-st*.03;return o}
+function pDragWalk(ph,st,o){o=pWalk(ph,false,o);o.bx=.2+st*.08;o.hx=.12;o.lsx=.95;o.rsx=.95;o.lsz=.18;o.rsz=-.18;o.lex=-.35;o.rex=-.35;o.lez=0;o.rez=0;return o}
 function pDragged(t,o){o=pBrace(t,1,o);o.lsx=-1.45;o.rsx=-1.45;o.lsz=.15;o.rsz=-.15;o.lex=0;o.rex=0;o.bx=-.34;o.hx=-.25;o.hz=Math.sin(t*20)*.08;o.by=Math.abs(Math.sin(t*16))*.04;return o}
 function margins(){if(innerWidth===DW)return;DW=innerWidth;DRAG=Math.max(innerHeight*1.8,1100);GROUPS.forEach(function(g){g.el.style.marginBottom=Math.round(g.mb0+DRAG*PANF)+'px'})}
 var slotT=0;function docPos(el){var t=0,l=0;while(el){t+=el.offsetTop;l+=el.offsetLeft;el=el.offsetParent}return[t,l]}
@@ -572,7 +572,7 @@ function moversFrame(now,t){if(now-slotT>1000)grpRefresh();var s=WN.scrollY||0;
   var dq=p-g.q;if(Math.abs(dq)<.0015){g.q=p}else{g.q+=dq*(.05+.4*st);var m=dq>0?'down':'up';if(m!==g.mode){g.mode=m;g.talked={}}}
   var q=g.q,up=g.mode==='up';
   var lead=1e9,rmost=-1e9;
-  g.cards.forEach(function(c,i){var u=clamp((q-i*.11)/.42,0,1),full=VW-c.__dl+40,off=(1-easeIO(u))*full;c.__off=off;c.__u=u;
+  g.cards.forEach(function(c,i){var u=clamp((q-i*.03)/.74,0,1),full=VW-c.__dl+40,off=(1-easeIO(u))*full;c.__off=off;c.__u=u;
    if(off>.5&&off<full-.5){rmost=Math.max(rmost,c.__dl+c.__dw+off)}
    var key=off<.5?'':off.toFixed(1);if(key===c.__k)return;
    if(c.__tr0===undefined)c.__tr0=c.style.transition;c.__k=key;c.style.opacity='';
@@ -582,29 +582,24 @@ function moversFrame(now,t){if(now-slotT>1000)grpRefresh();var s=WN.scrollY||0;
   var gt=g.top-s+pan,gb=gt+g.h,inV=!free&&gb>40&&gt<VH-40&&q>.001&&q<.999;
   var vt=Math.max(gt,90),vb=Math.min(gb,VH-12),feet=clamp((vt+vb)/2+70,160,VH-24),sc=VW<560?.9:1.05;
   var BX0=VW<560?30:Math.max(44,c0.__dl-46),RX0=VW<560?VW-30:Math.min(VW-44,c0.__dl+c0.__dw+46);
-  /* ---- the left robot ---- */
-  var lt,dragged=false;
-  if(up){lt=Math.max(BX0,c0l-28);dragged=lt>BX0+1}else{lt=q<.93?BX0:BX0-((q-.93)/.07)*(BX0+90)}
-  if(!inV){g.lx=up?lt:(q>=.999?-90:lt)}
-  var ld=lt-g.lx,lstep=dragged?120:18;g.lx+=clamp(ld,-lstep,lstep);var lmove=!dragged&&Math.abs(ld)>1.5;
-  if(up)g.lx=-90; /* scrolling back up : the left robot is gone, only the right one pulls */
+  /* ---- scrolling down : the left robot comes in from the right with the cards, walking ahead of them and dragging them in ---- */
+  var lt=q<.86?Math.max(BX0,c0l-28):(q<.93?BX0:BX0-((q-.93)/.07)*(BX0+90));
+  var lpx=g.lx;g.lx=up?-90:lt;var lv=g.lx-lpx;
   var showL=inV&&!up&&g.lx>-80&&g.lx<VW+80;show(L,showL);
-  var oL={},yL=.6;
+  var oL={},yL=-.6;
   if(showL){
-   if(lmove){pWalk(g.lx/16,true,oL);yL=ld>0?.6:-.6}
-   else if(dragged){pDragged(t,oL);say(g,L,'whoa',WHOA)}
-   else if(up||q<.86){pPull(t,st,oL);if(!up)say(g,L,'pull',PULL)}
+   if(q<.86){if(g.lx>BX0+1||Math.abs(lv)>.3){pDragWalk(g.lx/14,st,oL);yL=-.6}else{pPull(t,st,oL);yL=.6}say(g,L,'pull',PULL)}
    else if(q<.93){pCheer(t,oL);yL=0}
    else{pWalk(g.lx/16,true,oL);yL=-.6}
    L.sc=sc;pose(L,oL,.35);place(L,g.lx,feet,yL,.3);blink(L,now)}
-  /* ---- the right robot : only when scrolling back up ---- */
-  var showR=inV&&up,rt=Math.max(RX0,rmost+26);
-  if(!showR){g.rx=VW+70}else{var rd=rt-g.rx,rstep=rd>0?120:18;g.rx+=clamp(rd,-rstep,rstep);
-   var rmv=rd<-1.5,oR={};if(rmv)pWalk(g.rx/16,true,oR);else{pPull(t,st,oR);say(g,R,'back',BACK)}
-   showR=g.rx<VW+80}
-  show(R,showR);if(showR){R.sc=sc;pose(R,oR,.35);place(R,g.rx,feet,-.6,.3);blink(R,now)}
+  /* ---- scrolling back up : the left robot is gone ; a robot on the right drags the cards back out to the right ---- */
+  var showR=inV&&up,rt=Math.max(RX0,rmost+26),oR={},yR=.6;
+  if(!showR){g.rx=VW+70}else{var rd=rt-g.rx;g.rx+=rd>0?rd:Math.max(rd,-18);
+   if(rd<-1.5){pWalk(g.rx/16,true,oR);yR=-.6}else if(g.rx>RX0+1){pDragWalk(g.rx/14,st,oR);yR=.6}else{pPull(t,st,oR);yR=-.6}
+   say(g,R,'back',BACK);showR=g.rx<VW+80}
+  show(R,showR);if(showR){R.sc=sc;pose(R,oR,.35);place(R,g.rx,feet,yR,.3);blink(R,now)}
   /* ---- the ropes ---- */
-  var laT=showL&&!lmove?(up?1:(q<.86?1:clamp(1-(q-.86)/.05,0,1))):0,raT=showR&&g.rx<VW+40?1:0;
+  var laT=showL?(q<.86?1:clamp(1-(q-.86)/.05,0,1)):0,raT=showR&&g.rx<VW+40?1:0;
   g.la+=(laT-g.la)*.3;g.ra+=(raT-g.ra)*.3;if(g.la<.01)g.la=0;if(g.ra<.01)g.ra=0;
   var oa=g.la.toFixed(2),ob=g.ra.toFixed(2);if(oa!==g.oL){g.oL=oa;g.gL.style.opacity=oa}if(ob!==g.oR){g.oR=ob;g.gR.style.opacity=ob}
   var hy=feet-1.75*PPU*sc,tense=up&&g.ra>.5;
