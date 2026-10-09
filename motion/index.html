@@ -663,6 +663,9 @@ function hub(){
  safe(menuFold)();safe(vacPack)()}
 /* the two picture animations follow the scroll, but never faster than a set pace : a quick flick up or down still plays every step (fold, unseal) */
 var ANIM={m:{q:null,t:0,rate:.8},v:{q:null,t:0,rate:.55},run:false,last:0};
+/* forward only : scrolling back up never folds or unseals ; a started animation simply finishes ; it re-arms once the card is back below the screen */
+function animGo(k,p,below,set){var s=ANIM[k];if(s.q===null||below){if(below&&s.q!==null&&s.q>0&&p<=0){s.q=0;s.t=0;set(0);return}if(s.q===null){s.q=p;s.t=p;set(p);return}}
+ if(p>=s.t)s.t=p;else if(s.q>0&&s.q<1)s.t=1;animKick()}
 function animKick(){if(ANIM.run)return;ANIM.run=true;ANIM.last=performance.now();requestAnimationFrame(animStep)}
 function animStep(now){var dt=Math.min(.05,Math.max(0,(now-ANIM.last)/1000)),busy=false;ANIM.last=now;
  [['m',MPOP,mpSet],['v',VPOP,vpSet]].forEach(function(a){var s=ANIM[a[0]],o=a[1];if(!o||!o.el||s.q===null)return;var d=s.t-s.q;if(!d)return;
@@ -848,9 +851,9 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
    c.style.transform='translate3d('+(sd*q*120).toFixed(1)+'px,'+(q*90).toFixed(1)+'px,0) rotate('+(sd*q*8).toFixed(2)+'deg) scale('+(.76+.24*e).toFixed(4)+') skewY('+SKV+'deg)';c.style.opacity=e<.999?(.05+.95*e).toFixed(3):''});
   if(!FINE&&HUB.__best!==best){if(HUB.__best)HUB.__best.classList.remove('sx30-focus');if(best)best.classList.add('sx30-focus');HUB.__best=best}}
  if(MPOP&&MPOP.el&&GEO.mp){var open=!!(MPOP.card&&MPOP.card.classList.contains('open'));if(open!==MPOP.open){MPOP.open=open;MPOP.st='';if(open){ANIM.m.q=null;MPOP.src='0';MPOP.im.src=MPOP.src0;MPOP.shown=false;MPOP.el.style.display='none'}}
-  if(!open){var mp=clamp((vh*.69-(GEO.mp.ht-y))/(vh*.22),0,1) /* finishes before the next card starts packing */,ms=mp.toFixed(3);if(ms!==MPOP.st){MPOP.st=ms;ANIM.m.t=mp;if(ANIM.m.q===null){ANIM.m.q=mp;mpSet(mp)}else animKick()}}}
+  if(!open){var mp=clamp((vh*.69-(GEO.mp.ht-y))/(vh*.22),0,1) /* finishes before the next card starts packing */,ms=mp.toFixed(3);if(ms!==MPOP.st){MPOP.st=ms;animGo('m',mp,GEO.mp.ht-y>vh+20,mpSet)}}}
  if(VPOP&&VPOP.el&&GEO.vp){var vo=!!(VPOP.card&&VPOP.card.classList.contains('open'));if(vo!==VPOP.open){VPOP.open=vo;VPOP.st='';if(vo){ANIM.v.q=null;VPOP.im.style.visibility='';VPOP.hid=false;VPOP.shown=false;VPOP.el.style.display='none'}}
-  if(!vo){var vq=clamp((vh*.67-(GEO.vp.ht-y))/(vh*.41),0,1) /* all done while the card is still in the lower half, well clear of the title bar */,vs=vq.toFixed(3);if(vs!==VPOP.st){VPOP.st=vs;ANIM.v.t=vq;if(ANIM.v.q===null){ANIM.v.q=vq;vpSet(vq)}else animKick()}}}
+  if(!vo){var vq=clamp((vh*.67-(GEO.vp.ht-y))/(vh*.41),0,1) /* all done while the card is still in the lower half, well clear of the title bar */,vs=vq.toFixed(3);if(vs!==VPOP.st){VPOP.st=vs;animGo('v',vq,GEO.vp.ht-y>vh+20,vpSet)}}}
  if(MARK&&GEO.mTop!=null){var mt=GEO.mTop-y,mp=clamp((vh-mt)/(GEO.mH+vh*.35),0,1);MARK.style.transform='translate3d(0,'+((1-mp)*55).toFixed(1)+'%,0) scale('+(.82+.18*mp).toFixed(3)+')';MARK.style.opacity=(.15+.85*mp).toFixed(3)}}
 /* the scroll speed lean only touches the cards and the giant type, never the whole page */
 /* a custom property on a big block makes the browser restyle everything inside it, so the lean is written straight onto the two type rows */
