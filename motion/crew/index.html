@@ -519,7 +519,7 @@ function pixFrame(now,t){var r=PIX;if(!vf||!pw||!DIM){show(r,false);return}
  /* the head : sits still beside the lower right corner of the phone, looking at the screen */
  var inV=F.bottom>-80&&F.top<VH+80&&ready;show(r,inV);if(!inV)return;
  r.sc=VW<500?1.25:1.5;pose(r,{hx:-.14},1);glow(r,X.st!=='off');
- place(r,Math.min(VW-24,F.right+(VW<500?20:34)),F.bottom-F.height*.18,-.8,1);
+ place(r,Math.min(VW-22,F.right+(VW<500?50:90)),F.bottom-F.height*.18,-.8,1);
  if(X.st==='off')return;
  /* the beam : from the eyes to the edge of the screen only, so the picture itself stays sharp inside the frame */
  var e=eyesAt(r),i=6,S=[[F.left+i,F.top+i],[F.right-i,F.top+i],[F.right-i,F.bottom-i],[F.left+i,F.bottom-i]],pts=hull([[e.x,e.y]].concat(S));
