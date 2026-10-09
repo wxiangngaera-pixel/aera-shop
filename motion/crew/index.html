@@ -442,7 +442,7 @@ function talkFrame(now){if(!SPK)return;if(now>spkUntil||!SPK.on){bub.classList.r
  var h=headTop(SPK),bw=BW_,bh=BH_;bub.style.transform='translate3d('+clamp(h.x-bw/2,6,VW-bw-6).toFixed(1)+'px,'+(h.y-bh-14).toFixed(1)+'px,0)'}
 
 /* ---------- the crew ---------- */
-var LIFE=robot('bento');WN.__crewDbg.life=function(){return{x:sxOf(LIFE.x),y:syOf(LIFE.y+(LIFE.P.by||0)+TORY*LIFE.sc),sy:syOf(LIFE.y+(LIFE.P.by||0)+(HIPY+.06)*LIFE.sc)}};var PIX=robot('cap'),MOV=[robot('chef'),robot('band'),robot('chef'),robot('band')];
+var LIFE=robot('bento');LIFE.sc=VW<560?1.4:1.55; /* Bento is the big one */WN.__crewDbg.life=function(){return{x:sxOf(LIFE.x),y:syOf(LIFE.y+(LIFE.P.by||0)+TORY*LIFE.sc),sy:syOf(LIFE.y+(LIFE.P.by||0)+(HIPY+.06)*LIFE.sc)}};var PIX=robot('cap'),MOV=[robot('chef'),robot('band'),robot('chef'),robot('band')];
 var PAIRS=[{a:MOV[0],b:MOV[1],job:null},{a:MOV[2],b:MOV[3],job:null}];
 MOV.forEach(function(r){r.sc=.92});PIX.sc=1.05;
 
@@ -464,7 +464,7 @@ var L={mode:'enter',t0:performance.now(),until:0,tx:VW*.5,sx:-60,face:1,
   var list=['idle','idle','wave','stretch','watch','scratch','look','point','sit'];var m=list[Math.floor(Math.random()*list.length)];
   this.act(m,m==='idle'||m==='look'?2200+Math.random()*2600:(m==='sit'?5200:0));
   if(now-lastTalk>14000){if(m==='watch')talk(LIFE,SAY.watch);else if(m==='point')talk(LIFE,SAY.hungry);else if(m==='wave')talk(LIFE,Math.random()<.5?SAY.hi:SAY.macro)}}};
-function lifeFrame(now,t){var r=LIFE,o={},feet=VH-26,moving=false,run=false;show(r,true);
+function lifeFrame(now,t){var r=LIFE,o={},feet=L.base!=null?Math.min(L.base,VH-26):VH-26,moving=false,run=false;show(r,true);
  var fast=Math.abs(svel)>38;
  if(fast&&['sleep','sit','enter','held','fall','land'].indexOf(L.mode)<0){if(L.mode!=='whoa'){L.act('whoa');if(now-lastTalk>9000)talk(LIFE,SAY.whoa,1600)}}
  if(L.mode==='sleep'&&now-lastInput<1200){L.act('jump');talk(LIFE,SAY.up,1800)}
@@ -484,7 +484,7 @@ function lifeFrame(now,t){var r=LIFE,o={},feet=VH-26,moving=false,run=false;show
   case 'jump':var u=(now-L.t0)/900;pCheer(t,o);o.by=Math.sin(Math.min(1,u)*Math.PI)*1.1;if(u>=1){L.act('wave')}break;
   case 'held':pHeld(t,o);feet=L.fy;break;
   case 'fall':L.vy+=1.7;L.fy+=L.vy;pHeld(t,o);if(L.fy>=VH-26){L.fy=VH-26;L.mode='land';L.t0=now;L.until=0;L.vx=0}feet=L.fy;break;
-  case 'land':pBrace(t,Math.max(0,1-(now-L.t0)/450),o);if(now-L.t0>450){L.act('wave');if(now-lastTalk>1500)talk(LIFE,LANDED,1700)}break;
+  case 'land':pBrace(t,Math.max(0,1-(now-L.t0)/450),o);if(now-L.t0>450){L.act('wave');if(now-lastTalk>1500)talk(LIFE,L.base!=null?UPHI:LANDED,1700)}break;
   default:pIdle(t,o)}
  if(moving){var d=L.tx-L.sx,sp=(run?3.2:1.5)*(PPU/34);L.face=d>0?1:-1;L.sx+=Math.sign(d)*Math.min(Math.abs(d),sp);pWalk(t,run,o)}
  /* eyes and head follow your finger */
@@ -495,19 +495,30 @@ function lifeFrame(now,t){var r=LIFE,o={},feet=VH-26,moving=false,run=false;show
  place(r,L.sx,feet,yawT);grabAt(L.sx,feet,r.sc);blink(r,now);if(L.mode==='sleep'){r.eyeL.scale.y=r.eyeR.scale.y=.12}}
 
 /* ---------- pick Bento up : press and drag him anywhere, let go and he drops back to the floor ---------- */
-var ZHB=/[\u4e00-\u9fff]/.test(SAY.hi||''),HELD=ZHB?'放我下来！':'Wheee!',LANDED=ZHB?'好玩！再来！':'Again! Again!';
+var ZHB=/[\u4e00-\u9fff]/.test(SAY.hi||''),HELD=ZHB?'放我下来！':'Wheee!',UPHI=ZHB?'这里风景不错！':'Nice view up here!',LANDED=ZHB?'好玩！再来！':'Again! Again!';
 var GRAB=D.createElement('div');GRAB.id='sx30Grab';GRAB.setAttribute('aria-hidden','true');
 GRAB.style.cssText='position:fixed;left:0;top:0;width:10px;height:10px;z-index:45;touch-action:none;cursor:grab;background:transparent;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none';D.body.appendChild(GRAB);
 var G={k:'',dn:false,mv:false,sx:0,sy:0,ox:0,oy:0,lx:0,lt:0};
 function grabAt(x,feet,sc){var hw=Math.round(26*sc+10),hh=Math.round(3.2*PPU*sc+12),k=Math.round(x-hw)+','+Math.round(feet-hh)+','+hw+','+hh;if(k===G.k)return;G.k=k;
  GRAB.style.width=(hw*2)+'px';GRAB.style.height=(hh+8)+'px';GRAB.style.transform='translate3d('+Math.round(x-hw)+'px,'+Math.round(feet-hh)+'px,0)'}
 GRAB.addEventListener('pointerdown',function(e){e.stopPropagation();e.preventDefault();try{GRAB.setPointerCapture(e.pointerId)}catch(_){}
- G.dn=true;G.mv=false;G.sx=e.clientX;G.sy=e.clientY;G.ox=L.sx-e.clientX;G.oy=((L.mode==='held'||L.mode==='fall')?L.fy:VH-26)-e.clientY;G.lx=e.clientX;G.lt=performance.now();lastInput=ptrAt=G.lt;GRAB.style.cursor='grabbing'});
+ G.dn=true;G.mv=false;G.sx=e.clientX;G.sy=e.clientY;G.ox=L.sx-e.clientX;G.oy=(L.mode==='held'?L.fy:(L.base!=null?Math.min(L.base,VH-26):VH-26))-e.clientY;G.lx=e.clientX;G.lt=performance.now();lastInput=ptrAt=G.lt;GRAB.style.cursor='grabbing'});
 GRAB.addEventListener('pointermove',function(e){if(!G.dn)return;var now=performance.now();lastInput=ptrAt=now;
  if(!G.mv){if(Math.hypot(e.clientX-G.sx,e.clientY-G.sy)<7)return;G.mv=true;L.mode='held';L.until=0;L.vy=0;if(now-lastTalk>2500)talk(LIFE,HELD,1400)}
  var dt=Math.max(8,now-G.lt);L.vx=(e.clientX-G.lx)/dt*16;G.lx=e.clientX;G.lt=now;
  L.sx=clamp(e.clientX+G.ox,20,VW-20);L.fy=clamp(e.clientY+G.oy,90,VH-26);L.tx=L.sx});
-function drop(){if(!G.dn)return;G.dn=false;GRAB.style.cursor='grab';if(G.mv){L.mode='fall';L.vy=0;L.until=0}else{L.act('jump')}}
+/* let go : he stays exactly where you put him (drop him near the bottom and he goes back to the floor) */
+function drop(){if(!G.dn)return;G.dn=false;GRAB.style.cursor='grab';
+ if(G.mv){L.base=L.fy>=VH-60?null:L.fy;L.fy=L.base!=null?L.base:VH-26;L.mode='land';L.t0=performance.now();L.until=0;L.vx=0;try{sessionStorage.setItem('aera.bento.y',L.base==null?'':String(L.base/VH))}catch(e){}}
+ else emote()}
+try{var by0=parseFloat(sessionStorage.getItem('aera.bento.y'));if(by0>0&&by0<1)L.base=clamp(by0*VH,90,VH-26)}catch(e){}
+/* tap him : a random emote pops out of his head, and he acts it out */
+var EMO=[['\u2764\ufe0f','dance'],['\ud83d\ude04','jump'],['\ud83d\ude0b','dance'],['\ud83c\udf89','jump'],['\ud83d\udc4b','wave'],['\ud83d\udcaa','stretch'],['\ud83d\ude0e','bow'],['\ud83c\udf71','dance'],['\u2728','jump'],['\ud83d\ude0d','wave'],['\ud83e\udd29','jump'],['\ud83d\udc4d','point']],emoI=-1;
+function emote(){var k;do{k=Math.floor(Math.random()*EMO.length)}while(k===emoI);emoI=k;var e=EMO[k],h=headTop(LIFE);L.act(e[1]);lastInput=performance.now();
+ for(var i=0;i<4;i++){(function(i){var s=D.createElement('span'),big=i===0,fs=big?46:20;s.textContent=e[0];s.setAttribute('aria-hidden','true');
+  s.style.cssText='position:fixed;left:0;top:0;z-index:47;pointer-events:none;font-size:'+fs+'px;line-height:1;will-change:transform,opacity;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';D.body.appendChild(s);
+  var x=h.x-fs/2,y=h.y-fs-6,dx=big?0:(i-2)*36+(Math.random()*16-8),dy=big?-72:-40-Math.random()*40;
+  try{var a=s.animate([{transform:'translate3d('+x+'px,'+y+'px,0) scale(.2)',opacity:0},{transform:'translate3d('+(x+dx*.5)+'px,'+(y+dy*.6)+'px,0) scale('+(big?1.25:1)+')',opacity:1,offset:.35},{transform:'translate3d('+(x+dx)+'px,'+(y+dy-30)+'px,0) scale('+(big?1:.8)+')',opacity:0}],{duration:big?1400:1100,delay:big?0:120+i*60,easing:'cubic-bezier(.2,.9,.25,1)',fill:'both'});a.onfinish=function(){s.remove()}}catch(_){s.remove()}})(i)}}
 GRAB.addEventListener('pointerup',drop);GRAB.addEventListener('pointercancel',drop);
 
 /* ---------- Pixel : a projector head that sits beside the phone and beams the video onto its screen ----------
