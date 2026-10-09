@@ -431,7 +431,10 @@ css([
 '#hc-meals .sx30-mv{position:absolute;overflow:hidden;pointer-events:none;z-index:1;opacity:1;transition:opacity .6s ease}',
 '#hc-meals .sx30-mv video{position:absolute;max-width:none;display:block;object-fit:fill;background:transparent}',
 '.sx30-pw{display:block;position:relative;min-width:0}',
-'.sx30-pc{position:sticky;z-index:1}',
+'.sx30-pc{position:relative;z-index:1}',
+'.sx30-hh{position:relative;display:block}',
+'.sx30-hh>.hacc{position:sticky;z-index:2}',
+'.sx30-hsp{display:block;height:0}',
 '.sx30-pc.sx30-pm{z-index:3}',
 '.sx30-pov{position:absolute;left:0;top:0;width:100%;height:0;overflow:visible;z-index:30;pointer-events:none}',
 '.sx30-psp{display:block;height:0}',
@@ -906,9 +909,17 @@ function mvTick(y,vh){var g=GEO.mv;if(!g)return;var top=g.ht-y,v=MVP.v,w=MVP.w,o
 /* the four picture cards pin on the screen for a while so each animation gets a long, slow scroll :
    each card sits in a taller holder ; it rides up to 32% from the top, stays there for 70% of a screen of scrolling, then moves on */
 var PINW={},PINT=0,PINX=0;
-function pinSize(){var vh=innerHeight;PINT=Math.round(vh*.32);PINX=Math.round(vh*.7);for(var k in PINW){var P=PINW[k];P.sp.style.height=(P.open?0:PINX)+'px';P.c.style.top=PINT+'px'}GEO.t=0}
+/* the whole card list stays on screen while the four animations play one after another (menu, a la carte, bento, home) :
+   the list sits in a taller holder ; once it is fully on screen it holds still for HOLD.X of scrolling */
+var HOLD=null,HSEQ={menu:0,meals:1,plan:2,home:3},HPER=.75;
+function holdSize(){if(!HOLD)return;var vh=innerHeight,H=HOLD.el.offsetHeight,bar=GEO.bar||66,T=H<=vh-bar-24?Math.round(bar+(vh-bar-H)/2):Math.round(vh-H-16),X=Math.round(vh*HPER*4);
+ if(T!==HOLD.T){HOLD.T=T;HOLD.el.style.top=T+'px'}if(X!==HOLD.X){HOLD.X=X;HOLD.sp.style.height=X+'px'}HOLD.H=H}
+function seqP(k,y,vh){var i=HSEQ[k];if(!HOLD||!HOLD.X||i==null)return 0;var g=(HOLD.T-(HOLD.top-y))/HOLD.X;g=g<0?0:g>1?1:g;var v=g*4-i;return v<0?0:v>1?1:v}
+function holdBelow(y,vh){return !!HOLD&&HOLD.top-y>vh*.95}
+function pinSize(){var vh=innerHeight;PINT=0;PINX=0;for(var k in PINW){var P=PINW[k];P.sp.style.height=(P.open?0:PINX)+'px';P.c.style.top=PINT+'px'}GEO.t=0}
 function pins(){['menu','meals','plan','home'].forEach(function(k){var c=$('#hc-'+k);if(!c||!c.parentNode||(c.parentNode.classList&&c.parentNode.classList.contains('sx30-pw')))return;var w=D.createElement('div');w.className='sx30-pw';c.parentNode.insertBefore(w,c);var pc=D.createElement('div');pc.className='sx30-pc'+(k==='menu'?' sx30-pm':'');w.appendChild(pc);pc.appendChild(c);var ov=D.createElement('div');ov.className='sx30-pov';pc.appendChild(ov);var sp=D.createElement('div');sp.className='sx30-psp';w.appendChild(sp);PINW[k]={w:w,c:pc,card:c,ov:ov,sp:sp,top:0,open:c.classList.contains('open')}});
- pinSize();var lw=innerWidth;W.addEventListener('resize',function(){if(innerWidth!==lw){lw=innerWidth;pinSize()}})}
+ var acc=$('#hub .hacc');if(acc&&!HOLD&&acc.parentNode){var hw=D.createElement('div');hw.className='sx30-hh';acc.parentNode.insertBefore(hw,acc);hw.appendChild(acc);var hs=D.createElement('div');hs.className='sx30-hsp';hw.appendChild(hs);HOLD={w:hw,el:acc,sp:hs,top:0,T:null,X:0,H:0}}
+ pinSize();holdSize();var lw=innerWidth;W.addEventListener('resize',function(){if(innerWidth!==lw){lw=innerWidth;pinSize();holdSize()}})}
 function pinTop(k,y,fb){var P=PINW[k];return (P&&P.top?P.top:fb)-y}
 /* 0 when the card is just coming up from the bottom of the screen, 1 when its pinned stay is over */
 function pinP(k,y,vh,fb){var P=PINW[k],t=pinTop(k,y,fb),S=vh*.9,R=P?S-PINT+(P.open?0:PINX):vh*.5;if(R<vh*.3)R=vh*.3;var v=(S-t)/R;return v<0?0:v>1?1:v}
@@ -931,8 +942,8 @@ function scrubShow(o){if(!o.ready){if(o.w.style.opacity!=='0')o.w.style.opacity=
 function scrubTick(y,vh){SCR.forEach(function(o){if(o.ht==null)return;var top=o.ht-y;
  if(!o.loaded&&top<vh*2.2){o.loaded=true;var I=new Image();I.onload=function(){o.f.style.backgroundImage='url("'+o.d.url+'")';o.f.style.backgroundSize=(SC*100)+'% '+(SR*100)+'%';o.ready=true;o.fr=-1;scrubShow(o)};I.src=o.d.url}
  if(o.card&&o.card.classList.contains('open')){o.p=1;scrubShow(o);return}
- if(top>vh*.95&&o.p>0)o.p=0;
- var t=pinP(o.pk,y,vh,o.ht);if(t>o.p)o.p=t;scrubShow(o)})}
+ if((HOLD?holdBelow(y,vh):top>vh*.95)&&o.p>0)o.p=0;
+ var t=HOLD?seqP(o.pk,y,vh):pinP(o.pk,y,vh,o.ht);if(t>o.p)o.p=t;scrubShow(o)})}
 
 
 /* the robot crew ( homepage ) : loaded once the page is up */
@@ -948,6 +959,7 @@ function geoRefresh(){GEO.t=performance.now();GEO.hh=HERO?HERO.offsetHeight:0;GE
  GEO.hub=HUB.map(function(c){return{top:docTop(c),h:c.offsetHeight}});
  if(MARK){GEO.mTop=docTop(MARK.parentNode);GEO.mH=MARK.parentNode.offsetHeight}
  for(var pk in PINW)PINW[pk].top=docTop(PINW[pk].w);
+ if(HOLD){HOLD.top=docTop(HOLD.w);holdSize()}
  if(MPOP&&MPOP.r)mpGeo();
  if(VPOP&&VPOP.el)vpGeo();
  if(SCR.length)scrubGeo()}
@@ -966,7 +978,7 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
    c.style.transform='translate3d('+(sd*q*120).toFixed(1)+'px,'+(q*90).toFixed(1)+'px,0) rotate('+(sd*q*8).toFixed(2)+'deg) scale('+(.76+.24*e).toFixed(4)+') skewY('+SKV+'deg)';c.style.opacity=e<.999?(.05+.95*e).toFixed(3):''});
   if(!FINE&&HUB.__best!==best){if(HUB.__best)HUB.__best.classList.remove('sx30-focus');if(best)best.classList.add('sx30-focus');HUB.__best=best}}
  if(MPOP&&MPOP.el&&GEO.mp){var open=!!(MPOP.card&&MPOP.card.classList.contains('open'));if(open!==MPOP.open){MPOP.open=open;MPOP.st='';if(open){ANIM.m.q=null;MPOP.src='0';MPOP.im.src=MPOP.src0;MPOP.shown=false;MPOP.el.style.display='none'}}
-  if(!open){var mp=pinP('menu',y,vh,GEO.mp.ht),ms=mp.toFixed(3);animGo('m',mp,pinTop('menu',y,GEO.mp.ht)>vh*.85,mpSet,MPOP.im)}}
+  if(!open){var mp=HOLD?seqP('menu',y,vh):pinP('menu',y,vh,GEO.mp.ht),ms=mp.toFixed(3);animGo('m',mp,HOLD?holdBelow(y,vh):pinTop('menu',y,GEO.mp.ht)>vh*.85,mpSet,MPOP.im)}}
  if(VPOP&&VPOP.el&&GEO.vp){var vo=!!(VPOP.card&&VPOP.card.classList.contains('open'));if(vo!==VPOP.open){VPOP.open=vo;VPOP.st='';if(vo){ANIM.v.q=null;VPOP.im.style.visibility='';VPOP.hid=false;VPOP.shown=false;VPOP.el.style.display='none'}}
   if(!vo){var vq=clamp((vh*.67-(GEO.vp.ht-y))/(vh*.41),0,1) /* all done while the card is still in the lower half, well clear of the title bar */,vs=vq.toFixed(3);animGo('v',vq,GEO.vp.ht-y>vh*.85,vpSet,VPOP.im)}}
  if(SCR.length)scrubTick(y,vh);
