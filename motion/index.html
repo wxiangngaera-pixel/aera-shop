@@ -621,7 +621,7 @@ function phone(){
   e.innerHTML='<div class="cf"><span class="ci">'+c.i+'</span><span>'+c.h+'</span></div>';hp.appendChild(e);return e});
  function place(){var fw=vf.offsetWidth,fh=vf.offsetHeight;pw.style.setProperty('--fw',fw+'px');pw.style.setProperty('--fh',fh+'px');
   var fx=pw.offsetLeft+vf.offsetLeft,fy=pw.offsetTop+vf.offsetTop,hw=hp.offsetWidth;
-  els.forEach(function(e,i){var c=C[i],cw=e.offsetWidth||120;var L=c.side<0?fx-Math.min(46,cw*.42):fx+fw-cw+Math.min(46,cw*.42);
+  els.forEach(function(e,i){var c=C[i],cw=e.offsetWidth||120;var L=c.side<0?fx-cw+Math.min(46,cw*.42):fx+fw-Math.min(46,cw*.42); /* chips sit outside the phone, overlapping its edge only a little */
    e.style.left=clamp(L,4,hw-cw-4)+'px';e.style.top=(fy+fh*c.y)+'px'})}
  place();setTimeout(place,600);setTimeout(place,2500);W.addEventListener('resize',safe(place))}
 function marquee(){
