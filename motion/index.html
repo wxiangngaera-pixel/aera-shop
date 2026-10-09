@@ -429,6 +429,7 @@ css([
 '#sx30VacPop svg,#sx30VacPop .vr{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}',
 '#sx30VacPop .vr{max-width:none;display:block}',
 '#sx30VacPop .vf{position:absolute;max-width:none;display:block;will-change:transform,opacity}',
+'#sx30VacPop .vbag{position:absolute;inset:0;will-change:transform}',
 'html.sx30 #heroPic .phonewrap::after{content:none!important}',
 '#vFrame .vslide,#vFrame .sx30-scan,#vFrame .sx30-dim,#vFrame .sx30-load{clip-path:inset(0 round 27px)}',
 '@keyframes sx30RingP{0%,100%{opacity:.45}50%{opacity:1}}',
@@ -728,21 +729,23 @@ var VBAGS=[{n:'rice',o:[[177,3],[343,10],[328,295],[188,279]]},{n:'broc',o:[[332
 function vacPack(){if(VPOP)return;var hi=$('#hc-meals .himg'),im=hi&&$('img',hi);if(!hi||!im)return;VPOP={hi:hi,im:im,card:$('#hc-meals'),st:'',open:null,shown:null,hid:null};
  var tries=0,last='';(function wait(){var s=im.getAttribute('src')||'';if(im.complete&&im.naturalWidth>=400&&s&&s===last){vpBuild(s);return}last=s;if(++tries<40)setTimeout(wait,600)})()}
 /* lift the food itself out of the packed photo : green for the broccoli, golden brown for the chicken, the white block for the rice */
-function vfood(I,cb){var src=I.src,key='aera.vacfood.v2',sig=src.length+':'+src.slice(-48);try{var c=JSON.parse(localStorage.getItem(key)||'null');if(c&&c.sig===sig){cb(c);return}}catch(e){}
+function vfood(I,cb){var src=I.src,key='aera.vacfood.v3',sig=src.length+':'+src.slice(-48);try{var c=JSON.parse(localStorage.getItem(key)||'null');if(c&&c.sig===sig){cb(c);return}}catch(e){}
  var Wd=I.naturalWidth,Ht=I.naturalHeight,N=Wd*Ht,cv=D.createElement('canvas');cv.width=Wd;cv.height=Ht;var x=cv.getContext('2d');x.drawImage(I,0,0);var d=x.getImageData(0,0,Wd,Ht).data;
  var sx=Wd/520,sy=Ht/359,B=VBAGS.map(function(b){return b.o.map(function(p){return[p[0]*sx,p[1]*sy]})});
  function inP(px,py,P){var c=false;for(var i=0,j=P.length-1;i<P.length;j=i++){var xi=P[i][0],yi=P[i][1],xj=P[j][0],yj=P[j][1];if(((yi>py)!==(yj>py))&&(px<(xj-xi)*(py-yi)/(yj-yi)+xi))c=!c}return c}
  function shr(P,f){var cx=0,cy=0;P.forEach(function(p){cx+=p[0]/4;cy+=p[1]/4});return P.map(function(p){return[cx+(p[0]-cx)*f,cy+(p[1]-cy)*f]})}
- var SH=[1,1.04,1.04],out={sig:sig,W:Wd,H:Ht,f:[]};
+ var SH=[.93,1.04,1.04],out={sig:sig,W:Wd,H:Ht,f:[]};
+ /* the rice is partly hidden under the chicken and broccoli bags : rebuild the whole block by mirror-tiling a clean patch of rice */
+ var rd=new Uint8ClampedArray(d),X0=Math.round(215*sx),Y0=Math.round(30*sy),TW=Math.round(80*sx),TH=Math.round(76*sy);function pp(a,n){var q=a%(2*n);return q<n?q:2*n-1-q}
  for(var b=0;b<3;b++){var P=shr(B[b],SH[b]),m=new Float32Array(N);
-  for(var i=0;i<N;i++){var px=i%Wd,py=(i/Wd)|0;if(!inP(px,py,P)||d[i*4+3]<200)continue;if(b===0&&(inP(px,py,B[1])||inP(px,py,B[2])))continue;
+  for(var i=0;i<N;i++){var px=i%Wd,py=(i/Wd)|0;if(!inP(px,py,P)||(b>0&&d[i*4+3]<200))continue;if(b===0){m[i]=1;if(inP(px,py,B[1])||inP(px,py,B[2])){var s2=((Y0+pp(py,TH))*Wd+X0+pp(px,TW))*4;rd[i*4]=d[s2];rd[i*4+1]=d[s2+1];rd[i*4+2]=d[s2+2];rd[i*4+3]=255}continue}
    var r=d[i*4]/255,g=d[i*4+1]/255,bl=d[i*4+2]/255,mx=Math.max(r,g,bl),mn=Math.min(r,g,bl),s=mx?(mx-mn)/mx:0,h=0;
    if(mx!==mn){if(mx===r)h=60*(((g-bl)/(mx-mn))%6);else if(mx===g)h=60*((bl-r)/(mx-mn)+2);else h=60*((r-g)/(mx-mn)+4)}if(h<0)h+=360;
    m[i]=b===1?(h>50&&h<175&&s>.18&&mx>.08?1:0):(b===2?(h>5&&h<60&&s>.13&&mx>.15?1:0):(mx>.55&&mx<.985&&s<.25?1:0))}
   var mb=mbox(m,Wd,Ht,3);for(i=0;i<N;i++)mb[i]=mb[i]>.3?1:0;mb=mbox(mb,Wd,Ht,1);
   var x0=Wd,y0=Ht,x1=0,y1=0;for(i=0;i<N;i++)if(mb[i]>.05){var qx=i%Wd,qy=(i/Wd)|0;if(qx<x0)x0=qx;if(qx>x1)x1=qx;if(qy<y0)y0=qy;if(qy>y1)y1=qy}
   if(x1<=x0){out.f.push(null);continue}var cw=x1-x0+1,ch=y1-y0+1,cc=D.createElement('canvas');cc.width=cw;cc.height=ch;var c2=cc.getContext('2d'),o=c2.createImageData(cw,ch);
-  for(var yy=0;yy<ch;yy++)for(var xx=0;xx<cw;xx++){var si=(yy+y0)*Wd+xx+x0,q=(yy*cw+xx)*4;o.data[q]=d[si*4];o.data[q+1]=d[si*4+1];o.data[q+2]=d[si*4+2];o.data[q+3]=Math.round(mb[si]*255)}
+  var SRC=b===0?rd:d;for(var yy=0;yy<ch;yy++)for(var xx=0;xx<cw;xx++){var si=(yy+y0)*Wd+xx+x0,q=(yy*cw+xx)*4;o.data[q]=SRC[si*4];o.data[q+1]=SRC[si*4+1];o.data[q+2]=SRC[si*4+2];o.data[q+3]=Math.round(mb[si]*255)}
   c2.putImageData(o,0,0);var u=cc.toDataURL('image/webp',.9);if(u.indexOf('data:image/webp')!==0)u=cc.toDataURL('image/png');out.f.push({u:u,b:[x0,y0,cw,ch]})}
  try{localStorage.setItem(key,JSON.stringify(out))}catch(e){}cb(out)}
 function vpBuild(src){var I=new Image();I.onload=function(){try{vfood(I,function(F){vpMake(src,F)})}catch(e){}};I.src=src}
@@ -752,19 +755,24 @@ function vpMake(src,F){var IW=F.W,IH=F.H,sx=IW/520,sy=IH/359,o=D.createElement('
  o.id='sx30VacPop';o.setAttribute('aria-hidden','true');var G=[];
  VBAGS.forEach(function(b,i){var P=b.o.map(function(p){return[p[0]*sx,p[1]*sy]}),cx=0,cy=0;P.forEach(function(p){cx+=p[0]/4;cy+=p[1]/4});
   var f=F.f[i];G.push({P:P,c:[cx,cy]});
+  h+='<div class="vbag" data-b="'+i+'" style="transform-origin:'+(cx/IW*100).toFixed(1)+'% '+(cy/IH*100).toFixed(1)+'%">';
   h+='<svg class="vbk" viewBox="0 0 '+IW+' '+IH+'" preserveAspectRatio="none" data-b="'+i+'"><g><path class="vin" fill="rgba(120,140,165,.35)" stroke="rgba(255,255,255,.9)" stroke-width="'+(2.4*sx).toFixed(1)+'"/></g></svg>';
   if(f)h+='<img class="vf" alt="" src="'+f.u+'" data-b="'+i+'" style="left:'+(f.b[0]/IW*100).toFixed(3)+'%;top:'+(f.b[1]/IH*100).toFixed(3)+'%;width:'+(f.b[2]/IW*100).toFixed(3)+'%;height:'+(f.b[3]/IH*100).toFixed(3)+'%;opacity:0">';
   h+='<svg class="vfr" viewBox="0 0 '+IW+' '+IH+'" preserveAspectRatio="none" data-b="'+i+'"><g><path class="vedge" fill="none" stroke="rgba(22,71,158,.28)" stroke-width="'+(6*sx).toFixed(1)+'" stroke-linejoin="round"/><path class="vbody" fill="url(#sx30Film)" stroke="rgba(255,255,255,.92)" stroke-width="'+(2.6*sx).toFixed(1)+'" stroke-linejoin="round"/>'+
    '<path class="vdots" fill="url(#sx30Dots)"/><path class="vshine" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="'+(5*sx).toFixed(1)+'" stroke-linecap="round"/>'+
    '<path class="vcrimp" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="'+(7*sx).toFixed(1)+'" stroke-dasharray="'+(1.5*sx).toFixed(1)+' '+(2.5*sx).toFixed(1)+'"/>'+
    '<path class="vlip" fill="none" stroke="rgba(255,255,255,.95)" stroke-width="'+(2.6*sx).toFixed(1)+'" stroke-linecap="round"/>'+
-   '<path class="vbar" fill="none" stroke="#16479E" stroke-width="'+(13*sx).toFixed(1)+'" stroke-linecap="round" opacity="0"/>'+
-   '<path class="vseal" fill="none" stroke="#FDB913" stroke-width="'+(6*sx).toFixed(1)+'" stroke-linecap="round" opacity="0"/></g></svg>'+
-   '<img class="vr" alt="" src="'+src+'" data-b="'+i+'" style="opacity:0">'});
+   '<path class="vheat" fill="none" stroke="#FDB913" stroke-width="'+(26*sx).toFixed(1)+'" stroke-linecap="round" opacity="0"/>'+
+   '<path class="vseal" fill="none" stroke="#FFF6D6" stroke-width="'+(6*sx).toFixed(1)+'" stroke-linecap="round" opacity="0"/>'+
+   '<path class="vbar" fill="none" stroke="#16479E" stroke-width="'+(15*sx).toFixed(1)+'" stroke-linecap="round" opacity="0"/><path class="vbs" fill="none" stroke="#FDB913" stroke-width="'+(4*sx).toFixed(1)+'" stroke-linecap="round" opacity="0"/>'+
+   '<path class="vbar2" fill="none" stroke="#16479E" stroke-width="'+(15*sx).toFixed(1)+'" stroke-linecap="round" opacity="0"/><path class="vbs2" fill="none" stroke="#FDB913" stroke-width="'+(4*sx).toFixed(1)+'" stroke-linecap="round" opacity="0"/>'+
+   '<circle class="vst" r="'+(7*sx).toFixed(1)+'" fill="rgba(255,255,255,.85)" opacity="0"/><circle class="vst" r="'+(5*sx).toFixed(1)+'" fill="rgba(255,255,255,.85)" opacity="0"/><circle class="vst" r="'+(6*sx).toFixed(1)+'" fill="rgba(255,255,255,.85)" opacity="0"/>'+
+   '<text class="vtx" text-anchor="middle" font-family="Montserrat,system-ui,sans-serif" font-weight="800" font-size="'+(26*sx).toFixed(1)+'" fill="#FDB913" stroke="#16479E" stroke-width="'+(6*sx).toFixed(1)+'" paint-order="stroke" opacity="0">\u2713 SEALED</text></g></svg>'+
+   '<img class="vr" alt="" src="'+src+'" data-b="'+i+'" style="opacity:0"></div>'});
  h+='</div>';o.innerHTML=h;D.body.appendChild(o);
  VPOP.el=o;VPOP.inn=o.firstChild;VPOP.G=G;VPOP.IW=IW;VPOP.IH=IH;
- G.forEach(function(g,i){g.back=o.querySelector('.vbk[data-b="'+i+'"]');g.front=o.querySelector('.vfr[data-b="'+i+'"]');g.food=o.querySelector('.vf[data-b="'+i+'"]');g.real=o.querySelector('.vr[data-b="'+i+'"]');
-  ['vin','vedge','vbody','vdots','vshine','vcrimp','vlip','vbar','vseal'].forEach(function(k){g[k]=o.querySelector('[data-b="'+i+'"] .'+k)});g.bg=[g.back.firstChild,g.front.firstChild]});
+ G.forEach(function(g,i){g.back=o.querySelector('.vbk[data-b="'+i+'"]');g.front=o.querySelector('.vfr[data-b="'+i+'"]');g.food=o.querySelector('.vf[data-b="'+i+'"]');g.real=o.querySelector('.vr[data-b="'+i+'"]');g.wrap=o.querySelector('.vbag[data-b="'+i+'"]');g.steam=[].slice.call(g.front.querySelectorAll('.vst'));
+  ['vin','vedge','vbody','vdots','vshine','vcrimp','vlip','vbar','vbs','vbar2','vbs2','vheat','vseal','vtx'].forEach(function(k){g[k]=o.querySelector('[data-b="'+i+'"] .'+k)});g.bg=[g.back.firstChild,g.front.firstChild]});
  GEO.t=0;onScroll()}
 function vpGeo(){var im=VPOP.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){GEO.vp=null;return}
  var fit=getComputedStyle(im).objectFit,s=fit==='cover'?Math.max(w/VPOP.IW,h/VPOP.IH):Math.min(w/VPOP.IW,h/VPOP.IH),dw=VPOP.IW*s,dh=VPOP.IH*s,t=docTop(im),l=docLeft(im);
@@ -777,14 +785,15 @@ function vpSet(p){var g=GEO.vp,el=VPOP.el,show=p>0&&p<1,hid=p<1;
   /* each finished pack shows only its own bag of the real photo (the rice bag minus the two bags lying over it) */
   var f=g.w/VPOP.IW;function poly(P){return 'M'+P.map(function(q){return(q[0]*f).toFixed(1)+' '+(q[1]*f).toFixed(1)}).join('L')+'Z'}
   VPOP.G.forEach(function(G,i){if(!G.real)return;var d=poly(G.P);if(i===0)d+=poly(VPOP.G[1].P)+poly(VPOP.G[2].P);var cp="path(evenodd,'"+d+"')";G.real.style.clipPath=cp;G.real.style.webkitClipPath=cp})}
- function eo(u){return 1-Math.pow(1-u,3)}function sm(u){return u*u*(3-2*u)}
- var ap=clamp(p/.05,0,1),ext=eo(clamp((p-.02)/.12,0,1)),bag=eo(clamp((p-.12)/.12,0,1)),IW=VPOP.IW;
- /* sealing order : chicken, rice, broccoli, one at a time */
+ function eo(u){return 1-Math.pow(1-u,3)}function sm(u){return u*u*(3-2*u)}function seg(a,b){return clamp((p-a)/(b-a),0,1)}
+ var ap=clamp(p/.05,0,1),ext=eo(seg(.02,.13)),bag=eo(seg(.11,.22));
+ /* one bag at a time : chicken, then rice, then broccoli */
  var ORDER=[1,2,0];
- VPOP.G.forEach(function(G,i){var P=G.P,c=G.c,TL=P[0],TR=P[1],BR=P[2],BL=P[3],j=ORDER[i],S0=.5+.12*j;
-  var close=sm(clamp((p-S0)/.035,0,1)),bar=clamp((p-S0-.025)/.055,0,1),tight=sm(clamp((p-S0-.03)/.05,0,1)),done=sm(clamp((p-S0-.075)/.04,0,1));
-  var ex=TR[0]-TL[0],ey=TR[1]-TL[1],L=Math.sqrt(ex*ex+ey*ey),nx=ey/L,ny=-ex/L;if((c[0]-TL[0])*nx+(c[1]-TL[1])*ny>0){nx=-nx;ny=-ny}
-  var open=bag*(1-close),mx=(TL[0]+TR[0])/2,my=(TL[1]+TR[1])/2,lh=L*.2*open,puff=1+.08*bag*(1-tight);
+ VPOP.G.forEach(function(G,i){var P=G.P,c=G.c,TL=P[0],TR=P[1],BR=P[2],BL=P[3],j=ORDER[i],S0=.47+.13*j,L0=.13;
+  function ph(a,b){return clamp((p-S0-a*L0)/((b-a)*L0),0,1)}
+  var close=sm(ph(0,.14)),jawIn=sm(ph(.08,.28)),press=ph(.28,.62),jawOut=sm(ph(.62,.76)),tight=sm(ph(.3,.6)),done=sm(ph(.74,.92)),stamp=ph(.6,.95),focus=Math.sin(Math.PI*ph(.05,.95));
+  var ex=TR[0]-TL[0],ey=TR[1]-TL[1],L=Math.sqrt(ex*ex+ey*ey),ux=ex/L,uy=ey/L,nx=uy,ny=-ux;if((c[0]-TL[0])*nx+(c[1]-TL[1])*ny>0){nx=-nx;ny=-ny}
+  var open=bag*(1-close),mx=(TL[0]+TR[0])/2,my=(TL[1]+TR[1])/2,lh=L*.2*open,sx2=VPOP.IW/520;
   function pt(q){return q[0].toFixed(1)+' '+q[1].toFixed(1)}
   G.vin.setAttribute('d','M'+pt(TL)+'Q'+pt([mx+nx*lh,my+ny*lh])+' '+pt(TR)+'Q'+pt([mx-nx*lh*.6,my-ny*lh*.6])+' '+pt(TL)+'Z');
   var body='M'+pt(TL)+'Q'+pt([mx-nx*lh*.6,my-ny*lh*.6])+' '+pt(TR)+'L'+pt(BR)+'L'+pt(BL)+'Z';
@@ -792,15 +801,29 @@ function vpSet(p){var g=GEO.vp,el=VPOP.el,show=p>0&&p<1,hid=p<1;
   var s1=[TL[0]+(BL[0]-TL[0])*.15+ex*.1,TL[1]+(BL[1]-TL[1])*.15+ey*.1],s2=[TL[0]+(BL[0]-TL[0])*.8+ex*.1,TL[1]+(BL[1]-TL[1])*.8+ey*.1];G.vshine.setAttribute('d','M'+pt(s1)+'L'+pt(s2));
   var k1=[BL[0]+(TL[0]-BL[0])*.05,BL[1]+(TL[1]-BL[1])*.05],k2=[BR[0]+(TR[0]-BR[0])*.05,BR[1]+(TR[1]-BR[1])*.05];G.vcrimp.setAttribute('d','M'+pt(k1)+'L'+pt(k2));
   G.vlip.setAttribute('d','M'+pt(TL)+'Q'+pt([mx-nx*lh*.6,my-ny*lh*.6])+' '+pt(TR));
-  /* the heat sealer : a navy bar sweeps along the closed mouth, leaving a glowing gold seal behind it */
-  var a0=[TL[0]-ex*.06,TL[1]-ey*.06],sw=clamp(bar*1.15,0,1),a1=[TL[0]-ex*.06+ex*1.12*sw,TL[1]-ey*.06+ey*1.12*sw];
-  G.vbar.setAttribute('d','M'+pt(a0)+'L'+pt(a1));G.vbar.setAttribute('opacity',(bar>0&&bar<1?1:0).toString());
-  var glow=bar>0?Math.min(1,bar*2)*(1-done*.85):0;G.vseal.setAttribute('d','M'+pt(TL)+'L'+pt([TL[0]+ex*Math.min(1,sw),TL[1]+ey*Math.min(1,sw)]));G.vseal.setAttribute('opacity',glow.toFixed(3));
-  var sc=(.7+.3*bag)*puff-.03*tight,tr='translate('+c[0].toFixed(1)+' '+c[1].toFixed(1)+') scale('+sc.toFixed(4)+') translate('+(-c[0]).toFixed(1)+' '+(-c[1]).toFixed(1)+')';
+  /* the heat sealer : two navy jaws slam shut on the mouth, glow hot gold, steam puffs out, then they lift away leaving the seal */
+  var ext2=.16,gap=(60*(1-jawIn)+5+70*jawOut)*sx2,jo=(jawIn>0&&jawOut<1)?1:0,A=[TL[0]-ux*L*ext2,TL[1]-uy*L*ext2],Bp=[TR[0]+ux*L*ext2,TR[1]+uy*L*ext2];
+  function off(q,d){return[q[0]+nx*d,q[1]+ny*d]}
+  var j1='M'+pt(off(A,gap))+'L'+pt(off(Bp,gap)),j2='M'+pt(off(A,-gap))+'L'+pt(off(Bp,-gap));
+  G.vbar.setAttribute('d',j1);G.vbs.setAttribute('d',j1);G.vbar2.setAttribute('d',j2);G.vbs2.setAttribute('d',j2);
+  var jop=(jo*(1-jawOut)).toFixed(3),hot=press>0&&press<1?(.55+.45*Math.abs(Math.sin(press*Math.PI*4))):0;
+  [G.vbar,G.vbar2].forEach(function(e){e.setAttribute('opacity',jop)});[G.vbs,G.vbs2].forEach(function(e){e.setAttribute('opacity',(jo*(1-jawOut)*(.4+.6*hot)).toFixed(3))});
+  G.vheat.setAttribute('d','M'+pt(TL)+'L'+pt(TR));G.vheat.setAttribute('opacity',(hot*.75).toFixed(3));
+  G.vseal.setAttribute('d','M'+pt(TL)+'L'+pt(TR));G.vseal.setAttribute('opacity',(press>0?(1-done*.8):0).toFixed(3));
+  G.steam.forEach(function(s,q){var u=clamp((press-.15*q)/.7,0,1),t0=[TL[0]+ex*(.25+.25*q),TL[1]+ey*(.25+.25*q)],rise=u*55*sx2;
+   s.setAttribute('cx',(t0[0]+nx*rise+ux*Math.sin(u*6+q)*6*sx2).toFixed(1));s.setAttribute('cy',(t0[1]+ny*rise+uy*Math.sin(u*6+q)*6*sx2).toFixed(1));s.setAttribute('opacity',(u>0&&u<1?Math.sin(u*Math.PI)*.9:0).toFixed(3))});
+  var tp=off([mx,my],48*sx2);G.vtx.setAttribute('x',tp[0].toFixed(1));G.vtx.setAttribute('y',tp[1].toFixed(1));
+  var tpop=stamp>0?Math.min(1,stamp*3)*(1-sm(clamp((stamp-.7)/.3,0,1))):0;G.vtx.setAttribute('opacity',tpop.toFixed(3));
+  var tsc=.6+.4*eo(Math.min(1,stamp*3));G.vtx.setAttribute('transform','translate('+tp[0].toFixed(1)+' '+tp[1].toFixed(1)+') scale('+tsc.toFixed(3)+') translate('+(-tp[0]).toFixed(1)+' '+(-tp[1]).toFixed(1)+')');
+  /* vacuum : the pouch is squeezed tight around the food while the jaws hold */
+  var sq=1-.1*Math.sin(Math.PI*tight)*(1-done)-.03*tight,sc=(.7+.3*bag)*(1+.08*bag*(1-tight))*sq,tr='translate('+c[0].toFixed(1)+' '+c[1].toFixed(1)+') scale('+sc.toFixed(4)+') translate('+(-c[0]).toFixed(1)+' '+(-c[1]).toFixed(1)+')';
   G.bg[0].setAttribute('transform',tr);G.bg[1].setAttribute('transform',tr);
-  var bo=(bag*(1-done)).toFixed(3);G.back.style.opacity=bo;G.front.style.opacity=(bag*(1-done*.9)).toFixed(3);
+  G.back.style.opacity=(bag*(1-done)).toFixed(3);G.front.style.opacity=(bag).toFixed(3);
+  [G.vin,G.vedge,G.vbody,G.vdots,G.vshine,G.vcrimp,G.vlip].forEach(function(e){e.setAttribute('opacity',(1-done).toFixed(3))});
+  /* the bag being sealed comes forward, with a little shake while the jaws press */
+  var shake=press>0&&press<1?Math.sin(press*60)*1.2:0;G.wrap.style.transform=focus>0?'scale('+(1+.16*focus).toFixed(4)+') rotate('+shake.toFixed(2)+'deg)':'';G.wrap.style.zIndex=focus>0?'3':'';
   /* the food glides down into its open pouch, no bounce */
-  if(G.food){var u=sm(clamp((p-(.25+.07*i))/.16,0,1)),fl=1-u,bob=Math.sin(p*40+i)*1.5*fl*ext,dy=-fl*(150+i*10),rot=fl*(i===1?12:-10)+bob,fs=(.8+.2*ext)-.06*tight;
+  if(G.food){var u=sm(seg(.22+.07*j,.36+.07*j)),fl=1-u,bob=Math.sin(p*40+i)*1.5*fl*ext,dy=-fl*(150+i*10),rot=fl*(i===1?12:-10)+bob,fs=(.8+.2*ext)*(1-.06*tight);
    G.food.style.transform='translate3d(0,'+dy.toFixed(1)+'%,0) rotate('+rot.toFixed(2)+'deg) scale('+fs.toFixed(4)+')';G.food.style.opacity=(ext*(1-done)).toFixed(3)}
   if(G.real)G.real.style.opacity=done.toFixed(3)});
  /* the whole set rises out of the card while packing, then settles back into its place */
@@ -837,7 +860,7 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
  if(MPOP&&MPOP.el&&GEO.mp){var open=!!(MPOP.card&&MPOP.card.classList.contains('open'));if(open!==MPOP.open){MPOP.open=open;MPOP.st='';if(open){MPOP.src='0';MPOP.im.src=MPOP.src0;MPOP.shown=false;MPOP.el.style.display='none'}}
   if(!open){var mp=clamp((vh*.5-(GEO.mp.ht-y))/(vh*.22),0,1) /* finishes before the next card starts packing */,ms=mp.toFixed(3);if(ms!==MPOP.st){MPOP.st=ms;mpSet(mp)}}}
  if(VPOP&&VPOP.el&&GEO.vp){var vo=!!(VPOP.card&&VPOP.card.classList.contains('open'));if(vo!==VPOP.open){VPOP.open=vo;VPOP.st='';if(vo){VPOP.im.style.visibility='';VPOP.hid=false;VPOP.shown=false;VPOP.el.style.display='none'}}
-  if(!vo){var vq=clamp((vh*.5-(GEO.vp.ht-y))/(vh*.38),0,1),vs=vq.toFixed(3);if(vs!==VPOP.st){VPOP.st=vs;vpSet(vq)}}}
+  if(!vo){var vq=clamp((vh*.5-(GEO.vp.ht-y))/(vh*.46),0,1),vs=vq.toFixed(3);if(vs!==VPOP.st){VPOP.st=vs;vpSet(vq)}}}
  if(MARK&&GEO.mTop!=null){var mt=GEO.mTop-y,mp=clamp((vh-mt)/(GEO.mH+vh*.35),0,1);MARK.style.transform='translate3d(0,'+((1-mp)*55).toFixed(1)+'%,0) scale('+(.82+.18*mp).toFixed(3)+')';MARK.style.opacity=(.15+.85*mp).toFixed(3)}}
 /* the scroll speed lean only touches the cards and the giant type, never the whole page */
 /* a custom property on a big block makes the browser restyle everything inside it, so the lean is written straight onto the two type rows */
