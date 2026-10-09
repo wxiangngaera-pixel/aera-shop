@@ -3323,5 +3323,23 @@ function go(){var u=location.href.split('#')[0],h=location.hash;
   if(a[0]&&a[1]&&a[0].length>1000&&a[1].length>1000&&a[0]!==a[1]){var n=u.replace(/([?&])_v=\d+&?/,'$1').replace(/[?&]$/,'');location.replace(n+(n.indexOf('?')>=0?'&':'?')+'_v='+Date.now()+h)}}).catch(function(){})}
 if(document.readyState==='complete')setTimeout(go,1200);else window.addEventListener('load',function(){setTimeout(go,1200)})})();
 </script>
+<style id="aera-dock-css">
+/* the side tab : tucks "How it Works", the chatbot and WhatsApp Us away ; tap it to bring them back */
+#aeraDock{position:fixed;right:0;bottom:calc(170px + env(safe-area-inset-bottom,0px));z-index:2147482000;width:30px;height:58px;border:0;border-radius:14px 0 0 14px;background:#16479E;color:#FDB913;box-shadow:-4px 6px 18px rgba(10,30,70,.28);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;margin:0;-webkit-tap-highlight-color:transparent;transition:width .2s}
+#aeraDock:hover{width:36px}
+#aeraDock:focus-visible{outline:2px solid #FDB913;outline-offset:2px}
+#aeraDock svg{width:16px;height:16px;display:block;transition:transform .35s}
+html.aera-dock-open #aeraDock svg{transform:rotate(180deg)}
+#atHelp,a.btn.wa,[id^="ultra-fast-widget-bubble"]{transition:transform .45s cubic-bezier(.2,.9,.25,1),opacity .3s!important}
+html:not(.aera-dock-open) #atHelp{transform:translateX(-160%)!important;opacity:0!important;pointer-events:none!important}
+html:not(.aera-dock-open) a.btn.wa,html:not(.aera-dock-open) [id^="ultra-fast-widget-bubble"]{transform:translateX(160%)!important;opacity:0!important;pointer-events:none!important}
+</style>
+<script>(function(){if(window.__AERA_DOCK)return;window.__AERA_DOCK=1;
+var H=document.documentElement,K='aera.dock';try{if(sessionStorage.getItem(K)==='1')H.classList.add('aera-dock-open')}catch(e){}
+var b=document.createElement('button');b.id='aeraDock';b.type='button';
+b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
+function sync(){var o=H.classList.contains('aera-dock-open');b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Hide help, chat and WhatsApp':'Show help, chat and WhatsApp')}
+b.onclick=function(){H.classList.toggle('aera-dock-open');try{sessionStorage.setItem(K,H.classList.contains('aera-dock-open')?'1':'0')}catch(e){}sync()};
+function add(){document.body.appendChild(b);sync()}if(document.body)add();else document.addEventListener('DOMContentLoaded',add)})();</script>
 </body>
 </html>
