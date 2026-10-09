@@ -1104,7 +1104,7 @@ var PCLIP={"da80cefa14692436":"https://swpprjvubgcdsojapaad.supabase.co/storage/
 var PWARM={};function pwarm(e){try{var t=e.target&&e.target.closest&&e.target.closest('button.srow');if(!t)return;var im=t.querySelector('img'),src=im?im.getAttribute('src'):'',m=src&&src.match(/([^\/]+)\.(jpe?g|png|webp)/i),s=m&&PCLIP[m[1]];if(!s||PWARM[s])return;var u=/^https?:/.test(s)?s:'https://my.chatbees.io/uploads/feedback/upload_'+s+'.mp4',v=D.createElement('video');v.crossOrigin='anonymous';v.muted=true;v.preload='auto';v.src=u;PWARM[s]=v;v.load()}catch(x){}}
 D.addEventListener('pointerover',pwarm,true);D.addEventListener('touchstart',pwarm,{capture:true,passive:true});
 function dropCls(b,tray){try{return tray&&b.offsetTop>tray.offsetHeight*.3?'sx30-dropr':'sx30-drop'}catch(e){return 'sx30-drop'}}
-function pour(mb,tray,b,u,d){var m=u&&u.match(/([^\/]+)\.(jpe?g|png|webp)/i),s=m&&PCLIP[m[1]];if(!s||!b.offsetWidth||!tray.offsetWidth)return false;if(b.offsetTop>tray.offsetHeight*.3)return false;
+function pour(mb,tray,b,u,d){var m=u&&u.match(/([^\/]+)\.(jpe?g|png|webp)/i),s=m&&PCLIP[m[1]];if(!s||!b.offsetWidth||!tray.offsetWidth)return false;
  /* the clip is a top-down shot of the whole tray : it is laid over the tray, shown opaque inside the compartment, and the
     fall from above the tray is drawn on a canvas strip blended with multiply ( the shot's light table turns white and vanishes ) */
  var l=tray.offsetLeft,t=tray.offsetTop,w=tray.offsetWidth,h=tray.offsetHeight,VW=w/.8607,VH=h/.9654,vl=l-.0691*VW,vt=t-.0253*VH,
@@ -1113,7 +1113,9 @@ function pour(mb,tray,b,u,d){var m=u&&u.match(/([^\/]+)\.(jpe?g|png|webp)/i),s=m
  var v=D.createElement('video');b._pv=v;v.className='sx30-pour';v.crossOrigin='anonymous';v.muted=true;v.defaultMuted=true;v.setAttribute('muted','');v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';
  v.style.cssText='left:'+vl+'px;top:'+vt+'px;width:'+VW+'px;height:'+VH+'px;clip-path:inset('+y0+'px '+(VW-x-bw)+'px '+(VH-y-bh)+'px '+x+'px round '+r+'px)';
  var pad=bw*.18,cx=Math.max(0,x-pad),cw=Math.min(VW,x+bw+pad)-cx,ch=Math.max(0,ty),cv=D.createElement('canvas'),dp=Math.min(2,W.devicePixelRatio||1),g=null;
- cv.className='sx30-pout';cv.width=Math.max(1,Math.round(cw*dp));cv.height=Math.max(1,Math.round(ch*dp));cv.style.cssText='left:'+(vl+cx)+'px;top:'+vt+'px;width:'+cw+'px;height:'+ch+'px';try{g=cv.getContext('2d')}catch(e){}
+ cv.className='sx30-pout';cv.width=Math.max(1,Math.round(cw*dp));cv.height=Math.max(1,Math.round(ch*dp));cv.style.cssText='left:'+(vl+cx)+'px;top:'+vt+'px;width:'+cw+'px;height:'+ch+'px';
+ /* a lower compartment is fed from the side : the falling stream is turned a quarter so it comes in over the right rim, never across the compartment above */
+ if(b.offsetTop/h>=.26){var L0=vl+x+bw+r*.6,Cy=vt+y+bh/2;cv.style.left=(L0+ch/2-cw/2)+'px';cv.style.top=(Cy-ch/2)+'px';cv.style.transform='rotate(90deg)'}try{g=cv.getContext('2d')}catch(e){}
  v.style.opacity='0';cv.style.opacity='0';var done=false,go=false,raf=0;
  function rm(){if(raf)cancelAnimationFrame(raf);raf=0;if(v.parentNode)v.parentNode.removeChild(v);if(cv.parentNode)cv.parentNode.removeChild(cv)}v._rm=rm;
  function draw(){raf=0;if(done||!g)return;var vw=v.videoWidth,vh=v.videoHeight;if(vw&&ch>2){try{g.drawImage(v,cx/VW*vw,0,cw/VW*vw,ch/VH*vh,0,0,cv.width,cv.height)}catch(e){}}raf=requestAnimationFrame(draw)}
@@ -1122,7 +1124,7 @@ function pour(mb,tray,b,u,d){var m=u&&u.match(/([^\/]+)\.(jpe?g|png|webp)/i),s=m
   v.style.opacity='0';cv.style.opacity='0';setTimeout(rm,320);tray.classList.remove('sx30-pop');void tray.offsetWidth;tray.classList.add('sx30-pop')}
  v.addEventListener('ended',function(){fin(false)});v.addEventListener('error',function(){fin(true)});v.addEventListener('playing',function(){if(done)return;go=true;b.style.visibility='hidden';v.style.opacity='';cv.style.opacity='';if(!raf)draw()});
  setTimeout(function(){if(!go)fin(true)},5000+d);setTimeout(function(){fin(false)},9000+d);
- v.src=/^https?:/.test(s)?s:'https://my.chatbees.io/uploads/feedback/upload_'+s+'.mp4';mb.appendChild(v);if(ch>2&&b.offsetTop/h<.26)mb.appendChild(cv);
+ v.src=/^https?:/.test(s)?s:'https://my.chatbees.io/uploads/feedback/upload_'+s+'.mp4';mb.appendChild(v);if(ch>2)mb.appendChild(cv);
  setTimeout(function(){if(done)return;v.playbackRate=1.3;var q=v.play();if(q&&q.catch)q.catch(function(){fin(true)})},d);
  return true}
 /* the sauce goes in its own vacuum bag beside the tray ( the plan names it in the tray's aria-label ) */
