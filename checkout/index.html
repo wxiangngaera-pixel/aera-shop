@@ -528,7 +528,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 /* ===== Settings (edit here) ===== */
 var KITCHEN={lat:2.9976100,lng:101.6742575};
 var POINTS_URL='/api/public/landing-pages/6927/sheet-data'; // public AERA Points balances (hashed keys only — no emails or names in that sheet)
-var PAY={gateway:'stripe', // 'stripe' = Chatbees on-page Stripe checkout; 'billplz' = Billplz (FPX, Touch 'n Go, GrabPay, Boost, ShopeePay, DuitNow QR, cards) via flow 5488
+var PAY={gateway:'billplz', // 'stripe' = Chatbees on-page Stripe checkout; 'billplz' = Billplz (FPX, Touch 'n Go, GrabPay, Boost, ShopeePay, DuitNow QR, cards) via flow 5488
  flowUrl:'', // the Billplz webhook is read from the settings sheet (key: billplz_flow_url) so that no
  // token is baked into this public page. A browser-called webhook can never truly be secret,
  // but this keeps it in one place to rotate and off the page source.
