@@ -748,13 +748,13 @@ function vfood(I,cb){var src=I.src,key='aera.vacfood.v1',sig=src.length+':'+src.
 function vpBuild(src){var I=new Image();I.onload=function(){try{vfood(I,function(F){vpMake(src,F)})}catch(e){}};I.src=src}
 /* an empty vacuum pouch, drawn on each bag of the photo : see-through film, embossed dots, a shine, a crimped seal at the bottom and an open mouth at the top */
 function vpMake(src,F){var IW=F.W,IH=F.H,sx=IW/520,sy=IH/359,o=D.createElement('div'),h='<div class="vp-in"><svg viewBox="0 0 '+IW+' '+IH+'" preserveAspectRatio="none" style="width:0;height:0;position:absolute"><defs><pattern id="sx30Dots" width="'+(7*sx).toFixed(1)+'" height="'+(7*sx).toFixed(1)+'" patternUnits="userSpaceOnUse"><circle cx="'+(3.5*sx).toFixed(1)+'" cy="'+(3.5*sx).toFixed(1)+'" r="'+(1.1*sx).toFixed(2)+'" fill="rgba(255,255,255,.28)"/></pattern>'+
-  '<linearGradient id="sx30Film" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="rgba(255,255,255,.34)"/><stop offset=".5" stop-color="rgba(214,228,244,.16)"/><stop offset="1" stop-color="rgba(255,255,255,.3)"/></linearGradient></defs></svg>';
+  '<linearGradient id="sx30Film" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="rgba(255,255,255,.58)"/><stop offset=".45" stop-color="rgba(220,232,246,.3)"/><stop offset="1" stop-color="rgba(255,255,255,.52)"/></linearGradient></defs></svg>';
  o.id='sx30VacPop';o.setAttribute('aria-hidden','true');var G=[];
  VBAGS.forEach(function(b,i){var P=b.o.map(function(p){return[p[0]*sx,p[1]*sy]}),cx=0,cy=0;P.forEach(function(p){cx+=p[0]/4;cy+=p[1]/4});
   var f=F.f[i];G.push({P:P,c:[cx,cy]});
   h+='<svg class="vbk" viewBox="0 0 '+IW+' '+IH+'" preserveAspectRatio="none" data-b="'+i+'"><g><path class="vin" fill="rgba(120,140,165,.35)" stroke="rgba(255,255,255,.9)" stroke-width="'+(2.4*sx).toFixed(1)+'"/></g></svg>';
   if(f)h+='<img class="vf" alt="" src="'+f.u+'" data-b="'+i+'" style="left:'+(f.b[0]/IW*100).toFixed(3)+'%;top:'+(f.b[1]/IH*100).toFixed(3)+'%;width:'+(f.b[2]/IW*100).toFixed(3)+'%;height:'+(f.b[3]/IH*100).toFixed(3)+'%;opacity:0">';
-  h+='<svg class="vfr" viewBox="0 0 '+IW+' '+IH+'" preserveAspectRatio="none" data-b="'+i+'"><g><path class="vbody" fill="url(#sx30Film)" stroke="rgba(255,255,255,.92)" stroke-width="'+(2.6*sx).toFixed(1)+'" stroke-linejoin="round"/>'+
+  h+='<svg class="vfr" viewBox="0 0 '+IW+' '+IH+'" preserveAspectRatio="none" data-b="'+i+'"><g><path class="vedge" fill="none" stroke="rgba(22,71,158,.28)" stroke-width="'+(6*sx).toFixed(1)+'" stroke-linejoin="round"/><path class="vbody" fill="url(#sx30Film)" stroke="rgba(255,255,255,.92)" stroke-width="'+(2.6*sx).toFixed(1)+'" stroke-linejoin="round"/>'+
    '<path class="vdots" fill="url(#sx30Dots)"/><path class="vshine" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="'+(5*sx).toFixed(1)+'" stroke-linecap="round"/>'+
    '<path class="vcrimp" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="'+(7*sx).toFixed(1)+'" stroke-dasharray="'+(1.5*sx).toFixed(1)+' '+(2.5*sx).toFixed(1)+'"/>'+
    '<path class="vlip" fill="none" stroke="rgba(255,255,255,.95)" stroke-width="'+(2.6*sx).toFixed(1)+'" stroke-linecap="round"/>'+
@@ -762,7 +762,7 @@ function vpMake(src,F){var IW=F.W,IH=F.H,sx=IW/520,sy=IH/359,o=D.createElement('
  h+='<img class="vr" alt="" src="'+src+'" style="opacity:0"></div>';o.innerHTML=h;D.body.appendChild(o);
  VPOP.el=o;VPOP.inn=o.firstChild;VPOP.G=G;VPOP.IW=IW;VPOP.IH=IH;VPOP.real=o.querySelector('.vr');
  G.forEach(function(g,i){g.back=o.querySelector('.vbk[data-b="'+i+'"]');g.front=o.querySelector('.vfr[data-b="'+i+'"]');g.food=o.querySelector('.vf[data-b="'+i+'"]');
-  ['vin','vbody','vdots','vshine','vcrimp','vlip','vseal'].forEach(function(k){g[k]=o.querySelector('[data-b="'+i+'"] .'+k)});g.bg=[g.back.firstChild,g.front.firstChild]});
+  ['vin','vedge','vbody','vdots','vshine','vcrimp','vlip','vseal'].forEach(function(k){g[k]=o.querySelector('[data-b="'+i+'"] .'+k)});g.bg=[g.back.firstChild,g.front.firstChild]});
  GEO.t=0;onScroll()}
 function vpGeo(){var im=VPOP.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){GEO.vp=null;return}
  var fit=getComputedStyle(im).objectFit,s=fit==='cover'?Math.max(w/VPOP.IW,h/VPOP.IH):Math.min(w/VPOP.IW,h/VPOP.IH),dw=VPOP.IW*s,dh=VPOP.IH*s,t=docTop(im),l=docLeft(im);
@@ -788,7 +788,7 @@ function vpSet(p){var g=GEO.vp,el=VPOP.el,show=p>0&&p<1,hid=p<1;
   G.vin.setAttribute('d',back+front+'Z');
   var bulge=6*IW/520*open,sm1=[(TR[0]+BR[0])/2+nx*0,(TR[1]+BR[1])/2],sm2=[(BL[0]+TL[0])/2,(BL[1]+TL[1])/2];
   var body='M'+pt(TL)+'Q'+pt([mx-nx*lh*.6,my-ny*lh*.6])+' '+pt(TR)+'L'+pt(BR)+'L'+pt(BL)+'Z';
-  G.vbody.setAttribute('d',body);G.vdots.setAttribute('d',body);
+  G.vbody.setAttribute('d',body);G.vedge.setAttribute('d',body);G.vdots.setAttribute('d',body);
   var s1=[TL[0]+(BL[0]-TL[0])*.15+(TR[0]-TL[0])*.1,TL[1]+(BL[1]-TL[1])*.15+(TR[1]-TL[1])*.1],s2=[TL[0]+(BL[0]-TL[0])*.8+(TR[0]-TL[0])*.1,TL[1]+(BL[1]-TL[1])*.8+(TR[1]-TL[1])*.1];
   G.vshine.setAttribute('d','M'+pt(s1)+'L'+pt(s2));
   var k1=[BL[0]+(TL[0]-BL[0])*.05,BL[1]+(TL[1]-BL[1])*.05],k2=[BR[0]+(TR[0]-BR[0])*.05,BR[1]+(TR[1]-BR[1])*.05];G.vcrimp.setAttribute('d','M'+pt(k1)+'L'+pt(k2));
