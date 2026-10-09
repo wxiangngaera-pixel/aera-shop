@@ -2399,7 +2399,7 @@ if(window.aeraRetranslate)window.aeraRetranslate();
     var markGeo=new THREE.ExtrudeGeometry(sh,{depth:0.16,bevelEnabled:true,bevelThickness:0.03,
       bevelSize:0.024,bevelSegments:2,curveSegments:4});
     markGeo.center();
-    var mark=new THREE.Mesh(markGeo,mk(GOLD,0.85,0.34));
+    var mark=new THREE.Mesh(markGeo,mk(GOLD,0)); /* AERA portal in exact gold #FDB913 */
     mark.scale.setScalar(2.9);
     var portal=new THREE.Group(); portal.add(mark); portal.visible=false; scene.add(portal);
 
