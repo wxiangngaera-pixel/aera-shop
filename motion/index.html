@@ -840,7 +840,7 @@ var BCOMP=[{o:[[477,103],[687,91],[702,109],[647,175],[570,183],[468,222]]},{o:[
 function bentoPlate(){if(BPOP)return;var hi=$('#hc-plan .himg'),im=hi&&$('img',hi);if(!hi||!im)return;BPOP={hi:hi,im:im,card:$('#hc-plan'),open:null,shown:null,src:'0'};
  var tries=0,last='';(function wait(){var s=im.getAttribute('src')||'';if(im.complete&&im.naturalWidth>=600&&s&&s===last){BPOP.src0=s;(W.requestIdleCallback||function(f){setTimeout(f,300)})(function(){bcut(s,function(r){if(r){BPOP.r=r;bpBuild()}})});return}last=s;if(++tries<40)setTimeout(wait,600)})()}
 /* lift the three food portions out of the photo exactly along their own edges, and make the same photo with an empty box ; kept in this browser */
-function bcut(src,cb){var key='aera.bentocut.v2',sig=src.length+':'+src.slice(-48);try{var c=JSON.parse(localStorage.getItem(key)||'null');if(c&&c.sig===sig){cb(c);return}}catch(e){}
+function bcut(src,cb){var key='aera.bentocut.v3',sig=src.length+':'+src.slice(-48);try{var c=JSON.parse(localStorage.getItem(key)||'null');if(c&&c.sig===sig){cb(c);return}}catch(e){}
  var I=new Image();I.onload=function(){var r=null;try{r=bsplit(I);r.sig=sig;try{localStorage.setItem(key,JSON.stringify(r))}catch(e){}}catch(e){r=null}cb(r)};I.onerror=function(){cb(null)};I.src=src}
 function bsplit(I){var Wd=I.naturalWidth,Ht=I.naturalHeight,N=Wd*Ht,sx=Wd/960,sy=Ht/436,cv=D.createElement('canvas');cv.width=Wd;cv.height=Ht;var x=cv.getContext('2d');x.drawImage(I,0,0);var d=x.getImageData(0,0,Wd,Ht).data,i,j,k;
  var C=BCOMP.map(function(c){return c.o.map(function(p){return[p[0]*sx,p[1]*sy]})});
@@ -886,9 +886,11 @@ function bsplit(I){var Wd=I.naturalWidth,Ht=I.naturalHeight,N=Wd*Ht,sx=Wd/960,sy
   while(hs>0){var tp=hpop(),v=tp[0],ix=tp[1];if(v>dist[ix])continue;var qx=ix%w,qy=(ix/w)|0,nb=[qx>0?ix-1:-1,qx<w-1?ix+1:-1,qy>0?ix-w:-1,qy<h-1?ix+w:-1];
    for(var z2=0;z2<4;z2++){var kk=nb[z2];if(kk<0)continue;var gk=((kk/w|0)+Y0)*Wd+kk%w+X0;if(mb[gk]<=.5)continue;var dk=Math.max(0,(110-L[gk])/110),nv=v+1+60*dk*dk;if(nv<dist[kk]){dist[kk]=nv;lab[kk]=lab[ix];if(hs<hv.length)hpush(nv,kk)}}}
   var sr=0,sgc=0,sbc=0,cnt=0;
-  for(var q=0;q<K;q++){var x0=1e9,y0=1e9,x1=-1,y1=-1;for(k2=0;k2<n;k2++)if(lab[k2]===q){var px=k2%w,py=(k2/w)|0;if(px<x0)x0=px;if(px>x1)x1=px;if(py<y0)y0=py;if(py>y1)y1=py}if(x1<0)continue;
+  /* every piece overlaps its neighbours by 2px, so once they have all landed there are no seams */
+  function own(q,px,py){for(var oy=-2;oy<=2;oy++)for(var ox=-2;ox<=2;ox++){var X=px+ox,Y=py+oy;if(X<0||Y<0||X>=w||Y>=h)continue;if(lab[Y*w+X]===q)return true}return false}
+  for(var q=0;q<K;q++){var x0=1e9,y0=1e9,x1=-1,y1=-1;for(k2=0;k2<n;k2++)if(lab[k2]===q){var px=k2%w,py=(k2/w)|0;if(px<x0)x0=px;if(px>x1)x1=px;if(py<y0)y0=py;if(py>y1)y1=py}if(x1<0)continue;x0=Math.max(0,x0-2);y0=Math.max(0,y0-2);x1=Math.min(w-1,x1+2);y1=Math.min(h-1,y1+2);
    var cw=x1-x0+1,chh=y1-y0+1,cc=D.createElement('canvas');cc.width=cw;cc.height=chh;var c2=cc.getContext('2d'),o=c2.createImageData(cw,chh);
-   for(var yy=0;yy<chh;yy++)for(var xx=0;xx<cw;xx++){var lk=(yy+y0)*w+xx+x0;if(lab[lk]!==q)continue;var si=(yy+y0+Y0)*Wd+xx+x0+X0,qo=(yy*cw+xx)*4;o.data[qo]=d[si*4];o.data[qo+1]=d[si*4+1];o.data[qo+2]=d[si*4+2];o.data[qo+3]=Math.round(Math.min(1,mb[si])*255);sr+=d[si*4];sgc+=d[si*4+1];sbc+=d[si*4+2];cnt++}
+   for(var yy=0;yy<chh;yy++)for(var xx=0;xx<cw;xx++){var si=(yy+y0+Y0)*Wd+xx+x0+X0;if(mb[si]<.02||!own(q,xx+x0,yy+y0))continue;var qo=(yy*cw+xx)*4;o.data[qo]=d[si*4];o.data[qo+1]=d[si*4+1];o.data[qo+2]=d[si*4+2];o.data[qo+3]=Math.round(Math.min(1,mb[si])*255);sr+=d[si*4];sgc+=d[si*4+1];sbc+=d[si*4+2];cnt++}
    c2.putImageData(o,0,0);var pu=cc.toDataURL('image/webp',.92);if(pu.indexOf('data:image/webp')!==0)pu=cc.toDataURL('image/png');
    pieces.push({c:c,u:pu,b:[x0+X0,y0+Y0,cw,chh]})}
   pieces.push({c:c,col:'rgb('+Math.round(sr/cnt)+','+Math.round(sgc/cnt)+','+Math.round(sbc/cnt)+')'})});
