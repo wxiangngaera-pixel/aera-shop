@@ -411,6 +411,8 @@ function pSleep(t,o){o=pSit(t,o);o.lk=1.45;o.rk=1.45;o.hx=.48;o.hz=.22;o.by=-.5+
 function pDance(t,o){o=o||{};var s=Math.sin(t*7),c=Math.cos(t*7);o.by=Math.abs(s)*.16;o.bz=s*.14;o.lk=Math.max(0,c)*.7;o.rk=Math.max(0,-c)*.7;o.lh=-Math.max(0,c)*.35;o.rh=-Math.max(0,-c)*.35;
  o.lsz=1.6+s*.9;o.rsz=-1.6+s*.9;o.lez=-.6;o.rez=.6;o.hz=-s*.18;o.hy=c*.2;return o}
 function pBrace(t,k,o){o=o||{};o.lh=-.3*k;o.rh=-.3*k;o.lk=.62*k;o.rk=.62*k;o.la=.3*k;o.ra=.3*k;o.lsz=.4+.9*k+Math.sin(t*18)*.4*k;o.rsz=-.4-.9*k-Math.sin(t*18)*.4*k;o.lex=-.7*k;o.rex=-.7*k;o.bx=-.18*k;o.hx=-.12*k;return o}
+/* dangling from your finger : arms up, legs swinging, body swinging with the drag */
+function pHeld(t,o){o=o||{};var s=Math.sin(t*7);o.lsz=2.5;o.rsz=-2.5;o.lez=-.3;o.rez=.3;o.lh=s*.45;o.rh=-s*.45;o.lk=.35+.2*s;o.rk=.35-.2*s;o.hx=.1;o.bz=clamp(-(L.vx||0)*.035,-.5,.5);return o}
 function pCheer(t,o){o=o||{};o.lsz=2.3;o.rsz=-2.3;o.lez=-.5;o.rez=.5;o.by=Math.abs(Math.sin(t*9))*.22;o.hx=-.2;o.lk=.2;o.rk=.2;return o}
 function pProject(t,o){o=pIdle(t,o);o.lsx=-.9;o.rsx=-.9;o.lex=-.9;o.rex=-.9;o.lsz=.25;o.rsz=-.25;o.hx=-.12;o.bx=-.04;return o}
 function pPoint(t,o){o=pIdle(t,o);o.rsx=-1.5;o.rsz=-.35;o.rex=0;o.hx=-.15;return o}
@@ -464,7 +466,7 @@ var L={mode:'enter',t0:performance.now(),until:0,tx:VW*.5,sx:-60,face:1,
   if(now-lastTalk>14000){if(m==='watch')talk(LIFE,SAY.watch);else if(m==='point')talk(LIFE,SAY.hungry);else if(m==='wave')talk(LIFE,Math.random()<.5?SAY.hi:SAY.macro)}}};
 function lifeFrame(now,t){var r=LIFE,o={},feet=VH-26,moving=false,run=false;show(r,true);
  var fast=Math.abs(svel)>38;
- if(fast&&L.mode!=='sleep'&&L.mode!=='sit'&&L.mode!=='enter'){if(L.mode!=='whoa'){L.act('whoa');if(now-lastTalk>9000)talk(LIFE,SAY.whoa,1600)}}
+ if(fast&&['sleep','sit','enter','held','fall','land'].indexOf(L.mode)<0){if(L.mode!=='whoa'){L.act('whoa');if(now-lastTalk>9000)talk(LIFE,SAY.whoa,1600)}}
  if(L.mode==='sleep'&&now-lastInput<1200){L.act('jump');talk(LIFE,SAY.up,1800)}
  switch(L.mode){
   case 'enter':L.tx=VW*.42;moving=true;run=true;if(Math.abs(L.sx-L.tx)<4){L.act('wave');talk(LIFE,SAY.hi,2600)}break;
@@ -480,6 +482,9 @@ function lifeFrame(now,t){var r=LIFE,o={},feet=VH-26,moving=false,run=false;show
   case 'sit':pSit(t,o);if(now>L.until){if(now-lastInput>22000){L.mode='sleep';talk(LIFE,SAY.zz,4000)}else L.next()}break;
   case 'sleep':pSleep(t,o);if(now-lastTalk>6000)talk(LIFE,SAY.zz,3000);break;
   case 'jump':var u=(now-L.t0)/900;pCheer(t,o);o.by=Math.sin(Math.min(1,u)*Math.PI)*1.1;if(u>=1){L.act('wave')}break;
+  case 'held':pHeld(t,o);feet=L.fy;break;
+  case 'fall':L.vy+=1.7;L.fy+=L.vy;pHeld(t,o);if(L.fy>=VH-26){L.fy=VH-26;L.mode='land';L.t0=now;L.until=0;L.vx=0}feet=L.fy;break;
+  case 'land':pBrace(t,Math.max(0,1-(now-L.t0)/450),o);if(now-L.t0>450){L.act('wave');if(now-lastTalk>1500)talk(LIFE,LANDED,1700)}break;
   default:pIdle(t,o)}
  if(moving){var d=L.tx-L.sx,sp=(run?3.2:1.5)*(PPU/34);L.face=d>0?1:-1;L.sx+=Math.sign(d)*Math.min(Math.abs(d),sp);pWalk(t,run,o)}
  /* eyes and head follow your finger */
@@ -487,7 +492,23 @@ function lifeFrame(now,t){var r=LIFE,o={},feet=VH-26,moving=false,run=false;show
  if(!moving&&L.until&&now>L.until&&['whoa','sit','sleep','jump'].indexOf(L.mode)<0)L.next();
  pose(r,o,moving?.35:.14);
  var yawT=moving?(L.face>0?.55:-.55):(L.mode==='watch'?.35:(L.mode==='point'?.7:0));
- place(r,L.sx,feet,yawT);blink(r,now);if(L.mode==='sleep'){r.eyeL.scale.y=r.eyeR.scale.y=.12}}
+ place(r,L.sx,feet,yawT);grabAt(L.sx,feet,r.sc);blink(r,now);if(L.mode==='sleep'){r.eyeL.scale.y=r.eyeR.scale.y=.12}}
+
+/* ---------- pick Bento up : press and drag him anywhere, let go and he drops back to the floor ---------- */
+var ZHB=/[\u4e00-\u9fff]/.test(SAY.hi||''),HELD=ZHB?'放我下来！':'Wheee!',LANDED=ZHB?'好玩！再来！':'Again! Again!';
+var GRAB=D.createElement('div');GRAB.id='sx30Grab';GRAB.setAttribute('aria-hidden','true');
+GRAB.style.cssText='position:fixed;left:0;top:0;width:10px;height:10px;z-index:45;touch-action:none;cursor:grab;background:transparent;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none';D.body.appendChild(GRAB);
+var G={k:'',dn:false,mv:false,sx:0,sy:0,ox:0,oy:0,lx:0,lt:0};
+function grabAt(x,feet,sc){var hw=Math.round(26*sc+10),hh=Math.round(3.2*PPU*sc+12),k=Math.round(x-hw)+','+Math.round(feet-hh)+','+hw+','+hh;if(k===G.k)return;G.k=k;
+ GRAB.style.width=(hw*2)+'px';GRAB.style.height=(hh+8)+'px';GRAB.style.transform='translate3d('+Math.round(x-hw)+'px,'+Math.round(feet-hh)+'px,0)'}
+GRAB.addEventListener('pointerdown',function(e){e.stopPropagation();e.preventDefault();try{GRAB.setPointerCapture(e.pointerId)}catch(_){}
+ G.dn=true;G.mv=false;G.sx=e.clientX;G.sy=e.clientY;G.ox=L.sx-e.clientX;G.oy=((L.mode==='held'||L.mode==='fall')?L.fy:VH-26)-e.clientY;G.lx=e.clientX;G.lt=performance.now();lastInput=ptrAt=G.lt;GRAB.style.cursor='grabbing'});
+GRAB.addEventListener('pointermove',function(e){if(!G.dn)return;var now=performance.now();lastInput=ptrAt=now;
+ if(!G.mv){if(Math.hypot(e.clientX-G.sx,e.clientY-G.sy)<7)return;G.mv=true;L.mode='held';L.until=0;L.vy=0;if(now-lastTalk>2500)talk(LIFE,HELD,1400)}
+ var dt=Math.max(8,now-G.lt);L.vx=(e.clientX-G.lx)/dt*16;G.lx=e.clientX;G.lt=now;
+ L.sx=clamp(e.clientX+G.ox,20,VW-20);L.fy=clamp(e.clientY+G.oy,90,VH-26);L.tx=L.sx});
+function drop(){if(!G.dn)return;G.dn=false;GRAB.style.cursor='grab';if(G.mv){L.mode='fall';L.vy=0;L.until=0}else{L.act('jump')}}
+GRAB.addEventListener('pointerup',drop);GRAB.addEventListener('pointercancel',drop);
 
 /* ---------- Pixel : a projector head that sits beside the phone and beams the video onto its screen ----------
    The head never walks or moves. As the phone scrolls away the picture slowly powers down; when it comes back,
