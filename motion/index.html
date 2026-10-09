@@ -773,7 +773,8 @@ function vpSet(p){var g=GEO.vp,el=VPOP.el,show=p>0&&p<1,hid=p<1;
  var ORDER=[1,2,0];
  VPOP.G.forEach(function(G,i){var P=G.P,c=G.c,TL=P[0],TR=P[1],BR=P[2],BL=P[3],j=ORDER[i],S0=.47+.13*j,L0=.13;
   function ph(a,b){return clamp((p-S0-a*L0)/((b-a)*L0),0,1)}
-  var close=sm(ph(0,.14)),jawIn=sm(ph(.08,.28)),press=ph(.28,.62),jawOut=sm(ph(.62,.76)),tight=sm(ph(.3,.6)),done=sm(ph(.74,.92)),stamp=ph(.6,.95),focus=Math.sin(Math.PI*ph(.05,.95));
+  /* first the air is pulled out and the bag shrinks tight around the food, only then is the mouth closed and sealed */
+  var tight=sm(ph(0,.3)),close=sm(ph(.24,.36)),jawIn=sm(ph(.34,.46)),press=ph(.46,.72),jawOut=sm(ph(.72,.82)),done=sm(ph(.82,.96)),stamp=ph(.72,.99),focus=Math.sin(Math.PI*ph(0,.99));
   var ex=TR[0]-TL[0],ey=TR[1]-TL[1],L=Math.sqrt(ex*ex+ey*ey),ux=ex/L,uy=ey/L,nx=uy,ny=-ux;if((c[0]-TL[0])*nx+(c[1]-TL[1])*ny>0){nx=-nx;ny=-ny}
   var open=bag*(1-close),mx=(TL[0]+TR[0])/2,my=(TL[1]+TR[1])/2,lh=L*.2*open,sx2=VPOP.IW/520;
   function pt(q){return q[0].toFixed(1)+' '+q[1].toFixed(1)}
@@ -798,14 +799,14 @@ function vpSet(p){var g=GEO.vp,el=VPOP.el,show=p>0&&p<1,hid=p<1;
   var tpop=stamp>0?Math.min(1,stamp*3)*(1-sm(clamp((stamp-.7)/.3,0,1))):0;G.vtx.setAttribute('opacity',tpop.toFixed(3));
   var tsc=.6+.4*eo(Math.min(1,stamp*3));G.vtx.setAttribute('transform','translate('+tp[0].toFixed(1)+' '+tp[1].toFixed(1)+') scale('+tsc.toFixed(3)+') translate('+(-tp[0]).toFixed(1)+' '+(-tp[1]).toFixed(1)+')');
   /* vacuum : the pouch is squeezed tight around the food while the jaws hold */
-  var sq=1-.1*Math.sin(Math.PI*tight)*(1-done)-.03*tight,sc=(.7+.3*bag)*(1+.08*bag*(1-tight))*sq,tr='translate('+c[0].toFixed(1)+' '+c[1].toFixed(1)+') scale('+sc.toFixed(4)+') translate('+(-c[0]).toFixed(1)+' '+(-c[1]).toFixed(1)+')';
+  var sq=1-.13*tight,sc=(.7+.3*bag)*(1+.08*bag*(1-tight))*sq,tr='translate('+c[0].toFixed(1)+' '+c[1].toFixed(1)+') scale('+sc.toFixed(4)+') translate('+(-c[0]).toFixed(1)+' '+(-c[1]).toFixed(1)+')';
   G.bg[0].setAttribute('transform',tr);G.bg[1].setAttribute('transform',tr);
   G.back.style.opacity=(bag*(1-done)).toFixed(3);G.front.style.opacity=(bag).toFixed(3);
   [G.vin,G.vedge,G.vbody,G.vdots,G.vshine,G.vcrimp,G.vlip].forEach(function(e){e.setAttribute('opacity',(1-done).toFixed(3))});
   /* the bag being sealed comes forward, with a little shake while the jaws press */
   var shake=press>0&&press<1?Math.sin(press*60)*1.2:0;G.wrap.style.transform=focus>0?'scale('+(1+.16*focus).toFixed(4)+') rotate('+shake.toFixed(2)+'deg)':'';G.wrap.style.zIndex=focus>0?'3':'';
   /* the food glides down into its open pouch, no bounce */
-  if(G.food){var u=sm(seg(.22+.07*j,.36+.07*j)),fl=1-u,bob=Math.sin(p*40+i)*1.5*fl*ext,dy=-fl*(150+i*10),rot=fl*(i===1?12:-10)+bob,fs=(.8+.2*ext)*(1-.06*tight);
+  if(G.food){var u=sm(seg(.22+.07*j,.36+.07*j)),fl=1-u,bob=Math.sin(p*40+i)*1.5*fl*ext,dy=-fl*(150+i*10),rot=fl*(i===1?12:-10)+bob,fs=(.8+.2*ext)*(1-.11*tight);
    G.food.style.transform='translate3d(0,'+(dy*.7).toFixed(1)+'%,0) rotate('+(G.rot0+rot).toFixed(2)+'deg) scale('+fs.toFixed(4)+')';G.food.style.opacity=(ext*(1-done)).toFixed(3)}
   if(G.real)G.real.style.opacity=done.toFixed(3)});
  /* the whole set rises out of the card while packing, then settles back into its place */
