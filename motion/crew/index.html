@@ -532,42 +532,58 @@ function pixFrame(now,t){var r=PIX;if(!vf||!pw||!DIM){show(r,false);return}
  var key=x0+','+y0+','+path;if(key!==X.key){X.key=key;beam.style.left=x0+'px';beam.style.top=y0+'px';beam.style.width=Math.ceil(x1-x0)+'px';beam.style.height=Math.ceil(y1-y0)+'px';
   beam.style.clipPath=path;beam.style.setProperty('--ex',Math.round(e.x-x0)+'px');beam.style.setProperty('--ey',Math.round(e.y-y0)+'px')}}
 
-/* ---------- the movers : every homepage card is carried in ---------- */
-var CARDS=[].slice.call(D.querySelectorAll('#hub .hitem'));
-var QUEUE=[],SIDE=1;
+/* ---------- the haulers : one robot per card group drags every card in on a rope, driven by scroll ----------
+   The group scrolls past slowly while it is being hauled in, so the robot gets a long stretch of scrolling to do the work. */
+var GROUPS=[].slice.call(D.querySelectorAll('#hub .hubg')).map(function(el,i){var cs=[].slice.call(el.querySelectorAll('.hitem'));return{el:el,cards:cs,bot:MOV[i]||MOV[0],mb0:parseFloat(getComputedStyle(el).marginBottom)||0,said:false,ps:'',op:''}}).filter(function(g){return g.cards.length});
+var PANF=.75,DRAG=0,DW=0,PULL=/[\u4e00-\u9fff]/.test(SAY.carry||'')?'拉过来啦！':'Heave-ho!';
+function easeIO(u){return u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2}
+function margins(){if(innerWidth===DW)return;DW=innerWidth;DRAG=Math.max(innerHeight*1.8,1100);GROUPS.forEach(function(g){g.el.style.marginBottom=Math.round(g.mb0+DRAG*PANF)+'px'})}
 var slotT=0;function docPos(el){var t=0,l=0;while(el){t+=el.offsetTop;l+=el.offsetLeft;el=el.offsetParent}return[t,l]}
-function slotsRefresh(){slotT=performance.now();CARDS.forEach(function(c){var d=docPos(c);c.__dt=d[0];c.__dl=d[1];c.__dw=c.offsetWidth;c.__dh=c.offsetHeight})}
-D.addEventListener('click',function(){slotT=0;setTimeout(function(){slotT=0},450)},true);WN.addEventListener('resize',function(){slotT=0});
-function slotOf(c){var y=WN.scrollY||0,x=WN.scrollX||0;return{l:c.__dl-x,t:c.__dt-y,w:c.__dw,h:c.__dh}}
-slotsRefresh();
-function settle(c){c.__cs='placed';c.style.transform='';c.style.opacity='';c.style.transition=c.__tr||''}
-function hideCard(c){c.__cs='wait';c.style.opacity='0';c.style.transform=''}
-CARDS.forEach(function(c){c.__tr=c.style.transition;var s=slotOf(c);if(s.t<VH&&s.t+s.h>0)c.__cs='placed';else hideCard(c)});
-function moversFrame(now,t){if(now-slotT>1000)slotsRefresh();
- CARDS.forEach(function(c){if(c.__cs==='carry')return;var s=slotOf(c),open=c.classList.contains('open')||s.h>VH*.8;
-  if(open){if(c.__cs!=='placed')settle(c);return}
-  if(c.__cs==='placed'){if(s.t>VH+60||s.t+s.h<-60)hideCard(c);return}
-  if(c.__cs==='wait'&&s.t<VH*.9&&s.t+s.h>VH*.05){if(QUEUE.indexOf(c)<0){QUEUE.push(c);c.__qAt=now}}});
- QUEUE=QUEUE.filter(function(c){if(c.__cs!=='wait')return false;var s=slotOf(c);if(s.t>VH||s.t+s.h<0){return false}
-  var p=PAIRS.filter(function(p){return !p.job})[0];
-  if(p){p.job={c:c,t0:now,side:SIDE};SIDE=-SIDE;c.__cs='carry';c.style.transition='none';c.style.opacity='1';show(p.a,true);show(p.b,true);
-   if(now-lastTalk>8000)talk(p.a,SAY.carry,1500);return false}
-  if(now-c.__qAt>900){c.style.opacity='';c.__cs='placed';try{c.animate([{opacity:0,transform:'translateY(70px) scale(.85)'},{opacity:1,transform:'none'}],{duration:700,easing:'cubic-bezier(.2,.9,.25,1)'})}catch(e){}return false}
-  return true});
- PAIRS.forEach(function(p){var j=p.job;if(!j){show(p.a,false);show(p.b,false);return}
-  var c=j.c,s=slotOf(c),e=(now-j.t0)/1000,k=.4,T1=1.15,T2=.6,T3=.55,T4=.85;
-  if(s.t>VH+80||s.t+s.h<-80||c.classList.contains('open')){settle(c);p.job=null;return}
-  var scx=s.l+s.w/2,scy=s.t+s.h/2,feet=s.t+s.h+8,hands=feet-HANDS*PPU*p.a.sc,span=s.w*k*.33,cx,cy,sc,rot,oa={},ob={},yaw;
-  var start=j.side<0?-s.w*k*.6-40:VW+s.w*k*.6+40;
-  if(e<T1){var u=ease(e/T1);cx=start+(scx-start)*u;cy=hands-s.h*k/2+Math.abs(Math.sin(t*10))*4;sc=k;rot=Math.sin(t*9)*1.4;pCarry(t,true,oa);pCarry(t+.18,true,ob);yaw=j.side<0?.55:-.55;j.cx=cx}
-  else if(e<T1+T2){var v=(e-T1)/T2,b=back(v);cx=scx;var cy0=hands-s.h*k/2;cy=cy0+(scy-cy0)*b;sc=k+(1-k)*b;rot=0;pCarry(t,false,oa);pCarry(t,false,ob);oa.by=ob.by=.12*Math.sin(v*Math.PI);yaw=0;j.cx=scx}
-  else{cx=scx;cy=scy;sc=1;rot=0;if(c.__cs==='carry'){settle(c)}
-   if(e<T1+T2+T3){pCheer(t,oa);pCheer(t+.2,ob);yaw=0}
-   else if(e<T1+T2+T3+T4){var w=(e-T1-T2-T3)/T4;j.cx=scx+(-j.side)*w*w*(VW*.8);pWalk(t,true,oa);pWalk(t+.1,true,ob);yaw=j.side<0?.55:-.55}
-   else{p.job=null;show(p.a,false);show(p.b,false);return}}
-  if(c.__cs==='carry')c.style.transform='translate3d('+(cx-scx).toFixed(1)+'px,'+(cy-scy).toFixed(1)+'px,0) rotate('+rot.toFixed(2)+'deg) scale('+sc.toFixed(4)+')';
-  var mid=e<T1+T2?cx:j.cx;pose(p.a,oa,.3);pose(p.b,ob,.3);
-  place(p.a,mid-span,feet,yaw,.2);place(p.b,mid+span,feet,yaw,.2);blink(p.a,now);blink(p.b,now)})}
+function grpRefresh(){slotT=performance.now();GROUPS.forEach(function(g){var d=docPos(g.el);g.top=d[0];g.h=g.el.offsetHeight;g.cards.forEach(function(c){var p=docPos(c);c.__dt=p[0];c.__dl=p[1];c.__dw=c.offsetWidth;c.__dh=c.offsetHeight})})}
+D.addEventListener('click',function(){slotT=0;setTimeout(function(){slotT=0},450)},true);
+var mz;WN.addEventListener('resize',function(){clearTimeout(mz);mz=setTimeout(function(){margins();slotT=0},200)},{passive:true});
+/* the rope layer sits just under the robots */
+var NS='http://www.w3.org/2000/svg',RS=D.createElementNS(NS,'svg');RS.setAttribute('class','sx30-rope');RS.setAttribute('aria-hidden','true');
+RS.style.cssText='position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:43;overflow:visible';D.body.appendChild(RS);
+function el(n,a){var e=D.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);return e}
+GROUPS.forEach(function(g){g.svg=el('g',{});g.svg.style.display='none';RS.appendChild(g.svg);g.cards.forEach(function(c){c.classList.add('sx-on');
+  c.__r1=el('path',{fill:'none',stroke:'#A87A3E','stroke-width':'3.4','stroke-linecap':'round'});
+  c.__r2=el('path',{fill:'none',stroke:'#6E4B1F','stroke-width':'3.4','stroke-linecap':'round','stroke-dasharray':'2 5',opacity:'.75'});
+  c.__kn=el('circle',{r:'4.5',fill:'#6E4B1F'});c.__rd='';g.svg.appendChild(c.__r1);g.svg.appendChild(c.__r2);g.svg.appendChild(c.__kn)})});
+margins();grpRefresh();
+function moversFrame(now,t){if(now-slotT>1000)grpRefresh();var s=WN.scrollY||0;
+ MOV.forEach(function(r,i){if(i>=GROUPS.length)show(r,false)});
+ GROUPS.forEach(function(g){var r=g.bot,free=g.cards.some(function(c){return c.classList.contains('open')});
+  var s0=g.top-VH*.62,p=clamp((s-s0)/DRAG,0,1),pan=clamp(s-s0,0,DRAG)*PANF;
+  var ps=pan>0?pan.toFixed(1):'';if(ps!==g.ps){g.ps=ps;g.el.style.transform=ps?'translate3d(0,'+ps+'px,0)':''}
+  if(free)p=1;if(p<=0)g.said=false;
+  /* the cards : each one slides in from the right a little after the one above it */
+  g.cards.forEach(function(c,i){var u=clamp((p-i*.11)/.42,0,1),off=(1-easeIO(u))*(VW-c.__dl+40);c.__off=off;c.__u=u;
+   var key=off<.5?'':off.toFixed(1);if(key===c.__k)return;
+   if(c.__tr0===undefined)c.__tr0=c.style.transition;c.__k=key;
+   if(key===''){c.style.transform='';c.style.transition=c.__tr0}
+   else{var rot=u>0?Math.sin(off/38+i)*1.2:0;c.style.transition='none';c.style.transform='translate3d('+key+'px,0,0) rotate('+rot.toFixed(2)+'deg)'}});
+  var gt=g.top-s+pan,gb=gt+g.h,inV=!free&&p>0&&p<1&&gb>40&&gt<VH-40;
+  if(!inV){show(r,false);if(g.svg.style.display!=='none')g.svg.style.display='none';return}
+  show(r,true);if(g.svg.style.display)g.svg.style.display='';
+  if(!g.said&&p>.03){g.said=true;if(now-lastTalk>3000)talk(r,PULL,1700)}
+  /* the robot : walks in ahead of the first card, then plants his feet and hauls the rest in hand over hand */
+  var c0=g.cards[0],BX0=VW<560?30:Math.max(44,c0.__dl-46),lead=c0.__dl+c0.__off-28,bx,yaw,o={},walking=lead>BX0+1;
+  if(p<.86){bx=Math.max(BX0,lead)}else if(p<.93){bx=BX0}else{bx=BX0-((p-.93)/.07)*(BX0+90)}
+  if(p<.86&&walking){pWalk(bx/24,false,o);yaw=-.6}
+  else if(p<.86){pBrace(t,1,o);o.by=(o.by||0)+Math.abs(Math.sin(t*5))*.05;yaw=.6}
+  else if(p<.93){pCheer(t,o);yaw=0}
+  else{pWalk(bx/16,true,o);yaw=-.6}
+  r.sc=VW<560?.9:1.05;
+  var vt=Math.max(gt,90),vb=Math.min(gb,VH-12),feet=clamp((vt+vb)/2+70,160,VH-24);
+  pose(r,o,.3);place(r,bx,feet,yaw,.3);blink(r,now);
+  /* the rope : one hand, one rope to every card ; slack and fading once the job is done */
+  var a=p<.86?1:clamp(1-(p-.86)/.05,0,1),op=a.toFixed(2);if(op!==g.op){g.op=op;g.svg.style.opacity=op}
+  if(a<=0)return;
+  var hx=sxOf(r.x)+(yaw<0?-8:10),hy=feet-HANDS*PPU*r.sc*.92;
+  g.cards.forEach(function(c){var ex=c.__dl+c.__off+5,ey=c.__dt-s+pan+c.__dh/2,sag=(c.__u<1?8:22)+(1-a)*30;
+   var d='M'+hx.toFixed(1)+' '+hy.toFixed(1)+'Q'+((hx+ex)/2).toFixed(1)+' '+((hy+ey)/2+sag).toFixed(1)+' '+ex.toFixed(1)+' '+ey.toFixed(1);
+   if(d===c.__rd)return;c.__rd=d;c.__r1.setAttribute('d',d);c.__r2.setAttribute('d',d);c.__kn.setAttribute('cx',ex.toFixed(1));c.__kn.setAttribute('cy',ey.toFixed(1))})})}
 
 /* ---------- loop ---------- */
 var t0=performance.now(),vis=!D.hidden;D.addEventListener('visibilitychange',function(){vis=!D.hidden});
