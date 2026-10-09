@@ -688,7 +688,7 @@ function hub(){
  HUB=$$('#hub .hitem');HUB.forEach(function(c,i){c.classList.remove('sx-r','sx-on','sx-up');c.style.viewTransitionName='sxhub'+i});
  if(typeof W.hubTog==='function'&&D.startViewTransition&&!W.hubTog.__sx){var o=W.hubTog;
   W.hubTog=function(){var a=arguments,self=this;try{D.startViewTransition(function(){o.apply(self,a)})}catch(e){o.apply(self,a)}};W.hubTog.__sx=1}
- safe(pins)();safe(menuFold)();safe(mealVid)();safe(bentoPlate)();safe(homeSlide)()}
+ safe(pins)();safe(bundleIcons)();safe(menuFold)();safe(mealVid)();safe(bentoPlate)();safe(homeSlide)()}
 /* the two picture animations follow the scroll, but never faster than a set pace : a quick flick up or down still plays every step (fold, unseal) */
 var ANIM={m:{q:null,t:0,rate:.8},v:{q:null,t:0,rate:.55},b:{q:null,t:0,rate:.24},run:false,last:0};
 /* forward only : scrolling back up never folds or unseals ; a started animation simply finishes ;
@@ -978,6 +978,33 @@ function loopTick(o,g,url,y,vh,rate){if(!o||!o.v||!g)return;o.rate=rate||1;var t
 var ML={on:false,t0:0,pe:0,raf:0,held:0};
 function mlStep(now){if(!ML.on||!MPOP||!MPOP.el||!GEO.mp){ML.raf=0;return}ML.raf=requestAnimationFrame(mlStep);var e=(now-ML.t0)/1000,D1=3.4,H1=1.6;
  if(e<D1){ML.held=0;try{mpSet(e/D1)}catch(x){}}else if(e<D1+H1){if(!ML.held){ML.held=1;try{mpSet(1)}catch(x){}}}else{try{fadeAway(MPOP.im);mpSet(0)}catch(x){}ML.t0=now;ML.held=0}}
+/* the Meal Bundles icons, redrawn as live line art : the waist slims down inside the tape, the biceps swells */
+function icAn(a,b,D,K){return '<animate attributeName="d" dur="'+D+'s" repeatCount="indefinite" calcMode="spline" keyTimes="'+K+'" keySplines=".45 0 .55 1;0 0 1 1;.45 0 .55 1" values="'+[a,b,b,a].join(';')+'"/>'}
+function icP(a,b,D,K,x){return '<path d="'+a+'"'+(x||'')+'>'+icAn(a,b,D,K)+'</path>'}
+function icMv(v,D,K){return '<animateTransform attributeName="transform" type="translate" dur="'+D+'s" repeatCount="indefinite" calcMode="spline" keyTimes="'+K+'" keySplines=".45 0 .55 1;0 0 1 1;.45 0 .55 1" values="'+v+'"/>'}
+function icBg(id){return '<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#193897"/><stop offset="1" stop-color="#10297E"/></linearGradient></defs><rect x="5" y="5" width="250" height="250" rx="74" fill="url(#'+id+')"/>'}
+var icST=' fill="none" stroke="#F8BE10" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round"';
+function icFat(id){var D=2.8,K='0;.42;.62;1',s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 260" role="img" aria-label="Fat Loss">'+icBg(id)+'<g'+icST+'>';
+ s+=icP('M88,67 Q97,90 97,112','M88,67 Q99,90 104,112',D,K);
+ s+=icP('M170,67 Q161,90 162,111','M170,67 Q159,90 155,111',D,K);
+ s+=icP('M92,104 Q83,104 83,111 L83,123 Q84,131 92,134 Q130,146 168,134 Q176,131 177,123 L177,111 Q177,104 168,104','M100,104 Q91,104 91,111 L91,123 Q92,131 100,134 Q130,145 160,134 Q168,131 169,123 L169,111 Q169,104 160,104',D,K);
+ s+=icP('M83,111 Q130,129 177,111','M91,111 Q130,128 169,111',D,K);
+ s+=icP('M102,124 L102,131 M114,126 L114,133 M130,127 L130,135 M146,126 L146,133 M158,124 L158,131','M106,124 L106,131 M117,126 L117,133 M130,127 L130,135 M143,126 L143,133 M154,124 L154,131',D,K);
+ s+=icP('M92,138 C74,158 72,182 88,203','M98,138 C79,158 75,182 88,203',D,K);
+ s+=icP('M168,138 C186,158 188,182 170,203','M162,138 C181,158 185,182 170,203',D,K);
+ s+='<g><path d="M188,112 L188,137 M180,129 L188,137 L196,129"/>'+icMv('0 -2;0 5;0 5;0 -2',D,K)+'</g>';
+ return s+'</g></svg>'}
+function icGain(id){var D=2.4,K='0;.38;.62;1',s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 260" role="img" aria-label="Mass Gain">'+icBg(id)+'<g'+icST+'>';
+ s+='<rect x="84.7" y="76.3" width="9" height="24" rx="4.5"/><rect x="144.7" y="76.3" width="10.6" height="24" rx="5"/><path d="M94,93 L103,93 M138,93 L144,93"/>';
+ s+='<path d="M103,94 Q103,86 109,86 Q115,86 115,93 Q115,86 121,86 Q127,86 127,93 Q127,86 133,86 Q138,87 138,94"/>';
+ s+='<g>'+icP('M125,104 L114,143 C125,133 145,131 158,140 C170,149 168,172 150,180 C135,184 108,178 92,167 C82,160 83,148 88,138 L110,105','M125,104 L114,143 C122,125 150,119 166,133 C181,147 175,178 150,183 C135,186 108,180 92,168 C82,160 83,148 88,138 L110,105',D,K)+'</g>';
+ s+='<g><path d="M180,140 L180,108 M168,118 L180,106 L192,118"/>'+icMv('0 2;0 -5;0 -5;0 2',D,K)+'</g>';
+ return s+'</g></svg>'}
+function bundleIcons(){$$('#hc-bundles .ic img').forEach(function(im,i){if(im.__ic)return;var alt=(im.getAttribute('alt')||'').toLowerCase(),f=alt.indexOf('fat')>=0?icFat:alt.indexOf('gain')>=0?icGain:null;if(!f)return;
+ var cs=getComputedStyle(im),s=D.createElement('span');s.className='sx30-ic';s.setAttribute('aria-hidden','true');s.innerHTML=f('sx30icg'+i);
+ ['width','height','marginTop','marginRight','marginBottom','marginLeft','borderRadius','boxShadow','filter','verticalAlign'].forEach(function(k){s.style[k]=cs[k]});s.style.display=cs.display==='inline'?'inline-block':cs.display;
+ var sv=s.firstChild;sv.style.width='100%';sv.style.height='100%';sv.style.display='block';sv.style.overflow='visible';
+ im.parentNode.insertBefore(s,im);im.style.display='none';im.__ic=1})}
 
 
 /* the robot crew ( homepage ) : loaded once the page is up */
