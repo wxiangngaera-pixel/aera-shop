@@ -973,7 +973,7 @@ function start(){if(started)return;started=true;T0=Date.now();
  if(HOMEPAGE){
   var top=$('#top');HERO=top;BANNER=$('#banBand');
   [function(){sky(top)},phone,marquee,hub].forEach(function(f){safe(f)()});
-  intro(function(shown){if(shown)replayHero();go();setTimeout(crew,shown?300:600)})}
+  intro(function(shown){if(shown)replayHero();go() /* robot crew switched off */})}
  else go();
  W.addEventListener('scroll',onScroll,{passive:true});W.addEventListener('resize',onScroll)}
 ready(function(){setTimeout(start,0)});
