@@ -428,6 +428,8 @@ css([
 '#hc-plan .sx30-bv{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1;opacity:1;transition:opacity .6s ease}',
 '#hc-home .sx30-hv{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1;opacity:1;transition:opacity .6s ease}',
 '#hc-home .sx30-hv video{position:absolute;max-width:none;display:block;object-fit:fill;background:transparent}',
+'#hc-meals .sx30-mv{position:absolute;overflow:hidden;pointer-events:none;z-index:1;opacity:1;transition:opacity .6s ease}',
+'#hc-meals .sx30-mv video{position:absolute;max-width:none;display:block;object-fit:fill;background:transparent}',
 '#hc-plan .sx30-bv video{position:absolute;max-width:none;display:block;object-fit:fill;background:transparent}',
 '#sx30BentoPop{position:absolute;left:0;top:0;width:10px;height:10px;z-index:30;pointer-events:none;display:none}',
 '#sx30BentoPop .bp-in,#sx30BentoPop svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}',
@@ -674,7 +676,7 @@ function hub(){
  HUB=$$('#hub .hitem');HUB.forEach(function(c,i){c.classList.remove('sx-r','sx-on','sx-up');c.style.viewTransitionName='sxhub'+i});
  if(typeof W.hubTog==='function'&&D.startViewTransition&&!W.hubTog.__sx){var o=W.hubTog;
   W.hubTog=function(){var a=arguments,self=this;try{D.startViewTransition(function(){o.apply(self,a)})}catch(e){o.apply(self,a)}};W.hubTog.__sx=1}
- safe(menuFold)();safe(vacPack)();safe(bentoPlate)();safe(homeSlide)()}
+ safe(menuFold)();safe(mealVid)();safe(bentoPlate)();safe(homeSlide)()}
 /* the two picture animations follow the scroll, but never faster than a set pace : a quick flick up or down still plays every step (fold, unseal) */
 var ANIM={m:{q:null,t:0,rate:.8},v:{q:null,t:0,rate:.55},b:{q:null,t:0,rate:.24},run:false,last:0};
 /* forward only : scrolling back up never folds or unseals ; a started animation simply finishes ;
@@ -873,6 +875,22 @@ function hpTick(y,vh){var g=GEO.hp;if(!g)return;var top=g.ht-y,v=HPOP.v,w=HPOP.w
  if(!HPOP.loaded&&top<vh*2.2){HPOP.loaded=true;v.preload='auto';v.src=HVID;try{v.load()}catch(e){}}
  if(HPOP.st==='armed'&&top<vh*.6&&top>-vh*.3){HPOP.st='playing';w.style.opacity='1';try{v.currentTime=0;var pr=v.play();if(pr&&pr.catch)pr.catch(function(){HPOP.st='done';w.style.opacity='0'})}catch(e){HPOP.st='done';w.style.opacity='0'}}
  if(HPOP.st==='done'&&top>vh*.85){HPOP.st='armed';try{v.pause();v.currentTime=0}catch(e){}w.style.transition='none';w.style.opacity='1';void w.offsetWidth;w.style.transition=''}}
+/* a la carte : the food goes into the bags one by one, vacuumed tight and heat-sealed ( video, same rules as the bento ) */
+var MVP=null,MVID='https://my.chatbees.io/uploads/feedback/upload_413b643d-5b22-4d8f-b53a-8099f687cff6_1791526166002.mp4';
+function mealVid(){if(MVP)return;var hi=$('#hc-meals .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
+ var w=D.createElement('div');w.className='sx30-mv';w.setAttribute('aria-hidden','true');var v=D.createElement('video');v.muted=true;v.defaultMuted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('muted','');v.preload='none';
+ w.appendChild(v);hi.appendChild(w);MVP={hi:hi,im:im,card:$('#hc-meals'),w:w,v:v,st:'armed',loaded:false};
+ v.addEventListener('ended',function(){MVP.st='done';w.style.opacity='0'});GEO.t=0}
+/* the clip is 1280 x 720 with the 520 x 359 photo full height in the middle : the wrapper sits on the photo, the clip's black sides are clipped off */
+function mvGeo(){var im=MVP.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){GEO.mv=null;return}
+ var fit=getComputedStyle(im).objectFit,s=fit==='cover'?Math.max(w/520,h/359):Math.min(w/520,h/359),dw=520*s,dh=359*s,ox=(w-dw)/2+im.offsetLeft,oy=(h-dh)/2+im.offsetTop,pw=dh*1280/720,px=(pw-dw)/2;
+ var k=[ox,oy,dw,dh].map(Math.round).join();if(k!==MVP.k){MVP.k=k;var a=MVP.w.style,b=MVP.v.style;a.left=ox.toFixed(1)+'px';a.top=oy.toFixed(1)+'px';a.width=dw.toFixed(1)+'px';a.height=dh.toFixed(1)+'px';b.left=(-px).toFixed(1)+'px';b.top='0px';b.width=pw.toFixed(1)+'px';b.height=dh.toFixed(1)+'px'}
+ GEO.mv={ht:docTop(MVP.hi)}}
+function mvTick(y,vh){var g=GEO.mv;if(!g)return;var top=g.ht-y,v=MVP.v,w=MVP.w,open=MVP.card&&MVP.card.classList.contains('open');
+ if(open){if(MVP.st!=='done'){try{v.pause()}catch(e){}MVP.st='done';w.style.opacity='0'}return}
+ if(!MVP.loaded&&top<vh*2.2){MVP.loaded=true;v.preload='auto';v.src=MVID;try{v.load()}catch(e){}}
+ if(MVP.st==='armed'&&top<vh*.6&&top>-vh*.3){MVP.st='playing';w.style.opacity='1';try{v.currentTime=0;var pr=v.play();if(pr&&pr.catch)pr.catch(function(){MVP.st='done';w.style.opacity='0'})}catch(e){MVP.st='done';w.style.opacity='0'}}
+ if(MVP.st==='done'&&top>vh*.85){MVP.st='armed';try{v.pause();v.currentTime=0}catch(e){}w.style.transition='none';w.style.opacity='1';void w.offsetWidth;w.style.transition=''}}
 
 
 /* the robot crew ( homepage ) : loaded once the page is up */
@@ -890,7 +908,8 @@ function geoRefresh(){GEO.t=performance.now();GEO.hh=HERO?HERO.offsetHeight:0;GE
  if(MPOP&&MPOP.r)mpGeo();
  if(VPOP&&VPOP.el)vpGeo();
  if(BPOP&&BPOP.v)bpGeo();
- if(HPOP&&HPOP.v)hpGeo()}
+ if(HPOP&&HPOP.v)hpGeo();
+ if(MVP&&MVP.v)mvGeo()}
 D.addEventListener('click',function(){GEO.t=0;setTimeout(function(){GEO.t=0;onScroll()},450)},true);W.addEventListener('resize',function(){GEO.t=0});W.addEventListener('load',function(){GEO.t=0});
 /* every scroll frame only writes : all sizes come from GEO, measured at most once a second */
 function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y;VEL=VEL*.8+dy*.2;if(performance.now()-GEO.t>1000)geoRefresh();
@@ -910,6 +929,7 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
   if(!vo){var vq=clamp((vh*.67-(GEO.vp.ht-y))/(vh*.41),0,1) /* all done while the card is still in the lower half, well clear of the title bar */,vs=vq.toFixed(3);animGo('v',vq,GEO.vp.ht-y>vh*.85,vpSet,VPOP.im)}}
  if(BPOP&&BPOP.v&&GEO.bp)bpTick(y,vh);
  if(HPOP&&HPOP.v&&GEO.hp)hpTick(y,vh);
+ if(MVP&&MVP.v&&GEO.mv)mvTick(y,vh);
  if(MARK&&GEO.mTop!=null){var mt=GEO.mTop-y,mp=clamp((vh-mt)/(GEO.mH+vh*.35),0,1);MARK.style.transform='translate3d(0,'+((1-mp)*55).toFixed(1)+'%,0) scale('+(.82+.18*mp).toFixed(3)+')';MARK.style.opacity=(.15+.85*mp).toFixed(3)}}
 /* the scroll speed lean only touches the cards and the giant type, never the whole page */
 /* a custom property on a big block makes the browser restyle everything inside it, so the lean is written straight onto the two type rows */
