@@ -416,11 +416,13 @@ css([
 /* homepage cards : they sweep in from alternate sides as you scroll, driven by the browser itself so they never shake */
 '@supports (animation-timeline: view()){html.sx30 #hub .hacc .hitem{animation:sx30HubIn linear both;animation-timeline:view();animation-range:entry 0% cover 42%;animation-timing-function:cubic-bezier(.2,.9,.25,1)}html.sx30 #hub .hacc .hitem:nth-child(odd){--sd:-1}html.sx30 #hub .hacc .hitem:nth-child(even){--sd:1}html.sx30 #hub .hacc .hitem.open{animation:none}}',
 '@keyframes sx30HubIn{from{opacity:.05;transform:translate3d(calc(var(--sd,1)*120px),90px,0) rotate(calc(var(--sd,1)*8deg)) scale(.76)}to{opacity:1;transform:none}}',
-/* the AERA menu stand : lifted out of its picture, it pops out folded and unfolds as you scroll down, then slots back in */
+/* the AERA menu stand : lifted out of its picture, it pops out lying flat, stands up and opens its back leg like a real tent-card stand as you scroll down, then slots back in ; scrolling up folds it the same way */
 '#sx30MenuPop{position:absolute;left:0;top:0;width:10px;height:10px;z-index:30;pointer-events:none;perspective:900px;display:none}',
-'#sx30MenuPop .mp-in{position:absolute;inset:0;transform-origin:50% 100%;will-change:transform}',
-'#sx30MenuPop .fp{position:absolute;top:0;bottom:0;overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;will-change:transform}',
-'#sx30MenuPop .fp img{position:absolute;top:0;height:100%;max-width:none;display:block}',
+'#sx30MenuPop .mp-in{position:absolute;inset:0;transform-origin:50% 100%;will-change:transform;perspective:700px;perspective-origin:50% 60%}',
+'#sx30MenuPop .mp-st,#sx30MenuPop .mp-f,#sx30MenuPop .mp-b{position:absolute;inset:0}',
+'#sx30MenuPop .mp-st{transform-origin:50% 100%;will-change:transform}',
+'#sx30MenuPop .mp-b{transform-origin:88% 0;will-change:transform}',
+'#sx30MenuPop img{position:absolute;left:0;top:0;width:100%;height:100%;max-width:none;display:block}',
 'html.sx30 #heroPic .phonewrap::after{content:none!important}',
 '#vFrame .vslide,#vFrame .sx30-scan,#vFrame .sx30-dim,#vFrame .sx30-load{clip-path:inset(0 round 27px)}',
 '@keyframes sx30RingP{0%,100%{opacity:.45}50%{opacity:1}}',
@@ -690,9 +692,12 @@ function msplit(I){var Wd=I.naturalWidth,Ht=I.naturalHeight,N=Wd*Ht,cv=D.createE
  var bo=x.createImageData(Wd,Ht),F=lv[0].c;for(i=0;i<N;i++){bo.data[i*4]=F[0][i];bo.data[i*4+1]=F[1][i];bo.data[i*4+2]=F[2][i];bo.data[i*4+3]=255}x.putImageData(bo,0,0);
  var cutURL=cc.toDataURL('image/webp',.92);if(cutURL.indexOf('data:image/webp')!==0)cutURL=cc.toDataURL('image/png');
  return{cut:cutURL,bg:cv.toDataURL('image/jpeg',.9),W:Wd,H:Ht,x0:x0,y0:y0,x1:x1,y1:y1}}
-function mpBuild(){var r=MPOP.r,N=6,o=D.createElement('div'),h='<div class="mp-in">';o.id='sx30MenuPop';o.setAttribute('aria-hidden','true');
- for(var k=0;k<N;k++)h+='<div class="fp" style="left:'+(k*100/N).toFixed(4)+'%;width:'+(100/N).toFixed(4)+'%;transform-origin:'+(k%2?'100%':'0')+' 50%"><img alt="" src="'+r.cut+'" style="left:'+(-k*100)+'%;width:'+(N*100)+'%"></div>';
- o.innerHTML=h+'</div>';D.body.appendChild(o);MPOP.el=o;MPOP.inn=o.firstChild;MPOP.fp=[].slice.call(o.querySelectorAll('.fp'));MPOP.n=N;
+function mpBuild(){var r=MPOP.r,o=D.createElement('div');o.id='sx30MenuPop';o.setAttribute('aria-hidden','true');
+ /* the stand is two panels : the front board, and the back leg seen on its right, joined at the top hinge */
+ var HT=88,HB=83.2;
+ o.innerHTML='<div class="mp-in"><div class="mp-st"><div class="mp-b"><img alt="" src="'+r.cut+'" style="clip-path:polygon('+HT+'% 0,100% 0,100% 100%,'+HB+'% 100%)"></div>'+
+  '<div class="mp-f"><img alt="" src="'+r.cut+'" style="clip-path:polygon(0 0,'+(HT+.4)+'% 0,'+(HB+.4)+'% 100%,0 100%)"></div></div></div>';
+ D.body.appendChild(o);MPOP.el=o;MPOP.inn=o.firstChild;MPOP.stand=o.querySelector('.mp-st');MPOP.leg=o.querySelector('.mp-b');
  [r.bg,r.cut].forEach(function(s){var p=new Image();p.src=s;if(p.decode)p.decode().catch(function(){})});
  GEO.t=0;onScroll()}
 function mpGeo(){var hi=MPOP.hi,r=MPOP.r,w=hi.offsetWidth,h=hi.offsetHeight;if(!w||!h){GEO.mp=null;return}
@@ -703,11 +708,14 @@ function mpSet(p){var g=GEO.mp,el=MPOP.el,show=p>0&&p<1;
  var want=p>=1?'0':'bg';if(want!==MPOP.src){MPOP.src=want;MPOP.im.src=want==='0'?MPOP.src0:MPOP.r.bg}
  if(show!==MPOP.shown){MPOP.shown=show;el.style.display=show?'block':'none'}if(!show)return;
  var gk=Math.round(g.l)+','+Math.round(g.t)+','+Math.round(g.w)+','+Math.round(g.h);if(gk!==MPOP.gk){MPOP.gk=gk;el.style.transform='translate3d('+g.l.toFixed(1)+'px,'+g.t.toFixed(1)+'px,0)';el.style.width=g.w.toFixed(1)+'px';el.style.height=g.h.toFixed(1)+'px'}
- var ap=clamp(p/.08,0,1),u=clamp((p-.06)/.6,0,1),a=88*Math.pow(1-u,3),rd=a*Math.PI/180,X=100*(1-Math.cos(rd)),sn=Math.sin(rd);
+ function oBack(u){var c=1.5;return 1+(c+1)*Math.pow(u-1,3)+c*Math.pow(u-1,2)}
+ var ap=clamp(p/.08,0,1),u1=clamp((p-.04)/.38,0,1),u2=clamp((p-.36)/.3,0,1);
+ /* 1. it stands up from lying flat (hinged on its bottom edge)   2. the back leg swings open from the top hinge */
+ var tilt=u1>=1?0:84*(1-oBack(u1)),leg=u2<=0?0:Math.min(1.06,oBack(u2));
  var k=Math.sin(Math.PI*clamp((p-.04)/.84,0,1)) /* back in its slot by 88%, so the hand-over to the picture is seamless */,dx=k*(g.cx-(g.l+g.w/2))*.55,dy=-k*Math.min(70,g.h*.4),sc=1+k*.65;
  el.style.opacity=ap.toFixed(3);MPOP.inn.style.transform='translate3d('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px,0) scale('+sc.toFixed(4)+')';
- var N=MPOP.n;MPOP.fp.forEach(function(f,i){var ev=i%2===0,m=ev?(N/2-i):(N/2-i-1);
-  f.style.transform='translateX('+(m*X).toFixed(2)+'%) rotateY('+(ev?a:-a).toFixed(2)+'deg)';f.style.filter=sn>.01?'brightness('+(ev?1-.45*sn:1+.12*sn).toFixed(3)+')':''})}
+ MPOP.stand.style.transform=tilt?'rotateX('+tilt.toFixed(2)+'deg)':'';
+ MPOP.leg.style.transform=leg<1||leg>1?'scaleX('+Math.max(.001,leg).toFixed(4)+')':'';MPOP.leg.style.opacity=leg<.02?'0':''}
 
 /* the robot crew ( homepage ) : loaded once the page is up */
 function crew(){try{var v='';try{v=localStorage.getItem('aera.motion.v')||''}catch(e){}
