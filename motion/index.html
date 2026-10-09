@@ -427,7 +427,11 @@ css([
 /* the bento box : the box empties, then rice, broccoli and chicken are plated into their compartments one by one ; the phone never moves */
 '#sx30BentoPop{position:absolute;left:0;top:0;width:10px;height:10px;z-index:30;pointer-events:none;display:none}',
 '#sx30BentoPop .bp-in,#sx30BentoPop svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}',
-'#sx30BentoPop .bf{position:absolute;background-size:cover;background-position:center;will-change:transform,opacity}',
+'#sx30BentoPop .bf{position:absolute;overflow:hidden}',
+'#sx30BentoPop .bfi{position:absolute;inset:0;background-size:cover;background-position:center;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 22%);mask-image:linear-gradient(to bottom,transparent 0,#000 22%);will-change:transform}',
+'#sx30BentoPop .bpc,#sx30BentoPop .bpr{position:absolute;opacity:0;will-change:transform,opacity;pointer-events:none}',
+'#sx30BentoPop .bpc{background-repeat:no-repeat;box-shadow:0 3px 7px rgba(0,0,0,.38)}',
+'#sx30BentoPop .bpr{border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffaf0,#e6d9bc 60%,#c8b690);box-shadow:0 1px 2px rgba(0,0,0,.35)}',
 '#sx30VacPop{position:absolute;left:0;top:0;width:10px;height:10px;z-index:30;pointer-events:none;display:none}',
 '#sx30VacPop .vp-in{position:absolute;inset:0;transform-origin:50% 100%;will-change:transform}',
 '#sx30VacPop svg,#sx30VacPop .vr{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}',
@@ -666,7 +670,7 @@ function hub(){
   W.hubTog=function(){var a=arguments,self=this;try{D.startViewTransition(function(){o.apply(self,a)})}catch(e){o.apply(self,a)}};W.hubTog.__sx=1}
  safe(menuFold)();safe(vacPack)();safe(bentoPlate)()}
 /* the two picture animations follow the scroll, but never faster than a set pace : a quick flick up or down still plays every step (fold, unseal) */
-var ANIM={m:{q:null,t:0,rate:.8},v:{q:null,t:0,rate:.55},b:{q:null,t:0,rate:.6},run:false,last:0};
+var ANIM={m:{q:null,t:0,rate:.8},v:{q:null,t:0,rate:.55},b:{q:null,t:0,rate:.33},run:false,last:0};
 /* forward only : scrolling back up never folds or unseals ; a started animation simply finishes ;
    once the card has gone back down near the bottom of the screen it quietly re-arms (the finished picture fades away), so the next scroll down plays it again */
 function fadeAway(img){try{var c=img.cloneNode(true);c.removeAttribute('data-hi');c.style.visibility='visible';c.style.transition='opacity .35s';c.style.pointerEvents='none';img.parentNode.insertBefore(c,img.nextSibling);requestAnimationFrame(function(){requestAnimationFrame(function(){c.style.opacity='0'})});setTimeout(function(){if(c.parentNode)c.parentNode.removeChild(c)},500)}catch(e){}}
@@ -836,16 +840,27 @@ var BCOMP=[{f:'5e3be6aeba3ea86e' /* Brown Rice */,o:[[477,103],[687,91],[702,109
 function bentoPlate(){if(BPOP)return;var hi=$('#hc-plan .himg'),im=hi&&$('img',hi);if(!hi||!im)return;BPOP={hi:hi,im:im,card:$('#hc-plan'),open:null,shown:null};
  var tries=0,last='';(function wait(){var s=im.getAttribute('src')||'';if(im.complete&&im.naturalWidth>=600&&s&&s===last){bpBuild();return}last=s;if(++tries<40)setTimeout(wait,600)})()}
 function bpBuild(){var IW=BPOP.im.naturalWidth,IH=BPOP.im.naturalHeight,sx=IW/960,sy=IH/436,o=D.createElement('div');o.id='sx30BentoPop';o.setAttribute('aria-hidden','true');
- var h='<div class="bp-in"><svg viewBox="0 0 '+IW+' '+IH+'" preserveAspectRatio="none"><defs><linearGradient id="sx30Tray" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d0d0f"/><stop offset=".55" stop-color="#1c1c20"/><stop offset="1" stop-color="#2a2a2f"/></linearGradient></defs>',F=[];
+ var seed=11;function rnd(){seed=(seed*16807)%2147483647;return(seed-1)/2147483646}
+ function inP(x,y,P){var c=false;for(var i=0,j=P.length-1;i<P.length;j=i++){var xi=P[i][0],yi=P[i][1],xj=P[j][0],yj=P[j][1];if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))c=!c}return c}
+ var h='<div class="bp-in"><svg viewBox="0 0 '+IW+' '+IH+'" preserveAspectRatio="none"><defs><linearGradient id="sx30Tray" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d0d0f"/><stop offset=".55" stop-color="#1c1c20"/><stop offset="1" stop-color="#2a2a2f"/></linearGradient></defs>',F=[],PC=[];
  BCOMP.forEach(function(c,i){var P=c.o.map(function(p){return[p[0]*sx,p[1]*sy]});var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;P.forEach(function(p){x0=Math.min(x0,p[0]);y0=Math.min(y0,p[1]);x1=Math.max(x1,p[0]);y1=Math.max(y1,p[1])});
   h+='<polygon class="bt" data-c="'+i+'" points="'+P.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1)}).join(' ')+'" fill="url(#sx30Tray)" stroke="rgba(255,255,255,.07)" stroke-width="'+(2*sx).toFixed(1)+'" stroke-linejoin="round" opacity="0"/>';
   F.push({P:P,b:[x0,y0,x1-x0,y1-y0]})});
  h+='</svg>';
- F.forEach(function(f,i){var b=f.b,cp='polygon('+f.P.map(function(p){return((p[0]-b[0])/b[2]*100).toFixed(2)+'% '+((p[1]-b[1])/b[3]*100).toFixed(2)+'%'}).join(',')+')';
-  h+='<div class="bf" data-c="'+i+'" style="left:'+(b[0]/IW*100).toFixed(3)+'%;top:'+(b[1]/IH*100).toFixed(3)+'%;width:'+(b[2]/IW*100).toFixed(3)+'%;height:'+(b[3]/IH*100).toFixed(3)+'%;background-image:url(https://my.chatbees.io/objects/quick-uploads/1302/'+BCOMP[i].f+'.jpg);clip-path:'+cp+';-webkit-clip-path:'+cp+';opacity:0"></div>'});
- /* a soft shadow along the inside walls, so the food sits down in the compartment instead of looking pasted on */
+ /* the food pile in each compartment (Peter's photo), rising up from the bottom as the pieces land */
+ F.forEach(function(f,i){var bx=f.b,cp='polygon('+f.P.map(function(p){return((p[0]-bx[0])/bx[2]*100).toFixed(2)+'% '+((p[1]-bx[1])/bx[3]*100).toFixed(2)+'%'}).join(',')+')';
+  h+='<div class="bf" data-c="'+i+'" style="left:'+(bx[0]/IW*100).toFixed(3)+'%;top:'+(bx[1]/IH*100).toFixed(3)+'%;width:'+(bx[2]/IW*100).toFixed(3)+'%;height:'+(bx[3]/IH*100).toFixed(3)+'%;clip-path:'+cp+';-webkit-clip-path:'+cp+';opacity:0"><i class="bfi" style="background-image:url(https://my.chatbees.io/objects/quick-uploads/1302/'+BCOMP[i].f+'.jpg)"></i></div>'});
  h+='<svg viewBox="0 0 '+IW+' '+IH+'" preserveAspectRatio="none">'+F.map(function(f,i){return '<polygon class="bs" data-c="'+i+'" points="'+f.P.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1)}).join(' ')+'" fill="none" stroke="rgba(0,0,0,.55)" stroke-width="'+(14*sx).toFixed(1)+'" stroke-linejoin="round" opacity="0"/>'}).join('')+'</svg>';
- o.innerHTML=h+'</div>';D.body.appendChild(o);BPOP.el=o;BPOP.IW=IW;BPOP.IH=IH;BPOP.shade=[].slice.call(o.querySelectorAll('.bs'));BPOP.tray=[].slice.call(o.querySelectorAll('.bt'));BPOP.food=[].slice.call(o.querySelectorAll('.bf'));
+ /* the pieces that tumble in : grains of rice, broccoli florets, chunks of chicken */
+ F.forEach(function(f,i){var n=i===0?36:13,url='https://my.chatbees.io/objects/quick-uploads/1302/'+BCOMP[i].f+'.jpg';
+  for(var k=0;k<n;k++){var tx,ty,tries=0;do{tx=f.b[0]+rnd()*f.b[2];ty=f.b[1]+rnd()*f.b[3]}while(!inP(tx,ty,f.P)&&++tries<40);
+   var w,hh,st;if(i===0){w=(7+rnd()*3)*sx;hh=w*.55;st='';}else{w=(i===1?46:40)*sx*(.8+rnd()*.45);hh=w*(i===1?(.85+rnd()*.25):(.7+rnd()*.3));
+    st='background-image:url('+url+');background-size:'+(380+rnd()*120).toFixed(0)+'%;background-position:'+(rnd()*100).toFixed(0)+'% '+(rnd()*100).toFixed(0)+'%;border-radius:'+(i===1?'48% 52% 44% 56% / 55% 50% 50% 45%':(18+rnd()*14).toFixed(0)+'%')+';'}
+   h+='<i class="'+(i===0?'bpr':'bpc')+'" style="left:'+((tx-w/2)/IW*100).toFixed(3)+'%;top:'+((ty-hh/2)/IH*100).toFixed(3)+'%;width:'+(w/IW*100).toFixed(3)+'%;height:'+(hh/IH*100).toFixed(3)+'%;'+st+'"></i>';
+   PC.push({c:i,t0:(k/n)*.62+rnd()*.05,fall:(ty-f.b[1])+(70+rnd()*110)*sy,dx:(rnd()-.5)*40*sx,r0:(rnd()-.5)*(i===0?180:120),r1:(rnd()-.5)*(i===0?40:30)})}});
+ o.innerHTML=h+'</div>';D.body.appendChild(o);BPOP.el=o;BPOP.IW=IW;BPOP.IH=IH;
+ BPOP.tray=[].slice.call(o.querySelectorAll('.bt'));BPOP.food=[].slice.call(o.querySelectorAll('.bf'));BPOP.fill=[].slice.call(o.querySelectorAll('.bfi'));BPOP.shade=[].slice.call(o.querySelectorAll('.bs'));
+ var els=[].slice.call(o.querySelectorAll('.bpr,.bpc'));PC.forEach(function(pc,k){pc.el=els[k]});BPOP.pc=PC;
  BCOMP.forEach(function(c){var p=new Image();p.src='https://my.chatbees.io/objects/quick-uploads/1302/'+c.f+'.jpg'});GEO.t=0;onScroll()}
 function bpGeo(){var im=BPOP.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){GEO.bp=null;return}
  var fit=getComputedStyle(im).objectFit,s=fit==='contain'?Math.min(w/BPOP.IW,h/BPOP.IH):Math.max(w/BPOP.IW,h/BPOP.IH),dw=BPOP.IW*s,dh=BPOP.IH*s,t=docTop(im),l=docLeft(im);
@@ -854,11 +869,15 @@ function bpSet(p){var g=GEO.bp,el=BPOP.el;if(!g)return;var show=p>0&&p<1;
  if(show!==BPOP.shown){BPOP.shown=show;el.style.display=show?'block':'none'}if(!show)return;
  var gk=Math.round(g.l)+','+Math.round(g.t)+','+Math.round(g.w)+','+Math.round(g.h);if(gk!==BPOP.gk){BPOP.gk=gk;el.style.transform='translate3d('+g.l.toFixed(1)+'px,'+g.t.toFixed(1)+'px,0)';el.style.width=g.w.toFixed(1)+'px';el.style.height=g.h.toFixed(1)+'px'}
  function eo(u){return 1-Math.pow(1-u,3)}function sm(u){return u*u*(3-2*u)}function seg(a,b){return clamp((p-a)/(b-a),0,1)}
- /* the box empties first, then each compartment is filled in turn : rice, broccoli, chicken */
- var empty=sm(seg(0,.08));
- BPOP.food.forEach(function(f,j){var D0=.1+.22*j,D1=D0+.16,u=eo(seg(D0,D1)),r=sm(seg(D1+.02,D1+.09));
-  f.style.transform='translate3d(0,'+((1-u)*-230).toFixed(1)+'%,0) scale('+(.86+.14*u).toFixed(4)+')';var fo=(seg(D0,D0+.03)*(1-r)).toFixed(3);f.style.opacity=fo;BPOP.shade[j].setAttribute('opacity',(u*fo).toFixed(3));
-  BPOP.tray[j].setAttribute('opacity',(empty*(1-r)).toFixed(3))})}
+ /* the box empties first ; then, one compartment at a time (rice, broccoli, chicken), the food rains down piece by piece and piles up */
+ var empty=sm(seg(0,.07)),f=g.w/BPOP.IW,U=[],RV=[];
+ for(var j=0;j<3;j++){var W0=.08+.24*j,W1=W0+.24,u=seg(W0,W1),r=sm(seg(W1-.01,W1+.06)),lv=sm(clamp((u-.12)/.8,0,1));U.push(u);RV.push(r);
+  BPOP.fill[j].style.transform='translate3d(0,'+((1-lv)*100).toFixed(2)+'%,0)';BPOP.food[j].style.opacity=(u>0?(1-r):0).toFixed(3);
+  BPOP.tray[j].setAttribute('opacity',(empty*(1-r)).toFixed(3));BPOP.shade[j].setAttribute('opacity',(lv*(1-r)).toFixed(3))}
+ BPOP.pc.forEach(function(pc){var u=U[pc.c],r=RV[pc.c],t=clamp((u-pc.t0)/.3,0,1),e=pc.el;
+  if(u<=pc.t0||r>=1){if(e.__o!=='0'){e.__o='0';e.style.opacity='0'}return}
+  var fade=1-clamp((u-pc.t0-.3)/.07,0,1),op=(fade*(1-r)).toFixed(2),y=-(1-t*t)*pc.fall*f,x=(1-t)*pc.dx*f,rot=pc.r0+(pc.r1-pc.r0)*t;
+  e.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,0) rotate('+rot.toFixed(1)+'deg)';if(e.__o!==op){e.__o=op;e.style.opacity=op}})}
 
 /* the robot crew ( homepage ) : loaded once the page is up */
 function crew(){try{var v='';try{v=localStorage.getItem('aera.motion.v')||''}catch(e){}
