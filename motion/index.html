@@ -416,18 +416,11 @@ css([
 /* homepage cards : they sweep in from alternate sides as you scroll, driven by the browser itself so they never shake */
 '@supports (animation-timeline: view()){html.sx30 #hub .hacc .hitem{animation:sx30HubIn linear both;animation-timeline:view();animation-range:entry 0% cover 42%;animation-timing-function:cubic-bezier(.2,.9,.25,1)}html.sx30 #hub .hacc .hitem:nth-child(odd){--sd:-1}html.sx30 #hub .hacc .hitem:nth-child(even){--sd:1}html.sx30 #hub .hacc .hitem.open{animation:none}}',
 '@keyframes sx30HubIn{from{opacity:.05;transform:translate3d(calc(var(--sd,1)*120px),90px,0) rotate(calc(var(--sd,1)*8deg)) scale(.76)}to{opacity:1;transform:none}}',
-/* the AERA menu picture : folded like a paper menu, it unfolds panel by panel as you scroll down */
-'.sx30-fold{position:absolute;inset:0;perspective:800px;pointer-events:none;z-index:1;--p:0}',
-'.sx30-fold .fp{position:absolute;top:0;bottom:0;overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;animation-duration:1s;animation-timing-function:linear;animation-fill-mode:both;animation-play-state:paused;animation-delay:calc(var(--p) * -1s)}',
-'.sx30-fold .fp.e{transform-origin:0 50%;animation-name:sx30FoldE}',
-'.sx30-fold .fp.o{transform-origin:100% 50%;animation-name:sx30FoldO}',
-'.sx30-fold .fpi{position:absolute;top:0;height:100%;max-width:none;object-fit:cover}',
-'.sx30-fold .fp i{position:absolute;inset:0;pointer-events:none;animation-duration:1s;animation-timing-function:linear;animation-fill-mode:both;animation-play-state:paused;animation-delay:calc(var(--p) * -1s)}',
-'.sx30-fold .fp.e i{background:#0b1f45;animation-name:sx30ShE}',
-'.sx30-fold .fp.o i{background:#fff;animation-name:sx30ShO}',
-'.himg.sx30-folding>img:not(.fpi){visibility:hidden}',
-'.himg.sx30-unfolded .sx30-fold{display:none}',
-'.himg.sx30-unfolded>img:not(.fpi){visibility:visible}',
+/* the AERA menu stand : lifted out of its picture, it pops out folded and unfolds as you scroll down, then slots back in */
+'#sx30MenuPop{position:absolute;left:0;top:0;width:10px;height:10px;z-index:30;pointer-events:none;perspective:900px;display:none}',
+'#sx30MenuPop .mp-in{position:absolute;inset:0;transform-origin:50% 100%;will-change:transform}',
+'#sx30MenuPop .fp{position:absolute;top:0;bottom:0;overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;will-change:transform}',
+'#sx30MenuPop .fp img{position:absolute;top:0;height:100%;max-width:none;display:block}',
 'html.sx30 #heroPic .phonewrap::after{content:none!important}',
 '#vFrame .vslide,#vFrame .sx30-scan,#vFrame .sx30-dim,#vFrame .sx30-load{clip-path:inset(0 round 27px)}',
 '@keyframes sx30RingP{0%,100%{opacity:.45}50%{opacity:1}}',
@@ -659,16 +652,60 @@ function hub(){
  if(typeof W.hubTog==='function'&&D.startViewTransition&&!W.hubTog.__sx){var o=W.hubTog;
   W.hubTog=function(){var a=arguments,self=this;try{D.startViewTransition(function(){o.apply(self,a)})}catch(e){o.apply(self,a)}};W.hubTog.__sx=1}
  safe(menuFold)()}
-var FOLD=null;
-function menuFold(){if(FOLD)return;var hi=$('#hc-menu .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
- var src=im.currentSrc||im.src;if(!src)return;var N=6,A0=88,op=getComputedStyle(im).objectPosition||'50% 50%';
- if(!$('#sx30FoldKF')){var e='',o='',s1='',s2='';for(var j=0;j<=16;j++){var u=j/16,a=A0*Math.pow(1-u,3),rd=a*Math.PI/180,X=(100*(1-Math.cos(rd))).toFixed(3),sn=Math.sin(rd),pc=(u*100).toFixed(2)+'%';
-  e+=pc+'{transform:translateX(calc(var(--m) * '+X+'%)) rotateY('+a.toFixed(2)+'deg)}';o+=pc+'{transform:translateX(calc(var(--m) * '+X+'%)) rotateY('+(-a).toFixed(2)+'deg)}';
-  s1+=pc+'{opacity:'+(sn*.55).toFixed(3)+'}';s2+=pc+'{opacity:'+(sn*.18).toFixed(3)+'}'}
-  var st=D.createElement('style');st.id='sx30FoldKF';st.textContent='@keyframes sx30FoldE{'+e+'}@keyframes sx30FoldO{'+o+'}@keyframes sx30ShE{'+s1+'}@keyframes sx30ShO{'+s2+'}';D.head.appendChild(st)}
- var f=D.createElement('div'),h='';f.className='sx30-fold';f.setAttribute('aria-hidden','true');
- for(var k=0;k<N;k++){var ev=k%2===0,m=ev?(N/2-k):(N/2-k-1);h+='<div class="fp '+(ev?'e':'o')+'" style="left:'+(k*100/N).toFixed(4)+'%;width:'+(100/N).toFixed(4)+'%;--m:'+m+'"><img class="fpi" alt="" src="'+src+'" style="left:'+(-k*100)+'%;width:'+(N*100)+'%;object-position:'+op+'"><i></i></div>'}
- f.innerHTML=h;hi.appendChild(f);hi.classList.add('sx30-folding');FOLD={el:f,hi:hi,card:$('#hc-menu'),st:'',dn:null};GEO.t=0}
+var MPOP=null;
+function docLeft(el){var l=0;while(el){l+=el.offsetLeft;el=el.offsetParent}return l}
+function menuFold(){if(MPOP)return;var hi=$('#hc-menu .himg'),im=hi&&$('img',hi);if(!hi||!im)return;var src0=im.getAttribute('src');if(!src0)return;
+ MPOP={hi:hi,im:im,card:$('#hc-menu'),src0:src0,st:'',open:null,shown:null,src:'0'};
+ (W.requestIdleCallback||function(f){setTimeout(f,300)})(function(){mcut(src0,function(r){if(r){MPOP.r=r;mpBuild()}})})}
+/* split the picture once : the menu stand (cut out on its dark board) and the grey backdrop without it ; kept in this browser */
+function mcut(src,cb){var key='aera.menucut.v1',sig=src.length+':'+src.slice(-48);
+ try{var c=JSON.parse(localStorage.getItem(key)||'null');if(c&&c.sig===sig){cb(c);return}}catch(e){}
+ var I=new Image();I.onload=function(){var r=null;try{r=msplit(I);r.sig=sig;try{localStorage.setItem(key,JSON.stringify(r))}catch(e){}}catch(e){r=null}cb(r)};I.onerror=function(){cb(null)};I.src=src}
+function mbox(a,Wd,Ht,r){var N=Wd*Ht,o=new Float32Array(N),o2=new Float32Array(N),x,y,k,s,n=2*r+1;
+ for(y=0;y<Ht;y++){s=0;for(k=-r;k<=r;k++)s+=a[y*Wd+clamp(k,0,Wd-1)];for(x=0;x<Wd;x++){o[y*Wd+x]=s/n;s+=a[y*Wd+Math.min(Wd-1,x+r+1)]-a[y*Wd+Math.max(0,x-r)]}}
+ for(x=0;x<Wd;x++){s=0;for(k=-r;k<=r;k++)s+=o[clamp(k,0,Ht-1)*Wd+x];for(y=0;y<Ht;y++){o2[y*Wd+x]=s/n;s+=o[Math.min(Ht-1,y+r+1)*Wd+x]-o[Math.max(0,y-r)*Wd+x]}}return o2}
+function msplit(I){var Wd=I.naturalWidth,Ht=I.naturalHeight,N=Wd*Ht,cv=D.createElement('canvas');cv.width=Wd;cv.height=Ht;var x=cv.getContext('2d');x.drawImage(I,0,0);var d=x.getImageData(0,0,Wd,Ht).data,i,k;
+ var L=new Float32Array(N);for(i=0;i<N;i++)L[i]=.299*d[i*4]+.587*d[i*4+1]+.114*d[i*4+2];
+ /* backdrop = everything light that can be reached from the picture edge ; the rest is the menu stand */
+ var bg=new Uint8Array(N),q=new Int32Array(N),h=0,t=0;function push(j){if(!bg[j]&&L[j]>=100){bg[j]=1;q[t++]=j}}
+ for(k=0;k<Wd;k++){push(k);push((Ht-1)*Wd+k)}for(k=0;k<Ht;k++){push(k*Wd);push(k*Wd+Wd-1)}
+ while(h<t){i=q[h++];var px=i%Wd,py=(i/Wd)|0;if(px>0)push(i-1);if(px<Wd-1)push(i+1);if(py>0)push(i-Wd);if(py<Ht-1)push(i+Wd)}
+ var m=new Float32Array(N);for(i=0;i<N;i++)m[i]=bg[i]?0:1;var ma=mbox(m,Wd,Ht,1),ring=mbox(m,Wd,Ht,5);
+ var x0=Wd,y0=Ht,x1=0,y1=0;for(i=0;i<N;i++)if(ma[i]>.05){var cx=i%Wd,cy=(i/Wd)|0;if(cx<x0)x0=cx;if(cx>x1)x1=cx;if(cy<y0)y0=cy;if(cy>y1)y1=cy}
+ if(x1<=x0||y1<=y0)return null;var cw=x1-x0+1,ch=y1-y0+1,cc=D.createElement('canvas');cc.width=cw;cc.height=ch;var cx2=cc.getContext('2d'),cut=cx2.createImageData(cw,ch);
+ for(var yy=0;yy<ch;yy++)for(var xx=0;xx<cw;xx++){var s=(yy+y0)*Wd+xx+x0,o=(yy*cw+xx)*4;cut.data[o]=d[s*4];cut.data[o+1]=d[s*4+1];cut.data[o+2]=d[s*4+2];cut.data[o+3]=Math.round(ma[s]*255)}
+ cx2.putImageData(cut,0,0);
+ /* backdrop : fill the hole smoothly from the grey around it (push-pull) */
+ var lv=[],w=new Float32Array(N),C0=[new Float32Array(N),new Float32Array(N),new Float32Array(N)],ww=Wd,hh=Ht;
+ for(i=0;i<N;i++){w[i]=ring[i]>0?0:1;C0[0][i]=d[i*4];C0[1][i]=d[i*4+1];C0[2][i]=d[i*4+2]}lv.push({w:w,c:C0,ww:ww,hh:hh});
+ while(ww>1||hh>1){var nw=Math.max(1,Math.ceil(ww/2)),nh=Math.max(1,Math.ceil(hh/2)),W2=new Float32Array(nw*nh),C2=[new Float32Array(nw*nh),new Float32Array(nw*nh),new Float32Array(nw*nh)],P=lv[lv.length-1];
+  for(var y=0;y<nh;y++)for(var xq=0;xq<nw;xq++){var sw=0,s0=0,s1=0,s2=0;for(var dy=0;dy<2;dy++)for(var dx=0;dx<2;dx++){var j=Math.min(P.hh-1,y*2+dy)*P.ww+Math.min(P.ww-1,xq*2+dx),kk=P.w[j];sw+=kk;s0+=P.c[0][j]*kk;s1+=P.c[1][j]*kk;s2+=P.c[2][j]*kk}
+   var jj=y*nw+xq;if(sw>0){C2[0][jj]=s0/sw;C2[1][jj]=s1/sw;C2[2][jj]=s2/sw}W2[jj]=Math.min(1,sw)}
+  ww=nw;hh=nh;lv.push({w:W2,c:C2,ww:ww,hh:hh})}
+ for(var l=lv.length-2;l>=0;l--){var A=lv[l],B=lv[l+1];for(var y3=0;y3<A.hh;y3++)for(var x3=0;x3<A.ww;x3++){var ii=y3*A.ww+x3,kw=A.w[ii];if(kw>=1)continue;
+   var fx=clamp((x3+.5)/2-.5,0,B.ww-1),fy=clamp((y3+.5)/2-.5,0,B.hh-1),a0=fx|0,b0=fy|0,a1=Math.min(B.ww-1,a0+1),b1=Math.min(B.hh-1,b0+1),ax=fx-a0,ay=fy-b0;
+   for(var c3=0;c3<3;c3++){var Cq=B.c[c3],u=Cq[b0*B.ww+a0]*(1-ax)*(1-ay)+Cq[b0*B.ww+a1]*ax*(1-ay)+Cq[b1*B.ww+a0]*(1-ax)*ay+Cq[b1*B.ww+a1]*ax*ay;A.c[c3][ii]=A.c[c3][ii]*kw+u*(1-kw)}A.w[ii]=1}}
+ var bo=x.createImageData(Wd,Ht),F=lv[0].c;for(i=0;i<N;i++){bo.data[i*4]=F[0][i];bo.data[i*4+1]=F[1][i];bo.data[i*4+2]=F[2][i];bo.data[i*4+3]=255}x.putImageData(bo,0,0);
+ var cutURL=cc.toDataURL('image/webp',.92);if(cutURL.indexOf('data:image/webp')!==0)cutURL=cc.toDataURL('image/png');
+ return{cut:cutURL,bg:cv.toDataURL('image/jpeg',.9),W:Wd,H:Ht,x0:x0,y0:y0,x1:x1,y1:y1}}
+function mpBuild(){var r=MPOP.r,N=6,o=D.createElement('div'),h='<div class="mp-in">';o.id='sx30MenuPop';o.setAttribute('aria-hidden','true');
+ for(var k=0;k<N;k++)h+='<div class="fp" style="left:'+(k*100/N).toFixed(4)+'%;width:'+(100/N).toFixed(4)+'%;transform-origin:'+(k%2?'100%':'0')+' 50%"><img alt="" src="'+r.cut+'" style="left:'+(-k*100)+'%;width:'+(N*100)+'%"></div>';
+ o.innerHTML=h+'</div>';D.body.appendChild(o);MPOP.el=o;MPOP.inn=o.firstChild;MPOP.fp=[].slice.call(o.querySelectorAll('.fp'));MPOP.n=N;
+ [r.bg,r.cut].forEach(function(s){var p=new Image();p.src=s;if(p.decode)p.decode().catch(function(){})});
+ GEO.t=0;onScroll()}
+function mpGeo(){var hi=MPOP.hi,r=MPOP.r,w=hi.offsetWidth,h=hi.offsetHeight;if(!w||!h){GEO.mp=null;return}
+ var s=Math.max(w/r.W,h/r.H),ox=(w-r.W*s)/2,oy=(h-r.H*s)/2,t=docTop(hi),l=docLeft(hi);
+ GEO.mp={ht:t,l:l+ox+r.x0*s,t:t+oy+r.y0*s,w:(r.x1-r.x0+1)*s,h:(r.y1-r.y0+1)*s,cx:MPOP.card?docLeft(MPOP.card)+MPOP.card.offsetWidth/2:l+w/2}}
+function mpSet(p){var g=GEO.mp,el=MPOP.el,show=p>0&&p<1;
+ /* resting states : before, the card shows only the backdrop ; after, the untouched original picture */
+ var want=p>=1?'0':'bg';if(want!==MPOP.src){MPOP.src=want;MPOP.im.src=want==='0'?MPOP.src0:MPOP.r.bg}
+ if(show!==MPOP.shown){MPOP.shown=show;el.style.display=show?'block':'none'}if(!show)return;
+ var gk=Math.round(g.l)+','+Math.round(g.t)+','+Math.round(g.w)+','+Math.round(g.h);if(gk!==MPOP.gk){MPOP.gk=gk;el.style.transform='translate3d('+g.l.toFixed(1)+'px,'+g.t.toFixed(1)+'px,0)';el.style.width=g.w.toFixed(1)+'px';el.style.height=g.h.toFixed(1)+'px'}
+ var ap=clamp(p/.08,0,1),u=clamp((p-.06)/.6,0,1),a=88*Math.pow(1-u,3),rd=a*Math.PI/180,X=100*(1-Math.cos(rd)),sn=Math.sin(rd);
+ var k=Math.sin(Math.PI*clamp((p-.04)/.96,0,1)),dx=k*(g.cx-(g.l+g.w/2))*.55,dy=-k*Math.min(70,g.h*.4),sc=1+k*.65;
+ el.style.opacity=ap.toFixed(3);MPOP.inn.style.transform='translate3d('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px,0) scale('+sc.toFixed(4)+')';
+ var N=MPOP.n;MPOP.fp.forEach(function(f,i){var ev=i%2===0,m=ev?(N/2-i):(N/2-i-1);
+  f.style.transform='translateX('+(m*X).toFixed(2)+'%) rotateY('+(ev?a:-a).toFixed(2)+'deg)';f.style.filter=sn>.01?'brightness('+(ev?1-.45*sn:1+.12*sn).toFixed(3)+')':''})}
 
 /* the robot crew ( homepage ) : loaded once the page is up */
 function crew(){try{var v='';try{v=localStorage.getItem('aera.motion.v')||''}catch(e){}
@@ -682,7 +719,7 @@ function geoRefresh(){GEO.t=performance.now();GEO.hh=HERO?HERO.offsetHeight:0;GE
  if(BANNER){GEO.bTop=docTop(BANNER);GEO.bH=BANNER.offsetHeight}
  GEO.hub=HUB.map(function(c){return{top:docTop(c),h:c.offsetHeight}});
  if(MARK){GEO.mTop=docTop(MARK.parentNode);GEO.mH=MARK.parentNode.offsetHeight}
- if(FOLD)GEO.fold={top:docTop(FOLD.hi)}}
+ if(MPOP&&MPOP.r)mpGeo()}
 D.addEventListener('click',function(){GEO.t=0;setTimeout(function(){GEO.t=0;onScroll()},450)},true);W.addEventListener('resize',function(){GEO.t=0});W.addEventListener('load',function(){GEO.t=0});
 /* every scroll frame only writes : all sizes come from GEO, measured at most once a second */
 function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y;VEL=VEL*.8+dy*.2;if(performance.now()-GEO.t>1000)geoRefresh();
@@ -696,8 +733,8 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
    var e=clamp((vh-top)/(vh*.5),0,1);e=1-Math.pow(1-e,3);var sd=i%2?1:-1,q=1-e;
    c.style.transform='translate3d('+(sd*q*120).toFixed(1)+'px,'+(q*90).toFixed(1)+'px,0) rotate('+(sd*q*8).toFixed(2)+'deg) scale('+(.76+.24*e).toFixed(4)+') skewY('+SKV+'deg)';c.style.opacity=e<.999?(.05+.95*e).toFixed(3):''});
   if(!FINE&&HUB.__best!==best){if(HUB.__best)HUB.__best.classList.remove('sx30-focus');if(best)best.classList.add('sx30-focus');HUB.__best=best}}
- if(FOLD&&GEO.fold){var ft=GEO.fold.top-y,fp=clamp((vh*.92-ft)/(vh*.55),0,1);if(FOLD.card&&FOLD.card.classList.contains('open'))fp=1;var fs=fp.toFixed(3);
-  if(fs!==FOLD.st){FOLD.st=fs;FOLD.el.style.setProperty('--p',fs);var dn=fp>=.999;if(dn!==FOLD.dn){FOLD.dn=dn;FOLD.hi.classList.toggle('sx30-unfolded',dn)}}}
+ if(MPOP&&MPOP.el&&GEO.mp){var open=!!(MPOP.card&&MPOP.card.classList.contains('open'));if(open!==MPOP.open){MPOP.open=open;MPOP.st='';if(open){MPOP.src='0';MPOP.im.src=MPOP.src0;MPOP.shown=false;MPOP.el.style.display='none'}}
+  if(!open){var mp=clamp((vh*.48-(GEO.mp.ht-y))/(vh*.36),0,1),ms=mp.toFixed(3);if(ms!==MPOP.st){MPOP.st=ms;mpSet(mp)}}}
  if(MARK&&GEO.mTop!=null){var mt=GEO.mTop-y,mp=clamp((vh-mt)/(GEO.mH+vh*.35),0,1);MARK.style.transform='translate3d(0,'+((1-mp)*55).toFixed(1)+'%,0) scale('+(.82+.18*mp).toFixed(3)+')';MARK.style.opacity=(.15+.85*mp).toFixed(3)}}
 /* the scroll speed lean only touches the cards and the giant type, never the whole page */
 /* a custom property on a big block makes the browser restyle everything inside it, so the lean is written straight onto the two type rows */
