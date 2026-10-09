@@ -336,13 +336,16 @@ var MOB=!(WN.matchMedia&&matchMedia('(hover:hover) and (pointer:fine)').matches)
 var R=new T.WebGLRenderer({alpha:true,antialias:!MOB,powerPreference:'low-power'});R.setPixelRatio(Math.min(WN.devicePixelRatio||1,MOB?1.5:1.75));R.setSize(VW,VH);
 if(T.sRGBEncoding)R.outputEncoding=T.sRGBEncoding;wrap.appendChild(R.domElement);
 var S=new T.Scene(),C=new T.OrthographicCamera(-VW/2/PPU,VW/2/PPU,VH/2/PPU,-VH/2/PPU,-80,80);C.position.set(0,0,20);C.lookAt(0,0,0);S.add(C);
-S.add(new T.HemisphereLight(0xffffff,0xBCCDEA,.85));
-var key=new T.DirectionalLight(0xffffff,.8);key.position.set(3,6,8);S.add(key);
-var rim=new T.DirectionalLight(0xFFE3A0,.4);rim.position.set(-6,3,-5);S.add(rim);
-function mk(c,e,r){var m=new T.MeshStandardMaterial({color:c,roughness:r==null?.5:r,metalness:.06,emissive:c,emissiveIntensity:e==null?.1:e});
+/* lighting tuned so the robots show exactly AERA navy #16479E and gold #FDB913 on screen */
+var hemi=new T.HemisphereLight(0xffffff,0xffffff,.75);S.add(hemi);
+var key=new T.DirectionalLight(0xffffff,.3);key.position.set(3,6,8);S.add(key);
+var rim=new T.DirectionalLight(0xFFE3A0,.12);rim.position.set(-6,3,-5);S.add(rim);
+function mk(c,e,r){var m=new T.MeshStandardMaterial({color:c,roughness:r==null?.9:r,metalness:0,emissive:c,emissiveIntensity:e==null?.1:e});
  if(m.color.convertSRGBToLinear){m.color.convertSRGBToLinear();m.emissive.convertSRGBToLinear()}return m}
-var mN=mk(0x16479E,.1),mG=mk(0xFDB913,.28,.42),mW=mk(0xF6F9FE,.05,.4),mD=mk(0x0E3576,.08),mEye=mk(0xFFF1B8,1.6,.3),mHat=mk(0xFFFFFF,.12,.6);
+var mN=mk(0x16479E,0),mG=mk(0xFDB913,0),mW=mk(0xF6F9FE,.05,.4),mD=mk(0x0E3576,0),mEye=mk(0xFFF1B8,1.6,.3),mHat=mk(0xFFFFFF,.12,.6);
 var GC={};
+/* colour check hooks : read the exact colour the robots are drawn in */
+WN.__crewDbg={T:T,hemi:hemi,key:key,rim:rim,mat:{mN:mN,mG:mG,mW:mW,mD:mD},px:function(x,y){R.render(S,C);var gl=R.getContext(),pr=R.getPixelRatio(),b=new Uint8Array(4);gl.readPixels(Math.round(x*pr),Math.round((VH-y)*pr),1,1,gl.RGBA,gl.UNSIGNED_BYTE,b);return Array.from(b)}};
 function geo(k,f){return GC[k]||(GC[k]=f())}
 function limb(len,r,m){var x=new T.Mesh(geo('l'+len+'_'+r,function(){return new T.CylinderGeometry(r,r*.9,len,8)}),m);x.position.y=-len/2;return x}
 function ball(r,m){return new T.Mesh(geo('b'+r,function(){return new T.SphereGeometry(r,12,8)}),m)}
@@ -429,7 +432,7 @@ function talkFrame(now){if(!SPK)return;if(now>spkUntil||!SPK.on){bub.classList.r
  var h=headTop(SPK),bw=BW_,bh=BH_;bub.style.transform='translate3d('+clamp(h.x-bw/2,6,VW-bw-6).toFixed(1)+'px,'+(h.y-bh-14).toFixed(1)+'px,0)'}
 
 /* ---------- the crew ---------- */
-var LIFE=robot('bento'),PIX=robot('cap'),MOV=[robot('chef'),robot('band'),robot('chef'),robot('band')];
+var LIFE=robot('bento');WN.__crewDbg.life=function(){return{x:sxOf(LIFE.x),y:syOf(LIFE.y+(LIFE.P.by||0)+TORY*LIFE.sc),sy:syOf(LIFE.y+(LIFE.P.by||0)+(HIPY+.06)*LIFE.sc)}};var PIX=robot('cap'),MOV=[robot('chef'),robot('band'),robot('chef'),robot('band')];
 var PAIRS=[{a:MOV[0],b:MOV[1],job:null},{a:MOV[2],b:MOV[3],job:null}];
 MOV.forEach(function(r){r.sc=.92});PIX.sc=1.05;
 
