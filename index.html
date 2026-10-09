@@ -2307,19 +2307,19 @@ if(window.aeraRetranslate)window.aeraRetranslate();
     cam.position.set(0,0,20); cam.lookAt(0,0,0); scene.add(cam);
     function bounds(){ return {l:cam.left+2.6,r:cam.right-2.6,f:cam.bottom+0.52} }
 
-    scene.add(new THREE.HemisphereLight(0xffffff,0xC8D4E8,0.95));
-    var key=new THREE.DirectionalLight(0xffffff,0.85); key.position.set(3,6,7); scene.add(key);
-    var rim=new THREE.DirectionalLight(0xBFD4FF,0.35); rim.position.set(-5,3,-4); scene.add(rim);
+    scene.add(new THREE.HemisphereLight(0xffffff,0xffffff,0.75)); /* tuned so Bento shows exactly AERA navy #16479E and gold #FDB913 */
+    var key=new THREE.DirectionalLight(0xffffff,0.3); key.position.set(3,6,7); scene.add(key);
+    var rim=new THREE.DirectionalLight(0xBFD4FF,0.12); rim.position.set(-5,3,-4); scene.add(rim);
 
     /* ---------- materials ---------- */
     var NAVY=0x16479E, DEEP=0x0E3576, GOLD=0xFDB913, WHITE=0xF6F9FE;
     function mk(c,e,r){
-      var m=new THREE.MeshStandardMaterial({color:c,roughness:r===undefined?0.58:r,metalness:0,
+      var m=new THREE.MeshStandardMaterial({color:c,roughness:r===undefined?0.9:r,metalness:0,
         emissive:c,emissiveIntensity:e===undefined?0.28:e});
       if(m.color.convertSRGBToLinear){ m.color.convertSRGBToLinear(); m.emissive.convertSRGBToLinear(); }
       return m;
     }
-    var mN=mk(NAVY,0.34), mG=mk(GOLD,0.42,0.46), mW=mk(WHITE,0.05,0.42), mD=mk(DEEP,0.22);
+    var mN=mk(NAVY,0), mG=mk(GOLD,0), mW=mk(WHITE,0.05,0.42), mD=mk(DEEP,0);
 
     function limb(len,r,m){
       var x=new THREE.Mesh(new THREE.CylinderGeometry(r,r*0.9,len,14),m);
