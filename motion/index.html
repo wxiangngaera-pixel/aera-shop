@@ -843,7 +843,9 @@ function bpBuild(){var IW=BPOP.im.naturalWidth,IH=BPOP.im.naturalHeight,sx=IW/96
  h+='</svg>';
  F.forEach(function(f,i){var b=f.b,cp='polygon('+f.P.map(function(p){return((p[0]-b[0])/b[2]*100).toFixed(2)+'% '+((p[1]-b[1])/b[3]*100).toFixed(2)+'%'}).join(',')+')';
   h+='<div class="bf" data-c="'+i+'" style="left:'+(b[0]/IW*100).toFixed(3)+'%;top:'+(b[1]/IH*100).toFixed(3)+'%;width:'+(b[2]/IW*100).toFixed(3)+'%;height:'+(b[3]/IH*100).toFixed(3)+'%;background-image:url(https://my.chatbees.io/objects/quick-uploads/1302/'+BCOMP[i].f+'.jpg);clip-path:'+cp+';-webkit-clip-path:'+cp+';opacity:0"></div>'});
- o.innerHTML=h+'</div>';D.body.appendChild(o);BPOP.el=o;BPOP.IW=IW;BPOP.IH=IH;BPOP.tray=[].slice.call(o.querySelectorAll('.bt'));BPOP.food=[].slice.call(o.querySelectorAll('.bf'));
+ /* a soft shadow along the inside walls, so the food sits down in the compartment instead of looking pasted on */
+ h+='<svg viewBox="0 0 '+IW+' '+IH+'" preserveAspectRatio="none">'+F.map(function(f,i){return '<polygon class="bs" data-c="'+i+'" points="'+f.P.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1)}).join(' ')+'" fill="none" stroke="rgba(0,0,0,.55)" stroke-width="'+(14*sx).toFixed(1)+'" stroke-linejoin="round" opacity="0"/>'}).join('')+'</svg>';
+ o.innerHTML=h+'</div>';D.body.appendChild(o);BPOP.el=o;BPOP.IW=IW;BPOP.IH=IH;BPOP.shade=[].slice.call(o.querySelectorAll('.bs'));BPOP.tray=[].slice.call(o.querySelectorAll('.bt'));BPOP.food=[].slice.call(o.querySelectorAll('.bf'));
  BCOMP.forEach(function(c){var p=new Image();p.src='https://my.chatbees.io/objects/quick-uploads/1302/'+c.f+'.jpg'});GEO.t=0;onScroll()}
 function bpGeo(){var im=BPOP.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){GEO.bp=null;return}
  var fit=getComputedStyle(im).objectFit,s=fit==='contain'?Math.min(w/BPOP.IW,h/BPOP.IH):Math.max(w/BPOP.IW,h/BPOP.IH),dw=BPOP.IW*s,dh=BPOP.IH*s,t=docTop(im),l=docLeft(im);
@@ -855,7 +857,7 @@ function bpSet(p){var g=GEO.bp,el=BPOP.el;if(!g)return;var show=p>0&&p<1;
  /* the box empties first, then each compartment is filled in turn : rice, broccoli, chicken */
  var empty=sm(seg(0,.08));
  BPOP.food.forEach(function(f,j){var D0=.1+.22*j,D1=D0+.16,u=eo(seg(D0,D1)),r=sm(seg(D1+.02,D1+.09));
-  f.style.transform='translate3d(0,'+((1-u)*-230).toFixed(1)+'%,0) scale('+(.86+.14*u).toFixed(4)+')';f.style.opacity=(seg(D0,D0+.03)*(1-r)).toFixed(3);
+  f.style.transform='translate3d(0,'+((1-u)*-230).toFixed(1)+'%,0) scale('+(.86+.14*u).toFixed(4)+')';var fo=(seg(D0,D0+.03)*(1-r)).toFixed(3);f.style.opacity=fo;BPOP.shade[j].setAttribute('opacity',(u*fo).toFixed(3));
   BPOP.tray[j].setAttribute('opacity',(empty*(1-r)).toFixed(3))})}
 
 /* the robot crew ( homepage ) : loaded once the page is up */
