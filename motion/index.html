@@ -610,13 +610,13 @@ function sky(top){
  new IntersectionObserver(function(es){setRun(es[0].isIntersecting&&!D.hidden)},{threshold:0}).observe(top);
  D.addEventListener('visibilitychange',function(){if(D.hidden)setRun(false);else{var r=top.getBoundingClientRect();setRun(inView(r))}});
  W.addEventListener('pointermove',function(e){ptr=true;tmx=e.clientX/innerWidth;tmy=e.clientY/innerHeight},{passive:true})}
-var ICON={flame:'<svg viewBox="0 0 24 24"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2.2 1-3.6 2.2-4.8.3 1.6 1.2 2.6 2.3 2.8C11 8.5 11 5.6 12 3z"/></svg>',
+var ICON={crown:'<svg viewBox="0 0 24 24"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg>',badge:'<svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M9 14.5 7.5 22l4.5-2.5 4.5 2.5-1.5-7.5M9.5 9l1.7 1.7L14.6 7.3"/></svg>',flame:'<svg viewBox="0 0 24 24"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2.2 1-3.6 2.2-4.8.3 1.6 1.2 2.6 2.3 2.8C11 8.5 11 5.6 12 3z"/></svg>',
  bolt:'<svg viewBox="0 0 24 24"><path d="M13 2 5 13.5h6L10 22l8-11.5h-6z"/></svg>',
  snow:'<svg viewBox="0 0 24 24"><path d="M12 2v20M4.2 6.5l15.6 11M4.2 17.5l15.6-11M9 3.5l3 2.5 3-2.5M9 20.5l3-2.5 3 2.5"/></svg>'};
 function phone(){
  var hp=$('#heroPic'),pw=hp&&$('.phonewrap',hp),vf=$('#vFrame');if(!pw||!vf)return;
  var tag=$('.tag',hp),tt=(tag&&tag.textContent)||'',kc=(tt.match(/(\d[\d,]*)\s*KCAL/i)||[0,'653'])[1],pr=(tt.match(/(\d+)\s*g\s*Protein/i)||[0,'43'])[1];
- var C=[{h:'<b>'+kc+'</b>&nbsp;kcal',i:ICON.flame,side:-1,y:.17,d:1.6,bob:5.2},{h:'<b>'+pr+'g</b>&nbsp;Protein',i:ICON.bolt,side:1,y:.3,d:1.85,bob:6.1},{h:'<b>7-Day</b>&nbsp;Fresh',i:ICON.snow,side:-1,y:.64,d:2.1,bob:5.6}];
+ var C=[{h:'<b>VIP</b>&nbsp;Meal Plan',i:ICON.crown,side:-1,y:.17,d:1.6,bob:5.2},{h:'<b>High Quality</b>&nbsp;Meal Prep',i:ICON.badge,side:1,y:.3,d:1.85,bob:6.1},{h:'<b>7-Day</b>&nbsp;Fresh',i:ICON.snow,side:-1,y:.64,d:2.1,bob:5.6}];
  var els=C.map(function(c){var e=D.createElement('div');e.className='sx30-chip';e.setAttribute('aria-hidden','true');e.style.setProperty('--side',c.side);e.style.setProperty('--cd',c.d+'s');e.style.setProperty('--bob',c.bob+'s');
   e.innerHTML='<div class="cf"><span class="ci">'+c.i+'</span><span>'+c.h+'</span></div>';hp.appendChild(e);return e});
  function place(){var fw=vf.offsetWidth,fh=vf.offsetHeight;pw.style.setProperty('--fw',fw+'px');pw.style.setProperty('--fh',fh+'px');
