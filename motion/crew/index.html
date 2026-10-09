@@ -539,14 +539,14 @@ function pixFrame(now,t){var r=PIX;if(!vf||!pw||!DIM){show(r,false);return}
 var ZH=/[\u4e00-\u9fff]/.test(SAY.carry||''),PULL=ZH?'拉过来啦！':'Heave-ho!',BACK=ZH?'拉回去！':'Back you go!',WHOA=ZH?'哇——！':'Whoa—!';
 var GROUPS=[].slice.call(D.querySelectorAll('#hub .hubg')).map(function(el,i,all){var cs=[].slice.call(el.querySelectorAll('.hitem'));
  return{el:el,cards:cs,L:MOV[i%2],R:MOV[(i%2)+2],mb0:parseFloat(getComputedStyle(el).marginBottom)||0,ps:'',mode:'down',q:null,lx:-90,rx:9999,la:0,ra:0,oL:'',oR:'',sd:'',talked:{}}}).filter(function(g){return g.cards.length});
-var PANF=.75,DRAG=0,DW=0;
+var DRAG=0,DW=0,PINT=74;
 function easeIO(u){return u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2}
 function pPull(t,st,o){o=pBrace(t,1,o);o.lsz=.22;o.rsz=-.22;o.lsx=-1.2+st*.6;o.rsx=-1.2+st*.6;o.lex=-.45-st*.95;o.rex=-.45-st*.95;o.lez=0;o.rez=0;o.bx=-.16-st*.12;o.hx=-.1+st*.06;o.by=(o.by||0)-st*.03;return o}
 function pDragWalk(ph,st,o){o=pWalk(ph,false,o);o.bx=.2+st*.08;o.hx=.12;o.lsx=.95;o.rsx=.95;o.lsz=.18;o.rsz=-.18;o.lex=-.35;o.rex=-.35;o.lez=0;o.rez=0;return o}
 function pDragged(t,o){o=pBrace(t,1,o);o.lsx=-1.45;o.rsx=-1.45;o.lsz=.15;o.rsz=-.15;o.lex=0;o.rex=0;o.bx=-.34;o.hx=-.25;o.hz=Math.sin(t*20)*.08;o.by=Math.abs(Math.sin(t*16))*.04;return o}
-function margins(){if(innerWidth===DW)return;DW=innerWidth;DRAG=Math.max(innerHeight*1.8,1100);GROUPS.forEach(function(g){g.el.style.marginBottom=Math.round(g.mb0+DRAG*PANF)+'px'})}
+function margins(){if(innerWidth===DW)return;DW=innerWidth;DRAG=Math.max(innerHeight*1.4,1000);GROUPS.forEach(function(g){if(g.sp)g.sp.style.height=Math.round(DRAG)+'px'})}
 var slotT=0;function docPos(el){var t=0,l=0;while(el){t+=el.offsetTop;l+=el.offsetLeft;el=el.offsetParent}return[t,l]}
-function grpRefresh(){slotT=performance.now();GROUPS.forEach(function(g){var d=docPos(g.el);g.top=d[0];g.h=g.el.offsetHeight;g.cards.forEach(function(c){var p=docPos(c);c.__dt=p[0];c.__dl=p[1];c.__dw=c.offsetWidth;c.__dh=c.offsetHeight})})}
+function grpRefresh(){slotT=performance.now();GROUPS.forEach(function(g){var d=docPos(g.el);g.wtop=docPos(g.w)[0];g.h=g.el.offsetHeight;g.cards.forEach(function(c){var p=docPos(c);c.__ry=p[0]-d[0];c.__dl=p[1];c.__dw=c.offsetWidth;c.__dh=c.offsetHeight})})}
 D.addEventListener('click',function(){slotT=0;setTimeout(function(){slotT=0},450)},true);
 var mz;WN.addEventListener('resize',function(){clearTimeout(mz);mz=setTimeout(function(){margins();slotT=0},200)},{passive:true});
 /* the rope layer sits just under the robots */
@@ -559,12 +559,16 @@ function ropeTo(R,hx,hy,ex,ey,sag){var d='M'+hx.toFixed(1)+' '+hy.toFixed(1)+'Q'
  if(d===R.d)return;R.d=d;R.a.setAttribute('d',d);R.b.setAttribute('d',d);R.k.setAttribute('cx',ex.toFixed(1));R.k.setAttribute('cy',ey.toFixed(1))}
 GROUPS.forEach(function(g){g.gL=el('g',{});g.gR=el('g',{});g.gL.style.opacity=g.gR.style.opacity='0';RS.appendChild(g.gL);RS.appendChild(g.gR);
  g.cards.forEach(function(c){c.classList.add('sx-on');c.__rl=rope(g.gL);c.__rr=rope(g.gR)})});
+/* the group is held in place natively (position:sticky) while the robot works, so scrolling stays perfectly smooth */
+var NV=D.querySelector('nav');PINT=NV?clamp(Math.round(NV.getBoundingClientRect().bottom)+8,50,110):74;
+GROUPS.forEach(function(g){var w=D.createElement('div');w.className='sx30-pin';g.el.parentNode.insertBefore(w,g.el);w.appendChild(g.el);
+ g.sp=D.createElement('div');g.sp.className='sx30-pinsp';g.sp.setAttribute('aria-hidden','true');w.appendChild(g.sp);g.w=w;
+ g.el.style.transform='';g.el.style.marginBottom='';g.el.style.position='sticky';g.el.style.top=PINT+'px';g.el.style.zIndex='1'});
 margins();grpRefresh();
 function say(g,r,k,txt){if(g.talked[k])return;g.talked[k]=1;if(performance.now()-lastTalk>1500)talk(r,txt,1600)}
 function moversFrame(now,t){if(now-slotT>1000)grpRefresh();var s=WN.scrollY||0;
  GROUPS.forEach(function(g){var L=g.L,R=g.R,free=g.cards.some(function(c){return c.classList.contains('open')});
-  var s0=g.top-VH*.62,p=clamp((s-s0)/DRAG,0,1),pan=clamp(s-s0,0,DRAG)*PANF;
-  var ps=pan>0?pan.toFixed(1):'';if(ps!==g.ps){g.ps=ps;g.el.style.transform=ps?'translate3d(0,'+ps+'px,0)':''}
+  var gt=Math.min(Math.max(g.wtop-s,PINT),g.wtop+DRAG-s),p=clamp((s-(g.wtop-PINT))/DRAG,0,1);
   if(free)p=1;
   /* the cards follow the scroll in tugs : they move on each pull of the rope, not smoothly */
   var st=Math.max(0,Math.sin(t*7));
@@ -579,7 +583,7 @@ function moversFrame(now,t){if(now-slotT>1000)grpRefresh();var s=WN.scrollY||0;
    if(key===''){c.style.transform='';c.style.transition=c.__tr0}
    else{var rot=u>0?Math.sin(off/38+i)*1.2:0;c.style.transition='none';c.style.transform='translate3d('+key+'px,0,0) rotate('+rot.toFixed(2)+'deg)'}});
   var c0=g.cards[0],c0l=c0.__dl+c0.__off;
-  var gt=g.top-s+pan,gb=gt+g.h,inV=!free&&gb>40&&gt<VH-40&&q>.001&&q<.999;
+  var gb=gt+g.h,inV=!free&&gb>40&&gt<VH-40&&q>.001&&q<.999;
   var vt=Math.max(gt,90),vb=Math.min(gb,VH-12),feet=clamp((vt+vb)/2+70,160,VH-24),sc=VW<560?.9:1.05;
   var BX0=VW<560?30:Math.max(44,c0.__dl-46),RX0=VW<560?VW-30:Math.min(VW-44,c0.__dl+c0.__dw+46);
   /* ---- scrolling down : the left robot comes in from the right with the cards, walking ahead of them and dragging them in ---- */
@@ -603,13 +607,14 @@ function moversFrame(now,t){if(now-slotT>1000)grpRefresh();var s=WN.scrollY||0;
   g.la+=(laT-g.la)*.3;g.ra+=(raT-g.ra)*.3;if(g.la<.01)g.la=0;if(g.ra<.01)g.ra=0;
   var oa=g.la.toFixed(2),ob=g.ra.toFixed(2);if(oa!==g.oL){g.oL=oa;g.gL.style.opacity=oa}if(ob!==g.oR){g.oR=ob;g.gR.style.opacity=ob}
   var hy=feet-1.75*PPU*sc,tense=up&&g.ra>.5;
-  if(g.la>0){var hx=sxOf(L.x)+PPU*sc*.55;g.cards.forEach(function(c){ropeTo(c.__rl,hx,hy,c.__dl+c.__off+5,c.__dt-s+pan+c.__dh/2,(tense||c.__u<1?6:22)+(1-g.la)*30)})}
-  if(g.ra>0){var rx=sxOf(R.x)-PPU*sc*.55;g.cards.forEach(function(c){ropeTo(c.__rr,rx,hy,c.__dl+c.__dw+c.__off-5,c.__dt-s+pan+c.__dh/2,6)})}})}
+  if(g.la>0){var hx=sxOf(L.x)+PPU*sc*.55;g.cards.forEach(function(c){ropeTo(c.__rl,hx,hy,c.__dl+c.__off+5,gt+c.__ry+c.__dh/2,(tense||c.__u<1?6:22)+(1-g.la)*30)})}
+  if(g.ra>0){var rx=sxOf(R.x)-PPU*sc*.55;g.cards.forEach(function(c){ropeTo(c.__rr,rx,hy,c.__dl+c.__dw+c.__off-5,gt+c.__ry+c.__dh/2,6)})}})}
 
 /* ---------- loop ---------- */
 var t0=performance.now(),vis=!D.hidden;D.addEventListener('visibilitychange',function(){vis=!D.hidden});
-var lastF=0;function loop(now){requestAnimationFrame(loop);if(!vis)return;if(now-lastF<30)return;lastF=now;var t=(now-t0)/1000;svel*=.9;
- try{pixFrame(now,t)}catch(e){}try{lifeFrame(now,t)}catch(e){}try{moversFrame(now,t)}catch(e){}
+var lastF=0;function loop(now){requestAnimationFrame(loop);if(!vis)return;var t=(now-t0)/1000;try{moversFrame(now,t)}catch(e){} /* cards and ropes : every frame */
+ if(now-lastF<30)return;lastF=now;svel*=.9;
+ try{pixFrame(now,t)}catch(e){}try{lifeFrame(now,t)}catch(e){}
  talkFrame(now);R.render(S,C)}
 var rz;WN.addEventListener('resize',function(){clearTimeout(rz);rz=setTimeout(function(){VW=innerWidth;VH=innerHeight;PPU=VW<760?34:44;R.setSize(VW,VH);
  C.left=-VW/2/PPU;C.right=VW/2/PPU;C.top=VH/2/PPU;C.bottom=-VH/2/PPU;C.updateProjectionMatrix()},160)},{passive:true});
