@@ -708,10 +708,10 @@ function mpSet(p){var g=GEO.mp,el=MPOP.el,show=p>0&&p<1;
  var want=p>=1?'0':'bg';if(want!==MPOP.src){MPOP.src=want;MPOP.im.src=want==='0'?MPOP.src0:MPOP.r.bg}
  if(show!==MPOP.shown){MPOP.shown=show;el.style.display=show?'block':'none'}if(!show)return;
  var gk=Math.round(g.l)+','+Math.round(g.t)+','+Math.round(g.w)+','+Math.round(g.h);if(gk!==MPOP.gk){MPOP.gk=gk;el.style.transform='translate3d('+g.l.toFixed(1)+'px,'+g.t.toFixed(1)+'px,0)';el.style.width=g.w.toFixed(1)+'px';el.style.height=g.h.toFixed(1)+'px'}
- function oBack(u){var c=1.5;return 1+(c+1)*Math.pow(u-1,3)+c*Math.pow(u-1,2)}
+ function oBack(u){var c=.9;return 1+(c+1)*Math.pow(u-1,3)+c*Math.pow(u-1,2)}
  var ap=clamp(p/.08,0,1),u1=clamp((p-.04)/.38,0,1),u2=clamp((p-.36)/.3,0,1);
  /* 1. it stands up from lying flat (hinged on its bottom edge)   2. the back leg swings open from the top hinge */
- var tilt=u1>=1?0:84*(1-oBack(u1)),leg=u2<=0?0:Math.min(1.06,oBack(u2));
+ var tilt=u1>=1?0:84*(1-oBack(u1*u1*(3-2*u1))),leg=u2<=0?0:Math.min(1.06,oBack(u2));
  var k=Math.sin(Math.PI*clamp((p-.04)/.84,0,1)) /* back in its slot by 88%, so the hand-over to the picture is seamless */,dx=k*(g.cx-(g.l+g.w/2))*.55,dy=-k*Math.min(70,g.h*.4),sc=1+k*.65;
  el.style.opacity=ap.toFixed(3);MPOP.inn.style.transform='translate3d('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px,0) scale('+sc.toFixed(4)+')';
  MPOP.stand.style.transform=tilt?'rotateX('+tilt.toFixed(2)+'deg)':'';
