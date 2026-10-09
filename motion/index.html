@@ -701,7 +701,7 @@ function docLeft(el){var l=0;while(el){l+=el.offsetLeft;el=el.offsetParent}retur
 function menuFold(){if(MPOP)return;var hi=$('#hc-menu .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
  MPOP={hi:hi,im:im,card:$('#hc-menu'),src0:'',st:'',open:null,shown:null,src:'0'};
  /* the page first shows a small placeholder and swaps in the sharp picture : wait for the sharp one */
- var tries=0;(function wait(){var s=im.getAttribute('src');if(im.complete&&im.naturalWidth>=600&&s){MPOP.src0=s;(W.requestIdleCallback||function(f){setTimeout(f,300)})(function(){mcut(s,function(r){if(r&&r.W>=600){MPOP.r=r;mpBuild()}})});return}
+ var tries=0;(function wait(){var s=im.getAttribute('src');if(im.complete&&im.naturalWidth>=600&&s){MPOP.src0=s;(W.requestIdleCallback?function(f){W.requestIdleCallback(f,{timeout:1200})}:function(f){setTimeout(f,300)})(function(){mcut(s,function(r){if(r&&r.W>=600){MPOP.r=r;mpBuild()}})});return}
   if(++tries<60)setTimeout(wait,500)})()}
 /* split the picture once : the menu stand (cut out on its dark board) and the grey backdrop without it ; kept in this browser */
 function mcut(src,cb){var key='aera.menucut.v2',sig=src.length+':'+src.slice(-48);
