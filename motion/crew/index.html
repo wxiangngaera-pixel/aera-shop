@@ -425,7 +425,7 @@ function place(r,sx,feetSy,yawTo,k){r.x=wx(sx);r.y=wy(feetSy);r.wyaw=yawTo;r.yaw
  r.shade.visible=r.g.visible;r.shade.position.set(r.x,r.y+.02,-.3);r.shade.scale.setScalar(Math.max(.2,1-(r.P.by||0)*1.5)*r.sc)}
 function show(r,v){r.on=v;r.g.visible=v;r.shade.visible=v}
 function blink(r,now){if(now>r.blinkAt){var k=(now-r.blinkAt)/130;if(k<1){var s=1-Math.sin(k*Math.PI)*.92;r.eyeL.scale.y=r.eyeR.scale.y=s}else{r.eyeL.scale.y=r.eyeR.scale.y=1;r.blinkAt=now+2400+Math.random()*3600}}}
-function glow(r,on){if(r.glow===on)return;r.glow=on;r.eyeL.material=r.eyeR.material=on?mEye:mW;r.pupL.visible=r.pupR.visible=!on}
+function glow(r,on){if(r.glow===on)return;r.glow=on;r.eyeL.material=r.eyeR.material=r.eyeM||(on?mEye:mW);r.pupL.visible=r.pupR.visible=!on&&!r.eyeM}
 function headTop(r){r.head.getWorldPosition(V3);return{x:sxOf(V3.x),y:syOf(V3.y+.75*r.sc)}}
 function eyesAt(r){var a=new T.Vector3(),b=new T.Vector3();r.eyeL.getWorldPosition(a);r.eyeR.getWorldPosition(b);return{x:sxOf((a.x+b.x)/2),y:syOf((a.y+b.y)/2)}}
 function ease(u){return u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2}
@@ -498,7 +498,7 @@ if(vf){if(!vf.querySelector('.sx30-scan')){var sc=D.createElement('div');sc.clas
  DIM=D.createElement('div');DIM.className='sx30-dim';vf.appendChild(DIM);
  LD=D.createElement('div');LD.className='sx30-load';LD.innerHTML='<i></i><b>0%</b><u><s></s></u><em>'+SAY.load+'</em>';vf.appendChild(LD);LDb=LD.querySelector('b');LDs=LD.querySelector('s')}
 /* only the head : everything else on this robot is hidden */
-PIX.g.children.forEach(function(c){if(c!==PIX.head)c.visible=false});PIX.head.position.y=.45;PIX.shade.material.opacity=0;PIX.head.children[0].material=mk(0xFFFFFF,0); /* white head, gold cap and visor stay */
+PIX.g.children.forEach(function(c){if(c!==PIX.head)c.visible=false});PIX.head.position.y=.45;PIX.shade.material.opacity=0;PIX.head.children[0].material=mk(0xFFFFFF,0);PIX.eyeM=mk(0x16479E,.25,.35);PIX.eyeL.material=PIX.eyeR.material=PIX.eyeM;PIX.pupL.visible=PIX.pupR.visible=false; /* white head, gold cap and visor stay */
 function hull(P){P=P.slice().sort(function(a,b){return a[0]-b[0]||a[1]-b[1]});function cr(o,a,b){return(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0])}
  var lo=[],up=[];P.forEach(function(p){while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],p)<=0)lo.pop();lo.push(p)});
  for(var i=P.length-1;i>=0;i--){var p=P[i];while(up.length>=2&&cr(up[up.length-2],up[up.length-1],p)<=0)up.pop();up.push(p)}up.pop();lo.pop();return lo.concat(up)}
