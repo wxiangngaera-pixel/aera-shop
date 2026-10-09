@@ -855,7 +855,7 @@ function bpBuild(){var IW=BPOP.im.naturalWidth,IH=BPOP.im.naturalHeight,sx=IW/96
  F.forEach(function(f,i){var n=i===0?36:13,url='https://my.chatbees.io/objects/quick-uploads/1302/'+BCOMP[i].f+'.jpg';
   for(var k=0;k<n;k++){var tx,ty,tries=0;do{tx=f.b[0]+rnd()*f.b[2];ty=f.b[1]+rnd()*f.b[3]}while(!inP(tx,ty,f.P)&&++tries<40);
    var w,hh,st;if(i===0){w=(7+rnd()*3)*sx;hh=w*.55;st='';}else{w=(i===1?46:40)*sx*(.8+rnd()*.45);hh=w*(i===1?(.85+rnd()*.25):(.7+rnd()*.3));
-    st='background-image:url('+url+');background-size:'+(380+rnd()*120).toFixed(0)+'%;background-position:'+(rnd()*100).toFixed(0)+'% '+(rnd()*100).toFixed(0)+'%;border-radius:'+(i===1?'48% 52% 44% 56% / 55% 50% 50% 45%':(18+rnd()*14).toFixed(0)+'%')+';'}
+    st='background-image:url('+url+');background-size:'+(380+rnd()*120).toFixed(0)+'%;background-position:'+(rnd()*100).toFixed(0)+'% '+(rnd()*100).toFixed(0)+'%;border-radius:'+(i===1?'48% 52% 44% 56% / 55% 50% 50% 45%':(40+rnd()*12).toFixed(0)+'% '+(52+rnd()*10).toFixed(0)+'% '+(42+rnd()*12).toFixed(0)+'% '+(55+rnd()*10).toFixed(0)+'% / '+(50+rnd()*8).toFixed(0)+'% '+(44+rnd()*10).toFixed(0)+'% '+(54+rnd()*8).toFixed(0)+'% '+(48+rnd()*8).toFixed(0)+'%')+';'}
    h+='<i class="'+(i===0?'bpr':'bpc')+'" style="left:'+((tx-w/2)/IW*100).toFixed(3)+'%;top:'+((ty-hh/2)/IH*100).toFixed(3)+'%;width:'+(w/IW*100).toFixed(3)+'%;height:'+(hh/IH*100).toFixed(3)+'%;'+st+'"></i>';
    PC.push({c:i,t0:(k/n)*.62+rnd()*.05,fall:(ty-f.b[1])+(70+rnd()*110)*sy,dx:(rnd()-.5)*40*sx,r0:(rnd()-.5)*(i===0?180:120),r1:(rnd()-.5)*(i===0?40:30)})}});
  o.innerHTML=h+'</div>';D.body.appendChild(o);BPOP.el=o;BPOP.IW=IW;BPOP.IH=IH;
@@ -872,8 +872,7 @@ function bpSet(p){var g=GEO.bp,el=BPOP.el;if(!g)return;var show=p>0&&p<1;
  /* the box empties first ; then, one compartment at a time (rice, broccoli, chicken), the food rains down piece by piece and piles up */
  var empty=sm(seg(0,.07)),f=g.w/BPOP.IW,U=[],RV=[];
  for(var j=0;j<3;j++){var W0=.08+.24*j,W1=W0+.24,u=seg(W0,W1),r=sm(seg(W1-.01,W1+.06)),lv=sm(clamp((u-.12)/.8,0,1));U.push(u);RV.push(r);
-  BPOP.fill[j].style.transform='translate3d(0,'+((1-lv)*100).toFixed(2)+'%,0)';BPOP.food[j].style.opacity=(u>0?(1-r):0).toFixed(3);
-  BPOP.tray[j].setAttribute('opacity',(empty*(1-r)).toFixed(3));BPOP.shade[j].setAttribute('opacity',(lv*(1-r)).toFixed(3))}
+  /* no trays, no photo tiles : only the food pieces themselves fall into the real box */}
  BPOP.pc.forEach(function(pc){var u=U[pc.c],r=RV[pc.c],t=clamp((u-pc.t0)/.3,0,1),e=pc.el;
   if(u<=pc.t0||r>=1){if(e.__o!=='0'){e.__o='0';e.style.opacity='0'}return}
   var fade=1-clamp((u-pc.t0-.3)/.07,0,1),op=(fade*(1-r)).toFixed(2),y=-(1-t*t)*pc.fall*f,x=(1-t)*pc.dx*f,rot=pc.r0+(pc.r1-pc.r0)*t;
