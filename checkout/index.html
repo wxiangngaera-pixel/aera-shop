@@ -1820,13 +1820,13 @@ function tuOpen(pre){tuLoad().then(function(){var o=document.getElementById('tuO
  if(!TU.pick)TU.pick=pre&&pre>=TU.min?pre:(amts.filter(function(a){return a>=gap})[0]||amts[amts.length-1]);
  var em=String((document.getElementById('email')||{}).value||'').trim();
  o.innerHTML='<div class="tucard"><button type="button" class="tux" onclick="tuClose()" aria-label="Close">×</button>'+
-  '<h3>Top Up AERA Credit</h3><p class="tuhint">Credit is spent on your next Orders automatically. If it does not cover a whole Order, you pay the rest by card.</p>'+
-  '<div class="tuamts">'+amts.map(function(a){var b=tuBonusRM(a);return'<button type="button" class="tuamt'+(TU.pick===a?' on':'')+'" onclick="tuPick('+a+')"><b>'+rm(a)+'</b>'+(b?'<span>+ '+rm(b)+' in Points</span>':'')+'</button>'}).join('')+'</div>'+
-  '<label class="lb" for="tuOwn" style="margin-top:12px">Or Your Own Amount ( RM '+TU.min+' or more )</label><input type="number" id="tuOwn" inputmode="decimal" min="'+TU.min+'" max="'+TU.max+'" step="1" placeholder="e.g. 150"'+(amts.indexOf(TU.pick)<0?' value="'+TU.pick+'"':'')+' oninput="tuOwn(this.value)">'+
+  '<h3>Top Up AERA Credit</h3><p class="tuhint">Credit is spent on your next Orders automatically. If it does not cover a whole Order, you pay the rest at checkout.</p>'+
+  '<div class="tuamts">'+amts.map(function(a){var b=tuBonusRM(a);return'<button type="button" class="tuamt'+(TU.pick===a?' on':'')+'" onclick="tuPick('+a+')"><b>'+rm(a)+'</b>'+(b?'<span>+ '+Math.round(b*100).toLocaleString('en-US')+' AERA Points</span>':'')+'</button>'}).join('')+'</div>'+
+  '<label class="lb" for="tuOwn" style="margin-top:12px">Or Your Own Amount ( RM '+TU.min+' or more )</label><input type="number" id="tuOwn" inputmode="decimal" min="'+TU.min+'" max="'+TU.max+'" step="1" placeholder="e.g. 800"'+(amts.indexOf(TU.pick)<0?' value="'+TU.pick+'"':'')+' oninput="tuOwn(this.value)">'+
   '<label class="lb" for="tuEmail" style="margin-top:12px">Email For Your AERA Account</label><input type="email" id="tuEmail" value="'+esc(em)+'" placeholder="you@email.com" autocomplete="email">'+
   '<div id="tuSum" class="tusum"></div><div id="tuMsg"></div>'+
   '<button type="button" class="btn btn-y" id="tuPay" style="width:100%;margin-top:12px" onclick="tuPay()">Pay Securely</button>'+
-  '<p class="tulegal">AERA Credit can be refunded on request. You earn AERA Points when you spend your Credit on Meals, the same as any Order. See our <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a>.</p></div>';
+  '<p class="tulegal">AERA Credit top-ups are non-refundable. Bonus AERA Points expire 6 months after the top-up. You also earn AERA Points when you spend your Credit on Meals, the same as any Order. See our <a href="https://my.chatbees.io/p/G7mXL4RMz2" target="_blank" rel="noopener">Terms &amp; Conditions</a>.</p></div>';
  o.style.display='flex';tuSum()})}
 /* Auto Subscription customers are paid from AERA Credit, so when their Credit is low they are
    told here as well as in My Account ( which marks the browser with aera.autoSub ). Once a day. */
