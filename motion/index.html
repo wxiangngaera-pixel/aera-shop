@@ -1097,17 +1097,32 @@ function kitchen(){
  function glide(){var m=$('.main')||$('main')||$('#main')||$('#app');if(!m)return;
   [].slice.call(m.children).slice(0,14).forEach(function(k,i){if(!vis(k))return;anim(k,[{opacity:0,translate:'0 16px'},{opacity:1,translate:'0 0'}],{duration:520,delay:i*35,easing:EASE,fill:'backwards'})})}
  W.addEventListener('hashchange',safe(function(){setTimeout(glide,60)}));setTimeout(glide,250)}
-/* personalised meal plan : whenever an item in a meal changes, its food drops into that compartment of the bento box */
+/* personalised meal plan : each food is an AI-made portion (see-through background) that sits in the real empty bento tray ;
+   whenever an item changes, its portion falls from above into its compartment. Foods without a portion yet keep their photo tile. */
+var BCUT={"003a67e154aca516":"https://my.chatbees.io/uploads/feedback/upload_bc3dced3-56fd-472b-a0d1-657a2bc0a1c9_1791535300719.webp","0982cf0bef31af26":"https://my.chatbees.io/uploads/feedback/upload_df086b63-e13f-4cc7-981d-1dadcc34e2e0_1791535291792.webp","118cca459b88e295":"https://my.chatbees.io/uploads/feedback/upload_4de3b119-e585-4493-a6c6-8e5dfe562707_1791535304479.webp","01J1XYRSJ9N4A4SKEDC3NJTTQC":"https://my.chatbees.io/uploads/feedback/upload_224b3f4e-838d-4e7f-a773-02b3f62e3948_1791535078240.webp","2a71abf13e79a094":"https://my.chatbees.io/uploads/feedback/upload_2912a758-c035-497a-af37-b349993ed7b5_1791535308217.webp"};
+function bcutFor(u){var m=u&&u.match(/([^\/]+)\.(jpe?g|png|webp)/i);return m&&BCUT[m[1]]||null}
 function bentoDrop(){if(!$('.mbento')&&!$('#planCal'))return;var MEM={};
- var css=D.createElement('style');css.id='sx30BentoDrop';css.textContent='.mbento .bento b.sx30-drop{animation:sx30Drop .66s cubic-bezier(.22,.9,.3,1) both;z-index:2;box-shadow:0 10px 18px rgba(0,0,0,.3)}'+
+ var css=D.createElement('style');css.id='sx30BentoDrop';css.textContent='.mbento{position:relative}.mbento .bento b.sx30-cut{background-color:transparent!important;background-position:50% 50%!important;background-size:cover!important;background-repeat:no-repeat!important;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.35))}'+
+  '.mbento .sx30-fall{position:absolute;z-index:5;pointer-events:none;object-fit:cover;filter:drop-shadow(0 8px 10px rgba(0,0,0,.35));will-change:transform}'+
+  '.mbento .bento b.sx30-drop{animation:sx30Drop .66s cubic-bezier(.22,.9,.3,1) both;z-index:2;box-shadow:0 10px 18px rgba(0,0,0,.3)}'+
   '@keyframes sx30Drop{0%{transform:translateY(-135%) scale(1.14) rotate(-4deg);opacity:0}50%{opacity:1}80%{transform:translateY(3%) scale(.985) rotate(.4deg)}100%{transform:none;opacity:1}}'+
-  '.mbento .bento.sx30-pop{animation:sx30Tray .55s ease-out}@keyframes sx30Tray{0%,100%{transform:scale(1)}45%{transform:scale(1.03)}}';D.head.appendChild(css);
- function url(b){var m=(b.getAttribute('style')||'').match(/url\(["']?([^"')]+)/);return m?m[1]:''}
+  '.mbento .bento.sx30-pop{animation:sx30Tray .45s ease-out}@keyframes sx30Tray{0%,100%{transform:scale(1)}45%{transform:scale(1.025)}}';D.head.appendChild(css);
+ for(var k in BCUT){var p=new Image();p.src=BCUT[k]}
+ function su(b){var m=(b.getAttribute('style')||'').match(/url\(["']?([^"')]+)/);return m?m[1]:''}
+ /* the shop may swap the picture on the same tile : a picture that is not our portion means a new food */
+ function url(b){var s=su(b);if(b.dataset.orig&&(s===b.dataset.orig||s===b.dataset.cut))return b.dataset.orig;return s}
+ function dress(b){var s=su(b);if(b.dataset.orig&&(s===b.dataset.cut||(s===b.dataset.orig&&!b.dataset.cut)))return b.dataset.cut||'';
+  var c=bcutFor(s);b.dataset.orig=s;if(c){b.dataset.cut=c;b.style.backgroundImage='url("'+c+'")';b.classList.add('sx30-cut')}else{delete b.dataset.cut;b.classList.remove('sx30-cut')}return c||''}
+ function fall(mb,tray,b,c,d){var t=b.offsetTop+tray.offsetTop,l=b.offsetLeft+tray.offsetLeft,w=b.offsetWidth,h=b.offsetHeight;if(!w||!h)return;
+  var im=D.createElement('img');im.className='sx30-fall';im.alt='';im.src=c;im.style.cssText='left:'+l+'px;top:'+t+'px;width:'+w+'px;height:'+h+'px;opacity:0';mb.appendChild(im);b.style.visibility='hidden';
+  var a=anim(im,[{transform:'translateY('+(-(t+h+24))+'px) rotate(-7deg) scale(1.08)',opacity:0},{opacity:1,offset:.25},{transform:'translateY(5px) rotate(.6deg) scale(.985)',opacity:1,offset:.78},{transform:'none',opacity:1}],{duration:720,delay:d,easing:'cubic-bezier(.3,.7,.35,1)',fill:'both'});
+  function done(){b.style.visibility='';if(im.parentNode)im.parentNode.removeChild(im);tray.classList.remove('sx30-pop');void tray.offsetWidth;tray.classList.add('sx30-pop')}
+  if(a)a.onfinish=done;else setTimeout(done,760+d)}
  function scan(first){$$('.mbento').forEach(function(mb,i){var card=mb.closest('.mcard'),panel=mb.closest('.dpanel'),pi=panel?$$('.dpanel').indexOf(panel):0,ci=card&&panel?$$('.mcard',panel).indexOf(card):i,key=pi+':'+ci,prev=MEM[key],now={},n=0,tray=$('.bento',mb);
-  $$('.bento > b',mb).forEach(function(b){var k=b.className.replace(/\bsx30-drop\b/g,'').trim(),u=url(b);now[k]=u;
-   if(!first&&prev&&u&&prev[k]!==u&&!b.classList.contains('empty')){var d=n++*130;b.classList.remove('sx30-drop');void b.offsetWidth;b.style.animationDelay=d+'ms';b.classList.add('sx30-drop');
-    if(tray&&n===1){tray.classList.remove('sx30-pop');setTimeout(function(){tray.classList.add('sx30-pop');setTimeout(function(){tray.classList.remove('sx30-pop')},600)},520)}
-    setTimeout(function(){b.classList.remove('sx30-drop');b.style.animationDelay=''},760+d)}});
+  $$('.bento > b',mb).forEach(function(b){var c=dress(b),k=b.className.replace(/\bsx30-(drop|cut)\b/g,'').trim(),u=url(b);now[k]=u;
+   if(!first&&prev&&u&&prev[k]!==u&&!b.classList.contains('empty')){var d=n++*160;
+    if(c&&tray){fall(mb,tray,b,c,d)}
+    else{b.classList.remove('sx30-drop');void b.offsetWidth;b.style.animationDelay=d+'ms';b.classList.add('sx30-drop');setTimeout(function(){b.classList.remove('sx30-drop');b.style.animationDelay=''},760+d)}}});
   MEM[key]=now})}
  scan(true);var q=0;new MutationObserver(function(){if(q)return;q=setTimeout(function(){q=0;try{scan(false)}catch(e){}},30)}).observe(D.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style']})}
 var started=false;
