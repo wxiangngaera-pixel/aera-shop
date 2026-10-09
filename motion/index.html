@@ -958,20 +958,20 @@ function keyGL(o){var c=D.createElement('canvas');c.className='sx30-key';var gl=
  var v=o.v,run=0,bad=0;
  function draw(){if(bad||v.readyState<2)return;var W2=Math.max(2,Math.round((parseFloat(v.style.width)||200)*Math.min(2,W.devicePixelRatio||1))),H2=Math.max(2,Math.round(W2*9/16));
   if(c.width!==W2||c.height!==H2){c.width=W2;c.height=H2}gl.viewport(0,0,W2,H2);
-  try{gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,v)}catch(e){bad=1;o.w.classList.remove('sx30-keyed');c.style.display='none';return}
+  try{gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,v)}catch(e){bad=1;o.key=null;o.im.style.opacity='';o.w.classList.remove('sx30-keyed');c.style.display='none';return}
   gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);c.style.cssText=v.style.cssText;if(!o.w.classList.contains('sx30-keyed'))o.w.classList.add('sx30-keyed')}
  function loop(){if(!run)return;draw();requestAnimationFrame(loop)}
  v.addEventListener('play',function(){if(!run){run=1;requestAnimationFrame(loop)}});
  ['pause','ended','seeked','loadeddata'].forEach(function(ev){v.addEventListener(ev,function(){if(ev!=='seeked'&&ev!=='loadeddata')run=0;draw()})});
  o.w.appendChild(c);o.key=c}
-function loopGo(o,restart){var v=o.v;try{v.defaultPlaybackRate=o.rate||1;v.playbackRate=o.rate||1}catch(e){}if(restart){try{v.currentTime=0}catch(e){}}o.st='playing';o.w.style.opacity='1';try{var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}catch(e){}}
+function loopGo(o,restart){var v=o.v;if(o.key){o.im.style.transition='opacity .6s ease';o.im.style.opacity='0'}try{v.defaultPlaybackRate=o.rate||1;v.playbackRate=o.rate||1}catch(e){}if(restart){try{v.currentTime=0}catch(e){}}o.st='playing';o.w.style.opacity='1';try{var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}catch(e){}}
 function loopTick(o,g,url,y,vh,rate){if(!o||!o.v||!g)return;o.rate=rate||1;var top=g.ht-y,v=o.v,hh=o.hi.offsetHeight||150;
- if(o.card&&o.card.classList.contains('open')){if(o.lp){o.lp=0;try{v.pause()}catch(e){}}o.w.style.opacity='0';return}
+ if(o.card&&o.card.classList.contains('open')){if(o.lp){o.lp=0;try{v.pause()}catch(e){}}o.w.style.opacity='0';if(o.key)o.im.style.opacity='1';return}
  if(!o.loaded&&top<vh*2.2){o.loaded=true;v.preload='auto';if(o===MVP){v.crossOrigin='anonymous';safe(keyGL)(o)}
   /* the photo fades into the card on its left edge : the clip gets the very same fade */
   try{var ms=getComputedStyle(o.im),mi=ms.maskImage||ms.webkitMaskImage;if(mi&&mi!=='none'){o.w.style.webkitMaskImage=mi;o.w.style.maskImage=mi}}catch(e){}
   v.src=url;try{v.load()}catch(e){}
-  v.addEventListener('ended',function(){setTimeout(function(){if(o.lp)loopGo(o,true)},1500)})}
+  v.addEventListener('ended',function(){if(o.key)o.im.style.opacity='1';setTimeout(function(){if(o.lp)loopGo(o,true)},1500)})}
  var vis=top<vh&&top>-hh;
  if(vis&&!o.lp){o.lp=1;loopGo(o,v.ended||o.st==='done')}else if(!vis&&o.lp){o.lp=0;try{v.pause()}catch(e){}}}
 /* the menu stand loops the same way : unfolds over 3.4 s, rests 1.6 s, the finished picture fades back to the empty board, again */
