@@ -580,7 +580,7 @@ function moversFrame(now,t){if(now-slotT>1000)grpRefresh();var s=WN.scrollY||0;
   /* the rope : one hand, one rope to every card ; slack and fading once the job is done */
   var a=p<.86?1:clamp(1-(p-.86)/.05,0,1),op=a.toFixed(2);if(op!==g.op){g.op=op;g.svg.style.opacity=op}
   if(a<=0)return;
-  var hx=sxOf(r.x)+(yaw<0?-8:10),hy=feet-HANDS*PPU*r.sc*.92;
+  var hx=sxOf(r.x)+PPU*r.sc*.55,hy=feet-1.75*PPU*r.sc;
   g.cards.forEach(function(c){var ex=c.__dl+c.__off+5,ey=c.__dt-s+pan+c.__dh/2,sag=(c.__u<1?8:22)+(1-a)*30;
    var d='M'+hx.toFixed(1)+' '+hy.toFixed(1)+'Q'+((hx+ex)/2).toFixed(1)+' '+((hy+ey)/2+sag).toFixed(1)+' '+ex.toFixed(1)+' '+ey.toFixed(1);
    if(d===c.__rd)return;c.__rd=d;c.__r1.setAttribute('d',d);c.__r2.setAttribute('d',d);c.__kn.setAttribute('cx',ex.toFixed(1));c.__kn.setAttribute('cy',ey.toFixed(1))})})}
