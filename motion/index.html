@@ -919,12 +919,12 @@ var SCR=[],SN=40,SC=8,SR=5,SCRDEF=[
  {sel:'#hc-meals',url:'https://my.chatbees.io/uploads/feedback/upload_9aedef37-bade-4e89-8e00-7802289b23c6_1791526858882.jpg',iw:520,ih:359}];
 function scrubs(){if(SCR.length)return;SCRDEF.forEach(function(d){var hi=$(d.sel+' .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
  var w=D.createElement('div');w.className='sx30-sc';w.setAttribute('aria-hidden','true');var f=D.createElement('div');f.className='sx30-scf';w.appendChild(f);hi.appendChild(w);
- SCR.push({k:d.sel.slice(4),d:d,hi:hi,im:im,card:$(d.sel),w:w,f:f,p:0,fr:-1,loaded:false,ready:false,ht:null,k:''})});GEO.t=0}
+ SCR.push({pk:d.sel.slice(4),d:d,hi:hi,im:im,card:$(d.sel),w:w,f:f,p:0,fr:-1,loaded:false,ready:false,ht:null,k:''})});GEO.t=0}
 function scrubGeo(){SCR.forEach(function(o){var im=o.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){o.ht=null;return}
  var fit=getComputedStyle(im).objectFit,s=fit==='contain'?Math.min(w/o.d.iw,h/o.d.ih):Math.max(w/o.d.iw,h/o.d.ih),dw=o.d.iw*s,dh=o.d.ih*s,il=im.offsetLeft,it=im.offsetTop,ox=(w-dw)/2,oy=(h-dh)/2;
  var bx=fit==='contain'?[il+ox,it+oy,dw,dh]:[il,it,w,h],fx=fit==='contain'?0:ox,fy=fit==='contain'?0:oy;
  var k=[bx[0],bx[1],bx[2],bx[3],fx,fy].map(Math.round).join();if(k!==o.k){o.k=k;var a=o.w.style,b=o.f.style;a.left=bx[0].toFixed(1)+'px';a.top=bx[1].toFixed(1)+'px';a.width=bx[2].toFixed(1)+'px';a.height=bx[3].toFixed(1)+'px';b.left=fx.toFixed(1)+'px';b.top=fy.toFixed(1)+'px';b.width=dw.toFixed(1)+'px';b.height=dh.toFixed(1)+'px'}
- o.ht=PINW[o.k]&&PINW[o.k].top?PINW[o.k].top:docTop(o.hi)})}
+ o.ht=PINW[o.pk]&&PINW[o.pk].top?PINW[o.pk].top:docTop(o.hi)})}
 function scrubShow(o){if(!o.ready){if(o.w.style.opacity!=='0')o.w.style.opacity='0';return}var fr=Math.round(o.p*(SN-1));
  if(fr!==o.fr){o.fr=fr;o.f.style.backgroundPosition=((fr%SC)/(SC-1)*100).toFixed(3)+'% '+(Math.floor(fr/SC)/(SR-1)*100).toFixed(3)+'%'}
  var op=o.p>=1?'0':'1';if(o.w.style.opacity!==op)o.w.style.opacity=op}
@@ -932,7 +932,7 @@ function scrubTick(y,vh){SCR.forEach(function(o){if(o.ht==null)return;var top=o.
  if(!o.loaded&&top<vh*2.2){o.loaded=true;var I=new Image();I.onload=function(){o.f.style.backgroundImage='url("'+o.d.url+'")';o.f.style.backgroundSize=(SC*100)+'% '+(SR*100)+'%';o.ready=true;o.fr=-1;scrubShow(o)};I.src=o.d.url}
  if(o.card&&o.card.classList.contains('open')){o.p=1;scrubShow(o);return}
  if(top>vh*.95&&o.p>0)o.p=0;
- var t=pinP(o.k,y,vh,o.ht);if(t>o.p)o.p=t;scrubShow(o)})}
+ var t=pinP(o.pk,y,vh,o.ht);if(t>o.p)o.p=t;scrubShow(o)})}
 
 
 /* the robot crew ( homepage ) : loaded once the page is up */
