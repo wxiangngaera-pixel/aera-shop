@@ -1763,12 +1763,26 @@ function payBillplz(order,msg,total,name,email,phone){var m=document.getElementB
  .then(function(row){if(row&&row['Bill URL']&&String(row.Status||'')==='created'){btn.textContent='Opening secure payment…';location.href=row['Bill URL'];return}
   btn.disabled=false;renderCart();m.innerHTML='<div class="msg bad">Could not start payment'+(row&&/^failed/.test(String(row.Status||''))?' (payment provider error)':'')+'. Please try again or WhatsApp us.</div>'})
  .catch(function(){btn.disabled=false;renderCart();m.innerHTML='<div class="msg bad">Could not start payment. Please try again or WhatsApp us.</div>'})}
+/* Top-Up paid by Billplz : same bill flow as an Order ( flow 5488 ), the page comes back to bpReturn, which hands over to tuReturn. */
+function tuBillplz(no,msg,email,name,a,tb){var m=document.getElementById('tuMsg');var btn=document.getElementById('tuPay');
+ if(!PAY.flowUrl){m.innerHTML='<div class="msg bad">Top-Up is not available right now. Please WhatsApp us.</div>';return}
+ btn.disabled=true;btn.textContent='Opening secure payment…';
+ var tup={n:no,e:email,a:a,tb:tb,before:(APS.loaded&&!APS.failed&&APS.key===apKey(email)?crAvail():null),at:Date.now()};
+ var pending={kind:'topup',orderNo:no,msg:msg,email:email,total:a,at:Date.now(),tup:tup};try{sessionStorage.setItem('aera.pendingOrder',JSON.stringify(pending));localStorage.setItem('aera.pendingOrder',JSON.stringify(pending))}catch(e){}
+ var phone=String((document.getElementById('phone')||{}).value||'').trim();var key=billKey(no,email);
+ fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact(no),data:{action:'create',orderNo:no,amountCents:Math.round(a*100),custEmail:email,custName:name,custPhone:phone}})})
+ .then(function(r){return r.json()}).then(function(j){if(!j||!j.success)throw new Error('flow');return bpPoll(function(r){return String(r.Key||'')===key},PAY.pollMax)})
+ .then(function(row){if(row&&row['Bill URL']&&String(row.Status||'')==='created'){location.href=row['Bill URL'];return}throw new Error('nobill')})
+ .catch(function(){btn.disabled=false;btn.textContent='Pay Securely';try{sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(x){}m.innerHTML='<div class="msg bad">Could not start payment. Please try again or WhatsApp us.</div>'})}
 function bpReturn(){var q=new URLSearchParams(location.search);var id=q.get('billplz[id]');if(!id)return false;var paid=q.get('billplz[paid]')==='true';history.replaceState(null,'',location.pathname);
  var pending=null;try{pending=JSON.parse(sessionStorage.getItem('aera.pendingOrder')||localStorage.getItem('aera.pendingOrder')||'null')}catch(e){}
  var m=document.getElementById('payMsg');if(window.innerWidth<=940)openCart();
  if(!paid){m.innerHTML='<div class="msg warn">Payment was not completed — your order is still here whenever you are ready.</div>';return true}
  var doneKey='aera.bp.done.'+id;var done=false;try{done=!!localStorage.getItem(doneKey)}catch(e){}
  var thanks=function(no){CART={};save();try{localStorage.removeItem('aera.plan')}catch(e){}bdayMarkUsed();render();renderCart();try{localStorage.setItem(doneKey,'1');sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(e){}bpShow('<h2>Order received — thank you!</h2><p style="color:var(--ink2)">'+(no?'Order <b>'+esc(no)+'</b>. ':'')+'Payment confirmed. Your receipt is on its way by email, and you can follow the order on <a href="'+(ACCT?'https://my.chatbees.io/p/dtTMaV#orders':'https://my.chatbees.io/p/8s4Xd6h')+'">Track My Order</a>.</p>')};
+ if(pending&&pending.kind==='topup'&&pending.tup){if(!done){fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact('verify'),data:{action:'verify',billId:id,message:pending.msg,custEmail:pending.email}})}).catch(function(){})}
+  try{localStorage.setItem(doneKey,'1');var tp=JSON.stringify(pending.tup);sessionStorage.setItem('aera.topupPending',tp);localStorage.setItem('aera.topupPending',tp);sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(e){}
+  tuReturn();return true}
  if(done){thanks(pending&&pending.orderNo);return true}
  if(!pending||!pending.msg){bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! We could not match this payment to an order in this browser — please WhatsApp us your Billplz receipt so the kitchen can confirm your order.</p>');return true}
  bpShow('<h2>Confirming your payment…</h2><p style="color:var(--ink2)">One moment while we verify it with Billplz.</p>');
@@ -1840,9 +1854,10 @@ function tuPay(){var m=document.getElementById('tuMsg');m.innerHTML='';var a=TU.
  var email=String(document.getElementById('tuEmail').value||'').trim().toLowerCase();
  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){m.innerHTML='<div class="msg bad">Please enter your email, so the Credit goes to your account.</div>';document.getElementById('tuEmail').focus();return}
  var name=String((document.getElementById('name')||{}).value||'').trim()||(ACCT&&ACCT.name)||email.split('@')[0];
- if(typeof window.__processDonation!=='function'){m.innerHTML='<div class="msg bad">Top-Up is not available right now. Please WhatsApp us.</div>';return}
+ if(PAY.gateway!=='billplz'&&typeof window.__processDonation!=='function'){m.innerHTML='<div class="msg bad">Top-Up is not available right now. Please WhatsApp us.</div>';return}
  var no=tuNo(),tb=tuBonusAP(a);
  var msg=JSON.stringify({v:3,k:'topup',n:no,e:email,nm:name,tu:a,tb:tb,ex:''});
+ if(PAY.gateway==='billplz')return tuBillplz(no,msg,email,name,a,tb);
  try{var em=document.getElementById('email');if(em&&!em.value){em.value=email;apInput(true)}}catch(e){}
  try{sessionStorage.setItem('aera.topupPending',JSON.stringify({n:no,e:email,a:a,tb:tb,before:(APS.loaded&&!APS.failed&&APS.key===apKey(email)?crAvail():null),at:Date.now()}));localStorage.setItem('aera.topupPending',sessionStorage.getItem('aera.topupPending'))}catch(e){}
  var btn=document.getElementById('tuPay');btn.disabled=true;btn.textContent='Opening secure payment…';
