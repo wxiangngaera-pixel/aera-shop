@@ -430,6 +430,8 @@ css([
 '#hc-home .sx30-hv video{position:absolute;max-width:none;display:block;object-fit:fill;background:transparent}',
 '#hc-meals .sx30-mv{position:absolute;overflow:hidden;pointer-events:none;z-index:1;opacity:1;transition:opacity .6s ease}',
 '#hc-meals .sx30-mv video{position:absolute;max-width:none;display:block;object-fit:fill;background:transparent}',
+'.himg .sx30-sc{position:absolute;overflow:hidden;pointer-events:none;z-index:1;opacity:0;transition:opacity .45s ease}',
+'.himg .sx30-scf{position:absolute;background-repeat:no-repeat}',
 '#hc-plan .sx30-bv video{position:absolute;max-width:none;display:block;object-fit:fill;background:transparent}',
 '#sx30BentoPop{position:absolute;left:0;top:0;width:10px;height:10px;z-index:30;pointer-events:none;display:none}',
 '#sx30BentoPop .bp-in,#sx30BentoPop svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}',
@@ -676,18 +678,18 @@ function hub(){
  HUB=$$('#hub .hitem');HUB.forEach(function(c,i){c.classList.remove('sx-r','sx-on','sx-up');c.style.viewTransitionName='sxhub'+i});
  if(typeof W.hubTog==='function'&&D.startViewTransition&&!W.hubTog.__sx){var o=W.hubTog;
   W.hubTog=function(){var a=arguments,self=this;try{D.startViewTransition(function(){o.apply(self,a)})}catch(e){o.apply(self,a)}};W.hubTog.__sx=1}
- safe(menuFold)();safe(mealVid)();safe(bentoPlate)();safe(homeSlide)()}
+ safe(menuFold)();safe(scrubs)()}
 /* the two picture animations follow the scroll, but never faster than a set pace : a quick flick up or down still plays every step (fold, unseal) */
 var ANIM={m:{q:null,t:0,rate:.8},v:{q:null,t:0,rate:.55},b:{q:null,t:0,rate:.24},run:false,last:0};
 /* forward only : scrolling back up never folds or unseals ; a started animation simply finishes ;
    once the card has gone back down near the bottom of the screen it quietly re-arms (the finished picture fades away), so the next scroll down plays it again */
 function fadeAway(img){try{var c=img.cloneNode(true);c.removeAttribute('data-hi');c.style.visibility='visible';c.style.transition='opacity .35s';c.style.pointerEvents='none';img.parentNode.insertBefore(c,img.nextSibling);requestAnimationFrame(function(){requestAnimationFrame(function(){c.style.opacity='0'})});setTimeout(function(){if(c.parentNode)c.parentNode.removeChild(c)},500)}catch(e){}}
-function animGo(k,p,below,set,img){var s=ANIM[k];if(s.q===null||below){if(below&&s.q!==null&&s.q>0&&p<=0){if(s.q>=1&&img)fadeAway(img);s.q=0;s.t=0;set(0);return}if(s.q===null){s.q=p;s.t=p;set(p);return}}
- var t0=s.t;if(p>=s.t)s.t=p;else if(s.q>0&&s.q<1)s.t=1;if(s.t!==t0||s.q!==s.t)animKick()}
+function animGo(k,p,below,set,img){var s=ANIM[k];if(s.q===null||below){if(below&&s.q!==null&&s.q>0&&p<=0){if(s.q>=1&&img)fadeAway(img);s.q=0;s.t=0;s.fin=false;set(0);return}if(s.q===null){s.q=p;s.t=p;set(p);return}}
+ var t0=s.t;if(p>=s.t)s.t=p;else if(s.q>0&&s.q<1){s.t=1;s.fin=true}if(s.t!==t0||s.q!==s.t)animKick()}
 function animKick(){if(ANIM.run)return;ANIM.run=true;ANIM.last=performance.now();requestAnimationFrame(animStep)}
 function animStep(now){var dt=Math.min(.05,Math.max(0,(now-ANIM.last)/1000)),busy=false;ANIM.last=now;
  [['m',MPOP,mpSet],['v',VPOP,vpSet]].forEach(function(a){var s=ANIM[a[0]],o=a[1];if(!o||!o.el||s.q===null)return;var d=s.t-s.q;if(!d)return;
-  var st=dt*s.rate;s.q=Math.abs(d)<=st?s.t:s.q+(d>0?st:-st);try{a[2](s.q)}catch(e){}if(s.q!==s.t)busy=true});
+  var st=dt*(s.fin?1.6:60);s.q=Math.abs(d)<=st?s.t:s.q+(d>0?st:-st);try{a[2](s.q)}catch(e){}if(s.q!==s.t)busy=true});
  if(busy)requestAnimationFrame(animStep);else ANIM.run=false}
 var MPOP=null;
 function docLeft(el){var l=0;while(el){l+=el.offsetLeft;el=el.offsetParent}return l}
@@ -891,6 +893,29 @@ function mvTick(y,vh){var g=GEO.mv;if(!g)return;var top=g.ht-y,v=MVP.v,w=MVP.w,o
  if(!MVP.loaded&&top<vh*2.2){MVP.loaded=true;v.preload='auto';v.src=MVID;try{v.load()}catch(e){}}
  if(MVP.st==='armed'&&top<vh*.6&&top>-vh*.3){MVP.st='playing';w.style.opacity='1';try{v.currentTime=0;var pr=v.play();if(pr&&pr.catch)pr.catch(function(){MVP.st='done';w.style.opacity='0'})}catch(e){MVP.st='done';w.style.opacity='0'}}
  if(MVP.st==='done'&&top>vh*.85){MVP.st='armed';try{v.pause();v.currentTime=0}catch(e){}w.style.transition='none';w.style.opacity='1';void w.offsetWidth;w.style.transition=''}}
+/* the three picture clips (bento, home table, a la carte) follow the scroll frame by frame : 40 frames in one picture each.
+   forward only : the clip moves on as the card comes up the screen and is always finished by the time the card is 42% from the top ;
+   scrolling back up never plays it backwards ; once the card is back at the bottom of the screen it re-arms on the first frame */
+var SCR=[],SN=40,SC=8,SR=5,SCRDEF=[
+ {sel:'#hc-plan',url:'https://my.chatbees.io/uploads/feedback/upload_74723841-b7eb-429b-ba34-2e03ae6c2c3a_1791526847532.jpg',iw:960,ih:436},
+ {sel:'#hc-home',url:'https://my.chatbees.io/uploads/feedback/upload_917a3b13-3103-442b-80c6-fc14b3b478ef_1791526853636.jpg',iw:960,ih:540},
+ {sel:'#hc-meals',url:'https://my.chatbees.io/uploads/feedback/upload_9aedef37-bade-4e89-8e00-7802289b23c6_1791526858882.jpg',iw:520,ih:359}];
+function scrubs(){if(SCR.length)return;SCRDEF.forEach(function(d){var hi=$(d.sel+' .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
+ var w=D.createElement('div');w.className='sx30-sc';w.setAttribute('aria-hidden','true');var f=D.createElement('div');f.className='sx30-scf';w.appendChild(f);hi.appendChild(w);
+ SCR.push({d:d,hi:hi,im:im,card:$(d.sel),w:w,f:f,p:0,fr:-1,loaded:false,ready:false,ht:null,k:''})});GEO.t=0}
+function scrubGeo(){SCR.forEach(function(o){var im=o.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){o.ht=null;return}
+ var fit=getComputedStyle(im).objectFit,s=fit==='contain'?Math.min(w/o.d.iw,h/o.d.ih):Math.max(w/o.d.iw,h/o.d.ih),dw=o.d.iw*s,dh=o.d.ih*s,il=im.offsetLeft,it=im.offsetTop,ox=(w-dw)/2,oy=(h-dh)/2;
+ var bx=fit==='contain'?[il+ox,it+oy,dw,dh]:[il,it,w,h],fx=fit==='contain'?0:ox,fy=fit==='contain'?0:oy;
+ var k=[bx[0],bx[1],bx[2],bx[3],fx,fy].map(Math.round).join();if(k!==o.k){o.k=k;var a=o.w.style,b=o.f.style;a.left=bx[0].toFixed(1)+'px';a.top=bx[1].toFixed(1)+'px';a.width=bx[2].toFixed(1)+'px';a.height=bx[3].toFixed(1)+'px';b.left=fx.toFixed(1)+'px';b.top=fy.toFixed(1)+'px';b.width=dw.toFixed(1)+'px';b.height=dh.toFixed(1)+'px'}
+ o.ht=docTop(o.hi)})}
+function scrubShow(o){if(!o.ready){if(o.w.style.opacity!=='0')o.w.style.opacity='0';return}var fr=Math.round(o.p*(SN-1));
+ if(fr!==o.fr){o.fr=fr;o.f.style.backgroundPosition=((fr%SC)/(SC-1)*100).toFixed(3)+'% '+(Math.floor(fr/SC)/(SR-1)*100).toFixed(3)+'%'}
+ var op=o.p>=1?'0':'1';if(o.w.style.opacity!==op)o.w.style.opacity=op}
+function scrubTick(y,vh){SCR.forEach(function(o){if(o.ht==null)return;var top=o.ht-y;
+ if(!o.loaded&&top<vh*2.2){o.loaded=true;var I=new Image();I.onload=function(){o.f.style.backgroundImage='url("'+o.d.url+'")';o.f.style.backgroundSize=(SC*100)+'% '+(SR*100)+'%';o.ready=true;o.fr=-1;scrubShow(o)};I.src=o.d.url}
+ if(o.card&&o.card.classList.contains('open')){o.p=1;scrubShow(o);return}
+ if(top>vh*.95&&o.p>0)o.p=0;
+ var t=(vh*.92-top)/(vh*.5);t=t<0?0:t>1?1:t;if(t>o.p)o.p=t;scrubShow(o)})}
 
 
 /* the robot crew ( homepage ) : loaded once the page is up */
@@ -907,9 +932,7 @@ function geoRefresh(){GEO.t=performance.now();GEO.hh=HERO?HERO.offsetHeight:0;GE
  if(MARK){GEO.mTop=docTop(MARK.parentNode);GEO.mH=MARK.parentNode.offsetHeight}
  if(MPOP&&MPOP.r)mpGeo();
  if(VPOP&&VPOP.el)vpGeo();
- if(BPOP&&BPOP.v)bpGeo();
- if(HPOP&&HPOP.v)hpGeo();
- if(MVP&&MVP.v)mvGeo()}
+ if(SCR.length)scrubGeo()}
 D.addEventListener('click',function(){GEO.t=0;setTimeout(function(){GEO.t=0;onScroll()},450)},true);W.addEventListener('resize',function(){GEO.t=0});W.addEventListener('load',function(){GEO.t=0});
 /* every scroll frame only writes : all sizes come from GEO, measured at most once a second */
 function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y;VEL=VEL*.8+dy*.2;if(performance.now()-GEO.t>1000)geoRefresh();
@@ -927,9 +950,7 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
   if(!open){var mp=clamp((vh*.69-(GEO.mp.ht-y))/(vh*.22),0,1) /* finishes before the next card starts packing */,ms=mp.toFixed(3);animGo('m',mp,GEO.mp.ht-y>vh*.85,mpSet,MPOP.im)}}
  if(VPOP&&VPOP.el&&GEO.vp){var vo=!!(VPOP.card&&VPOP.card.classList.contains('open'));if(vo!==VPOP.open){VPOP.open=vo;VPOP.st='';if(vo){ANIM.v.q=null;VPOP.im.style.visibility='';VPOP.hid=false;VPOP.shown=false;VPOP.el.style.display='none'}}
   if(!vo){var vq=clamp((vh*.67-(GEO.vp.ht-y))/(vh*.41),0,1) /* all done while the card is still in the lower half, well clear of the title bar */,vs=vq.toFixed(3);animGo('v',vq,GEO.vp.ht-y>vh*.85,vpSet,VPOP.im)}}
- if(BPOP&&BPOP.v&&GEO.bp)bpTick(y,vh);
- if(HPOP&&HPOP.v&&GEO.hp)hpTick(y,vh);
- if(MVP&&MVP.v&&GEO.mv)mvTick(y,vh);
+ if(SCR.length)scrubTick(y,vh);
  if(MARK&&GEO.mTop!=null){var mt=GEO.mTop-y,mp=clamp((vh-mt)/(GEO.mH+vh*.35),0,1);MARK.style.transform='translate3d(0,'+((1-mp)*55).toFixed(1)+'%,0) scale('+(.82+.18*mp).toFixed(3)+')';MARK.style.opacity=(.15+.85*mp).toFixed(3)}}
 /* the scroll speed lean only touches the cards and the giant type, never the whole page */
 /* a custom property on a big block makes the browser restyle everything inside it, so the lean is written straight onto the two type rows */
