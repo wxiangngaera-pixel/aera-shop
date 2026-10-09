@@ -1773,7 +1773,7 @@ function bpReturn(){var q=new URLSearchParams(location.search);var id=q.get('bil
  if(!pending||!pending.msg){bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! We could not match this payment to an order in this browser — please WhatsApp us your Billplz receipt so the kitchen can confirm your order.</p>');return true}
  bpShow('<h2>Confirming your payment…</h2><p style="color:var(--ink2)">One moment while we verify it with Billplz.</p>');
  fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact('verify'),data:{action:'verify',billId:id,message:pending.msg,custEmail:pending.email}})})
- .then(function(r){return r.json()}).then(function(){return bpPoll(function(r){return String(r.Key||'')==='paid:'+id},10)})
+ .then(function(r){return r.json()},function(){return null}).then(function(){return bpPoll(function(r){return String(r.Key||'')==='paid:'+id},60)})
  .then(function(row){if(row&&String(row.Status||'')==='paid')thanks(pending.orderNo);else bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! Billplz confirmed the payment but our system could not record order <b>'+esc(pending.orderNo)+'</b> automatically'+(row?' ( '+esc(String(row.Status||''))+' )':'')+'. Please WhatsApp us and we will confirm it by hand.</p>')})
  .catch(function(){bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! We could not reach our order system just now — please WhatsApp us with order <b>'+esc(pending.orderNo)+'</b>.</p>')});
  return true}
