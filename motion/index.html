@@ -977,7 +977,7 @@ function wpGeo(){var im=WPOP.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){GE
  var k=[ox,oy,dw].map(Math.round).join();if(k!==WPOP.k){WPOP.k=k;var st=WPOP.v.style;st.left=ox.toFixed(1)+'px';st.top=oy.toFixed(1)+'px';st.width=dw.toFixed(1)+'px';st.height=dh.toFixed(1)+'px'}
  GEO.wp={ht:docTop(WPOP.hi)}}
 /* more looping picture clips (16:9 photos, 960 x 540) : packaging & delivery = the box gets plated and sealed */
-var GVS=[{sel:'#hc-pack',url:'https://my.chatbees.io/uploads/feedback/upload_65cfaaaa-3331-4a41-8f7e-dabe1d6b1bc4_1791531110367.mp4',rate:1.3}];
+var GVS=[{sel:'#hc-pack',url:'https://my.chatbees.io/uploads/feedback/upload_39a34542-ebcc-411b-b6b1-3d75eeaf72b0_1791531606390.mp4',rate:1.5} /* box plated + sealed, then both vacuum bags filled and sealed */];
 function gvAll(){GVS.forEach(function(g){if(g.o)return;var hi=$(g.sel+' .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
  var w=D.createElement('div');w.className='sx30-gv';w.setAttribute('aria-hidden','true');var v=D.createElement('video');v.muted=true;v.defaultMuted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('muted','');v.preload='none';
  w.appendChild(v);hi.appendChild(w);var o={hi:hi,im:im,card:$(g.sel),w:w,v:v,st:'armed',loaded:false};g.o=o;
