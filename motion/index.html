@@ -979,7 +979,8 @@ function wpGeo(){var im=WPOP.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){GE
 /* more looping picture clips (16:9 photos, 960 x 540) : packaging & delivery = the box gets plated and sealed */
 var GVS=[{sel:'#hc-pack',url:'https://my.chatbees.io/uploads/feedback/upload_39a34542-ebcc-411b-b6b1-3d75eeaf72b0_1791531606390.mp4',rate:1.5} /* box plated + sealed, then both vacuum bags filled and sealed */,
  {sel:'#hc-pick',url:'https://my.chatbees.io/uploads/feedback/upload_fb135132-9b49-4be7-95d2-bbf7a7484e7b_1791531999535.mp4',rate:1.15} /* delivery : the rider hands the meal bag over to the customer */,
- {sel:'#hc-gyms',url:'https://my.chatbees.io/uploads/feedback/upload_5fba15f1-dedf-423d-83cd-b1d8e4857615_1791532573891.mp4',rate:1.2} /* gym fridges : meals stocked onto the shelves, then the door closes */];
+ {sel:'#hc-gyms',url:'https://my.chatbees.io/uploads/feedback/upload_5fba15f1-dedf-423d-83cd-b1d8e4857615_1791532573891.mp4',rate:1.2} /* gym fridges : meals stocked onto the shelves, then the door closes */,
+ {sel:'#hc-faq',url:'https://my.chatbees.io/uploads/feedback/upload_bc011724-728d-4802-82a4-47e28b709d7b_1791533186876.mp4',rate:1.2} /* faq : the empty box slides onto the table, then each compartment is filled */];
 function gvAll(){GVS.forEach(function(g){if(g.o)return;var hi=$(g.sel+' .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
  var w=D.createElement('div');w.className='sx30-gv';w.setAttribute('aria-hidden','true');var v=D.createElement('video');v.muted=true;v.defaultMuted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('muted','');v.preload='none';
  w.appendChild(v);hi.appendChild(w);var o={hi:hi,im:im,card:$(g.sel),w:w,v:v,st:'armed',loaded:false};g.o=o;
