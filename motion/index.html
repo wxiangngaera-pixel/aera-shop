@@ -670,7 +670,7 @@ function hub(){
   W.hubTog=function(){var a=arguments,self=this;try{D.startViewTransition(function(){o.apply(self,a)})}catch(e){o.apply(self,a)}};W.hubTog.__sx=1}
  safe(menuFold)();safe(vacPack)();safe(bentoPlate)()}
 /* the two picture animations follow the scroll, but never faster than a set pace : a quick flick up or down still plays every step (fold, unseal) */
-var ANIM={m:{q:null,t:0,rate:.8},v:{q:null,t:0,rate:.55},b:{q:null,t:0,rate:.33},run:false,last:0};
+var ANIM={m:{q:null,t:0,rate:.8},v:{q:null,t:0,rate:.55},b:{q:null,t:0,rate:.24},run:false,last:0};
 /* forward only : scrolling back up never folds or unseals ; a started animation simply finishes ;
    once the card has gone back down near the bottom of the screen it quietly re-arms (the finished picture fades away), so the next scroll down plays it again */
 function fadeAway(img){try{var c=img.cloneNode(true);c.removeAttribute('data-hi');c.style.visibility='visible';c.style.transition='opacity .35s';c.style.pointerEvents='none';img.parentNode.insertBefore(c,img.nextSibling);requestAnimationFrame(function(){requestAnimationFrame(function(){c.style.opacity='0'})});setTimeout(function(){if(c.parentNode)c.parentNode.removeChild(c)},500)}catch(e){}}
