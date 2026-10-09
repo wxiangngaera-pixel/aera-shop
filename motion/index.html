@@ -690,7 +690,7 @@ function hub(){
  HUB=$$('#hub .hitem');HUB.forEach(function(c,i){c.classList.remove('sx-r','sx-on','sx-up');c.style.viewTransitionName='sxhub'+i});
  if(typeof W.hubTog==='function'&&D.startViewTransition&&!W.hubTog.__sx){var o=W.hubTog;
   W.hubTog=function(){var a=arguments,self=this;try{D.startViewTransition(function(){o.apply(self,a)})}catch(e){o.apply(self,a)}};W.hubTog.__sx=1}
- safe(pins)();safe(bundleIcons)();safe(howVid)();safe(menuFold)();safe(mealVid)();safe(bentoPlate)();safe(homeSlide)()}
+ safe(pins)();safe(bundleIcons)();safe(howVid)();safe(gvAll)();safe(menuFold)();safe(mealVid)();safe(bentoPlate)();safe(homeSlide)()}
 /* the two picture animations follow the scroll, but never faster than a set pace : a quick flick up or down still plays every step (fold, unseal) */
 var ANIM={m:{q:null,t:0,rate:.8},v:{q:null,t:0,rate:.55},b:{q:null,t:0,rate:.24},run:false,last:0};
 /* forward only : scrolling back up never folds or unseals ; a started animation simply finishes ;
@@ -976,6 +976,16 @@ function wpGeo(){var im=WPOP.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){GE
  var s=Math.max(w/960,h/540),dw=960*s,dh=540*s,ox=(w-dw)/2+im.offsetLeft,oy=(h-dh)/2+im.offsetTop;
  var k=[ox,oy,dw].map(Math.round).join();if(k!==WPOP.k){WPOP.k=k;var st=WPOP.v.style;st.left=ox.toFixed(1)+'px';st.top=oy.toFixed(1)+'px';st.width=dw.toFixed(1)+'px';st.height=dh.toFixed(1)+'px'}
  GEO.wp={ht:docTop(WPOP.hi)}}
+/* more looping picture clips (16:9 photos, 960 x 540) : packaging & delivery = the box gets plated and sealed */
+var GVS=[{sel:'#hc-pack',url:'https://my.chatbees.io/uploads/feedback/upload_65cfaaaa-3331-4a41-8f7e-dabe1d6b1bc4_1791531110367.mp4',rate:1.3}];
+function gvAll(){GVS.forEach(function(g){if(g.o)return;var hi=$(g.sel+' .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
+ var w=D.createElement('div');w.className='sx30-gv';w.setAttribute('aria-hidden','true');var v=D.createElement('video');v.muted=true;v.defaultMuted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('muted','');v.preload='none';
+ w.appendChild(v);hi.appendChild(w);var o={hi:hi,im:im,card:$(g.sel),w:w,v:v,st:'armed',loaded:false};g.o=o;
+ v.addEventListener('ended',function(){o.st='done';w.style.opacity='0'})});GEO.t=0}
+function gvGeo(){GVS.forEach(function(g){var o=g.o;if(!o)return;var im=o.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){g.geo=null;return}
+ var s=Math.max(w/960,h/540),dw=960*s,dh=540*s,ox=(w-dw)/2+im.offsetLeft,oy=(h-dh)/2+im.offsetTop;
+ var k=[ox,oy,dw].map(Math.round).join();if(k!==o.k){o.k=k;var st=o.v.style;st.left=ox.toFixed(1)+'px';st.top=oy.toFixed(1)+'px';st.width=dw.toFixed(1)+'px';st.height=dh.toFixed(1)+'px'}
+ g.geo={ht:docTop(o.hi)}})}
 function loopGo(o,restart){var v=o.v;if(o.key){o.im.style.transition='opacity .6s ease';o.im.style.opacity='0'}try{v.defaultPlaybackRate=o.rate||1;v.playbackRate=o.rate||1}catch(e){}if(restart){try{v.currentTime=0}catch(e){}}o.st='playing';o.w.style.opacity='1';try{var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}catch(e){}}
 function loopTick(o,g,url,y,vh,rate){if(!o||!o.v||!g)return;o.rate=rate||1;var top=g.ht-y,v=o.v,hh=o.hi.offsetHeight||150;
  if(o.card&&o.card.classList.contains('open')){if(o.lp){o.lp=0;try{v.pause()}catch(e){}}o.w.style.opacity='0';if(o.key)o.im.style.opacity='1';return}
@@ -1039,7 +1049,8 @@ function geoRefresh(){GEO.t=performance.now();GEO.hh=HERO?HERO.offsetHeight:0;GE
  if(BPOP&&BPOP.v)bpGeo();
  if(HPOP&&HPOP.v)hpGeo();
  if(MVP&&MVP.v)mvGeo();
- if(WPOP&&WPOP.v)wpGeo()}
+ if(WPOP&&WPOP.v)wpGeo();
+ gvGeo()}
 D.addEventListener('click',function(){GEO.t=0;setTimeout(function(){GEO.t=0;onScroll()},450)},true);W.addEventListener('resize',function(){GEO.t=0});W.addEventListener('load',function(){GEO.t=0});
 /* every scroll frame only writes : all sizes come from GEO, measured at most once a second */
 function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y;VEL=VEL*.8+dy*.2;for(var pk in PINW){var PP=PINW[pk],po=PP.card.classList.contains('open');if(po!==PP.open){PP.open=po;PP.sp.style.height=(po?0:PINX)+'px';GEO.t=0}}
@@ -1060,7 +1071,7 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
  if(VPOP&&VPOP.el&&GEO.vp){var vo=!!(VPOP.card&&VPOP.card.classList.contains('open'));if(vo!==VPOP.open){VPOP.open=vo;VPOP.st='';if(vo){ANIM.v.q=null;VPOP.im.style.visibility='';VPOP.hid=false;VPOP.shown=false;VPOP.el.style.display='none'}}
   if(!vo){var vq=clamp((vh*.67-(GEO.vp.ht-y))/(vh*.41),0,1) /* all done while the card is still in the lower half, well clear of the title bar */,vs=vq.toFixed(3);animGo('v',vq,GEO.vp.ht-y>vh*.85,vpSet,VPOP.im)}}
  if(SCR.length)scrubTick(y,vh);
- loopTick(BPOP,GEO.bp,BVID,y,vh,1);loopTick(HPOP,GEO.hp,HVID,y,vh,1.6) /* home : 6 s clip in about 3.8 s */;loopTick(MVP,GEO.mv,MVID,y,vh,1.9) /* a la carte : 9 s clip in about 4.8 s */;loopTick(WPOP,GEO.wp,WVID,y,vh,1.3);
+ loopTick(BPOP,GEO.bp,BVID,y,vh,1);loopTick(HPOP,GEO.hp,HVID,y,vh,1.6) /* home : 6 s clip in about 3.8 s */;loopTick(MVP,GEO.mv,MVID,y,vh,1.9) /* a la carte : 9 s clip in about 4.8 s */;loopTick(WPOP,GEO.wp,WVID,y,vh,1.3);GVS.forEach(function(g){loopTick(g.o,g.geo,g.url,y,vh,g.rate)});
  if(MARK&&GEO.mTop!=null){var mt=GEO.mTop-y,mp=clamp((vh-mt)/(GEO.mH+vh*.35),0,1);MARK.style.transform='translate3d(0,'+((1-mp)*55).toFixed(1)+'%,0) scale('+(.82+.18*mp).toFixed(3)+')';MARK.style.opacity=(.15+.85*mp).toFixed(3)}}
 /* the scroll speed lean only touches the cards and the giant type, never the whole page */
 /* a custom property on a big block makes the browser restyle everything inside it, so the lean is written straight onto the two type rows */
