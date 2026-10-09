@@ -430,6 +430,9 @@ css([
 '#hc-home .sx30-hv video{position:absolute;max-width:none;display:block;object-fit:fill;background:transparent}',
 '#hc-meals .sx30-mv{position:absolute;overflow:hidden;pointer-events:none;z-index:1;opacity:1;transition:opacity .6s ease}',
 '#hc-meals .sx30-mv video{position:absolute;max-width:none;display:block;object-fit:fill;background:transparent}',
+'.sx30-pw{display:grid;position:relative}',
+'.sx30-pw>.hitem{grid-area:1/1;position:sticky;align-self:start;z-index:1}',
+'.sx30-pw>.sx30-pov{grid-area:1/1;position:sticky;z-index:30;pointer-events:none}',
 '.himg .sx30-sc{position:absolute;overflow:hidden;pointer-events:none;z-index:1;opacity:0;transition:opacity .45s ease}',
 '.himg .sx30-scf{position:absolute;background-repeat:no-repeat}',
 '#hc-plan .sx30-bv video{position:absolute;max-width:none;display:block;object-fit:fill;background:transparent}',
@@ -678,7 +681,7 @@ function hub(){
  HUB=$$('#hub .hitem');HUB.forEach(function(c,i){c.classList.remove('sx-r','sx-on','sx-up');c.style.viewTransitionName='sxhub'+i});
  if(typeof W.hubTog==='function'&&D.startViewTransition&&!W.hubTog.__sx){var o=W.hubTog;
   W.hubTog=function(){var a=arguments,self=this;try{D.startViewTransition(function(){o.apply(self,a)})}catch(e){o.apply(self,a)}};W.hubTog.__sx=1}
- safe(menuFold)();safe(scrubs)()}
+ safe(pins)();safe(menuFold)();safe(scrubs)()}
 /* the two picture animations follow the scroll, but never faster than a set pace : a quick flick up or down still plays every step (fold, unseal) */
 var ANIM={m:{q:null,t:0,rate:.8},v:{q:null,t:0,rate:.55},b:{q:null,t:0,rate:.24},run:false,last:0};
 /* forward only : scrolling back up never folds or unseals ; a started animation simply finishes ;
@@ -738,8 +741,10 @@ function mpBuild(){var r=MPOP.r,o=D.createElement('div');o.id='sx30MenuPop';o.se
  [r.bg,r.cut].forEach(function(s){var p=new Image();p.src=s;if(p.decode)p.decode().catch(function(){})});
  GEO.t=0;onScroll()}
 function mpGeo(){var hi=MPOP.hi,r=MPOP.r,w=hi.offsetWidth,h=hi.offsetHeight;if(!w||!h){GEO.mp=null;return}
- var s=Math.max(w/r.W,h/r.H),ox=(w-r.W*s)/2,oy=(h-r.H*s)/2,t=docTop(hi),l=docLeft(hi);
- GEO.mp={ht:t,l:l+ox+r.x0*s,t:t+oy+r.y0*s,w:(r.x1-r.x0+1)*s,h:(r.y1-r.y0+1)*s,cx:MPOP.card?docLeft(MPOP.card)+MPOP.card.offsetWidth/2:l+w/2}}
+ var s=Math.max(w/r.W,h/r.H),ox=(w-r.W*s)/2,oy=(h-r.H*s)/2,t=docTop(hi),l=docLeft(hi),cx=MPOP.card?docLeft(MPOP.card)+MPOP.card.offsetWidth/2:l+w/2,P=PINW.menu,ro=P&&relOff(hi,P.card);
+ /* pinned : the unfolding stand lives in a layer pinned together with the card, in card coordinates */
+ if(ro){if(MPOP.el&&MPOP.el.parentNode!==P.ov){P.ov.appendChild(MPOP.el);MPOP.gk=''}l=ro[0];t=ro[1];cx=P.card.offsetWidth/2}
+ GEO.mp={ht:docTop(hi),l:l+ox+r.x0*s,t:t+oy+r.y0*s,w:(r.x1-r.x0+1)*s,h:(r.y1-r.y0+1)*s,cx:cx}}
 function mpSet(p){var g=GEO.mp,el=MPOP.el,show=p>0&&p<1;
  /* resting states : before, the card shows only the backdrop ; after, the untouched original picture */
  var want=p>=1?'0':'bg';if(want!==MPOP.src){MPOP.src=want;MPOP.im.src=want==='0'?MPOP.src0:MPOP.r.bg}
@@ -896,18 +901,28 @@ function mvTick(y,vh){var g=GEO.mv;if(!g)return;var top=g.ht-y,v=MVP.v,w=MVP.w,o
 /* the three picture clips (bento, home table, a la carte) follow the scroll frame by frame : 40 frames in one picture each.
    forward only : the clip moves on as the card comes up the screen and is always finished by the time the card is 42% from the top ;
    scrolling back up never plays it backwards ; once the card is back at the bottom of the screen it re-arms on the first frame */
+/* the four picture cards pin on the screen for a while so each animation gets a long, slow scroll :
+   each card sits in a taller holder ; it rides up to 32% from the top, stays there for 70% of a screen of scrolling, then moves on */
+var PINW={},PINT=0,PINX=0;
+function pinSize(){var vh=innerHeight;PINT=Math.round(vh*.32);PINX=Math.round(vh*.7);for(var k in PINW){var P=PINW[k];P.w.style.paddingBottom=(P.open?0:PINX)+'px';P.card.style.top=PINT+'px';P.ov.style.top=PINT+'px'}GEO.t=0}
+function pins(){['menu','meals','plan','home'].forEach(function(k){var c=$('#hc-'+k);if(!c||!c.parentNode||(c.parentNode.classList&&c.parentNode.classList.contains('sx30-pw')))return;var w=D.createElement('div');w.className='sx30-pw';c.parentNode.insertBefore(w,c);w.appendChild(c);var ov=D.createElement('div');ov.className='sx30-pov';w.appendChild(ov);PINW[k]={w:w,card:c,ov:ov,top:0,open:c.classList.contains('open')}});
+ pinSize();var lw=innerWidth;W.addEventListener('resize',function(){if(innerWidth!==lw){lw=innerWidth;pinSize()}})}
+function pinTop(k,y,fb){var P=PINW[k];return (P&&P.top?P.top:fb)-y}
+/* 0 when the card is just coming up from the bottom of the screen, 1 when its pinned stay is over */
+function pinP(k,y,vh,fb){var P=PINW[k],t=pinTop(k,y,fb),S=vh*.9,R=P?S-PINT+(P.open?0:PINX):vh*.5;if(R<vh*.3)R=vh*.3;var v=(S-t)/R;return v<0?0:v>1?1:v}
+function relOff(el,anc){var t=0,l=0;while(el&&el!==anc){t+=el.offsetTop;l+=el.offsetLeft;el=el.offsetParent}return el===anc?[l,t]:null}
 var SCR=[],SN=40,SC=8,SR=5,SCRDEF=[
  {sel:'#hc-plan',url:'https://my.chatbees.io/uploads/feedback/upload_74723841-b7eb-429b-ba34-2e03ae6c2c3a_1791526847532.jpg',iw:960,ih:436},
  {sel:'#hc-home',url:'https://my.chatbees.io/uploads/feedback/upload_917a3b13-3103-442b-80c6-fc14b3b478ef_1791526853636.jpg',iw:960,ih:540},
  {sel:'#hc-meals',url:'https://my.chatbees.io/uploads/feedback/upload_9aedef37-bade-4e89-8e00-7802289b23c6_1791526858882.jpg',iw:520,ih:359}];
 function scrubs(){if(SCR.length)return;SCRDEF.forEach(function(d){var hi=$(d.sel+' .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
  var w=D.createElement('div');w.className='sx30-sc';w.setAttribute('aria-hidden','true');var f=D.createElement('div');f.className='sx30-scf';w.appendChild(f);hi.appendChild(w);
- SCR.push({d:d,hi:hi,im:im,card:$(d.sel),w:w,f:f,p:0,fr:-1,loaded:false,ready:false,ht:null,k:''})});GEO.t=0}
+ SCR.push({k:d.sel.slice(4),d:d,hi:hi,im:im,card:$(d.sel),w:w,f:f,p:0,fr:-1,loaded:false,ready:false,ht:null,k:''})});GEO.t=0}
 function scrubGeo(){SCR.forEach(function(o){var im=o.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){o.ht=null;return}
  var fit=getComputedStyle(im).objectFit,s=fit==='contain'?Math.min(w/o.d.iw,h/o.d.ih):Math.max(w/o.d.iw,h/o.d.ih),dw=o.d.iw*s,dh=o.d.ih*s,il=im.offsetLeft,it=im.offsetTop,ox=(w-dw)/2,oy=(h-dh)/2;
  var bx=fit==='contain'?[il+ox,it+oy,dw,dh]:[il,it,w,h],fx=fit==='contain'?0:ox,fy=fit==='contain'?0:oy;
  var k=[bx[0],bx[1],bx[2],bx[3],fx,fy].map(Math.round).join();if(k!==o.k){o.k=k;var a=o.w.style,b=o.f.style;a.left=bx[0].toFixed(1)+'px';a.top=bx[1].toFixed(1)+'px';a.width=bx[2].toFixed(1)+'px';a.height=bx[3].toFixed(1)+'px';b.left=fx.toFixed(1)+'px';b.top=fy.toFixed(1)+'px';b.width=dw.toFixed(1)+'px';b.height=dh.toFixed(1)+'px'}
- o.ht=docTop(o.hi)})}
+ o.ht=PINW[o.k]&&PINW[o.k].top?PINW[o.k].top:docTop(o.hi)})}
 function scrubShow(o){if(!o.ready){if(o.w.style.opacity!=='0')o.w.style.opacity='0';return}var fr=Math.round(o.p*(SN-1));
  if(fr!==o.fr){o.fr=fr;o.f.style.backgroundPosition=((fr%SC)/(SC-1)*100).toFixed(3)+'% '+(Math.floor(fr/SC)/(SR-1)*100).toFixed(3)+'%'}
  var op=o.p>=1?'0':'1';if(o.w.style.opacity!==op)o.w.style.opacity=op}
@@ -915,7 +930,7 @@ function scrubTick(y,vh){SCR.forEach(function(o){if(o.ht==null)return;var top=o.
  if(!o.loaded&&top<vh*2.2){o.loaded=true;var I=new Image();I.onload=function(){o.f.style.backgroundImage='url("'+o.d.url+'")';o.f.style.backgroundSize=(SC*100)+'% '+(SR*100)+'%';o.ready=true;o.fr=-1;scrubShow(o)};I.src=o.d.url}
  if(o.card&&o.card.classList.contains('open')){o.p=1;scrubShow(o);return}
  if(top>vh*.95&&o.p>0)o.p=0;
- var t=(vh*.92-top)/(vh*.5);t=t<0?0:t>1?1:t;if(t>o.p)o.p=t;scrubShow(o)})}
+ var t=pinP(o.k,y,vh,o.ht);if(t>o.p)o.p=t;scrubShow(o)})}
 
 
 /* the robot crew ( homepage ) : loaded once the page is up */
@@ -930,12 +945,14 @@ function geoRefresh(){GEO.t=performance.now();GEO.hh=HERO?HERO.offsetHeight:0;GE
  if(BANNER){GEO.bTop=docTop(BANNER);GEO.bH=BANNER.offsetHeight}
  GEO.hub=HUB.map(function(c){return{top:docTop(c),h:c.offsetHeight}});
  if(MARK){GEO.mTop=docTop(MARK.parentNode);GEO.mH=MARK.parentNode.offsetHeight}
+ for(var pk in PINW)PINW[pk].top=docTop(PINW[pk].w);
  if(MPOP&&MPOP.r)mpGeo();
  if(VPOP&&VPOP.el)vpGeo();
  if(SCR.length)scrubGeo()}
 D.addEventListener('click',function(){GEO.t=0;setTimeout(function(){GEO.t=0;onScroll()},450)},true);W.addEventListener('resize',function(){GEO.t=0});W.addEventListener('load',function(){GEO.t=0});
 /* every scroll frame only writes : all sizes come from GEO, measured at most once a second */
-function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y;VEL=VEL*.8+dy*.2;if(performance.now()-GEO.t>1000)geoRefresh();
+function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y;VEL=VEL*.8+dy*.2;for(var pk in PINW){var PP=PINW[pk],po=PP.card.classList.contains('open');if(po!==PP.open){PP.open=po;PP.w.style.paddingBottom=(po?0:PINX)+'px';GEO.t=0}}
+ if(performance.now()-GEO.t>1000)geoRefresh();
  if(STRIP&&Math.abs(dy)>1)STRIP.dir=dy>0?-1:1;
  if(BAR){var sc=y>12;if(BAR.__sc!==sc){BAR.__sc=sc;BAR.classList.toggle('sx30-sc',sc)}}
  if(PBAR)PBAR.style.transform='scaleX('+(GEO.dh>vh?clamp(y/(GEO.dh-vh),0,1):0).toFixed(4)+')';
@@ -947,7 +964,7 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
    c.style.transform='translate3d('+(sd*q*120).toFixed(1)+'px,'+(q*90).toFixed(1)+'px,0) rotate('+(sd*q*8).toFixed(2)+'deg) scale('+(.76+.24*e).toFixed(4)+') skewY('+SKV+'deg)';c.style.opacity=e<.999?(.05+.95*e).toFixed(3):''});
   if(!FINE&&HUB.__best!==best){if(HUB.__best)HUB.__best.classList.remove('sx30-focus');if(best)best.classList.add('sx30-focus');HUB.__best=best}}
  if(MPOP&&MPOP.el&&GEO.mp){var open=!!(MPOP.card&&MPOP.card.classList.contains('open'));if(open!==MPOP.open){MPOP.open=open;MPOP.st='';if(open){ANIM.m.q=null;MPOP.src='0';MPOP.im.src=MPOP.src0;MPOP.shown=false;MPOP.el.style.display='none'}}
-  if(!open){var mp=clamp((vh*.69-(GEO.mp.ht-y))/(vh*.22),0,1) /* finishes before the next card starts packing */,ms=mp.toFixed(3);animGo('m',mp,GEO.mp.ht-y>vh*.85,mpSet,MPOP.im)}}
+  if(!open){var mp=pinP('menu',y,vh,GEO.mp.ht),ms=mp.toFixed(3);animGo('m',mp,pinTop('menu',y,GEO.mp.ht)>vh*.85,mpSet,MPOP.im)}}
  if(VPOP&&VPOP.el&&GEO.vp){var vo=!!(VPOP.card&&VPOP.card.classList.contains('open'));if(vo!==VPOP.open){VPOP.open=vo;VPOP.st='';if(vo){ANIM.v.q=null;VPOP.im.style.visibility='';VPOP.hid=false;VPOP.shown=false;VPOP.el.style.display='none'}}
   if(!vo){var vq=clamp((vh*.67-(GEO.vp.ht-y))/(vh*.41),0,1) /* all done while the card is still in the lower half, well clear of the title bar */,vs=vq.toFixed(3);animGo('v',vq,GEO.vp.ht-y>vh*.85,vpSet,VPOP.im)}}
  if(SCR.length)scrubTick(y,vh);
