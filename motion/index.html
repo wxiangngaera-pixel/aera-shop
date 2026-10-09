@@ -413,6 +413,21 @@ css([
 '@keyframes sx30B3{to{transform:translate3d(-14vmax,-16vmax,0) scale(.9)}}',
 'html.sx30 #top h1.sx30-done span{background:linear-gradient(100deg,#FDB913 30%,#FFF6D2 46%,#FDB913 62%) 0 0/300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:sx30Txt 2.4s linear 2}',
 '@keyframes sx30Txt{from{background-position:100% 0}to{background-position:-200% 0}}',
+/* homepage cards : they sweep in from alternate sides as you scroll, driven by the browser itself so they never shake */
+'@supports (animation-timeline: view()){html.sx30 #hub .hacc .hitem{animation:sx30HubIn linear both;animation-timeline:view();animation-range:entry 0% cover 42%;animation-timing-function:cubic-bezier(.2,.9,.25,1)}html.sx30 #hub .hacc .hitem:nth-child(odd){--sd:-1}html.sx30 #hub .hacc .hitem:nth-child(even){--sd:1}html.sx30 #hub .hacc .hitem.open{animation:none}}',
+'@keyframes sx30HubIn{from{opacity:.05;transform:translate3d(calc(var(--sd,1)*120px),90px,0) rotate(calc(var(--sd,1)*8deg)) scale(.76)}to{opacity:1;transform:none}}',
+/* the AERA menu picture : folded like a paper menu, it unfolds panel by panel as you scroll down */
+'.sx30-fold{position:absolute;inset:0;perspective:800px;pointer-events:none;z-index:1;--p:0}',
+'.sx30-fold .fp{position:absolute;top:0;bottom:0;overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;animation-duration:1s;animation-timing-function:linear;animation-fill-mode:both;animation-play-state:paused;animation-delay:calc(var(--p) * -1s)}',
+'.sx30-fold .fp.e{transform-origin:0 50%;animation-name:sx30FoldE}',
+'.sx30-fold .fp.o{transform-origin:100% 50%;animation-name:sx30FoldO}',
+'.sx30-fold .fpi{position:absolute;top:0;height:100%;max-width:none;object-fit:cover}',
+'.sx30-fold .fp i{position:absolute;inset:0;pointer-events:none;animation-duration:1s;animation-timing-function:linear;animation-fill-mode:both;animation-play-state:paused;animation-delay:calc(var(--p) * -1s)}',
+'.sx30-fold .fp.e i{background:#0b1f45;animation-name:sx30ShE}',
+'.sx30-fold .fp.o i{background:#fff;animation-name:sx30ShO}',
+'.himg.sx30-folding>img:not(.fpi){visibility:hidden}',
+'.himg.sx30-unfolded .sx30-fold{display:none}',
+'.himg.sx30-unfolded>img:not(.fpi){visibility:visible}',
 'html.sx30 #heroPic .phonewrap::after{content:none!important}',
 '#vFrame .vslide,#vFrame .sx30-scan,#vFrame .sx30-dim,#vFrame .sx30-load{clip-path:inset(0 round 27px)}',
 '@keyframes sx30RingP{0%,100%{opacity:.45}50%{opacity:1}}',
@@ -638,10 +653,22 @@ var VEL=0;
 function mloop(t){if(!STRIP||!STRIP.on)return;requestAnimationFrame(mloop);var dt=Math.min(48,t-(STRIP.last||t));STRIP.last=t;
  var sp=(.55+Math.min(6,Math.abs(VEL)*.06))*dt/16;STRIP.x+=STRIP.dir*sp;var s=STRIP.set||1;
  if(STRIP.x<=-s)STRIP.x+=s;if(STRIP.x>0)STRIP.x-=s;STRIP.tr.style.transform='translate3d('+STRIP.x.toFixed(2)+'px,0,0)'}
+var HUBCSS=!!(W.CSS&&CSS.supports&&CSS.supports('animation-timeline: view()'));
 function hub(){
  HUB=$$('#hub .hitem');HUB.forEach(function(c,i){c.classList.remove('sx-r','sx-on','sx-up');c.style.viewTransitionName='sxhub'+i});
  if(typeof W.hubTog==='function'&&D.startViewTransition&&!W.hubTog.__sx){var o=W.hubTog;
-  W.hubTog=function(){var a=arguments,self=this;try{D.startViewTransition(function(){o.apply(self,a)})}catch(e){o.apply(self,a)}};W.hubTog.__sx=1}}
+  W.hubTog=function(){var a=arguments,self=this;try{D.startViewTransition(function(){o.apply(self,a)})}catch(e){o.apply(self,a)}};W.hubTog.__sx=1}
+ safe(menuFold)()}
+var FOLD=null;
+function menuFold(){if(FOLD)return;var hi=$('#hc-menu .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
+ var src=im.currentSrc||im.src;if(!src)return;var N=6,A0=88,op=getComputedStyle(im).objectPosition||'50% 50%';
+ if(!$('#sx30FoldKF')){var e='',o='',s1='',s2='';for(var j=0;j<=16;j++){var u=j/16,a=A0*Math.pow(1-u,3),rd=a*Math.PI/180,X=(100*(1-Math.cos(rd))).toFixed(3),sn=Math.sin(rd),pc=(u*100).toFixed(2)+'%';
+  e+=pc+'{transform:translateX(calc(var(--m) * '+X+'%)) rotateY('+a.toFixed(2)+'deg)}';o+=pc+'{transform:translateX(calc(var(--m) * '+X+'%)) rotateY('+(-a).toFixed(2)+'deg)}';
+  s1+=pc+'{opacity:'+(sn*.55).toFixed(3)+'}';s2+=pc+'{opacity:'+(sn*.18).toFixed(3)+'}'}
+  var st=D.createElement('style');st.id='sx30FoldKF';st.textContent='@keyframes sx30FoldE{'+e+'}@keyframes sx30FoldO{'+o+'}@keyframes sx30ShE{'+s1+'}@keyframes sx30ShO{'+s2+'}';D.head.appendChild(st)}
+ var f=D.createElement('div'),h='';f.className='sx30-fold';f.setAttribute('aria-hidden','true');
+ for(var k=0;k<N;k++){var ev=k%2===0,m=ev?(N/2-k):(N/2-k-1);h+='<div class="fp '+(ev?'e':'o')+'" style="left:'+(k*100/N).toFixed(4)+'%;width:'+(100/N).toFixed(4)+'%;--m:'+m+'"><img class="fpi" alt="" src="'+src+'" style="left:'+(-k*100)+'%;width:'+(N*100)+'%;object-position:'+op+'"><i></i></div>'}
+ f.innerHTML=h;hi.appendChild(f);hi.classList.add('sx30-folding');FOLD={el:f,hi:hi,card:$('#hc-menu'),st:'',dn:null};GEO.t=0}
 
 /* the robot crew ( homepage ) : loaded once the page is up */
 function crew(){try{var v='';try{v=localStorage.getItem('aera.motion.v')||''}catch(e){}
@@ -654,7 +681,8 @@ function docTop(el){var t=0;while(el){t+=el.offsetTop;el=el.offsetParent}return 
 function geoRefresh(){GEO.t=performance.now();GEO.hh=HERO?HERO.offsetHeight:0;GEO.dh=D.documentElement.scrollHeight;GEO.bar=BAR?BAR.offsetHeight:66;
  if(BANNER){GEO.bTop=docTop(BANNER);GEO.bH=BANNER.offsetHeight}
  GEO.hub=HUB.map(function(c){return{top:docTop(c),h:c.offsetHeight}});
- if(MARK){GEO.mTop=docTop(MARK.parentNode);GEO.mH=MARK.parentNode.offsetHeight}}
+ if(MARK){GEO.mTop=docTop(MARK.parentNode);GEO.mH=MARK.parentNode.offsetHeight}
+ if(FOLD)GEO.fold={top:docTop(FOLD.hi)}}
 D.addEventListener('click',function(){GEO.t=0;setTimeout(function(){GEO.t=0;onScroll()},450)},true);W.addEventListener('resize',function(){GEO.t=0});W.addEventListener('load',function(){GEO.t=0});
 /* every scroll frame only writes : all sizes come from GEO, measured at most once a second */
 function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y;VEL=VEL*.8+dy*.2;if(performance.now()-GEO.t>1000)geoRefresh();
@@ -663,11 +691,13 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
  if(PBAR)PBAR.style.transform='scaleX('+(GEO.dh>vh?clamp(y/(GEO.dh-vh),0,1):0).toFixed(4)+')';
  if(HUB.length&&GEO.hub){var best=null,bd=1e9;HUB.forEach(function(c,i){var g=GEO.hub[i];if(!g)return;var top=g.top-y,h=g.h;if(top+h<-50||top>vh+50)return;
    var d=Math.abs(top+h/2-vh*.5);if(d<bd&&h<vh*.8){bd=d;best=c}
-   if(W.__SX30_CREW)return;
+   if(W.__SX30_CREW||HUBCSS)return;
    if(h>vh*.8){c.style.transform='';c.style.opacity='';return}
    var e=clamp((vh-top)/(vh*.5),0,1);e=1-Math.pow(1-e,3);var sd=i%2?1:-1,q=1-e;
    c.style.transform='translate3d('+(sd*q*120).toFixed(1)+'px,'+(q*90).toFixed(1)+'px,0) rotate('+(sd*q*8).toFixed(2)+'deg) scale('+(.76+.24*e).toFixed(4)+') skewY('+SKV+'deg)';c.style.opacity=e<.999?(.05+.95*e).toFixed(3):''});
   if(!FINE&&HUB.__best!==best){if(HUB.__best)HUB.__best.classList.remove('sx30-focus');if(best)best.classList.add('sx30-focus');HUB.__best=best}}
+ if(FOLD&&GEO.fold){var ft=GEO.fold.top-y,fp=clamp((vh*.92-ft)/(vh*.55),0,1);if(FOLD.card&&FOLD.card.classList.contains('open'))fp=1;var fs=fp.toFixed(3);
+  if(fs!==FOLD.st){FOLD.st=fs;FOLD.el.style.setProperty('--p',fs);var dn=fp>=.999;if(dn!==FOLD.dn){FOLD.dn=dn;FOLD.hi.classList.toggle('sx30-unfolded',dn)}}}
  if(MARK&&GEO.mTop!=null){var mt=GEO.mTop-y,mp=clamp((vh-mt)/(GEO.mH+vh*.35),0,1);MARK.style.transform='translate3d(0,'+((1-mp)*55).toFixed(1)+'%,0) scale('+(.82+.18*mp).toFixed(3)+')';MARK.style.opacity=(.15+.85*mp).toFixed(3)}}
 /* the scroll speed lean only touches the cards and the giant type, never the whole page */
 /* a custom property on a big block makes the browser restyle everything inside it, so the lean is written straight onto the two type rows */
