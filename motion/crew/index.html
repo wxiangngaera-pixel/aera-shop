@@ -575,7 +575,7 @@ function moversFrame(now,t){if(now-slotT>1000)grpRefresh();var s=WN.scrollY||0;
   g.cards.forEach(function(c,i){var u=clamp((q-i*.11)/.42,0,1),full=VW-c.__dl+40,off=(1-easeIO(u))*full;c.__off=off;c.__u=u;
    if(off>.5&&off<full-.5){rmost=Math.max(rmost,c.__dl+c.__dw+off)}
    var key=off<.5?'':off.toFixed(1);if(key===c.__k)return;
-   if(c.__tr0===undefined)c.__tr0=c.style.transition;c.__k=key;
+   if(c.__tr0===undefined)c.__tr0=c.style.transition;c.__k=key;c.style.opacity='';
    if(key===''){c.style.transform='';c.style.transition=c.__tr0}
    else{var rot=u>0?Math.sin(off/38+i)*1.2:0;c.style.transition='none';c.style.transform='translate3d('+key+'px,0,0) rotate('+rot.toFixed(2)+'deg)'}});
   var c0=g.cards[0],c0l=c0.__dl+c0.__off;
