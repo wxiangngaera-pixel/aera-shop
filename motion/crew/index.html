@@ -498,7 +498,7 @@ if(vf){if(!vf.querySelector('.sx30-scan')){var sc=D.createElement('div');sc.clas
  DIM=D.createElement('div');DIM.className='sx30-dim';vf.appendChild(DIM);
  LD=D.createElement('div');LD.className='sx30-load';LD.innerHTML='<i></i><b>0%</b><u><s></s></u><em>'+SAY.load+'</em>';vf.appendChild(LD);LDb=LD.querySelector('b');LDs=LD.querySelector('s')}
 /* only the head : everything else on this robot is hidden */
-PIX.g.children.forEach(function(c){if(c!==PIX.head)c.visible=false});PIX.head.position.y=.45;PIX.shade.material.opacity=0;
+PIX.g.children.forEach(function(c){if(c!==PIX.head)c.visible=false});PIX.head.position.y=.45;PIX.shade.material.opacity=0;PIX.head.children[0].material=mk(0xFFFFFF,0); /* white head, gold cap and visor stay */
 function hull(P){P=P.slice().sort(function(a,b){return a[0]-b[0]||a[1]-b[1]});function cr(o,a,b){return(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0])}
  var lo=[],up=[];P.forEach(function(p){while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],p)<=0)lo.pop();lo.push(p)});
  for(var i=P.length-1;i>=0;i--){var p=P[i];while(up.length>=2&&cr(up[up.length-2],up[up.length-1],p)<=0)up.pop();up.push(p)}up.pop();lo.pop();return lo.concat(up)}
@@ -522,7 +522,10 @@ function pixFrame(now,t){var r=PIX;if(!vf||!pw||!DIM){show(r,false);return}
  place(r,Math.min(VW-22,F.right+(VW<500?50:90)),F.bottom-F.height*.18,-.8,1);
  if(X.st==='off')return;
  /* the beam : from the eyes to the edge of the screen only, so the picture itself stays sharp inside the frame */
- var e=eyesAt(r),i=6,S=[[F.left+i,F.top+i],[F.right-i,F.top+i],[F.right-i,F.bottom-i],[F.left+i,F.bottom-i]],pts=hull([[e.x,e.y]].concat(S));
+ /* the screen outline : inside the 5px bezel, with the phone's rounded corners, so the light ends exactly at the screen */
+ var e=eyesAt(r),bw=5,rr=27,L0=F.left+bw,T0=F.top+bw,R0=F.right-bw,B0=F.bottom-bw,S=[];
+ [[R0-rr,T0+rr,-90],[R0-rr,B0-rr,0],[L0+rr,B0-rr,90],[L0+rr,T0+rr,180]].forEach(function(c){for(var k=0;k<=6;k++){var an=(c[2]+k*15)*Math.PI/180;S.push([c[0]+Math.cos(an)*rr,c[1]+Math.sin(an)*rr])}});
+ var pts=hull([[e.x,e.y]].concat(S));
  var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;pts.forEach(function(p){x0=Math.min(x0,p[0]);y0=Math.min(y0,p[1]);x1=Math.max(x1,p[0]);y1=Math.max(y1,p[1])});x0=Math.floor(x0);y0=Math.floor(y0);
  function q(p){return Math.round(p[0]-x0)+'px '+Math.round(p[1]-y0)+'px'}
  var path='polygon(evenodd,'+pts.map(q).join(',')+','+q(pts[0])+','+S.map(q).join(',')+','+q(S[0])+')';
