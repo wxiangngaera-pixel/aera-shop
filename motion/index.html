@@ -1097,12 +1097,26 @@ function kitchen(){
  function glide(){var m=$('.main')||$('main')||$('#main')||$('#app');if(!m)return;
   [].slice.call(m.children).slice(0,14).forEach(function(k,i){if(!vis(k))return;anim(k,[{opacity:0,translate:'0 16px'},{opacity:1,translate:'0 0'}],{duration:520,delay:i*35,easing:EASE,fill:'backwards'})})}
  W.addEventListener('hashchange',safe(function(){setTimeout(glide,60)}));setTimeout(glide,250)}
+/* personalised meal plan : whenever an item in a meal changes, its food drops into that compartment of the bento box */
+function bentoDrop(){if(!$('.mbento')&&!$('#planCal'))return;var MEM={};
+ var css=D.createElement('style');css.id='sx30BentoDrop';css.textContent='.mbento .bento b.sx30-drop{animation:sx30Drop .66s cubic-bezier(.22,.9,.3,1) both;z-index:2;box-shadow:0 10px 18px rgba(0,0,0,.3)}'+
+  '@keyframes sx30Drop{0%{transform:translateY(-135%) scale(1.14) rotate(-4deg);opacity:0}50%{opacity:1}80%{transform:translateY(3%) scale(.985) rotate(.4deg)}100%{transform:none;opacity:1}}'+
+  '.mbento .bento.sx30-pop{animation:sx30Tray .55s ease-out}@keyframes sx30Tray{0%,100%{transform:scale(1)}45%{transform:scale(1.03)}}';D.head.appendChild(css);
+ function url(b){var m=(b.getAttribute('style')||'').match(/url\(["']?([^"')]+)/);return m?m[1]:''}
+ function scan(first){$$('.mbento').forEach(function(mb,i){var card=mb.closest('.mcard'),panel=mb.closest('.dpanel'),pi=panel?$$('.dpanel').indexOf(panel):0,ci=card&&panel?$$('.mcard',panel).indexOf(card):i,key=pi+':'+ci,prev=MEM[key],now={},n=0,tray=$('.bento',mb);
+  $$('.bento > b',mb).forEach(function(b){var k=b.className.replace(/\bsx30-drop\b/g,'').trim(),u=url(b);now[k]=u;
+   if(!first&&prev&&u&&prev[k]!==u&&!b.classList.contains('empty')){var d=n++*130;b.classList.remove('sx30-drop');void b.offsetWidth;b.style.animationDelay=d+'ms';b.classList.add('sx30-drop');
+    if(tray&&n===1){tray.classList.remove('sx30-pop');setTimeout(function(){tray.classList.add('sx30-pop');setTimeout(function(){tray.classList.remove('sx30-pop')},600)},520)}
+    setTimeout(function(){b.classList.remove('sx30-drop');b.style.animationDelay=''},760+d)}});
+  MEM[key]=now})}
+ scan(true);var q=0;new MutationObserver(function(){if(q)return;q=setTimeout(function(){q=0;try{scan(false)}catch(e){}},30)}).observe(D.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style']})}
 var started=false;
 function start(){if(started)return;started=true;T0=Date.now();
  MODE=modeOf();H.classList.remove('sx30-full','sx30-app','sx30-kitchen');H.classList.add('sx30-'+MODE);
  HOMEPAGE=HOME&&!!$('#top.hero')&&MODE==='full';
  observers();
  [glass,shine,touches,desktop,wordmark,big].forEach(function(f){safe(f)()});
+ safe(bentoDrop)();
  if(MODE==='kitchen')safe(kitchen)();
  if(MODE==='full'&&!$('#sxBar')){PBAR=D.createElement('div');PBAR.id='sx30Bar';D.body.appendChild(PBAR)}
  function go(){
