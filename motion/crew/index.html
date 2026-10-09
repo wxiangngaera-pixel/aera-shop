@@ -307,14 +307,22 @@ if(window.__SX30_CREW_ON)return;window.__SX30_CREW_ON=1;window.__SX30_CREW=true;
 var D=document,WN=window;
 function need(cb){if(WN.THREE)return cb();var s=D.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';s.async=true;s.onload=cb;D.head.appendChild(s)}
 var ZH=/[一-鿿]/.test(((D.querySelector('h1')||{}).textContent||'')+D.title);
-var SAY=ZH?{hi:'你好！我是 Bento',fresh:'新鲜送到！',macro:'每盒都有营养数据',hungry:'饿了吗？',yum:'好选择！',zz:'Zzz…',whoa:'哇，慢一点！',proj:'正在播放 ▶',carry:'送餐中！',watch:'午餐时间到了吗？',up:'早安！'}
- :{hi:"Hi! I'm Bento",fresh:'Fresh delivery!',macro:'Macros on every box',hungry:'Hungry yet?',yum:'Yum, great pick!',zz:'Zzz…',whoa:'Whoa, slow down!',proj:'Now playing ▶',carry:'Coming through!',watch:'Is it lunch yet?',up:"I'm up, I'm up!"};
+var SAY=ZH?{hi:'你好！我是 Bento',fresh:'新鲜送到！',macro:'每盒都有营养数据',hungry:'饿了吗？',yum:'好选择！',zz:'Zzz…',whoa:'哇，慢一点！',proj:'正在播放 ▶',carry:'送餐中！',watch:'午餐时间到了吗？',up:'早安！',load:'正在投影视频'}
+ :{hi:"Hi! I'm Bento",fresh:'Fresh delivery!',macro:'Macros on every box',hungry:'Hungry yet?',yum:'Yum, great pick!',zz:'Zzz…',whoa:'Whoa, slow down!',proj:'Now playing ▶',carry:'Coming through!',watch:'Is it lunch yet?',up:"I'm up, I'm up!",load:'Projecting video'};
 var st=D.createElement('style');st.textContent=[
 '#sx30Crew{position:fixed;inset:0;z-index:44;pointer-events:none;overflow:hidden}',
 '#sx30Crew canvas{display:block;width:100%;height:100%}',
-'#sx30Beam{position:fixed;left:0;top:0;width:0;height:0;z-index:43;pointer-events:none;opacity:0;transition:opacity .5s;will-change:opacity;background:radial-gradient(circle at var(--ex,50%) var(--ey,50%),rgba(255,244,205,.42),rgba(253,215,110,.2) 22%,rgba(253,185,19,.07) 55%,rgba(253,185,19,.02) 80%,transparent)}',
-'#sx30Beam.on{opacity:1;animation:sx30Flick 2.4s steps(1) infinite}',
-'@keyframes sx30Flick{0%,100%{opacity:1}47%{opacity:.82}49%{opacity:1}52%{opacity:.9}}',
+'#sx30Beam{position:fixed;left:0;top:0;width:0;height:0;z-index:43;pointer-events:none;opacity:0;transition:opacity .15s linear;will-change:opacity;background:radial-gradient(circle at var(--ex,50%) var(--ey,50%),rgba(255,248,220,.75),rgba(253,215,110,.38) 20%,rgba(253,185,19,.14) 60%,rgba(253,185,19,.05) 100%)}',
+'#vFrame .sx30-dim{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:1;background:repeating-linear-gradient(0deg,rgba(253,185,19,.07) 0 2px,transparent 2px 5px),radial-gradient(circle at 50% 50%,#0b2552,#030a1c 80%)}',
+'#vFrame .sx30-load{position:absolute;inset:0;z-index:6;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;pointer-events:none;background:radial-gradient(circle at 50% 45%,#16479E,#06122c 78%);color:#fff;font:800 13px/1 Montserrat,system-ui,sans-serif;text-align:center}',
+'#vFrame .sx30-load.on{display:flex;animation:sx30LdIn .35s ease-out}',
+'@keyframes sx30LdIn{from{opacity:0;transform:scale(1.08)}}',
+'#vFrame .sx30-load i{width:64px;height:64px;border-radius:50%;border:5px solid rgba(253,185,19,.2);border-top-color:#FDB913;border-right-color:#FDB913;animation:sx30Ring 1s linear infinite;box-shadow:0 0 26px rgba(253,185,19,.45)}',
+'@keyframes sx30Ring{to{transform:rotate(360deg)}}',
+'#vFrame .sx30-load b{font-size:30px;letter-spacing:.02em;color:#FDB913;text-shadow:0 0 14px rgba(253,185,19,.6)}',
+'#vFrame .sx30-load u{display:block;width:66%;height:7px;border-radius:9px;background:rgba(255,255,255,.14);overflow:hidden;text-decoration:none}',
+'#vFrame .sx30-load s{display:block;height:100%;width:0;background:linear-gradient(90deg,#FDB913,#FFE08A);box-shadow:0 0 12px #FDB913;text-decoration:none}',
+'#vFrame .sx30-load em{font-style:normal;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.8)}',
 '#sx30Say{position:fixed;left:0;top:0;z-index:46;pointer-events:none;padding:7px 11px;border-radius:14px;background:#fff;color:#16479E;border:2px solid #16479E;font:800 12px/1.2 Montserrat,system-ui,sans-serif;white-space:nowrap;box-shadow:0 8px 20px rgba(11,28,54,.25);opacity:0;transform-origin:50% 100%;transition:opacity .25s}',
 '#sx30Say.on{opacity:1}',
 '#sx30Say::after{content:"";position:absolute;left:50%;bottom:-8px;width:12px;height:12px;margin-left:-6px;background:#fff;border-right:2px solid #16479E;border-bottom:2px solid #16479E;transform:rotate(45deg)}',
@@ -481,32 +489,45 @@ function lifeFrame(now,t){var r=LIFE,o={},feet=VH-26,moving=false,run=false;show
  var yawT=moving?(L.face>0?.55:-.55):(L.mode==='watch'?.35:(L.mode==='point'?.7:0));
  place(r,L.sx,feet,yawT);blink(r,now);if(L.mode==='sleep'){r.eyeL.scale.y=r.eyeR.scale.y=.12}}
 
-/* ---------- Pixel : projects the video onto the phone ---------- */
-var X={st:'off',sx:VW+60,t0:0,booted:false};
-var vf=D.getElementById('vFrame'),pw=D.querySelector('#heroPic .phonewrap');
-if(vf&&!vf.querySelector('.sx30-scan')){var sc=D.createElement('div');sc.className='sx30-scan';vf.appendChild(sc)}
+/* ---------- Pixel : a projector head that sits beside the phone and beams the video onto its screen ----------
+   The head never walks or moves. As the phone scrolls away the picture slowly powers down; when it comes back,
+   the screen shows a loading meter before the picture flickers back on. */
+var X={st:'off',t0:0,on:0,key:'',dim:'',bo:'',pct:-1};
+var vf=D.getElementById('vFrame'),pw=D.querySelector('#heroPic .phonewrap'),DIM=null,LD=null,LDb=null,LDs=null;
+if(vf){if(!vf.querySelector('.sx30-scan')){var sc=D.createElement('div');sc.className='sx30-scan';vf.appendChild(sc)}
+ DIM=D.createElement('div');DIM.className='sx30-dim';vf.appendChild(DIM);
+ LD=D.createElement('div');LD.className='sx30-load';LD.innerHTML='<i></i><b>0%</b><u><s></s></u><em>'+SAY.load+'</em>';vf.appendChild(LD);LDb=LD.querySelector('b');LDs=LD.querySelector('s')}
+/* only the head : everything else on this robot is hidden */
+PIX.g.children.forEach(function(c){if(c!==PIX.head)c.visible=false});PIX.head.position.y=.45;PIX.shade.material.opacity=0;
 function hull(P){P=P.slice().sort(function(a,b){return a[0]-b[0]||a[1]-b[1]});function cr(o,a,b){return(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0])}
  var lo=[],up=[];P.forEach(function(p){while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],p)<=0)lo.pop();lo.push(p)});
  for(var i=P.length-1;i>=0;i--){var p=P[i];while(up.length>=2&&cr(up[up.length-2],up[up.length-1],p)<=0)up.pop();up.push(p)}up.pop();lo.pop();return lo.concat(up)}
-function pixFrame(now,t){var r=PIX;if(!vf||!pw){show(r,false);return}
- var F=vf.getBoundingClientRect(),ready=!D.getElementById('sx30Intro')&&pw.classList.contains('sx-pin'),inV=F.bottom>40&&F.top<VH-40&&F.width>0;
- if(!inV||!ready){if(X.st!=='off'){X.st='off';show(r,false);beam.classList.remove('on');glow(r,false);X.booted=false}return}
- var gap=VW<500?30:58,tx=Math.min(VW-26,F.right+gap),feet=F.bottom+2,o={},moving=false;
- if(X.st==='off'){X.st='enter';X.sx=VW+60;show(r,true)}
- if(X.st==='enter'){moving=true;var d=tx-X.sx;X.sx+=Math.sign(d)*Math.min(Math.abs(d),2.6*(PPU/34));pWalk(t,true,o);if(Math.abs(d)<3){X.st='setup';X.t0=now}}
- else{X.sx+= (tx-X.sx)*.2}
- if(X.st==='setup'){var u=(now-X.t0)/700;pBrace(t,.5,o);o.hx=-.2;if(u>=1){X.st='on';X.t0=now;glow(r,true);beam.classList.add('on');
-   if(!X.booted){X.booted=true;vf.classList.remove('sx30-boot');void vf.offsetWidth;vf.classList.add('sx30-boot');setTimeout(function(){vf.classList.remove('sx30-boot')},1700)}
-   if(performance.now()-lastTalk>4000)talk(PIX,SAY.proj,2000)}}
- if(X.st==='on'){pProject(t,o);if(Math.sin(t*.37)>.985){o.rsz=-1.9;o.rez=Math.sin(t*11)*.4}}
- pose(r,o,moving?.35:.16);
- place(r,X.sx,feet,X.st==='enter'?-.55:-1.05,.12);blink(r,now);
- if(X.st==='on'){var e=eyesAt(r),pts=hull([[e.x,e.y],[F.left+6,F.top+6],[F.right-6,F.top+6],[F.right-6,F.bottom-6],[F.left+6,F.bottom-6]]);
-  var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;pts.forEach(function(p){x0=Math.min(x0,p[0]);y0=Math.min(y0,p[1]);x1=Math.max(x1,p[0]);y1=Math.max(y1,p[1])});
-  x0=Math.floor(x0);y0=Math.floor(y0);var key=x0+','+y0+','+Math.round(x1)+','+Math.round(y1)+','+pts.map(function(p){return Math.round(p[0])+' '+Math.round(p[1])}).join(',');
-  if(key!==X.key){X.key=key;beam.style.left=x0+'px';beam.style.top=y0+'px';beam.style.width=Math.ceil(x1-x0)+'px';beam.style.height=Math.ceil(y1-y0)+'px';
-   beam.style.clipPath='polygon('+pts.map(function(p){return Math.round(p[0]-x0)+'px '+Math.round(p[1]-y0)+'px'}).join(',')+')';
-   beam.style.setProperty('--ex',Math.round(e.x-x0)+'px');beam.style.setProperty('--ey',Math.round(e.y-y0)+'px')}}}
+function pixFrame(now,t){var r=PIX;if(!vf||!pw||!DIM){show(r,false);return}
+ var F=vf.getBoundingClientRect(),ready=!D.getElementById('sx30Intro')&&pw.classList.contains('sx-pin');
+ var seen=Math.min(F.bottom,VH)-Math.max(F.top,0),ratio=(ready&&F.height>0)?clamp(seen/F.height,0,1):0,want=clamp((ratio-.25)/.5,0,1);
+ if(X.st==='off'&&ratio>.6){X.st='load';X.t0=now;X.pct=-1;LD.classList.add('on');vf.classList.add('sx30-loading')}
+ if(X.st==='load'){var u=Math.min(1,(now-X.t0)/2600),pct=Math.round(100*(1-Math.pow(1-u,2.2)));
+  if(pct!==X.pct){X.pct=pct;LDb.textContent=pct+'%';LDs.style.width=pct+'%'}
+  X.on=.25+.35*Math.abs(Math.sin(t*16))*Math.min(1,u*3);
+  if(ratio<.2){X.st='off';X.on=0;LD.classList.remove('on');vf.classList.remove('sx30-loading')}
+  else if(u>=1){X.st='on';X.on=1;LD.classList.remove('on');vf.classList.remove('sx30-loading');vf.classList.remove('sx30-boot');void vf.offsetWidth;vf.classList.add('sx30-boot');
+   setTimeout(function(){vf.classList.remove('sx30-boot')},1700);if(now-lastTalk>4000)talk(PIX,SAY.proj,1800)}}
+ if(X.st==='on'){X.on+=(want-X.on)*.06;if(want<.12&&X.on<.15){X.st='off';X.on=0}}
+ /* screen : dark when off, powers down gradually as the phone scrolls away */
+ var dim=(X.st==='on'?clamp(1-X.on,0,1):1).toFixed(2);if(dim!==X.dim){X.dim=dim;DIM.style.opacity=dim}
+ var bo=(X.st==='off'?0:clamp(X.on,0,1)).toFixed(2);if(bo!==X.bo){X.bo=bo;beam.style.opacity=bo}
+ /* the head : sits still beside the lower right corner of the phone, looking at the screen */
+ var inV=F.bottom>-80&&F.top<VH+80&&ready;show(r,inV);if(!inV)return;
+ r.sc=VW<500?1.25:1.5;pose(r,{hx:-.14},1);glow(r,X.st!=='off');
+ place(r,Math.min(VW-24,F.right+(VW<500?20:34)),F.bottom-F.height*.18,-.8,1);
+ if(X.st==='off')return;
+ /* the beam : from the eyes to the edge of the screen only, so the picture itself stays sharp inside the frame */
+ var e=eyesAt(r),i=6,S=[[F.left+i,F.top+i],[F.right-i,F.top+i],[F.right-i,F.bottom-i],[F.left+i,F.bottom-i]],pts=hull([[e.x,e.y]].concat(S));
+ var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;pts.forEach(function(p){x0=Math.min(x0,p[0]);y0=Math.min(y0,p[1]);x1=Math.max(x1,p[0]);y1=Math.max(y1,p[1])});x0=Math.floor(x0);y0=Math.floor(y0);
+ function q(p){return Math.round(p[0]-x0)+'px '+Math.round(p[1]-y0)+'px'}
+ var path='polygon(evenodd,'+pts.map(q).join(',')+','+q(pts[0])+','+S.map(q).join(',')+','+q(S[0])+')';
+ var key=x0+','+y0+','+path;if(key!==X.key){X.key=key;beam.style.left=x0+'px';beam.style.top=y0+'px';beam.style.width=Math.ceil(x1-x0)+'px';beam.style.height=Math.ceil(y1-y0)+'px';
+  beam.style.clipPath=path;beam.style.setProperty('--ex',Math.round(e.x-x0)+'px');beam.style.setProperty('--ey',Math.round(e.y-y0)+'px')}}
 
 /* ---------- the movers : every homepage card is carried in ---------- */
 var CARDS=[].slice.call(D.querySelectorAll('#hub .hitem'));
