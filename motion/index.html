@@ -414,7 +414,7 @@ css([
 'html.sx30 #top h1.sx30-done span{background:linear-gradient(100deg,#FDB913 30%,#FFF6D2 46%,#FDB913 62%) 0 0/300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:sx30Txt 2.4s linear 2}',
 '@keyframes sx30Txt{from{background-position:100% 0}to{background-position:-200% 0}}',
 /* homepage cards : they sweep in from alternate sides as you scroll, driven by the browser itself so they never shake */
-'@supports (animation-timeline: view()){html.sx30 #hub .hacc .hitem{animation:sx30HubIn linear both;animation-timeline:view();animation-range:entry 0% cover 42%;animation-timing-function:cubic-bezier(.2,.9,.25,1)}html.sx30 #hub .hacc .hitem:nth-child(odd){--sd:-1}html.sx30 #hub .hacc .hitem:nth-child(even){--sd:1}html.sx30 #hub .hacc .hitem.open{animation:none}}',
+'@supports (animation-timeline: view()){html.sx30 #hub .hacc .hitem{animation:sx30HubIn linear both;animation-timeline:view();animation-range:entry 0% cover 28%;animation-timing-function:cubic-bezier(.2,.9,.25,1)}html.sx30 #hub .hacc .hitem:nth-child(odd){--sd:-1}html.sx30 #hub .hacc .hitem:nth-child(even){--sd:1}html.sx30 #hub .hacc .hitem.open{animation:none}}',
 '@keyframes sx30HubIn{from{opacity:.05;transform:translate3d(calc(var(--sd,1)*120px),90px,0) rotate(calc(var(--sd,1)*8deg)) scale(.76)}to{opacity:1;transform:none}}',
 /* the AERA menu stand : lifted out of its picture, it pops out lying flat, stands up and opens its back leg like a real tent-card stand as you scroll down, then slots back in ; scrolling up folds it the same way */
 '#sx30MenuPop{position:absolute;left:0;top:0;width:10px;height:10px;z-index:30;pointer-events:none;perspective:900px;display:none}',
@@ -841,9 +841,9 @@ function frame(){tick=false;var y=W.scrollY||0,vh=innerHeight,dy=y-lastY;lastY=y
    c.style.transform='translate3d('+(sd*q*120).toFixed(1)+'px,'+(q*90).toFixed(1)+'px,0) rotate('+(sd*q*8).toFixed(2)+'deg) scale('+(.76+.24*e).toFixed(4)+') skewY('+SKV+'deg)';c.style.opacity=e<.999?(.05+.95*e).toFixed(3):''});
   if(!FINE&&HUB.__best!==best){if(HUB.__best)HUB.__best.classList.remove('sx30-focus');if(best)best.classList.add('sx30-focus');HUB.__best=best}}
  if(MPOP&&MPOP.el&&GEO.mp){var open=!!(MPOP.card&&MPOP.card.classList.contains('open'));if(open!==MPOP.open){MPOP.open=open;MPOP.st='';if(open){MPOP.src='0';MPOP.im.src=MPOP.src0;MPOP.shown=false;MPOP.el.style.display='none'}}
-  if(!open){var mp=clamp((vh*.5-(GEO.mp.ht-y))/(vh*.22),0,1) /* finishes before the next card starts packing */,ms=mp.toFixed(3);if(ms!==MPOP.st){MPOP.st=ms;mpSet(mp)}}}
+  if(!open){var mp=clamp((vh*.66-(GEO.mp.ht-y))/(vh*.22),0,1) /* finishes before the next card starts packing */,ms=mp.toFixed(3);if(ms!==MPOP.st){MPOP.st=ms;mpSet(mp)}}}
  if(VPOP&&VPOP.el&&GEO.vp){var vo=!!(VPOP.card&&VPOP.card.classList.contains('open'));if(vo!==VPOP.open){VPOP.open=vo;VPOP.st='';if(vo){VPOP.im.style.visibility='';VPOP.hid=false;VPOP.shown=false;VPOP.el.style.display='none'}}
-  if(!vo){var vq=clamp((vh*.5-(GEO.vp.ht-y))/(vh*.46),0,1),vs=vq.toFixed(3);if(vs!==VPOP.st){VPOP.st=vs;vpSet(vq)}}}
+  if(!vo){var vq=clamp((vh*.64-(GEO.vp.ht-y))/(vh*.44),0,1) /* all done while the card is still in the lower half, well clear of the title bar */,vs=vq.toFixed(3);if(vs!==VPOP.st){VPOP.st=vs;vpSet(vq)}}}
  if(MARK&&GEO.mTop!=null){var mt=GEO.mTop-y,mp=clamp((vh-mt)/(GEO.mH+vh*.35),0,1);MARK.style.transform='translate3d(0,'+((1-mp)*55).toFixed(1)+'%,0) scale('+(.82+.18*mp).toFixed(3)+')';MARK.style.opacity=(.15+.85*mp).toFixed(3)}}
 /* the scroll speed lean only touches the cards and the giant type, never the whole page */
 /* a custom property on a big block makes the browser restyle everything inside it, so the lean is written straight onto the two type rows */
