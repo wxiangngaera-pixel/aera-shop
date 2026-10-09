@@ -551,7 +551,7 @@ D.addEventListener('click',function(){slotT=0;setTimeout(function(){slotT=0},450
 var mz;WN.addEventListener('resize',function(){clearTimeout(mz);mz=setTimeout(function(){margins();slotT=0},200)},{passive:true});
 /* the rope layer sits just under the robots */
 var NS='http://www.w3.org/2000/svg',RS=D.createElementNS(NS,'svg');RS.setAttribute('class','sx30-rope');RS.setAttribute('aria-hidden','true');
-RS.style.cssText='position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:43;overflow:visible';D.body.appendChild(RS);
+RS.style.cssText='position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:43;overflow:visible;opacity:.45';D.body.appendChild(RS);
 function el(n,a){var e=D.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);return e}
 function rope(parent){var a=el('path',{fill:'none',stroke:'#A87A3E','stroke-width':'3.4','stroke-linecap':'round'}),b=el('path',{fill:'none',stroke:'#6E4B1F','stroke-width':'3.4','stroke-linecap':'round','stroke-dasharray':'2 5',opacity:'.75'}),k=el('circle',{r:'4.5',fill:'#6E4B1F'});
  parent.appendChild(a);parent.appendChild(b);parent.appendChild(k);return{a:a,b:b,k:k,d:''}}
