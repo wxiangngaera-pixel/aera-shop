@@ -9,6 +9,8 @@
  self.addEventListener('activate',function(e){e.waitUntil(self.clients.claim())});
  self.addEventListener('push',function(e){
   var d={};try{d=e.data?e.data.json():{}}catch(x){d={body:e.data?e.data.text():''}}
+  /* the number on the app icon, like WhatsApp ( sent with kitchen New Order alerts ) */
+  var nb=parseInt(d.badge,10);if(nb>=0&&self.navigator&&self.navigator.setAppBadge){try{(nb?self.navigator.setAppBadge(nb):self.navigator.clearAppBadge()).catch(function(){})}catch(x){}}
   e.waitUntil(self.registration.showNotification(d.title||'New message from AERA',{
    body:d.body||'You have a new message in your AERA Inbox.',icon:ICON,badge:BADGE,
    tag:d.tag||'aera-inbox',renotify:true,data:{url:d.url||INBOX}}));
