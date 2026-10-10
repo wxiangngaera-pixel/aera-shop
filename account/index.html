@@ -3450,8 +3450,11 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();P=e;bar(true)});
  window.addEventListener('appinstalled',function(){bar(false);sheet(false)});
  var BTN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M12 7v7M9 11l3 3 3-3"/></svg><span>Get The App</span>';
+ /* the button carries the app's own icon and name, the way it will look on the Home Screen */
+ var AIC=(C.icons&&(C.icons['180']||C.icons['192']))||(I+'180');
+ function appBtnHtml(){return '<img src="'+AIC+'" alt="" style="width:24px;height:24px;border-radius:6px;flex:none;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.4)"><span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.1;text-align:left"><small style="font-size:.7em;font-weight:700;opacity:.85">Get The App</small><b style="white-space:nowrap">'+(C.short||C.name||'AERA')+'</b></span>'}
  function mount(){if(el('aaGetApp'))return true;var host=document.querySelector(C.mount);if(!host)return false;
-  var b=document.createElement('button');b.type='button';b.id='aaGetApp';b.className='aera-getapp';b.setAttribute('aria-label','Get The App');b.innerHTML=BTN;b.onclick=go;
+  var b=document.createElement('button');b.type='button';b.id='aaGetApp';b.className='aera-getapp';b.setAttribute('aria-label','Get The App');b.innerHTML=appBtnHtml();b.onclick=go;
   host.insertBefore(b,host.firstChild);return true}
  function build(){
   mount();try{new MutationObserver(function(){if(!el('aaGetApp'))mount()}).observe(document.body,{childList:true,subtree:true})}catch(e){}
