@@ -1409,7 +1409,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]):not(:focus),selec
  function build(){
   var nav=document.querySelector('.top .pnav');
   if(nav&&!el('getAppBtn')){var b=document.createElement('button');b.type='button';b.id='getAppBtn';b.className='getapp plink';
-   b.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M12 7v7M9 11l3 3 3-3"/></svg><span>Get The App</span>';
+   b.innerHTML='<img src="https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/sign/kc-app/icons/fridge-yellow-180.png?token=eyJraWQiOiJjNjRlYTIxMi01YmFiLTRjNmMtODcwNS00ZGE3Y2U5YmZiMTYiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJrYy1hcHAvaWNvbnMvZnJpZGdlLXllbGxvdy0xODAucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc5MTE4MDQzNCwiZXhwIjoyMTA2NTQwNDM0fQ._syko6ZvojMd-h6pghQ-VxjtKagq9Tcs6M8ui7ayNKZ8bmC36UHuVpMtGp5boVJAsV7YNdeA59ONouYArvxmAw" alt="" style="width:22px;height:22px;border-radius:6px;flex:none;display:block"><span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.1;text-align:left"><small style="font-size:.72em;font-weight:700;opacity:.85">Get The App</small><b style="white-space:nowrap">AERA Fridge</b></span>';b.style.display='inline-flex';b.style.alignItems='center';b.style.gap='7px';
    b.onclick=go;nav.insertBefore(b,nav.firstChild)}
   if(!el('appHow')){var h=document.createElement('div');h.id='appHow';h.innerHTML='<div class="sh"></div>';document.body.appendChild(h);
    h.onclick=function(e){if(e.target===h||e.target.classList.contains('ok'))sheet(false)}}
