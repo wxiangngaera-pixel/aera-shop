@@ -614,5 +614,12 @@ window.__AERAPK_T=setInterval(loop,1500);if(document.readyState!=='loading')loop
 window.AERAPK={offer:offer,login:login};
 })();
 </script>
+<script>/* AERA-BADGE : the number on the AERA Console app icon ( like WhatsApp ) = Orders not accepted yet, for today onwards */
+(function(){if(!('setAppBadge' in navigator))return;
+function upd(){var sb=window.__KC_SB;if(!sb||!sb.rpc)return;sb.rpc('kc_web_orders',{p_days:45}).then(function(r){if(!r||r.error||!Array.isArray(r.data))return;
+ var today=new Date(Date.now()+8*3600e3).toISOString().slice(0,10);
+ var n=r.data.filter(function(o){return String(o.status||'new')==='new'&&String(o.gateway||'').toLowerCase()!=='legacy'&&(!o.date||String(o.date)>=today)}).length;
+ (n?navigator.setAppBadge(n):navigator.clearAppBadge()).catch(function(){})}).catch(function(){})}
+setTimeout(upd,4000);setInterval(upd,60000);document.addEventListener('visibilitychange',function(){if(!document.hidden)setTimeout(upd,800)});})();</script>
 </body>
 </html>
