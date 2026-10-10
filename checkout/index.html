@@ -1743,7 +1743,7 @@ async function pay(){var m=document.getElementById('payMsg');m.innerHTML='';
  var msg=compactOrder(order);window.__foUsed=foRM>0?('aera.foUsed:'+email.toLowerCase()):'';window.__bdayUsed=bday>0?email.toLowerCase()+':'+bdayYear():'';try{if(window.__bdayUsed)localStorage.setItem('aera.bdayPending',window.__bdayUsed);else localStorage.removeItem('aera.bdayPending')}catch(e){}
  if(PAY.gateway==='billplz'){
    if(!PAY.flowUrl)return msg.innerHTML='<div class="msg warn">Billplz is not configured on this page. Add the flow webhook address to the settings sheet under <b>billplz_flow_url</b>, or open this page with <b>?gw=stripe</b>.</div>';
-   return payBillplz(order,msg,total,name,email,phone)}
+   return orderStash(order.orderNo).then(function(){payBillplz(order,msg,total,name,email,phone)})}
  if(typeof window.__processDonation!=='function')return m.innerHTML='<div class="msg bad">Checkout is not available right now. Please WhatsApp us to order.</div>';
  try{sessionStorage.setItem('aera.lastOrder',JSON.stringify(order))}catch(e){}
  if(vCode)try{localStorage.setItem('aera.voucherPending',vCode)}catch(e){}
@@ -1760,7 +1760,7 @@ function payBillplz(order,msg,total,name,email,phone){var m=document.getElementB
  var key=billKey(order.orderNo,email);
  fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact(order.orderNo),data:{action:'create',orderNo:order.orderNo,amountCents:Math.round(total*100),custEmail:email,custName:name,custPhone:phone}})})
  .then(function(r){return r.json()}).then(function(j){if(!j||!j.success)throw new Error('flow');return bpPoll(function(r){return String(r.Key||'')===key},PAY.pollMax)})
- .then(function(row){if(row&&row['Bill URL']&&String(row.Status||'')==='created'){btn.textContent='Opening secure payment…';location.href=row['Bill URL'];return}
+ .then(function(row){if(row&&row['Bill URL']&&String(row.Status||'')==='created'){btn.textContent='Opening secure payment…';var go=function(){location.href=row['Bill URL']};if(!row['Bill ID'])return go();Promise.race([fetch(ORD_SB+'/rest/v1/rpc/order_bill',{method:'POST',headers:{apikey:ORD_ANON,Authorization:'Bearer '+ORD_ANON,'Content-Type':'application/json'},body:JSON.stringify({p_no:order.orderNo,p_bill:String(row['Bill ID'])})}).catch(function(){}),new Promise(function(r){setTimeout(r,3000)})]).then(go);return}
   btn.disabled=false;renderCart();m.innerHTML='<div class="msg bad">Could not start payment'+(row&&/^failed/.test(String(row.Status||''))?' (payment provider error)':'')+'. Please try again or WhatsApp us.</div>'})
  .catch(function(){btn.disabled=false;renderCart();m.innerHTML='<div class="msg bad">Could not start payment. Please try again or WhatsApp us.</div>'})}
 /* Top-Up paid by Billplz : same bill flow as an Order ( flow 5488 ), the page comes back to bpReturn, which hands over to tuReturn. */
@@ -1774,6 +1774,7 @@ function tuBillplz(no,msg,email,name,a,tb){var m=document.getElementById('tuMsg'
  .then(function(r){return r.json()}).then(function(j){if(!j||!j.success)throw new Error('flow');return bpPoll(function(r){return String(r.Key||'')===key},PAY.pollMax)})
  .then(function(row){if(row&&row['Bill URL']&&String(row.Status||'')==='created'){location.href=row['Bill URL'];return}throw new Error('nobill')})
  .catch(function(){btn.disabled=false;btn.textContent='Pay Securely';try{sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(x){}m.innerHTML='<div class="msg bad">Could not start payment. Please try again or WhatsApp us.</div>'})}
+var BP_CB='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/billplz-callback'; // Billplz callback_url too: books paid orders even if the customer never comes back
 function bpReturn(){var q=new URLSearchParams(location.search);var id=q.get('billplz[id]');if(!id)return false;var paid=q.get('billplz[paid]')==='true';history.replaceState(null,'',location.pathname);
  var pending=null;try{pending=JSON.parse(sessionStorage.getItem('aera.pendingOrder')||localStorage.getItem('aera.pendingOrder')||'null')}catch(e){}
  var m=document.getElementById('payMsg');if(window.innerWidth<=940)openCart();
@@ -1784,10 +1785,14 @@ function bpReturn(){var q=new URLSearchParams(location.search);var id=q.get('bil
   try{localStorage.setItem(doneKey,'1');var tp=JSON.stringify(pending.tup);sessionStorage.setItem('aera.topupPending',tp);localStorage.setItem('aera.topupPending',tp);sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(e){}
   tuReturn();return true}
  if(done){thanks(pending&&pending.orderNo);return true}
- if(!pending||!pending.msg){bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! We could not match this payment to an order in this browser — please WhatsApp us your Billplz receipt so the kitchen can confirm your order.</p>');return true}
+ if(!pending||!pending.msg){bpShow('<h2>Confirming your payment…</h2><p style="color:var(--ink2)">One moment while we verify it with Billplz.</p>');
+  fetch(BP_CB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id,paid:'true'})}).then(function(r){return r.json()}).catch(function(){return null})
+  .then(function(j){if(!j||!(j.claimed||j.reason==='already'))return null;return bpPoll(function(r){return String(r.Key||'')==='paid:'+id},75)})
+  .then(function(row){if(row&&String(row.Status||'')==='paid')thanks('');else bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! We could not match this payment to an order in this browser — please WhatsApp us your Billplz receipt so the kitchen can confirm your order.</p>')});return true}
  bpShow('<h2>Confirming your payment…</h2><p style="color:var(--ink2)">One moment while we verify it with Billplz.</p>');
- fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact('verify'),data:{action:'verify',billId:id,message:pending.msg,custEmail:pending.email}})})
- .then(function(r){return r.json()},function(){return null}).then(function(){return bpPoll(function(r){return String(r.Key||'')==='paid:'+id},60)})
+ fetch(BP_CB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id,paid:'true'})}).then(function(r){return r.json()}).catch(function(){return null})
+ .then(function(j){if(j&&j.ok&&(j.claimed||j.reason==='already'))return null;return fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact('verify'),data:{action:'verify',billId:id,message:pending.msg,custEmail:pending.email}})}).then(function(r){return r.json()},function(){return null})})
+ .then(function(){return bpPoll(function(r){return String(r.Key||'')==='paid:'+id},75)})
  .then(function(row){if(row&&String(row.Status||'')==='paid')thanks(pending.orderNo);else bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! Billplz confirmed the payment but our system could not record order <b>'+esc(pending.orderNo)+'</b> automatically'+(row?' ( '+esc(String(row.Status||''))+' )':'')+'. Please WhatsApp us and we will confirm it by hand.</p>')})
  .catch(function(){bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! We could not reach our order system just now — please WhatsApp us with order <b>'+esc(pending.orderNo)+'</b>.</p>')});
  return true}
