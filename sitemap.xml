@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
-    <lastmod>2026-10-11T06:49:52.389Z</lastmod>
+    <loc>https://aeramealprep.net/meal-plan/</loc>
+    <lastmod>2026-10-11T06:50:04.951Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/meal-plan/</loc>
-    <lastmod>2026-10-11T06:49:42.693Z</lastmod>
+    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
+    <lastmod>2026-10-11T06:49:52.389Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
