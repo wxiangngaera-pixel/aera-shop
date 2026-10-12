@@ -1091,8 +1091,9 @@ async function doSignup(e){e.preventDefault();busy('sBtn',true,'Creating…');ms
 async function doForgot(e){e.preventDefault();busy('fBtn',true,'Sending…');msg('authMsg','');try{var r=await sb.auth.resetPasswordForEmail($('#fEmail').value.trim(),{redirectTo:location.origin+location.pathname});if(r.error)throw r.error;msg('authMsg','<div class="msg ok">If that email has an account, a reset link is on its way.</div>')}catch(err){msg('authMsg','<div class="msg bad">'+esc(friendly(err))+'</div>')}busy('fBtn',false);return false}
 async function doReset(e){e.preventDefault();busy('rBtn',true,'Saving…');msg('authMsg','');try{var r=await sb.auth.updateUser({password:$('#rPass').value});if(r.error)throw r.error;RECOVERY=false;history.replaceState(null,'',location.pathname);msg('authMsg','<div class="msg ok">Password saved — you are signed in.</div>');var s=await sb.auth.getSession();USER=s.data.session?s.data.session.user:null;if(USER)showAccount()}catch(err){msg('authMsg','<div class="msg bad">'+esc(friendly(err))+'</div>')}busy('rBtn',false);return false}
 async function doLogout(back){try{await sb.auth.signOut()}catch(e){}
- USER=null;PROFILE=null;ADDRS=[];
- try{['aera.account','aera.refLock'].forEach(function(k){localStorage.removeItem(k)})}catch(e){}
+ USER=null;PROFILE=null;ADDRS=[];FAVS=null;
+ try{['aera.account','aera.refLock','aera.planDraft','aera.favs'].forEach(function(k){localStorage.removeItem(k)})}catch(e){}
+ try{['aera.planDraft','aera.planOpen'].forEach(function(k){sessionStorage.removeItem(k)})}catch(e){}
  if(back){location.replace(HOME_URL);return}
  showAuth()}
 /* ===== Account ===== */
@@ -1298,8 +1299,14 @@ async function phoneVerify(){var code=($('#pCode').value||'').replace(/[^0-9]/g,
 async function saveProfile(e){e.preventDefault();busy('pBtn',true,'Saving…');var up={id:USER.id,email:USER.email.toLowerCase(),name:$('#pName').value.trim(),birth_date:$('#pDob').value||null,packaging:$('#pPack').value,updated_at:new Date().toISOString()};var r=await sb.from('profiles').upsert(up);busy('pBtn',false);if(r.error){msg('pMsg',' <span class="chip bad">'+esc(friendly(r.error))+'</span>');return false}Object.assign(PROFILE,up);$('#who').textContent=PROFILE.name||'Welcome';cacheAccount();loadPoints();msg('pMsg',' <span class="chip ok">Saved</span>');return false}
 async function savePrefs(e){e.preventDefault();busy('qBtn',true,'Saving…');var up={id:USER.id,email:USER.email.toLowerCase(),seasoning:$('#qSeason').value,spice:$('#qSpice').value,allergens:$('#qAllergens').value.trim(),dislikes:$('#qDislikes').value.trim(),updated_at:new Date().toISOString()};var r=await sb.from('profiles').upsert(up);busy('qBtn',false);if(r.error){msg('qMsg',' <span class="chip bad">'+esc(friendly(r.error))+'</span>');return false}Object.assign(PROFILE,up);cacheAccount();msg('qMsg',' <span class="chip ok">Saved</span>');return false}
 /* ===== Favourite plans ( starred on this device ) ===== */
-function loadFavs(){try{return JSON.parse(localStorage.getItem('aera.favs')||'[]')}catch(e){return[]}}
-function saveFavs(f){try{localStorage.setItem('aera.favs',JSON.stringify(f))}catch(e){}}
+/* Favourite plans are kept in the customer's account ( plan_store ), never in this browser. Stars left in a browser by the old version move into the account that signs in, unless the plan is saved under another account. */
+var FAVS=null,FAVS_BUSY=false;
+function loadFavs(){return FAVS||[]}
+function saveFavs(f){FAVS=f;if(!USER||!sb)return;var now=new Date().toISOString();sb.from('plan_store').upsert({user_id:USER.id,email:String(USER.email||'').toLowerCase(),favs:f,favs_at:now,updated_at:now},{onConflict:'user_id'}).then(function(){})}
+function favsFetch(cb){if(!USER||!sb){FAVS=[];if(cb)cb();return}if(FAVS_BUSY)return;FAVS_BUSY=true;
+ sb.from('plan_store').select('favs').eq('user_id',USER.id).maybeSingle().then(function(r){FAVS=(r&&r.data&&r.data.favs)||[];var old=[];try{old=JSON.parse(localStorage.getItem('aera.favs')||'[]')||[]}catch(e){}
+  if(!old.length){FAVS_BUSY=false;if(cb)cb();return}
+  Promise.all(old.map(function(x){return x&&x.id?sb.rpc('plan_id_state',{p_id:x.id}).then(function(s){return s&&!s.error&&s.data!=='other'?x:null},function(){return null}):Promise.resolve(null)})).then(function(keep){var have={};FAVS.forEach(function(x){have[x.id]=1});keep.forEach(function(x){if(x&&!have[x.id]){FAVS.push(x);have[x.id]=1}});FAVS.sort(function(p,q){return (q.at||0)-(p.at||0)});FAVS=FAVS.slice(0,20);try{localStorage.removeItem('aera.favs')}catch(e){}saveFavs(FAVS);FAVS_BUSY=false;if(cb)cb()})},function(){FAVS=[];FAVS_BUSY=false;if(cb)cb()})}
 function loadHomeLib(){try{return JSON.parse(localStorage.getItem('aera.home')||'[]')}catch(e){return[]}}
 function renderHome(){renderOverview();var el=$('#homeLib');if(!el)return;var a=loadHomeLib();
  el.innerHTML=a.length?a.map(function(h,i){return'<div class="line" style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)"><span><b>'+esc(h.n)+'</b><br><span class="hint">'+Math.round(h.k)+' KCALs · Protein '+(h.p||0)+' g · Carbs '+(h.c||0)+' g · Fat '+(h.f||0)+' g</span></span><button class="btn btn-o s" type="button" onclick="homeLibDel('+i+')">Remove</button></div>'}).join(''):
@@ -1318,7 +1325,7 @@ var FAVPICS=false;
 function favPics(){
  if(FAVPICS)return;FAVPICS=true;
  catLoad().then(function(){if(BYCODE&&Object.keys(BYCODE).length)try{renderFavs()}catch(e){}})}
-function renderFavs(){var el=$('#favList');if(!el)return;var f=loadFavs();
+function renderFavs(){var el=$('#favList');if(!el)return;if(FAVS===null){el.innerHTML='<div class="hint">Loading your Favourites…</div>';favsFetch(renderFavs);return}var f=loadFavs();
  el.innerHTML=(f.length?f.map(function(x,i){
   return'<div class="order"><div class="top"><span class="no" id="favName'+i+'">'+esc(x.name||'Personalised Plan')+' '+'<button class="btn btn-o s renbtn" type="button" onclick="favRename('+i+')">Rename</button>'+'</span><span class="chip">'+(x.at?fmtDate(new Date(x.at).toISOString().slice(0,10)):'')+'</span></div>'+
    '<div class="meta">'+(x.boxes||0)+' Meals · '+rm(x.price||0)+((x.boxes)?' · ≈ '+rm(x.price/x.boxes)+' per Meal':'')+'</div>'+
@@ -1332,7 +1339,7 @@ function favRename(i){var x=loadFavs()[i];var el=document.getElementById('favNam
 function favRenameSave(i){var f=loadFavs();if(!f[i])return;var v=String((document.getElementById('favNameIn'+i)||{}).value||'').replace(/\s+/g,' ').trim().slice(0,60);if(v)f[i].name=v;saveFavs(f);renderFavs()}
 function favRemove(i){var f=loadFavs();f.splice(i,1);saveFavs(f);renderFavs()}
 function favOpen(i){var x=loadFavs()[i];if(!x||!x.plan)return;
- try{localStorage.setItem('aera.planDraft',JSON.stringify({q:x.plan.q||{},plan:x.plan,step:4}))}catch(e){}
+ try{sessionStorage.setItem('aera.planOpen',JSON.stringify({q:x.plan.q||{},plan:x.plan,step:4,owner:String((USER&&USER.email)||'').toLowerCase()}))}catch(e){}
  location.href=PLAN_URL+'#plan'}
 function favCart(i){var x=loadFavs()[i];if(!x)return;
  try{localStorage.setItem('aera.plan',JSON.stringify({id:x.id,name:'Personalised Plan · '+(x.days||'?')+' Days x '+(x.mpd||'?')+' Meals',boxes:x.boxes,price:x.price,pl:x.pl||'',prefs:x.prefs||'normal/normal',at:Date.now()}));
@@ -1347,7 +1354,7 @@ async function planOpen(i){var p=PLANS[i];if(!p)return;
  var pr=p.prefs||{};var q=pr.q||{goal:pr.goal,plan:pr.plan,body:pr.body,activity:pr.activity,dob:pr.dob,kcalEdit:pr.kcalEdit,seasoning:pr.seasoning,spice:pr.spice,avoid:pr.avoid||[],home:pr.home||[]};
  q.days=+p.days||q.days||7;q.mpd=+p.meals_per_day||q.mpd||1;
  var plan={id:p.id,days:q.days,mpd:q.mpd,meals:meals,targets:p.targets||{},q:q};
- try{localStorage.setItem('aera.planDraft',JSON.stringify({q:q,plan:plan,step:4}))}catch(e){}
+ try{sessionStorage.setItem('aera.planOpen',JSON.stringify({q:q,plan:plan,step:4,owner:String((USER&&USER.email)||'').toLowerCase()}))}catch(e){}
  location.href=PLAN_URL+'#plan'}
 function sha256hex(str){var K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];var H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];var b=[];for(var i=0;i<str.length;i++){var c=str.charCodeAt(i);if(c<128)b.push(c);else if(c<2048)b.push(192|c>>6,128|c&63);else if(c<55296||c>=57344)b.push(224|c>>12,128|c>>6&63,128|c&63);else{i++;c=65536+((c&1023)<<10|str.charCodeAt(i)&1023);b.push(240|c>>18,128|c>>12&63,128|c>>6&63,128|c&63)}}var l=b.length*8;b.push(128);while(b.length%64!==56)b.push(0);for(var j=7;j>=0;j--)b.push(j>=4?0:(l/Math.pow(2,j*8))&255);var w=new Array(64);function R(x,n){return(x>>>n)|(x<<(32-n))}for(var p=0;p<b.length;p+=64){for(var t=0;t<16;t++)w[t]=(b[p+t*4]<<24)|(b[p+t*4+1]<<16)|(b[p+t*4+2]<<8)|b[p+t*4+3];for(t=16;t<64;t++){var s0=R(w[t-15],7)^R(w[t-15],18)^(w[t-15]>>>3),s1=R(w[t-2],17)^R(w[t-2],19)^(w[t-2]>>>10);w[t]=(w[t-16]+s0+w[t-7]+s1)|0}var a=H[0],bb=H[1],cc=H[2],d=H[3],e=H[4],f=H[5],g=H[6],h=H[7];for(t=0;t<64;t++){var S1=R(e,6)^R(e,11)^R(e,25),ch=(e&f)^(~e&g),t1=(h+S1+ch+K[t]+w[t])|0,S0=R(a,2)^R(a,13)^R(a,22),mj=(a&bb)^(a&cc)^(bb&cc),t2=(S0+mj)|0;h=g;g=f;f=e;e=(d+t1)|0;d=cc;cc=bb;bb=a;a=(t1+t2)|0}H[0]=(H[0]+a)|0;H[1]=(H[1]+bb)|0;H[2]=(H[2]+cc)|0;H[3]=(H[3]+d)|0;H[4]=(H[4]+e)|0;H[5]=(H[5]+f)|0;H[6]=(H[6]+g)|0;H[7]=(H[7]+h)|0}var out='';for(i=0;i<8;i++)out+=('00000000'+(H[i]>>>0).toString(16)).slice(-8);return out}
 
