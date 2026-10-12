@@ -967,7 +967,7 @@ function keyGL(o){var c=D.createElement('canvas');c.className='sx30-key';var gl=
  ['pause','ended','seeked','loadeddata'].forEach(function(ev){v.addEventListener(ev,function(){if(ev!=='seeked'&&ev!=='loadeddata')run=0;draw()})});
  o.w.appendChild(c);o.key=c}
 /* how it works : the chef plates the box (chicken, then rice, then vegetables), looping like the others */
-var WPOP=null,WVID='https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/how.mp4';
+var WPOP=null,WVID='https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/how2.mp4';
 function howVid(){if(WPOP)return;var hi=$('#hc-how .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
  var w=D.createElement('div');w.className='sx30-gv';w.setAttribute('aria-hidden','true');var v=D.createElement('video');v.muted=true;v.defaultMuted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('muted','');v.preload='none';
  w.appendChild(v);hi.appendChild(w);WPOP={hi:hi,im:im,card:$('#hc-how'),w:w,v:v,st:'armed',loaded:false};
@@ -977,7 +977,7 @@ function wpGeo(){var im=WPOP.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){GE
  var k=[ox,oy,dw].map(Math.round).join();if(k!==WPOP.k){WPOP.k=k;var st=WPOP.v.style;st.left=ox.toFixed(1)+'px';st.top=oy.toFixed(1)+'px';st.width=dw.toFixed(1)+'px';st.height=dh.toFixed(1)+'px'}
  GEO.wp={ht:docTop(WPOP.hi)}}
 /* more looping picture clips (16:9 photos, 960 x 540) : packaging & delivery = the box gets plated and sealed */
-var GVS=[{sel:'#hc-pack',url:'https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/pack.mp4',rate:1.5} /* box plated + sealed, then both vacuum bags filled and sealed */,
+var GVS=[{sel:'#hc-pack',url:'https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/pack2.mp4',rate:1.5} /* box plated + sealed, then both vacuum bags filled and sealed */,
  {sel:'#hc-pick',url:'https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/pick.mp4',rate:1.15} /* delivery : the rider hands the meal bag over to the customer */,
  {sel:'#hc-gyms',url:'https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/gyms.mp4',rate:1.2} /* gym fridges : meals stocked onto the shelves, then the door closes */,
  {sel:'#hc-faq',url:'https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/faq.mp4',rate:1.2} /* faq : the empty box slides onto the table, then each compartment is filled */];
