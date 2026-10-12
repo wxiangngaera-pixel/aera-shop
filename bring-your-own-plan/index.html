@@ -895,7 +895,7 @@ $('#open').addEventListener('click',function(){
  var d=planDraft();
  if(!d.plan){msg('#openmsg','bad','There is nothing on this plan we cook yet.');return}
  try{
-  localStorage.setItem('aera.planDraft',JSON.stringify({q:d.plan.q,plan:d.plan,step:4}));
+  sessionStorage.setItem('aera.planOpen',JSON.stringify({q:d.plan.q,plan:d.plan,step:4}));
   localStorage.setItem('aera.byop',JSON.stringify({off:d.off,basis:BASIS,at:Date.now()}))}
  catch(e){msg('#openmsg','bad','This browser will not let us hand the plan over. '+
   'Try again outside private browsing, or send it to the kitchen below.');
