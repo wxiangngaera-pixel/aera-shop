@@ -858,7 +858,7 @@ function vpSet(p){var g=GEO.vp,el=VPOP.el,show=p>0&&p<1,hid=p<1;
  el.style.opacity=ap.toFixed(3);VPOP.inn.style.transform='translate3d('+dx.toFixed(1)+'px,'+dyy.toFixed(1)+'px,0) scale('+sc2.toFixed(4)+')'}
 var BPOP=null;
 /* the bento box : a short video of the food dropping into the empty box, played when the card is in place, ending on the real photo */
-var BVID='https://my.chatbees.io/uploads/feedback/upload_75daa080-9577-48ff-a28c-6170df0f391d_1791524428805.mp4';
+var BVID='https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/plan.mp4';
 function bentoPlate(){if(BPOP)return;var hi=$('#hc-plan .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
  var w=D.createElement('div');w.className='sx30-bv';w.setAttribute('aria-hidden','true');var v=D.createElement('video');v.muted=true;v.defaultMuted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('muted','');v.preload='none';
  w.appendChild(v);hi.appendChild(w);BPOP={hi:hi,im:im,card:$('#hc-plan'),w:w,v:v,st:'armed',loaded:false};
@@ -876,7 +876,7 @@ function bpTick(y,vh){var g=GEO.bp;if(!g)return;var top=g.ht-y,v=BPOP.v,w=BPOP.w
  /* back near the bottom of the screen : quietly re-arm on the empty box */
  if(BPOP.st==='done'&&top>vh*.85){BPOP.st='armed';try{v.pause();v.currentTime=0}catch(e){}w.style.transition='none';w.style.opacity='1';void w.offsetWidth;w.style.transition=''}}
 /* home-sourced meals : the dishes slide onto the empty table ( video, same rules as the bento ) */
-var HPOP=null,HVID='https://my.chatbees.io/uploads/feedback/upload_7a2d9ed0-21e3-465f-a3a1-5e135f9642f7_1791525244162.mp4';
+var HPOP=null,HVID='https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/home.mp4';
 function homeSlide(){if(HPOP)return;var hi=$('#hc-home .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
  var w=D.createElement('div');w.className='sx30-hv';w.setAttribute('aria-hidden','true');var v=D.createElement('video');v.muted=true;v.defaultMuted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('muted','');v.preload='none';
  w.appendChild(v);hi.appendChild(w);HPOP={hi:hi,im:im,card:$('#hc-home'),w:w,v:v,st:'armed',loaded:false};
@@ -892,7 +892,7 @@ function hpTick(y,vh){var g=GEO.hp;if(!g)return;var top=g.ht-y,v=HPOP.v,w=HPOP.w
  if(HPOP.st==='armed'&&top<vh*.6&&top>-vh*.3){HPOP.st='playing';w.style.opacity='1';try{v.currentTime=0;var pr=v.play();if(pr&&pr.catch)pr.catch(function(){HPOP.st='done';w.style.opacity='0'})}catch(e){HPOP.st='done';w.style.opacity='0'}}
  if(HPOP.st==='done'&&top>vh*.85){HPOP.st='armed';try{v.pause();v.currentTime=0}catch(e){}w.style.transition='none';w.style.opacity='1';void w.offsetWidth;w.style.transition=''}}
 /* a la carte : the food goes into the bags one by one, vacuumed tight and heat-sealed ( video, same rules as the bento ) */
-var MVP=null,MVID='https://my.chatbees.io/uploads/feedback/upload_413b643d-5b22-4d8f-b53a-8099f687cff6_1791526166002.mp4';
+var MVP=null,MVID='https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/meals.mp4';
 function mealVid(){if(MVP)return;var hi=$('#hc-meals .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
  var w=D.createElement('div');w.className='sx30-mv';w.setAttribute('aria-hidden','true');var v=D.createElement('video');v.muted=true;v.defaultMuted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('muted','');v.preload='none';
  w.appendChild(v);hi.appendChild(w);MVP={hi:hi,im:im,card:$('#hc-meals'),w:w,v:v,st:'armed',loaded:false};
@@ -967,7 +967,7 @@ function keyGL(o){var c=D.createElement('canvas');c.className='sx30-key';var gl=
  ['pause','ended','seeked','loadeddata'].forEach(function(ev){v.addEventListener(ev,function(){if(ev!=='seeked'&&ev!=='loadeddata')run=0;draw()})});
  o.w.appendChild(c);o.key=c}
 /* how it works : the chef plates the box (chicken, then rice, then vegetables), looping like the others */
-var WPOP=null,WVID='https://my.chatbees.io/uploads/feedback/upload_a3310e54-6e08-47a7-a10b-9d3760f8ed51_1791530653730.mp4';
+var WPOP=null,WVID='https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/how.mp4';
 function howVid(){if(WPOP)return;var hi=$('#hc-how .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
  var w=D.createElement('div');w.className='sx30-gv';w.setAttribute('aria-hidden','true');var v=D.createElement('video');v.muted=true;v.defaultMuted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('muted','');v.preload='none';
  w.appendChild(v);hi.appendChild(w);WPOP={hi:hi,im:im,card:$('#hc-how'),w:w,v:v,st:'armed',loaded:false};
@@ -977,10 +977,10 @@ function wpGeo(){var im=WPOP.im,w=im.offsetWidth,h=im.offsetHeight;if(!w||!h){GE
  var k=[ox,oy,dw].map(Math.round).join();if(k!==WPOP.k){WPOP.k=k;var st=WPOP.v.style;st.left=ox.toFixed(1)+'px';st.top=oy.toFixed(1)+'px';st.width=dw.toFixed(1)+'px';st.height=dh.toFixed(1)+'px'}
  GEO.wp={ht:docTop(WPOP.hi)}}
 /* more looping picture clips (16:9 photos, 960 x 540) : packaging & delivery = the box gets plated and sealed */
-var GVS=[{sel:'#hc-pack',url:'https://my.chatbees.io/uploads/feedback/upload_39a34542-ebcc-411b-b6b1-3d75eeaf72b0_1791531606390.mp4',rate:1.5} /* box plated + sealed, then both vacuum bags filled and sealed */,
- {sel:'#hc-pick',url:'https://my.chatbees.io/uploads/feedback/upload_fb135132-9b49-4be7-95d2-bbf7a7484e7b_1791531999535.mp4',rate:1.15} /* delivery : the rider hands the meal bag over to the customer */,
- {sel:'#hc-gyms',url:'https://my.chatbees.io/uploads/feedback/upload_5fba15f1-dedf-423d-83cd-b1d8e4857615_1791532573891.mp4',rate:1.2} /* gym fridges : meals stocked onto the shelves, then the door closes */,
- {sel:'#hc-faq',url:'https://my.chatbees.io/uploads/feedback/upload_bc011724-728d-4802-82a4-47e28b709d7b_1791533186876.mp4',rate:1.2} /* faq : the empty box slides onto the table, then each compartment is filled */];
+var GVS=[{sel:'#hc-pack',url:'https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/pack.mp4',rate:1.5} /* box plated + sealed, then both vacuum bags filled and sealed */,
+ {sel:'#hc-pick',url:'https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/pick.mp4',rate:1.15} /* delivery : the rider hands the meal bag over to the customer */,
+ {sel:'#hc-gyms',url:'https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/gyms.mp4',rate:1.2} /* gym fridges : meals stocked onto the shelves, then the door closes */,
+ {sel:'#hc-faq',url:'https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/home/faq.mp4',rate:1.2} /* faq : the empty box slides onto the table, then each compartment is filled */];
 function gvAll(){GVS.forEach(function(g){if(g.o)return;var hi=$(g.sel+' .himg'),im=hi&&$('img',hi);if(!hi||!im)return;
  var w=D.createElement('div');w.className='sx30-gv';w.setAttribute('aria-hidden','true');var v=D.createElement('video');v.muted=true;v.defaultMuted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('muted','');v.preload='none';
  w.appendChild(v);hi.appendChild(w);var o={hi:hi,im:im,card:$(g.sel),w:w,v:v,st:'armed',loaded:false};g.o=o;
