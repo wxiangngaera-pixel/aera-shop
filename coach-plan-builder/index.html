@@ -980,7 +980,7 @@ function draft(){
 $('#doOpen').addEventListener('click',function(){
  var d=draft();if(!d)return say('bad','There are no AERA dishes in this plan yet.');
  try{
-  localStorage.setItem('aera.planDraft',JSON.stringify({q:d.plan.q,plan:d.plan,step:4}));
+  sessionStorage.setItem('aera.planOpen',JSON.stringify({q:d.plan.q,plan:d.plan,step:4}));
   localStorage.setItem('aera.byop',JSON.stringify({off:d.off,basis:cur().basis,at:Date.now(),
    coach:1,client:cur().name||''}))}
  catch(e){return say('bad','This browser will not let us hand the plan over. Copy the sheet instead.')}
