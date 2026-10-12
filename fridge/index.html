@@ -697,7 +697,7 @@ function paintStock(){
   var ph=r.image_url?'<img class="ph" src="'+esc(r.image_url)+'" alt="" loading="lazy">':'<div class="ph"></div>';
   var sel=SEL[i]||0;
   return '<div class="row'+(sel?' sel':'')+'" data-i="'+i+'"><span class="tick">'+(sel?'✓':'')+'</span>'+ph+
-   '<div class="nm">'+esc(r.meal)+tag+'</div>'+
+   '<div class="nm">'+esc(r.meal)+tag+mealInfo(r.meal)+'</div>'+
    (sel?'<span class="qsel"><button type="button" data-q="-1" data-i="'+i+'">−</button>'+sel+
         '<button type="button" data-q="1" data-i="'+i+'">+</button></span>'
        :'<div class="pill">'+(+r.qty||0)+'</div>')+'</div>'}).join('');
@@ -742,8 +742,14 @@ async function loadMenu(){
  try{var t=await (await fetch(SHOP_URL,{cache:'no-cache'})).text();
   var a=t.indexOf('/*MENU*/'),b=t.indexOf('/*ENDMENU*/');if(a<0||b<a)return;
   var s=t.slice(a,b),o=s.indexOf('['),c=s.lastIndexOf(']');
-  MENU=JSON.parse(s.slice(o,c+1)).map(function(r){return{name:r[1],goal:r[2],img:r[8]}})
+  MENU=JSON.parse(s.slice(o,c+1)).map(function(r){return{name:r[1],goal:r[2],price:+r[3]||0,kcal:+r[4]||0,p:+r[5]||0,c:+r[6]||0,f:+r[7]||0,img:r[8]}})
  }catch(e){MENU=[]}}
+/* Price on the fridge shelf ( the shop price plus the box ) and the macros, under every meal, so the gym can see what it is choosing */
+function menuOf(label){var L=String(label||'').toLowerCase(),b=baseName(label).toLowerCase(),hit=null;
+ MENU.forEach(function(m){var lab=(m.name+(m.goal==='mass'?' ( MASS GAIN )':' ( FAT LOSS )')).toLowerCase();if(lab===L)hit=m});
+ if(!hit)MENU.forEach(function(m){if(!hit&&String(m.name).toLowerCase()===b)hit=m});return hit}
+function mealInfo(label){var m=menuOf(label);if(!m||!m.kcal)return'';var pk=CUR&&CUR.pack!=null&&isFinite(+CUR.pack)?+CUR.pack:1.8;
+ return '<small class="mi"><b>Sells at '+rm(m.price+pk)+'</b> · '+Math.round(m.kcal)+' kcal · Protein '+Math.round(m.p)+' g · Carbs '+Math.round(m.c)+' g · Fat '+Math.round(m.f)+' g</small>'}
 function buildOrderList(){
  var past={};MEALS.forEach(function(m){past[baseName(m).toLowerCase()]=1});
  var a=[],b=[],seen={};
@@ -759,7 +765,7 @@ function paintLines(kind,sel){
  if(!ORDERL.length){box.innerHTML='<div class="empty">Loading the menu…</div>';return}
  box.innerHTML=ORDERL.map(function(m,i){
   var ph=m.img?'<img class="ph" src="'+esc(m.img)+'" alt="" loading="lazy">':'<div class="ph"></div>';
-  return '<div class="row">'+ph+'<div class="nm">'+esc(m.label)+'</div>'+
+  return '<div class="row">'+ph+'<div class="nm">'+esc(m.label)+mealInfo(m.label)+'</div>'+
    '<div class="step"><button type="button" aria-label="One fewer" data-i="'+i+'" data-d="-1">−</button>'+
    '<input type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" value="" placeholder="0" data-i="'+i+'">'+
    '<button type="button" aria-label="One more" data-i="'+i+'" data-d="1">+</button></div></div>'}).join('');
