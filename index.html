@@ -4,7 +4,7 @@
 <script id="aera-motion-loader">/* AERA Motion 2030 : runs the shared motion engine ( aeramealprep.net/motion/ ) before the page draws.
    It keeps a copy in this browser so pages open instantly, and quietly picks up a newer engine for next time.
    Preview only until launch : ?scrolly=1 turns it on for this browser, ?scrolly=0 turns it off. */
-(function(){var LIVE=false;try{var q=location.search,L=window.localStorage;
+(function(){var LIVE=true;try{var q=location.search,L=window.localStorage;
 if(/[?&]scrolly=1/.test(q))L.setItem('aera.scrolly','1');if(/[?&]scrolly=0/.test(q))L.removeItem('aera.scrolly');
 if(!(LIVE||L.getItem('aera.scrolly')==='1'))return;
 if(/(^|\.)my\.chatbees\.io$/i.test(location.hostname))return;
@@ -3043,7 +3043,7 @@ html.sx #banDots i.on{animation:sxDotGlow 1.8s ease-in-out infinite}
    in parallax, "From Order to Microwave" steps light up one by one with a progress pill, numbers count up, and a
    yellow bar tracks how far down the page you are. Nothing is hidden if the browser cannot animate. */
 (function(){
-var LIVE=false;var q=location.search,on=false;
+var LIVE=true;var q=location.search,on=false;
 try{if(/[?&]scrolly=1/.test(q))localStorage.setItem('aera.scrolly','1');if(/[?&]scrolly=0/.test(q))localStorage.removeItem('aera.scrolly');on=localStorage.getItem('aera.scrolly')==='1'}catch(e){on=/[?&]scrolly=1/.test(q)}
 if(!(LIVE||on))return;
 if(!('IntersectionObserver' in window))return;
