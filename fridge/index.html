@@ -749,7 +749,7 @@ function menuOf(label){var L=String(label||'').toLowerCase(),b=baseName(label).t
  MENU.forEach(function(m){var lab=(m.name+(m.goal==='mass'?' ( MASS GAIN )':' ( FAT LOSS )')).toLowerCase();if(lab===L)hit=m});
  if(!hit)MENU.forEach(function(m){if(!hit&&String(m.name).toLowerCase()===b)hit=m});return hit}
 function mealInfo(label){var m=menuOf(label);if(!m||!m.kcal)return'';var pk=CUR&&CUR.pack!=null&&isFinite(+CUR.pack)?+CUR.pack:1.8;
- return '<small class="mi"><b>Sells at '+rm(m.price+pk)+'</b> · '+Math.round(m.kcal)+' kcal · Protein '+Math.round(m.p)+' g · Carbs '+Math.round(m.c)+' g · Fat '+Math.round(m.f)+' g</small>'}
+ return '<small class="mi"><b>Sells at '+rm(m.price+pk)+'</b><span>'+Math.round(m.kcal)+' kcal</span><span>Protein '+Math.round(m.p)+' g</span><span>Carbs '+Math.round(m.c)+' g</span><span>Fat '+Math.round(m.f)+' g</span></small>'}
 function buildOrderList(){
  var past={};MEALS.forEach(function(m){past[baseName(m).toLowerCase()]=1});
  var a=[],b=[],seen={};
