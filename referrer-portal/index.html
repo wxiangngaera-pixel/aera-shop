@@ -1,6 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style id="aera-input-guard-css">
+/* iPhone : a box with text smaller than 16px makes Safari zoom the whole page in when it is tapped */
+@media (hover:none) and (pointer:coarse){input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}}
+</style>
+<script id="aera-input-guard">/* While someone is typing, a page that redraws itself would throw the box they are typing in away
+   and draw a new one : on a phone the keyboard closes, the page jumps and everything flashes. This
+   keeps the very box being typed in, and swaps in everything around it. */
+(function(){if(window.__AERA_IG)return;window.__AERA_IG=1;
+var P=Element.prototype,D=Object.getOwnPropertyDescriptor(P,'innerHTML');if(!D||!D.set||!D.get)return;
+var NOTXT=/^(checkbox|radio|button|submit|reset|file|range|color|hidden|image)$/i,busy=false;
+function typing(e){return !!e&&(e.tagName==='TEXTAREA'||(e.tagName==='INPUT'&&!NOTXT.test(e.type||''))||e.isContentEditable===true)}
+function pathOf(root,el){var p=[];while(el&&el!==root){var par=el.parentNode;if(!par)return null;p.unshift([].indexOf.call(par.childNodes,el));el=par}return el===root?p:null}
+function follow(root,p){var n=root;for(var i=0;i<p.length;i++){n=n&&n.childNodes[p[i]];if(!n)return null}return n}
+function sync(a,b){/* the kept box takes the new box's attributes ( its handlers, hints ), never its value */
+ for(var i=0;i<b.attributes.length;i++){var at=b.attributes[i];if(at.name==='value')continue;if(a.getAttribute(at.name)!==at.value)a.setAttribute(at.name,at.value)}}
+function morph(L,F,keep,fk){var lp=pathOf(L,keep),fp=pathOf(F,fk);if(!lp||!fp||lp.length!==fp.length)return false;
+ var l=L,f=F;
+ for(var d=0;d<lp.length;d++){var lc=[].slice.call(l.childNodes),fc=[].slice.call(f.childNodes),kl=lp[d],kf=fp[d],on=lc[kl],fon=fc[kf];
+  if(!on||!fon||on.nodeName!==fon.nodeName)return false;
+  if(kl===kf&&lc.length===fc.length){lc.forEach(function(n,i){if(i===kl)return;var nn=fc[i];if(n.isEqualNode&&n.isEqualNode(nn))return;l.replaceChild(nn,n)})}
+  else{lc.forEach(function(n,i){if(i!==kl)l.removeChild(n)});
+   fc.forEach(function(n,i){if(i<kf)l.insertBefore(n,on);else if(i>kf)l.appendChild(n)})}
+  if(d<lp.length-1){if(on.nodeType===1&&fon.nodeType===1)sync(on,fon)}
+  l=on;f=fon}
+ sync(keep,fk);return true}
+function twin(F,a){/* no id : the new box that looks most like the old one */
+ var cs=[].filter.call(F.querySelectorAll(a.tagName),function(c){return (c.type||'')===(a.type||'')});if(!cs.length)return null;if(cs.length===1)return cs[0];
+ var best=null,bs=0,ac=String(a.getAttribute('class')||'').split(/\s+/).filter(Boolean);
+ cs.forEach(function(c){var s=0;['name','placeholder','aria-label','data-k','data-i'].forEach(function(k){var v=a.getAttribute(k);if(v!=null&&v===c.getAttribute(k))s+=3});
+  var cc=String(c.getAttribute('class')||'').split(/\s+/);ac.forEach(function(x){if(cc.indexOf(x)>=0)s+=1});if(s>bs){bs=s;best=c}});return bs>=3?best:null}
+Object.defineProperty(P,'innerHTML',{configurable:true,enumerable:D.enumerable,get:D.get,set:function(v){
+ var a=document.activeElement;
+ if(busy||!typing(a)||a===this||!this.contains||!this.contains(a))return D.set.call(this,v);
+ busy=true;try{
+  var t=document.createElement('template');D.set.call(t,v);var F=t.content,fk=null;
+  if(a.id){try{fk=F.querySelector('#'+(window.CSS&&CSS.escape?CSS.escape(a.id):a.id))}catch(e){}}
+  if(!fk)fk=twin(F,a);
+  if(!fk){var p=pathOf(this,a);var c=p&&follow(F,p);if(c&&c.nodeName===a.nodeName&&(c.type||'')===(a.type||''))fk=c}
+  if(!fk||fk.nodeName!==a.nodeName||!morph(this,F,a,fk))D.set.call(this,v);
+ }catch(e){try{D.set.call(this,v)}catch(x){}}finally{busy=false}}});
+})();
+</script>
+
 <script id="aera-motion-loader">/* AERA Motion 2030 : runs the shared motion engine ( aeramealprep.net/motion/ ) before the page draws.
    It keeps a copy in this browser so pages open instantly, and quietly picks up a newer engine for next time.
    Preview only until launch : ?scrolly=1 turns it on for this browser, ?scrolly=0 turns it off. */
