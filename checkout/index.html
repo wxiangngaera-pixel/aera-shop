@@ -485,7 +485,7 @@ window.addEventListener('load',function(){coRider();setTimeout(coRider,1500)});
     <span class="eyebrow">Order online</span>
     <p style="color:var(--ink2);margin:8px 0 0;max-width:62ch">Everything is cooked to Order, weighed to the gram and MAP-Packed to stay fresh for 7 Days in the chiller. Choose Self Pick-Up or Rider Delivery ( Lalamove ) at Checkout.</p>
     <div id="planView" style="display:none"></div>
-    <div class="tabs" role="tablist"><button class="tab on" data-f="bundle">Meal Bundles</button><button class="tab" data-f="fat">Fat Loss Meals</button><button class="tab" data-f="mass">Mass Gain Meals</button><button class="tab" data-f="all">All Meals</button><button class="tab" data-f="alc">À la Carte</button></div>
+    <div class="tabs" role="tablist"><button class="tab on" data-f="fat">Fat Loss Meals</button><button class="tab" data-f="mass">Mass Gain Meals</button><button class="tab" data-f="all">All Meals</button><button class="tab" data-f="alc">À la Carte</button></div>
     <div class="grid" id="grid"></div>
     <p class="hint" style="margin-top:16px">Prices in Malaysian Ringgit, packaging included. Serving weights are Raw ( Before cooking ). That's how our Kitchen weighs every portion. Each Meal carries badges for Beef, Dairy, Nuts, Prawn and how Spicy it is. They cover our own Kitchen. Everything is cooked in one Kitchen, so we cannot promise a Meal is free of traces. If you have a serious Allergy, message us on WhatsApp before ordering.</p>
   </section>
@@ -1290,7 +1290,7 @@ function alcVacNotice(){var seen='';try{seen=sessionStorage.getItem('aera.alcVac
   '<button class="btn btn-y" type="button" style="margin-top:16px" onclick="this.closest(\'.vacwrap\').remove()">Got It</button></div>';
  w.addEventListener('click',function(e){if(e.target===w)w.remove()});
  document.body.appendChild(w)}
-var FILTER='bundle';
+var FILTER='fat';
 /* ---- a Personalised Meal Plan in the Cart : show the Plan itself, not the shop ----
    The Plan travels as recipe codes and grams, meal by meal ( aera.plan .pl ). The names and
    pictures come from the same recipe list À la Carte uses, so nothing extra is fetched. */
@@ -1326,7 +1326,7 @@ function pvRender(){var on=pvOn();
   '<p class="pvsub">'+days+' Days · '+mpd+' Meal'+(mpd>1?'s':'')+' a Day · '+meals.length+' Meals</p></div>'+
   '<div class="pvacts"><a class="btn pvedit" href="https://my.chatbees.io/p/SrQzC5m2">Edit Plan</a>'+
   '<div class="pvdd"><button type="button" class="btn pvmore" aria-haspopup="true" onclick="pvMenu(event)"><span>Add Other Meals</span> <i aria-hidden="true">▾</i></button>'+
-  '<div class="pvmenu" id="pvMenu"><button type="button" onclick="pvGo(\'bundle\')">Meal Bundles</button><button type="button" onclick="pvGo(\'alc\')">À la Carte</button>'+
+  '<div class="pvmenu" id="pvMenu"><button type="button" onclick="pvGo(\'alc\')">À la Carte</button>'+
   '<button type="button" onclick="pvGo(\'fat\')">Fat Loss Meals</button><button type="button" onclick="pvGo(\'mass\')">Mass Gain Meals</button><div class="sep"></div>'+
   '<a href="https://my.chatbees.io/p/dtTMaV#plans">Saved Meal Plan</a><a href="https://my.chatbees.io/p/dtTMaV#favs">My Favourite Meal Plan</a><a href="https://my.chatbees.io/p/dtTMaV#history">Order History</a></div></div></div></div>';
  h+=pvExtras();if(!ALC.loaded)h+='<div class="pvwait">Loading your Meals…</div>';
@@ -1373,7 +1373,7 @@ if(FILTER==='bundle')BUNDLES.forEach(function(b){h+=card({sku:b[0],name:b[1],goa
 document.querySelectorAll('.tab').forEach(function(t){t.addEventListener('click',function(){document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});t.classList.add('on');FILTER=t.dataset.f;render()})});
 /* the Shop menu on the other pages links here with a hash — honour it */
 function shopHash(){var h=(location.hash||'').replace('#','').toLowerCase();
- var map={bundles:'bundle',bundle:'bundle',fat:'fat',mass:'mass',all:'all',meals:'all',alacarte:'alc',alc:'alc'};
+ var map={bundles:'fat',bundle:'fat',fat:'fat',mass:'mass',all:'all',meals:'all',alacarte:'alc',alc:'alc'};
  if(!map[h])return;FILTER=map[h];
  document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.dataset.f===FILTER)});render()}
 window.addEventListener('hashchange',shopHash);shopHash();
@@ -1959,7 +1959,7 @@ function tuReturn(){var p=null;try{p=JSON.parse(sessionStorage.getItem('aera.top
 (function(){var _rc=renderCart;renderCart=function(){var r=_rc.apply(this,arguments);try{tuPaint()}catch(e){}return r};
  try{var q=new URLSearchParams(location.search);if(q.get('topup')!=null&&location.search.indexOf('donation=success')<0){var amt=+q.get('topup')||0;setTimeout(function(){tuOpen(amt)},400)}}catch(e){}})();
 /* ===== After payment ===== */
-(function(){if(PAY.gateway==='billplz'){document.getElementById('secureTxt').textContent="FPX online banking, Touch 'n Go eWallet, GrabPay, Boost, ShopeePay, DuitNow QR or card — secured by Billplz. We never see your card or bank details."}var q=location.search;if(bpReturn())return;if(q.indexOf('donation=success')>=0){if(tuReturn())return;CART={};save();try{localStorage.removeItem('aera.plan')}catch(e){}bdayMarkUsed();return}var m=/[?&]add=([A-Z0-9-]+)/i.exec(q);if(m&&CAT[m[1].toUpperCase()]){var sku=m[1].toUpperCase();CART[sku]=(CART[sku]||0)+1;save();FILTER=sku.indexOf('BUNDLE')===0?'bundle':CAT[sku].goal;document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.dataset.f===FILTER)});if(window.innerWidth<=940)openCart();history.replaceState(null,'',location.pathname)}})();
+(function(){if(PAY.gateway==='billplz'){document.getElementById('secureTxt').textContent="FPX online banking, Touch 'n Go eWallet, GrabPay, Boost, ShopeePay, DuitNow QR or card — secured by Billplz. We never see your card or bank details."}var q=location.search;if(bpReturn())return;if(q.indexOf('donation=success')>=0){if(tuReturn())return;CART={};save();try{localStorage.removeItem('aera.plan')}catch(e){}bdayMarkUsed();return}var m=/[?&]add=([A-Z0-9-]+)/i.exec(q);if(m&&CAT[m[1].toUpperCase()]){var sku=m[1].toUpperCase();CART[sku]=(CART[sku]||0)+1;save();FILTER=sku.indexOf('BUNDLE')===0?'fat':CAT[sku].goal;document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.dataset.f===FILTER)});if(window.innerWidth<=940)openCart();history.replaceState(null,'',location.pathname)}})();
 /* ===== Signed-in account (copy left in this browser by the My Account page) ===== */
 function signedIn(){return !!(ACCT&&ACCT.email)}
 function authUrl(a){return 'https://my.chatbees.io/p/dtTMaV?next=checkout#'+a}
@@ -3395,7 +3395,7 @@ setTimeout(paint,800);
 <style id="aera-corp-noalc-css">html.corp .tabs .tab[data-f="alc"]{display:none!important}html.corp #corpChg{display:none!important}</style>
 <script id="aera-corp-noalc">/* AERA Corporate : no À la Carte — Meal Bundles and Meals only */
 (function(){var H=document.documentElement;if(!H.classList.contains('corp'))return;
-function fix(){try{if(typeof FILTER!=='undefined'&&FILTER==='alc'){var t=document.querySelector('.tabs .tab[data-f="bundle"]');if(t)t.click()}}catch(e){}
+function fix(){try{if(typeof FILTER!=='undefined'&&FILTER==='alc'){var t=document.querySelector('.tabs .tab[data-f="fat"]');if(t)t.click()}}catch(e){}
  try{var gone=0;Object.keys(CART||{}).forEach(function(k){if(/^ALC-/.test(k)){delete CART[k];gone++}});if(gone){save();renderCart()}}catch(e){}}
 setTimeout(fix,600);setInterval(fix,2000)})();
 </script>
