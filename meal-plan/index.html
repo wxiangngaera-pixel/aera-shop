@@ -56,7 +56,7 @@ function fix(el){if(!el||el.nodeType!==1)return;
 function all(root){if(!root||!root.querySelectorAll)return;if(root.nodeType===1)fix(root);var l=root.querySelectorAll('[style*="url("],img');for(var i=0;i<l.length;i++)fix(l[i])}
 new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){var m=ms[i];if(m.type==='attributes')fix(m.target);else for(var j=0;j<m.addedNodes.length;j++)all(m.addedNodes[j])}}).observe(D.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['style','src']});
 function done(){if(--left>0)return;READY=true;all(D)}
-['/img1/','/img2/','/img3/','/img4/'].forEach(function(p){fetch(p).then(function(r){return r.ok?r.text():''}).then(function(t){var a=t.indexOf('/*IMGPACK-START*/'),b=t.indexOf('/*IMGPACK-END*/');if(a>=0&&b>a){var j=JSON.parse(t.slice(a+17,b));for(var k in j){var u=blob(j[k]);if(u)MAP[k]=u}}all(D)}).catch(function(){}).then(done)});
+['/img1/','/img2/','/img3/','/img4/'].forEach(function(p){fetch(p).then(function(r){return r.ok?r.text():''}).then(function(t){var a=t.indexOf('/*IMGPACK-START*/'),b=t.indexOf('/*IMGPACK-END*/');if(a>=0&&b>a){var j=JSON.parse(t.slice(a+17,b));for(var k in j){var u=blob(j[k]);if(u)MAP[k]=u+'#/'+k.split('/').pop()}}all(D)}).catch(function(){}).then(done)});
 setTimeout(function(){if(!READY){FAIL=true;all(D)}},9000);
 })();</script>
 
@@ -1568,6 +1568,6 @@ var b=document.createElement('button');b.id='aeraDock';b.type='button';
 b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 function sync(){var o=H.classList.contains('aera-dock-open');b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Hide help, chat and WhatsApp':'Show help, chat and WhatsApp')}
 b.onclick=function(){H.classList.toggle('aera-dock-open');try{sessionStorage.setItem(K,H.classList.contains('aera-dock-open')?'1':'0')}catch(e){}sync()};
-function add(){document.body.appendChild(b);sync()}if(document.body)add();else document.addEventListener('DOMContentLoaded',add)})();</script><!-- build 1791926861375 -->
+function add(){document.body.appendChild(b);sync()}if(document.body)add();else document.addEventListener('DOMContentLoaded',add)})();</script><!-- build 1791927752760 -->
 </body>
 </html>
