@@ -43,6 +43,7 @@ Object.defineProperty(P,'innerHTML',{configurable:true,enumerable:D.enumerable,g
  }catch(e){try{D.set.call(this,v)}catch(x){}}finally{busy=false}}});
 })();
 </script>
+<script id="aera-v2-loader">(function(){try{var q=location.search,L=localStorage;if(/[?&]preview=new/.test(q))L.setItem('aera.v2','1');if(/[?&]preview=off/.test(q))L.removeItem('aera.v2');if(L.getItem('aera.v2')!=='1')return;fetch('/v2/?t='+Math.floor(Date.now()/60000),{cache:'no-store'}).then(function(r){return r.text()}).then(function(t){var a=t.indexOf('/*AERA-V2-START*/'),b=t.indexOf('/*AERA-V2-END*/');if(a<0||b<a)return;(new Function(t.slice(a,b)))()})}catch(e){}})();</script>
 
 <script id="aera-motion-loader">/* AERA Motion 2030 : runs the shared motion engine ( aeramealprep.net/motion/ ) before the page draws.
    It keeps a copy in this browser so pages open instantly, and quietly picks up a newer engine for next time.
