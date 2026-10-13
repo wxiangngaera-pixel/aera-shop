@@ -1145,7 +1145,7 @@ function pour(mb,tray,b,u,d){var m=u&&u.match(/([^\/]+)\.(jpe?g|png|webp)/i),s=m
  b.style.visibility='hidden';v.style.opacity='0';cv.style.opacity='0';var done=false,go=false,raf=0,side=side||0;
  function rm(){if(raf)cancelAnimationFrame(raf);raf=0;if(v.parentNode)v.parentNode.removeChild(v);if(cv.parentNode)cv.parentNode.removeChild(cv)}v._rm=rm;
  function draw(){raf=0;if(done||!g)return;var vw=v.videoWidth,vh=v.videoHeight;if(vw&&ch>2){try{g.globalCompositeOperation='source-over';g.drawImage(v,cx/VW*vw,0,cw/VW*vw,ch/VH*vh,0,0,cv.width,cv.height);
-  if(side){var W2=cv.width,H2=cv.height,id=g.getImageData(0,0,W2,H2),q=id.data,n=q.length,k,dr,dg,db,dd;
+  if(1){var W2=cv.width,H2=cv.height,id=g.getImageData(0,0,W2,H2),q=id.data,n=q.length,k,dr,dg,db,dd;
    /* the clip's own first frame ( the empty tray ) is the clean plate : whatever differs from it is food in the air */
    if(!BG){if(v.currentTime>.3){g.clearRect(0,0,W2,H2);raf=requestAnimationFrame(draw);return}BG=new Uint8ClampedArray(q)}
    var RW=W2*4,ry,fy;for(k=0;k<n;k+=4){ry=Math.floor(k/RW)/H2;fy=ry<.06?ry/.06:1;dr=q[k]-BG[k];dg=q[k+1]-BG[k+1];db=q[k+2]-BG[k+2];dd=Math.sqrt(dr*dr+dg*dg+db*db);q[k+3]=Math.round(fy*(dd<26?0:dd>62?255:(dd-26)/36*255))}g.putImageData(id,0,0);
@@ -1180,7 +1180,7 @@ function bcutFor(u){var m=u&&u.match(/([^\/]+)\.(jpe?g|png|webp)/i);return m&&BC
 function bentoDrop(){if(!$('.mbento')&&!$('#planCal'))return;var MEM={};
  var css=D.createElement('style');css.id='sx30BentoDrop';css.textContent='.mbento{position:relative}.mbento .bento b.sx30-cut{background-color:transparent!important;background-position:50% 50%!important;background-size:cover!important;background-repeat:no-repeat!important;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.35))}'+
   '.mbento video.sx30-pour{position:absolute;z-index:6;pointer-events:none;object-fit:fill;transition:opacity .3s;background:transparent}'+
-  '.mbento canvas.sx30-pout{position:absolute;z-index:7;pointer-events:none;mix-blend-mode:multiply;filter:brightness(1.14);transition:opacity .3s}'+
+  '.mbento canvas.sx30-pout{position:absolute;z-index:7;pointer-events:none;transition:opacity .3s}'+
   '.mbento .sx30-sauce{position:absolute;left:calc(100% + 10px);top:14%;width:30%;z-index:4;text-align:center;pointer-events:none;transition:opacity .3s!important}.mbento .sx30-sauce.sx30-in{left:auto;right:-4%;top:auto;bottom:-14%;width:27%;z-index:8}'+
   '.mbento .sx30-sauce .sb{position:relative;aspect-ratio:7/6;transform:rotate(4deg);transform-origin:50% 60%}'+
   '.mbento .sx30-sauce .sb:before{content:"";position:absolute;inset:1%;border-radius:6%;background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(225,232,240,.45));box-shadow:inset 0 0 0 1px rgba(160,172,190,.7),0 4px 8px rgba(0,0,0,.12);opacity:0}'+
@@ -1262,5 +1262,5 @@ try{var _no=D.createElement('style');_no.id='sx30-off';_no.textContent="#sx30Cur
 ready(function(){setTimeout(start,0)});
 })();
 
-/*AERA-MOTION-END*/</script>
+/*AERA-MOTION-END*/</script><!-- build 1791928081845 -->
 </body></html>
