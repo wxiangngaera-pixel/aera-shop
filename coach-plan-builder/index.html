@@ -1529,7 +1529,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
   'Send code to Client':'发送验证码给客户','Resend code':'重新发送','Confirm':'确认','Email confirmed':'电邮已确认',
   'This does not look like an email yet.':'这看起来还不是有效的电邮。','Checking this email…':'正在检查这个电邮…',
   'This email’s domain cannot receive mail. Please check the spelling.':'这个电邮的域名收不到邮件，请检查拼写。',
-  'Did you mean':'您是指','Use it':'使用','Sending…':'发送中…',
+  'Did you mean':'您是指','Code on its way. It can take up to a minute, so ask your Client for the 6 digits ( check Spam too ).':'验证码已发出，最多需要一分钟。请向客户索取 6 位数字（也请查看垃圾邮件）。','Use it':'使用','Sending…':'发送中…',
   'Code sent. Ask your Client for the 6 digits ( check Spam too ).':'验证码已发送。请向客户索取 6 位数字（也请查看垃圾邮件）。',
   'That code is not right.':'验证码不正确。','That code has expired. Send a new one.':'验证码已过期，请重新发送。',
   'Too many tries. Send a new code.':'尝试次数太多，请重新发送验证码。','We could not send the code. Please try again.':'无法发送验证码，请再试一次。',
@@ -1588,10 +1588,10 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
   var a=new Uint32Array(1);crypto.getRandomValues(a);var code=String(100000+a[0]%900000);
   var coachEl=$('#coachname'),coach=coachEl?coachEl.value:'';
   sha(code+'|'+e).then(function(h){
+   var P=pend();P[e]={h:h,exp:Date.now()+TTL,sent:Date.now(),n:0};setPend(P);codeUi(c,e,T('Code on its way. It can take up to a minute, so ask your Client for the 6 digits ( check Spam too ).'));var ci=$('#cvCode');if(ci)ci.focus();
    return fetch(HOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:'coach-verify-'+Date.now().toString(36)+'@aera-sync.invalid',data:{to:e,code:code,coach:String(coach||'').slice(0,60)}})})
-   .then(function(r){return r.json().catch(function(){return {success:r.ok}})}).then(function(j){if(!j||j.success===false)throw 0;
-    var P=pend();P[e]={h:h,exp:Date.now()+TTL,sent:Date.now(),n:0};setPend(P);codeUi(c,e);var ci=$('#cvCode');if(ci)ci.focus()})})
-  .catch(function(){codeUi(c,e,T('We could not send the code. Please try again.'),'bad')})}
+   .then(function(r){return r.json().catch(function(){return {success:r.ok}})}).then(function(j){if(!j||j.success===false)throw 0})})
+  .catch(function(){var P=pend();delete P[e];setPend(P);if(norm(($('#cemail')||{}).value)===e)codeUi(c,e,T('We could not send the code. Please try again.'),'bad')})}
  function check(c,e){var ci=$('#cvCode');if(!ci)return;var v=ci.value.replace(/\D/g,'');if(v.length!==6)return;
   var P=pend(),p=P[e];if(!p)return codeUi(c,e);
   if(Date.now()>p.exp){delete P[e];setPend(P);return codeUi(c,e,T('That code has expired. Send a new one.'),'bad')}
@@ -1711,6 +1711,6 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 </script>
 <style id="aera-coach-app-fit">#aaBar{bottom:auto!important;top:calc(70px + env(safe-area-inset-top))!important}@media(max-width:600px){.ab-r #aaGetApp{width:34px!important;height:34px!important}.ab-r #aaGetApp span{display:none!important}.ab-r #aaGetApp img{width:26px!important;height:26px!important}}</style>
 <!-- AERA coach app kit : end -->
-<!-- build 1791934755192 -->
+<!-- build 1791934942273 -->
 </body>
 </html>
