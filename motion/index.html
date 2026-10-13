@@ -518,6 +518,8 @@ function heads(){var sel=KSEL[MODE];if(!sel)return;if(MODE!=='full'&&Date.now()-
   if(!txt||txt.length>140||fs<15||headSkip(h)){h.classList.add('sx30-x');return}
   h.classList.add('sx30-k');var r=h.getBoundingClientRect();
   if(MODE!=='full'&&!inView(r)){return}
+  /* a heading the page redraws while someone is using it ( a search, a quantity ) stays put instead of flying in again */
+  if(Date.now()-T0>3500&&inView(r)){h.classList.add('sx30-x');h.classList.remove('sx30-k');return}
   h.classList.add('sx30-kh');kio.observe(h)})}
 
 /* ---------------- reveals ( website pages other than the homepage ) ---------------- */
@@ -560,7 +562,8 @@ function shine(){if(MODE==='kitchen')return;
 var PRESSED=null;
 var TAP='button,a,[role=button],.btn,.hhead,.tb,label,summary,input[type=checkbox],input[type=radio],.chip,.pill';
 function touches(){
- D.addEventListener('pointerdown',safe(function(e){var t=e.target.closest&&e.target.closest(TAP);if(!t||e.button>0)return;
+ D.addEventListener('pointerdown',safe(function(e){var f=e.target.closest&&e.target.closest('input,textarea,select,[contenteditable]');if(f&&!/^(checkbox|radio|button|submit|reset)$/i.test(f.type||''))return; /* tapping into a box to type : no ripple, no press */
+  var t=e.target.closest&&e.target.closest(TAP);if(!t||e.button>0)return;
   var r=t.getBoundingClientRect(),sz=Math.max(60,Math.min(520,Math.max(r.width,r.height)*1.5)),k=sz/240;
   var s=D.createElement('span');s.className='sx30-rip';s.style.transform='translate3d('+e.clientX+'px,'+e.clientY+'px,0)';D.body.appendChild(s);
   var a=anim(s,[{transform:'translate3d('+e.clientX+'px,'+e.clientY+'px,0) scale(.1)',opacity:1},{transform:'translate3d('+e.clientX+'px,'+e.clientY+'px,0) scale('+k+')',opacity:0}],{duration:650,easing:'cubic-bezier(.2,.7,.2,1)'});
