@@ -591,7 +591,7 @@ function freePlan(){
  '#v2save i{font-style:normal;font-size:20px;line-height:1;color:#16479E}#v2save b{display:block;font-size:14.5px}#v2save span{font-size:13px;line-height:1.4;color:#33415C}'+
  '#v2sheet{position:fixed;inset:0;z-index:2147482600;background:rgba(11,28,54,.5);display:none;align-items:flex-end;justify-content:center;font-family:Montserrat,system-ui,sans-serif}'+
  '#v2sheet.on{display:flex}'+
- '#v2sheet .in{width:100%;max-width:520px;background:#fff;border-radius:22px 22px 0 0;padding:22px 18px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -12px 30px rgba(0,0,0,.2);color:#0B1C36}'+
+ '#v2sheet .in{width:100%;max-width:520px;background:#fff;border-radius:22px 22px 0 0;padding:22px 18px calc(56px + env(safe-area-inset-bottom));box-shadow:0 -12px 30px rgba(0,0,0,.2);color:#0B1C36}'+
  '#v2sheet h3{font-size:22px;font-weight:800;margin:0 0 6px}#v2sheet p{font-size:14.5px;line-height:1.45;color:#33415C;margin:0 0 6px}'+
  '#v2sheet .fm{font-weight:700;color:#16479E;margin-bottom:16px}'+
  '#v2sheet a,#v2sheet button{display:flex;align-items:center;justify-content:center;width:100%;box-sizing:border-box;height:52px;border-radius:999px;font:800 16px Montserrat,system-ui,sans-serif;text-decoration:none;margin:0 0 10px;cursor:pointer}'+
@@ -635,7 +635,7 @@ function mealAdjust(){
  '#s4 .mcard .v2adjb:active{transform:scale(.97)}'+
  '#v2adj{position:fixed;inset:0;z-index:2147482600;background:rgba(11,28,54,.5);display:none;align-items:flex-end;justify-content:center;font-family:Montserrat,system-ui,sans-serif}'+
  '#v2adj.on{display:flex}'+
- '#v2adj .in{width:100%;max-width:520px;max-height:88vh;overflow-y:auto;background:#fff;border-radius:22px 22px 0 0;padding:20px 18px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -12px 30px rgba(0,0,0,.2);color:#0B1C36}'+
+ '#v2adj .in{width:100%;max-width:520px;max-height:85vh;max-height:85dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#fff;border-radius:22px 22px 0 0;padding:0 18px calc(64px + env(safe-area-inset-bottom));box-shadow:0 -12px 30px rgba(0,0,0,.2);color:#0B1C36}'+
  '#v2adj .hd b{display:block;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#16479E}'+
  '#v2adj .hd h3{font-size:19px;line-height:1.25;font-weight:800;margin:4px 0 4px}'+
  '#v2adj .hd p{font-size:13px;color:#4A5A75;margin:0 0 14px}#v2adj .hd p em{font-style:normal;font-weight:800;color:#0B1C36}'+
@@ -645,8 +645,8 @@ function mealAdjust(){
  '#v2adj .gr button:active{border-color:#16479E;background:#EDF3FD}'+
  '#v2adj .gr button[disabled]{opacity:.4}'+
  '#v2adj .gr button.dl{color:#C0392B}'+
- '#v2adj .ft{display:flex;gap:8px;margin-top:16px}'+
- '#v2adj .ft button{flex:1;height:50px;border-radius:999px;font:800 15px Montserrat,system-ui,sans-serif;cursor:pointer}'+
+ '#v2adj .ft{position:sticky;top:0;z-index:3;display:flex;gap:8px;margin:0 -18px 14px;padding:14px 18px 12px;background:#fff;border-bottom:1px solid #E3E8F2;border-radius:22px 22px 0 0}#v2adj button,#v2qp button,#v2sheet a,#v2sheet button,#v2bar button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}'+
+ '#v2adj .ft button{flex:1;height:46px;border-radius:999px;font:800 15px Montserrat,system-ui,sans-serif;cursor:pointer}'+
  '#v2adj .ft .un{background:#fff;border:2px solid #16479E;color:#16479E}#v2adj .ft .un[disabled]{opacity:.35}'+
  '#v2adj .ft .ok{background:#FDB913;border:0;color:#0B1C36}'+
  'body .modal{z-index:2147482700!important}'+
@@ -667,12 +667,12 @@ function mealAdjust(){
   function btns(sel){return [].map.call(card.querySelectorAll(sel),function(b){var c=b.getAttribute('onclick')||'';return '<button type="button" data-run="'+c.replace(/"/g,'&quot;')+'"'+(b.disabled?' disabled':'')+(/delMeal/.test(c)?' class="dl"':'')+'>'+t(lbl(b))+'</button>'}).join('')}
   var tnEl=card.querySelector('.tuned'),tn=tnEl?tnEl.textContent.trim():'';var tuneB=btns('.tune [onclick^="tuneMeal("]'),addB=btns('.addrow [onclick]'),mhB=btns('.mh .mac [onclick]');
   var und=card.querySelector('.tune [onclick^="undoMeal("]');
-  S.innerHTML='<div class="in" role="dialog" aria-modal="true"><div class="hd"><b>'+(tb?tb.textContent:t('This meal'))+'</b><h3>'+(names[0]||'')+'</h3><p>'+(names.slice(1).join(' · '))+'<br><em>'+mt.replace(/\s*·\s*$/,'').trim()+'</em></p></div>'+
+  S.innerHTML='<div class="in" role="dialog" aria-modal="true">'+'<div class="ft"><button type="button" class="un"'+(und?' data-run="'+und.getAttribute('onclick')+'"':'')+(!und||und.disabled?' disabled':'')+'>↶ '+t('Undo')+'</button><button type="button" class="ok" data-x="1">'+t('Done')+'</button></div>'+'<div class="hd"><b>'+(tb?tb.textContent:t('This meal'))+'</b><h3>'+(names[0]||'')+'</h3><p>'+(names.slice(1).join(' · '))+'<br><em>'+mt.replace(/\s*·\s*$/,'').trim()+'</em></p></div>'+
    (tn?'<div class="tn">'+tn.replace(/[<>&]/g,'')+'</div>':'')+
    (tuneB?'<h4>'+t('Tune this meal')+'</h4><div class="gr">'+tuneB+'</div>':'')+
    (addB?'<h4>'+t('Add to this meal')+'</h4><div class="gr">'+addB+'</div>':'')+
    (mhB?'<h4>'+t('This meal')+'</h4><div class="gr">'+mhB+'</div>':'')+
-   '<div class="ft"><button type="button" class="un"'+(und?' data-run="'+und.getAttribute('onclick')+'"':'')+(!und||und.disabled?' disabled':'')+'>↶ '+t('Undo')+'</button><button type="button" class="ok" data-x="1">'+t('Done')+'</button></div></div>'}
+   '</div>'}
  function open(i){CUR=i;if(!S){S=D.createElement('div');S.id='v2adj';D.body.appendChild(S);
    S.addEventListener('click',function(e){if(e.target===S||(e.target.closest&&e.target.closest('[data-x]'))){S.classList.remove('on');return}
     var b=e.target.closest&&e.target.closest('[data-run]');if(!b||b.disabled)return;var code=b.getAttribute('data-run'),o=byClick(code);if(!o)return;
