@@ -314,7 +314,7 @@ css(
 '#v2badge{position:fixed;left:12px;bottom:calc(96px + env(safe-area-inset-bottom));white-space:nowrap;z-index:2147483000;background:rgba(11,28,54,.92);color:#fff;font:600 11px/1.2 Montserrat,system-ui,sans-serif;border-radius:999px;padding:7px 11px;box-shadow:0 6px 18px rgba(0,0,0,.25);display:flex;gap:10px;align-items:center}'+
 '#v2badge a{color:#FDB913;text-decoration:underline}'+
 '@media (max-width:480px){#aaGetApp small,#aaGetApp b{display:none!important}#aaGetApp{padding:4px!important;min-width:0!important;width:auto!important}#findBtn{display:none!important}body > nav .wrap{gap:6px!important}#ordBtn{padding:7px 10px!important;font-size:12.5px!important}}'+
-'@media (max-width:400px){#aaGetApp{display:none!important}}body{overflow-x:clip}'
+'@media (max-width:400px){#aaGetApp{display:none!important}}html,body{overflow-x:clip}'
 ,'v2-base');
 ready(function(){if(D.getElementById('v2badge'))return;var b=D.createElement('div');b.id='v2badge';
  b.innerHTML='<span>'+t('New website preview')+'</span><a href="?preview=off">'+t('Exit preview')+'</a>';D.body.appendChild(b)});
@@ -687,7 +687,7 @@ function mealAdjust(){
  D.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.v2adjb');if(!b)return;e.preventDefault();open(+b.getAttribute('data-i'))});
  function carbs(){try{if(!window.CAP||typeof window.extraComps!=='function'||typeof window.catCount!=='function')return false;if(window.CAP.c>=2)return true;window.CAP.c=2;var ox=window.extraComps;window.extraComps=function(m){return ox(m)+Math.max(0,window.catCount(m,'c')-1)};if(window.PLAN&&window.STEP===4)window.renderPlan();return true}catch(e){return true}}
  var cn=0,civ=setInterval(function(){if(carbs()||++cn>80)clearInterval(civ)},100);
- var qq=0;ready(function(){add();new MutationObserver(function(ms){if(qq)return;if(S&&ms.every(function(m){return S.contains(m.target)}))return;qq=setTimeout(function(){qq=0;add();if(S&&S.classList.contains('on'))paint()},80)}).observe(D.body,{childList:true,subtree:true})})}
+ var qq=0;ready(function(){add();new MutationObserver(function(ms){if(qq)return;var dm=D.getElementById('v2demo');if(ms.every(function(m){return (S&&S.contains(m.target))||(dm&&dm.contains(m.target))||m.target===dm||(m.addedNodes.length===1&&m.addedNodes[0].id==='v2demo')}))return;qq=setTimeout(function(){qq=0;add();if(S&&S.classList.contains('on'))paint()},80)}).observe(D.body,{childList:true,subtree:true})})}
 
 /* ---------- "How it Works" : a finger taps the real buttons, instead of pop-up text ---------- */
 function tapDemo(){
@@ -726,7 +726,7 @@ function tapDemo(){
  '#v2help{position:fixed;right:12px;bottom:calc(96px + env(safe-area-inset-bottom));z-index:2147481000;display:flex;align-items:center;gap:7px;height:38px;padding:0 14px 0 8px;border-radius:999px;border:0;background:#16479E;color:#fff;font:800 13px Montserrat,system-ui,sans-serif;box-shadow:0 8px 20px rgba(11,28,54,.3);cursor:pointer;touch-action:manipulation}'+
  '#v2help i{width:24px;height:24px;border-radius:50%;background:#FDB913;color:#16479E;display:grid;place-items:center;font-style:normal;font-size:11px}'+
  'body.v2qp-on #v2help,body.v2demo-on #v2help,body:has(#v2adj.on) #v2help,body:has(#v2sheet.on) #v2help{display:none!important}'+
- 'body.v2demo-on #v2badge{display:none!important}'+
+ 'body.v2demo-on #v2badge,body.v2demo-on #aaBar{display:none!important}'+
  '#v2demo{position:fixed;inset:0;z-index:2147482800;font-family:Montserrat,system-ui,sans-serif}'+
  '#v2demo .hole{position:fixed;border-radius:16px;box-shadow:0 0 0 200vmax rgba(11,28,54,.58);transition:all .5s cubic-bezier(.4,0,.2,1);pointer-events:none;outline:3px solid #FDB913;outline-offset:2px}'+
  '#v2demo .fg{position:fixed;left:0;top:0;width:46px;height:58px;transition:transform .7s cubic-bezier(.4,0,.2,1);pointer-events:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));z-index:2}'+
@@ -775,7 +775,7 @@ function tapDemo(){
     if(!(await sleep(750,id)))return;
     for(var tp=0;tp<2;tp++){fg.classList.add('tap');rp.style.left=cx+'px';rp.style.top=cy+'px';rp.classList.remove('go');void rp.offsetWidth;rp.classList.add('go');
      if(!(await sleep(170,id)))return;fg.classList.remove('tap');if(!(await sleep(260,id)))return}
-    if(st.act==='click'){try{el.click();if(/v2adjb/.test(el.className))OPENED=true;if(el.hasAttribute&&el.hasAttribute('data-x'))OPENED=false}catch(e){}}
+    if(st.act==='click'){try{el=find(st)||el;el.click();if(/v2adjb/.test(el.className))OPENED=true;if(el.hasAttribute&&el.hasAttribute('data-x'))OPENED=false}catch(e){}}
     skipNow=false;for(var w=0;w<20&&!skipNow;w++){if(!(await sleep(100,id)))return}}
    if(id!==RUN)return;if(!shown){stop();return}
    var ve=VV();fg.style.transform='translate('+(ve.x+ve.w/2-23)+'px,'+(ve.y+ve.h+40)+'px)';hole.style.opacity='0'})()}
