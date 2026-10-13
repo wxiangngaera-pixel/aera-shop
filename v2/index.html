@@ -714,6 +714,15 @@ function tapDemo(){
   plan5:[
    {sel:['#orderSummary'],t:['Check it over','核对'],s:['Everything you chose, in one list.','您选择的一切，都在这里。']},
    {sel:['#orderBtn','#s5 .btn-y'],t:['Into the cart','加入购物车'],s:['Tap here to take the whole week to Checkout.','点这里，把整周带到结账。']}],
+  coach:[
+   {sel:['#coachname'],t:['Your name','您的名字'],s:['Your name and your gym, so we know who the plan is from.','填上您的名字和健身房，我们才知道餐单是谁做的。']},
+   {sel:['#clientTabs'],t:['Your Clients','您的客户'],s:['One tab per Client. Tap + New client to add another.','每位客户一个标签。点「+ 新增客户」再加一位。']},
+   {sel:['#cname'],t:['Client details','客户资料'],s:['Name, email and mobile. We send the price to that email.','姓名、电邮和手机。价格会发到这个电邮。']},
+   {sel:['#basisSeg'],t:['Raw or Cooked','生重或熟重'],s:['Pick how you write your weights. We turn Cooked into Raw for you.','选择您写的是生重还是熟重，熟重由我们换算成生重。']},
+   {sel:['#dayTabs'],t:['Days','天数'],s:['One tab per day. Add a day, or duplicate this one.','每天一个标签。可以新增一天，或复制这一天。']},
+   {sel:['.meal .addrow [data-add]'],t:['Add a Dish','加入一道菜'],s:['Search our Kitchen List, pick the Dish, then set the Weight.','搜索我们的厨房清单，选菜，再设定重量。']},
+   {sel:['#addMeal'],t:['Add a Meal','加入一餐'],s:['Breakfast, Lunch, Pre Workout… as many as the day needs.','早餐、午餐、练前餐…一天要几餐都可以。']},
+   {sel:['#doSend'],t:['Send to AERA','发送给 AERA'],s:['When the plan is ready, tap here. More has Save, Copy as a Sheet and Save to My Meal Plan.','餐单完成后点这里。「更多」里有保存、复制成餐单和保存到我的餐单。']}],
   checkout:[
    {sel:['#lines'],t:['Your meals','您的餐点'],s:['Check what you are ordering.','核对您订购的餐点。']},
    {sel:['#pkBento','#pkVacuum'],t:['How it is packed','包装方式'],s:['Tap Bento Box or Vacuum Packed.','选择便当盒或真空包装。']},
@@ -748,7 +757,7 @@ function tapDemo(){
  function L(a){return zh()&&a[1]?a[1]:a[0]}
  function vis(e){if(!e)return false;var r=e.getBoundingClientRect();if(!r.width&&!r.height)return false;var cs=getComputedStyle(e);return cs.visibility!=='hidden'&&cs.display!=='none'}
  function find(st){for(var i=0;i<st.sel.length;i++){var es=D.querySelectorAll(st.sel[i]);for(var j=0;j<es.length;j++)if(vis(es[j]))return es[j]}return null}
- function which(){if(P==='/')return 'home';if(P==='/checkout'){var ln=D.getElementById('lines');return (!ln||/empty/i.test(ln.textContent))?null:'checkout'}
+ function which(){if(P==='/coach-plan-builder')return 'coach';if(P==='/')return 'home';if(P==='/checkout'){var ln=D.getElementById('lines');return (!ln||/empty/i.test(ln.textContent))?null:'checkout'}
   if(P==='/meal-plan'){if(D.body.classList.contains('v2qp-on'))return null;var s=+window.STEP||1;if(s===4)return window.PLAN?'plan':null;if(s===5)return 'plan5';return 'plan1'}return null}
  function sleep(ms,id){return new Promise(function(res){setTimeout(function(){res(id===RUN)},ms)})}
  function stop(){RUN++;if(OPENED){var x=D.querySelector('#v2adj.on [data-x]');if(x)x.click();OPENED=false}if(W){W.remove();W=null}D.body.classList.remove('v2demo-on')}
@@ -791,11 +800,68 @@ function tapDemo(){
   if(k==='checkout'){var ln=D.getElementById('lines');if(!ln||/empty/i.test(ln.textContent))return}
   if(n>=8)play(k)},500)})}
 
+/* ---------- Coach Plan Builder : the same clean look as Build My Plan ---------- */
+function coach(){
+ Object.assign(ZH,{'More':'更多','Coach Plan Builder':'教练餐单编排'});
+ try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
+ var N='#16479E',Y='#FDB913',K='#0B1C36';
+ css(
+ 'body.v2c header.top{background:#fff;color:'+K+';padding:26px 0 4px}'+
+ 'body.v2c header.top .brand img{display:none!important}'+
+ 'body.v2c header.top .brand small{border:0;padding:0;color:'+N+';font-weight:800;font-size:12px;letter-spacing:.16em}'+
+ 'body.v2c header.top h1,body.v2c header.top h1 *{color:'+K+'!important;opacity:1!important;filter:none!important}'+
+ 'body.v2c header.top h1{font-size:clamp(28px,4.4vw,42px);line-height:1.12;margin-top:8px}'+
+ 'body.v2c header.top p{color:#4A5A75;font-size:16px;line-height:1.55;max-width:64ch}'+
+ 'body.v2c .card{border:2px solid '+N+';border-radius:18px;box-shadow:0 10px 28px rgba(11,40,81,.06);padding:22px;margin-top:18px}'+
+ 'body.v2c .card>h2{font-size:20px;letter-spacing:0;text-transform:none;color:'+K+';font-weight:800;margin-bottom:14px}'+
+ 'body.v2c .tab,body.v2c .daytab{border:2px solid '+N+';border-radius:999px;color:'+N+';background:#fff}'+
+ 'body.v2c .tab{padding:8px 16px}'+
+ 'body.v2c .tab.on,body.v2c .daytab.on{background:'+N+';color:'+Y+';border-color:'+N+'}'+
+ 'body.v2c .daytab>button:first-child{color:'+N+';padding:8px 14px}body.v2c .daytab.on>button:first-child{color:'+Y+'}'+
+ 'body.v2c .daytab .dx{border-left-color:rgba(22,71,158,.25)}body.v2c .daytab.on .dx{color:#fff}'+
+ 'body.v2c .seg{border:2px solid '+N+';border-radius:999px}body.v2c .seg button{color:'+N+';padding:9px 20px}body.v2c .seg button.on{background:'+N+';color:'+Y+'}'+
+ 'body.v2c .card input[type=text],body.v2c .card input[type=email],body.v2c .card input[type=tel],body.v2c .card select{border-radius:12px;border:1.5px solid #CBD9F0;min-height:46px;font-size:15px}'+
+ 'body.v2c .card input:focus,body.v2c .card select:focus{border-color:'+N+';outline:0;box-shadow:0 0 0 3px rgba(22,71,158,.12)}'+
+ 'body.v2c .card .lb{color:#5A6B87;font-weight:800;letter-spacing:.08em}'+
+ 'body.v2c .meal{border:1.5px solid #DDE4EF;border-radius:16px;background:#F7F9FD;padding:14px 14px 12px;margin-top:12px}'+
+ 'body.v2c .meal .msel{min-height:40px;font-weight:800;color:'+K+'}'+
+ 'body.v2c .meal .mac{color:'+N+';font-weight:700;font-size:13px}'+
+ 'body.v2c .meal .addrow{gap:8px;flex-wrap:wrap}'+
+ 'body.v2c .dtot .tile{border:2px solid '+N+';border-radius:14px;background:#fff;box-shadow:none}'+
+ 'body.v2c .dtot .tile .v{color:'+K+'}'+
+ 'body.v2c .hint{color:#4A5A75}body.v2c .hint a,body.v2c .foot a{color:'+N+';font-weight:700}'+
+ 'body.v2c .finish{background:rgba(255,255,255,.97);box-shadow:0 -10px 30px rgba(11,28,54,.12);border-top:0;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}'+
+ 'body.v2c .finish .wrap{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom))}'+
+ 'body.v2c .finish .sum{font-family:Montserrat,system-ui,sans-serif!important;font-weight:700;color:'+K+';font-size:14px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'+
+ 'body.v2c .finish .btn{height:46px;border-radius:999px;font-weight:800;white-space:nowrap}'+
+ 'body.v2c .finish #doUndo{width:46px;padding:0;justify-content:center;font-size:0}body.v2c .finish #doUndo:before{content:"\\21B6";font-size:20px}'+
+ 'body.v2c .finish #doSend{background:'+Y+'!important;color:'+K+'!important;border-color:'+Y+'!important;padding:0 22px}'+
+ 'body.v2c .v2cmore{position:relative}'+
+ 'body.v2c .v2cmore>button{height:46px;border-radius:999px;border:2px solid '+N+';background:#fff;color:'+N+';font:800 14px Montserrat,system-ui,sans-serif;padding:0 16px;cursor:pointer;white-space:nowrap}'+
+ 'body.v2c .v2cmenu{position:absolute;right:0;bottom:56px;min-width:230px;background:#fff;border-radius:16px;box-shadow:0 18px 44px rgba(11,28,54,.25);padding:6px;display:none;z-index:50}'+
+ 'body.v2c .v2cmore.open .v2cmenu{display:block}'+
+ 'body.v2c .v2cmenu .btn{display:flex!important;width:100%;height:auto!important;justify-content:flex-start;text-align:left;background:#fff!important;color:'+K+'!important;border:0!important;border-radius:10px!important;padding:12px 14px!important;box-shadow:none!important;font-weight:700!important;margin:0!important}'+
+ 'body.v2c .v2cmenu .btn:hover{background:#EDF3FD!important}'+
+ '@media (max-width:600px){body.v2c .finish .sum{display:none}body.v2c .finish .wrap{justify-content:flex-end}body.v2c .card{padding:16px;border-radius:16px}body.v2c .finish #doSend{flex:1}}'
+ ,'v2-coach');
+ ready(function(){D.body.classList.add('v2c');
+  var f=D.querySelector('.finish .wrap'),sv=D.getElementById('doSave'),sh=D.getElementById('doSheet'),op=D.getElementById('doOpen'),se=D.getElementById('doSend'),un=D.getElementById('doUndo');
+  if(f&&se&&!D.querySelector('.v2cmore')){
+   if(un)un.setAttribute('aria-label','Undo');
+   var w=D.createElement('div');w.className='v2cmore';w.innerHTML='<button type="button" aria-haspopup="true">'+t('More')+' ▾</button><div class="v2cmenu" role="menu"></div>';
+   var m=w.querySelector('.v2cmenu');[sv,sh,op].forEach(function(b){if(b){b.classList.remove('sx30-shine');m.appendChild(b)}});
+   f.insertBefore(w,se);
+   w.firstChild.addEventListener('click',function(e){e.stopPropagation();w.classList.toggle('open')});
+   m.addEventListener('click',function(){setTimeout(function(){w.classList.remove('open')},0)});
+   D.addEventListener('click',function(e){if(!w.contains(e.target))w.classList.remove('open')})}
+ })}
+
 if(P==='/')home();
 if(P==='/checkout')checkout();
+if(P==='/coach-plan-builder')coach();
 if(P==='/meal-plan'){plan();quick();freePlan();mealAdjust()}
 tapDemo();
 })();
 
-/*AERA-V2-END*/</script><!-- build 1791926308000 -->
+/*AERA-V2-END*/</script><!-- build 1791929927912 -->
 </body></html>
