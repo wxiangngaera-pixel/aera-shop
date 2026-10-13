@@ -55,7 +55,7 @@ function fix(el){if(!el||el.nodeType!==1)return;
 function all(root){if(!root||!root.querySelectorAll)return;if(root.nodeType===1)fix(root);var l=root.querySelectorAll('[style*="url("],img');for(var i=0;i<l.length;i++)fix(l[i])}
 new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){var m=ms[i];if(m.type==='attributes')fix(m.target);else for(var j=0;j<m.addedNodes.length;j++)all(m.addedNodes[j])}}).observe(D.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['style','src']});
 function done(){if(--left>0)return;READY=true;all(D)}
-PK.forEach(function(p){fetch(p).then(function(r){return r.ok?r.text():''}).then(function(t){var a=t.indexOf('/*IMGPACK-START*/'),b=t.indexOf('/*IMGPACK-END*/');if(a>=0&&b>a){var j=JSON.parse(t.slice(a+17,b));for(var k in j)MAP[k]=j[k]}all(D)}).catch(function(){}).then(done)});
+PK.forEach(function(p){fetch(p).then(function(r){return r.ok?r.text():''}).then(function(t){var a=t.indexOf('/*IMGPACK-START*/'),b=t.indexOf('/*IMGPACK-END*/');if(a>=0&&b>a){var j=JSON.parse(t.slice(a+17,b));for(var k in j)MAP[k]=j[k]+'#/'+k.split('/').pop()}all(D)}).catch(function(){}).then(done)});
 setTimeout(function(){if(!READY){FAIL=true;all(D)}},9000);
 })();</script>
 
@@ -3462,6 +3462,6 @@ function f(){btn();H.classList.toggle('aera-coe',!forced&&empty())}
 window.addEventListener('hashchange',function(){if(SHOP.test(location.hash||'')){forced=true;f()}});
 function go(){f();var l=document.getElementById('lines');if(l)new MutationObserver(f).observe(l,{childList:true,subtree:true,characterData:true});setTimeout(f,1500)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
 try{Object.assign(window.AERA_I18N||{},{"Browse the Menu":"浏览菜单"})}catch(e){}})();</script>
-<!-- build 1791927302501 -->
+<!-- build 1791927755929 -->
 </body>
 </html>
