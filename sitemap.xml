@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://aeramealprep.net/img1/</loc>
+    <lastmod>2026-10-13T21:23:32.115Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://aeramealprep.net/v2/</loc>
     <lastmod>2026-10-13T21:18:36.845Z</lastmod>
     <changefreq>weekly</changefreq>
