@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow">
+<!-- SEO Meta Tags -->
+<title>AERA v2 Preview Engine</title>
+<meta property="og:title" content="AERA v2 Preview Engine" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="AERA v2 Preview Engine" />
+<!-- End SEO Meta Tags -->
+<script data-lp-token-hydrate>
+(function(){try{
+  var slug="lp-mv6forup-tbmjn";
+  var SITEK="";
+  var SK='lp_access_'+slug;
+  var map={access_token:'lp_pw_',allowlist_access_token:'lp_al_',pin_access_token:'lp_pin_',paywall_access_token:'lp_paid_'};
+  function siteTok(){try{return SITEK?localStorage.getItem(SITEK):null;}catch(e){return null;}}
+  var u=new URL(location.href);var found=null;var changed=false;
+  var PINP=true;
+  if(!PINP){try{localStorage.removeItem('lp_pin_'+slug);if(SITEK)localStorage.removeItem(SITEK);}catch(e){}}
+  Object.keys(map).forEach(function(p){var v=u.searchParams.get(p);if(v){found=v;try{if(PINP||p!=='pin_access_token'){localStorage.setItem(map[p]+slug,v);if(SITEK&&p==='pin_access_token')localStorage.setItem(SITEK,v);}}catch(e){}if(p==='pin_access_token'){try{sessionStorage.setItem('lp_fresh_'+slug,'1');}catch(e){}}u.searchParams.delete(p);changed=true;}});
+  if(found){try{sessionStorage.setItem(SK,found);}catch(e){}}
+  else{try{if(!sessionStorage.getItem(SK)){var t=localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();if(t)sessionStorage.setItem(SK,t);}}catch(e){}}
+  if(changed){try{history.replaceState(null,'',u.toString());}catch(e){}}
+  function getTok(){try{return sessionStorage.getItem(SK)||localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();}catch(e){return null;}}
+  function needsToken(url,method){if(!url)return false;var s=String(url);var m=(method||'GET').toUpperCase();var isSheetWrite=(m==='POST'||m==='PATCH'||m==='PUT'||m==='DELETE')&&/\/sheet-rows(\/|$|\?)/.test(s);var isSheetRead=/\/sheet-data(\/|$|\?)/.test(s);var isLlm=/\/api\/landing-pages\/public\/[^/]+\/(llm|llm-config)(\/|$|\?)/.test(s);return isSheetWrite||isSheetRead||isLlm;}
+  if(window.fetch){var _f=window.fetch;window.fetch=function(input,init){try{var url=typeof input==='string'?input:(input&&input.url)||'';var method=(init&&init.method)||(input&&input.method)||'GET';if(needsToken(url,method)){var tok=getTok();if(tok){init=init||{};var h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});if(!h.has('X-Landing-Page-Token'))h.set('X-Landing-Page-Token',tok);init.headers=h;}}}catch(e){}return _f.call(this,input,init);};}
+  if(window.XMLHttpRequest){var _o=XMLHttpRequest.prototype.open;var _s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__lpM=m;this.__lpU=u;return _o.apply(this,arguments);};XMLHttpRequest.prototype.send=function(){try{if(needsToken(this.__lpU,this.__lpM)){var tok=getTok();if(tok)this.setRequestHeader('X-Landing-Page-Token',tok);}}catch(e){}return _s.apply(this,arguments);};}
+}catch(e){}})();
+</script>
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://my.chatbees.io/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=8015');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='QnKb4gF';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    var phone=findPhone();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    var __pLoc=(document.documentElement.lang||navigator.language||'en');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,phone:phone||'',amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,locale:__pLoc,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var sidP=urlParams.get('session_id');
+      if(sidP){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidP})}).catch(function(){});}catch(e){}}
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-cart>
+(function(){
+  var slug='QnKb4gF';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findCartEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realCart=function(arg){
+    var items, email='', customerName='', successUrl, cancelUrl, currency;
+    if(Array.isArray(arg)){items=arg;}
+    else if(arg&&typeof arg==='object'){
+      items=arg.items;email=arg.email||'';customerName=arg.name||arg.customerName||'';
+      successUrl=arg.successUrl;cancelUrl=arg.cancelUrl;currency=arg.currency;
+    }
+    if(!Array.isArray(items)||items.length===0){alert('No items in cart.');return Promise.reject('no_items');}
+    var cleanItems=[];var totalCents=0;
+    for(var i=0;i<items.length;i++){
+      var it=items[i];if(!it||typeof it!=='object'){alert('Invalid item at position '+i);return Promise.reject('bad_item');}
+      var nm=typeof it.name==='string'?it.name.trim():'';
+      if(!nm){alert('Item '+(i+1)+' is missing a name.');return Promise.reject('no_name');}
+      var amt=typeof it.amountCents==='number'?it.amountCents:(typeof it.amount==='number'?Math.round(it.amount*100):NaN);
+      if(!isFinite(amt)||amt<1){alert('Item "'+nm+'" needs a valid amount in cents.');return Promise.reject('bad_amount');}
+      var qty=(typeof it.quantity==='number'&&it.quantity>0)?Math.floor(it.quantity):1;
+      cleanItems.push({name:nm,description:it.description||'',amountCents:amt,quantity:qty});
+      totalCents+=amt*qty;
+    }
+    if(totalCents<50){alert('Cart total must be at least $0.50');return Promise.reject('total_too_low');}
+    if(!email)email=findCartEmail();
+    if(!customerName)customerName=findCartName();
+    var cartPhone=findCartPhone();
+    if(!email){var p=window.prompt('Enter your email for the receipt:','');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert('An email address is required to complete checkout.');return Promise.reject('no_email');}}
+    var successBase=window.location.href.split('?')[0];
+    var body={email:email,name:customerName,items:cleanItems,locale:(document.documentElement.lang||navigator.language||'en')};
+    if(currency)body.currency=currency;
+    if(cartPhone)body.phone=cartPhone;
+    body.successUrl=successUrl||(successBase+'?cart=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}');
+    body.cancelUrl=cancelUrl||(successBase+'?cart=cancelled');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/cart/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process checkout');throw new Error(d.error);}
+    });
+  };
+  try{Object.defineProperty(window,'__processCart',{value:__realCart,writable:false,configurable:false});}catch(e){window.__processCart=__realCart;}
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('cart')==='success'){
+      var sidC=urlParams.get('session_id');
+      if(sidC){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidC})}).catch(function(){});}catch(e){}}
+      if(document.getElementById('payment-success-overlay')||document.getElementById('donation-success-overlay')||document.getElementById('cart-success-overlay'))return;
+      var overlay=document.createElement('div');overlay.id='cart-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||'Thank you for your order.';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var cBtn=document.getElementById('lp-cart-success-btn');
+      if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script></head>
+<body><p>AERA v2 preview engine. Loaded only after ?preview=new. Do not delete.</p>
+<script type="text/plain" id="aera-v2-src">/*AERA-V2-START*/
+/* AERA v2 : the simpler customer journey ( preview ). Loaded only for browsers that opened ?preview=new */
+(function(){if(window.__AERA_V2)return;window.__AERA_V2=1;
+var D=document,H=D.documentElement,P=(location.pathname||'/').replace(/\/+$/,'')||'/';
+function css(t,id){var s=D.createElement('style');if(id)s.id=id;s.textContent=t;(D.head||H).appendChild(s);return s}
+function ready(f){if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',f);else f()}
+function zh(){return H.getAttribute('data-lang')==='zh'}
+var ZH={'Meal prep built around your goal.':'围绕您目标打造的备餐。','Chef-cooked, weighed to the gram, delivered chilled across Klang Valley.':'厨师烹制，精确到克，冷藏配送至巴生谷。',
+ 'Build My Plan':'定制我的餐单','Tell us your goal. We build your week to your calories and macros.':'告诉我们您的目标，我们按您的热量与宏量营养素排好一周。','Start':'开始',
+ 'Pick a Bundle':'选择套餐','7 days, chef-picked for Fat Loss or Mass Gain.':'7 天，主厨为减脂或增肌挑选。','See Bundles':'查看套餐','From':'低至','a meal':'每餐',
+ '29 meals':'29 道餐点','Macros on every box':'每盒标注宏量','7-day fresh':'保鲜 7 天','Delivery or self pick-up':'配送或自取',
+ 'Preview of the new website':'新网站预览','Exit preview':'退出预览','Everything else':'更多选择'};
+try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
+function t(s){return zh()&&ZH[s]?ZH[s]:s}
+
+/* ---------- every page : a small preview badge, and a header that fits a phone ---------- */
+css(
+'#v2badge{position:fixed;left:50%;transform:translateX(-50%);top:78px;white-space:nowrap;z-index:2147483000;background:#0B1C36;color:#fff;font:600 12px/1.2 Montserrat,system-ui,sans-serif;border-radius:999px;padding:8px 12px;box-shadow:0 6px 18px rgba(0,0,0,.25);display:flex;gap:10px;align-items:center}'+
+'#v2badge a{color:#FDB913;text-decoration:underline}'+
+'@media (max-width:480px){#aaGetApp small,#aaGetApp b{display:none!important}#aaGetApp{padding:4px!important;min-width:0!important;width:auto!important}#findBtn{display:none!important}body > nav .wrap{gap:6px!important}#ordBtn{padding:7px 10px!important;font-size:12.5px!important}}'
+,'v2-base');
+ready(function(){if(D.getElementById('v2badge'))return;var b=D.createElement('div');b.id='v2badge';
+ b.innerHTML='<span>'+t('Preview of the new website')+'</span><a href="?preview=off">'+t('Exit preview')+'</a>';D.body.appendChild(b)});
+
+/* ---------- homepage : one clear start, two equal choices ---------- */
+function home(){
+ css(
+ '#banBand,#top{display:none!important}'+
+ '#v2hero{background:linear-gradient(160deg,#16479E 0%,#0E3576 55%,#092851 100%);color:#fff;padding:28px 16px 30px;font-family:Montserrat,system-ui,sans-serif}'+
+ '#v2hero .in{max-width:1080px;margin:0 auto}'+
+ '#v2hero .eb{font-size:11px;font-weight:800;letter-spacing:.14em;color:#FDB913;text-transform:uppercase;margin:0 0 10px}'+
+ '#v2hero h1{font-size:clamp(30px,8vw,52px);line-height:1.08;font-weight:800;margin:0 0 10px;letter-spacing:-.01em}'+
+ '#v2hero h1 em{font-style:normal;color:#FDB913}'+
+ '#v2hero .sub{font-size:15.5px;line-height:1.5;color:rgba(255,255,255,.86);margin:0 0 22px;max-width:560px}'+
+ '#v2hero .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}'+
+ '#v2hero .ch{display:flex;flex-direction:column;justify-content:space-between;gap:12px;border-radius:20px;padding:18px 16px 16px;text-decoration:none;min-height:212px;box-shadow:0 14px 34px rgba(0,0,0,.25);transition:transform .18s ease}'+
+ '#v2hero .ch:active{transform:scale(.98)}'+
+ '#v2hero .ch.a{background:#FDB913;color:#0B1C36}'+
+ '#v2hero .ch.b{background:#fff;color:#0B1C36}'+
+ '#v2hero .ch .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:#16479E;color:#FDB913}'+
+ '#v2hero .ch.b .ic{background:#FDB913;color:#16479E}'+
+ '#v2hero .ch .ic svg{width:24px;height:24px}'+
+ '#v2hero .ch h2{font-size:clamp(18px,4.8vw,26px);line-height:1.15;font-weight:800;margin:12px 0 6px;color:#0B1C36}'+
+ '#v2hero .ch p{font-size:13px;line-height:1.45;margin:0;color:#33415C}'+
+ '#v2hero .ch .go{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:42px;border-radius:999px;font-weight:800;font-size:14px;background:#16479E;color:#fff}'+
+ '#v2hero .ch.b .go{background:#16479E}'+
+ '#v2hero .ch .fr{font-size:12px;font-weight:700;color:#16479E;margin-top:6px}'+
+ '#v2hero .trust{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}'+
+ '#v2hero .trust li{font-size:12px;font-weight:600;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 11px}'+
+ '#v2more{font:800 11px/1 Montserrat,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#16479E;max-width:1080px;margin:26px auto 4px;padding:0 16px}'+
+ '@media (min-width:760px){#v2hero{padding:56px 24px 60px}#v2hero .two{max-width:760px;gap:18px}#v2hero .ch{min-height:240px;padding:24px}#v2hero .ch p{font-size:14.5px}}'
+ ,'v2-home');
+ var ICA='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>';
+ var ICB='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M3 12h18M12 7v13M8 7c0-2 1.5-3 4-3s4 1 4 3"/></svg>';
+ function paint(){var top=D.getElementById('top');if(!top)return false;var s=D.getElementById('v2hero');if(!s){s=D.createElement('section');s.id='v2hero';top.parentNode.insertBefore(s,top)}
+  s.innerHTML='<div class="in"><p class="eb">'+(zh()?'厨师烹制 · 每盒标注宏量 · 巴生谷':'Chef-cooked · Macros on every box · Klang Valley')+'</p>'+
+   '<h1>'+(zh()?ZH['Meal prep built around your goal.']:'Meal prep built around <em>your goal.</em>')+'</h1>'+
+   '<p class="sub">'+t('Chef-cooked, weighed to the gram, delivered chilled across Klang Valley.')+'</p>'+
+   '<div class="two">'+
+    '<a class="ch a" href="/meal-plan/"><div><span class="ic">'+ICA+'</span><h2>'+t('Build My Plan')+'</h2><p>'+t('Tell us your goal. We build your week to your calories and macros.')+'</p></div><span class="go">'+t('Start')+' →</span></a>'+
+    '<a class="ch b" href="#bundles" data-v2b="1"><div><span class="ic">'+ICB+'</span><h2>'+t('Pick a Bundle')+'</h2><p>'+t('7 days, chef-picked for Fat Loss or Mass Gain.')+'</p><div class="fr">'+t('From')+' RM 22.50 '+t('a meal')+'</div></div><span class="go">'+t('See Bundles')+' →</span></a>'+
+   '</div>'+
+   '<ul class="trust"><li>'+t('29 meals')+'</li><li>'+t('Macros on every box')+'</li><li>'+t('7-day fresh')+'</li><li>'+t('Delivery or self pick-up')+'</li></ul></div>';
+  return true}
+ D.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-v2b]');if(!a)return;e.preventDefault();
+  var card=D.getElementById('hc-bundles');try{if(card&&!card.classList.contains('open')&&typeof window.hubTog==='function')window.hubTog('bundles')}catch(x){}
+  setTimeout(function(){var el=card||D.getElementById('bundles');if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},120)},true);
+ ready(function(){if(!paint()){var n=0,iv=setInterval(function(){if(paint()||++n>40)clearInterval(iv)},150)}});
+ new MutationObserver(function(){paint()}).observe(H,{attributes:true,attributeFilter:['data-lang']})}
+
+/* ---------- Meal Plan : one step at a time, one obvious next move ---------- */
+function plan(){
+ Object.assign(ZH,{'Answer a few quick questions. We build your week to your calories and macros.':'回答几个简单问题，我们按您的热量与宏量营养素排好一周。',
+  'Your answers are saved to your account as you go.':'您的答案会随时保存到账户。','More':'更多','Fine-tune the whole plan':'微调整份餐单','Step':'步骤','of':'/','meals':'餐','Add To Cart':'加入购物车'});
+ try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
+ css(
+ '#stepbar{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;gap:6px!important;padding-bottom:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}'+
+ '#stepbar::-webkit-scrollbar{display:none}'+
+ '#stepbar .step{flex:0 0 auto;white-space:nowrap;font-size:12.5px!important;padding:7px 12px!important}'+
+ '#v2prog{height:4px;border-radius:4px;background:#E3E8F2;margin:8px 0 14px;overflow:hidden}#v2prog i{display:block;height:100%;background:#FDB913;border-radius:4px;transition:width .3s ease}'+
+ '.planacts details.v2more{position:relative}'+
+ '.planacts details.v2more>summary{list-style:none;cursor:pointer}.planacts details.v2more>summary::-webkit-details-marker{display:none}'+
+ '.planacts details.v2more .v2menu{position:absolute;z-index:50;top:calc(100% + 6px);left:0;min-width:220px;background:#fff;border:1px solid #CBD9F0;border-radius:14px;box-shadow:0 14px 30px rgba(11,28,54,.18);padding:6px;display:flex;flex-direction:column;gap:4px}'+
+ '.planacts details.v2more .v2menu .btn{width:100%;justify-content:flex-start;text-align:left;background:#fff!important;color:#16479E!important;border-color:transparent!important}'+
+ '.planacts details.v2more .v2menu .btn:hover{background:#EDF3FD!important}'+
+ 'details.v2tune>summary{list-style:none;cursor:pointer;font-weight:700;color:#16479E;font-size:14px;padding:10px 0}details.v2tune>summary::-webkit-details-marker{display:none}'+
+ 'details.v2tune>summary:after{content:" ▾"}details.v2tune[open]>summary:after{content:" ▴"}'+
+ 'details.v2tune .tune .lb{display:none}'+
+ '#v2bar{position:fixed;left:0;right:0;bottom:0;z-index:2147482000;background:#fff;border-top:1px solid #CBD9F0;box-shadow:0 -8px 24px rgba(11,28,54,.12);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:none;align-items:center;gap:12px;font-family:Montserrat,system-ui,sans-serif}'+
+ '#v2bar.on{display:flex}#v2bar .p{flex:1;min-width:0}#v2bar .p b{display:block;font-size:18px;color:#0B1C36}#v2bar .p small{font-size:12px;color:#5A6B87}'+
+ '#v2bar button{height:48px;border:0;border-radius:999px;background:#FDB913;color:#0B1C36;font:800 15px Montserrat,system-ui,sans-serif;padding:0 22px;white-space:nowrap}'+
+ 'body.v2bar-on{padding-bottom:84px}'+
+ '@media (max-width:600px){#planIntro{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}#planIntro.v2open{display:block}}'+
+ '@media (min-width:900px){#v2bar{display:none!important}body.v2bar-on{padding-bottom:0}}'
+ ,'v2-plan');
+ function intro(){var p=D.querySelector('.wrap > p');if(p&&/Tell us about you and your Goal/.test(p.textContent)&&!p.__v2){p.__v2=1;p.textContent=t('Answer a few quick questions. We build your week to your calories and macros.')}
+  [].forEach.call(D.querySelectorAll('#s1 .hint'),function(h){if(/Nothing is saved until you Order/.test(h.textContent))h.textContent=t('Your answers are saved to your account as you go.')})}
+ function prog(){var sb=D.getElementById('stepbar');if(!sb)return;var on=sb.querySelector('.step.on'),n=on?+on.getAttribute('data-s'):1;
+  var pg=D.getElementById('v2prog');if(!pg){pg=D.createElement('div');pg.id='v2prog';pg.innerHTML='<i></i>';sb.parentNode.insertBefore(pg,sb.nextSibling)}
+  var w=(n/5*100)+'%';if(pg.firstChild.style.width!==w)pg.firstChild.style.width=w;if(on&&on.scrollIntoView&&!on.__v2seen){on.__v2seen=1;try{sb.scrollTo({left:on.offsetLeft-12,behavior:'smooth'})}catch(e){}}return n}
+ function acts(){[].forEach.call(D.querySelectorAll('.planacts'),function(row){if(row.__v2)return;var keep=/savePlan\(\)|adminSave\(\)/;
+  var btns=[].filter.call(row.children,function(b){return (b.tagName==='BUTTON'||b.tagName==='A')&&!keep.test(b.getAttribute('onclick')||'')});if(!btns.length)return;row.__v2=1;
+  var d=D.createElement('details');d.className='v2more';d.innerHTML='<summary class="btn btn-o s aera-nb">'+t('More')+' ▾</summary><div class="v2menu"></div>';
+  var menu=d.querySelector('.v2menu');btns.forEach(function(b){menu.appendChild(b)});row.appendChild(d);
+  menu.addEventListener('click',function(){setTimeout(function(){d.open=false},50)});
+  D.addEventListener('click',function(e){if(d.open&&!d.contains(e.target))d.open=false})})}
+ function tune(){var tu=D.querySelector('#planCal .tune');if(!tu||tu.parentNode.classList.contains('v2tune'))return;
+  var d=D.createElement('details');d.className='v2tune';d.innerHTML='<summary>'+t('Fine-tune the whole plan')+'</summary>';tu.parentNode.insertBefore(d,tu);d.appendChild(tu)}
+ function bar(n){var b=D.getElementById('v2bar');if(!b){b=D.createElement('div');b.id='v2bar';b.innerHTML='<div class="p"><b></b><small></small></div><button type="button"></button>';D.body.appendChild(b);
+   b.querySelector('button').addEventListener('click',function(){try{window.goStep(5)}catch(e){}})}
+  var P_=window.PLAN,on=n===4&&P_&&P_.meals&&P_.meals.length&&!(D.getElementById('s4')||{classList:{contains:function(){return false}}}).classList.contains('gated');
+  b.classList.toggle('on',!!on);D.body.classList.toggle('v2bar-on',!!on);if(!on)return;
+  var pr=0;try{pr=window.planPrice()}catch(e){}
+  function st(el,v){if(el.textContent!==v)el.textContent=v}
+  st(b.querySelector('b'),'RM '+(+pr||0).toFixed(2));st(b.querySelector('small'),P_.meals.length+' '+(zh()?'餐':'meals')+' · '+(zh()?'含包装':'incl. packaging'));
+  st(b.querySelector('button'),t('Add To Cart')+' →')}
+ D.addEventListener('click',function(e){var pi=e.target.closest&&e.target.closest('#planIntro');if(pi)pi.classList.toggle('v2open')});
+ function run(){try{intro();var n=prog();acts();tune();bar(n)}catch(e){}}
+ var q=0;function soon(){if(q)return;q=setTimeout(function(){q=0;run()},120)}
+ ready(function(){run();new MutationObserver(soon).observe(D.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});setInterval(run,1500)})}
+
+/* ---------- Checkout : short, with the Pay button always in reach ---------- */
+function checkout(){
+ Object.assign(ZH,{'Have a referral code?':'有推荐码吗？','Add a note for the kitchen or rider':'给厨房或骑手留言'});
+ try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
+ css(
+ '#side #payBtn{position:sticky;bottom:12px;z-index:5;box-shadow:0 12px 26px rgba(11,28,54,.28)}'+
+ '#side details.v2opt{margin:12px 0 4px;border:1px solid #CBD9F0;border-radius:14px;padding:0 14px;background:#fff}'+
+ '#side details.v2opt>summary{list-style:none;cursor:pointer;font-weight:700;color:#16479E;font-size:14px;padding:13px 0}#side details.v2opt>summary::-webkit-details-marker{display:none}'+
+ '#side details.v2opt>summary:after{content:" +";float:right;font-weight:800}#side details.v2opt[open]>summary:after{content:" −"}'+
+ '#side details.v2opt[open]{padding-bottom:12px}#side details.v2opt .lb{display:none}'+
+ '#apBox table{display:none}'+
+ '@media (max-width:600px){#side .opt small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}}'
+ ,'v2-checkout');
+ function wrap(labelRe,ids,title){var side=D.getElementById('side');if(!side)return;if(side.querySelector('details.v2opt[data-k="'+title+'"]'))return;
+  var lab=[].filter.call(side.querySelectorAll(':scope > label.lb'),function(l){return labelRe.test(l.textContent)})[0];if(!lab)return;
+  var nodes=[lab].concat(ids.map(function(i){return D.getElementById(i)}).filter(Boolean));if(nodes.length<2)return;
+  var d=D.createElement('details');d.className='v2opt';d.setAttribute('data-k',title);d.innerHTML='<summary>'+t(title)+'</summary>';
+  side.insertBefore(d,lab);nodes.forEach(function(n){d.appendChild(n)});
+  var has=nodes.some(function(n){return (n.value||'').trim()});if(has)d.open=true}
+ function run(){try{wrap(/Referral Code/i,['refCode','refMsg'],'Have a referral code?');wrap(/Notes for the Kitchen/i,['notes'],'Add a note for the kitchen or rider')}catch(e){}}
+ ready(function(){run();setTimeout(run,800);setTimeout(run,2500)})}
+
+if(P==='/')home();
+if(P==='/checkout')checkout();
+if(P==='/meal-plan')plan();
+})();
+
+/*AERA-V2-END*/</script>
+</body></html>
