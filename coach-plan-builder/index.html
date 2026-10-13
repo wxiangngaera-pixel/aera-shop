@@ -58,7 +58,7 @@ var c=L.getItem('aera.motion.code')||'',cv=L.getItem('aera.motion.cv');
 if(c&&cv===v){(new Function(c))();setTimeout(function(){try{fetch(U,{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var k=cut(t);if(k&&k!==c)L.setItem('aera.motion.code',k)})}catch(e){}},4000);return}
 var x=new XMLHttpRequest();x.open('GET',U,false);x.send(null);if(x.status!==200)return;var k=cut(x.responseText);if(!k)return;
 try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
-(new Function(k))();}catch(e){}})();</script><script id="aera-imgpack-loader">/* AERA image pack : the meal photos come from small copies on aeramealprep.net ( /img1/ – /img4/ ) instead of the full-size originals on Chatbees, so the pictures appear at once. If the packs cannot load, the originals are used. */
+(new Function(k))();}catch(e){}})();</script><script id="aera-v2-loader">/* AERA v2 is LIVE ( Oct 2026 ). ?preview=off turns it off in this browser, ?preview=new turns it back on. Keeps a copy so pages open without waiting. */(function(){try{var q=location.search,L=localStorage;if(/[?&]preview=off/.test(q))L.setItem('aera.v2off','1');if(/[?&]preview=new/.test(q))L.removeItem('aera.v2off');if(L.getItem('aera.v2off')==='1')return;var A='/*AERA-V2-START*/',B='/*AERA-V2-END*/';function cut(t){var a=t.indexOf(A),b=t.indexOf(B);return a<0||b<a?'':t.slice(a,b)}var U='/v2/?t='+Math.floor(Date.now()/300000),c='';try{c=L.getItem('aera.v2.code')||''}catch(e){}if(c){try{(new Function(c))()}catch(e){}setTimeout(function(){fetch(U,{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var k=cut(t);if(k&&k!==c)try{L.setItem('aera.v2.code',k)}catch(e){}}).catch(function(){})},3000);return}var x=new XMLHttpRequest();x.open('GET',U,false);x.send(null);if(x.status!==200)return;var k=cut(x.responseText);if(!k)return;try{L.setItem('aera.v2.code',k)}catch(e){}(new Function(k))()}catch(e){}})();</script><script id="aera-imgpack-loader">/* AERA image pack : the meal photos come from small copies on aeramealprep.net ( /img1/ – /img4/ ) instead of the full-size originals on Chatbees, so the pictures appear at once. If the packs cannot load, the originals are used. */
 (function(){if(window.__AERA_IMG)return;window.__AERA_IMG=1;
 var D=document,MAP={},READY=false,FAIL=false,left=4,BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 var RE=/https:\/\/(?:my\.chatbees\.io\/objects\/(?:quick-uploads|generated-images)\/1302\/|aera-assets-production\.sgp1\.digitaloceanspaces\.com\/recipe-images\/)[^"')\s]+/g;
@@ -1496,6 +1496,6 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 </script>
-<!-- AERA site bar : end --><!-- build 1791929473574 -->
+<!-- AERA site bar : end --><!-- build 1791929931866 -->
 </body>
 </html>
