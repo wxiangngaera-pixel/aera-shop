@@ -43,7 +43,21 @@ Object.defineProperty(P,'innerHTML',{configurable:true,enumerable:D.enumerable,g
  }catch(e){try{D.set.call(this,v)}catch(x){}}finally{busy=false}}});
 })();
 </script>
-<script id="aera-v2-loader">/* AERA v2 is LIVE ( Oct 2026 ). ?preview=off turns it off in this browser, ?preview=new turns it back on. Keeps a copy so pages open without waiting. */(function(){try{var q=location.search,L=localStorage;if(/[?&]preview=off/.test(q))L.setItem('aera.v2off','1');if(/[?&]preview=new/.test(q))L.removeItem('aera.v2off');if(L.getItem('aera.v2off')==='1')return;var A='/*AERA-V2-START*/',B='/*AERA-V2-END*/';function cut(t){var a=t.indexOf(A),b=t.indexOf(B);return a<0||b<a?'':t.slice(a,b)}var U='/v2/?t='+Math.floor(Date.now()/300000),c='';try{c=L.getItem('aera.v2.code')||''}catch(e){}if(c){try{(new Function(c))()}catch(e){}setTimeout(function(){fetch(U,{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var k=cut(t);if(k&&k!==c)try{L.setItem('aera.v2.code',k)}catch(e){}}).catch(function(){})},3000);return}var x=new XMLHttpRequest();x.open('GET',U,false);x.send(null);if(x.status!==200)return;var k=cut(x.responseText);if(!k)return;try{L.setItem('aera.v2.code',k)}catch(e){}(new Function(k))()}catch(e){}})();</script>
+<script id="aera-v2-loader">/* AERA v2 is LIVE ( Oct 2026 ). ?preview=off turns it off in this browser, ?preview=new turns it back on. Keeps a copy so pages open without waiting. */(function(){try{var q=location.search,L=localStorage;if(/[?&]preview=off/.test(q))L.setItem('aera.v2off','1');if(/[?&]preview=new/.test(q))L.removeItem('aera.v2off');if(L.getItem('aera.v2off')==='1')return;var A='/*AERA-V2-START*/',B='/*AERA-V2-END*/';function cut(t){var a=t.indexOf(A),b=t.indexOf(B);return a<0||b<a?'':t.slice(a,b)}var U='/v2/?t='+Math.floor(Date.now()/300000),c='';try{c=L.getItem('aera.v2.code')||''}catch(e){}if(c){try{(new Function(c))()}catch(e){}setTimeout(function(){fetch(U,{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var k=cut(t);if(k&&k!==c)try{L.setItem('aera.v2.code',k)}catch(e){}}).catch(function(){})},3000);return}var x=new XMLHttpRequest();x.open('GET',U,false);x.send(null);if(x.status!==200)return;var k=cut(x.responseText);if(!k)return;try{L.setItem('aera.v2.code',k)}catch(e){}(new Function(k))()}catch(e){}})();</script><script id="aera-imgpack-loader">/* AERA image pack ( shop ) : meal photos, sauce pictures and vacuum-bag sheets come from small copies on aeramealprep.net ( /img5/, /img6/ ) instead of the full-size originals on Chatbees. Copies are data URLs so the backdrop cutter still works on them. If the packs cannot load, the originals are used. */
+(function(){if(window.__AERA_IMG)return;window.__AERA_IMG=1;
+var D=document,MAP={},READY=false,FAIL=false,PK=['/img5/','/img6/'],left=PK.length,BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+var RE=/https:\/\/my\.chatbees\.io\/objects\/(?:quick-uploads|generated-images)\/1302\/[^"')\s]+/g;
+function sw(s){return s.replace(RE,function(u){if(MAP[u])return MAP[u];if(READY||FAIL)return u;return BLANK})}
+function fix(el){if(!el||el.nodeType!==1)return;
+ var o=el.__aimgS,s=el.getAttribute('style');
+ if(s&&s.indexOf('url(')>=0){if(!o||s.indexOf(BLANK)<0)o=s;var n=sw(o);if(n!==s){el.__aimgS=o;el.setAttribute('style',n)}else if(n===o)el.__aimgS=null}
+ if(el.tagName==='IMG'){var src=el.__aimgI||el.getAttribute('src')||'';RE.lastIndex=0;var mm=src.match(RE);if(mm&&mm[0]===src){var v=MAP[src]||((READY||FAIL)?src:BLANK);if(v!==el.getAttribute('src')){el.__aimgI=src;el.setAttribute('src',v)}if(v===src)el.__aimgI=null}}}
+function all(root){if(!root||!root.querySelectorAll)return;if(root.nodeType===1)fix(root);var l=root.querySelectorAll('[style*="url("],img');for(var i=0;i<l.length;i++)fix(l[i])}
+new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){var m=ms[i];if(m.type==='attributes')fix(m.target);else for(var j=0;j<m.addedNodes.length;j++)all(m.addedNodes[j])}}).observe(D.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['style','src']});
+function done(){if(--left>0)return;READY=true;all(D)}
+PK.forEach(function(p){fetch(p).then(function(r){return r.ok?r.text():''}).then(function(t){var a=t.indexOf('/*IMGPACK-START*/'),b=t.indexOf('/*IMGPACK-END*/');if(a>=0&&b>a){var j=JSON.parse(t.slice(a+17,b));for(var k in j)MAP[k]=j[k]}all(D)}).catch(function(){}).then(done)});
+setTimeout(function(){if(!READY){FAIL=true;all(D)}},9000);
+})();</script>
 
 <script id="aera-motion-loader">/* AERA Motion 2030 : runs the shared motion engine ( aeramealprep.net/motion/ ) before the page draws.
    It keeps a copy in this browser so pages open instantly, and quietly picks up a newer engine for next time.
@@ -3448,6 +3462,6 @@ function f(){btn();H.classList.toggle('aera-coe',!forced&&empty())}
 window.addEventListener('hashchange',function(){if(SHOP.test(location.hash||'')){forced=true;f()}});
 function go(){f();var l=document.getElementById('lines');if(l)new MutationObserver(f).observe(l,{childList:true,subtree:true,characterData:true});setTimeout(f,1500)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
 try{Object.assign(window.AERA_I18N||{},{"Browse the Menu":"浏览菜单"})}catch(e){}})();</script>
-<!-- build 1791925891444 -->
+<!-- build 1791927302501 -->
 </body>
 </html>
