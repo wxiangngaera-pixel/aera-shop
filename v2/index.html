@@ -448,7 +448,7 @@ function quick(){
   'Most people pick 2, lunch and dinner.':'大多数人选 2 餐：午餐和晚餐。','days':'天','meal':'餐','meals':'餐','Anything you do not eat?':'有不吃的食物吗？',
   'Tap all that apply. We leave them out of every meal.':'点选所有适用项，每一餐都会避开。','I eat everything':'我什么都吃','Build My Plan':'生成我的餐单','Next':'下一步',
   'Customise everything':'完整自定义','Using your saved details':'使用您已保存的资料','Change':'更改','Please fill in all four.':'请填写全部四项。',
-  'Quick Plan':'快速餐单','Answer 5 quick questions instead':'改为回答 5 个简单问题','Prawn':'虾','Fish':'鱼','Beef':'牛肉','Egg':'鸡蛋','Peanut & Nuts':'花生与坚果','Tofu':'豆腐','Pasta':'意面','Toast':'吐司'});
+  'Quick Plan':'快速餐单','yrs':'岁','How much of your week should AERA cover?':'您希望 AERA 负责一周中的多少餐？','Answer 5 quick questions instead':'改为回答 5 个简单问题','Prawn':'虾','Fish':'鱼','Beef':'牛肉','Egg':'鸡蛋','Peanut & Nuts':'花生与坚果','Tofu':'豆腐','Pasta':'意面','Toast':'吐司'});
  try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
  css(
  'body.v2qp-on{overflow:hidden}'+
@@ -514,7 +514,7 @@ function quick(){
   return true}
  function paint(){try{if(D.activeElement&&W.contains(D.activeElement))D.activeElement.blur()}catch(x){}var fl=flow(),s=fl[cur],h='';
   if(s==='goal'){h='<h2>'+t('What is your goal?')+'</h2><p class="sb">'+t('We set your calories and macros around it.')+'</p>'+cardList(GOALS2,A.goal,'goal');
-   if(known()){var q=Qg();h+='<div class="known"><span><b>'+t('Using your saved details')+'</b><br>'+esc2((q.gender==='f'?t('Female'):t('Male'))+' · '+(q.age||'')+' · '+q.height+' cm · '+q.weight+' kg')+'</span><a href="#" data-edit="1">'+t('Change')+'</a></div>'}}
+   if(known()){var q=Qg();h+='<div class="known"><span><b>'+t('Using your saved details')+'</b><br>'+esc2((q.gender==='f'?t('Female'):t('Male'))+' · '+(q.age?q.age+' '+t('yrs'):'')+' · '+q.height+' cm · '+q.weight+' kg')+'</span><a href="#" data-edit="1">'+t('Change')+'</a></div>'}}
   else if(s==='about'){var mx=new Date().getFullYear()-14;
    h='<h2>'+t('About you')+'</h2><p class="sb">'+t('Used only to work out your daily calories.')+'</p>'+
     '<div class="seg"><button type="button" data-gender="m" class="'+(A.gender==='m'?'on':'')+'">'+t('Male')+'</button><button type="button" data-gender="f" class="'+(A.gender==='f'?'on':'')+'">'+t('Female')+'</button></div>'+
@@ -522,7 +522,7 @@ function quick(){
     '<div class="two2"><div class="fld"><label class="lb2" for="v2h">'+t('Height (cm)')+'</label><input type="number" id="v2h" inputmode="numeric" min="120" max="230" placeholder="170" value="'+esc2(A.height||'')+'"></div>'+
     '<div class="fld"><label class="lb2" for="v2w">'+t('Weight (kg)')+'</label><input type="number" id="v2w" inputmode="decimal" min="30" max="250" step="0.1" placeholder="70" value="'+esc2(A.weight||'')+'"></div></div><div class="er" id="v2er"></div>'}
   else if(s==='act'){h='<h2>'+t('How active are you?')+'</h2><p class="sb">'+t('Used only to work out your daily calories.')+'</p>'+cardList(ACTS,A.act,'act')}
-  else if(s==='week'){h='<h2>'+t('Your week')+'</h2><p class="sb">&nbsp;</p><label class="lb2">'+t('How many days?')+'</label><div class="seg">'+[5,6,7].map(function(d){return '<button type="button" data-days="'+d+'" class="'+(A.days===d?'on':'')+'">'+d+'<small>'+t('days')+'</small></button>'}).join('')+'</div>'+
+  else if(s==='week'){h='<h2>'+t('Your week')+'</h2><p class="sb">'+t('How much of your week should AERA cover?')+'</p><label class="lb2">'+t('How many days?')+'</label><div class="seg">'+[5,6,7].map(function(d){return '<button type="button" data-days="'+d+'" class="'+(A.days===d?'on':'')+'">'+d+'<small>'+t('days')+'</small></button>'}).join('')+'</div>'+
    '<label class="lb2">'+t('AERA meals a day')+'</label><div class="seg">'+[1,2,3].map(function(m){return '<button type="button" data-mpd="'+m+'" class="'+(A.mpd===m?'on':'')+'">'+m+'<small>'+(m===1?t('meal'):t('meals'))+'</small></button>'}).join('')+'</div>'+
    '<p class="sb" style="margin-top:-6px">'+t('Most people pick 2, lunch and dinner.')+'</p>'}
   else if(s==='avoid'){h='<h2>'+t('Anything you do not eat?')+'</h2><p class="sb">'+t('Tap all that apply. We leave them out of every meal.')+'</p><div class="chips2"><button type="button" class="all'+(A.avoid.length?'':' on')+'" data-none="1">'+t('I eat everything')+'</button>'+
@@ -580,9 +580,52 @@ function quick(){
   if(window.ADMIN_ID||/[?&](edit|next)=/.test(location.search))return;
   if(window.STEP===1&&!window.PLAN&&!off)start()},150)})}
 
+/* ---------- Show the plan first, ask for an account only at Add To Cart ---------- */
+function freePlan(){
+ Object.assign(ZH,{'Your plan is ready.':'您的餐单已生成。','Like it? Sign in or create a free account when you order, and it is saved to your account.':'满意吗？下单时登录或免费注册，餐单会保存到您的账户。',
+  'Almost there':'就差一步','Sign in or create a free AERA account to order. Your plan comes with you.':'登录或免费注册 AERA 账户即可下单，您的餐单会一并保留。',
+  'Your first month of the Personalised Meal Plan is free.':'个性化餐单首月免费。','Sign In':'登录','Create A Free Account':'免费注册','Keep looking':'继续查看'});
+ try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
+ css(
+ '#v2save{display:flex;gap:12px;align-items:flex-start;background:#FFF7DD;border:1px solid #FDB913;border-radius:14px;padding:12px 14px;margin:0 0 14px;font-family:Montserrat,system-ui,sans-serif;color:#0B1C36}'+
+ '#v2save i{font-style:normal;font-size:20px;line-height:1;color:#16479E}#v2save b{display:block;font-size:14.5px}#v2save span{font-size:13px;line-height:1.4;color:#33415C}'+
+ '#v2sheet{position:fixed;inset:0;z-index:2147482600;background:rgba(11,28,54,.5);display:none;align-items:flex-end;justify-content:center;font-family:Montserrat,system-ui,sans-serif}'+
+ '#v2sheet.on{display:flex}'+
+ '#v2sheet .in{width:100%;max-width:520px;background:#fff;border-radius:22px 22px 0 0;padding:22px 18px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -12px 30px rgba(0,0,0,.2);color:#0B1C36}'+
+ '#v2sheet h3{font-size:22px;font-weight:800;margin:0 0 6px}#v2sheet p{font-size:14.5px;line-height:1.45;color:#33415C;margin:0 0 6px}'+
+ '#v2sheet .fm{font-weight:700;color:#16479E;margin-bottom:16px}'+
+ '#v2sheet a,#v2sheet button{display:flex;align-items:center;justify-content:center;width:100%;box-sizing:border-box;height:52px;border-radius:999px;font:800 16px Montserrat,system-ui,sans-serif;text-decoration:none;margin:0 0 10px;cursor:pointer}'+
+ '#v2sheet .y{background:#FDB913;color:#0B1C36;border:0}#v2sheet .o{background:#fff;color:#16479E;border:2px solid #16479E}#v2sheet button{background:none;border:0;color:#5A6B87;height:40px;font-size:14px;margin:0}'+
+ '@media (min-width:600px){#v2sheet{align-items:center}#v2sheet .in{border-radius:22px}}'
+ ,'v2-free');
+ function signed(){try{return !!window.signedIn()}catch(e){return true}}
+ function acctUrl(h){var u='/account/';try{if(window.ACCOUNT_URL)u=window.ACCOUNT_URL}catch(e){}return u+'?next=plan#'+h}
+ function keep(){try{window.saveDraft()}catch(e){}try{localStorage.setItem('aera.planGate','1')}catch(e){}}
+ function note(){var s4=D.getElementById('s4'),n=D.getElementById('v2save');if(signed()){if(n)n.remove();return}
+  if(!s4||n)return;n=D.createElement('div');n.id='v2save';n.innerHTML='<i>✦</i><div><b>'+t('Your plan is ready.')+'</b><span>'+t('Like it? Sign in or create a free account when you order, and it is saved to your account.')+'</span></div>';
+  var c=s4.querySelector('.card')||s4;c.insertBefore(n,c.firstChild)}
+ function sheet(){keep();var s=D.getElementById('v2sheet');
+  if(!s){s=D.createElement('div');s.id='v2sheet';D.body.appendChild(s);
+   s.addEventListener('click',function(e){if(e.target===s||(e.target.closest&&e.target.closest('[data-x]')))s.classList.remove('on');if(e.target.closest&&e.target.closest('a'))keep()})}
+  s.innerHTML='<div class="in" role="dialog" aria-modal="true"><h3>'+t('Almost there')+'</h3><p>'+t('Sign in or create a free AERA account to order. Your plan comes with you.')+'</p><p class="fm">'+t('Your first month of the Personalised Meal Plan is free.')+'</p>'+
+   '<a class="y" href="'+acctUrl('login')+'">'+t('Sign In')+'</a><a class="o" href="'+acctUrl('signup')+'">'+t('Create A Free Account')+'</a><button type="button" data-x="1">'+t('Keep looking')+'</button></div>';
+  s.classList.add('on')}
+ function hook(){if(typeof window.planGate!=='function'||typeof window.goStep!=='function'||window.planGate.__v2)return false;
+  var og=window.planGate;
+  var ng=function(){if(window.ADMIN_ID)return og.apply(this,arguments);
+   try{localStorage.setItem('aera.planGate','1')}catch(e){}
+   var s4=D.getElementById('s4');if(s4)s4.classList.remove('gated');
+   if(ng.__busy)return;ng.__busy=1;var os=window.signedIn;try{if(!window.PLAN){window.signedIn=function(){return true};try{window.generate()}finally{window.signedIn=os}}if(!window.PLAN||!window.PLAN.meals)throw 0;window.renderPlan()}catch(e){ng.__busy=0;return og.apply(this,arguments)}ng.__busy=0;
+   try{window.saveDraft()}catch(e){}note()};
+  ng.__v2=1;window.planGate=ng;
+  var gs=window.goStep;window.goStep=function(n){if(n===5&&!signed()&&!window.ADMIN_ID){sheet();return}var r=gs.apply(this,arguments);if(n===4)setTimeout(note,0);return r};
+  var s4=D.getElementById('s4');if(s4&&s4.classList.contains('gated')&&window.STEP===4)ng();
+  return true}
+ ready(function(){var n=0,iv=setInterval(function(){if(hook()||++n>60)clearInterval(iv)},100)})}
+
 if(P==='/')home();
 if(P==='/checkout')checkout();
-if(P==='/meal-plan'){plan();quick()}
+if(P==='/meal-plan'){plan();quick();freePlan()}
 })();
 
 /*AERA-V2-END*/</script>
