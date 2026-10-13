@@ -305,18 +305,18 @@ var ZH={'Meal prep built around your goal.':'围绕您目标打造的备餐。',
  'Build My Plan':'定制我的餐单','Tell us your goal. We build your week to your calories and macros.':'告诉我们您的目标，我们按您的热量与宏量营养素排好一周。','Start':'开始',
  'Pick a Bundle':'选择套餐','7 days, chef-picked for Fat Loss or Mass Gain.':'7 天，主厨为减脂或增肌挑选。','See Bundles':'查看套餐','From':'低至','a meal':'每餐',
  '29 meals':'29 道餐点','Macros on every box':'每盒标注宏量','7-day fresh':'保鲜 7 天','Delivery or self pick-up':'配送或自取',
- 'Preview of the new website':'新网站预览','Exit preview':'退出预览','Everything else':'更多选择'};
+ 'Preview of the new website':'新网站预览','New website preview':'新网站预览','Exit preview':'退出预览','Everything else':'更多选择'};
 try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
 function t(s){return zh()&&ZH[s]?ZH[s]:s}
 
 /* ---------- every page : a small preview badge, and a header that fits a phone ---------- */
 css(
-'#v2badge{position:fixed;left:50%;transform:translateX(-50%);top:78px;white-space:nowrap;z-index:2147483000;background:#0B1C36;color:#fff;font:600 12px/1.2 Montserrat,system-ui,sans-serif;border-radius:999px;padding:8px 12px;box-shadow:0 6px 18px rgba(0,0,0,.25);display:flex;gap:10px;align-items:center}'+
+'#v2badge{position:fixed;left:12px;bottom:calc(96px + env(safe-area-inset-bottom));white-space:nowrap;z-index:2147483000;background:rgba(11,28,54,.92);color:#fff;font:600 11px/1.2 Montserrat,system-ui,sans-serif;border-radius:999px;padding:7px 11px;box-shadow:0 6px 18px rgba(0,0,0,.25);display:flex;gap:10px;align-items:center}'+
 '#v2badge a{color:#FDB913;text-decoration:underline}'+
 '@media (max-width:480px){#aaGetApp small,#aaGetApp b{display:none!important}#aaGetApp{padding:4px!important;min-width:0!important;width:auto!important}#findBtn{display:none!important}body > nav .wrap{gap:6px!important}#ordBtn{padding:7px 10px!important;font-size:12.5px!important}}'
 ,'v2-base');
 ready(function(){if(D.getElementById('v2badge'))return;var b=D.createElement('div');b.id='v2badge';
- b.innerHTML='<span>'+t('Preview of the new website')+'</span><a href="?preview=off">'+t('Exit preview')+'</a>';D.body.appendChild(b)});
+ b.innerHTML='<span>'+t('New website preview')+'</span><a href="?preview=off">'+t('Exit preview')+'</a>';D.body.appendChild(b)});
 
 /* ---------- homepage : one clear start, two equal choices ---------- */
 function home(){
@@ -437,9 +437,152 @@ function checkout(){
  function run(){try{wrap(/Referral Code/i,['refCode','refMsg'],'Have a referral code?');wrap(/Notes for the Kitchen/i,['notes'],'Add a note for the kitchen or rider')}catch(e){}}
  ready(function(){run();setTimeout(run,800);setTimeout(run,2500)})}
 
+/* ---------- Quick Plan : five taps instead of a long form ---------- */
+function quick(){
+ Object.assign(ZH,{'What is your goal?':'您的目标是什么？','We set your calories and macros around it.':'我们会据此设定您的热量与宏量营养素。',
+  'Lose Fat':'减脂','Lean and defined, without going hungry.':'变瘦变结实，不挨饿。','Build Lean Muscle':'增加精瘦肌肉','More muscle, little extra fat.':'增肌，少长脂肪。',
+  'Bulk Up':'增重增肌','Size and strength, more carbs.':'追求体型与力量，碳水更多。','Eat Healthy':'健康饮食','Balanced meals, keep my weight.':'均衡饮食，保持体重。',
+  'About you':'关于您','Used only to work out your daily calories.':'仅用于计算您每日所需热量。','Male':'男','Female':'女','Date of birth':'出生日期','Height (cm)':'身高（厘米）','Weight (kg)':'体重（公斤）',
+  'How active are you?':'您的活动量如何？','Mostly sitting':'多坐少动','Desk job, little exercise.':'办公室工作，很少运动。','Active':'适度活跃','Exercise 1 to 3 times a week.':'每周运动 1 至 3 次。',
+  'Very active':'非常活跃','Train 4 or more times a week.':'每周训练 4 次以上。','Your week':'您的一周','How many days?':'几天？','AERA meals a day':'每天 AERA 餐数',
+  'Most people pick 2, lunch and dinner.':'大多数人选 2 餐：午餐和晚餐。','days':'天','meal':'餐','meals':'餐','Anything you do not eat?':'有不吃的食物吗？',
+  'Tap all that apply. We leave them out of every meal.':'点选所有适用项，每一餐都会避开。','I eat everything':'我什么都吃','Build My Plan':'生成我的餐单','Next':'下一步',
+  'Customise everything':'完整自定义','Using your saved details':'使用您已保存的资料','Change':'更改','Please fill in all four.':'请填写全部四项。',
+  'Quick Plan':'快速餐单','Answer 5 quick questions instead':'改为回答 5 个简单问题','Prawn':'虾','Fish':'鱼','Beef':'牛肉','Egg':'鸡蛋','Peanut & Nuts':'花生与坚果','Tofu':'豆腐','Pasta':'意面','Toast':'吐司'});
+ try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
+ css(
+ 'body.v2qp-on{overflow:hidden}'+
+ '#v2qp{position:fixed;inset:0;z-index:2147482500;background:#F4F7FC;display:flex;flex-direction:column;font-family:Montserrat,system-ui,sans-serif;color:#0B1C36}'+
+ '#v2qp .qh{display:flex;align-items:center;gap:12px;padding:calc(12px + env(safe-area-inset-top)) 16px 10px;background:#fff;border-bottom:1px solid #E3E8F2}'+
+ '#v2qp .bk{width:40px;height:40px;border-radius:12px;border:1px solid #CBD9F0;background:#fff;color:#16479E;font:800 18px/1 Montserrat,system-ui,sans-serif;flex:0 0 auto}'+
+ '#v2qp .bk[disabled]{opacity:.3}'+
+ '#v2qp .pg{flex:1;height:6px;border-radius:6px;background:#E3E8F2;overflow:hidden}#v2qp .pg i{display:block;height:100%;background:#FDB913;border-radius:6px;transition:width .3s ease}'+
+ '#v2qp .cz{font-size:12px;font-weight:700;color:#16479E;white-space:nowrap;text-decoration:underline}'+
+ '#v2qp .qb{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:22px 16px 24px}'+
+ '#v2qp .qi{max-width:560px;margin:0 auto}'+
+ '#v2qp .st{font-size:11px;font-weight:800;letter-spacing:.14em;color:#16479E;text-transform:uppercase;margin:0 0 8px}'+
+ '#v2qp h2{font-size:clamp(24px,6.6vw,32px);line-height:1.15;font-weight:800;margin:0 0 6px}'+
+ '#v2qp .sb{font-size:14.5px;line-height:1.45;color:#4A5A75;margin:0 0 18px}'+
+ '#v2qp .cards{display:grid;gap:10px}'+
+ '#v2qp .cd{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#fff;border:2px solid #E3E8F2;border-radius:16px;padding:15px 14px;font:inherit;color:inherit;cursor:pointer;transition:border-color .15s,background .15s,transform .12s}'+
+ '#v2qp .cd:active{transform:scale(.985)}'+
+ '#v2qp .cd .em{width:46px;height:46px;border-radius:12px;background:#EDF3FD;display:grid;place-items:center;font-size:24px;flex:0 0 auto}'+
+ '#v2qp .cd b{display:block;font-size:16.5px;font-weight:800;margin-bottom:2px}#v2qp .cd small{display:block;font-size:13px;color:#4A5A75;line-height:1.35}'+
+ '#v2qp .cd.on{border-color:#16479E;background:#EDF3FD}#v2qp .cd.on .em{background:#16479E}'+
+ '#v2qp .seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px;margin:0 0 18px}'+
+ '#v2qp .seg button{height:56px;border-radius:14px;border:2px solid #E3E8F2;background:#fff;font:800 16px Montserrat,system-ui,sans-serif;color:#0B1C36;cursor:pointer}'+
+ '#v2qp .seg button small{display:block;font-size:11px;font-weight:600;color:#5A6B87}'+
+ '#v2qp .seg button.on{border-color:#16479E;background:#16479E;color:#fff}#v2qp .seg button.on small{color:#CBD9F0}'+
+ '#v2qp .lb2{display:block;font-size:13px;font-weight:700;color:#33415C;margin:0 0 6px}'+
+ '#v2qp .fld{margin:0 0 16px}'+
+ '#v2qp .fld input{width:100%;box-sizing:border-box;height:52px;border-radius:14px;border:2px solid #E3E8F2;background:#fff;padding:0 14px;font:600 16px Montserrat,system-ui,sans-serif;color:#0B1C36;-webkit-appearance:none;appearance:none}'+
+ '#v2qp .fld input:focus{outline:none;border-color:#16479E}'+
+ '#v2qp .two2{display:grid;grid-template-columns:1fr 1fr;gap:10px}'+
+ '#v2qp .chips2{display:flex;flex-wrap:wrap;gap:8px}'+
+ '#v2qp .chips2 button{height:46px;padding:0 16px;border-radius:999px;border:2px solid #E3E8F2;background:#fff;font:700 14.5px Montserrat,system-ui,sans-serif;color:#0B1C36;cursor:pointer}'+
+ '#v2qp .chips2 button.on{border-color:#C0392B;background:#FDECEA;color:#C0392B;text-decoration:line-through}'+
+ '#v2qp .chips2 button.all.on{border-color:#16479E;background:#16479E;color:#fff;text-decoration:none}'+
+ '#v2qp .known{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #CBD9F0;border-radius:14px;padding:12px 14px;margin:18px 0 0;font-size:13px;color:#33415C}'+
+ '#v2qp .known span{flex:1}#v2qp .known a{color:#16479E;font-weight:800}'+
+ '#v2qp .er{color:#C0392B;font-size:13px;font-weight:700;min-height:18px;margin:4px 0 0}'+
+ '#v2qp .qf{padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #E3E8F2}'+
+ '#v2qp .qf button{display:block;width:100%;max-width:560px;margin:0 auto;height:54px;border:0;border-radius:999px;background:#FDB913;color:#0B1C36;font:800 16.5px Montserrat,system-ui,sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(253,185,19,.35)}'+
+ '#v2qp .qf button[disabled]{background:#E3E8F2;color:#8A97AD;box-shadow:none}'+
+ '#v2qlink{display:flex;align-items:center;gap:10px;width:100%;box-sizing:border-box;margin:0 0 14px;padding:13px 14px;border-radius:14px;border:0;background:#16479E;color:#fff;font:800 14.5px Montserrat,system-ui,sans-serif;text-align:left;cursor:pointer}'+
+ '#v2qlink span{flex:1}#v2qlink i{font-style:normal;color:#FDB913}'
+ ,'v2-quick');
+ var A=null,cur=0,W=null,editAbout=false;
+ var GOALS2=[['fat_loss','🔥','Lose Fat','Lean and defined, without going hungry.'],['lean_gain','💪','Build Lean Muscle','More muscle, little extra fat.'],['mass_gain','🏋️','Bulk Up','Size and strength, more carbs.'],['healthy','🥗','Eat Healthy','Balanced meals, keep my weight.']];
+ var ACTS=[['1.2','🪑','Mostly sitting','Desk job, little exercise.'],['1.375','🚶','Active','Exercise 1 to 3 times a week.'],['1.45','⚡','Very active','Train 4 or more times a week.']];
+ var AV=[['prawn','Prawn'],['seafood','Fish'],['beef','Beef'],['egg','Egg'],['peanut','Peanut & Nuts'],['tofu','Tofu'],['pasta','Pasta'],['toast','Toast']];
+ function Qg(){return window.Q||{}}
+ function known(){var q=Qg();return !!(q.gender&&q.dob&&+q.height>=120&&+q.weight>=30&&+q.activity>0)}
+ function flow(){return (known()&&!editAbout)?['goal','week','avoid']:['goal','about','act','week','avoid']}
+ function esc2(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+ function start(){var q=Qg();
+  A={goal:q.goal&&q.goal!=='custom'?q.goal:'',gender:q.gender||'',dob:q.dob||'',height:q.height||'',weight:q.weight||'',act:q.activity?String(q.activity):'',days:+q.days||7,mpd:+q.mpd||2,avoid:(q.avoid||[]).slice()};
+  cur=0;editAbout=false;
+  try{if(window.AERATOUR&&AERATOUR.stop)AERATOUR.stop()}catch(e){}
+  if(!W){W=D.createElement('div');W.id='v2qp';W.setAttribute('role','dialog');W.setAttribute('aria-modal','true');D.body.appendChild(W);
+   W.addEventListener('click',onClick);W.addEventListener('input',onInput);W.addEventListener('change',onInput)}
+  W.style.display='flex';D.body.classList.add('v2qp-on');paint()}
+ function close(){if(W)W.style.display='none';D.body.classList.remove('v2qp-on')}
+ function cardList(list,val,key){return '<div class="cards">'+list.map(function(g){return '<button type="button" class="cd'+(val===g[0]?' on':'')+'" data-'+key+'="'+g[0]+'"><span class="em">'+g[1]+'</span><span><b>'+t(g[2])+'</b><small>'+t(g[3])+'</small></span></button>'}).join('')+'</div>'}
+ function ok(){var s=flow()[cur];
+  if(s==='goal')return !!A.goal;if(s==='act')return !!A.act;
+  if(s==='about')return !!(A.gender&&/^\d{4}-\d{2}-\d{2}$/.test(A.dob)&&+A.height>=120&&+A.height<=230&&+A.weight>=30&&+A.weight<=250);
+  return true}
+ function paint(){try{if(D.activeElement&&W.contains(D.activeElement))D.activeElement.blur()}catch(x){}var fl=flow(),s=fl[cur],h='';
+  if(s==='goal'){h='<h2>'+t('What is your goal?')+'</h2><p class="sb">'+t('We set your calories and macros around it.')+'</p>'+cardList(GOALS2,A.goal,'goal');
+   if(known()){var q=Qg();h+='<div class="known"><span><b>'+t('Using your saved details')+'</b><br>'+esc2((q.gender==='f'?t('Female'):t('Male'))+' · '+(q.age||'')+' · '+q.height+' cm · '+q.weight+' kg')+'</span><a href="#" data-edit="1">'+t('Change')+'</a></div>'}}
+  else if(s==='about'){var mx=new Date().getFullYear()-14;
+   h='<h2>'+t('About you')+'</h2><p class="sb">'+t('Used only to work out your daily calories.')+'</p>'+
+    '<div class="seg"><button type="button" data-gender="m" class="'+(A.gender==='m'?'on':'')+'">'+t('Male')+'</button><button type="button" data-gender="f" class="'+(A.gender==='f'?'on':'')+'">'+t('Female')+'</button></div>'+
+    '<div class="fld"><label class="lb2" for="v2dob">'+t('Date of birth')+'</label><input type="date" id="v2dob" min="1926-01-01" max="'+mx+'-12-31" value="'+esc2(A.dob)+'"></div>'+
+    '<div class="two2"><div class="fld"><label class="lb2" for="v2h">'+t('Height (cm)')+'</label><input type="number" id="v2h" inputmode="numeric" min="120" max="230" placeholder="170" value="'+esc2(A.height||'')+'"></div>'+
+    '<div class="fld"><label class="lb2" for="v2w">'+t('Weight (kg)')+'</label><input type="number" id="v2w" inputmode="decimal" min="30" max="250" step="0.1" placeholder="70" value="'+esc2(A.weight||'')+'"></div></div><div class="er" id="v2er"></div>'}
+  else if(s==='act'){h='<h2>'+t('How active are you?')+'</h2><p class="sb">'+t('Used only to work out your daily calories.')+'</p>'+cardList(ACTS,A.act,'act')}
+  else if(s==='week'){h='<h2>'+t('Your week')+'</h2><p class="sb">&nbsp;</p><label class="lb2">'+t('How many days?')+'</label><div class="seg">'+[5,6,7].map(function(d){return '<button type="button" data-days="'+d+'" class="'+(A.days===d?'on':'')+'">'+d+'<small>'+t('days')+'</small></button>'}).join('')+'</div>'+
+   '<label class="lb2">'+t('AERA meals a day')+'</label><div class="seg">'+[1,2,3].map(function(m){return '<button type="button" data-mpd="'+m+'" class="'+(A.mpd===m?'on':'')+'">'+m+'<small>'+(m===1?t('meal'):t('meals'))+'</small></button>'}).join('')+'</div>'+
+   '<p class="sb" style="margin-top:-6px">'+t('Most people pick 2, lunch and dinner.')+'</p>'}
+  else if(s==='avoid'){h='<h2>'+t('Anything you do not eat?')+'</h2><p class="sb">'+t('Tap all that apply. We leave them out of every meal.')+'</p><div class="chips2"><button type="button" class="all'+(A.avoid.length?'':' on')+'" data-none="1">'+t('I eat everything')+'</button>'+
+   AV.map(function(a){return '<button type="button" data-av="'+a[0]+'" class="'+(A.avoid.indexOf(a[0])>=0?'on':'')+'">'+t(a[1])+'</button>'}).join('')+'</div>'}
+  var last=cur===fl.length-1;
+  W.innerHTML='<div class="qh"><button type="button" class="bk" data-back="1" aria-label="Back"'+(cur?'':' disabled')+'>←</button><div class="pg"><i style="width:'+((cur+1)/fl.length*100)+'%"></i></div><a class="cz" href="#" data-custom="1">'+t('Customise everything')+'</a></div>'+
+   '<div class="qb"><div class="qi"><p class="st">'+t('Quick Plan')+' · '+(cur+1)+' / '+fl.length+'</p>'+h+'</div></div>'+
+   '<div class="qf"><button type="button" data-next="1"'+(ok()?'':' disabled')+'>'+(last?t('Build My Plan')+' ✦':t('Next')+' →')+'</button></div>';
+  var qb=W.querySelector('.qb');if(qb)qb.scrollTop=0}
+ function setNext(){var b=W.querySelector('[data-next]');if(b)b.disabled=!ok()}
+ function onInput(e){var el=e.target;if(el.id==='v2dob')A.dob=el.value;if(el.id==='v2h')A.height=el.value;if(el.id==='v2w')A.weight=el.value;setNext();var er=W.querySelector('#v2er');if(er)er.textContent=''}
+ function pick(sel,attr,val){[].forEach.call(W.querySelectorAll('['+attr+']'),function(b){b.classList.toggle('on',b.getAttribute(attr)===val)})}
+ function auto(){setTimeout(function(){if(ok()){cur++;paint()}},220)}
+ function onClick(e){var b=e.target.closest('button,a');if(!b||!W.contains(b))return;
+  if(b.hasAttribute('data-custom')){e.preventDefault();try{sessionStorage.setItem('aera.v2qp.off','1')}catch(x){}close();return}
+  if(b.hasAttribute('data-edit')){e.preventDefault();editAbout=true;cur=1;paint();return}
+  if(b.hasAttribute('data-back')){if(cur>0){cur--;paint()}return}
+  if(b.hasAttribute('data-goal')){A.goal=b.getAttribute('data-goal');pick(0,'data-goal',A.goal);setNext();auto();return}
+  if(b.hasAttribute('data-act')){A.act=b.getAttribute('data-act');pick(0,'data-act',A.act);setNext();auto();return}
+  if(b.hasAttribute('data-gender')){A.gender=b.getAttribute('data-gender');pick(0,'data-gender',A.gender);setNext();return}
+  if(b.hasAttribute('data-days')){A.days=+b.getAttribute('data-days');pick(0,'data-days',String(A.days));return}
+  if(b.hasAttribute('data-mpd')){A.mpd=+b.getAttribute('data-mpd');pick(0,'data-mpd',String(A.mpd));return}
+  if(b.hasAttribute('data-none')){A.avoid=[];[].forEach.call(W.querySelectorAll('[data-av]'),function(x){x.classList.remove('on')});b.classList.add('on');return}
+  if(b.hasAttribute('data-av')){var v=b.getAttribute('data-av'),i=A.avoid.indexOf(v);if(i>=0)A.avoid.splice(i,1);else A.avoid.push(v);b.classList.toggle('on',i<0);var n=W.querySelector('[data-none]');if(n)n.classList.toggle('on',!A.avoid.length);return}
+  if(b.hasAttribute('data-next')){if(!ok()){var er=W.querySelector('#v2er');if(er)er.textContent=t('Please fill in all four.');return}
+   if(cur<flow().length-1){cur++;paint()}else build()}}
+ function val(id,v){var el=D.getElementById(id);if(el&&v!=null&&v!==''){el.value=v;try{el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}))}catch(x){}}}
+ function build(){var q=Qg();
+  try{
+   q.goal=A.goal;q.picked=q.picked||{};q.picked.goal=1;q.picked.activity=1;q.picked.body=1;if(!q.body)q.body='mesomorph';q.kcalEdit=null;
+   if(!known()||editAbout){q.gender=A.gender;q.dob=A.dob;q.height=+A.height;q.weight=+A.weight;
+    var p=A.dob.split('-'),ss=D.querySelectorAll('.dobpick select');
+    if(ss.length===3){[p[2],p[1],p[0]].forEach(function(v,i){var s=ss[i];if([].some.call(s.options,function(o){return o.value===v}))s.value=v})}
+    val('height',A.height);val('weight',A.weight);var dob=D.getElementById('dob');if(dob)dob.value=A.dob;
+    try{window.renderGender()}catch(x){}}
+   else{val('height',q.height);val('weight',q.weight);var d2=D.getElementById('dob');if(d2&&q.dob)d2.value=q.dob}
+   if(A.act)q.activity=String(A.act);
+   q.days=A.days;q.mpd=A.mpd;q.total=A.mpd>=3?3:(+q.total||3);var tt=D.getElementById('total');if(tt)tt.value=String(q.total);
+   q.avoid=A.avoid.slice();
+   [].forEach.call(D.querySelectorAll('#activity .opt'),function(o){o.classList.toggle('on',o.getAttribute('data-v')===q.activity)});
+   [].forEach.call(D.querySelectorAll('#goal .opt'),function(o){o.classList.toggle('on',o.getAttribute('data-v')===q.goal)});
+   ['renderTargets','renderStep2','renderStep3'].forEach(function(f){try{window[f]()}catch(x){}});
+   ['intro','week','prefs'].forEach(function(k){try{localStorage.setItem('aera.tour.plan.'+k+'.v1','1')}catch(x){}});
+   window.PLAN=null;
+  }catch(e){}
+  close();try{window.goStep(4)}catch(e){}}
+ function link(){var s1=D.getElementById('s1');if(!s1||D.getElementById('v2qlink'))return;var h2=s1.querySelector('h2');if(!h2)return;
+  var b=D.createElement('button');b.type='button';b.id='v2qlink';b.innerHTML='<i>⚡</i><span>'+t('Answer 5 quick questions instead')+'</span><i>→</i>';
+  b.addEventListener('click',function(){try{sessionStorage.removeItem('aera.v2qp.off')}catch(x){}start()});h2.parentNode.insertBefore(b,h2)}
+ window.v2QuickPlan=start;
+ ready(function(){var n=0,iv=setInterval(function(){n++;link();
+  var off=false;try{off=sessionStorage.getItem('aera.v2qp.off')==='1'}catch(x){}
+  if(typeof window.goStep!=='function'||!window.Q){if(n>40)clearInterval(iv);return}
+  if(n<6)return;clearInterval(iv);
+  if(window.ADMIN_ID||/[?&](edit|next)=/.test(location.search))return;
+  if(window.STEP===1&&!window.PLAN&&!off)start()},150)})}
+
 if(P==='/')home();
 if(P==='/checkout')checkout();
-if(P==='/meal-plan')plan();
+if(P==='/meal-plan'){plan();quick()}
 })();
 
 /*AERA-V2-END*/</script>
