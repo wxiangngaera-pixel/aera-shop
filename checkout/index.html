@@ -52,6 +52,24 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 /* a Bundle's meals list : picture on the left, the name full width beside it and its KCALs underneath ( no squeezed name column ) */.inside ol li{display:grid!important;grid-template-columns:56px minmax(0,1fr);column-gap:10px;row-gap:2px;align-items:center}.inside ol li .insidepic{grid-row:1 / span 2}.inside ol li>span,.inside ol li>em{grid-column:2;min-width:0}.inside ol li>em{white-space:normal!important}.inside ol li>:not(.insidepic):not(span):not(em){grid-column:1 / -1}.inside ol li:not(:has(.insidepic)){grid-template-columns:minmax(0,1fr)}.inside ol li:not(:has(.insidepic))>span,.inside ol li:not(:has(.insidepic))>em{grid-column:1}html[data-lang="zh"] .inside ol li>span{white-space:pre-line}
 </style>
 <!-- AERA phone fit : end -->
+<script id="aera-intl-phone">/* An overseas mobile is fine, but the Rider calls a Malaysian number : for a Delivery with an overseas
+   mobile, a Malaysian number for the Rider is asked for, the Order carries that one, and the customer's own
+   number goes in the Kitchen notes. */
+function coIntl(v){v=String(v||'').trim();if(!/^(\+|00)/.test(v))return false;var d=v.replace(/\D/g,'').replace(/^00/,'');return d.indexOf('60')!==0}
+function coMy(v){var x=String(v||'').replace(/\D/g,'');if(/^\s*(\+|00)/.test(String(v||''))){x=x.replace(/^00/,'');if(x.indexOf('60')!==0)return false}else if(x.indexOf('60')!==0){x=x.charAt(0)==='0'?'60'+x.slice(1):'60'+x}return /^601[0-9]{8,9}$/.test(x)}
+function coDel(){try{return typeof isDel!=='function'||isDel()}catch(e){return true}}
+function coNeedsRider(){return coIntl((document.getElementById('phone')||{}).value)&&coDel()}
+function coRider(){var b=document.getElementById('riderBox');if(!b)return;var on=coNeedsRider();b.style.display=on?'block':'none';
+ if(on){var p2=document.getElementById('phone2');if(p2&&!p2.value){try{var a=JSON.parse(localStorage.getItem('aera.account')||'null');if(a&&a.rider_phone)p2.value=a.rider_phone}catch(e){}}}}
+function coPhone(){var p=String((document.getElementById('phone')||{}).value||'').trim();if(coNeedsRider()){var r=String((document.getElementById('phone2')||{}).value||'').trim();if(r)return r}return p}
+function coNotes(n){n=String(n||'');var p=String((document.getElementById('phone')||{}).value||'').trim();
+ if(coNeedsRider()&&String((document.getElementById('phone2')||{}).value||'').trim()){var t="Customer's own mobile ( overseas ): "+p;return n?t+' · '+n:t}return n}
+function coRiderBad(){return coNeedsRider()&&!coMy((document.getElementById('phone2')||{}).value)}
+document.addEventListener('input',function(e){if(e.target&&e.target.id==='phone')coRider()},true);
+document.addEventListener('change',function(){setTimeout(coRider,0)},true);
+document.addEventListener('click',function(){setTimeout(coRider,0)},true);
+window.addEventListener('load',function(){coRider();setTimeout(coRider,1500)});
+</script>
 
 <!-- SEO Meta Tags -->
 <title>Order — AERA Meal Prep</title>
@@ -475,6 +493,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
       <div><input type="email" id="email" placeholder="Email" required autocomplete="email" oninput="apInput();coChanged()" onchange="apInput(true);coChanged()"><div class="hint" style="margin-top:3px">For your Receipt, Order Tracking and AERA Points. Your AERA Points appear below as you type.</div></div>
       <div><input type="tel" id="phone" placeholder="Mobile" required autocomplete="tel"><div class="hint" style="margin-top:3px" id="phoneHint">So the Kitchen can reach you about this Order.</div></div>
     </div>
+    <div id="riderBox" style="display:none;margin-top:8px"><input type="tel" id="phone2" placeholder="Malaysian Mobile for the Rider ( 012-345 6789 )" autocomplete="off"><div class="hint" style="margin-top:3px">Your mobile is from outside Malaysia. Our Rider calls this Malaysian number when they arrive. A friend or colleague in Malaysia is fine.</div></div>
     <label style="display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--ink2);margin-top:8px;cursor:pointer"><input type="checkbox" id="remember" checked style="width:auto;margin:0"> Remember my details on this device so I don't type them next time</label>
     <label class="lb">Referral Code <span style="font-weight:500;text-transform:none;letter-spacing:0">· Optional</span></label>
     <input type="text" id="refCode" placeholder="e.g. AERA-GYMNAME" autocomplete="off" maxlength="24" oninput="refInput()" style="text-transform:uppercase">
@@ -889,9 +908,9 @@ async function coBill(){
    (gone.length===1?'is':'are')+' out of stock. Remove '+(gone.length===1?'it':'them')+' and try again.</div>';
  if(!signedIn()&&!coOn()){renderAuthGate();return m.innerHTML='<div class="msg warn">Please sign in first.</div>'}
  var name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),
-  phone=document.getElementById('phone').value.trim(),date=document.getElementById('date').value,
-  slot=document.getElementById('slot').value,notes=(document.getElementById('notes')||{}).value||'';
- if(!name)return m.innerHTML='<div class="msg warn">Please enter a contact name.</div>';
+  phone=coPhone(),date=document.getElementById('date').value,
+  slot=document.getElementById('slot').value,notes=coNotes((document.getElementById('notes')||{}).value||'');
+ if(coRiderBad())return m.innerHTML='<div class="msg warn">Your mobile is from outside Malaysia. Please add a Malaysian mobile number for the Rider.</div>'; if(!name)return m.innerHTML='<div class="msg warn">Please enter a contact name.</div>';
  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return m.innerHTML='<div class="msg warn">Please enter a valid email.</div>';
  if(!date)return m.innerHTML='<div class="msg warn">Please choose a date.</div>';
  var shutWhy=cloWhy(date);
@@ -1701,8 +1720,8 @@ async function pay(){var m=document.getElementById('payMsg');m.innerHTML='';
   ' from your order and the rest is good to go.</div>';
  if(!signedIn()&&!coOn()){renderAuthGate();var g=document.getElementById('authGate');if(g)g.scrollIntoView({behavior:'smooth',block:'center'});
   return m.innerHTML='<div class="msg warn">Please sign in or create an account before you order — it is how we keep your order, your points and your addresses together.</div>'}
- var name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),phone=document.getElementById('phone').value.trim(),date=document.getElementById('date').value,slot=document.getElementById('slot').value,notes=document.getElementById('notes').value.trim();
- if(!name)return m.innerHTML='<div class="msg warn">Please enter your name.</div>';
+ var name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),phone=coPhone(),date=document.getElementById('date').value,slot=document.getElementById('slot').value,notes=coNotes(document.getElementById('notes').value.trim());
+ if(coRiderBad())return m.innerHTML='<div class="msg warn">Your mobile is from outside Malaysia. Please add a Malaysian mobile number for the Rider.</div>'; if(!name)return m.innerHTML='<div class="msg warn">Please enter your name.</div>';
  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return m.innerHTML='<div class="msg warn">Please enter a valid email for your receipt.</div>';
  if(phone.replace(/\D/g,'').length<9)return m.innerHTML='<div class="msg warn">'+
   (isDel()?'Please enter your mobile number — the Rider needs it to reach you.'
@@ -1771,7 +1790,7 @@ function tuBillplz(no,msg,email,name,a,tb){var m=document.getElementById('tuMsg'
  btn.disabled=true;btn.textContent='Opening secure payment…';
  var tup={n:no,e:email,a:a,tb:tb,before:(APS.loaded&&!APS.failed&&APS.key===apKey(email)?crAvail():null),at:Date.now()};
  var pending={kind:'topup',orderNo:no,msg:msg,email:email,total:a,at:Date.now(),tup:tup};try{sessionStorage.setItem('aera.pendingOrder',JSON.stringify(pending));localStorage.setItem('aera.pendingOrder',JSON.stringify(pending))}catch(e){}
- var phone=String((document.getElementById('phone')||{}).value||'').trim();var key=billKey(no,email);
+ var phone=coPhone();var key=billKey(no,email);
  fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact(no),data:{action:'create',orderNo:no,amountCents:Math.round(a*100),custEmail:email,custName:name,custPhone:phone}})})
  .then(function(r){return r.json()}).then(function(j){if(!j||!j.success)throw new Error('flow');return bpPoll(function(r){return String(r.Key||'')===key},PAY.pollMax)})
  .then(function(row){if(row&&row['Bill URL']&&String(row.Status||'')==='created'){location.href=row['Bill URL'];return}throw new Error('nobill')})
