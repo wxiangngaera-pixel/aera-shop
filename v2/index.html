@@ -427,7 +427,6 @@ function checkout(){
  '#side details.v2opt>summary:after{content:" +";float:right;font-weight:800}#side details.v2opt[open]>summary:after{content:" −"}'+
  '#side details.v2opt[open]{padding-bottom:12px}#side details.v2opt .lb{display:none}'+
  '#apBox table{display:none}'+
- '#side.v2empty>*:not(h2):not(#lines):not(.closex){display:none!important}#side.v2empty #lines{padding-bottom:6px}'+
  '@media (max-width:600px){#side .opt small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}}'
  ,'v2-checkout');
  function wrap(labelRe,ids,title){var side=D.getElementById('side');if(!side)return;if(side.querySelector('details.v2opt[data-k="'+title+'"]'))return;
