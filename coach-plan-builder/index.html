@@ -58,7 +58,36 @@ var c=L.getItem('aera.motion.code')||'',cv=L.getItem('aera.motion.cv');
 if(c&&cv===v){(new Function(c))();setTimeout(function(){try{fetch(U,{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var k=cut(t);if(k&&k!==c)L.setItem('aera.motion.code',k)})}catch(e){}},4000);return}
 var x=new XMLHttpRequest();x.open('GET',U,false);x.send(null);if(x.status!==200)return;var k=cut(x.responseText);if(!k)return;
 try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
-(new Function(k))();}catch(e){}})();</script>
+(new Function(k))();}catch(e){}})();</script><script id="aera-imgpack-loader">/* AERA image pack : the meal photos come from small copies on aeramealprep.net ( /img1/ – /img4/ ) instead of the full-size originals on Chatbees, so the pictures appear at once. If the packs cannot load, the originals are used. */
+(function(){if(window.__AERA_IMG)return;window.__AERA_IMG=1;
+var D=document,MAP={},READY=false,FAIL=false,left=4,BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+var RE=/https:\/\/(?:my\.chatbees\.io\/objects\/(?:quick-uploads|generated-images)\/1302\/|aera-assets-production\.sgp1\.digitaloceanspaces\.com\/recipe-images\/)[^"')\s]+/g;
+function blob(d){try{var i=d.indexOf(','),m=d.slice(5,d.indexOf(';')),s=atob(d.slice(i+1)),n=s.length,u=new Uint8Array(n);while(n--)u[n]=s.charCodeAt(n);return URL.createObjectURL(new Blob([u],{type:m}))}catch(e){return ''}}
+function sw(s){return s.replace(RE,function(u){if(MAP[u])return MAP[u];if(READY||FAIL)return u;return BLANK})}
+function fix(el){if(!el||el.nodeType!==1)return;
+ var o=el.__aimgS,s=el.getAttribute('style');
+ if(s&&s.indexOf('url(')>=0){if(!o||s.indexOf(BLANK)<0)o=s;var n=sw(o);if(n!==s){el.__aimgS=o;el.setAttribute('style',n)}else if(n===o)el.__aimgS=null}
+ if(el.tagName==='IMG'){var src=el.__aimgI||el.getAttribute('src')||'';RE.lastIndex=0;if(src&&src.match(RE)&&src.match(RE)[0]===src){var v=MAP[src]||((READY||FAIL)?src:BLANK);if(v!==el.getAttribute('src')){el.__aimgI=src;el.setAttribute('src',v)}if(v===src)el.__aimgI=null}}}
+function all(root){if(!root||!root.querySelectorAll)return;if(root.nodeType===1)fix(root);var l=root.querySelectorAll('[style*="url("],img');for(var i=0;i<l.length;i++)fix(l[i])}
+new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){var m=ms[i];if(m.type==='attributes')fix(m.target);else for(var j=0;j<m.addedNodes.length;j++)all(m.addedNodes[j])}}).observe(D.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['style','src']});
+function done(){if(--left>0)return;READY=true;all(D)}
+['/img1/','/img2/','/img3/','/img4/'].forEach(function(p){fetch(p).then(function(r){return r.ok?r.text():''}).then(function(t){var a=t.indexOf('/*IMGPACK-START*/'),b=t.indexOf('/*IMGPACK-END*/');if(a>=0&&b>a){var j=JSON.parse(t.slice(a+17,b));for(var k in j){var u=blob(j[k]);if(u)MAP[k]=u+'#/'+k.split('/').pop()}}all(D)}).catch(function(){}).then(done)});
+setTimeout(function(){if(!READY){FAIL=true;all(D)}},9000);
+})();</script><script id="aera-coach-acct">/* Coach Plan Builder : a signed-in coach's Clients are kept in their AERA account ( Supabase plan_store.coach ), so they open on any device. Signed out, they stay in this browser as before. */
+(function(){var SBU='https://swpprjvubgcdsojapaad.supabase.co',AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0';
+function tok(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var o=JSON.parse(localStorage.getItem(k)||'null');if(o&&o.currentSession)o=o.currentSession;if(o&&o.access_token&&o.user&&(!o.expires_at||o.expires_at*1000>Date.now()+30000))return{t:o.access_token,uid:o.user.id,em:String(o.user.email||'').toLowerCase()}}}}catch(e){}return null}
+var T=0,OK=false;
+function note(){var n=document.getElementById('coachSaveNote');if(!n)return;var a=tok();n.textContent=a?'Your Clients are saved to your AERA Account ( '+a.em+' ) and open on any Device. They are not sent to our Kitchen until you press Send to AERA.':'Your Clients are saved in this Browser on this Device only. Sign in to keep them in your AERA Account on any Device. They are not sent anywhere until you press Send to AERA.'}
+function put(st){var a=tok();if(!a||!OK)return;var now=new Date().toISOString();st._owner=a.em;st._at=now;fetch(SBU+'/rest/v1/plan_store?on_conflict=user_id',{method:'POST',headers:{apikey:AK,Authorization:'Bearer '+a.t,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:a.uid,email:a.em,coach:st,coach_at:now,updated_at:now})}).catch(function(){})}
+window.__coachAcct={push:function(st){clearTimeout(T);T=setTimeout(function(){put(st)},700)},
+ pull:function(st,cb){note();var a=tok();if(!a)return;fetch(SBU+'/rest/v1/plan_store?select=coach,coach_at&user_id=eq.'+a.uid,{headers:{apikey:AK,Authorization:'Bearer '+a.t}}).then(function(r){return r.ok?r.json():null}).then(function(j){if(!j)return;OK=true;var acc=j[0]&&j[0].coach;
+  var mine=!st._owner||st._owner===a.em,localNewer=mine&&st._at&&(!acc||!acc._at||st._at>acc._at);
+  if(acc&&!localNewer){cb(acc);return}
+  if(!acc&&!mine){cb({clients:[],coach:''});return}
+  if(localNewer||(!acc&&st.clients&&st.clients.some(function(c){return (c.days||[]).some(function(d){return (d.meals||[]).some(function(m){return (m.items||[]).length})})})))put(st)}).catch(function(){})}};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',note);else note();
+try{Object.assign(window.AERA_I18N||{},{'Write the Plan straight into our Kitchen List':'直接用我们的厨房菜单写出餐单','Pick the Dishes, set the Weights, and hand it over. Nothing is typed up twice and nothing is read by a machine, so nothing can be misread. Keep as many Clients here as you like.':'挑选菜色、设定重量，然后交给我们。不用重复输入，也不经机器读取，所以不会读错。客户数量不限，想存多少就存多少。','Photo Reader':'拍照读取工具','will read it out for you. Photograph the sheet, check what it read, and it goes straight to our Kitchen. This Page is for building a Plan from our Dish List.':'可以帮您读出来。拍下那张表，确认读取结果，就会直接送到我们厨房。这个页面是用我们的菜色清单来编排餐单。','Our Kitchen weighs Raw. Pick Cooked if that is how you write, and we convert every line ourselves. You will see both figures on each row.':'我们厨房按生重称量。如果您习惯写熟重，请选「熟」，每一行都由我们换算，两个数字都会显示。','Copy as a Sheet':'复制成餐单','Send to AERA':'发送给 AERA','Save to My Meal Plan':'保存到我的餐单'});(window.AERA_I18N_RE||[]).push([/^([\d,]+) KCAL · Protein - ([\d.]+) · Carbs - ([\d.]+) · Fat - ([\d.]+)$/,'$1 大卡 · 蛋白 $2 · 碳水 $3 · 脂肪 $4'])}catch(e){}
+})();</script><style id="aera-coach-tidy">.finish .btn{text-transform:none!important}</style>
 <!-- AERA host redirect : start -->
 <script>/* Customers always stay on aeramealprep.net : a customer page opened on my.chatbees.io ( an old
    email, a bookmark, a link we missed ) moves itself across straight away, keeping everything after
@@ -388,9 +417,8 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTM5IiBoZWlnaHQ9IjU5IiB2aWV3Qm94PSIwIDAgMTM5IDU5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik02NS40MTI1IDIzLjQ3OTJDNjYuMTQ0OCAyNS41MjQxIDY2Ljg4NDUgMjcuNTU3MyA2Ny42MDcyIDI5LjU3NDdDNjguMzI1IDMxLjU3OTUgNjkuMDM4OCAzMy41NzI3IDY5Ljc3MjQgMzUuNTUyNkM2OS44MzggMzUuNzYzNSA2OS43OTA5IDM2LjAwODYgNjkuNjIzNSAzNi4yMjI4QzY5LjQ1NjIgMzYuNDM3OSA2OS4yMDY5IDM2LjU2MDQgNjguOTczOSAzNi41NTk2QzY3LjE1MjkgMzYuNTUyOSA2NS4zNDU2IDM2LjU0NjIgNjMuNTM5NiAzNi41Mzg3QzYzLjMwOCAzNi41Mzc5IDYzLjEyODQgMzYuNDIzNyA2My4wNjA4IDM2LjIyMkM2Mi45MjQyIDM1Ljg4NiA2Mi43OTkyIDM1LjU0NzYgNjIuNjczNSAzNS4yMDkxQzYyLjYyNSAzNS4yMDkxIDYyLjU4ODEgMzUuMjA5MSA2Mi41NTEyIDM1LjIwOTFDNTkuNzMxNiAzNS4xOTkxIDU2LjkyODQgMzUuMTg5OSA1NC4xMTc2IDM1LjE3OTlDNTQuMDgxNCAzNS4xNzk5IDU0LjA0NDUgMzUuMTc5OSA1NC4wMDgzIDM1LjE3OTlDNTMuNzEyNiAzNS41MTU5IDUzLjQ1MyAzNS44NTI3IDUzLjE3MDIgMzYuMTg2MUM1Mi45OTg4IDM2LjM4NjIgNTIuNzkwNCAzNi40OTg3IDUyLjU2MDMgMzYuNDk3OUM1MC43NjY2IDM2LjQ5MTIgNDguOTYzMyAzNi40ODQ2IDQ3LjE3MyAzNi40Nzc5QzQ2Ljk0MzUgMzYuNDc3MSA0Ni43NTAyIDM2LjM1MzcgNDYuNjY1NSAzNi4xMzg2QzQ2LjYxNyAzNS45MjUyIDQ2LjY2NTUgMzUuNjgwOSA0Ni44MzQ5IDM1LjQ3MjVDNDguNDI3MSAzMy41MTE5IDUwLjA0NDYgMzEuNTM1MyA1MS42NzM3IDI5LjU0NDZDNTMuMzE1IDI3LjUzODkgNTQuOTU3MSAyNS41MTQ5IDU2LjYzNiAyMy40Nzc1QzU3LjI4MzUgMjIuNjc4OSA1OC4xNTAzIDIyLjIyODggNTkuMDYwMiAyMi4yMjg4QzYwLjU0MzcgMjIuMjI4OCA2Mi4wNDAzIDIyLjIyODggNjMuNTM4OSAyMi4yMjg4QzY0LjQ1MDggMjIuMjI4OCA2NS4xMjQzIDIyLjY4MDYgNjUuNDExOCAyMy40OEw2NS40MTI1IDIzLjQ3OTJaTTU2LjcxNTkgMzEuOTcyMkM1OC4yODM1IDMxLjk3NjMgNTkuODUzMiAzMS45ODA1IDYxLjQzNTggMzEuOTg0N0M2MS40NjA0IDMxLjk4NDcgNjEuNDg1IDMxLjk4NDcgNjEuNTA4OSAzMS45ODQ3QzYxLjI1NTUgMzEuMzA5NCA2MS4wMDE0IDMwLjYzMjUgNjAuNzU5NiAyOS45NTQ4QzYwLjUxNzEgMjkuMjc1NCA2MC4yNjE2IDI4LjU5MjYgNjAuMDE3OCAyNy45MDkxVjI3Ljg4NTdDNjAuMDA2MiAyNy44OTQxIDU5Ljk5MzIgMjcuOTAxNiA1OS45ODA5IDI3LjkwODJDNTkuNDIyOSAyOC41OTEgNTguODQ2NCAyOS4yNjU0IDU4LjI4NjkgMjkuOTQ5QzU3LjczODUgMzAuNjE4NCA1Ny4xODExIDMxLjI5ODYgNTYuNjQyOCAzMS45NzEzQzU2LjY2NzQgMzEuOTcxMyA1Ni42OTIgMzEuOTcxMyA1Ni43MTY2IDMxLjk3MTNMNTYuNzE1OSAzMS45NzIyWiIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNNzYuNjQzMSAyMi4yMjc2QzgyLjA4NDMgMjIuMjI3NiA4Ny41NjU4IDIyLjIyNzYgOTMuMDUwNyAyMi4yMjc2QzkzLjQxODEgMjIuMjI3NiA5My42MzUzIDIyLjU0MTEgOTMuNTI4OCAyMi45MjQ1QzkzLjMzODIgMjMuNTgxNCA5My4xNjA2IDI0LjIzNjcgOTIuOTcxNCAyNC44OTExQzkyLjg2NjIgMjUuMjcxMiA5Mi40NjM5IDI1LjU4MTMgOTIuMDk4NSAyNS41ODA1Qzg4LjIzMTEgMjUuNTc3MSA4NC4zODQ4IDI1LjU3MzggODAuNTQ1NCAyNS41NzA1QzgwLjI4MjQgMjUuNTcwNSA4MC4wMjE1IDI1Ljc1MyA3OS44OTQ0IDI2LjAwODFDNzkuODc5NCAyNi4wNDk4IDc5Ljg2NTEgMjYuMDkyMyA3OS44NSAyNi4xMzRDNzkuNzA1OSAyNi43MDkyIDc5LjU0ODggMjcuMjgyNyA3OS4zOTI0IDI3Ljg1MzhDODMuMDI2OSAyNy44NTg4IDg2LjY1NTkgMjcuODY0NiA5MC4zMTcxIDI3Ljg2OTZDOTAuNjkzNCAyNy44Njk2IDkwLjkwOTMgMjguMTc4IDkwLjgwNjIgMjguNTU0QzkwLjYyMDQgMjkuMjAwMSA5MC40NDgyIDI5Ljg0MiA5MC4yNjMxIDMwLjQ4M0M5MC4xNjA3IDMwLjg1NjUgODkuNzYzOCAzMS4xNTkxIDg5LjM4OTUgMzEuMTU4M0M4NS43NTAyIDMxLjE0OTkgODIuMTQyMyAzMS4xNDE2IDc4LjUyOTcgMzEuMTMyNEM3OC4zODc2IDMxLjY5NzYgNzguMjMzOSAzMi4yNjExIDc4LjA5MjUgMzIuODIzQzc4LjA3ODIgMzIuODY0NyA3OC4wNjMyIDMyLjkwNTUgNzguMDczNCAzMi45NDY0Qzc4LjA2MDQgMzMuMTk0OCA3OC4yMzYgMzMuMzc0IDc4LjQ5NTUgMzMuMzc0OUM4Mi4yODEgMzMuMzg1NyA4Ni4wNzMzIDMzLjM5NzQgODkuODg2MSAzMy40MDgyQzkwLjI0NjcgMzMuNDA5IDkwLjQ0ODIgMzMuNzExNiA5MC4zNDY1IDM0LjA4MDFDOTAuMTYyNyAzNC43MTIgODkuOTkyNiAzNS4zNDMgODkuODEwMyAzNS45NzE2Qzg5LjcwOTIgMzYuMzM3NiA4OS4zMjg3IDM2LjYzNDMgODguOTcwMSAzNi42MzM1QzgzLjYyNTkgMzYuNjEzNSA3OC4yODUyIDM2LjU5MjYgNzIuOTgzMyAzNi41NzI2QzcxLjgzMTcgMzYuNTY4NSA3MS4xMjQ3IDM1LjYxNDggNzEuNDE4NSAzNC40NTAyQzcxLjgzMzEgMzIuODA0NyA3Mi4yNDk3IDMxLjE0OTkgNzIuNjY4NCAyOS40ODZDNzMuMDg5OSAyNy44MTIxIDczLjUxNDEgMjYuMTI4MiA3My45NDEgMjQuNDMyNkM3NC4yNDcgMjMuMjIyMiA3NS40NjA3IDIyLjIyNjggNzYuNjQzMSAyMi4yMjY4VjIyLjIyNzZaIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik05Ny4xODEzIDIyLjIyNkgxMTUuMDAyQzExNi4xOTUgMjIuMjI2IDExNi44NjMgMjMuMjMzOSAxMTYuNDczIDI0LjQ1ODVDMTE2LjE1OCAyNS40MjU1IDExNS44NDQgMjYuMzkwOCAxMTUuNTMxIDI3LjM0ODdDMTE1LjIxOSAyOC4zMDQgMTE0LjkwNyAyOS4yNjAxIDExNC41OTcgMzAuMjA4OEMxMTQuMjE3IDMxLjQwNTEgMTEyLjkxOSAzMi4zNzc5IDExMS43NDggMzIuMzc0NkMxMTEuMjc3IDMyLjM3MzcgMTEwLjgwNiAzMi4zNzIxIDExMC4zMzUgMzIuMzcxMkMxMTEuMDAyIDMzLjQ0OTEgMTExLjY4MiAzNC41MjIgMTEyLjM2IDM1LjU5MTVDMTEyLjQ5NSAzNS43ODk5IDExMi40NjMgMzYuMDY2NyAxMTIuMjY1IDM2LjMxNzZDMTEyLjA2NyAzNi41Njg1IDExMS43OTQgMzYuNzIxOSAxMTEuNTI1IDM2LjcyMTFDMTA5Ljk1MyAzNi43MTUyIDEwOC4zODEgMzYuNzA5NCAxMDYuODExIDM2LjcwMzZDMTA2LjYyNyAzNi43MDM2IDEwNi40NzkgMzYuNjMzNSAxMDYuMzk0IDM2LjQ5ODVDMTA1LjkzOSAzNS44MTE2IDEwNS40OTkgMzUuMTIzIDEwNS4wNTcgMzQuNDMzNkMxMDQuNjE0IDMzLjc0MjUgMTA0LjE1NyAzMy4wNDk4IDEwMy43MjYgMzIuMzUzN0MxMDIuNDQ3IDMyLjM1MDQgMTAxLjE4MyAzMi4zNDcxIDk5LjkxOTYgMzIuMzQzN0M5OS41Mzk4IDMzLjU3MTYgOTkuMTc1OCAzNC43OTIxIDk4LjgxMzggMzYuMDA3NUM5OC43MTA2IDM2LjM3NDMgOTguMzE3OSAzNi42NzE5IDk3Ljk1MjQgMzYuNjcwMkM5Ni4yOTI2IDM2LjY2MzYgOTQuNjQ3OCAzNi42NTc3IDkzLjAwNDQgMzYuNjUxMUM5Mi42Mzk3IDM2LjY0OTQgOTIuNDM4MiAzNi4zNTEgOTIuNTM3MiAzNS45ODQyQzkzLjE1NTQgMzMuODUwMSA5My43NzgzIDMxLjY5NiA5NC40MDYgMjkuNTI4NkM5NS4wMzc5IDI3LjM0NTMgOTUuNjc1MSAyNS4xNDIgOTYuMzAyOSAyMi45MjI5Qzk2LjQyMSAyMi41Mzk1IDk2LjgwNyAyMi4yMjQ0IDk3LjE4MiAyMi4yMjQ0TDk3LjE4MTMgMjIuMjI2Wk0xMDcuOTk0IDI5LjA3MjZDMTA4LjMxIDI5LjA3MjYgMTA4LjYyMiAyOC44MjA4IDEwOC43MjYgMjguNTA5OUMxMDguOTY2IDI3LjczMDQgMTA5LjIyIDI2Ljk0OTMgMTA5LjQ2IDI2LjE2NDFDMTA5LjU1MSAyNS44NTIzIDEwOS4zOTEgMjUuNTk0NyAxMDkuMDg4IDI1LjU5MzlDMTA2LjY5NSAyNS41OTE0IDEwNC4zMDYgMjUuNTg5NyAxMDEuOTM0IDI1LjU4NzJDMTAxLjU4MyAyNi43NTAxIDEwMS4yNDcgMjcuOTA3MiAxMDAuODk5IDI5LjA1OTJDMTAzLjI1NiAyOS4wNjM0IDEwNS42MyAyOS4wNjc2IDEwNy45OTMgMjkuMDcxN0wxMDcuOTk0IDI5LjA3MjZaIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0xMzUuMjI0IDIzLjUwMjRDMTM1Ljc0MyAyNS41ODQ4IDEzNi4yNyAyNy42NTU1IDEzNi43ODIgMjkuNzA5NkMxMzcuMjkgMzEuNzUwMyAxMzcuNzk2IDMzLjc3OTMgMTM4LjMyMyAzNS43OTQyQzEzOC4zNjYgMzYuMDA4NCAxMzguMjg5IDM2LjI1ODUgMTM4LjA5IDM2LjQ3NjFDMTM3Ljg5MSAzNi42OTUzIDEzNy42MTggMzYuODE5NSAxMzcuMzc3IDM2LjgxODdDMTM1LjQ4OSAzNi44MTEyIDEzMy42MTYgMzYuODA0NSAxMzEuNzQ1IDM2Ljc5N0MxMzEuNTA1IDM2Ljc5NjIgMTMxLjMzMiAzNi42ODAzIDEzMS4yODUgMzYuNDc1MkMxMzEuMTgzIDM2LjEzMjYgMTMxLjA5MyAzNS43ODgzIDEzMS4wMDMgMzUuNDQ0MUMxMzAuOTUyIDM1LjQ0NDEgMTMwLjkxNCAzNS40NDQxIDEzMC44NzcgMzUuNDQ0MUMxMjcuOTU0IDM1LjQzNDEgMTI1LjA0OSAzNS40MjQgMTIyLjEzNSAzNS40MTRDMTIyLjA5NyAzNS40MTQgMTIyLjA1OSAzNS40MTQgMTIyLjAyMiAzNS40MTRDMTIxLjY3NSAzNS43NTU4IDEyMS4zNjcgMzYuMDk4NSAxMjEuMDM1IDM2LjQzNzdDMTIwLjgzMyAzNi42NDExIDEyMC42MDQgMzYuNzU1MyAxMjAuMzY2IDM2Ljc1NDVDMTE4LjUwNyAzNi43NDc4IDExNi42MzggMzYuNzQwMyAxMTQuNzgzIDM2LjczMzdDMTE0LjU0NiAzNi43MzI4IDExNC4zNTkgMzYuNjA3IDExNC4yOTcgMzYuMzg4NkMxMTQuMjcyIDM2LjE3MTggMTE0LjM1IDM1LjkyMzQgMTE0LjU1MSAzNS43MTA4QzExNi40MzIgMzMuNzE2IDExOC4zNDEgMzEuNzAzNiAxMjAuMjYzIDI5LjY3NzlDMTIyLjIwMSAyNy42MzYzIDEyNC4xNDIgMjUuNTc1NiAxMjYuMTIzIDIzLjQ5OTlDMTI2Ljg4OSAyMi42ODcxIDEyNy44NDEgMjIuMjI3OCAxMjguNzg0IDIyLjIyNzhDMTMwLjMyMyAyMi4yMjc4IDEzMS44NzYgMjIuMjI3OCAxMzMuNDMgMjIuMjI3OEMxMzQuMzc2IDIyLjIyNzggMTM1LjAyMSAyMi42ODc5IDEzNS4yMjUgMjMuNTAyNEgxMzUuMjI0Wk0xMjUuMjA1IDMyLjE0ODdDMTI2LjgzMSAzMi4xNTI5IDEyOC40NTcgMzIuMTU3MSAxMzAuMDk5IDMyLjE2MTJDMTMwLjEyNCAzMi4xNjEyIDEzMC4xNDkgMzIuMTYxMiAxMzAuMTc0IDMyLjE2MTJDMTI5Ljk5MSAzMS40NzM1IDEyOS44MDcgMzAuNzg0OSAxMjkuNjM2IDMwLjA5NDdDMTI5LjQ2NSAyOS40MDI4IDEyOS4yOCAyOC43MDg0IDEyOS4xMDggMjguMDExNUMxMjkuMTA4IDI4LjAwNCAxMjkuMTEgMjcuOTk3MyAxMjkuMTExIDI3Ljk4ODFDMTI5LjA5NyAyNy45OTczIDEyOS4wODMgMjguMDA0OCAxMjkuMDY5IDI4LjAxMTVDMTI4LjQxIDI4LjcwNjcgMTI3LjczMyAyOS4zOTI4IDEyNy4wNzIgMzAuMDg4OUMxMjYuNDI0IDMwLjc3MDggMTI1Ljc2NyAzMS40NjI3IDEyNS4xMjkgMzIuMTQ3MUMxMjUuMTU0IDMyLjE0NzEgMTI1LjE4IDMyLjE0NzEgMTI1LjIwNSAzMi4xNDcxVjMyLjE0ODdaIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik00Ni4yODE2IDIuNDE0ODhDNDUuNzQwNiAwLjYyNzU5MSA0My43MDk5IC0wLjE2MTg1IDQyLjQ0NyAxLjQ3MDM5TDM5Ljk5NjkgNC42MzU2NUwxMS44MTQyIDQxLjA0NzVMOS4zMDE5NiAxNi45Mjk5QzkuNDA3ODQgMTcuMDI5MSAxNS4wNTUzIDIzLjYwNTYgMTYuODgzMSAyNS43MzM4QzE3LjIwMDEgMjYuMTAyMyAxNy4yMjUzIDI2LjcwOTIgMTYuOTQxOSAyNy4xMTZMMTYuMDc5OSAyOC4zNTMxTDE1LjQ2OTIgMzIuMjc0NUwyMS40ODgzIDI0Ljk1NjlDMjEuOTYwOSAyNC4zODI1IDIxLjk2NzggMjMuNDUxNCAyMS41MDQgMjIuODY2Mkw0LjI3MTMgMS4xNDE5NEw0LjI1ODMyIDEuMTI1MjZDMi44NDAzMSAtMC42NjQ1MjUgMC4zNzc5MTQgMC44MzE4MjkgMC42OTI4IDMuMjkwMTlMMS4wNTE0IDYuMDkxMTZMMS4xOTU1MiA3LjIxNDA1TDcuNDkwNTEgNTYuMzU3QzcuNzk2NTIgNTguNzQ3OCAxMC4yODkgNTkuNTQ4MSAxMS41MTk4IDU3LjY1MDhMMTMuMjY0MyA1NC45NjA3TDM4Ljg5ODUgMTUuNDM0NEwzNi41MTA2IDM4LjkxMjZMMzIuMDMxMSAzNC44MTI4QzMxLjc4MzkgMzQuNTg2MSAzMS43MTA4IDM0LjE3MTggMzEuODYwNCAzMy44NDE3TDMyLjUxMTMgMzIuNDAzN0wzMi42ODI4IDI4LjY4ODJMMjcuODIwOCAzNi42NTkzQzI3LjQ0NzIgMzcuMjcyIDI3LjUwNTkgMzguMTI4MiAyNy45NTgxIDM4LjY1NjdMMzUuNjI1MyA0Ny42MDczTDM2Ljk3OTEgNDkuMTg3OEMzNy43MTgyIDUwLjA1MDYgMzguOTQ2MyA0OS41NzcxIDM5LjE0NTggNDguMzUyNkwzOS4zODA4IDQ2LjkwODdMNDAuMTQwMyA0Mi4yMzYzTDQwLjUyMjEgMzkuODg3MUw0NC4zNTk1IDE2LjI5MTRMNDQuODMzNSAxMy4zNzU0QzQ0LjgzNyAxMy40MDg3IDQ0LjgzOTcgMTMuNDQyOSA0NC44NDE3IDEzLjQ3NzFMNDYuMzc1OSAzLjk2NzkyQzQ2LjQxMDcgMy43NTExOCA0Ni40MjU3IDMuNTQxMTEgNDYuNDIzIDMuMzM3N0M0Ni40MTg5IDMuMDA4NDIgNDYuMzY3NyAyLjY5OTE1IDQ2LjI3OTYgMi40MTU3MUw0Ni4yODE2IDIuNDE0ODhaIiBmaWxsPSIjRkRCOTEzIi8+PC9zdmc+" alt="AERA Meal Prep" width="139" height="59">
    <small>Coach Plan Builder</small>
   </div>
-  <h1>Write the plan straight into our kitchen list</h1>
-  <p>Pick the dishes, set the weights, and hand it over. Nothing is typed up twice and nothing is
-   read by a machine, so nothing can be misread. Keep as many clients here as you like.</p>
+  <h1>Write the Plan straight into our Kitchen List</h1>
+  <p>Pick the Dishes, set the Weights, and hand it over. Nothing is typed up twice and nothing is read by a machine, so nothing can be misread. Keep as many Clients here as you like.</p>
  </div>
 </header>
 
@@ -404,10 +432,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
   </div>
   <div class="tabs" id="clientTabs"></div>
   <p class="hint" style="margin:-4px 0 14px;font-size:14px;color:var(--ink2)">
-   Working from a handwritten or printed sheet instead? Our
-   <a href="https://my.chatbees.io/p/DSBcJ9bN4" target="_blank" rel="noopener">photo reader</a>
-   will read it out for you &mdash; photograph the sheet, check what it read, and it goes
-   straight to our kitchen. This page is for building a plan from our dish list.</p>
+   Working from a handwritten or printed sheet instead? Our <a href="https://my.chatbees.io/p/DSBcJ9bN4" target="_blank" rel="noopener">Photo Reader</a> will read it out for you. Photograph the sheet, check what it read, and it goes straight to our Kitchen. This Page is for building a Plan from our Dish List.</p>
   <div class="f3">
    <div><label class="lb" for="cname">Client name</label><input type="text" id="cname" autocomplete="off"></div>
    <div><label class="lb" for="cemail">Client email</label><input type="email" id="cemail" autocomplete="off"></div>
@@ -421,9 +446,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
      <button type="button" data-b="cooked">Cooked</button>
     </div>
    </div>
-   <p class="hint" style="font-size:13.5px;color:var(--ink2);margin:0;flex:1;min-width:240px">
-    Our kitchen weighs raw. Pick Cooked if that is how you write, and we convert every line
-    ourselves — you will see both figures on each row.</p>
+   <p class="hint" style="font-size:13.5px;color:var(--ink2);margin:0;flex:1;min-width:240px">Our Kitchen weighs Raw. Pick Cooked if that is how you write, and we convert every line ourselves. You will see both figures on each row.</p>
   </div>
  </div>
 
@@ -448,8 +471,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
  <div id="msg"></div>
 
  <p class="foot">AERA Meal Preparation SDN BHD · Seri Kembangan.
-  Your clients are saved in this browser on this device only — they are not sent anywhere until you
-  press Send To AERA. <a href="https://my.chatbees.io/p/DSBcJ9bN4">Bring Your Own Plan</a> ·
+  <span id="coachSaveNote">Your Clients are saved in this Browser on this Device only. They are not sent anywhere until you press Send to AERA.</span> <a href="https://my.chatbees.io/p/DSBcJ9bN4">Bring Your Own Plan</a> ·
   <a href="https://my.chatbees.io/p/SrQzC5m2">Personalised Meal Plan</a></p>
 </div>
 
@@ -458,9 +480,9 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
   <span class="sum" id="finishSum"></span>
   <button class="btn o" type="button" id="doUndo" title="Undo the last change">&#8630; Undo</button>
   <button class="btn o" type="button" id="doSave">Save</button>
-  <button class="btn o" type="button" id="doSheet">Copy As A Sheet</button>
-  <button class="btn o" type="button" id="doSend">Send To AERA</button>
-  <button class="btn" type="button" id="doOpen">Save To My Meal Plan</button>
+  <button class="btn o" type="button" id="doSheet">Copy as a Sheet</button>
+  <button class="btn o" type="button" id="doSend">Send to AERA</button>
+  <button class="btn" type="button" id="doOpen">Save to My Meal Plan</button>
  </div>
 </div>
 
@@ -603,7 +625,7 @@ function load(){try{var d=JSON.parse(localStorage.getItem(KEY)||'null');
  if(!ST.clients.length)ST.clients=[blank('Client 1')];
  if(typeof ST.coach!=='string')ST.coach='';
  if(!ST.sel||!byId(ST.sel))ST.sel=ST.clients[0].id}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){
+function save(){try{if(window.__coachAcct)window.__coachAcct.push(ST)}catch(e){}try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){
  say('bad','<b>This browser will not let us save.</b> Your work is still on screen, but it will '+
   'be lost if you close the tab — copy the sheet before you do.')}}
 function blank(n){return{id:uid(),name:n,email:'',phone:'',basis:'raw',
@@ -676,16 +698,15 @@ function paint(){
     '<button class="x" type="button" data-rm="1" aria-label="Remove">&times;</button></div>'}).join('');
   h+='<div class="meal"><div class="mh">'+
    mealSelect(m,mi)+
-   '<span class="mac">'+Math.round(t.kcal)+' kcal · P '+Math.round(t.p)+' · C '+Math.round(t.c)+
-    ' · F '+Math.round(t.f)+'<br>'+rm(t.price)+'</span>'+
+   '<span class="mac">'+Math.round(t.kcal)+' KCAL · Protein - '+Math.round(t.p)+' · Carbs - '+Math.round(t.c)+' · Fat - '+Math.round(t.f)+'<br>'+rm(t.price)+'</span>'+
    '<button class="x" type="button" data-delmeal="'+mi+'" aria-label="Remove this meal">&times;</button>'+
    '</div><div class="rows">'+(rows||'<div class="empty">Nothing in this meal yet.</div>')+'</div>'+
    mfootHtml(m.items)+
    '<div class="addrow">'+
-    '<button class="btn o s" type="button" data-add="'+mi+'">+ Add a dish</button>'+
+    '<button class="btn o s" type="button" data-add="'+mi+'">+ Add a Dish</button>'+
     '<button class="btn o s" type="button" data-own="'+mi+'">+ Client&rsquo;s Home-Sourced Meal</button>'+
    '</div></div>'});
- h+='<button class="btn o s" type="button" id="addMeal">+ Add a meal</button>';
+ h+='<button class="btn o s" type="button" id="addMeal">+ Add a Meal</button>';
  $('#dayPanel').innerHTML=h;
 
  var dt=dayTotals(d);
@@ -797,8 +818,7 @@ function refreshTotals(){
   var el=$('#dayPanel').querySelectorAll('.meal')[mi];
   if(el){var mf=el.querySelector('.mfoot');
    if(mf)mf.outerHTML=mfootHtml(m.items)||'<div class="mfoot" hidden></div>'}
-  if(el)el.querySelector('.mac').innerHTML=Math.round(t.kcal)+' kcal · P '+Math.round(t.p)+
-   ' · C '+Math.round(t.c)+' · F '+Math.round(t.f)+'<br>'+rm(t.price)});
+  if(el)el.querySelector('.mac').innerHTML=Math.round(t.kcal)+' KCAL · Protein - '+Math.round(t.p)+' · Carbs - '+Math.round(t.c)+' · Fat - '+Math.round(t.f)+'<br>'+rm(t.price)});
  $('#dayTot').innerHTML=tile('Calories',Math.round(dt.kcal))+tile('Protein',Math.round(dt.p)+' g')+
   tile('Carbs',Math.round(dt.c)+' g')+tile('Day price',rm(dt.price));
  var n=boxCount(c),days=c.days.filter(function(x){return cooked(x).length}).length;
@@ -1088,6 +1108,7 @@ $('#doSend').addEventListener('click',function(){
  $('#msg').scrollIntoView({behavior:'smooth',block:'center'})});
 
 load();paint();
+try{if(window.__coachAcct)window.__coachAcct.pull(ST,function(d){if(!d||!d.clients||!d.clients.length)return;ST=d;if(typeof ST.coach!=='string')ST.coach='';if(!ST.sel||!byId(ST.sel))ST.sel=ST.clients[0].id;DAY=0;try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}paint()})}catch(e){}
 })();
 </script>
 <!-- AERA language switch : start -->
@@ -1208,7 +1229,7 @@ if(window.aeraRetranslate)window.aeraRetranslate();
  if(document.readyState==="loading")addEventListener("DOMContentLoaded",boot);else boot()})();
 </script>
 <script>
-Object.assign(window.AERA_I18N,{"Pick the dishes, set the weights, and hand it over. Nothing is typed up twice and nothing is read by a machine, so nothing is misread. Keep as many clients here as you like.":"选好菜色、定好克数，交给我们就行。不必重打一次，也不经机器辨识，不会读错。客户要存多少个都可以。","+ New client":"+ 新增客户","+ Add day":"+ 新增一天","Duplicate this day":"复制这一天","Day name":"这一天的名称","Monday":"星期一","Tuesday":"星期二","Wednesday":"星期三","Thursday":"星期四","Friday":"星期五","Saturday":"星期六","Sunday":"星期日","Breakfast":"早餐","Lunch":"午餐","Dinner":"晚餐","Supper":"宵夜","Nothing in this meal yet.":"这一餐还没有内容。","+ Add a dish":"+ 加入一道菜","+ Client’s Home-Sourced Meal":"+ 客户自备的一餐","+ Add a meal":"+ 新增一餐","Calories":"热量","Protein":"蛋白质","Carbs":"碳水","Fat":"脂肪","Nothing to send yet":"目前还没有可发送的内容","Chicken":"鸡肉","Fish":"鱼","Beef":"牛肉","Rice":"米饭","Pasta":"意面","Potato":"马铃薯","Vegetables":"蔬菜","Oil-free":"无油","Lean":"低脂"});
+Object.assign(window.AERA_I18N,{"Pick the dishes, set the weights, and hand it over. Nothing is typed up twice and nothing is read by a machine, so nothing is misread. Keep as many clients here as you like.":"选好菜色、定好克数，交给我们就行。不必重打一次，也不经机器辨识，不会读错。客户要存多少个都可以。","+ New client":"+ 新增客户","+ Add day":"+ 新增一天","Duplicate this day":"复制这一天","Day name":"这一天的名称","Monday":"星期一","Tuesday":"星期二","Wednesday":"星期三","Thursday":"星期四","Friday":"星期五","Saturday":"星期六","Sunday":"星期日","Breakfast":"早餐","Lunch":"午餐","Dinner":"晚餐","Supper":"宵夜","Nothing in this meal yet.":"这一餐还没有内容。","+ Add a Dish":"+ 加入一道菜","+ Client’s Home-Sourced Meal":"+ 客户自备的一餐","+ Add a Meal":"+ 新增一餐","Calories":"热量","Protein":"蛋白质","Carbs":"碳水","Fat":"脂肪","Nothing to send yet":"目前还没有可发送的内容","Chicken":"鸡肉","Fish":"鱼","Beef":"牛肉","Rice":"米饭","Pasta":"意面","Potato":"马铃薯","Vegetables":"蔬菜","Oil-free":"无油","Lean":"低脂"});
 window.AERA_I18N_RE.push([/^(\d+) boxes?$/,"$1 盒"],[/^(\d+) meals?$/,"$1 餐"],[/^(\d+) clients?$/,"$1 位客户"],
  [/^([\d,]+) kcal · P ([\d.]+) · C ([\d.]+) · F ([\d.]+)$/,"$1 大卡 · 蛋白 $2 · 碳水 $3 · 脂肪 $4"],
  [/^Client (\d+)$/,"客户 $1"]);
