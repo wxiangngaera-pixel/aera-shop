@@ -626,7 +626,7 @@ function freePlan(){
 /* ---------- One "Adjust" button per meal instead of eight ---------- */
 function mealAdjust(){
  Object.assign(ZH,{'Adjust':'调整','Tune this meal':'调整这一餐','Add to this meal':'为这一餐添加','This meal':'这一餐','Done':'完成','Duplicate':'复制','Delete':'删除','Undo':'撤销',
-  'Fit My Calories':'贴合我的热量','Maximise Protein':'最大化蛋白质','Reduce Carbs':'减少碳水','Reduce Fat':'减少脂肪','Lower the Cost':'降低价格'});
+  'Fit My Calories':'贴合我的热量','Maximise Protein':'最大化蛋白质','Reduce Carbs':'减少碳水','Reduce Fat':'减少脂肪','Lower the Cost':'降低价格','+ Carbs':'+ 碳水'});
  try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
  css(
  '#s4 .mcard .mmain .addrow,#s4 .mcard .mmain .tune,#s4 .mcard .mh .mac .btn{display:none!important}'+
@@ -664,7 +664,7 @@ function mealAdjust(){
   var tb=card.querySelector('.mtitle b'),di=card.querySelectorAll('.mtitle i'),mac=card.querySelector('.mh .mac'),mt='';
   if(mac)[].forEach.call(mac.childNodes,function(n){if(n.nodeType===3)mt+=n.textContent;else if(n.tagName==='B')mt+=n.textContent});
   var names=[].map.call(di,function(i){return i.textContent}).filter(Boolean);
-  function btns(sel){return [].map.call(card.querySelectorAll(sel),function(b){var c=b.getAttribute('onclick')||'';return '<button type="button" data-run="'+c.replace(/"/g,'&quot;')+'"'+(b.disabled?' disabled':'')+(/delMeal/.test(c)?' class="dl"':'')+'>'+t(lbl(b))+'</button>'}).join('')}
+  function btns(sel){return [].map.call(card.querySelectorAll(sel),function(b){var c=b.getAttribute('onclick')||'',L=t(lbl(b));if(/^addComp\(\d+,'c'\)/.test(c))L=L.replace(/^\+ Carb$/,'+ Carbs');if(/^addComp\(\d+,'c'\)/.test(c)&&!/RM/.test(L)){try{if(window.catCount(window.PLAN.meals[CUR],'c')>0)L+=' ( + '+(window.rm?window.rm(window.EXTRA_COMP):'RM 0.50')+' )'}catch(x){}}return '<button type="button" data-run="'+c.replace(/"/g,'&quot;')+'"'+(b.disabled?' disabled':'')+(/delMeal/.test(c)?' class="dl"':'')+'>'+L+'</button>'}).join('')}
   var tnEl=card.querySelector('.tuned'),tn=tnEl?tnEl.textContent.trim():'';var tuneB=btns('.tune [onclick^="tuneMeal("]'),addB=btns('.addrow [onclick]'),mhB=btns('.mh .mac [onclick]');
   var und=card.querySelector('.tune [onclick^="undoMeal("]');
   S.innerHTML='<div class="in" role="dialog" aria-modal="true">'+'<div class="ft"><button type="button" class="un"'+(und?' data-run="'+und.getAttribute('onclick')+'"':'')+(!und||und.disabled?' disabled':'')+'>↶ '+t('Undo')+'</button><button type="button" class="ok" data-x="1">'+t('Done')+'</button></div>'+'<div class="hd"><b>'+(tb?tb.textContent:t('This meal'))+'</b><h3>'+(names[0]||'')+'</h3><p>'+(names.slice(1).join(' · '))+'<br><em>'+mt.replace(/\s*·\s*$/,'').trim()+'</em></p></div>'+
@@ -684,6 +684,8 @@ function mealAdjust(){
   var b=mh.querySelector('.v2adjb');if(b){b.setAttribute('data-i',i);return}
   b=D.createElement('button');b.type='button';b.className='v2adjb';b.setAttribute('data-i',i);b.innerHTML='⚙︎ '+t('Adjust');mh.appendChild(b)})}
  D.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.v2adjb');if(!b)return;e.preventDefault();open(+b.getAttribute('data-i'))});
+ function carbs(){try{if(!window.CAP||typeof window.extraComps!=='function'||typeof window.catCount!=='function')return false;if(window.CAP.c>=2)return true;window.CAP.c=2;var ox=window.extraComps;window.extraComps=function(m){return ox(m)+Math.max(0,window.catCount(m,'c')-1)};if(window.PLAN&&window.STEP===4)window.renderPlan();return true}catch(e){return true}}
+ var cn=0,civ=setInterval(function(){if(carbs()||++cn>80)clearInterval(civ)},100);
  var qq=0;ready(function(){add();new MutationObserver(function(ms){if(qq)return;if(S&&ms.every(function(m){return S.contains(m.target)}))return;qq=setTimeout(function(){qq=0;add();if(S&&S.classList.contains('on'))paint()},80)}).observe(D.body,{childList:true,subtree:true})})}
 
 if(P==='/')home();
