@@ -746,7 +746,7 @@ function tapDemo(){
  function L(a){return zh()&&a[1]?a[1]:a[0]}
  function vis(e){if(!e)return false;var r=e.getBoundingClientRect();if(!r.width&&!r.height)return false;var cs=getComputedStyle(e);return cs.visibility!=='hidden'&&cs.display!=='none'}
  function find(st){for(var i=0;i<st.sel.length;i++){var es=D.querySelectorAll(st.sel[i]);for(var j=0;j<es.length;j++)if(vis(es[j]))return es[j]}return null}
- function which(){if(P==='/')return 'home';if(P==='/checkout')return 'checkout';
+ function which(){if(P==='/')return 'home';if(P==='/checkout'){var ln=D.getElementById('lines');return (!ln||/empty/i.test(ln.textContent))?null:'checkout'}
   if(P==='/meal-plan'){if(D.body.classList.contains('v2qp-on'))return null;var s=+window.STEP||1;if(s===4)return window.PLAN?'plan':null;if(s===5)return 'plan5';return 'plan1'}return null}
  function sleep(ms,id){return new Promise(function(res){setTimeout(function(){res(id===RUN)},ms)})}
  function stop(){RUN++;if(OPENED){var x=D.querySelector('#v2adj.on [data-x]');if(x)x.click();OPENED=false}if(W){W.remove();W=null}D.body.classList.remove('v2demo-on')}
