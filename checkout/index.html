@@ -3426,7 +3426,5 @@ b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 function sync(){var o=H.classList.contains('aera-dock-open');b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Hide help, chat and WhatsApp':'Show help, chat and WhatsApp')}
 b.onclick=function(){H.classList.toggle('aera-dock-open');try{sessionStorage.setItem(K,H.classList.contains('aera-dock-open')?'1':'0')}catch(e){}sync()};
 function add(){document.body.appendChild(b);sync()}if(document.body)add();else document.addEventListener('DOMContentLoaded',add)})();</script>
-<style id="aera-empty-cart">#side.aeraempty>*:not(h2):not(#lines):not(.closex){display:none!important}</style>
-<script id="aera-empty-cart-js">(function(){function f(){var s=document.getElementById('side'),l=document.getElementById('lines');if(!s||!l)return;var e=!!l.querySelector('.empty');try{if(typeof count==='function')e=e&&count()===0}catch(x){}s.classList.toggle('aeraempty',e)}function go(){f();var l=document.getElementById('lines');if(l)new MutationObserver(f).observe(l,{childList:true,subtree:true,characterData:true});setTimeout(f,1500)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go()})();</script>
 </body>
 </html>
