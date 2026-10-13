@@ -588,7 +588,7 @@ function touches(){
 /* ---------------- desktop : cursor light, magnetic buttons, film grain ---------------- */
 function desktop(){if(!FINE||MODE!=='full')return;
  var cur=D.createElement('div');cur.id='sx30Cur';var gl=D.createElement('div');gl.id='sx30Glow';var gr=D.createElement('div');gr.id='sx30Grain';
- D.body.appendChild(gr);D.body.appendChild(gl);D.body.appendChild(cur);
+ D.body.appendChild(gr); /* cursor circle and glow switched off ( Peter, Oct 2026 ) */
  var x=innerWidth/2,y=innerHeight/2,cx=x,cy=y,gx=x,gy=y,run=false,mag=null;
  function loop(){cx+=(x-cx)*.22;cy+=(y-cy)*.22;gx+=(x-gx)*.08;gy+=(y-gy)*.08;
   cur.style.transform='translate3d('+cx+'px,'+cy+'px,0)';gl.style.transform='translate3d('+gx+'px,'+gy+'px,0)';
@@ -1245,7 +1245,7 @@ function start(){if(started)return;started=true;T0=Date.now();
   safe(heads)();
   if(MODE==='full'&&!HOMEPAGE)safe(reveals)();
   if(HOMEPAGE){safe(function(){$$('img').forEach(function(im){if(im.__sxi||im.closest('nav,#heroPic,.sx30-sky,button,[role=dialog],#banBand'))return;if(im.offsetWidth<140||im.offsetHeight<100)return;im.__sxi=1;im.classList.add('sx30-img');iio.observe(im)})})()}
-  var mq=0;new MutationObserver(function(){if(mq)return;mq=setTimeout(function(){mq=0;safe(heads)();if(MODE==='full'&&!HOMEPAGE)safe(reveals)();safe(shine)();if(HOMEPAGE&&HUB.length<2)safe(hub)()},400)}).observe(D.body,{childList:true,subtree:true});
+  var mq=0;new MutationObserver(function(){if(mq)return;mq=setTimeout(function(){mq=0;safe(heads)();if(MODE==='full'&&!HOMEPAGE)safe(reveals)();safe(shine)();/* homepage card animations switched off */},400)}).observe(D.body,{childList:true,subtree:true});
   /* safety : nothing waits hidden for long */
   setTimeout(function(){H.classList.add('sx30-safe')},2600);
   setInterval(function(){$$('.sx30-kh').forEach(function(h){var r=h.getBoundingClientRect();if(inView(r)&&r.top<innerHeight*.9&&!h.__kp){h.__kin=1;play(h,0)}});
@@ -1253,10 +1253,12 @@ function start(){if(started)return;started=true;T0=Date.now();
   frame();setTimeout(frame,700);setTimeout(frame,2200);W.addEventListener('load',function(){frame()})}
  if(HOMEPAGE){
   var top=$('#top');HERO=top;BANNER=$('#banBand');
-  [function(){sky(top)},phone,marquee,hub].forEach(function(f){safe(f)()});
+  [function(){sky(top)},phone,marquee].forEach(function(f){safe(f)()});
   intro(function(shown){if(shown)replayHero();go() /* robot crew switched off */})}
  else go();
  W.addEventListener('scroll',onScroll,{passive:true});W.addEventListener('resize',onScroll)}
+/* no cursor circle, no card animations ( Oct 2026 ) */
+try{var _no=D.createElement('style');_no.id='sx30-off';_no.textContent="#sx30Cur,#sx30Glow{display:none!important}html.sx30 #hub .hacc .hitem{animation:none!important}.sx30-img{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important;transition:none!important;animation:none!important}#sx30MenuPop,.sx30-hv{display:none!important}";(D.head||H).appendChild(_no)}catch(e){}
 ready(function(){setTimeout(start,0)});
 })();
 
