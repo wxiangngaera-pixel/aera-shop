@@ -504,10 +504,10 @@ window.addEventListener('load',function(){coRider();setTimeout(coRider,1500)});
     <label class="opt" id="optDelivery"><input type="radio" name="ful" value="delivery" onchange="setFul('delivery')"><svg class="pkico" viewBox="0 0 40 30" aria-hidden="true"><path d="M3 18.5V7h20.5v11.5z"/><path d="M23.5 11.5h8l5 7v0h-13z"/><path class="d" d="M25.5 13h4.8l2.9 3.6h-7.7z"/><circle cx="10.5" cy="21.3" r="2.9"/><circle cx="30.5" cy="21.3" r="2.9"/></svg><span><b>Rider Delivery</b><small>A Lalamove Rider brings your whole Order in one trip, anywhere in Klang Valley. Fee calculated live from your address.</small></span><span class="fee">from RM <span id="feeFromAny">6</span></span></label>
 
     <div id="deliveryBox" style="display:none">
-      <label class="lb">Delivery Address</label>
+      <label class="lb">Building or Street ( Search )</label>
       <div id="savedAddr"></div>
-      <div class="acwrap"><input type="text" id="address" placeholder="Start typing your address…" autocomplete="off" oninput="acInput()" onkeydown="acKey(event)" onblur="setTimeout(acHide,200)"><div class="ac" id="acList"></div></div>
-      <div style="margin-top:8px"><label class="lb" for="addrUnit">Address Line 1 *</label><input type="text" id="addrUnit" placeholder="Unit / House No., Building, Street" autocomplete="address-line1"></div>
+      <div class="acwrap"><input type="text" id="address" placeholder="Start typing your building, condo or street…" autocomplete="off" oninput="acInput()" onkeydown="acKey(event)" onblur="setTimeout(acHide,200)"><div class="ac" id="acList"></div></div>
+      <div style="margin-top:8px"><label class="lb" for="addrUnit">Address Line 1 *</label><input type="text" id="addrUnit" placeholder="Unit / House No. — e.g. B1-3A-05 or No. 12" autocomplete="address-line1"></div>
       <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:10px"><div><label class="lb" for="addrLine2">Address Line 2</label><input type="text" id="addrLine2" placeholder="Taman / Area ( optional )" autocomplete="address-line2"></div><div><label class="lb" for="addrPost">Postcode *</label><input type="text" id="addrPost" inputmode="numeric" maxlength="5" placeholder="e.g. 51200" autocomplete="postal-code" oninput="this.value=this.value.replace(/\D/g,'').slice(0,5)"></div></div>
       <div class="hint">Pick your Address from the suggestions, then fill in Address Line 1 ( Unit / House No. ) and Postcode — both are required.</div>
       <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-k" type="button" onclick="checkFee()" id="feeBtn">Check Delivery Fee</button></div>
@@ -1629,17 +1629,24 @@ function addrGeoCands(q){var c=[];function add(s){s=String(s||'').replace(/\s+/g
  var p=q.split(/\s*,\s*/).filter(Boolean);
  add(q);if(pc&&q.indexOf(pc)<0)add(q2+', '+pc);add([q2,u2,l2,pc].filter(Boolean).join(', '));add([u2,l2,pc].filter(Boolean).join(', '));
  for(var i=1;i<p.length-1&&c.length<6;i++)add(p.slice(i).join(', '));
- if(pc)add(pc+', Malaysia');return c.slice(0,7)}
-function geoTry(c){var i=0;function go(){if(i>=c.length)return Promise.resolve([]);var q=c[i++];
- return fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=my&q='+encodeURIComponent(q),{headers:{'Accept':'application/json'}}).then(function(r){return r.json()}).then(function(j){if(j&&j[0])return j;if(i>=c.length)return j;return new Promise(function(r){setTimeout(r,1100)}).then(go)})}
+ if(pc)add(pc+', Malaysia');c=c.slice(0,7);if(pc)c.push({pc:pc});return c}
+function geoTry(c){var i=0;function go(){if(i>=c.length)return Promise.resolve([]);var q=c[i++];var pc=(q&&typeof q==='object')?q.pc:'';
+ var url=pc?'https://nominatim.openstreetmap.org/search?format=json&limit=1&country=Malaysia&postalcode='+encodeURIComponent(pc):'https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=my&q='+encodeURIComponent(q);
+ var tag=function(j){if(j&&j[0]&&(pc||/^\d{5}, Malaysia$/.test(String(q))))j.__approx=pc||String(q).slice(0,5);return j};
+ return fetch(url,{headers:{'Accept':'application/json'}}).then(function(r){return r.json()}).then(function(j){if(j&&j[0])return tag(j);if(i>=c.length)return j;return new Promise(function(r){setTimeout(r,1100)}).then(go)},function(){if(i>=c.length)return [];return new Promise(function(r){setTimeout(r,1100)}).then(go)})}
  return go()}
+/* Auto-tidy : a unit number typed into the search box ( e.g. B1-3A-05 ) moves to Address Line 1. */
+var ADDR_UNIT_RE=/^\s*((no\.?|unit|lot)\s*)?[A-Z]{0,2}\d+[A-Z]?(\s*[-\/]\s*[A-Z0-9]+)+\s*,?\s*/i;
+function addrTidy(){var a=document.getElementById('address'),u=document.getElementById('addrUnit');if(!a||!u)return false;var v=String(a.value||''),m=ADDR_UNIT_RE.exec(v);if(!m)return false;var unit=m[0].replace(/[\s,]+$/,'').trim(),rest=v.slice(m[0].length).trim();if(!rest)return false;a.value=rest;var cu=String(u.value||'').trim();if(!cu)u.value=unit;else if(cu.toLowerCase().indexOf(unit.toLowerCase())<0)u.value=unit+', '+cu;return true}
+document.addEventListener('change',function(e){if(e.target&&e.target.id==='address')addrTidy()},true);
 function addrPostFill(){var p=document.getElementById('addrPost');if(!p||p.value)return;var pc=addrSplit(addrVal('address')).post;if(pc)p.value=pc}
 function checkFee(){var q=document.getElementById('address').value.trim();var m=document.getElementById('feeMsg');if(q.length<8){m.innerHTML='<div class="msg warn">Please enter your full address including postcode.</div>';return}
  var b=document.getElementById('feeBtn');b.disabled=true;b.textContent='Checking…';m.innerHTML='';GEO=null;FEE_RM=null;renderCart();
+ addrTidy();q=document.getElementById('address').value.trim()||q;
  geoTry(addrGeoCands(q)).then(function(j){
   b.disabled=false;b.textContent='Check Delivery Fee';
   if(!j||!j[0]){m.innerHTML='<div class="msg bad">We couldn\'t find that address on the map. Try adding the area, postcode and city ( e.g. "Bangsar South, 59200 Kuala Lumpur" ).</div>';renderCart();return}
-  var g={lat:+j[0].lat,lng:+j[0].lon,label:j[0].display_name};var km=Math.round(hav(KITCHEN,g)*ROAD_FACTOR*10)/10;g.km=km;
+  var g={lat:+j[0].lat,lng:+j[0].lon,label:j[0].display_name};if(j.__approx){g.approx=1;g.label='Postcode '+j.__approx+' area — we could not pin your exact building, so the fee is for this area. Our Kitchen will confirm your location.'}var km=Math.round(hav(KITCHEN,g)*ROAD_FACTOR*10)/10;g.km=km;
   if(km>MAX_KM){GEO=g;FEE_RM=null;m.innerHTML='<div class="msg bad">That address is about '+km+' km from our kitchen — outside our delivery area. Please choose self pick-up or WhatsApp us.</div>';renderCart();return}
   GEO=g;refee();
  }).catch(function(){b.disabled=false;b.textContent='Check Delivery Fee';m.innerHTML='<div class="msg bad">Address lookup failed — please try again.</div>'})}
@@ -3432,5 +3439,6 @@ b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 function sync(){var o=H.classList.contains('aera-dock-open');b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Hide help, chat and WhatsApp':'Show help, chat and WhatsApp')}
 b.onclick=function(){H.classList.toggle('aera-dock-open');try{sessionStorage.setItem(K,H.classList.contains('aera-dock-open')?'1':'0')}catch(e){}sync()};
 function add(){document.body.appendChild(b);sync()}if(document.body)add();else document.addEventListener('DOMContentLoaded',add)})();</script>
+<script id="aera-addr-approx">(function(){try{Object.assign(window.AERA_I18N||{},{"Building or Street ( Search )":"大楼或街道（搜索）","Start typing your building, condo or street…":"输入大楼、公寓或街道名称…","Unit / House No. — e.g. B1-3A-05 or No. 12":"单位 / 门牌号 — 例如 B1-3A-05 或 No. 12"})}catch(e){} var o=window.coNotes;if(typeof o!=='function')return;window.coNotes=function(n){var r=o.apply(this,arguments);try{if(typeof GEO!=='undefined'&&GEO&&GEO.approx){var f='ADDRESS NOT PINNED — priced by postcode only, Kitchen please confirm the location';r=r?f+' · '+r:f}}catch(e){}return r}})();</script>
 </body>
 </html>
