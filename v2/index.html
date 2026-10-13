@@ -313,7 +313,8 @@ function t(s){return zh()&&ZH[s]?ZH[s]:s}
 css(
 '#v2badge{position:fixed;left:12px;bottom:calc(96px + env(safe-area-inset-bottom));white-space:nowrap;z-index:2147483000;background:rgba(11,28,54,.92);color:#fff;font:600 11px/1.2 Montserrat,system-ui,sans-serif;border-radius:999px;padding:7px 11px;box-shadow:0 6px 18px rgba(0,0,0,.25);display:flex;gap:10px;align-items:center}'+
 '#v2badge a{color:#FDB913;text-decoration:underline}'+
-'@media (max-width:480px){#aaGetApp small,#aaGetApp b{display:none!important}#aaGetApp{padding:4px!important;min-width:0!important;width:auto!important}#findBtn{display:none!important}body > nav .wrap{gap:6px!important}#ordBtn{padding:7px 10px!important;font-size:12.5px!important}}'
+'@media (max-width:480px){#aaGetApp small,#aaGetApp b{display:none!important}#aaGetApp{padding:4px!important;min-width:0!important;width:auto!important}#findBtn{display:none!important}body > nav .wrap{gap:6px!important}#ordBtn{padding:7px 10px!important;font-size:12.5px!important}}'+
+'@media (max-width:400px){#aaGetApp{display:none!important}}body{overflow-x:clip}'
 ,'v2-base');
 ready(function(){if(D.getElementById('v2badge'))return;var b=D.createElement('div');b.id='v2badge';
  b.innerHTML='<span>'+t('New website preview')+'</span><a href="?preview=off">'+t('Exit preview')+'</a>';D.body.appendChild(b)});
@@ -695,7 +696,7 @@ function tapDemo(){
    {sel:['#v2hero .ch.a'],t:['Build your own plan','定制您的餐单'],s:['Tap here. Answer 5 quick questions and we build your week.','点这里，回答 5 个简单问题，我们为您排好一周。']},
    {sel:['#v2hero .ch.b'],t:['Or pick a bundle','或选择套餐'],s:['7 days, ready-made for Fat Loss or Mass Gain.','7 天现成套餐，适合减脂或增肌。']},
    {sel:['#langSw'],t:['English or 中文','English 或 中文'],s:['Switch the language any time.','随时切换语言。']},
-   {sel:['#abCart','.cartbtn','#ordBtn'],t:['Your cart','购物车'],s:['Everything you add waits here until you pay.','加入的餐点都在这里，付款前随时查看。']}],
+   {sel:['#cartTop','#abCart','.cartbtn','#ordBtn'],t:['Your cart','购物车'],s:['Everything you add waits here until you pay.','加入的餐点都在这里，付款前随时查看。']}],
   plan1:[
    {sel:['#v2qlink'],t:['The quick way','快捷方式'],s:['Tap here for 5 quick questions instead of the full form.','点这里，只需回答 5 个简单问题。']},
    {sel:['#stepbar .step.on','#stepbar'],t:['Or go step by step','或逐步填写'],s:['Fill each step, then tap Next at the bottom.','逐步填写，然后点底部的“下一步”。']}],
@@ -732,7 +733,7 @@ function tapDemo(){
  '#v2demo .fg svg{width:100%;height:100%;transition:transform .15s ease}#v2demo .fg.tap svg{transform:scale(.82)}'+
  '#v2demo .rp{position:fixed;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:3px solid #FDB913;opacity:0;pointer-events:none;z-index:1}'+
  '#v2demo .rp.go{animation:v2rp .7s ease-out}@keyframes v2rp{0%{opacity:1;transform:scale(.4)}100%{opacity:0;transform:scale(3.2)}}'+
- '#v2demo .cap{position:fixed;left:12px;right:12px;max-width:480px;margin:0 auto;background:#fff;color:#0B1C36;border-radius:18px;padding:14px 14px 12px;box-shadow:0 14px 34px rgba(0,0,0,.3);transition:top .35s,bottom .35s;z-index:3}'+
+ '#v2demo .cap{position:fixed;left:12px;box-sizing:border-box;background:#fff;color:#0B1C36;border-radius:18px;padding:14px 14px 12px;box-shadow:0 14px 34px rgba(0,0,0,.3);transition:top .35s;z-index:3}'+
  '#v2demo .cap .n{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:.12em;color:#16479E;text-transform:uppercase;margin:0 0 6px}'+
  '#v2demo .cap .n span{flex:1;height:4px;border-radius:4px;background:#E3E8F2;overflow:hidden}#v2demo .cap .n span i{display:block;height:100%;background:#FDB913;transition:width .4s}'+
  '#v2demo .cap b{display:block;font-size:17px;margin:0 0 3px}#v2demo .cap p{margin:0;font-size:14px;line-height:1.4;color:#33415C}'+
@@ -756,7 +757,8 @@ function tapDemo(){
   D.body.classList.add('v2demo-on');
   W=D.createElement('div');W.id='v2demo';W.innerHTML='<div class="hole"></div><div class="rp"></div><div class="fg">'+HAND+'</div><div class="cap" role="status" aria-live="polite"></div>';D.body.appendChild(W);
   var hole=W.querySelector('.hole'),fg=W.querySelector('.fg'),rp=W.querySelector('.rp'),cap=W.querySelector('.cap'),skipNow=false;
-  fg.style.transform='translate('+(innerWidth/2-23)+'px,'+(innerHeight+40)+'px)';
+  function VV(){var v=window.visualViewport;return v?{w:v.width,h:v.height,x:v.offsetLeft,y:v.offsetTop}:{w:D.documentElement.clientWidth,h:D.documentElement.clientHeight,x:0,y:0}}
+  var v0=VV();fg.style.transform='translate('+(v0.x+v0.w/2-23)+'px,'+(v0.y+v0.h+40)+'px)';
   W.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(b&&b.hasAttribute('data-stop')){stop();return}if(b&&b.hasAttribute('data-again')){play(k);return}skipNow=true});
   (async function(){var shown=0,list=steps.slice();
    for(var i=0;i<list.length;i++){var st=list[i];if(st.wait&&!(await sleep(st.wait,id)))return;var el=find(st);if(!el)continue;shown++;
@@ -765,17 +767,18 @@ function tapDemo(){
     hole.style.left=(r.left-pad)+'px';hole.style.top=(r.top-pad)+'px';hole.style.width=(r.width+pad*2)+'px';hole.style.height=(r.height+pad*2)+'px';
     var cx=r.left+Math.min(r.width/2,r.width-14),cy=r.top+Math.min(r.height/2,r.height-8);
     fg.style.transform='translate('+(cx-46*TIPX)+'px,'+(cy-58*TIPY)+'px)';
-    var low=(r.top+r.height/2)>innerHeight*0.55;cap.style.top=low?'calc(14px + env(safe-area-inset-top))':'auto';cap.style.bottom=low?'auto':'calc(24px + env(safe-area-inset-bottom))';
+    var vp=VV(),low=(r.top+r.height/2-vp.y)>vp.h*0.55;
     var last=(i===list.length-1);
     cap.innerHTML='<div class="n">'+(i+1)+' / '+list.length+'<span><i style="width:'+((i+1)/list.length*100)+'%"></i></span></div><b>'+L(st.t)+'</b><p>'+L(st.s)+'</p>'+
      '<div class="bt"><button type="button" class="o" data-stop="1">'+(last?t('Close'):t('Skip'))+'</button>'+(last?'<button type="button" class="y" data-again="1">↺ '+t('Replay')+'</button>':'')+'</div>';
+    var cw=Math.min(480,vp.w-24);cap.style.width=cw+'px';cap.style.left=(vp.x+(vp.w-cw)/2)+'px';cap.style.right='auto';cap.style.bottom='auto';cap.style.top=(low?vp.y+14:vp.y+vp.h-cap.offsetHeight-28)+'px';
     if(!(await sleep(750,id)))return;
     for(var tp=0;tp<2;tp++){fg.classList.add('tap');rp.style.left=cx+'px';rp.style.top=cy+'px';rp.classList.remove('go');void rp.offsetWidth;rp.classList.add('go');
      if(!(await sleep(170,id)))return;fg.classList.remove('tap');if(!(await sleep(260,id)))return}
     if(st.act==='click'){try{el.click();if(/v2adjb/.test(el.className))OPENED=true;if(el.hasAttribute&&el.hasAttribute('data-x'))OPENED=false}catch(e){}}
     skipNow=false;for(var w=0;w<20&&!skipNow;w++){if(!(await sleep(100,id)))return}}
    if(id!==RUN)return;if(!shown){stop();return}
-   fg.style.transform='translate('+(innerWidth/2-23)+'px,'+(innerHeight+40)+'px)';hole.style.opacity='0'})()}
+   var ve=VV();fg.style.transform='translate('+(ve.x+ve.w/2-23)+'px,'+(ve.y+ve.h+40)+'px)';hole.style.opacity='0'})()}
  function btn(){if(D.getElementById('v2help'))return;var b=D.createElement('button');b.type='button';b.id='v2help';b.innerHTML='<i>▶</i>'+t('How it Works');
   b.addEventListener('click',function(){var k=which();if(k)play(k)});D.body.appendChild(b)}
  function quiet(){try{if(window.AERATOUR&&!window.AERATOUR.__v2){window.AERATOUR.__v2=1;window.AERATOUR.stop&&window.AERATOUR.stop(false);window.AERATOUR.seen=function(){return true};window.AERATOUR.auto=function(){};window.AERATOUR.start=function(){var k=which();if(k&&!seen(k))setTimeout(function(){play(k)},300)}}}catch(e){}}
