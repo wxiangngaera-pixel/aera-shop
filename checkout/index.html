@@ -1623,7 +1623,13 @@ window.aeraPastAddr=function(cli){if(PAST_DONE||!cli||!cli.rpc)return;PAST_DONE=
    for(var k=0;k<D.length;k++){var sp=addrSplit(D[k]);if(sp.l1&&sp.post&&sp.post===pc){var f=function(id,v){var e=document.getElementById(id);if(e&&!e.value)e.value=v||''};f('addrUnit',sp.l1);f('addrLine2',sp.l2);f('addrPost',sp.post);break}}}
  }).catch(function(){})};
 /* Map lookup with fall-backs : the full address, then without the unit / building, then the postcode. */
-function addrGeoCands(q){var p=q.split(/\s*,\s*/).filter(Boolean),c=[q];for(var i=1;i<p.length-1&&c.length<3;i++)c.push(p.slice(i).join(', '));var m=q.match(/\b\d{5}\b/);if(m)c.push(m[0]+', Malaysia');return c}
+function addrGeoCands(q){var c=[];function add(s){s=String(s||'').replace(/\s+/g,' ').replace(/^[\s,]+|[\s,]+$/g,'');if(s&&c.indexOf(s)<0)c.push(s)}
+ var V=function(id){try{return String(addrVal(id)||'').trim()}catch(e){return ''}};var u=V('addrUnit'),l2=V('addrLine2'),pc=V('addrPost')||(q.match(/\b\d{5}\b/)||[''])[0];
+ var unitRe=/^\s*(no\.?\s*|unit\s*|lot\s*)?[A-Z]{0,2}\d+[A-Z]?(\s*[-\/]\s*[A-Z0-9]+)+\s*,?\s*/i;var q2=q.replace(unitRe,''),u2=u.replace(unitRe,'');
+ var p=q.split(/\s*,\s*/).filter(Boolean);
+ add(q);if(pc&&q.indexOf(pc)<0)add(q2+', '+pc);add([q2,u2,l2,pc].filter(Boolean).join(', '));add([u2,l2,pc].filter(Boolean).join(', '));
+ for(var i=1;i<p.length-1&&c.length<6;i++)add(p.slice(i).join(', '));
+ if(pc)add(pc+', Malaysia');return c.slice(0,7)}
 function geoTry(c){var i=0;function go(){if(i>=c.length)return Promise.resolve([]);var q=c[i++];
  return fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=my&q='+encodeURIComponent(q),{headers:{'Accept':'application/json'}}).then(function(r){return r.json()}).then(function(j){if(j&&j[0])return j;if(i>=c.length)return j;return new Promise(function(r){setTimeout(r,1100)}).then(go)})}
  return go()}
