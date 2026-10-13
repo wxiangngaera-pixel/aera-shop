@@ -1108,6 +1108,7 @@ $('#doSend').addEventListener('click',function(){
  $('#msg').scrollIntoView({behavior:'smooth',block:'center'})});
 
 load();paint();
+window.__coach={cur:function(){return cur()},save:function(){save()}};
 try{if(window.__coachAcct)window.__coachAcct.pull(ST,function(d){if(!d||!d.clients||!d.clients.length)return;ST=d;if(typeof ST.coach!=='string')ST.coach='';if(!ST.sel||!byId(ST.sel))ST.sel=ST.clients[0].id;DAY=0;try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}paint()})}catch(e){}
 })();
 </script>
@@ -1498,6 +1499,115 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 </script>
 <!-- AERA site bar : end -->
 <script id="aera-coach-app-cfg">window.AERA_APP={"key":"coach","name":"AERA Coach Plan Builder","short":"AERA Coach","scopePath":"/coach-plan-builder/","link":"https://aeramealprep.net/coach-plan-builder/?install=1","mount":".ab-r","barTitle":"Get The AERA Coach App","howTitle":"Add AERA Coach To Your Home Screen","done":"That is it. Open AERA Coach from your Home Screen to build and send your Clients’ Plans.","icons":{"180":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/app-icons/coach-180.png","192":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/app-icons/coach-192.png","512":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/app-icons/coach-512.png"},"zh":{"Get The AERA Coach App":"AERA Coach App","Add AERA Coach To Your Home Screen":"把 AERA Coach 加到主屏幕","That is it. Open AERA Coach from your Home Screen to build and send your Clients’ Plans.":"完成！以后从主屏幕打开 AERA Coach，为学员编排并发送餐单。"}};</script>
+<style id="aera-coach-verify-css">
+#cvBox{margin-top:8px;font-size:13px;line-height:1.45}
+#cvBox .cv-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+#cvBox .cv-msg{margin:0 0 6px;color:#3A4660}
+#cvBox .cv-msg.bad{color:#B42318;font-weight:600}
+#cvBox .cv-msg.ok{color:#067647;font-weight:700}
+#cvBox .cv-msg.warn{color:#8A5A00;font-weight:600}
+#cvBox button{height:36px;padding:0 14px;border-radius:999px;border:1.5px solid #16479E;background:#fff;color:#16479E;font:inherit;font-weight:800;font-size:13px;cursor:pointer;text-transform:none}
+#cvBox button.pri{background:#16479E;color:#fff}
+#cvBox button.yel{background:#FDB913;border-color:#FDB913;color:#0B1C36}
+#cvBox button[disabled]{opacity:.45;cursor:default}
+#cvBox input.cv-code{width:130px!important;height:36px!important;letter-spacing:.3em;font-weight:800;text-align:center;font-size:16px}
+#cvBox .cv-link{background:none!important;border:0!important;padding:0!important;height:auto!important;color:#16479E!important;text-decoration:underline;font-weight:700}
+#cemail.cv-good{border-color:#12B76A!important}
+#cemail.cv-bad{border-color:#F04438!important}
+</style>
+<script id="aera-coach-verify">
+/* Client email check : before a plan can go to the Kitchen, the Client's email must be shown to
+   work. 1 ) as the coach types : format, common typos ( gmial.com -> gmail.com ) and whether the
+   domain can receive mail at all ( public DNS lookup ). 2 ) a 6-digit code is emailed to the
+   Client by flow #6964 and the coach types it in. The confirmed address is kept on the Client
+   ( c.ev ), so it travels with the account copy and only needs doing once per email. */
+(function(){
+ var HOOK='https://my.chatbees.io/api/webhooks/flow/dd9ph03i/cfec004a9d020414f13b8a9b2b7a059c01f42a2cc8157bcb890be1f378bbe552';
+ var TTL=30*60*1000,WAIT=60,MAXTRY=5,PK='aera.coach.vcode';
+ var Z=window.AERA_I18N=window.AERA_I18N||{};
+ Object.assign(Z,{'We email your Client a 6-digit code, so we know this email reaches them.':'我们会发 6 位数验证码到客户的电邮，确认这个电邮能收到信。',
+  'Send code to Client':'发送验证码给客户','Resend code':'重新发送','Confirm':'确认','Email confirmed':'电邮已确认',
+  'This does not look like an email yet.':'这看起来还不是有效的电邮。','Checking this email…':'正在检查这个电邮…',
+  'This email’s domain cannot receive mail. Please check the spelling.':'这个电邮的域名收不到邮件，请检查拼写。',
+  'Did you mean':'您是指','Use it':'使用','Sending…':'发送中…',
+  'Code sent. Ask your Client for the 6 digits ( check Spam too ).':'验证码已发送。请向客户索取 6 位数字（也请查看垃圾邮件）。',
+  'That code is not right.':'验证码不正确。','That code has expired. Send a new one.':'验证码已过期，请重新发送。',
+  'Too many tries. Send a new code.':'尝试次数太多，请重新发送验证码。','We could not send the code. Please try again.':'无法发送验证码，请再试一次。',
+  'Please confirm the Client’s email first.':'请先确认客户的电邮。','Confirm the Client’s email first':'请先确认客户的电邮'});
+ function $(s){return document.querySelector(s)}
+ function T(s){return s}
+ function A(){return window.__coach||null}
+ function cur(){var a=A();try{return a?a.cur():null}catch(e){return null}}
+ function norm(e){return String(e||'').trim().toLowerCase()}
+ var RE=/^[a-z0-9._%+'-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/;
+ var DOM=['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','live.com','me.com','msn.com','ymail.com','yahoo.com.my','hotmail.my','protonmail.com','proton.me','googlemail.com','aol.com','mail.com','gmx.com','qq.com','163.com','126.com'];
+ function lev(a,b){var m=a.length,n=b.length,d=[],i,j;for(i=0;i<=m;i++){d[i]=[i]}for(j=1;j<=n;j++)d[0][j]=j;for(i=1;i<=m;i++)for(j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n]}
+ function suggest(e){var p=e.split('@');if(p.length!==2)return '';var d=p[1].replace(/\.con$|\.cpm$|\.vom$|\.xom$|\.comm$|\.cm$|\.om$/,'.com').replace(/\.c$/,'.com');if(DOM.indexOf(d)>=0)return d!==p[1]?p[0]+'@'+d:'';
+  var best='',bd=3;DOM.forEach(function(x){var k=lev(d,x);if(k<bd){bd=k;best=x}});if(best&&bd<=2&&d.length>4)return p[0]+'@'+best;return ''}
+ var DNS={};
+ function domainOk(d,cb){if(DNS[d]!==undefined)return cb(DNS[d]);
+  function q(t){return fetch('https://dns.google/resolve?name='+encodeURIComponent(d)+'&type='+t).then(function(r){return r.json()})}
+  q('MX').then(function(j){if(j.Status===3)return false;if(j.Answer&&j.Answer.some(function(a){return a.type===15&&!/^0 \.$/.test(a.data)}))return true;
+   return q('A').then(function(k){return !!(k.Answer&&k.Answer.length)})})
+  .then(function(v){DNS[d]=v;cb(v)}).catch(function(){cb(null)})}
+ function pend(){try{return JSON.parse(localStorage.getItem(PK)||'{}')}catch(e){return {}}}
+ function setPend(o){try{localStorage.setItem(PK,JSON.stringify(o))}catch(e){}}
+ function sha(s){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('')})}
+ function verified(c){return !!(c&&c.ev&&c.ev===norm(c.email))}
+ var box,msg,tick=null,last='';
+ function build(){var inp=$('#cemail');if(!inp||$('#cvBox'))return !!inp;
+  box=document.createElement('div');box.id='cvBox';inp.parentNode.appendChild(box);
+  inp.addEventListener('input',function(){render()});inp.addEventListener('blur',function(){render(true)});
+  document.addEventListener('click',function(ev){if(ev.target.closest&&ev.target.closest('#cvBox'))return;setTimeout(function(){if(key()!==LK)render()},0)},true);
+  return true}
+ function H(cls,html,extra){box.innerHTML='<p class="cv-msg '+(cls||'')+'">'+html+'</p>'+(extra||'')}
+ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+ var LK='';function key(){var c=cur(),i=$('#cemail');return (c&&c.id)+'|'+(i?norm(i.value):'')+'|'+verified(c)}
+ function render(force){if(!box)return;var c=cur(),inp=$('#cemail');if(!c||!inp)return;var e=norm(inp.value);LK=key();
+  inp.classList.remove('cv-good','cv-bad');
+  if(!e){last='';return H('',T('We email your Client a 6-digit code, so we know this email reaches them.'))}
+  if(verified(c)){inp.classList.add('cv-good');last=e;return H('ok','&#10003; '+T('Email confirmed'))}
+  if(!RE.test(e)){if(force||e.indexOf('@')>0&&/\.[a-z]{2,}$/.test(e))inp.classList.add('cv-bad');return H(force?'bad':'',T('This does not look like an email yet.'))}
+  var sg=suggest(e);if(sg){inp.classList.add('cv-bad');return H('warn',T('Did you mean')+' <b>'+esc(sg)+'</b>?','<div class="cv-row"><button type="button" class="yel" id="cvUse">'+T('Use it')+'</button></div>'),bindUse(sg)}
+  var d=e.split('@')[1];
+  if(DNS[d]===false){inp.classList.add('cv-bad');return H('bad',T('This email’s domain cannot receive mail. Please check the spelling.'))}
+  if(DNS[d]===undefined){H('',T('Checking this email…'));domainOk(d,function(){if(norm($('#cemail').value)===e)render()});return}
+  codeUi(c,e)}
+ function bindUse(sg){var b=$('#cvUse');if(b)b.onclick=function(){var inp=$('#cemail');inp.value=sg;inp.dispatchEvent(new Event('input',{bubbles:true}));render()}}
+ function left(p){return p&&p.sent?Math.max(0,WAIT-Math.floor((Date.now()-p.sent)/1000)):0}
+ function codeUi(c,e,note,cls){var P=pend(),p=P[e];if(p&&Date.now()>p.exp){delete P[e];setPend(P);p=null}
+  var w=left(p);
+  var html=p?'<div class="cv-row"><input class="cv-code" id="cvCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••"><button type="button" class="pri" id="cvOk">'+T('Confirm')+'</button><button type="button" id="cvSend"'+(w?' disabled':'')+'>'+T('Resend code')+(w?' ( '+w+'s )':'')+'</button></div>'
+   :'<div class="cv-row"><button type="button" class="yel" id="cvSend">'+T('Send code to Client')+'</button></div>';
+  H(cls||'',note||(p?T('Code sent. Ask your Client for the 6 digits ( check Spam too ).'):T('We email your Client a 6-digit code, so we know this email reaches them.')),html);
+  var s=$('#cvSend');if(s)s.onclick=function(){send(c,e)};
+  var k=$('#cvOk'),ci=$('#cvCode');if(k)k.onclick=function(){check(c,e)};
+  if(ci){ci.addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();check(c,e)}});ci.addEventListener('input',function(){this.value=this.value.replace(/\D/g,'').slice(0,6);if(this.value.length===6)check(c,e)})}
+  clearInterval(tick);if(w)tick=setInterval(function(){var b=$('#cvSend'),ww=left(pend()[e]);if(!b){clearInterval(tick);return}if(!ww){clearInterval(tick);b.disabled=false;b.textContent=T('Resend code');return}b.textContent=T('Resend code')+' ( '+ww+'s )'},1000)}
+ function send(c,e){var b=$('#cvSend');if(b){b.disabled=true;b.textContent=T('Sending…')}
+  var a=new Uint32Array(1);crypto.getRandomValues(a);var code=String(100000+a[0]%900000);
+  var coachEl=$('#coachname'),coach=coachEl?coachEl.value:'';
+  sha(code+'|'+e).then(function(h){
+   return fetch(HOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:'coach-verify-'+Date.now().toString(36)+'@aera-sync.invalid',data:{to:e,code:code,coach:String(coach||'').slice(0,60)}})})
+   .then(function(r){return r.json().catch(function(){return {success:r.ok}})}).then(function(j){if(!j||j.success===false)throw 0;
+    var P=pend();P[e]={h:h,exp:Date.now()+TTL,sent:Date.now(),n:0};setPend(P);codeUi(c,e);var ci=$('#cvCode');if(ci)ci.focus()})})
+  .catch(function(){codeUi(c,e,T('We could not send the code. Please try again.'),'bad')})}
+ function check(c,e){var ci=$('#cvCode');if(!ci)return;var v=ci.value.replace(/\D/g,'');if(v.length!==6)return;
+  var P=pend(),p=P[e];if(!p)return codeUi(c,e);
+  if(Date.now()>p.exp){delete P[e];setPend(P);return codeUi(c,e,T('That code has expired. Send a new one.'),'bad')}
+  if(p.n>=MAXTRY){delete P[e];setPend(P);return codeUi(c,e,T('Too many tries. Send a new code.'),'bad')}
+  sha(v+'|'+e).then(function(h){
+   if(h!==p.h){p.n++;P[e]=p;setPend(P);codeUi(c,e,T('That code is not right.'),'bad');return}
+   delete P[e];setPend(P);var cc=cur();if(cc&&norm(cc.email)===e){cc.ev=e;cc.evAt=new Date().toISOString();try{A().save()}catch(x){}}render()})}
+ /* Send to AERA waits for a confirmed email */
+ document.addEventListener('click',function(ev){var b=ev.target.closest&&ev.target.closest('#doSend');if(!b)return;var c=cur();if(!c)return;
+  if(RE.test(norm(c.email))&&!verified(c)){ev.preventDefault();ev.stopImmediatePropagation();
+   var m=$('#msg');if(m)m.innerHTML='<div class="note bad"><b>'+T('Please confirm the Client’s email first.')+'</b> '+T('We email your Client a 6-digit code, so we know this email reaches them.')+'</div>';
+   render(true);var inp=$('#cemail');if(inp)inp.scrollIntoView({behavior:'smooth',block:'center'})}},true);
+ function boot(){if(!build())return setTimeout(boot,300);render()}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
+</script>
 <!-- AERA coach app kit : start -->
 <style id="aera-coach-app-kit">
 .aera-getapp{display:inline-flex;align-items:center;gap:6px;background:#FDB913!important;color:#0B1C36!important;border:0!important;border-radius:999px!important;padding:8px 14px!important;font:inherit;font-size:12.5px!important;font-weight:800!important;cursor:pointer;white-space:nowrap;line-height:1.2;text-decoration:none;flex:none;box-shadow:none}
@@ -1601,6 +1711,6 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 </script>
 <style id="aera-coach-app-fit">#aaBar{bottom:auto!important;top:calc(70px + env(safe-area-inset-top))!important}@media(max-width:600px){.ab-r #aaGetApp{width:34px!important;height:34px!important}.ab-r #aaGetApp span{display:none!important}.ab-r #aaGetApp img{width:26px!important;height:26px!important}}</style>
 <!-- AERA coach app kit : end -->
-<!-- build 1791934144412 -->
+<!-- build 1791934755192 -->
 </body>
 </html>
