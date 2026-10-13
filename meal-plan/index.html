@@ -43,7 +43,7 @@ Object.defineProperty(P,'innerHTML',{configurable:true,enumerable:D.enumerable,g
  }catch(e){try{D.set.call(this,v)}catch(x){}}finally{busy=false}}});
 })();
 </script>
-<script id="aera-v2-loader">(function(){try{var q=location.search,L=localStorage;if(/[?&]preview=new/.test(q))L.setItem('aera.v2','1');if(/[?&]preview=off/.test(q))L.removeItem('aera.v2');if(L.getItem('aera.v2')!=='1')return;fetch('/v2/?t='+Math.floor(Date.now()/60000),{cache:'no-store'}).then(function(r){return r.text()}).then(function(t){var a=t.indexOf('/*AERA-V2-START*/'),b=t.indexOf('/*AERA-V2-END*/');if(a<0||b<a)return;(new Function(t.slice(a,b)))()})}catch(e){}})();</script>
+<script id="aera-v2-loader">/* AERA v2 is LIVE ( Oct 2026 ). ?preview=off turns it off in this browser, ?preview=new turns it back on. Keeps a copy so pages open without waiting. */(function(){try{var q=location.search,L=localStorage;if(/[?&]preview=off/.test(q))L.setItem('aera.v2off','1');if(/[?&]preview=new/.test(q))L.removeItem('aera.v2off');if(L.getItem('aera.v2off')==='1')return;var A='/*AERA-V2-START*/',B='/*AERA-V2-END*/';function cut(t){var a=t.indexOf(A),b=t.indexOf(B);return a<0||b<a?'':t.slice(a,b)}var U='/v2/?t='+Math.floor(Date.now()/300000),c='';try{c=L.getItem('aera.v2.code')||''}catch(e){}if(c){try{(new Function(c))()}catch(e){}setTimeout(function(){fetch(U,{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var k=cut(t);if(k&&k!==c)try{L.setItem('aera.v2.code',k)}catch(e){}}).catch(function(){})},3000);return}var x=new XMLHttpRequest();x.open('GET',U,false);x.send(null);if(x.status!==200)return;var k=cut(x.responseText);if(!k)return;try{L.setItem('aera.v2.code',k)}catch(e){}(new Function(k))()}catch(e){}})();</script>
 
 <script id="aera-motion-loader">/* AERA Motion 2030 : runs the shared motion engine ( aeramealprep.net/motion/ ) before the page draws.
    It keeps a copy in this browser so pages open instantly, and quietly picks up a newer engine for next time.
@@ -1553,6 +1553,6 @@ var b=document.createElement('button');b.id='aeraDock';b.type='button';
 b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 function sync(){var o=H.classList.contains('aera-dock-open');b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Hide help, chat and WhatsApp':'Show help, chat and WhatsApp')}
 b.onclick=function(){H.classList.toggle('aera-dock-open');try{sessionStorage.setItem(K,H.classList.contains('aera-dock-open')?'1':'0')}catch(e){}sync()};
-function add(){document.body.appendChild(b);sync()}if(document.body)add();else document.addEventListener('DOMContentLoaded',add)})();</script>
+function add(){document.body.appendChild(b);sync()}if(document.body)add();else document.addEventListener('DOMContentLoaded',add)})();</script><!-- build 1791925888275 -->
 </body>
 </html>
