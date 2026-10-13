@@ -387,7 +387,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
       </form>
       <form id="fSignup" style="display:none" onsubmit="return doSignup(event)">
         <label class="lb" id="sNameLb">Your Name</label><input type="text" id="sName" autocomplete="name" required placeholder="Full Name">
-        <div class="f2"><div><label class="lb">Email</label><input type="email" id="sEmail" autocomplete="email" required placeholder="you@example.com"></div><div><label class="lb">Mobile</label><input type="tel" id="sPhone" autocomplete="tel" placeholder="01x-xxx xxxx"></div></div>
+        <div class="f2"><div><label class="lb">Email</label><input type="email" id="sEmail" autocomplete="email" required placeholder="you@example.com"></div><div><label class="lb">Mobile</label><input type="tel" id="sPhone" autocomplete="tel" placeholder="01x-xxx xxxx  ·  overseas: +65 …"></div></div>
         <label class="lb">Password</label><input type="password" id="sPass" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters">
         <div class="hint" id="sHint">Use the same Email you Order with. Your AERA Points from earlier Orders are linked automatically.</div>
 <label class="aera-mkt" style="display:flex;gap:8px;align-items:flex-start;margin:14px 0 0;font-size:13px;line-height:1.45;color:#374151;cursor:pointer;font-weight:400"><input type="checkbox" id="sMkt" style="width:auto;flex:none;margin:2px 0 0;accent-color:#1F2937"><span>Send me New Menus, Offers and News by Email or WhatsApp. You can stop anytime.</span></label>
@@ -1078,7 +1078,7 @@ function suHere(){
  if(USER){try{sessionStorage.setItem('aera.goHome','1')}catch(_){}showAccount()}else{setAuth('login');}}
 async function doSignup(e){e.preventDefault();busy('sBtn',true,'Creating…');msg('authMsg','');try{var email=$('#sEmail').value.trim().toLowerCase();
  var ph=$('#sPhone').value.trim();
- if(ph){if(!phoneOk(ph))throw new Error('That does not look like a Malaysian mobile number.');
+ if(ph){if(!phoneOk(ph))throw new Error('That does not look like a mobile number. An overseas number starts with + and the country code.');
   var t=await sb.rpc('phone_taken',{p:ph});
   if(!t.error&&t.data===true)throw new Error('That mobile number already has an AERA account. Sign in instead, or use Forgot Password.')}
  var tok=suToken();
@@ -1194,7 +1194,7 @@ async function loadProfile(){var r=await sb.from('profiles').select('*').eq('id'
  renderPhone();$('#who').textContent=PROFILE.name||(USER.user_metadata||{}).name||'Welcome';$('#pName').value=PROFILE.name||(USER.user_metadata||{}).name||'';if($('#pPhone'))$('#pPhone').value=PROFILE.phone||(USER.user_metadata||{}).phone||'';$('#pDob').value=PROFILE.birth_date?String(PROFILE.birth_date).slice(0,10):'';if(!window.DOBP)window.DOBP=dobPicker('pDob',14,100);DOBP.set($('#pDob').value);$('#pPack').value=PROFILE.packaging||'bento';$('#qSeason').value=PROFILE.seasoning||'normal';$('#qSpice').value=PROFILE.spice||'normal';$('#qAllergens').value=PROFILE.allergens||'';$('#qDislikes').value=PROFILE.dislikes||'';cacheAccount()}
 /* whether this account has an AERA Fridge on it : the Shop reads this from the cached copy */
 var FRIDGEOK=false;
-function cacheAccount(){/* small copy for the checkout page (same browser only) */try{var def=ADDRS.filter(function(a){return a.is_default})[0]||ADDRS[0]||null;localStorage.setItem('aera.account',JSON.stringify({email:USER.email.toLowerCase(),name:PROFILE.name||'',phone:PROFILE.phone||'',packaging:PROFILE.packaging||'bento',seasoning:PROFILE.seasoning||'normal',spice:PROFILE.spice||'normal',allergens:PROFILE.allergens||'',dislikes:PROFILE.dislikes||'',dob:PROFILE.birth_date?String(PROFILE.birth_date).slice(0,10):'',bdayUsed:BDAY.used,orders:(ORDERCOUNT==null?null:ORDERCOUNT),ap:(AP_AVAIL==null?null:AP_AVAIL),address:def?{address:def.address,lat:def.lat,lng:def.lng,km:def.km,notes:def.notes||''}:null,
+function cacheAccount(){/* small copy for the checkout page (same browser only) */try{var def=ADDRS.filter(function(a){return a.is_default})[0]||ADDRS[0]||null;localStorage.setItem('aera.account',JSON.stringify({email:USER.email.toLowerCase(),name:PROFILE.name||'',phone:PROFILE.phone||'',rider_phone:PROFILE.rider_phone||'',packaging:PROFILE.packaging||'bento',seasoning:PROFILE.seasoning||'normal',spice:PROFILE.spice||'normal',allergens:PROFILE.allergens||'',dislikes:PROFILE.dislikes||'',dob:PROFILE.birth_date?String(PROFILE.birth_date).slice(0,10):'',bdayUsed:BDAY.used,orders:(ORDERCOUNT==null?null:ORDERCOUNT),ap:(AP_AVAIL==null?null:AP_AVAIL),address:def?{address:def.address,lat:def.lat,lng:def.lng,km:def.km,notes:def.notes||''}:null,
   addresses:ADDRS.map(function(a){return{id:a.id,label:a.label||'Address',address:a.address,lat:a.lat,lng:a.lng,km:a.km,notes:a.notes||'',def:!!a.is_default}}),
   /* a summary for the Shop Landing, which has no sign-in of its own and reads this copy */
   sum:acctSummary(),
@@ -1244,18 +1244,43 @@ function acctSummary(){
    guarantee is that a number cannot be moved onto a second account behind your back, and the
    unique index in the database is what actually enforces one account per number. */
 var PV={stage:'idle',phone:'',busy:false,msg:'',bad:false};
-function normPhone(p){var x=String(p||'').replace(/[^0-9]/g,'');if(!x)return'';
+/* Mobile numbers : Malaysian by default, any country allowed. A Malaysian number is kept as typed ;
+   an overseas one is kept as + country code and number. Riders need a Malaysian number, so an
+   overseas customer also gives one for the Rider ( profiles.rider_phone ). */
+var CCS=[['60','Malaysia'],['65','Singapore'],['673','Brunei'],['62','Indonesia'],['66','Thailand'],['63','Philippines'],['84','Vietnam'],['86','China'],['852','Hong Kong'],['853','Macau'],['886','Taiwan'],['81','Japan'],['82','South Korea'],['91','India'],['61','Australia'],['64','New Zealand'],['44','United Kingdom'],['1','USA / Canada'],['971','UAE'],['966','Saudi Arabia'],['49','Germany'],['33','France'],['31','Netherlands'],['41','Switzerland']];
+function intlIn(p){return /^\s*(\+|00)/.test(String(p||''))}
+function normPhone(p){var s=String(p||'').trim(),x=s.replace(/[^0-9]/g,'');if(!x)return'';
+ if(intlIn(s))return x.replace(/^00/,'');
  if(x.indexOf('60')===0)return x;if(x.charAt(0)==='0')return '60'+x.slice(1);
  if(x.length>=9&&x.length<=11)return '60'+x;return x}
-function phoneOk(p){return /^60[0-9]{8,10}$/.test(normPhone(p))}
+function isMyNorm(n){return String(n||'').indexOf('60')===0}
+function phoneOk(p){var n=normPhone(p);if(!n)return false;if(isMyNorm(n))return /^60[0-9]{8,10}$/.test(n);return intlIn(p)&&/^[1-9][0-9]{7,14}$/.test(n)}
+function myMobileOk(p){if(intlIn(p)&&!isMyNorm(normPhone(p)))return false;return /^601[0-9]{8,9}$/.test(normPhone(p))}
 function phonePretty(p){var n=normPhone(p);if(!n)return '';return '+'+n}
+function phoneStore(p){var n=normPhone(p);if(!n)return '';return isMyNorm(n)&&!intlIn(p)?String(p).trim():'+'+n}
+function ccOf(n){var best='';CCS.forEach(function(c){if(c[0]!=='60'&&n.indexOf(c[0])===0&&c[0].length>best.length)best=c[0]});return best}
+function phoneCompose(cc,nat){nat=String(nat||'').trim();if(!nat)return '';if(cc==='60')return nat;
+ if(cc==='other')return /^\s*(\+|00)/.test(nat)?nat:'+'+nat;
+ if(/^\s*(\+|00)/.test(nat))return nat;return '+'+cc+' '+nat.replace(/^0+/,'')}
 function pvMsg(t,bad){PV.msg=t||'';PV.bad=!!bad;renderPhone()}
 function renderPhone(){var el=$('#phoneBox');if(!el)return;
- var saved=PROFILE.phone||'',verified=!!PROFILE.phone_verified_at;
+ var af=document.activeElement&&document.activeElement.id;
+ var saved=PROFILE.phone||'',verified=!!PROFILE.phone_verified_at,sn=normPhone(saved);
+ if(PV.cc==null)PV.cc=(sn&&!isMyNorm(sn))?(ccOf(sn)||'other'):'60';
  var typed=PV.phone!==''?PV.phone:saved;
  var same=normPhone(typed)&&normPhone(typed)===normPhone(saved);
+ var tn=normPhone(typed),natShow;
+ if(PV.nat!=null)natShow=PV.nat;
+ else if(!tn||(isMyNorm(tn)&&!intlIn(typed)))natShow=typed;
+ else if(PV.cc!=='other'&&PV.cc!=='60'&&tn.indexOf(PV.cc)===0)natShow=tn.slice(PV.cc.length);
+ else natShow='+'+tn;
+ var lock=PV.stage==='sent';
  var h='<label class="lb">Mobile ( Rider Contact )</label>'+
-  '<div class="f2"><div><input type="tel" id="pPhone" autocomplete="tel" placeholder="012-345 6789" value="'+esc(typed)+'" oninput="PV.phone=this.value;PV.stage=\'idle\';renderPhone()"'+(PV.stage==='sent'?' readonly':'')+'></div>'+
+  '<div class="f2"><div style="display:flex;gap:6px">'+
+   '<select id="pCC" aria-label="Country" style="flex:0 0 auto;width:auto;max-width:46%" onchange="PV.cc=this.value;var i=document.getElementById(\'pPhone\');PV.nat=i?i.value:\'\';PV.phone=phoneCompose(PV.cc,PV.nat);PV.stage=\'idle\';renderPhone()"'+(lock?' disabled':'')+'>'+
+    CCS.map(function(c){return'<option value="'+c[0]+'"'+(PV.cc===c[0]?' selected':'')+'>'+esc(c[1])+' +'+c[0]+'</option>'}).join('')+
+    '<option value="other"'+(PV.cc==='other'?' selected':'')+'>Other country</option></select>'+
+   '<input type="tel" id="pPhone" autocomplete="tel" style="flex:1;min-width:0" placeholder="'+(PV.cc==='60'?'012-345 6789':PV.cc==='other'?'+ country code and number':'Mobile number')+'" value="'+esc(natShow)+'" oninput="PV.nat=this.value;PV.phone=phoneCompose(PV.cc,this.value);PV.stage=\'idle\';renderPhone()"'+(lock?' readonly':'')+'></div>'+
   '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'+
    (verified&&same?'<span class="chip ok">Verified</span><span class="hint" style="margin:0">'+esc(phonePretty(saved))+'</span>':
     saved&&same?'<span class="chip">Not verified yet</span>':'')+
@@ -1269,13 +1294,27 @@ function renderPhone(){var el=$('#phoneBox');if(!el)return;
   var can=phoneOk(typed);
   h+='<div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
      '<button class="btn btn-k" type="button" id="pvBtn" onclick="phoneSend()"'+(can?'':' disabled')+'>Send Me A Code</button>'+
-     '<span class="hint" style="margin:0">'+(can?'We Email a Code to '+esc(USER.email)+' to confirm the change.':'Enter a Malaysian mobile number.')+'</span></div>';
+     '<span class="hint" style="margin:0">'+(can?'We Email a Code to '+esc(USER.email)+' to confirm the change.':(PV.cc==='60'?'Enter a Malaysian mobile number.':PV.cc==='other'?'Enter + then the country code and number.':'Enter the mobile number.'))+'</span></div>';
  }
  h+='<div class="hint" style="margin-top:8px">A Mobile Number can belong to one AERA Account only. It is what our Riders call when they arrive.</div>';
+ if(saved&&verified&&sn&&!isMyNorm(sn)){var rp=PROFILE.rider_phone||'';
+  h+='<div style="margin-top:14px"><label class="lb">Malaysian Mobile for the Rider</label>'+
+   '<div class="f2"><div><input type="tel" id="pRider" autocomplete="off" placeholder="012-345 6789" value="'+esc(rp)+'"></div>'+
+   '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><button class="btn btn-k" type="button" id="prBtn" onclick="riderSave()">Save</button>'+
+   (rp?'<span class="chip ok">Saved</span>':'<span class="chip bad">Needed for Delivery</span>')+'</div></div>'+
+   '<div class="hint">Your mobile is from outside Malaysia. Our Riders call a Malaysian number when they arrive. A friend, family member or colleague in Malaysia is fine.</div></div>'}
  if(PV.msg)h+='<div style="margin-top:8px"><span class="chip '+(PV.bad?'bad':'ok')+'">'+PV.msg+'</span></div>';
- el.innerHTML=h}
+ el.innerHTML=h;
+ if(af==='pPhone'){var ip=$('#pPhone');if(ip){ip.focus();var L=ip.value.length;try{ip.setSelectionRange(L,L)}catch(e){}}}}
+async function riderSave(){var v=(($('#pRider')||{}).value||'').trim();
+ if(v&&!myMobileOk(v))return pvMsg('That does not look like a Malaysian mobile number.',true);
+ busy('prBtn',true,'Saving…');
+ var up={id:USER.id,email:USER.email.toLowerCase(),rider_phone:v||null,updated_at:new Date().toISOString()};
+ var r=await sb.from('profiles').upsert(up);busy('prBtn',false);
+ if(r.error)return pvMsg(friendly(r.error),true);
+ Object.assign(PROFILE,up);cacheAccount();pvMsg(v?'Rider number saved.':'Rider number removed.')}
 async function phoneSend(){var typed=PV.phone!==''?PV.phone:(PROFILE.phone||'');
- if(!phoneOk(typed))return pvMsg('That does not look like a Malaysian mobile number.',true);
+ if(!phoneOk(typed))return pvMsg(PV.cc==='60'?'That does not look like a Malaysian mobile number.':'That does not look like a mobile number. Check the country and the number.',true);
  if(PV.busy)return;PV.busy=true;busy('pvBtn',true,'Sending…');
  /* claim the number before spending an email on it */
  var dup=await sb.rpc('phone_taken',{p:typed});
@@ -1290,7 +1329,7 @@ async function phoneVerify(){var code=($('#pCode').value||'').replace(/[^0-9]/g,
  if(PV.busy)return;PV.busy=true;busy('pvBtn',true,'Confirming…');
  var v=await sb.auth.verifyOtp({email:USER.email,token:code,type:'email'});
  if(v.error){PV.busy=false;busy('pvBtn',false);return pvMsg(/expired|invalid/i.test(v.error.message||'')?'That code is wrong or has expired — send a new one.':friendly(v.error),true)}
- var up={id:USER.id,email:USER.email.toLowerCase(),phone:PV.phone,phone_verified_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+ var up={id:USER.id,email:USER.email.toLowerCase(),phone:phoneStore(PV.phone),phone_verified_at:new Date().toISOString(),updated_at:new Date().toISOString()};
  var r=await sb.from('profiles').upsert(up);
  PV.busy=false;busy('pvBtn',false);
  if(r.error){var m=(r.error.message||'')+' '+(r.error.code||'');
