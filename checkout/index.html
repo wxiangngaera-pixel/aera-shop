@@ -1627,13 +1627,14 @@ function addrGeoCands(q){var c=[];function add(s){s=String(s||'').replace(/\s+/g
  var V=function(id){try{return String(addrVal(id)||'').trim()}catch(e){return ''}};var u=V('addrUnit'),l2=V('addrLine2'),pc=V('addrPost')||(q.match(/\b\d{5}\b/)||[''])[0];
  var unitRe=/^\s*(no\.?\s*|unit\s*|lot\s*)?[A-Z]{0,2}\d+[A-Z]?(\s*[-\/]\s*[A-Z0-9]+)+\s*,?\s*/i;var q2=q.replace(unitRe,''),u2=u.replace(unitRe,'');
  var p=q.split(/\s*,\s*/).filter(Boolean);
- add(q);if(pc&&q.indexOf(pc)<0)add(q2+', '+pc);add([q2,u2,l2,pc].filter(Boolean).join(', '));add([u2,l2,pc].filter(Boolean).join(', '));
+ add(q);if(pc&&q.indexOf(pc)<0)add(q2+', '+pc);add([q2,u2,l2,pc].filter(Boolean).join(', '));if(/[A-Za-z]{3,}/.test(u2+' '+l2))add([u2,l2,pc].filter(Boolean).join(', '));
  for(var i=1;i<p.length-1&&c.length<6;i++)add(p.slice(i).join(', '));
  if(pc)add(pc+', Malaysia');c=c.slice(0,7);if(pc)c.push({pc:pc});return c}
-function geoTry(c){var i=0;function go(){if(i>=c.length)return Promise.resolve([]);var q=c[i++];var pc=(q&&typeof q==='object')?q.pc:'';
+function geoTry(c){var i=0,PC='';c.forEach(function(x){if(x&&typeof x==='object'&&x.pc)PC=x.pc});
+ var good=function(j,pc){if(!(j&&j[0]))return false;if(pc||!PC)return true;var m=String(j[0].display_name||'').match(/\b\d{5}\b/g);return !m||m.indexOf(PC)>=0};function go(){if(i>=c.length)return Promise.resolve([]);var q=c[i++];var pc=(q&&typeof q==='object')?q.pc:'';
  var url=pc?'https://nominatim.openstreetmap.org/search?format=json&limit=1&country=Malaysia&postalcode='+encodeURIComponent(pc):'https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=my&q='+encodeURIComponent(q);
  var tag=function(j){if(j&&j[0]&&(pc||/^\d{5}, Malaysia$/.test(String(q))))j.__approx=pc||String(q).slice(0,5);return j};
- return fetch(url,{headers:{'Accept':'application/json'}}).then(function(r){return r.json()}).then(function(j){if(j&&j[0])return tag(j);if(i>=c.length)return j;return new Promise(function(r){setTimeout(r,1100)}).then(go)},function(){if(i>=c.length)return [];return new Promise(function(r){setTimeout(r,1100)}).then(go)})}
+ return fetch(url,{headers:{'Accept':'application/json'}}).then(function(r){return r.json()}).then(function(j){if(good(j,pc))return tag(j);if(j&&j[0])j=[];if(i>=c.length)return j;return new Promise(function(r){setTimeout(r,1100)}).then(go)},function(){if(i>=c.length)return [];return new Promise(function(r){setTimeout(r,1100)}).then(go)})}
  return go()}
 /* Auto-tidy : a unit number typed into the search box ( e.g. B1-3A-05 ) moves to Address Line 1. */
 var ADDR_UNIT_RE=/^\s*((no\.?|unit|lot)\s*)?[A-Z]{0,2}\d+[A-Z]?(\s*[-\/]\s*[A-Z0-9]+)+\s*,?\s*/i;
@@ -3439,6 +3440,6 @@ b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 function sync(){var o=H.classList.contains('aera-dock-open');b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Hide help, chat and WhatsApp':'Show help, chat and WhatsApp')}
 b.onclick=function(){H.classList.toggle('aera-dock-open');try{sessionStorage.setItem(K,H.classList.contains('aera-dock-open')?'1':'0')}catch(e){}sync()};
 function add(){document.body.appendChild(b);sync()}if(document.body)add();else document.addEventListener('DOMContentLoaded',add)})();</script>
-<script id="aera-addr-approx">(function(){try{Object.assign(window.AERA_I18N||{},{"Building or Street ( Search )":"大楼或街道（搜索）","Start typing your building, condo or street…":"输入大楼、公寓或街道名称…","Unit / House No. — e.g. B1-3A-05 or No. 12":"单位 / 门牌号 — 例如 B1-3A-05 或 No. 12"})}catch(e){} var o=window.coNotes;if(typeof o!=='function')return;window.coNotes=function(n){var r=o.apply(this,arguments);try{if(typeof GEO!=='undefined'&&GEO&&GEO.approx){var f='ADDRESS NOT PINNED — priced by postcode only, Kitchen please confirm the location';r=r?f+' · '+r:f}}catch(e){}return r}})();</script><!-- build 1791901492336 -->
+<script id="aera-addr-approx">(function(){try{Object.assign(window.AERA_I18N||{},{"Building or Street ( Search )":"大楼或街道（搜索）","Start typing your building, condo or street…":"输入大楼、公寓或街道名称…","Unit / House No. — e.g. B1-3A-05 or No. 12":"单位 / 门牌号 — 例如 B1-3A-05 或 No. 12"})}catch(e){} var o=window.coNotes;if(typeof o!=='function')return;window.coNotes=function(n){var r=o.apply(this,arguments);try{if(typeof GEO!=='undefined'&&GEO&&GEO.approx){var f='ADDRESS NOT PINNED — priced by postcode only, Kitchen please confirm the location';r=r?f+' · '+r:f}}catch(e){}return r}})();</script><!-- build 1791901572839 -->
 </body>
 </html>
