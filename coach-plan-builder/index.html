@@ -79,7 +79,7 @@ function tok(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key
 var T=0,OK=false;
 function note(){var n=document.getElementById('coachSaveNote');if(!n)return;var a=tok();n.textContent=a?'Your Clients are saved to your AERA Account ( '+a.em+' ) and open on any Device. They are not sent to our Kitchen until you press Send to AERA.':'Your Clients are saved in this Browser on this Device only. Sign in to keep them in your AERA Account on any Device. They are not sent anywhere until you press Send to AERA.'}
 function put(st){var a=tok();if(!a||!OK)return;var now=new Date().toISOString();st._owner=a.em;st._at=now;fetch(SBU+'/rest/v1/plan_store?on_conflict=user_id',{method:'POST',headers:{apikey:AK,Authorization:'Bearer '+a.t,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:a.uid,email:a.em,coach:st,coach_at:now,updated_at:now})}).catch(function(){})}
-window.__coachAcct={push:function(st){clearTimeout(T);T=setTimeout(function(){put(st)},700)},
+window.__coachAcct={signed:function(){return !!tok()},push:function(st){clearTimeout(T);T=setTimeout(function(){put(st)},700)},
  pull:function(st,cb){note();var a=tok();if(!a)return;fetch(SBU+'/rest/v1/plan_store?select=coach,coach_at&user_id=eq.'+a.uid,{headers:{apikey:AK,Authorization:'Bearer '+a.t}}).then(function(r){return r.ok?r.json():null}).then(function(j){if(!j)return;OK=true;var acc=j[0]&&j[0].coach;
   var mine=!st._owner||st._owner===a.em,localNewer=mine&&st._at&&(!acc||!acc._at||st._at>acc._at);
   if(acc&&!localNewer){cb(acc);return}
@@ -1056,7 +1056,7 @@ $('#doUndo').addEventListener('click',function(){
 $('#doSave').addEventListener('click',function(){
  save();
  var t=new Date();
- say('ok','<b>Saved on this device.</b> You can close the tab and pick '+
+ say('ok',((window.__coachAcct&&window.__coachAcct.signed())?'<b>Saved to your AERA Account.</b> Open it on any Device and pick ':'<b>Saved on this Device.</b> You can close the tab and pick ')+
   esc(cur().name||'this plan')+' up later &mdash; it was saved at '+
   t.getHours().toString().padStart(2,'0')+':'+t.getMinutes().toString().padStart(2,'0')+'.')});
 $('#doSheet').addEventListener('click',function(){
@@ -1496,6 +1496,6 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 </script>
-<!-- AERA site bar : end -->
+<!-- AERA site bar : end --><!-- build 1791929473574 -->
 </body>
 </html>
