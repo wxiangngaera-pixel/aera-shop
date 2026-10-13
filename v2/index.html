@@ -369,7 +369,7 @@ function home(){
 /* ---------- Meal Plan : one step at a time, one obvious next move ---------- */
 function plan(){
  Object.assign(ZH,{'Answer a few quick questions. We build your week to your calories and macros.':'回答几个简单问题，我们按您的热量与宏量营养素排好一周。',
-  'Your answers are saved to your account as you go.':'您的答案会随时保存到账户。','More':'更多','Fine-tune the whole plan':'微调整份餐单','Step':'步骤','of':'/','meals':'餐','Add To Cart':'加入购物车'});
+  'Your answers are saved to your account as you go.':'您的答案会随时保存到账户。','More':'更多','Fine-Tune the whole Plan':'微调整份餐单','Step':'步骤','of':'/','meals':'餐','Add To Cart':'加入购物车'});
  try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
  css(
  '#stepbar{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;gap:6px!important;padding-bottom:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}'+
@@ -403,7 +403,7 @@ function plan(){
   menu.addEventListener('click',function(){setTimeout(function(){d.open=false},50)});
   D.addEventListener('click',function(e){if(d.open&&!d.contains(e.target))d.open=false})})}
  function tune(){var tu=D.querySelector('#planCal .tune');if(!tu||tu.parentNode.classList.contains('v2tune'))return;
-  var d=D.createElement('details');d.className='v2tune';d.innerHTML='<summary>'+t('Fine-tune the whole plan')+'</summary>';tu.parentNode.insertBefore(d,tu);d.appendChild(tu)}
+  var d=D.createElement('details');d.className='v2tune';d.innerHTML='<summary>'+t('Fine-Tune the whole Plan')+'</summary>';tu.parentNode.insertBefore(d,tu);d.appendChild(tu)}
  function bar(n){var b=D.getElementById('v2bar');if(!b){b=D.createElement('div');b.id='v2bar';b.innerHTML='<div class="p"><b></b><small></small></div><button type="button"></button>';D.body.appendChild(b);
    b.querySelector('button').addEventListener('click',function(){try{window.goStep(5)}catch(e){}})}
   var P_=window.PLAN,on=n===4&&P_&&P_.meals&&P_.meals.length&&!(D.getElementById('s4')||{classList:{contains:function(){return false}}}).classList.contains('gated');
@@ -797,5 +797,5 @@ if(P==='/meal-plan'){plan();quick();freePlan();mealAdjust()}
 tapDemo();
 })();
 
-/*AERA-V2-END*/</script><!-- build 1791925845368 -->
+/*AERA-V2-END*/</script><!-- build 1791926308000 -->
 </body></html>
