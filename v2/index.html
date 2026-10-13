@@ -688,9 +688,108 @@ function mealAdjust(){
  var cn=0,civ=setInterval(function(){if(carbs()||++cn>80)clearInterval(civ)},100);
  var qq=0;ready(function(){add();new MutationObserver(function(ms){if(qq)return;if(S&&ms.every(function(m){return S.contains(m.target)}))return;qq=setTimeout(function(){qq=0;add();if(S&&S.classList.contains('on'))paint()},80)}).observe(D.body,{childList:true,subtree:true})})}
 
+/* ---------- "How it Works" : a finger taps the real buttons, instead of pop-up text ---------- */
+function tapDemo(){
+ var DEMOS={
+  home:[
+   {sel:['#v2hero .ch.a'],t:['Build your own plan','定制您的餐单'],s:['Tap here. Answer 5 quick questions and we build your week.','点这里，回答 5 个简单问题，我们为您排好一周。']},
+   {sel:['#v2hero .ch.b'],t:['Or pick a bundle','或选择套餐'],s:['7 days, ready-made for Fat Loss or Mass Gain.','7 天现成套餐，适合减脂或增肌。']},
+   {sel:['#langSw'],t:['English or 中文','English 或 中文'],s:['Switch the language any time.','随时切换语言。']},
+   {sel:['#abCart','.cartbtn','#ordBtn'],t:['Your cart','购物车'],s:['Everything you add waits here until you pay.','加入的餐点都在这里，付款前随时查看。']}],
+  plan1:[
+   {sel:['#v2qlink'],t:['The quick way','快捷方式'],s:['Tap here for 5 quick questions instead of the full form.','点这里，只需回答 5 个简单问题。']},
+   {sel:['#stepbar .step.on','#stepbar'],t:['Or go step by step','或逐步填写'],s:['Fill each step, then tap Next at the bottom.','逐步填写，然后点底部的“下一步”。']}],
+  plan:[
+   {sel:['#s4 .daytabs button.on','#s4 .daytabs button'],t:['Pick a day','选择一天'],s:['Tap a day to see its meals.','点选某一天，查看当天餐点。']},
+   {sel:['#s4 .v2adjb'],t:['Change one meal','调整一餐'],s:['Tap Adjust on any meal.','在任一餐点上点“调整”。'],act:'click'},
+   {sel:['#v2adj [data-run^="tuneMeal("]'],t:['Tune it','微调'],s:['Fit your calories, more protein, less carbs, less fat or a lower price.','贴合热量、更多蛋白质、更少碳水或脂肪、更低价格。'],wait:500},
+   {sel:['#v2adj [data-run^="addComp("]'],t:['Add more food','加量'],s:['Add Protein, Carbs or Vegetables for RM 0.50.','加蛋白质、碳水或蔬菜，每份 RM 0.50。']},
+   {sel:['#v2adj .ft .ok'],t:['Done','完成'],s:['Tap Done to go back to your plan.','点“完成”回到餐单。'],act:'click'},
+   {sel:['details.v2tune > summary'],t:['Change every meal at once','一次调整所有餐点'],s:['Tap here to tune the whole week together.','点这里，一次调整整周。']},
+   {sel:['.planacts [onclick*="savePlan"]'],t:['Save it','保存'],s:['Keeps the plan in your account for next time.','把餐单保存到您的账户。']},
+   {sel:['#v2bar.on button','#stepbar .step[data-s="5"]'],t:['Order','下单'],s:['Happy with it? Tap Add To Cart.','满意了？点“加入购物车”。']}],
+  plan5:[
+   {sel:['#orderSummary'],t:['Check it over','核对'],s:['Everything you chose, in one list.','您选择的一切，都在这里。']},
+   {sel:['#orderBtn','#s5 .btn-y'],t:['Into the cart','加入购物车'],s:['Tap here to take the whole week to Checkout.','点这里，把整周带到结账。']}],
+  checkout:[
+   {sel:['#lines'],t:['Your meals','您的餐点'],s:['Check what you are ordering.','核对您订购的餐点。']},
+   {sel:['#pkBento','#pkVacuum'],t:['How it is packed','包装方式'],s:['Tap Bento Box or Vacuum Packed.','选择便当盒或真空包装。']},
+   {sel:['#optDelivery','#optPickup'],t:['Pick-up or delivery','自取或配送'],s:['Tap Self Pick-Up or Rider Delivery.','选择自取或骑手配送。']},
+   {sel:['#date'],t:['Choose a day','选择日期'],s:['Then pick a time slot beside it.','再选择旁边的时间段。']},
+   {sel:['#phone','#name'],t:['Your details','您的资料'],s:['Your name and mobile, for the Rider and your receipt.','姓名和手机号，用于骑手联系和收据。']},
+   {sel:['#payBtn'],t:['Pay','付款'],s:['Tap Pay Securely. FPX, Touch \'n Go, cards and more.','点“安全付款”。支持 FPX、Touch \'n Go、银行卡等。']}]
+ };
+ Object.assign(ZH,{'How it Works':'怎么用','Skip':'跳过','Replay':'重播','Close':'关闭'});
+ css(
+ '.at-help,.at-mask,.at-card{display:none!important}'+
+ '#v2help{position:fixed;right:12px;bottom:calc(96px + env(safe-area-inset-bottom));z-index:2147481000;display:flex;align-items:center;gap:7px;height:38px;padding:0 14px 0 8px;border-radius:999px;border:0;background:#16479E;color:#fff;font:800 13px Montserrat,system-ui,sans-serif;box-shadow:0 8px 20px rgba(11,28,54,.3);cursor:pointer;touch-action:manipulation}'+
+ '#v2help i{width:24px;height:24px;border-radius:50%;background:#FDB913;color:#16479E;display:grid;place-items:center;font-style:normal;font-size:11px}'+
+ 'body.v2qp-on #v2help,body.v2demo-on #v2help,body:has(#v2adj.on) #v2help,body:has(#v2sheet.on) #v2help{display:none!important}'+
+ 'body.v2demo-on #v2badge{display:none!important}'+
+ '#v2demo{position:fixed;inset:0;z-index:2147482800;font-family:Montserrat,system-ui,sans-serif}'+
+ '#v2demo .hole{position:fixed;border-radius:16px;box-shadow:0 0 0 200vmax rgba(11,28,54,.58);transition:all .5s cubic-bezier(.4,0,.2,1);pointer-events:none;outline:3px solid #FDB913;outline-offset:2px}'+
+ '#v2demo .fg{position:fixed;left:0;top:0;width:46px;height:58px;transition:transform .7s cubic-bezier(.4,0,.2,1);pointer-events:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));z-index:2}'+
+ '#v2demo .fg svg{width:100%;height:100%;transition:transform .15s ease}#v2demo .fg.tap svg{transform:scale(.82)}'+
+ '#v2demo .rp{position:fixed;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:3px solid #FDB913;opacity:0;pointer-events:none;z-index:1}'+
+ '#v2demo .rp.go{animation:v2rp .7s ease-out}@keyframes v2rp{0%{opacity:1;transform:scale(.4)}100%{opacity:0;transform:scale(3.2)}}'+
+ '#v2demo .cap{position:fixed;left:12px;right:12px;max-width:480px;margin:0 auto;background:#fff;color:#0B1C36;border-radius:18px;padding:14px 14px 12px;box-shadow:0 14px 34px rgba(0,0,0,.3);transition:top .35s,bottom .35s;z-index:3}'+
+ '#v2demo .cap .n{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:.12em;color:#16479E;text-transform:uppercase;margin:0 0 6px}'+
+ '#v2demo .cap .n span{flex:1;height:4px;border-radius:4px;background:#E3E8F2;overflow:hidden}#v2demo .cap .n span i{display:block;height:100%;background:#FDB913;transition:width .4s}'+
+ '#v2demo .cap b{display:block;font-size:17px;margin:0 0 3px}#v2demo .cap p{margin:0;font-size:14px;line-height:1.4;color:#33415C}'+
+ '#v2demo .cap .bt{display:flex;gap:8px;margin-top:10px}'+
+ '#v2demo .cap .bt button{flex:1;height:40px;border-radius:999px;font:800 13.5px Montserrat,system-ui,sans-serif;cursor:pointer;touch-action:manipulation}'+
+ '#v2demo .cap .bt .o{background:#fff;border:2px solid #16479E;color:#16479E}#v2demo .cap .bt .y{background:#FDB913;border:0;color:#0B1C36}'
+ ,'v2-demo');
+ var HAND='<svg viewBox="0 0 32 40" aria-hidden="true"><path d="M11 2.5a3 3 0 0 1 3 3V17h1.2v-4a3 3 0 0 1 6 0v5h1.2v-2.6a3 3 0 0 1 6 0V27c0 6.4-4.6 11-10.6 11h-2.4c-3.6 0-6.4-1.7-8.4-4.6L2.6 27a3 3 0 0 1 5-3.4L8 25V5.5a3 3 0 0 1 3-3z" fill="#fff" stroke="#0B1C36" stroke-width="2" stroke-linejoin="round"/></svg>';
+ var TIPX=0.34,TIPY=0.06,W=null,RUN=0,OPENED=false;
+ function L(a){return zh()&&a[1]?a[1]:a[0]}
+ function vis(e){if(!e)return false;var r=e.getBoundingClientRect();if(!r.width&&!r.height)return false;var cs=getComputedStyle(e);return cs.visibility!=='hidden'&&cs.display!=='none'}
+ function find(st){for(var i=0;i<st.sel.length;i++){var es=D.querySelectorAll(st.sel[i]);for(var j=0;j<es.length;j++)if(vis(es[j]))return es[j]}return null}
+ function which(){if(P==='/')return 'home';if(P==='/checkout')return 'checkout';
+  if(P==='/meal-plan'){if(D.body.classList.contains('v2qp-on'))return null;var s=+window.STEP||1;if(s===4)return window.PLAN?'plan':null;if(s===5)return 'plan5';return 'plan1'}return null}
+ function sleep(ms,id){return new Promise(function(res){setTimeout(function(){res(id===RUN)},ms)})}
+ function stop(){RUN++;if(OPENED){var x=D.querySelector('#v2adj.on [data-x]');if(x)x.click();OPENED=false}if(W){W.remove();W=null}D.body.classList.remove('v2demo-on')}
+ function key(k){return 'aera.demo.'+k+'.v1'}
+ function seen(k){try{return localStorage.getItem(key(k))==='1'}catch(e){return true}}
+ function mark(k){try{localStorage.setItem(key(k),'1')}catch(e){}}
+ function play(k){var steps=(DEMOS[k]||[]);if(!steps.length)return;stop();var id=RUN;mark(k);OPENED=false;
+  D.body.classList.add('v2demo-on');
+  W=D.createElement('div');W.id='v2demo';W.innerHTML='<div class="hole"></div><div class="rp"></div><div class="fg">'+HAND+'</div><div class="cap" role="status" aria-live="polite"></div>';D.body.appendChild(W);
+  var hole=W.querySelector('.hole'),fg=W.querySelector('.fg'),rp=W.querySelector('.rp'),cap=W.querySelector('.cap'),skipNow=false;
+  fg.style.transform='translate('+(innerWidth/2-23)+'px,'+(innerHeight+40)+'px)';
+  W.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(b&&b.hasAttribute('data-stop')){stop();return}if(b&&b.hasAttribute('data-again')){play(k);return}skipNow=true});
+  (async function(){var shown=0,list=steps.slice();
+   for(var i=0;i<list.length;i++){var st=list[i];if(st.wait&&!(await sleep(st.wait,id)))return;var el=find(st);if(!el)continue;shown++;
+    try{el.scrollIntoView({block:'center',behavior:'smooth'})}catch(e){el.scrollIntoView()}
+    if(!(await sleep(450,id)))return;el=find(st)||el;var r=el.getBoundingClientRect(),pad=6;
+    hole.style.left=(r.left-pad)+'px';hole.style.top=(r.top-pad)+'px';hole.style.width=(r.width+pad*2)+'px';hole.style.height=(r.height+pad*2)+'px';
+    var cx=r.left+Math.min(r.width/2,r.width-14),cy=r.top+Math.min(r.height/2,r.height-8);
+    fg.style.transform='translate('+(cx-46*TIPX)+'px,'+(cy-58*TIPY)+'px)';
+    var low=(r.top+r.height/2)>innerHeight*0.55;cap.style.top=low?'calc(14px + env(safe-area-inset-top))':'auto';cap.style.bottom=low?'auto':'calc(24px + env(safe-area-inset-bottom))';
+    var last=(i===list.length-1);
+    cap.innerHTML='<div class="n">'+(i+1)+' / '+list.length+'<span><i style="width:'+((i+1)/list.length*100)+'%"></i></span></div><b>'+L(st.t)+'</b><p>'+L(st.s)+'</p>'+
+     '<div class="bt"><button type="button" class="o" data-stop="1">'+(last?t('Close'):t('Skip'))+'</button>'+(last?'<button type="button" class="y" data-again="1">↺ '+t('Replay')+'</button>':'')+'</div>';
+    if(!(await sleep(750,id)))return;
+    for(var tp=0;tp<2;tp++){fg.classList.add('tap');rp.style.left=cx+'px';rp.style.top=cy+'px';rp.classList.remove('go');void rp.offsetWidth;rp.classList.add('go');
+     if(!(await sleep(170,id)))return;fg.classList.remove('tap');if(!(await sleep(260,id)))return}
+    if(st.act==='click'){try{el.click();if(/v2adjb/.test(el.className))OPENED=true;if(el.hasAttribute&&el.hasAttribute('data-x'))OPENED=false}catch(e){}}
+    skipNow=false;for(var w=0;w<20&&!skipNow;w++){if(!(await sleep(100,id)))return}}
+   if(id!==RUN)return;if(!shown){stop();return}
+   fg.style.transform='translate('+(innerWidth/2-23)+'px,'+(innerHeight+40)+'px)';hole.style.opacity='0'})()}
+ function btn(){if(D.getElementById('v2help'))return;var b=D.createElement('button');b.type='button';b.id='v2help';b.innerHTML='<i>▶</i>'+t('How it Works');
+  b.addEventListener('click',function(){var k=which();if(k)play(k)});D.body.appendChild(b)}
+ function quiet(){try{if(window.AERATOUR&&!window.AERATOUR.__v2){window.AERATOUR.__v2=1;window.AERATOUR.stop&&window.AERATOUR.stop(false);window.AERATOUR.seen=function(){return true};window.AERATOUR.auto=function(){};window.AERATOUR.start=function(){var k=which();if(k&&!seen(k))setTimeout(function(){play(k)},300)}}}catch(e){}}
+ function busy(){var a=D.activeElement;return !!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))||D.body.classList.contains('v2qp-on')||!!D.querySelector('#v2adj.on,#v2sheet.on,.modal')}
+ ready(function(){btn();quiet();var n=0,iv=setInterval(function(){n++;quiet();
+  var b=D.getElementById('v2help');if(b){var k0=which();b.style.display=k0?'':'none'}
+  if(W||busy())return;var k=which();if(!k||seen(k))return;
+  if(k==='checkout'){var ln=D.getElementById('lines');if(!ln||/empty/i.test(ln.textContent))return}
+  if(n>=8)play(k)},500)})}
+
 if(P==='/')home();
 if(P==='/checkout')checkout();
 if(P==='/meal-plan'){plan();quick();freePlan();mealAdjust()}
+tapDemo();
 })();
 
 /*AERA-V2-END*/</script>
