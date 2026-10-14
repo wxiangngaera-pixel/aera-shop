@@ -3260,7 +3260,7 @@ body.signedin:not(.mkExpand) #hub{padding-bottom:8px}
 }
 </style>
 <script id="aera-ux-pass-js">
-(function(){if(window.__aeraUx)return;window.__aeraUx=1;var D=document,MQ=window.matchMedia('(max-width:600px)');
+(function(){if(window.__aeraUx)return;window.__aeraUx=1;try{var D0=window.AERA_I18N=window.AERA_I18N||{};if(!D0['Inbox'])D0['Inbox']='收件箱'}catch(e){}var D=document,MQ=window.matchMedia('(max-width:600px)');
 function $(s){return D.querySelector(s)}
 /* Order before the dashboard */
 function order(){var hub=$('#hub'),me=$('#meHome');if(hub&&me&&me.parentNode&&hub.compareDocumentPosition(me)&D.DOCUMENT_POSITION_PRECEDING)me.parentNode.insertBefore(hub,me)}
@@ -3272,7 +3272,7 @@ function inbox(){var ul=$('#navPanel .wrap'),btn=$('#inboxBtn'),tg=$('#navToggle
 /* Extend as a button inside the dashboard on phones ( it presses the original edge tab, which stays where it is ) */
 function ext(){var hd=$('#meHome .ovhead');if(!hd||!$('#meToggle'))return;var p=$('#meExtBtn');
  if(!p||!hd.contains(p)){if(p)p.remove();p=D.createElement('button');p.type='button';p.id='meExtBtn';p.addEventListener('click',function(){var o=$('#meToggle');if(o)o.click()});hd.appendChild(p)}
- var tx=D.body.classList.contains('mkExpand')?'Summarise':'Extend';if(p.textContent!==tx)p.textContent=tx}
+ var tx=D.body.classList.contains('mkExpand')?'Summarise':'Extend';if(p.getAttribute('data-k')!==tx){p.setAttribute('data-k',tx);p.textContent=tx}}
 /* Get The App waits until they have scrolled past the top */
 function aa(){var b=$('#aaBar');if(b&&!b.classList.contains('aaok')&&(scrollY>500))b.classList.add('aaok')}
 /* image descriptions */
