@@ -637,6 +637,7 @@ function mealAdjust(){
  '#s4 .mcard .mmain .addrow.v2top .btn{display:inline-flex!important;align-items:center;height:38px;padding:0 16px;border-radius:999px;border:1.5px solid #16479E;background:#fff;color:#16479E;font:800 13.5px Montserrat,system-ui,sans-serif;text-transform:none;cursor:pointer;box-shadow:none}'+
  '#s4 .mcard .mmain .addrow.v2top .btn:hover{background:#EDF3FD}'+
  '#s4 .mcard .mmain .addrow.v2top .hint{font-size:12.5px}'+
+ '#s4 .etbl td.mac .v2pp{display:block;line-height:1.55;white-space:nowrap}'+
  '#s4 .mcard .mh{position:relative}'+
  '#s4 .mcard .v2adjb{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 16px;border-radius:999px;border:2px solid #16479E;background:#fff;color:#16479E;font:800 14px Montserrat,system-ui,sans-serif;cursor:pointer;margin:8px 0 0}'+
  '#s4 .mcard .v2adjb:active{transform:scale(.97)}'+
@@ -690,6 +691,8 @@ function mealAdjust(){
  function add(){[].forEach.call(D.querySelectorAll('#s4 .mcard'),function(card){var i=idxOf(card);if(i==null)return;
   /* the + Protein / + Vegetable buttons sit right above the item table, not only inside Adjust */
   var ar=card.querySelector('.mmain .addrow'),tw=card.querySelector('.mmain .tblwrap');if(ar&&tw){if(!ar.classList.contains('v2top'))ar.classList.add('v2top');if(ar.nextElementSibling!==tw)tw.parentNode.insertBefore(ar,tw)}
+  /* Per Portion : one figure per line */
+  [].forEach.call(card.querySelectorAll('.etbl td.mac'),function(td){if(td.querySelector('.v2pp'))return;var t=td.textContent.trim();if(t.indexOf(' · ')<0)return;td.innerHTML='<span class="v2pp">'+t.split(' · ').map(function(x){return x.replace(/[<>&]/g,'')}).join('<br>')+'</span>'});
   var mh=card.querySelector('.mh');if(!mh)return;
   var b=mh.querySelector('.v2adjb');if(b){b.setAttribute('data-i',i);return}
   b=D.createElement('button');b.type='button';b.className='v2adjb';b.setAttribute('data-i',i);b.innerHTML='⚙︎ '+t('Adjust');mh.appendChild(b)})}
@@ -877,5 +880,5 @@ tapDemo();
 })();
 
 /*AERA-V2-END*/</script>
-<!-- build 1791951251178 -->
+<!-- build 1791951593831 -->
 </body></html>
