@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://aeramealprep.net/img5/</loc>
+    <lastmod>2026-10-14T05:25:37.417Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/img1/</loc>
+    <lastmod>2026-10-14T05:25:22.375Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://aeramealprep.net/meal-plan/</loc>
     <lastmod>2026-10-14T05:21:43.683Z</lastmod>
     <changefreq>weekly</changefreq>
@@ -51,11 +61,6 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/img5/</loc>
-    <lastmod>2026-10-13T21:34:25.362Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
     <loc>https://aeramealprep.net/img4/</loc>
     <lastmod>2026-10-13T21:24:13.581Z</lastmod>
     <changefreq>weekly</changefreq>
@@ -68,11 +73,6 @@
   <url>
     <loc>https://aeramealprep.net/img2/</loc>
     <lastmod>2026-10-13T21:23:46.085Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/img1/</loc>
-    <lastmod>2026-10-13T21:23:32.115Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
