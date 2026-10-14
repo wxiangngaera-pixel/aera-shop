@@ -1156,9 +1156,11 @@ async function legacyCheck(email){var box=$('#legacyNote');if(!box||!sb)return;
   LEG.known=true;
   var bits=[];if(d.has_points)bits.push('your AERA Points');if(d.has_order)bits.push('your order history');
   box.innerHTML='<div class="msg ok"><b>Welcome back.</b> We know this email from our old site. '+
-   (d.claimed?'You have already set a password here — just sign in.'
-            :'Set a password here and '+(bits.length?bits.join(' and ')+' come with it.':'your details come with it.'))+
-   '<br><span class="hint">We could not move passwords across — they were never readable by anyone. This one is new.</span></div>'}
+   (d.claimed?'You already have a password on this new site, so just sign in. '+
+     '<a href="#" onclick="var v=($(\'#sEmail\')||{}).value||($(\'#fEmail\')||{}).value||\'\';setAuth(\'login\');var l=$(\'#lEmail\');if(l&&v)l.value=v;return false" style="font-weight:800">Sign In</a>'+
+     '<br><span class="hint">Forgot it? Use <a href="#" onclick="var v=($(\'#lEmail\')||{}).value||($(\'#sEmail\')||{}).value||\'\';setAuth(\'forgot\');var f=$(\'#fEmail\');if(f&&v)f.value=v;return false">Forgot Password</a> and we will email you a link to set a new one.</span></div>'
+    :'Set a password here and '+(bits.length?bits.join(' and ')+' come with it.':'your details come with it.')+
+     '<br><span class="hint">Your old site password does not carry over, so please choose a new one.</span></div>')}
  catch(e){}}
 document.addEventListener('input',function(e){
  if(e.target&&(e.target.id==='sEmail'||e.target.id==='lEmail'||e.target.id==='fEmail'))legacyCheck(e.target.value)});
@@ -3679,5 +3681,6 @@ if(document.readyState==='complete')later();else window.addEventListener('load',
 })();
 </script>
 <!-- AERA notifications on by default : end -->
+<!-- build 1791948413149 -->
 </body>
 </html>
