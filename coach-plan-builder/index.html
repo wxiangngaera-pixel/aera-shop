@@ -679,7 +679,7 @@ function paint(){
     '<small>'+mealsOf(d)+'</small></button>'+
    (c.days.length>1?'<button class="dx" type="button" data-delday="'+i+'" title="Remove this day" '+
     'aria-label="Remove '+esc(dayLabel(d,i))+'">&times;</button>':'')+'</span>'}).join('')+
-  '<button class="tab" type="button" data-addday="1">+ Add day</button>'+
+  '<button class="tab" type="button" data-addday="1">+ Add Day</button>'+
   '<button class="tab" type="button" data-copyday="1">Duplicate this Day</button>';
 
  var d=day(),h='';
@@ -1240,7 +1240,7 @@ if(window.aeraRetranslate)window.aeraRetranslate();
  if(document.readyState==="loading")addEventListener("DOMContentLoaded",boot);else boot()})();
 </script>
 <script>
-Object.assign(window.AERA_I18N,{"Pick the dishes, set the weights, and hand it over. Nothing is typed up twice and nothing is read by a machine, so nothing is misread. Keep as many clients here as you like.":"选好菜色、定好克数，交给我们就行。不必重打一次，也不经机器辨识，不会读错。客户要存多少个都可以。","+ New Client":"+ 新增客户","+ New client":"+ 新增客户","+ Add day":"+ 新增一天","Duplicate this Day":"复制这一天","Duplicate this day":"复制这一天","Day name":"这一天的名称","Monday":"星期一","Tuesday":"星期二","Wednesday":"星期三","Thursday":"星期四","Friday":"星期五","Saturday":"星期六","Sunday":"星期日","Breakfast":"早餐","Lunch":"午餐","Dinner":"晚餐","Supper":"宵夜","Nothing in this meal yet.":"这一餐还没有内容。","Nothing in this Meal yet.":"这一餐还没有内容。","Raw Weight":"生重","Cooked Weight":"熟重","+ Add a Dish":"+ 加入一道菜","+ Client’s Home-Sourced Meal":"+ 客户自备的一餐","+ Add a Meal":"+ 新增一餐","Calories":"热量","Protein":"蛋白质","Carbs":"碳水","Fat":"脂肪","Nothing to send yet":"目前还没有可发送的内容","Chicken":"鸡肉","Fish":"鱼","Beef":"牛肉","Rice":"米饭","Pasta":"意面","Potato":"马铃薯","Vegetables":"蔬菜","Oil-free":"无油","Lean":"低脂"});
+Object.assign(window.AERA_I18N,{"Pick the dishes, set the weights, and hand it over. Nothing is typed up twice and nothing is read by a machine, so nothing is misread. Keep as many clients here as you like.":"选好菜色、定好克数，交给我们就行。不必重打一次，也不经机器辨识，不会读错。客户要存多少个都可以。","+ New Client":"+ 新增客户","+ New client":"+ 新增客户","+ Add day":"+ 新增一天","+ Add Day":"+ 新增一天","Duplicate this Day":"复制这一天","Duplicate this day":"复制这一天","Day name":"这一天的名称","Monday":"星期一","Tuesday":"星期二","Wednesday":"星期三","Thursday":"星期四","Friday":"星期五","Saturday":"星期六","Sunday":"星期日","Breakfast":"早餐","Lunch":"午餐","Dinner":"晚餐","Supper":"宵夜","Nothing in this meal yet.":"这一餐还没有内容。","Nothing in this Meal yet.":"这一餐还没有内容。","Raw Weight":"生重","Cooked Weight":"熟重","+ Add a Dish":"+ 加入一道菜","+ Client’s Home-Sourced Meal":"+ 客户自备的一餐","+ Add a Meal":"+ 新增一餐","Calories":"热量","Protein":"蛋白质","Carbs":"碳水","Fat":"脂肪","Nothing to send yet":"目前还没有可发送的内容","Chicken":"鸡肉","Fish":"鱼","Beef":"牛肉","Rice":"米饭","Pasta":"意面","Potato":"马铃薯","Vegetables":"蔬菜","Oil-free":"无油","Lean":"低脂"});
 window.AERA_I18N_RE.push([/^(\d+) boxes?$/,"$1 盒"],[/^([\d,]+) KCALs$/,"$1 大卡"],[/^Protein - ([\d.]+)$/,"蛋白 $1"],[/^Carbs - ([\d.]+)$/,"碳水 $1"],[/^Fat - ([\d.]+)$/,"脂肪 $1"],[/^(\d+) [Mm]eals?$/,"$1 餐"],[/^(\d+) clients?$/,"$1 位客户"],
  [/^([\d,]+) kcal · P ([\d.]+) · C ([\d.]+) · F ([\d.]+)$/,"$1 大卡 · 蛋白 $2 · 碳水 $3 · 脂肪 $4"],
  [/^Client (\d+)$/,"客户 $1"]);
@@ -1721,6 +1721,6 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 </script>
 <style id="aera-coach-app-fit">#aaBar{bottom:auto!important;top:calc(70px + env(safe-area-inset-top))!important}@media(max-width:600px){.ab-r #aaGetApp{width:34px!important;height:34px!important}.ab-r #aaGetApp span{display:none!important}.ab-r #aaGetApp img{width:26px!important;height:26px!important}}</style>
 <!-- AERA coach app kit : end -->
-<!-- build 1791958231721 -->
+<!-- build 2026-10-14T06:14:26.211Z -->
 </body>
 </html>
