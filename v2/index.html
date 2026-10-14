@@ -572,7 +572,7 @@ function quick(){
    ['intro','week','prefs'].forEach(function(k){try{localStorage.setItem('aera.tour.plan.'+k+'.v1','1')}catch(x){}});
    window.PLAN=null;
   }catch(e){}
-  close();try{window.goStep(4)}catch(e){}}
+  close();try{if(typeof window.v2PrefsFirst==='function')window.v2PrefsFirst();else window.goStep(4)}catch(e){}}
  function link(){var s1=D.getElementById('s1');if(!s1||D.getElementById('v2qlink'))return;var h2=s1.querySelector('h2');if(!h2)return;
   var b=D.createElement('button');b.type='button';b.id='v2qlink';b.innerHTML='<i>⚡</i><span>'+t('Answer 5 quick questions instead')+'</span><i>→</i>';
   b.addEventListener('click',function(){try{sessionStorage.removeItem('aera.v2qp.off')}catch(x){}start()});h2.parentNode.insertBefore(b,h2)}
@@ -880,7 +880,7 @@ function oneFlow(){
  Object.assign(ZH,{'Close':'关闭','1 · Your Answers':'1 · 您的回答','2 · Your Plan':'2 · 您的餐单','3 · Order':'3 · 下单','Fine-Tune My Targets':'微调我的目标',
   'Optional. Change your Targets or how we build your Meals.':'可选。调整您的目标或餐点编排方式。','Goal, Body Type & Macros':'目标、体型与宏量营养素',
   'Food You Eat Outside AERA':'AERA 以外的饮食','Meal Preferences':'饮食偏好','← Back to My Plan':'← 返回我的餐单','Update My Plan →':'更新我的餐单 →',
-  'Update My Plan rebuilds your Meals to the new Targets.':'「更新我的餐单」会按新目标重新编排餐点。','← Change My Answers':'← 更改我的回答','Fine-Tune':'微调'});
+  'Update My Plan rebuilds your Meals to the new Targets.':'「更新我的餐单」会按新目标重新编排餐点。','← Change My Answers':'← 更改我的回答','Fine-Tune':'微调','← Back to Questions':'← 返回问题','Pick what you like, or leave it as it is and we use everything.':'挑选您喜欢的，或保持不变，我们会全部使用。','Build My Plan →':'生成我的餐单 →'});
  try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
  css(
  '#stepbar .step[data-s="2"],#stepbar .step[data-s="3"]{display:none!important}#v2qlink{display:none!important}'+
@@ -894,17 +894,20 @@ function oneFlow(){
  '.v2ft>summary small{order:3;flex-basis:100%;font:500 12.5px/1.4 system-ui,sans-serif;color:#5A6B87}'+
  '.v2ft-in{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 14px}.v2ft-in button{border:0;background:#16479E;color:#FDB913;border-radius:999px;padding:10px 15px;font:700 13px Montserrat,system-ui,sans-serif;cursor:pointer}'
  ,'v2-oneflow');
- var FT=false,G0=null;
- function ftOff(){FT=false;D.body.classList.remove('v2ft-on')}
+ var FT=false,PRE=false,G0=null;
+ function setBars(){[].forEach.call(D.querySelectorAll('.v2ftbar'),function(b){var k=b.querySelector('.bk'),s=b.querySelector('span'),g=b.querySelector('.go');if(!k||!s||!g)return;
+  k.textContent=t(PRE?'← Back to Questions':'← Back to My Plan');s.textContent=t(PRE?'Pick what you like, or leave it as it is and we use everything.':'Update My Plan rebuilds your Meals to the new Targets.');g.textContent=t(PRE?'Build My Plan →':'Update My Plan →')})}
+ function ftOff(){FT=false;PRE=false;D.body.classList.remove('v2ft-on','v2pre');setBars()}
+ window.v2PrefsFirst=function(){if(!G0||byop()){(G0||window.goStep)(4);return}FT=true;PRE=true;D.body.classList.add('v2ft-on','v2pre');setBars();try{G0(3)}catch(e){}if(window.STEP!==3){ftOff();G0(4);return}try{window.scrollTo(0,0)}catch(e){}};
  function quickOpen(){ftOff();try{if(typeof window.v2QuickPlan==='function'){window.v2QuickPlan();return}}catch(e){}if(G0)G0(1)}
  function byop(){return !!(window.PLAN&&window.PLAN.byop)}
- function fine(k){FT=true;D.body.classList.add('v2ft-on');try{G0(k)}catch(e){}try{W.scrollTo(0,0)}catch(e){}}
+ function fine(k){FT=true;PRE=false;D.body.classList.add('v2ft-on');D.body.classList.remove('v2pre');setBars();try{G0(k)}catch(e){}try{W.scrollTo(0,0)}catch(e){}}
  function bar(cls){var b=D.createElement('div');b.className='v2ftbar'+(cls?' '+cls:'');
   b.innerHTML='<button type="button" class="bk" data-ftback="1">'+t('← Back to My Plan')+'</button><span>'+t('Update My Plan rebuilds your Meals to the new Targets.')+'</span><button type="button" class="go" data-ftgo="1">'+t('Update My Plan →')+'</button>';return b}
  function ensure(){
   [].forEach.call(D.querySelectorAll('#stepbar .step'),function(s){var k=s.getAttribute('data-s'),L={'1':'1 · Your Answers','4':'2 · Your Plan','5':'3 · Order'}[k];
    if(L&&!s.__v2l){s.__v2l=1;s.textContent=t(L);if(k==='1'){s.removeAttribute('onclick');s.addEventListener('click',function(e){e.preventDefault();quickOpen()})}}});
-  ['s1','s2','s3'].forEach(function(id){var s=D.getElementById(id);if(!s||s.querySelector(':scope > .v2ftbar'))return;s.insertBefore(bar(''),s.firstChild);s.appendChild(bar('bot'))});
+  ['s1','s2','s3'].forEach(function(id){var s=D.getElementById(id);if(!s||s.querySelector(':scope > .v2ftbar'))return;s.insertBefore(bar(''),s.firstChild);s.appendChild(bar('bot'));setBars()});
   var s4=D.getElementById('s4'),acts=s4&&s4.querySelector('.planacts');
   if(acts&&!D.getElementById('v2ftPanel')){var d=D.createElement('details');d.className='v2ft';d.id='v2ftPanel';
    d.innerHTML='<summary>'+t('Fine-Tune My Targets')+'<small>'+t('Optional. Change your Targets or how we build your Meals.')+'</small></summary><div class="v2ft-in"><button type="button" data-ft="1">'+t('Goal, Body Type & Macros')+'</button><button type="button" data-ft="2">'+t('Food You Eat Outside AERA')+'</button><button type="button" data-ft="3">'+t('Meal Preferences')+'</button></div>';
@@ -917,7 +920,7 @@ function oneFlow(){
   window.goStep=function(k){if(k>=1&&k<=3&&!FT&&!byop()){quickOpen();return}if(k===4||k===5)ftOff();return G0.apply(this,arguments)};
   D.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-ft],[data-ftback],[data-ftgo]');if(!b)return;e.preventDefault();
    if(b.hasAttribute('data-ft')){fine(+b.getAttribute('data-ft'));return}
-   if(b.hasAttribute('data-ftback')){ftOff();G0(4);return}
+   if(b.hasAttribute('data-ftback')){if(PRE){quickOpen();return}ftOff();G0(4);return}
    if(b.hasAttribute('data-ftgo')){ftOff();try{window.generate()}catch(x){}G0(4)}},true);
   ensure();setInterval(ensure,1000);
   if(window.STEP>=1&&window.STEP<=3&&!byop()){if(window.PLAN)G0(4);else quickOpen()}}
@@ -932,5 +935,5 @@ tapDemo();
 })();
 
 /*AERA-V2-END*/</script>
-<!-- build 2026-10-14T07:31:17.347Z -->
+<!-- build 2026-10-14T07:35:26.257Z -->
 </body></html>
