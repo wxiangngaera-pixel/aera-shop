@@ -369,7 +369,7 @@ function home(){
 /* ---------- Meal Plan : one step at a time, one obvious next move ---------- */
 function plan(){
  Object.assign(ZH,{'Answer a few quick questions. We build your week to your calories and macros.':'回答几个简单问题，我们按您的热量与宏量营养素排好一周。',
-  'Your answers are saved to your account as you go.':'您的答案会随时保存到账户。','More':'更多','Fine-Tune the whole Plan':'微调整份餐单','Step':'步骤','of':'/','meals':'餐','Add To Cart':'加入购物车'});
+  'Your answers are saved to your account as you go.':'您的答案会随时保存到账户。','More':'更多','Fine-Tune the whole Plan':'微调整份餐单','Step':'步骤','of':'/','meals':'餐','Add To Cart':'加入购物车','Add to Cart':'加入购物车'});
  try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
  css(
  '#stepbar{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;gap:6px!important;padding-bottom:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}'+
@@ -410,8 +410,8 @@ function plan(){
   b.classList.toggle('on',!!on);D.body.classList.toggle('v2bar-on',!!on);if(!on)return;
   var pr=0;try{pr=window.planPrice()}catch(e){}
   function st(el,v){if(el.textContent!==v)el.textContent=v}
-  st(b.querySelector('b'),'RM '+(+pr||0).toFixed(2));st(b.querySelector('small'),P_.meals.length+' '+(zh()?'餐':'meals')+' · '+(zh()?'含包装':'incl. packaging'));
-  st(b.querySelector('button'),t('Add To Cart')+' →')}
+  st(b.querySelector('b'),'RM '+(+pr||0).toFixed(2));st(b.querySelector('small'),P_.meals.length+' '+(zh()?'餐':(P_.meals.length===1?'Meal':'Meals'))+' · '+(zh()?'含包装':'INCLUDED Packaging'));
+  st(b.querySelector('button'),t('Add to Cart')+' →')}
  D.addEventListener('click',function(e){var pi=e.target.closest&&e.target.closest('#planIntro');if(pi)pi.classList.toggle('v2open')});
  function run(){try{intro();var n=prog();acts();tune();bar(n)}catch(e){}}
  var q=0;function soon(){if(q)return;q=setTimeout(function(){q=0;run()},120)}
@@ -880,5 +880,5 @@ tapDemo();
 })();
 
 /*AERA-V2-END*/</script>
-<!-- build 1791951593831 -->
+<!-- build 1791952748926 -->
 </body></html>
