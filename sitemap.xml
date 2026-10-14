@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://aeramealprep.net/account/</loc>
-    <lastmod>2026-10-14T03:27:30.490Z</lastmod>
+    <loc>https://aeramealprep.net/bring-your-own-plan/</loc>
+    <lastmod>2026-10-14T03:35:06.484Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://aeramealprep.net/data/kitchen-list/</loc>
-    <lastmod>2026-10-14T01:41:29.441Z</lastmod>
+    <lastmod>2026-10-14T03:33:11.693Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/account/</loc>
+    <lastmod>2026-10-14T03:27:30.490Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -93,11 +98,6 @@
   <url>
     <loc>https://aeramealprep.net/referrer-signup/</loc>
     <lastmod>2026-10-13T16:17:17.972Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/bring-your-own-plan/</loc>
-    <lastmod>2026-10-13T10:50:21.516Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
