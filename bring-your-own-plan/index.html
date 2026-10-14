@@ -100,6 +100,8 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 #planPics .pp-list li{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-top:1px dashed #E3E8F2}
 #planPics .pp-list li span{color:#6B7690;white-space:nowrap}
 #planPics .pp-list li.mine{color:#8A5A00}
+#planPics .pp-list li i{font-style:normal}
+#planPics .pp-list em.sug{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#8A5A00;background:#FFF4D1;border-radius:999px;padding:1px 7px;margin-left:4px;white-space:nowrap}
 #planPics .bento{position:relative;width:100%;aspect-ratio:1536/1024;overflow:hidden;background:#E9EEF5 50% 50%/cover no-repeat;container-type:inline-size}
 #planPics .bento b{position:absolute;display:block;background:#0B2450 50% 50%/cover no-repeat;box-shadow:inset 0 0 0 1px rgba(0,0,0,.35);border-radius:2.2cqw;filter:saturate(1.2) contrast(1.13) brightness(1.07)}
 #planPics .bento b.pro{left:19.40%;top:20.31%;width:18.23%;height:52.54%}
@@ -979,9 +981,11 @@ function picBento(cs){var P=[],C=null,V=[],G=[];
 function paintPics(){var box=$('#planPics');if(!box)return;var days=[];
  ((PLAN&&PLAN.days)||[]).forEach(function(d){var ms=[];
   (d.meals||[]).forEach(function(m){var cs=[],mine=[];
-   (m.items||[]).forEach(function(it){var r=it.code&&BYCODE[it.code];
-    if(!r){if(it.mine&&it.food)mine.push(it.food);return}
-    var rw=rawOf(it.grams,it.food,it.category);cs.push({r:r,g:clampG(r,rw.rule==='q'?r.po[0]:rw.g)})});
+   (m.items||[]).forEach(function(it){var r=it.code&&BYCODE[it.code],sug=false;
+    /* Not chosen yet : show our closest dish, marked Suggested, so the picture is whole from the start. */
+    if(!r&&!it.mine&&it.pickCode!=='-'){try{var mm=matchOne(it.food,it.category);if(mm&&mm.state==='pick'&&mm.code&&BYCODE[mm.code]){r=BYCODE[mm.code];sug=true}}catch(e){}}
+    if(!r){if(it.food&&(it.mine||it.pickCode==='-'))mine.push(it.food);return}
+    var rw=rawOf(it.grams,it.food,it.category);cs.push({r:r,sug:sug,g:clampG(r,rw.rule==='q'?r.po[0]:rw.g)})});
    if(cs.length||mine.length)ms.push({name:m.meal||'',cs:cs,mine:mine})});
   if(ms.length)days.push({name:d.day||('Day '+(days.length+1)),meals:ms})});
  if(!days.length){box.innerHTML='';return}
@@ -992,9 +996,10 @@ function paintPics(){var box=$('#planPics');if(!box)return;var days=[];
   return '<div class="pp-card">'+(m.cs.length?picBento(m.cs):'<div class="pp-none">Food you buy yourself</div>')+
    '<div class="pp-body"><div class="pp-meal">'+esc(ppCase(m.name||('Meal '+(mi+1))))+'</div>'+
    (m.cs.length?'<div class="pp-mac">'+Math.round(t.kcal)+' KCAL · Protein '+Math.round(t.p)+' g · Carbs '+Math.round(t.c)+' g · Fat '+Math.round(t.f)+' g</div>':'')+
-   '<ul class="pp-list">'+m.cs.map(function(x){return '<li>'+esc(x.r.name)+' <span>'+Math.round(x.g)+' g</span></li>'}).join('')+
+   '<ul class="pp-list">'+m.cs.map(function(x){return '<li><i>'+esc(x.r.name)+(x.sug?' <em class="sug">Suggested</em>':'')+'</i> <span>'+Math.round(x.g)+' g</span></li>'}).join('')+
    m.mine.map(function(f){return '<li class="mine">'+esc(f)+' <span>Yours</span></li>'}).join('')+'</ul></div></div>'}).join('');
- box.innerHTML='<div class="pp-head">Your Plan, As Our Kitchen Would Pack It</div>'+tabs+'<div class="pp-grid">'+cards+'</div>';
+ var anySug=days.some(function(d){return d.meals.some(function(m){return m.cs.some(function(x){return x.sug})})});
+ box.innerHTML='<div class="pp-head">Your Plan, As Our Kitchen Would Pack It</div>'+(anySug?'<p class="hint" style="margin:-4px 0 10px"><b>Suggested</b> is our closest dish to what you wrote. Pick a different one in step 2 and the pictures change with it.</p>':'')+tabs+'<div class="pp-grid">'+cards+'</div>';
  if(!box.__w){box.__w=1;box.addEventListener('click',function(e){var b=e.target.closest('[data-pd]');if(!b)return;PICDAY=+b.dataset.pd;paintPics()})}}
 
 $('#open').addEventListener('click',function(){
@@ -1514,6 +1519,6 @@ function done(){if(--left>0)return;READY=true;all(D)}
 ['/img1/','/img2/','/img3/','/img4/'].forEach(function(p){fetch(p).then(function(r){return r.ok?r.text():''}).then(function(t){var a=t.indexOf('/*IMGPACK-START*/'),b=t.indexOf('/*IMGPACK-END*/');if(a>=0&&b>a){var j=JSON.parse(t.slice(a+17,b));for(var k in j){var u=blob(j[k]);if(u)MAP[k]=u+'#/'+k.split('/').pop()}}all(D)}).catch(function(){}).then(done)});
 setTimeout(function(){if(!READY){FAIL=true;all(D)}},9000);
 })();</script>
-<!-- build 1791948894110 -->
+<!-- build 1791949148728 -->
 </body>
 </html>
