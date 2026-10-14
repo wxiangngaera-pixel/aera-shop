@@ -1144,12 +1144,15 @@ async function doSignup(e){e.preventDefault();busy('sBtn',true,'Creating…');ms
  if(su&&su.identities&&su.identities.length===0){setAuth('login');var le=$('#lEmail');if(le)le.value=email;msg('authMsg','<div class="msg bad">That email already has an AERA account, so no new confirmation was sent. Sign in below, or use Forgot Password if you cannot remember it.</div>')} else if(r.data&&r.data.session){/* signed in immediately */} else suWait(email,$('#sPass').value,tok)}catch(err){msg('authMsg','<div class="msg bad">'+esc(friendly(err))+'</div>')}busy('sBtn',false);return false}
 async function doForgot(e){e.preventDefault();busy('fBtn',true,'Sending…');msg('authMsg','');try{var r=await sb.auth.resetPasswordForEmail($('#fEmail').value.trim(),{redirectTo:location.origin+location.pathname});if(r.error)throw r.error;msg('authMsg','<div class="msg ok">If that email has an account, a reset link is on its way.</div>')}catch(err){msg('authMsg','<div class="msg bad">'+esc(friendly(err))+'</div>')}busy('fBtn',false);return false}
 async function doReset(e){e.preventDefault();busy('rBtn',true,'Saving…');msg('authMsg','');try{var r=await sb.auth.updateUser({password:$('#rPass').value});if(r.error)throw r.error;RECOVERY=false;history.replaceState(null,'',location.pathname);msg('authMsg','<div class="msg ok">Password saved — you are signed in.</div>');var s=await sb.auth.getSession();USER=s.data.session?s.data.session.user:null;if(USER)showAccount()}catch(err){msg('authMsg','<div class="msg bad">'+esc(friendly(err))+'</div>')}busy('rBtn',false);return false}
-async function doLogout(back){try{await sb.auth.signOut()}catch(e){}
+async function doLogout(back){if(window.__aeraOut)return;window.__aeraOut=1;
+ /* signOut can wait forever on a stuck session lock ( seen in the installed phone app ), so it gets 3 seconds and the saved session is cleared by hand as well */
+ try{await Promise.race([sb.auth.signOut(),new Promise(function(r){setTimeout(r,3000)})])}catch(e){}
+ try{Object.keys(localStorage).forEach(function(k){if(/^sb-.*-auth-token/.test(k))localStorage.removeItem(k)})}catch(e){}
  USER=null;PROFILE=null;ADDRS=[];FAVS=null;
  try{['aera.account','aera.refLock','aera.planDraft','aera.favs'].forEach(function(k){localStorage.removeItem(k)})}catch(e){}
  try{['aera.planDraft','aera.planOpen'].forEach(function(k){sessionStorage.removeItem(k)})}catch(e){}
  if(back){location.replace(HOME_URL);return}
- showAuth()}
+ window.__aeraOut=0;showAuth()}
 /* ===== Account ===== */
 var NEXT={plan:'https://my.chatbees.io/p/SrQzC5m2',shop:'https://my.chatbees.io/p/D2pz8bZ',checkout:'https://my.chatbees.io/p/D2pz8bZ',coach:COACH_URL,coachplan:'https://aeramealprep.net/account/#coachplan'};
 function nextTarget(){try{var v=new URLSearchParams(location.search).get('next');return v?NEXT[String(v).toLowerCase()]||null:(COACH_APP?COACH_URL:null)}catch(e){return null}}
@@ -1240,6 +1243,7 @@ function hashTab(){var hh=(location.hash||'').replace('#','').toLowerCase();
  if(hh==='track'||hh==='tracking')hh='orders';
  if(hh==='order-history'||hh==='past-orders')hh='history';return ['orders','history','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].indexOf(hh)>=0?hh:''}
 window.addEventListener('hashchange',function(){
+ if((location.hash||'').toLowerCase().indexOf('logout')>=0){doLogout(true);return}
  if(!USER)return;var t=hashTab();if(t&&t!==TAB)setTab(t);
  try{obMaybeAsk()}catch(e){}});
 function setTab(t){if(t==='send'&&!IS_ADMIN)t='inbox';TAB=t;try{var hh0=(location.hash||'').replace('#','');if((t!=='orders'||hh0)&&hh0!==t)history.replaceState(null,'',location.pathname+location.search+'#'+t)}catch(e){}if(t==='credit')creditLoad();if(t==='auto')loadAutoSubs();if(t==='inbox'){loadInbox();alLoad()}if(t==='send')smLoad();if(t==='body')bodyLoad();if(t==='favs')favPics();if(t==='plans')plansPics();if(t==='history'){t='orders';TAB=t;setTimeout(function(){oTab('hist')},0)}['orders','inbox','plans','favs','home','points','credit','auto','refs','details','address','prefs','body','send'].forEach(function(k){$('#t'+k.charAt(0).toUpperCase()+k.slice(1)).style.display=k===t?'block':'none'});document.querySelectorAll('.menu button').forEach(function(b){b.classList.toggle('on',b.dataset.t===(t==='send'?'inbox':t))});document.querySelectorAll('.ibsw button').forEach(function(b){b.classList.toggle('on',b.dataset.s===t)})}
