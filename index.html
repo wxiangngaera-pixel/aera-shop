@@ -3226,7 +3226,7 @@ body.signedin:not(.mkExpand) #hub{padding-bottom:8px}
 @media(max-width:600px){
  /* header : Inbox moves into the menu, the menu button gets a proper thumb size */
  nav.sx-nav #inboxBtn{display:none!important}
- #navInboxLi{display:list-item}
+ #navInboxLi{display:block}
  #navInboxLi .cnt{display:inline-block;min-width:18px;padding:0 6px;margin-left:8px;border-radius:9px;background:#FDB913;color:#16479E;font-size:11px;font-weight:800;line-height:18px;text-align:center}
  #navInboxLi .cnt:empty{display:none}
  nav.sx-nav .navtoggle{min-width:40px;min-height:40px;font-size:22px;display:inline-flex;align-items:center;justify-content:center;position:relative}
@@ -3265,8 +3265,8 @@ function $(s){return D.querySelector(s)}
 /* Order before the dashboard */
 function order(){var hub=$('#hub'),me=$('#meHome');if(hub&&me&&me.parentNode&&hub.compareDocumentPosition(me)&D.DOCUMENT_POSITION_PRECEDING)me.parentNode.insertBefore(hub,me)}
 /* Inbox inside the menu, the unread count on the menu button */
-function inbox(){var ul=$('nav.sx-nav .wrap > ul'),btn=$('#inboxBtn'),tg=$('#navToggle');if(!ul||!btn)return;
- var li=$('#navInboxLi');if(!li){li=D.createElement('li');li.id='navInboxLi';li.innerHTML='<a href="'+btn.getAttribute('href')+'">Inbox<span class="cnt"></span></a>';ul.insertBefore(li,ul.firstChild)}
+function inbox(){var ul=$('#navPanel .wrap'),btn=$('#inboxBtn'),tg=$('#navToggle');if(!ul||!btn)return;
+ var li=$('#navInboxLi');if(!li){li=D.createElement('span');li.id='navInboxLi';li.innerHTML='<a href="'+btn.getAttribute('href')+'">Inbox<span class="cnt"></span></a>';ul.insertBefore(li,ul.firstChild)}
  var b=btn.querySelector('.hbn');var n=b&&getComputedStyle(b).display!=='none'?(b.textContent||'').trim():'';if(!/\d/.test(n))n='';
  li.querySelector('.cnt').textContent=n;if(tg)tg.classList.toggle('hasdot',!!n)}
 /* Extend as a button inside the dashboard on phones ( it presses the original edge tab, which stays where it is ) */
@@ -3281,6 +3281,7 @@ function all(){try{order()}catch(e){}try{inbox()}catch(e){}try{ext()}catch(e){}t
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',all);else all();
 addEventListener('load',all);setTimeout(all,2500);setTimeout(all,6000);
 addEventListener('scroll',aa,{passive:true});
+D.addEventListener('click',function(e){if(e.target&&e.target.closest&&e.target.closest('#navToggle'))setTimeout(inbox,60)},true);
 try{new MutationObserver(function(){clearTimeout(window.__aeraUxT);window.__aeraUxT=setTimeout(all,250)}).observe(D.body,{attributes:true,attributeFilter:['class']})}catch(e){}
 try{var mh=$('#meHome');if(mh)new MutationObserver(function(){clearTimeout(window.__aeraUxM);window.__aeraUxM=setTimeout(ext,120)}).observe(mh,{childList:true,subtree:true})}catch(e){}
 try{var ib=$('#inboxBtn');if(ib)new MutationObserver(inbox).observe(ib,{subtree:true,childList:true,characterData:true,attributes:true})}catch(e){}
