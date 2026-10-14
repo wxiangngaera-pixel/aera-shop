@@ -733,7 +733,7 @@ function tile(l,v){return '<div class="tile"><div class="l">'+l+'</div><div clas
 function thumb(r){return r&&r.img
  ? '<div class="thumb" role="img" aria-label="'+esc(r.name)+'" style="background-image:url('+esc(r.img)+')"></div>'
  : '<div class="thumb none" aria-hidden="true">+</div>'}
-function mealsOf(d){var n=d.meals.length;return n+' meal'+(n===1?'':'s')}
+function mealsOf(d){var n=d.meals.length;return n+' Meal'+(n===1?'':'s')}
 function cooked(d){return d.meals.filter(function(m){
  return m.items.some(function(it){return it.code&&BYCODE[it.code]})})}
 function boxCount(c){var n=0;c.days.forEach(function(d){n+=cooked(d).length});return n}
@@ -1721,6 +1721,6 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 </script>
 <style id="aera-coach-app-fit">#aaBar{bottom:auto!important;top:calc(70px + env(safe-area-inset-top))!important}@media(max-width:600px){.ab-r #aaGetApp{width:34px!important;height:34px!important}.ab-r #aaGetApp span{display:none!important}.ab-r #aaGetApp img{width:26px!important;height:26px!important}}</style>
 <!-- AERA coach app kit : end -->
-<!-- build 1791958151038 -->
+<!-- build 1791958231721 -->
 </body>
 </html>
