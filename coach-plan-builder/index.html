@@ -701,7 +701,7 @@ function paint(){
    return '<div class="row" data-m="'+mi+'" data-i="'+ii+'">'+
     '<button class="grip" type="button" aria-label="Drag to reorder" title="Drag to reorder">'+
     '<span></span><span></span><span></span></button>'+(r?thumb(r):ownThumb(it))+
-    '<div class="nm">'+nm+'<small>'+sub+'</small></div>'+'<div class="pp">'+ppHtml(it)+'</div>'+
+    '<div class="nm">'+nm+(r?'<i class="chg">Change &#9662;</i>':'')+'<small>'+sub+'</small></div>'+'<div class="pp">'+ppHtml(it)+'</div>'+
     '<div class="wcell wb-'+cur().basis+'"><small class="wh">'+(cur().basis==='raw'?'Raw Weight':'Cooked Weight')+'</small><span class="wbd"><input type="number" min="0" step="'+(r?(r.po[2]||25):5)+'" value="'+(+it.g||0)+'" aria-label="weight in grams, '+cur().basis+'"><em>g</em></span></div>'+
     '<div class="pr">'+(r?rm(per(r,rw.g).price):'<span class="ownno">Not Ours</span>')+
      '<small>'+(r?Math.round(per(r,rw.g).kcal)+' KCALs':(ownMac(it)?Math.round(ownMac(it).kcal)+' KCALs':'Not Ours'))+'</small></div>'+
@@ -956,6 +956,9 @@ function paintRes(){
    '</small></span></button>'}).join('')}
 /* Asking for a home-sourced meal used to leave our whole kitchen list sitting underneath,
    which is the opposite of what that button is for. The pop-up now shows one or the other. */
+var SWAP=null;
+function catOf(r){if(r.cat!=='g')return r.cat;return /chicken|beef|tofu|prawn|fish|salmon|egg|lamb|duck|tuna|dory/.test(r.name.toLowerCase())?'p':'v'}
+$('#dayPanel').addEventListener('click',function(e){var t=e.target.closest('.row .thumb, .row .nm');if(!t)return;var row=t.closest('.row');if(!row)return;var mi=+row.dataset.m,ii=+row.dataset.i,it=day().meals[mi]&&day().meals[mi].items[ii];var r=it&&BYCODE[it.code];if(!r)return;openPick(mi,false,catOf(r));SWAP={m:mi,i:ii};$('#popTitle').textContent='Change '+r.name});
 var PCAT=null,PCATN={p:'Add Protein',c:'Add Carbs',s:'Add Sauce',v:'Add Vegetables'};
 function catMenu(){if(!PCAT)return MENU;return MENU.filter(function(r){var n=r.name.toLowerCase();if(r.cat===PCAT)return true;if(r.cat!=='g')return false;var pr=/chicken|beef|tofu|prawn|fish|salmon|egg|lamb|duck|tuna|dory/.test(n);return PCAT==='p'?pr:(PCAT==='v'?!pr:false)})}
 function openPick(mi,own,cat){
@@ -989,7 +992,7 @@ function coachBento(m){if(packOf()!=='bento')return '';var P=[],C=null,V=[],G=[]
  var cell=function(x,cls){if(!x)return '<b class="'+cls+' empty"></b>';return '<b class="'+cls+'" title="'+esc(x.r.name+' · '+x.g+' g')+'"'+(x.r.img?' style="background-image:url('+x.r.img+')"':'')+'></b>'};
  var names=[];m.items.forEach(function(it){var r=BYCODE[it.code];if(r)names.push(r.name+' '+rawOf(it).g+' g')});
  var inner=(P.length>1?cell(P[0],'pro h1')+cell(P[1],'pro h2'):cell(P[0],'pro'))+cell(C,'crb')+(L.length>1?cell(L[0],'veg w1')+cell(L[1],'veg w2'):cell(L[0],'veg'));
- return '<div class="cbento"><div class="bento" role="img" aria-label="'+esc(names.join(', '))+'" style="background-image:url('+CB_TRAY+')">'+inner+'</div></div>'}
+ return '<div class="cbento mbento"><div class="bento" role="img" aria-label="'+esc(names.join(', '))+'" style="background-image:url('+CB_TRAY+')">'+inner+'</div></div>'}
 function addOwn(){
  var nm=$('#ownq').value.trim();if(!nm||PICK==null||OWNBUSY)return;
  OWNBUSY=true;OWNF=null;var btn=$('#ownAdd');btn.disabled=true;
@@ -1027,7 +1030,7 @@ $('#ownFound').addEventListener('input',function(e){if(e.target.id==='ownQn'){OW
 
 $('#ownAdd').addEventListener('click',addOwn);
 $('#ownq').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addOwn()}});
-function closePick(){$('#scrim').classList.remove('open');PICK=null;OWNF=null;var of_=document.getElementById('ownFound');if(of_)of_.innerHTML=''}
+function closePick(){$('#scrim').classList.remove('open');PICK=null;OWNF=null;SWAP=null;var of_=document.getElementById('ownFound');if(of_)of_.innerHTML=''}
 $('#popClose').addEventListener('click',closePick);
 $('#scrim').addEventListener('click',function(e){if(e.target===this)closePick()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&PICK!=null)closePick()});
@@ -1039,7 +1042,7 @@ $('#res').addEventListener('click',function(e){
     so the number in the box is one they can sensibly edit rather than one we invented. */
  var g=r.po[0];
  if(cur().basis==='cooked'){var c2=conv(r,g);if(c2.ok&&c2.g)g=Math.round(g*g/c2.g)}
- mark();day().meals[PICK].items.push({code:r.code,g:g});
+ mark();var sw_=SWAP&&day().meals[SWAP.m]&&day().meals[SWAP.m].items[SWAP.i];if(sw_){sw_.code=r.code}else day().meals[PICK].items.push({code:r.code,g:g});SWAP=null;
  save();closePick();paint()});
 $('#chips').innerHTML=[['Chicken','chicken'],['Fish','fish'],['Beef','beef'],['Rice','rice'],
  ['Pasta','pasta'],['Potato','potato'],['Vegetables','veg'],['Oil-free','no oil'],
@@ -1578,7 +1581,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 })();
 </script>
 <!-- AERA site bar : end -->
-<script id="aera-coach-app-cfg">window.AERA_APP={"key":"coach","name":"AERA Coach Plan Builder","short":"AERA Coach","scopePath":"/coach-plan-builder/","link":"https://aeramealprep.net/coach-plan-builder/?install=1","mount":".ab-r","barTitle":"Get The AERA Coach App","howTitle":"Add AERA Coach To Your Home Screen","done":"That is it. Open AERA Coach from your Home Screen to build and send your Clients’ Plans.","icons":{"180":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/app-icons/coach-180.png","192":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/app-icons/coach-192.png","512":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/app-icons/coach-512.png"},"zh":{"Get The AERA Coach App":"AERA Coach App","Add AERA Coach To Your Home Screen":"把 AERA Coach 加到主屏幕","That is it. Open AERA Coach from your Home Screen to build and send your Clients’ Plans.":"完成！以后从主屏幕打开 AERA Coach，为学员编排并发送餐单。"}};</script>
+<script id="aera-coach-app-cfg">window.AERA_APP={"key":"coach","name":"AERA Coach Plan Builder","short":"AERA Coach","btn":"AERA Coach Plan","scopePath":"/coach-plan-builder/","link":"https://aeramealprep.net/coach-plan-builder/?install=1","mount":".ab-r","barTitle":"Get The AERA Coach App","howTitle":"Add AERA Coach To Your Home Screen","done":"That is it. Open AERA Coach from your Home Screen to build and send your Clients’ Plans.","icons":{"180":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/app-icons/coach-180.png","192":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/app-icons/coach-192.png","512":"https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/app-icons/coach-512.png"},"zh":{"Get The AERA Coach App":"AERA Coach App","Add AERA Coach To Your Home Screen":"把 AERA Coach 加到主屏幕","That is it. Open AERA Coach from your Home Screen to build and send your Clients’ Plans.":"完成！以后从主屏幕打开 AERA Coach，为学员编排并发送餐单。"}};</script>
 <style id="aera-coach-verify-css">
 #cvBox{margin-top:8px;font-size:13px;line-height:1.45}
 #cvBox .cv-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
@@ -1772,7 +1775,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  var BTN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M12 7v7M9 11l3 3 3-3"/></svg><span>Get The App</span>';
  /* the button carries the app's own icon and name, the way it will look on the Home Screen */
  var AIC=(C.icons&&(C.icons['180']||C.icons['192']))||(IC('180'));
- function appBtnHtml(){return '<img src="'+AIC+'" alt="" style="width:24px;height:24px;border-radius:6px;flex:none;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.4)"><span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.1;text-align:left"><small style="font-size:.7em;font-weight:700;opacity:.85">Get The App</small><b style="white-space:nowrap">'+(C.short||C.name||'AERA')+'</b></span>'}
+ function appBtnHtml(){return '<img src="'+AIC+'" alt="" style="width:24px;height:24px;border-radius:6px;flex:none;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.4)"><span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.1;text-align:left"><small style="font-size:.7em;font-weight:700;opacity:.85">Get The App</small><b style="white-space:nowrap">'+(C.btn||C.short||C.name||'AERA')+'</b></span>'}
  function mount(){if(el('aaGetApp'))return true;var host=document.querySelector(C.mount);if(!host)return false;
   var b=document.createElement('button');b.type='button';b.id='aaGetApp';b.className='aera-getapp';b.setAttribute('aria-label','Get The App');b.innerHTML=appBtnHtml();b.onclick=go;
   host.insertBefore(b,host.firstChild);return true}
@@ -1806,4 +1809,6 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 <style id="aera-coach-bento">.cbento{display:flex;justify-content:center;align-items:center;background:#EEEAE6;border-bottom:1px solid #DBE1EA;overflow:hidden}.cbento .bento{position:relative;width:100%;max-width:520px;aspect-ratio:1536/1024;background:#EEEAE6 center/cover no-repeat;container-type:inline-size;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 14%,#000 86%,transparent 100%),linear-gradient(transparent 0,#000 14%,#000 86%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent 0,#000 14%,#000 86%,transparent 100%),linear-gradient(transparent 0,#000 14%,#000 86%,transparent 100%);mask-composite:intersect}.cbento .bento b{position:absolute;display:block;background:#0B2450 center/cover no-repeat;box-shadow:inset 0 0 0 1px rgba(0,0,0,.35);overflow:hidden;border-radius:2.2cqw;filter:saturate(1.2) contrast(1.13) brightness(1.07)}.cbento .bento b.pro{left:19.4%;top:20.31%;width:18.23%;height:52.54%}.cbento .bento b.crb{left:38.93%;top:20.31%;width:40.76%;height:26.76%}.cbento .bento b.veg{left:38.93%;top:48.63%;width:40.76%;height:24.22%}.cbento .bento b.pro.h1{height:25.97%;border-radius:2.2cqw 2.2cqw .3cqw .3cqw}.cbento .bento b.pro.h2{top:46.88%;height:25.97%;border-radius:.3cqw .3cqw 2.2cqw 2.2cqw}.cbento .bento b.veg.w1{width:20.08%;border-radius:2.2cqw .3cqw .3cqw 2.2cqw}.cbento .bento b.veg.w2{left:59.61%;width:20.08%;border-radius:.3cqw 2.2cqw 2.2cqw .3cqw}.cbento .bento b.empty{background:#0F2D63;filter:none}</style>
 
 <script id="aera-coach-addcat-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"+ Add Protein":"+ 加入蛋白质","+ Add Carbs":"+ 加入碳水","+ Add Sauce":"+ 加入酱汁","+ Add Vegetables":"+ 加入蔬菜","Add Protein":"加入蛋白质","Add Carbs":"加入碳水","Add Sauce":"加入酱汁","Add Vegetables":"加入蔬菜"})}catch(e){}</script>
-<!-- build 2026-10-14T07:03:45.454Z -->
+
+<style id="aera-coach-swap">.rows .row .thumb,.rows .row .nm{cursor:pointer}.rows .row .nm .chg{display:inline-block;margin-left:8px;font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#16479E;border:1.5px solid #16479E;border-radius:999px;padding:1px 8px;vertical-align:2px;white-space:nowrap}.rows .row .nm:hover .chg{background:#16479E;color:#FDB913}</style><script id="aera-coach-swap-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Change ▾":"更换 ▾"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Change (.+)$/,"更换 $1"])}catch(e){}</script><div class="mbento" hidden aria-hidden="true" style="display:none"></div>
+<!-- build 2026-10-14T07:06:07.839Z -->
