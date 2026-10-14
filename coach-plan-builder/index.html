@@ -1164,7 +1164,14 @@ $('#doSend').addEventListener('click',function(){
  else done(false);
  $('#msg').scrollIntoView({behavior:'smooth',block:'center'})});
 
-load();paint();
+/* Home-Sourced items added before the AI look-up existed get their Macros and picture filled in, once. */
+var OWNBF=false;function ownBackfill(){if(OWNBF)return;var todo=[];ST.clients.forEach(function(c){c.days.forEach(function(d){d.meals.forEach(function(m){m.items.forEach(function(it){if(it.own&&!it.b&&!it.tried)todo.push(it)})})})});if(!todo.length)return;OWNBF=true;
+ (function next(){var it=todo.shift();if(!it){OWNBF=false;save();paint();return}it.tried=1;
+  Promise.all([coachFetch('food',{text:it.own}).catch(function(){return null}),wikiPics(it.own)]).then(function(res){var x=res[0],pics=res[1]||[];
+   if(pics[0]&&!it.img)it.img=pics[0];
+   if(x&&x.name&&+x.kcal>0){var gs=gramsOf(x.serving||'');it.b={k:+x.kcal||0,p:+x.p||0,c:+x.c||0,f:+x.f||0,gs:gs};it.q=it.q||1;it.sv=x.serving||'1 Serving';if(gs&&!(+it.g>0))it.g=Math.round(gs*it.q)}
+   save();paint();next()})})()}
+load();paint();setTimeout(ownBackfill,1500);setTimeout(ownBackfill,6000);
 window.__coach={cur:function(){return cur()},save:function(){save()}};
 try{if(window.__coachAcct)window.__coachAcct.pull(ST,function(d){if(!d||!d.clients||!d.clients.length)return;ST=d;if(typeof ST.coach!=='string')ST.coach='';if(!ST.sel||!byId(ST.sel))ST.sel=ST.clients[0].id;DAY=0;try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}paint()})}catch(e){}
 })();
@@ -1776,4 +1783,4 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 <style id="aera-coach-own">.ownf{margin-top:12px;border:1.5px solid #16479E;border-radius:14px;padding:12px;background:#fff}.ownf-top{display:flex;gap:12px;align-items:center}.ownf-pic{flex:none;width:76px;height:76px;border-radius:12px;background:#E9EEF5 center/cover no-repeat;border:1px solid #DBE1EA}.ownf-top b{display:block;color:#16479E;font-size:16px;line-height:1.25}.ownf-top small{display:block;color:#5A6478;font-size:12.5px;margin-top:3px;line-height:1.35}.ownf-pics{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;align-items:center}.ownf-pics button{width:46px;height:46px;border-radius:9px;border:2px solid #DBE1EA;background:#E9EEF5 center/cover no-repeat;cursor:pointer;padding:0}.ownf-pics button.on{border-color:#FDB913;box-shadow:0 0 0 2px #16479E}.ownf-pics button.nopic{width:auto;padding:0 10px;font:inherit;font-size:12px;font-weight:700;color:#16479E;background:#fff}.ownf-q{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.ownf-q button{font:inherit;font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;border:1.5px solid #16479E;background:#fff;color:#16479E;cursor:pointer}.ownf-q button.on{background:#16479E;color:#FDB913}.ownf-q input{width:74px}.ownf-tot{margin-top:10px;font-weight:800;color:#16479E;font-size:18px}.ownf-tot small{display:block;font-weight:600;font-size:12.5px;color:#5A6478;margin-top:2px}.ownf-act{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.ownbusy{display:flex;align-items:center;gap:8px;margin:10px 0 0}.ownspin{width:16px;height:16px;border-radius:50%;border:2.5px solid #DBE1EA;border-top-color:#16479E;animation:ownspin .8s linear infinite;flex:none}@keyframes ownspin{to{transform:rotate(360deg)}}.pr .ownno{font-size:12px;font-weight:700;color:#5A6478}</style><script id="aera-coach-own-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Find The Macros":"查询营养值","Looking up the Macros…":"正在查询营养值…","How Much?":"份量多少？","Half":"半份","1 Serving":"1 份","2 Servings":"2 份","3 Servings":"3 份","Servings":"份","Add to this Meal":"加入这一餐","Add Without Macros":"不带营养值加入","Cancel":"取消","No Picture":"不要图片","Estimated Figures. Adjust the Servings to match the portion.":"估计数值。请调整份数以符合实际份量。","We could not find the Macros for this one. Try naming it more simply, or add it without them.":"找不到这项的营养值。请用更简单的名称再试，或不带营养值加入。"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Per Serving : (.+)$/,"每份：$1"],[/^Home-Sourced\. Not cooked by AERA · (.+)$/,"自备。非 AERA 烹调 · $1"])}catch(e){}</script>
 
 <script id="aera-coach-broc-zh">try{(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^(.*)Broccoli, same as Cooked Weight(.*)$/,"$1西兰花，与熟重相同$2"])}catch(e){}</script>
-<!-- build 2026-10-14T06:52:31.220Z -->
+<!-- build 2026-10-14T06:53:49.906Z -->
