@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://aeramealprep.net/checkout/</loc>
-    <lastmod>2026-10-14T05:29:38.333Z</lastmod>
+    <loc>https://aeramealprep.net/v2/</loc>
+    <lastmod>2026-10-14T05:29:46.785Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/v2/</loc>
-    <lastmod>2026-10-14T05:29:30.040Z</lastmod>
+    <loc>https://aeramealprep.net/checkout/</loc>
+    <lastmod>2026-10-14T05:29:38.333Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
