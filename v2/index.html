@@ -633,6 +633,10 @@ function mealAdjust(){
  try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
  css(
  '#s4 .mcard .mmain .addrow,#s4 .mcard .mmain .tune,#s4 .mcard .mh .mac .btn{display:none!important}'+
+ '#s4 .mcard .mmain .addrow.v2top{display:flex!important;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 10px}'+
+ '#s4 .mcard .mmain .addrow.v2top .btn{display:inline-flex!important;align-items:center;height:38px;padding:0 16px;border-radius:999px;border:1.5px solid #16479E;background:#fff;color:#16479E;font:800 13.5px Montserrat,system-ui,sans-serif;text-transform:none;cursor:pointer;box-shadow:none}'+
+ '#s4 .mcard .mmain .addrow.v2top .btn:hover{background:#EDF3FD}'+
+ '#s4 .mcard .mmain .addrow.v2top .hint{font-size:12.5px}'+
  '#s4 .mcard .mh{position:relative}'+
  '#s4 .mcard .v2adjb{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 16px;border-radius:999px;border:2px solid #16479E;background:#fff;color:#16479E;font:800 14px Montserrat,system-ui,sans-serif;cursor:pointer;margin:8px 0 0}'+
  '#s4 .mcard .v2adjb:active{transform:scale(.97)}'+
@@ -683,7 +687,10 @@ function mealAdjust(){
     if(del){S.classList.remove('on');return}
     setTimeout(paint,60)})}
   paint();S.classList.add('on')}
- function add(){[].forEach.call(D.querySelectorAll('#s4 .mcard'),function(card){var i=idxOf(card);if(i==null)return;var mh=card.querySelector('.mh');if(!mh)return;
+ function add(){[].forEach.call(D.querySelectorAll('#s4 .mcard'),function(card){var i=idxOf(card);if(i==null)return;
+  /* the + Protein / + Vegetable buttons sit right above the item table, not only inside Adjust */
+  var ar=card.querySelector('.mmain .addrow'),tw=card.querySelector('.mmain .tblwrap');if(ar&&tw){if(!ar.classList.contains('v2top'))ar.classList.add('v2top');if(ar.nextElementSibling!==tw)tw.parentNode.insertBefore(ar,tw)}
+  var mh=card.querySelector('.mh');if(!mh)return;
   var b=mh.querySelector('.v2adjb');if(b){b.setAttribute('data-i',i);return}
   b=D.createElement('button');b.type='button';b.className='v2adjb';b.setAttribute('data-i',i);b.innerHTML='⚙︎ '+t('Adjust');mh.appendChild(b)})}
  D.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.v2adjb');if(!b)return;e.preventDefault();open(+b.getAttribute('data-i'))});
@@ -870,5 +877,5 @@ tapDemo();
 })();
 
 /*AERA-V2-END*/</script>
-<!-- build 1791930536649 -->
+<!-- build 1791951251178 -->
 </body></html>
