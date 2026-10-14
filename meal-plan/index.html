@@ -1750,8 +1750,8 @@ D.addEventListener('click',function(e){if(e.target.closest('.swapd .srow')){D.do
 <script id="aera-swap-tabs-js">
 (function(){if(window.__aeraSwTabs||typeof window.swapPanel!=='function')return;window.__aeraSwTabs=1;
 /* Change This Item : four tabs over the dish list.
-   Your Preferences = what the Plan picks from ( their Meal Preferences, fits this Meal ).
-   Suitable = every dish that goes with the rest of this Meal.  ✕ Your Preferences = Suitable dishes outside their Meal Preferences.
+   Your Preferences = the dishes they selected on the Meal Preferences page.
+   Suitable = Compatible Items, every dish that goes with the rest of this Meal.  ✕ Your Preferences = the dishes they did not select in Meal Preferences.
    All = every dish in the category, the ones the Kitchen does not usually pair with this Meal marked.
    Dishes they asked to avoid and Out of Stock dishes never show. */
 var TABS=[['p','Your Preferences'],['s','Suitable'],['x','✕ Your Preferences'],['a','All']];
@@ -1759,10 +1759,10 @@ function T(s){var D=window.AERA_I18N;return (D&&document.documentElement.getAttr
 try{var D0=window.AERA_I18N=window.AERA_I18N||{};D0['Your Preferences']=D0['Your Preferences']||'您的偏好';D0['Suitable']=D0['Suitable']||'合适';D0['✕ Your Preferences']=D0['✕ Your Preferences']||'✕ 偏好以外';D0['All']=D0['All']||'全部';D0['Change This Item']=D0['Change This Item']||'更换此项'}catch(e){}
 window.swapPanel=function(mi,ci,cur,opts){
  var m=PLAN.meals[mi],cp=m&&m.comps[ci];var w=mealRows(m,cp);var used={};(m&&m.comps||[]).forEach(function(o,j){if(j!==ci)used[o.r]=1});
- var P={};opts.forEach(function(o){P[o.c]=1});
+ var P={};pool(cur.cat).forEach(function(o){P[o.c]=1});
  var all=CATALOG.filter(function(r){return r.cat===cur.cat&&!excluded(r)&&!oosHas(r.c)&&!used[r.c]});if(all.indexOf(cur)<0)all.unshift(cur);
  opts.forEach(function(o){if(all.indexOf(o)<0)all.push(o)});
- var rows=all.map(function(o){var s=o===cur||okWith(o,w);var p=!!P[o.c];return{o:o,p:p,s:s,x:s&&!p}});
+ var rows=all.map(function(o){var s=o===cur||okWith(o,w);var p=!!P[o.c];return{o:o,p:p,s:s,x:!p}});
  var cnt={p:0,s:0,x:0,a:rows.length};rows.forEach(function(r){if(r.p)cnt.p++;if(r.s)cnt.s++;if(r.x)cnt.x++});
  var subs=[];rows.forEach(function(r){if(subs.indexOf(r.o.sub)<0)subs.push(r.o.sub)});
  var tabs='<div class="swtabs">'+TABS.map(function(t){return '<button type="button" class="swtab'+(t[0]==='p'?' on':'')+'" data-t="'+t[0]+'" onclick="swTab(this)">'+esc(T(t[1]))+'<i>'+cnt[t[0]]+'</i></button>'}).join('')+'</div>';
