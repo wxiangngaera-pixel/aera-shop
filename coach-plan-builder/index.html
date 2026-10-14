@@ -583,7 +583,7 @@ function mfootHtml(items){
  if(!c.any)return '';
  return '<div class="mfoot"><span>Food '+rm(c.food)+'</span>'+
   '<span class="pk">'+(packOf()==='vacuum'?'Vacuum Packed ':'MAP Bento Box ')+rm(c.pack)+'</span>'+
-  (c.extras?'<span class="pk">'+c.extras+' extra packaging '+rm(c.extraCost)+'</span>':'')+
+  (c.extras?'<span class="pk">'+c.extras+' Extra Packaging '+rm(c.extraCost)+'</span>':'')+
   '<b>'+rm(c.total)+'</b></div>'}
 function clampG(r,g){var st=r.po[2]||25;g=Math.round((+g||0)/st)*st;
  return Math.max(r.po[0],Math.min(r.po[1],g))}
@@ -1811,4 +1811,6 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 <script id="aera-coach-addcat-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"+ Add Protein":"+ 加入蛋白质","+ Add Carbs":"+ 加入碳水","+ Add Sauce":"+ 加入酱汁","+ Add Vegetables":"+ 加入蔬菜","Add Protein":"加入蛋白质","Add Carbs":"加入碳水","Add Sauce":"加入酱汁","Add Vegetables":"加入蔬菜"})}catch(e){}</script>
 
 <style id="aera-coach-swap">.rows .row .thumb,.rows .row .nm{cursor:pointer}.rows .row .nm .chg{display:inline-block;margin-left:8px;font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#16479E;border:1.5px solid #16479E;border-radius:999px;padding:1px 8px;vertical-align:2px;white-space:nowrap}.rows .row .nm:hover .chg{background:#16479E;color:#FDB913}</style><script id="aera-coach-swap-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Change ▾":"更换 ▾"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Change (.+)$/,"更换 $1"])}catch(e){}</script><div class="mbento" hidden aria-hidden="true" style="display:none"></div>
-<!-- build 2026-10-14T07:06:07.839Z -->
+
+<script id="aera-coach-xpk-zh">try{(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^(\d+) Extra Packaging (RM [\d.]+)$/,"$1 份额外包装 $2"])}catch(e){}</script>
+<!-- build 2026-10-14T07:07:34.379Z -->
