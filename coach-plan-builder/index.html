@@ -459,7 +459,7 @@ try{Object.assign(window.AERA_I18N||{},{'Write the Plan straight into our Kitche
     </div>
    </div>
    <p class="hint" style="font-size:13.5px;color:var(--ink2);margin:0;flex:1;min-width:240px">Our Kitchen weighs Raw. Pick Cooked if that is how you write, and we convert every line ourselves. You will see both figures on each row.</p>
-  </div>
+  </div><div id="packRow" style="margin-top:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end"><div><label class="lb">Packaging Method</label><div class="seg" id="packSeg"><button type="button" data-p="bento" class="on">MAP Bento Box</button><button type="button" data-p="vacuum">Vacuum Packed</button></div></div><p class="hint" id="packHint" style="font-size:13.5px;color:var(--ink2);margin:0;flex:1;min-width:240px">Oxygen replaced with Nitrogen / CO₂ and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life. RM 1.80 per Meal.</p></div>
  </div>
 
  <div class="card" data-section="days">
@@ -582,7 +582,7 @@ function mfootHtml(items){
  var c=mealCost(items);
  if(!c.any)return '';
  return '<div class="mfoot"><span>Food '+rm(c.food)+'</span>'+
-  '<span class="pk">Bento Box '+rm(c.pack)+'</span>'+
+  '<span class="pk">'+(packOf()==='vacuum'?'Vacuum Packed ':'MAP Bento Box ')+rm(c.pack)+'</span>'+
   (c.extras?'<span class="pk">'+c.extras+' extra packaging '+rm(c.extraCost)+'</span>':'')+
   '<b>'+rm(c.total)+'</b></div>'}
 function clampG(r,g){var st=r.po[2]||25;g=Math.round((+g||0)/st)*st;
@@ -657,7 +657,7 @@ function day(){var c=cur();if(DAY>=c.days.length)DAY=c.days.length-1;if(DAY<0)DA
 
 /* ---- painting ---- */
 function paint(){
- var c=cur();
+ var c=cur();packPaint(c);
  $('#clientTabs').innerHTML=ST.clients.map(function(x){
   return '<button class="tab'+(x.id===c.id?' on':'')+'" type="button" data-c="'+x.id+'">'+
    esc(x.name||'Unnamed')+'<small>'+boxCount(x)+' Meal'+(boxCount(x)===1?'':'s')+
@@ -696,7 +696,7 @@ function paint(){
    var nm=r?esc(r.name):esc(it.own||'')+'<em>home-sourced</em>';
    var us=r?unitStr(r,rw.g):'';
    var sub=r?(rw.g+' g Raw'+(us?' ( '+us+' )':'')+(rw.why?' — '+esc(rw.why):''))
-            :'home-sourced — not cooked by us';
+            :'Home-Sourced. Not cooked by AERA';
    var step=r?(r.po[2]||25):5;
    return '<div class="row" data-m="'+mi+'" data-i="'+ii+'">'+
     '<button class="grip" type="button" aria-label="Drag to reorder" title="Drag to reorder">'+
@@ -704,11 +704,11 @@ function paint(){
     '<div class="nm">'+nm+'<small>'+sub+'</small></div>'+
     '<div class="wcell wb-'+cur().basis+'"><small class="wh">'+(cur().basis==='raw'?'Raw Weight':'Cooked Weight')+'</small><span class="wbd"><input type="number" min="0" step="'+(r?(r.po[2]||25):5)+'" value="'+(+it.g||0)+'" aria-label="weight in grams, '+cur().basis+'"><em>g</em></span></div>'+
     '<div class="pr">'+(r?rm(per(r,rw.g).price):'&mdash;')+
-     '<small>'+(r?Math.round(per(r,rw.g).kcal)+' KCALs':'not ours')+'</small></div>'+
+     '<small>'+(r?Math.round(per(r,rw.g).kcal)+' KCALs':'Not Ours')+'</small></div>'+
     '<button class="x" type="button" data-rm="1" aria-label="Remove">&times;</button></div>'}).join('');
   h+='<div class="meal"><div class="mh">'+
    mealSelect(m,mi)+
-   '<span class="mac">'+Math.round(t.kcal)+' KCALs<br>Protein - '+Math.round(t.p)+'<br>Carbs - '+Math.round(t.c)+'<br>Fat - '+Math.round(t.f)+'<br><b>'+rm(t.price)+'</b></span>'+
+   '<span class="mac">'+Math.round(t.kcal)+' KCALs<br>Protein - '+Math.round(t.p)+' g<br>Carbs - '+Math.round(t.c)+' g<br>Fat - '+Math.round(t.f)+' g<br><b>'+rm(t.price)+'</b></span>'+
    '<button class="x" type="button" data-delmeal="'+mi+'" aria-label="Remove this meal">&times;</button>'+
    '</div><div class="rows">'+(rows||'<div class="empty">Nothing in this Meal yet.</div>')+'</div>'+
    mfootHtml(m.items)+
@@ -766,6 +766,9 @@ $('#coachname').addEventListener('input',function(){ST.coach=this.value;save()})
  $('#'+id).addEventListener('input',function(){
   var c=cur();c[id.slice(1)==='name'?'name':id.slice(1)]=this.value;save();
   if(id==='cname')paint()})});
+function packOf(c){return (c||cur()).pack==='vacuum'?'vacuum':'bento'}
+function packPaint(c){var p=packOf(c);[].forEach.call(document.querySelectorAll('#packSeg button'),function(b){b.classList.toggle('on',b.dataset.p===p)});var ph=document.getElementById('packHint');if(ph)ph.textContent=p==='vacuum'?'Same freshness, flatter pack. Takes far less Fridge space, compresses the Food slightly. RM 1.80 per Meal.':'Oxygen replaced with Nitrogen / CO₂ and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life. RM 1.80 per Meal.'}
+$('#packSeg').addEventListener('click',function(e){var b=e.target.closest('button[data-p]');if(!b||b.dataset.p===packOf())return;mark();cur().pack=b.dataset.p;save();paint()});
 $('#basisSeg').addEventListener('click',function(e){
  var b=e.target.closest('button[data-b]');if(!b||b.dataset.b===cur().basis)return;
  mark();cur().basis=b.dataset.b;save();paint()});
@@ -828,7 +831,7 @@ function refreshTotals(){
   var el=$('#dayPanel').querySelectorAll('.meal')[mi];
   if(el){var mf=el.querySelector('.mfoot');
    if(mf)mf.outerHTML=mfootHtml(m.items)||'<div class="mfoot" hidden></div>'}
-  if(el)el.querySelector('.mac').innerHTML=Math.round(t.kcal)+' KCALs<br>Protein - '+Math.round(t.p)+'<br>Carbs - '+Math.round(t.c)+'<br>Fat - '+Math.round(t.f)+'<br><b>'+rm(t.price)+'</b>'});
+  if(el)el.querySelector('.mac').innerHTML=Math.round(t.kcal)+' KCALs<br>Protein - '+Math.round(t.p)+' g<br>Carbs - '+Math.round(t.c)+' g<br>Fat - '+Math.round(t.f)+' g<br><b>'+rm(t.price)+'</b>'});
  $('#dayTot').innerHTML=tile('Calories',Math.round(dt.kcal))+tile('Protein',Math.round(dt.p)+' g')+
   tile('Carbs',Math.round(dt.c)+' g')+tile('Day price',rm(dt.price));
  var n=boxCount(c),days=c.days.filter(function(x){return cooked(x).length}).length;
@@ -1005,6 +1008,7 @@ function sheetText(){
   'Mobile:   '+phoneOut(c.phone),
   'Coach:    '+(ST.coach||''),
   'Weights:  '+(c.basis==='raw'?'RAW':'COOKED'),
+  'Packaging: '+(packOf(c)==='vacuum'?'VACUUM PACKED':'MAP BENTO BOX'),
   'Covers:   '+c.days.length+' day'+(c.days.length===1?'':'s'),''];
  var W=nameWidth(c);
  c.days.forEach(function(d){
@@ -1054,7 +1058,7 @@ $('#doOpen').addEventListener('click',function(){
  var d=draft();if(!d)return say('bad','There are no AERA dishes in this plan yet.');
  try{
   sessionStorage.setItem('aera.planOpen',JSON.stringify({q:d.plan.q,plan:d.plan,step:4}));
-  localStorage.setItem('aera.byop',JSON.stringify({off:d.off,basis:cur().basis,at:Date.now(),
+  localStorage.setItem('aera.byop',JSON.stringify({off:d.off,basis:cur().basis,pack:packOf(),at:Date.now(),
    coach:1,client:cur().name||''}))}
  catch(e){return say('bad','This browser will not let us hand the plan over. Copy the sheet instead.')}
  location.href=PLAN_URL});
@@ -1721,6 +1725,8 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 </script>
 <style id="aera-coach-app-fit">#aaBar{bottom:auto!important;top:calc(70px + env(safe-area-inset-top))!important}@media(max-width:600px){.ab-r #aaGetApp{width:34px!important;height:34px!important}.ab-r #aaGetApp span{display:none!important}.ab-r #aaGetApp img{width:26px!important;height:26px!important}}</style>
 <!-- AERA coach app kit : end -->
-<!-- build 2026-10-14T06:14:26.211Z -->
+
 </body>
 </html>
+<script id="aera-coach-pack-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Packaging Method":"包装方式","MAP Bento Box":"MAP 便当盒","Vacuum Packed":"真空包装","Oxygen replaced with Nitrogen / CO₂ and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life. RM 1.80 per Meal.":"以氮气 / 二氧化碳取代氧气并封顶。食物不会被压扁。请冷藏，保质期 7 天。每餐 RM 1.80。","Same freshness, flatter pack. Takes far less Fridge space, compresses the Food slightly. RM 1.80 per Meal.":"同样新鲜，包装更扁平。更省冰箱空间，食物会被轻微压扁。每餐 RM 1.80。","Home-Sourced. Not cooked by AERA":"自备。非 AERA 烹调","Not Ours":"非我们的"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Protein - ([\d.]+) g$/,"蛋白 $1 克"],[/^Carbs - ([\d.]+) g$/,"碳水 $1 克"],[/^Fat - ([\d.]+) g$/,"脂肪 $1 克"],[/^MAP Bento Box (RM [\d.]+)$/,"MAP 便当盒 $1"],[/^Vacuum Packed (RM [\d.]+)$/,"真空包装 $1"])}catch(e){}</script>
+<!-- build 2026-10-14T06:19:13.376Z -->
