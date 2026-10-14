@@ -2695,7 +2695,7 @@ function apply(row){var loc=snap(),rem=row?{cart:norm(row.cart),plan:row.plan||n
 async function pull(){if(!cli)return;try{var ss=(await cli.auth.getSession()).data.session;if(!ss){tok=null;uid=null;return}
   tok=ss.access_token;uid=ss.user.id;email=String(ss.user.email||'').toLowerCase();try{if(window.aeraPastAddr)window.aeraPastAddr(cli)}catch(e){}
   var q=await cli.from('carts').select('cart,plan,at').eq('user_id',uid).maybeSingle();if(q.error)return;apply(q.data)}catch(e){}}
-function start(){try{cli=window.supabase.createClient(SBU,SBK,{auth:{persistSession:true,autoRefreshToken:false,detectSessionInUrl:false}})}catch(e){return}
+function start(){try{var g0=window.sb;cli=(g0&&g0.auth&&typeof g0.from==='function')?g0:window.supabase.createClient(SBU,SBK,{auth:{persistSession:true,autoRefreshToken:false,detectSessionInUrl:false,lock:function(n,t,f){return f()}}})}catch(e){return}
  pull();setInterval(function(){cli.auth.getSession().then(function(r){var ss=r.data.session;tok=ss?ss.access_token:null})},600000);
  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')pull()});
  window.addEventListener('storage',function(e){if(e.key==='sb-swpprjvubgcdsojapaad-auth-token')pull()})}
