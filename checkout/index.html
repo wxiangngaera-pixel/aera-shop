@@ -3470,33 +3470,51 @@ window.addEventListener('hashchange',function(){if(SHOP.test(location.hash||''))
 function go(){f();var l=document.getElementById('lines');if(l)new MutationObserver(f).observe(l,{childList:true,subtree:true,characterData:true});setTimeout(f,1500)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
 try{Object.assign(window.AERA_I18N||{},{"Browse the Menu":"浏览菜单"})}catch(e){}})();</script>
 
-<script id="aera-pv-sharp">
-/* Sharp Bento Box thumbnails : each food in a little Bento Box was the full camera photo ( up to
-   3000 x 4000 ) squeezed into a 40 px compartment, which the browser shrinks badly and looks soft.
-   Each one is now cut to the compartment's own shape and scaled down properly, once, then reused. */
-(function(){
- var C={},W={},Q=[],busy=0,DPR=Math.min(3,Math.max(1,window.devicePixelRatio||1));
- function urlOf(el){var b=(el.style&&el.style.backgroundImage)||'';var m=/url\(["']?(https?:[^"')]+)["']?\)/.exec(b);return m?m[1]:''}
- function halve(src,sx,sy,sw,sh,tw,th){var cv=document.createElement('canvas'),g,w=sw,h=sh,cur=src,cx=sx,cy=sy;
-  while(w/2>tw*1.2&&h/2>th*1.2){var n=document.createElement('canvas');n.width=Math.round(w/2);n.height=Math.round(h/2);g=n.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(cur,cx,cy,w,h,0,0,n.width,n.height);cur=n;cx=0;cy=0;w=n.width;h=n.height}
-  cv.width=tw;cv.height=th;g=cv.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(cur,cx,cy,w,h,0,0,tw,th);return cv}
- function make(u,tw,th,done){var i=new Image();i.crossOrigin='anonymous';
-  i.onload=function(){try{var iw=i.naturalWidth,ih=i.naturalHeight,s=Math.max(tw/iw,th/ih),sw=tw/s,sh=th/s,sx=(iw-sw)/2,sy=(ih-sh)/2;
-    var out=function(cv){cv.toBlob(function(b){done(b?URL.createObjectURL(b):'')},'image/jpeg',0.9)};
-    if(window.createImageBitmap){createImageBitmap(i,sx,sy,sw,sh,{resizeWidth:tw,resizeHeight:th,resizeQuality:'high'}).then(function(bm){var cv=document.createElement('canvas');cv.width=tw;cv.height=th;cv.getContext('2d').drawImage(bm,0,0);out(cv)}).catch(function(){out(halve(i,sx,sy,sw,sh,tw,th))})}
-    else out(halve(i,sx,sy,sw,sh,tw,th))}catch(e){done('')}};
-  i.onerror=function(){done('')};i.src=u}
- function get(u,tw,th,cb){var k=u+'|'+tw+'x'+th;if(k in C)return cb(C[k]);(W[k]=W[k]||[]).push(cb);if(W[k].length>1)return;Q.push([k,u,tw,th]);pump()}
- function pump(){if(busy||!Q.length)return;busy=1;var q=Q.shift();make(q[1],q[2],q[3],function(v){C[q[0]]=v;var L=W[q[0]]||[];delete W[q[0]];L.forEach(function(f){try{f(v)}catch(e){}});busy=0;setTimeout(pump,10)})}
- function sharpen(el){var u=el.__src||urlOf(el);if(!u)return;var w=el.offsetWidth,h=el.offsetHeight;if(w<4||h<4)return;var sz=w+'x'+h;if(el.__sharp===sz)return;
-  var tw=Math.min(600,Math.round(w*DPR*1.5)),th=Math.min(600,Math.round(h*DPR*1.5));el.__src=u;el.__sharp=sz;
-  get(u,tw,th,function(v){if(!v||!el.isConnected||el.__src!==u)return;el.style.backgroundImage='url("'+v+'")';el.style.backgroundSize='cover';el.style.backgroundPosition='center'})}
- window.addEventListener('resize',function(){clearTimeout(t);t=setTimeout(function(){t=0;scan()},200)});
- function scan(){var l=document.querySelectorAll('.pvbento b');for(var i=0;i<l.length;i++)sharpen(l[i])}
- var t=0;new MutationObserver(function(){if(t)return;t=setTimeout(function(){t=0;scan()},120)}).observe(document.documentElement,{childList:true,subtree:true});
+
+<script id="aera-pv-comp">(function(){
+ /* Sharp Bento Box thumbnails : every little Bento Box is painted ONCE into a single picture at the
+   screen's real pixel size ( tray + each food in its compartment, rounded corners, thin edge ), with
+   each photo shrunk in halves so it stays crisp in every browser, Safari included. The compartments
+   underneath are then hidden. Photos are kept in memory at 1024 px at most, never at camera size. */
+ var D=Math.min(3,Math.max(1,window.devicePixelRatio||1)),SRC={},SW={},OUT={},MINE={},Q=[],busy=0;
+ function bg(el){var b=(el.style&&el.style.backgroundImage)||'';if(!b||b==='none')b=getComputedStyle(el).backgroundImage||'';var m=/url\(["']?([^"')]+)["']?\)/.exec(b);return m?m[1]:''}
+ function halve(src,sx,sy,sw,sh,tw,th){var w=sw,h=sh,cur=src,cx=sx,cy=sy,g;
+  while(w/2>=tw&&h/2>=th){var n=document.createElement('canvas');n.width=Math.max(1,Math.round(w/2));n.height=Math.max(1,Math.round(h/2));g=n.getContext('2d');g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(cur,cx,cy,w,h,0,0,n.width,n.height);cur=n;cx=0;cy=0;w=n.width;h=n.height}
+  var cv=document.createElement('canvas');cv.width=Math.max(1,Math.round(tw));cv.height=Math.max(1,Math.round(th));g=cv.getContext('2d');g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(cur,cx,cy,w,h,0,0,cv.width,cv.height);return cv}
+ function src(u,cb){if(u in SRC)return cb(SRC[u]);(SW[u]=SW[u]||[]).push(cb);if(SW[u].length>1)return;
+  var i=new Image();if(/^https?:/.test(u))i.crossOrigin='anonymous';
+  var fin=function(v){SRC[u]=v;var L=SW[u]||[];delete SW[u];L.forEach(function(f){try{f(v)}catch(e){}})};
+  i.onload=function(){try{var iw=i.naturalWidth,ih=i.naturalHeight,s=Math.min(1,1024/Math.max(iw,ih));fin(s<1?halve(i,0,0,iw,ih,iw*s,ih*s):i)}catch(e){fin(null)}};
+  i.onerror=function(){fin(null)};i.src=u}
+ function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r[0],y);g.lineTo(x+w-r[1],y);g.quadraticCurveTo(x+w,y,x+w,y+r[1]);g.lineTo(x+w,y+h-r[2]);g.quadraticCurveTo(x+w,y+h,x+w-r[2],y+h);g.lineTo(x+r[3],y+h);g.quadraticCurveTo(x,y+h,x,y+h-r[3]);g.lineTo(x,y+r[0]);g.quadraticCurveTo(x,y,x+r[0],y);g.closePath()}
+ function paint(pb){var W=pb.offsetWidth,H=pb.offsetHeight;if(W<20||H<10)return;
+  var cur=bg(pb);if(cur&&!MINE[cur])pb.__tray=cur;var tray=pb.__tray;if(!tray||/^data:image\/gif/.test(tray))return;
+  var cells=[].map.call(pb.querySelectorAll('b'),function(c){var cs=getComputedStyle(c);return{c:c,u:bg(c),x:c.offsetLeft,y:c.offsetTop,w:c.offsetWidth,h:c.offsetHeight,
+   r:[cs.borderTopLeftRadius,cs.borderTopRightRadius,cs.borderBottomRightRadius,cs.borderBottomLeftRadius].map(function(v){return (parseFloat(v)||0)*D}),col:cs.backgroundColor}});
+  var sig=W+'x'+H+'|'+tray.slice(-40)+'|'+cells.map(function(x){return x.u.slice(-60)+'@'+x.x+','+x.y+','+x.w+','+x.h}).join(';');
+  if(cells.some(function(x){return /^data:image\/gif/.test(x.u)}))return;
+  if(pb.__sig===sig)return;pb.__sig=sig;
+  if(OUT[sig])return show(pb,OUT[sig]);
+  Q.push([pb,sig,tray,cells,W,H]);pump()}
+ function show(pb,url){if(!pb.isConnected)return;pb.style.backgroundImage='url("'+url+'")';pb.style.backgroundSize='100% 100%';[].forEach.call(pb.querySelectorAll('b'),function(c){c.style.visibility='hidden'})}
+ function pump(){if(busy||!Q.length)return;busy=1;var q=Q.shift(),pb=q[0],sig=q[1],cells=q[3],W=q[4],H=q[5];
+  if(OUT[sig]){show(pb,OUT[sig]);busy=0;return setTimeout(pump,0)}
+  var need=[q[2]].concat(cells.map(function(x){return x.u}).filter(Boolean)),got={},left=need.length;
+  need.forEach(function(u){src(u,function(v){got[u]=v;if(--left)return;
+   try{var cv=document.createElement('canvas');cv.width=Math.round(W*D);cv.height=Math.round(H*D);var g=cv.getContext('2d');
+    var t=got[q[2]];if(t)g.drawImage(halve(t,0,0,t.width||t.naturalWidth,t.height||t.naturalHeight,cv.width,cv.height),0,0);
+    cells.forEach(function(x){var X=x.x*D,Y=x.y*D,CW=x.w*D,CH=x.h*D;if(CW<1||CH<1)return;g.save();rr(g,X,Y,CW,CH,x.r);g.clip();
+     var im=x.u&&got[x.u];if(im){var iw=im.width||im.naturalWidth,ih=im.height||im.naturalHeight,s=Math.max(CW/iw,CH/ih),sw=CW/s,sh=CH/s;
+      g.drawImage(halve(im,(iw-sw)/2,(ih-sh)/2,sw,sh,CW,CH),X,Y)}else{g.fillStyle=x.col||'#0F2D63';g.fillRect(X,Y,CW,CH)}
+     g.lineWidth=D;g.strokeStyle='rgba(0,0,0,.35)';rr(g,X+D/2,Y+D/2,CW-D,CH-D,x.r);g.stroke();g.restore()});
+    OUT[sig]=cv.toDataURL('image/jpeg',0.92);MINE[OUT[sig]]=1;show(pb,OUT[sig])}catch(e){}
+   busy=0;setTimeout(pump,0)})})}
+ function scan(){[].forEach.call(document.querySelectorAll('.pvbento'),paint)}
+ var t=0;function soon(){if(t)return;t=setTimeout(function(){t=0;scan()},150)}
+ new MutationObserver(soon).observe(document.documentElement,{childList:true,subtree:true});
+ window.addEventListener('resize',function(){clearTimeout(t);t=0;soon()});
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',scan);else scan();
-})();
-</script>
-<!-- build 1791956381252 -->
+})();</script>
+<!-- build 1791956613335 -->
 </body>
 </html>
