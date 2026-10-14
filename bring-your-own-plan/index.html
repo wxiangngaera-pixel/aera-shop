@@ -455,9 +455,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 
  <div class="card" id="reviewCard" style="display:none" data-section="review">
   <h2><span class="step">2</span>Check What We Read</h2>
-  <p class="hint" style="margin:-4px 0 14px">A machine read this, so check it against your own sheet before you send it.
-   The grey line under each item is your original wording. Change any weight that looks wrong &mdash; the raw
-   figure on the right updates as you type.</p>
+  <p class="hint" style="margin:-4px 0 14px">A Machine read this, so check it against your own sheet before you send it. The grey line under each Item is your original wording. Change any Weight that looks wrong. The Raw Figure on the right updates as you type.</p>
   <div id="review"></div>
   <div class="tot" id="totals"></div>
   <div id="flags"></div>
@@ -465,16 +463,13 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 
  <div class="card" id="openCard" style="display:none" data-section="open">
   <h2><span class="step">3</span>See It As A Plan</h2>
-  <p class="hint" style="margin:-4px 0 14px">Here is your plan as our kitchen would pack it, built from the
-   dishes matched above. Press Open My Plan to fine-tune it in our plan editor. Swap any dish, change any portion, and the calories, protein and price move
-   with it. Your own plan's totals become the target, so you can see where ours drifts from your
-   coach's sheet.</p>
+  <p class="hint" style="margin:-4px 0 14px">Here is your Plan as our Kitchen would pack it, built from the Dishes matched above. Press Open My Plan to fine-tune it in our Plan Editor. Swap any Dish, change any portion, and the Calories, Protein and Price move with it. Your own Plan's Totals become the target, so you can see where ours drifts from your Coach's sheet.</p>
   <div id="planPics"></div>
   <div id="openSum"></div>
   <div style="margin-top:16px"><button class="btn wide" id="open">Open My Plan</button></div>
   <div id="openmsg"></div>
   <p class="hint" style="margin:14px 0 0">Would rather we just priced it by hand and came back to you?
-   <a href="#" id="askQuote">Send it to the kitchen instead</a>.</p>
+   <a href="#" id="askQuote">Send it to the Kitchen instead</a>.</p>
  </div>
 
  <div class="card" id="sendCard" style="display:none" data-section="send">
@@ -530,22 +525,22 @@ function riceFactor(name){var n=norm(name),best=null,len=-1;
 function rawOf(g,name,cat){
  g=+g||0;cat=String(cat||'').toLowerCase();
  if(!g)return{g:0,rule:'q',why:'no weight given'};
- if(BASIS==='raw')return{g:g,rule:'',why:'already raw'};
+ if(BASIS==='raw')return{g:g,rule:'',why:'Already Raw'};
  var rf=riceFactor(name);
- if(rf)return{g:g/rf,rule:'',why:'rice, divided by '+rf.toFixed(2)};
- if(cat==='protein')return{g:g*PROTEIN_F,rule:'',why:'protein, times 1.5'};
+ if(rf)return{g:g/rf,rule:'',why:'Rice ÷ '+rf.toFixed(2)};
+ if(cat==='protein')return{g:g*PROTEIN_F,rule:'',why:'Protein x 1.5'};
  if(cat==='vegetable'){
-  if(/broccoli/.test(norm(name)))return{g:g,rule:'',why:'broccoli, no change'};
-  return{g:g+VEG_ADD,rule:'',why:'vegetable, plus 25 g'}}
+  if(/broccoli/.test(norm(name)))return{g:g,rule:'',why:'Broccoli, no change'};
+  return{g:g+VEG_ADD,rule:'',why:'Vegetable + 25 g'}}
  return{g:g,rule:'n',why:'no conversion for this yet'}}
 function snap25(g){return Math.max(0,Math.round((+g||0)/25)*25)}
 /* What goes in the right-hand column. An item with no factor is NEVER shown snapped to
    the 25 g grid — a rounded number reads as a converted one, and this is exactly the
    case where nothing has been converted. It shows the weight as written and says so. */
 function rawCell(r,rec){
- if(r.rule==='q')return '<div class="raw">&mdash;<small>no weight given</small></div>';
+ if(r.rule==='q')return '<div class="raw">&mdash;<small>No Weight given</small></div>';
  if(r.rule==='n')return '<div class="raw" style="color:var(--warn)">'+(+r.g||0)+
-  ' g<small>as written &mdash; we weigh it</small></div>';
+  ' g<small>As written, we weigh it</small></div>';
  var g=snap25(r.g),why=esc(r.why);
  /* Once a dish is chosen, this column shows the portion the kitchen would actually weigh
     out — the same figure the editor will show. Every dish has a smallest and largest
@@ -817,8 +812,8 @@ function paint(){
     var r=rawOf(it.grams,it.food,it.category);
     if(r.rule==='n')unknown++;
     if(r.rule==='q')noweight++;
-    var flag=r.rule==='n'?'<span class="flag n">no rule</span>'
-            :r.rule==='q'?'<span class="flag q">no weight</span>':'';
+    var flag=r.rule==='n'?'<span class="flag n">No Rule</span>'
+            :r.rule==='q'?'<span class="flag q">No Weight</span>':'';
     var mm=matchOne(it.food,it.category);
     var ch=chosenOf(it,mm);
     var rec=ch?BYCODE[ch.code]:null;
@@ -847,16 +842,13 @@ function paint(){
   '<div><div class="l">We Cook</div><div class="v">'+weCook+'</div></div>'+
   '<div><div class="l">Needs A Look</div><div class="v">'+look+'</div></div>';
  var f='';
- if(askYou)f+='<div class="note warn"><b>'+askYou+' item'+(askYou===1?'':'s')+
-  ' could be more than one of ours.</b> Pick the one you want from the list under each &mdash; '+
-  'we will not choose a flavour for you.</div>';
- if(youSort)f+='<div class="note"><b>'+youSort+' item'+(youSort===1?' is':'s are')+
+ if(askYou)f+='<div class="note warn"><b>'+askYou+' Item'+(askYou===1?'':'s')+' could be more than one of ours.</b> Pick the one you want from the List under each. We will not choose a Flavour for you.</div>';
+ if(youSort)f+='<div class="note"><b>'+youSort+' Item'+(youSort===1?' is':'s are')+
   ' not on our menu.</b> Eggs, fruit, oats, yoghurt and the like are yours to sort out. '+
   'We will still list '+(youSort===1?'it':'them')+' on your plan so nothing goes missing.</div>';
- if(noweight)f+='<div class="note warn"><b>'+noweight+' item'+(noweight===1?' has':'s have')+
+ if(noweight)f+='<div class="note warn"><b>'+noweight+' Item'+(noweight===1?' has':'s have')+
   ' no weight.</b> Your plan did not give one. Put a number in, or leave it and we will ask you.</div>';
- if(unknown)f+='<div class="note warn"><b>'+unknown+' item'+(unknown===1?'':'s')+
-  ' we cannot convert yet.</b> We will weigh '+(unknown===1?'it':'them')+' by hand rather than guess.</div>';
+ if(unknown)f+='<div class="note warn"><b>'+unknown+' Item'+(unknown===1?'':'s')+' we cannot convert yet.</b> We will weigh '+(unknown===1?'it':'them')+' by hand rather than guess.</div>';
  if((PLAN.unreadable||[]).filter(Boolean).length)f+='<div class="note bad"><b>We could not read these lines:</b> '+
   esc(PLAN.unreadable.filter(Boolean).join(' · '))+'</div>';
  if(PLAN.note)f+='<div class="note ok">'+esc(PLAN.note)+'</div>';
@@ -939,11 +931,9 @@ function paintOpen(){
  $('#open').disabled=false;
  var boxes=d.plan.meals.length,T=d.plan.targets;
  h+='<div class="tot"><div><div class="l">Meals</div><div class="v">'+boxes+'</div></div>'+
-  '<div><div class="l">A Day</div><div class="v">'+Math.round(T.kcal)+' KCAL</div></div>'+
+  '<div><div class="l">A Day</div><div class="v">'+Math.round(T.kcal)+' KCALs</div></div>'+
   '<div><div class="l">Protein A Day</div><div class="v">'+T.p+' g</div></div></div>';
- if(d.waiting)h+='<div class="note warn" style="margin-top:12px"><b>'+d.waiting+' item'+
-  (d.waiting===1?' is':'s are')+' still waiting on you.</b> Pick which of ours you want for '+
-  (d.waiting===1?'it':'them')+' above, or they will not be in the boxes.</div>';
+ if(d.waiting)h+='<div class="note warn" style="margin-top:12px"><b>'+d.waiting+' Item'+(d.waiting===1?' is':'s are')+' still waiting on you.</b> Pick which of ours you want for '+(d.waiting===1?'it':'them')+' above, or they will not be in the Meals.</div>';
  /* The editor carries one daily target for the whole plan, so a plan with three meals on
     Monday and two on Tuesday will read over on one day and under on the other. That is their
     plan's own shape, not our portions drifting, and it is better said here than puzzled over
@@ -998,7 +988,7 @@ function paintPics(){var box=$('#planPics');if(!box)return;var days=[];
    '<ul class="pp-list">'+m.cs.map(function(x){return '<li><i>'+esc(x.r.name)+(x.sug?' <em class="sug">Suggested</em>':'')+'</i> <span>'+Math.round(x.g)+' g</span></li>'}).join('')+
    m.mine.map(function(f){return '<li class="mine">'+esc(f)+' <span>Yours</span></li>'}).join('')+'</ul></div></div>'}).join('');
  var anySug=days.some(function(d){return d.meals.some(function(m){return m.cs.some(function(x){return x.sug})})});
- box.innerHTML='<div class="pp-head">Your Plan, As Our Kitchen Would Pack It</div>'+(anySug?'<p class="hint" style="margin:-4px 0 10px"><b>Suggested</b> is our closest dish to what you wrote. Pick a different one in step 2 and the pictures change with it.</p>':'')+tabs+'<div class="pp-grid">'+cards+'</div>';
+ box.innerHTML='<div class="pp-head">Your Plan, As Our Kitchen Would Pack It</div>'+(anySug?'<p class="hint" style="margin:-4px 0 10px"><b>Suggested</b> is our closest Dish to what you wrote. Pick a different one in Step 2 and the pictures change with it.</p>':'')+tabs+'<div class="pp-grid">'+cards+'</div>';
  if(!box.__w){box.__w=1;box.addEventListener('click',function(e){var b=e.target.closest('[data-pd]');if(!b)return;PICDAY=+b.dataset.pd;paintPics()})}}
 
 $('#open').addEventListener('click',function(){
@@ -1147,7 +1137,7 @@ window.AERA_I18N={};window.AERA_I18N_RE=[];
 <script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
 "Return to Homepage":"返回首页","Home":"首页","Terms & Conditions":"条款与细则","Bring Your Own Plan":"自带餐单",
-"Already have a Plan? We will cook it.":"已经有餐单了？交给我们来煮。","This is what it comes back as":"成品会是这个样子","Every Meal on your Plan is weighed to the gram and packed into a MAP Bento Box. Protein, Carbohydrate and Vegetables in their own compartments, sealed and labelled with the Calories and Macros for that Meal.":"您餐单上的每一餐都会称到克，装进 MAP 保鲜餐盒 — 蛋白质、碳水与蔬菜各自分格，封膜并标上该盒的热量与营养值。","Hand us the Plan your Coach, Dietitian or Clinic wrote for you. We read it, turn the portions into the weights our Kitchen works to, and show you exactly what we would make.":"把教练、营养师或诊所为您写的餐单交给我们。我们会读一遍，把份量换算成厨房使用的重量，再清楚告诉您我们会做出什么。","Give Us The Plan":"把餐单交给我们","The weights in your plan are":"您餐单上的重量是","Cooked Weights":"熟重","Raw Weights":"生重","Most Coaches write Cooked Weights. What ends up on the plate. Our Kitchen weighs everything Raw, so we convert it for you. If you are not sure, leave it on Cooked.":"多数教练写的是熟重 — 也就是上桌时的重量。我们厨房一律称生重，所以会为您换算。如果不确定，就保持「熟重」。","Type it out, or paste it":"直接输入，或贴上","Or take a photo of it, or load a PDF":"或拍一张照片，或上传 PDF","Photograph the whole sheet straight on, in good light. We read it out into the text box above so you can check every line before anything is priced. A machine reading handwriting will get some of it wrong, and it is much easier to fix here than after it is Cooked.":"请在光线充足处正对着拍下整张表。我们会把内容读进上方的文字框，让您在报价前逐行核对。机器读手写字一定会有出错的地方，在这里改比煮好后再改容易得多。","Choose File":"选择文件","No File selected":"未选择文件","x-old-photo":"请在光线充足处正对着拍下整张表。我们会把内容读进上方的框里，让您在报价前逐行核对 — 机器读手写字一定会有出错的地方，在这里改比煮好后再改容易得多。","Read My Plan":"读取我的餐单","Check What We Read":"核对我们读到的内容","A machine read this, so check it against your own sheet before you send it. The grey line under each item is your original wording. Change any weight that looks wrong — the raw figure on the right updates as you type.":"这是机器读出来的，送出前请对照您自己的表核对一遍。每一项下方的灰色文字是您原本的写法。看到不对的重量就直接改 — 右边的生重会随着您输入即时更新。","See It As A Plan":"以餐单形式查看","This opens your plan in our plan editor, built from the dishes matched above. Swap any dish, change any portion, and the calories, protein and price move with it. Your own plan's totals become the target, so you can see where ours drifts from your coach's sheet.":"这会用上方配对到的菜色，在我们的餐单编辑器中打开您的餐单。换任何一道菜、改任何份量，热量、蛋白质与价格都会跟着变。您原本餐单的总量会成为目标，方便您看出我们和教练那张表差在哪里。","Open My Plan":"打开我的餐单","Would rather we just priced it by hand and came back to you?":"想让我们直接人工报价再回复您？","Send it to the kitchen instead":"改为送去厨房","Send It To The Kitchen":"送去厨房","Your Name":"您的姓名","Email":"电邮","Mobile":"手机号码","Who Wrote This Plan":"这份餐单是谁写的","If a coach, dietitian or clinic wrote it, their name goes on the plan when it reaches our kitchen. Leave it empty if the plan is your own.":"若是教练、营养师或诊所写的，餐单送到厨房时会附上他们的名字。如果是您自己写的，留空即可。","Anything We Should Know":"有什么需要我们注意的","We will price it and come back to you before anything is cooked. Nothing is charged at this point.":"我们会先报价并回复您，之后才开始烹调。此阶段不会收取任何费用。","Send My Plan To AERA":"把我的餐单送给 AERA","AERA Meal Preparation SDN BHD · Seri Kembangan":"AERA Meal Preparation SDN BHD · Seri Kembangan","Prefer us to build the plan instead?":"想让我们帮您制定餐单？","Use the Personalised Meal Plan builder":"使用个人定制餐单工具","Bring Your Own Plan — AERA Meal Prep":"自带餐单 — AERA Meal Prep",
+"Already have a Plan? We will cook it.":"已经有餐单了？交给我们来煮。","This is what it comes back as":"成品会是这个样子","Every Meal on your Plan is weighed to the gram and packed into a MAP Bento Box. Protein, Carbohydrate and Vegetables in their own compartments, sealed and labelled with the Calories and Macros for that Meal.":"您餐单上的每一餐都会称到克，装进 MAP 保鲜餐盒 — 蛋白质、碳水与蔬菜各自分格，封膜并标上该盒的热量与营养值。","Hand us the Plan your Coach, Dietitian or Clinic wrote for you. We read it, turn the portions into the weights our Kitchen works to, and show you exactly what we would make.":"把教练、营养师或诊所为您写的餐单交给我们。我们会读一遍，把份量换算成厨房使用的重量，再清楚告诉您我们会做出什么。","Give Us The Plan":"把餐单交给我们","The weights in your plan are":"您餐单上的重量是","Cooked Weights":"熟重","Raw Weights":"生重","Most Coaches write Cooked Weights. What ends up on the plate. Our Kitchen weighs everything Raw, so we convert it for you. If you are not sure, leave it on Cooked.":"多数教练写的是熟重 — 也就是上桌时的重量。我们厨房一律称生重，所以会为您换算。如果不确定，就保持「熟重」。","Type it out, or paste it":"直接输入，或贴上","Or take a photo of it, or load a PDF":"或拍一张照片，或上传 PDF","Photograph the whole sheet straight on, in good light. We read it out into the text box above so you can check every line before anything is priced. A machine reading handwriting will get some of it wrong, and it is much easier to fix here than after it is Cooked.":"请在光线充足处正对着拍下整张表。我们会把内容读进上方的文字框，让您在报价前逐行核对。机器读手写字一定会有出错的地方，在这里改比煮好后再改容易得多。","Choose File":"选择文件","No File selected":"未选择文件","x-old-photo":"请在光线充足处正对着拍下整张表。我们会把内容读进上方的框里，让您在报价前逐行核对 — 机器读手写字一定会有出错的地方，在这里改比煮好后再改容易得多。","Read My Plan":"读取我的餐单","Check What We Read":"核对我们读到的内容","A Machine read this, so check it against your own sheet before you send it. The grey line under each Item is your original wording. Change any Weight that looks wrong. The Raw Figure on the right updates as you type.":"这是机器读出来的，送出前请对照您自己的表核对一遍。每一项下方的灰色文字是您原本的写法。看到不对的重量就直接改 — 右边的生重会随着您输入即时更新。","See It As A Plan":"以餐单形式查看","This opens your plan in our plan editor, built from the dishes matched above. Swap any dish, change any portion, and the calories, protein and price move with it. Your own plan's totals become the target, so you can see where ours drifts from your coach's sheet.":"这会用上方配对到的菜色，在我们的餐单编辑器中打开您的餐单。换任何一道菜、改任何份量，热量、蛋白质与价格都会跟着变。您原本餐单的总量会成为目标，方便您看出我们和教练那张表差在哪里。","Open My Plan":"打开我的餐单","Would rather we just priced it by hand and came back to you?":"想让我们直接人工报价再回复您？","Send it to the Kitchen instead":"改为送去厨房","Send it to the kitchen instead":"改为送去厨房","Send It To The Kitchen":"送去厨房","Your Name":"您的姓名","Email":"电邮","Mobile":"手机号码","Who Wrote This Plan":"这份餐单是谁写的","If a coach, dietitian or clinic wrote it, their name goes on the plan when it reaches our kitchen. Leave it empty if the plan is your own.":"若是教练、营养师或诊所写的，餐单送到厨房时会附上他们的名字。如果是您自己写的，留空即可。","Anything We Should Know":"有什么需要我们注意的","We will price it and come back to you before anything is cooked. Nothing is charged at this point.":"我们会先报价并回复您，之后才开始烹调。此阶段不会收取任何费用。","Send My Plan To AERA":"把我的餐单送给 AERA","AERA Meal Preparation SDN BHD · Seri Kembangan":"AERA Meal Preparation SDN BHD · Seri Kembangan","Prefer us to build the plan instead?":"想让我们帮您制定餐单？","Use the Personalised Meal Plan builder":"使用个人定制餐单工具","Bring Your Own Plan — AERA Meal Prep":"自带餐单 — AERA Meal Prep",
 "01x-xxx xxxx":"01x-xxx xxxx","Coach Hafiz, TNT Fitness — or leave blank if it is your own":"例如：Coach Hafiz, TNT Fitness — 若是自己写的可留空","No prawns. Less salt on everything.":"例如：不要虾。全部少盐。"
 });
 if(window.aeraRetranslate)window.aeraRetranslate();
@@ -1520,6 +1510,6 @@ setTimeout(function(){if(!READY){FAIL=true;all(D)}},9000);
 })();</script>
 
 <script id="aera-byop-file-js">(function(){var i=document.getElementById("pdf"),n=document.getElementById("pdfName");if(!i||!n)return;function up(){var f=i.files&&i.files[0];n.textContent=f?f.name:"No File selected"}i.addEventListener("change",up);setInterval(function(){if(!(i.files&&i.files.length)&&n.textContent!=="No File selected"&&n.textContent!=="未选择文件")up()},1500)})();</script>
-<!-- build 1791949758502 -->
+<!-- build 1791950412071 -->
 </body>
 </html>
