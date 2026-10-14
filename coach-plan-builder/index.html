@@ -512,9 +512,9 @@ try{Object.assign(window.AERA_I18N||{},{'Write the Plan straight into our Kitche
    <label class="lb" for="ownq">What do they eat here?</label>
    <div style="display:flex;gap:8px">
     <input type="text" id="ownq" placeholder="Egg Whites, Rolled Oats, Banana…" autocomplete="off">
-    <button class="btn o s" type="button" id="ownAdd">Add</button>
+    <button class="btn o s" type="button" id="ownAdd">Find The Macros</button>
    </div>
-   <p class="hint" style="margin:6px 0 0">Something the Client sources at Home. We will not cook it, but it stays on the Plan so nothing goes missing.</p>
+   <p class="hint" style="margin:6px 0 0">Something the Client sources at Home. We will not cook it, but it stays on the Plan so nothing goes missing.</p><div id="ownFound"></div>
   </div>
  </div>
 </div>
@@ -692,19 +692,19 @@ function paint(){
   t.price=mealPrice(m.items);
   var rows=m.items.map(function(it,ii){
    var r=BYCODE[it.code],rw=rawOf(it);
-   if(r){var x=per(r,rw.g);t.kcal+=x.kcal;t.p+=x.p;t.c+=x.c;t.f+=x.f}
+   if(r){var x=per(r,rw.g);t.kcal+=x.kcal;t.p+=x.p;t.c+=x.c;t.f+=x.f}else{var om=ownMac(it);if(om){t.kcal+=om.kcal;t.p+=om.p;t.c+=om.c;t.f+=om.f}}
    var nm=r?esc(r.name):esc(it.own||'')+'<em>home-sourced</em>';
    var us=r?unitStr(r,rw.g):'';
    var sub=r?(rw.g+' g Raw'+(us?' ( '+us+' )':'')+(rw.why?' — '+esc(rw.why):''))
-            :'Home-Sourced. Not cooked by AERA';
+            :(it.sv?'Home-Sourced. Not cooked by AERA · '+esc(ownServ(it)):'Home-Sourced. Not cooked by AERA');
    var step=r?(r.po[2]||25):5;
    return '<div class="row" data-m="'+mi+'" data-i="'+ii+'">'+
     '<button class="grip" type="button" aria-label="Drag to reorder" title="Drag to reorder">'+
-    '<span></span><span></span><span></span></button>'+thumb(r)+
+    '<span></span><span></span><span></span></button>'+(r?thumb(r):ownThumb(it))+
     '<div class="nm">'+nm+'<small>'+sub+'</small></div>'+
     '<div class="wcell wb-'+cur().basis+'"><small class="wh">'+(cur().basis==='raw'?'Raw Weight':'Cooked Weight')+'</small><span class="wbd"><input type="number" min="0" step="'+(r?(r.po[2]||25):5)+'" value="'+(+it.g||0)+'" aria-label="weight in grams, '+cur().basis+'"><em>g</em></span></div>'+
-    '<div class="pr">'+(r?rm(per(r,rw.g).price):'&mdash;')+
-     '<small>'+(r?Math.round(per(r,rw.g).kcal)+' KCALs':'Not Ours')+'</small></div>'+
+    '<div class="pr">'+(r?rm(per(r,rw.g).price):(ownMac(it)?'<span class="ownno">Not Ours</span>':'&mdash;'))+
+     '<small>'+(r?Math.round(per(r,rw.g).kcal)+' KCALs':(ownMac(it)?Math.round(ownMac(it).kcal)+' KCALs':'Not Ours'))+'</small></div>'+
     '<button class="x" type="button" data-rm="1" aria-label="Remove">&times;</button></div>'}).join('');
   h+='<div class="meal"><div class="mh">'+
    mealSelect(m,mi)+
@@ -739,7 +739,7 @@ function cooked(d){return d.meals.filter(function(m){
 function boxCount(c){var n=0;c.days.forEach(function(d){n+=cooked(d).length});return n}
 function dayTotals(d){var t={kcal:0,p:0,c:0,f:0,price:0};
  d.meals.forEach(function(m){t.price+=mealPrice(m.items);
-  m.items.forEach(function(it){var r=BYCODE[it.code];if(!r)return;
+  m.items.forEach(function(it){var r=BYCODE[it.code];if(!r){var om=ownMac(it);if(om){t.kcal+=om.kcal;t.p+=om.p;t.c+=om.c;t.f+=om.f}return}
    var x=per(r,rawOf(it).g);t.kcal+=x.kcal;t.p+=x.p;t.c+=x.c;t.f+=x.f})});
  t.price=Math.round(t.price*100)/100;return t}
 function planPrice(c){var s=0;c.days.forEach(function(d){s+=dayTotals(d).price});return s}
@@ -817,7 +817,7 @@ $('#dayPanel').addEventListener('input',function(e){
    var us2=unitStr(r,rw.g);
    row.querySelector('.nm small').textContent=rw.g+' g Raw'+(us2?' ( '+us2+' )':'')+
     (rw.why?' — '+rw.why:'');
-   row.querySelector('.pr').innerHTML=rm(x.price)+'<small>'+Math.round(x.kcal)+' KCALs</small>'}
+   row.querySelector('.pr').innerHTML=rm(x.price)+'<small>'+Math.round(x.kcal)+' KCALs</small>'}else{var om=ownMac(it),ps=row.querySelector('.pr small');if(om&&ps)ps.textContent=Math.round(om.kcal)+' KCALs'}
   refreshTotals()}});
 /* Typing in a weight box must not repaint the page — that would take the cursor with it — so
    every figure that depends on the weight is refreshed in place instead. */
@@ -826,7 +826,7 @@ function refreshTotals(){
  d.meals.forEach(function(m,mi){
   var t={kcal:0,p:0,c:0,f:0,price:0};
   t.price=mealPrice(m.items);
-  m.items.forEach(function(it){var r=BYCODE[it.code];if(!r)return;
+  m.items.forEach(function(it){var r=BYCODE[it.code];if(!r){var om=ownMac(it);if(om){t.kcal+=om.kcal;t.p+=om.p;t.c+=om.c;t.f+=om.f}return}
    var x=per(r,rawOf(it).g);t.kcal+=x.kcal;t.p+=x.p;t.c+=x.c;t.f+=x.f});
   var el=$('#dayPanel').querySelectorAll('.meal')[mi];
   if(el){var mf=el.querySelector('.mfoot');
@@ -962,13 +962,56 @@ function openPick(mi,own){
  if(!own)paintRes();
  $('#scrim').classList.add('open');
  setTimeout(function(){$(own?'#ownq':'#q').focus()},30)}
+/* Home-Sourced items : the coach types what the Client eats, our AI look-up finds the Macros per
+   Serving, a picture is found for it, and the coach picks how much. Figures are estimates. */
+var COACH_URL='https://my.chatbees.io/api/webhooks/flow/5507/ea7799f6789f3ea8762fe9814eeb2d8edfd82f94b81a92d911cc84c067973c9f',COACH_READ='https://my.chatbees.io/api/public/landing-pages/6940/sheet-data';
+var OWNF=null,OWNQ=1,OWNBUSY=false;
+function r1(v){return Math.round((+v||0)*10)/10}
+async function coachFetch(mode,payload){var key='C'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);var ctl=new AbortController();var to=setTimeout(function(){ctl.abort()},60000);await fetch(COACH_URL,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctl.signal,body:JSON.stringify({contactEmail:'sync-coach-'+key.toLowerCase()+'@aera-sync.invalid',data:{mode:mode,key:key,payload:JSON.stringify(payload)}})});clearTimeout(to);var row=null;for(var i=0;i<8&&!row;i++){if(i)await new Promise(function(r){setTimeout(r,1500)});try{var j=await fetch(COACH_READ+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()});(j&&j.data||[]).forEach(function(r){if(r.Key===key)row=r})}catch(e){}}if(!row)throw new Error('timeout');var a=null;try{a=JSON.parse(row.Reply)}catch(e){a=null}if(!a||a.error)throw new Error((a&&a.error)||'bad reply');return a}
+function wikiPics(s){var u='https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrlimit=6&gsrsearch='+encodeURIComponent(s+' food')+'&prop=pageimages&piprop=thumbnail&pithumbsize=320';
+ return fetch(u).then(function(r){return r.json()}).then(function(j){var p=[];var q=(j&&j.query&&j.query.pages)||{};for(var k in q)p.push(q[k]);p.sort(function(a,b){return a.index-b.index});return p.filter(function(x){return x.thumbnail&&x.thumbnail.source&&!/\.svg/i.test(x.thumbnail.source)}).slice(0,4).map(function(x){return x.thumbnail.source})}).catch(function(){return []})}
+function ownMac(it){var b=it&&it.b;if(!b)return null;var s=(b.gs>0&&+it.g>0)?(+it.g/b.gs):(+it.q||1);return{kcal:b.k*s,p:b.p*s,c:b.c*s,f:b.f*s}}
+function ownServ(it){var q=+it.q||1,b=it.b||{};if(b.gs>0&&+it.g>0)return (+it.g)+' g';return (q===1?'1 Serving':(q+' Servings'))+(it.sv?' ( '+it.sv+' )':'')}
+function ownThumb(it){return it&&it.img?'<div class="thumb" role="img" aria-label="'+esc(it.own||'')+'" style="background-image:url('+esc(it.img)+')"></div>':'<div class="thumb none" aria-hidden="true">+</div>'}
+function gramsOf(s){var m=/(\d+(?:\.\d+)?)\s*(?:g|gram|grams)\b/i.exec(s||'');return m?+m[1]:0}
 function addOwn(){
- var nm=$('#ownq').value.trim();if(!nm||PICK==null)return;
- mark();day().meals[PICK].items.push({own:nm,g:0});
- save();closePick();paint()}
+ var nm=$('#ownq').value.trim();if(!nm||PICK==null||OWNBUSY)return;
+ OWNBUSY=true;OWNF=null;var btn=$('#ownAdd');btn.disabled=true;
+ $('#ownFound').innerHTML='<p class="hint ownbusy"><span class="ownspin"></span>Looking up the Macros…</p>';
+ Promise.all([coachFetch('food',{text:nm}).catch(function(){return null}),wikiPics(nm)]).then(function(res){
+  OWNBUSY=false;btn.disabled=false;var a=res[0],pics=res[1]||[];
+  if(a&&a.name&&+a.kcal>0)OWNF={name:a.name,serving:a.serving||'1 Serving',kcal:+a.kcal||0,p:+a.p||0,c:+a.c||0,f:+a.f||0,note:a.note||'',pics:pics,img:pics[0]||''};
+  else OWNF={name:nm,none:true,pics:pics,img:pics[0]||''};
+  OWNQ=1;ownPaint()})}
+function ownPaint(){var el=$('#ownFound');if(!el)return;if(!OWNF){el.innerHTML='';return}var F=OWNF,q=OWNQ;
+ var pic='<div class="ownf-pic"'+(F.img?' style="background-image:url('+esc(F.img)+')"':'')+'></div>';
+ var pics=F.pics.length>1?'<div class="ownf-pics">'+F.pics.map(function(u,i){return '<button type="button" data-pic="'+i+'" class="'+(u===F.img?'on':'')+'" style="background-image:url('+esc(u)+')" aria-label="Picture '+(i+1)+'"></button>'}).join('')+'<button type="button" data-pic="-1" class="nopic'+(F.img?'':' on')+'">No Picture</button></div>':'';
+ if(F.none){el.innerHTML='<div class="ownf"><div class="ownf-top">'+pic+'<div><b>'+esc(F.name)+'</b><small>We could not find the Macros for this one. Try naming it more simply, or add it without them.</small></div></div>'+pics+
+  '<div class="ownf-act"><button class="btn s" type="button" data-ownok="1">Add Without Macros</button><button class="btn o s" type="button" data-owncancel="1">Cancel</button></div></div>';return}
+ var opts=[[0.5,'Half'],[1,'1 Serving'],[1.5,'1½'],[2,'2 Servings'],[3,'3 Servings']];
+ el.innerHTML='<div class="ownf"><div class="ownf-top">'+pic+'<div><b>'+esc(F.name)+'</b><small>Per Serving : '+esc(F.serving)+'</small><small>'+Math.round(F.kcal)+' KCALs · Protein '+r1(F.p)+' g · Carbs '+r1(F.c)+' g · Fat '+r1(F.f)+' g</small></div></div>'+pics+
+  '<label class="lb" style="margin-top:12px">How Much?</label><div class="ownf-q">'+opts.map(function(o){return '<button type="button" data-q="'+o[0]+'" class="'+(Math.abs(q-o[0])<0.001?'on':'')+'">'+o[1]+'</button>'}).join('')+
+  '<input type="number" step="0.25" min="0.25" max="10" value="'+q+'" id="ownQn" aria-label="Servings"><span class="hint" style="margin:0">Servings</span></div>'+
+  '<div class="ownf-tot" id="ownTot"></div>'+(F.note?'<p class="hint" style="margin:6px 0 0">'+esc(F.note)+'</p>':'')+
+  '<div class="ownf-act"><button class="btn s" type="button" data-ownok="1">Add to this Meal</button><button class="btn o s" type="button" data-owncancel="1">Cancel</button></div>'+
+  '<p class="hint" style="margin:8px 0 0">Estimated Figures. Adjust the Servings to match the portion.</p></div>';
+ ownTot()}
+function ownTot(){var e=document.getElementById('ownTot');if(!e||!OWNF||OWNF.none)return;var q=OWNQ,F=OWNF;
+ e.innerHTML=Math.round(F.kcal*q)+' KCALs<small>Protein '+r1(F.p*q)+' g · Carbs '+r1(F.c*q)+' g · Fat '+r1(F.f*q)+' g</small>';
+ [].forEach.call(document.querySelectorAll('#ownFound .ownf-q button'),function(b){b.classList.toggle('on',Math.abs(q-(+b.dataset.q))<0.001)})}
+function ownAddNow(){if(!OWNF||PICK==null)return;var F=OWNF,q=OWNQ,it={own:F.name,g:0};if(F.img)it.img=F.img;
+ if(!F.none){var gs=gramsOf(F.serving);it.b={k:F.kcal,p:F.p,c:F.c,f:F.f,gs:gs};it.q=q;it.sv=F.serving;if(gs)it.g=Math.round(gs*q)}
+ mark();day().meals[PICK].items.push(it);save();$('#ownq').value='';closePick();paint()}
+$('#ownFound').addEventListener('click',function(e){var b=e.target.closest('button');if(!b||!OWNF)return;
+ if(b.dataset.pic!=null){var i=+b.dataset.pic;OWNF.img=i<0?'':OWNF.pics[i];ownPaint();return}
+ if(b.dataset.q!=null){OWNQ=+b.dataset.q;var n=document.getElementById('ownQn');if(n)n.value=OWNQ;ownTot();return}
+ if(b.dataset.ownok){ownAddNow();return}
+ if(b.dataset.owncancel){OWNF=null;ownPaint()}});
+$('#ownFound').addEventListener('input',function(e){if(e.target.id==='ownQn'){OWNQ=Math.max(0.25,Math.min(10,+e.target.value||1));ownTot()}});
+
 $('#ownAdd').addEventListener('click',addOwn);
 $('#ownq').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addOwn()}});
-function closePick(){$('#scrim').classList.remove('open');PICK=null}
+function closePick(){$('#scrim').classList.remove('open');PICK=null;OWNF=null;var of_=document.getElementById('ownFound');if(of_)of_.innerHTML=''}
 $('#popClose').addEventListener('click',closePick);
 $('#scrim').addEventListener('click',function(e){if(e.target===this)closePick()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&PICK!=null)closePick()});
@@ -1019,7 +1062,7 @@ function sheetText(){
    m.items.forEach(function(it){var r=BYCODE[it.code];
     var u=r?unitStr(r,+it.g||0):'';
     L.push('    '+pad(r?r.name:(it.own||''),W)+String(+it.g||0).padStart(5)+' g'+
-     (u?'  ( '+u+' )':''))})});
+     (u?'  ( '+u+' )':'')+(ownMac(it)?'  ( Home-Sourced · '+Math.round(ownMac(it).kcal)+' KCALs · Protein '+Math.round(ownMac(it).p)+' g · Carbs '+Math.round(ownMac(it).c)+' g · Fat '+Math.round(ownMac(it).f)+' g )':''))})});
   L.push('')});
  return L.join('\n')}
 function draft(){
@@ -1030,7 +1073,7 @@ function draft(){
    var comps=[];
    m.items.forEach(function(it){
     var r=BYCODE[it.code];
-    if(!r){if(it.own)off.push({day:d.name||'',meal:m.name||'',food:it.own,g:+it.g||0});return}
+    if(!r){if(it.own)off.push({day:d.name||'',meal:m.name||'',food:it.own,g:+it.g||0,mac:ownMac(it)});return}
     comps.push({r:it.code,g:rawOf(it).g})});
    if(comps.length)pending.push(comps)});
   if(!pending.length)return;
@@ -1729,4 +1772,6 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 </body>
 </html>
 <script id="aera-coach-pack-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Packaging Method":"包装方式","MAP Bento Box":"MAP 便当盒","Vacuum Packed":"真空包装","Oxygen replaced with Nitrogen / CO₂ and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life. RM 1.80 per Meal.":"以氮气 / 二氧化碳取代氧气并封顶。食物不会被压扁。请冷藏，保质期 7 天。每餐 RM 1.80。","Same freshness, flatter pack. Takes far less Fridge space, compresses the Food slightly. RM 1.80 per Meal.":"同样新鲜，包装更扁平。更省冰箱空间，食物会被轻微压扁。每餐 RM 1.80。","Home-Sourced. Not cooked by AERA":"自备。非 AERA 烹调","Not Ours":"非我们的"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Protein - ([\d.]+) g$/,"蛋白 $1 克"],[/^Carbs - ([\d.]+) g$/,"碳水 $1 克"],[/^Fat - ([\d.]+) g$/,"脂肪 $1 克"],[/^MAP Bento Box (RM [\d.]+)$/,"MAP 便当盒 $1"],[/^Vacuum Packed (RM [\d.]+)$/,"真空包装 $1"])}catch(e){}</script>
-<!-- build 2026-10-14T06:19:13.376Z -->
+
+<style id="aera-coach-own">.ownf{margin-top:12px;border:1.5px solid #16479E;border-radius:14px;padding:12px;background:#fff}.ownf-top{display:flex;gap:12px;align-items:center}.ownf-pic{flex:none;width:76px;height:76px;border-radius:12px;background:#E9EEF5 center/cover no-repeat;border:1px solid #DBE1EA}.ownf-top b{display:block;color:#16479E;font-size:16px;line-height:1.25}.ownf-top small{display:block;color:#5A6478;font-size:12.5px;margin-top:3px;line-height:1.35}.ownf-pics{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;align-items:center}.ownf-pics button{width:46px;height:46px;border-radius:9px;border:2px solid #DBE1EA;background:#E9EEF5 center/cover no-repeat;cursor:pointer;padding:0}.ownf-pics button.on{border-color:#FDB913;box-shadow:0 0 0 2px #16479E}.ownf-pics button.nopic{width:auto;padding:0 10px;font:inherit;font-size:12px;font-weight:700;color:#16479E;background:#fff}.ownf-q{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.ownf-q button{font:inherit;font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;border:1.5px solid #16479E;background:#fff;color:#16479E;cursor:pointer}.ownf-q button.on{background:#16479E;color:#FDB913}.ownf-q input{width:74px}.ownf-tot{margin-top:10px;font-weight:800;color:#16479E;font-size:18px}.ownf-tot small{display:block;font-weight:600;font-size:12.5px;color:#5A6478;margin-top:2px}.ownf-act{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.ownbusy{display:flex;align-items:center;gap:8px;margin:10px 0 0}.ownspin{width:16px;height:16px;border-radius:50%;border:2.5px solid #DBE1EA;border-top-color:#16479E;animation:ownspin .8s linear infinite;flex:none}@keyframes ownspin{to{transform:rotate(360deg)}}.pr .ownno{font-size:12px;font-weight:700;color:#5A6478}</style><script id="aera-coach-own-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Find The Macros":"查询营养值","Looking up the Macros…":"正在查询营养值…","How Much?":"份量多少？","Half":"半份","1 Serving":"1 份","2 Servings":"2 份","3 Servings":"3 份","Servings":"份","Add to this Meal":"加入这一餐","Add Without Macros":"不带营养值加入","Cancel":"取消","No Picture":"不要图片","Estimated Figures. Adjust the Servings to match the portion.":"估计数值。请调整份数以符合实际份量。","We could not find the Macros for this one. Try naming it more simply, or add it without them.":"找不到这项的营养值。请用更简单的名称再试，或不带营养值加入。"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Per Serving : (.+)$/,"每份：$1"],[/^Home-Sourced\. Not cooked by AERA · (.+)$/,"自备。非 AERA 烹调 · $1"])}catch(e){}</script>
+<!-- build 2026-10-14T06:25:39.653Z -->
