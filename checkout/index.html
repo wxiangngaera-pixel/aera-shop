@@ -1342,8 +1342,8 @@ function pvRender(){var on=pvOn();
  var days=+PLANITEM.days||(mm?+mm[1]:0),mpd=+PLANITEM.mpd||(mm?+mm[2]:0);
  if(!mpd)mpd=days?Math.max(1,Math.round(meals.length/days)):1;
  if(!days)days=Math.max(1,Math.ceil(meals.length/mpd));
- var h='<div class="pvhead"><div><span class="eyebrow">Your Order</span><h2>Your Personalised Meal Plan</h2>'+
-  '<p class="pvsub">'+days+' Days · '+mpd+' Meal'+(mpd>1?'s':'')+' a Day · '+meals.length+' Meals</p></div>'+
+ var h='<div class="pvhead"><div><span class="eyebrow">Your Order</span><h2>Personalised Plan · '+days+' Day'+(days>1?'s':'')+' x '+mpd+' Meal'+(mpd>1?'s':'')+'</h2>'+
+  '<p class="pvsub">'+meals.length+' Meals · Packaging included</p></div>'+
   '<div class="pvacts"><a class="btn pvedit" href="https://my.chatbees.io/p/SrQzC5m2">Edit Plan</a>'+
   '<div class="pvdd"><button type="button" class="btn pvmore" aria-haspopup="true" onclick="pvMenu(event)"><span>Add Other Meals</span> <i aria-hidden="true">▾</i></button>'+
   '<div class="pvmenu" id="pvMenu"><button type="button" onclick="pvGo(\'alc\')">À la Carte</button>'+
@@ -2346,7 +2346,7 @@ Object.assign(window.AERA_I18N,{"Select One Only":"只能选一个","AERA Points
 AERA_I18N_RE.push([/^First Order Voucher · (\d+)% OFF up to (RM [\d.,]+)$/,'首单优惠券 · $1% 折扣，最多减 $2'],[/^(\d+)% of your (RM [\d.,]+) of Meals is (RM [\d.,]+)\. The First Order Voucher takes off up to (RM [\d.,]+)\.$/,'您的餐点 $2 的 $1% 是 $3。首单优惠券最多减 $4。']);
 AERA_I18N_RE.push([/^Using Your First Order Voucher · (RM [\d.]+) OFF$/,'正在使用首单优惠券 · 减 $1']);
 AERA_I18N_RE.push([/^Using ([\d,]+ AP) · (RM [\d.]+) OFF$/,'正在使用 $1 · 减 $2'],[/^Tap to use ([\d,]+ AP) · (RM [\d.]+) OFF$/,'点击使用 $1 · 减 $2'],[/^The most this Order allows \( (\d+)% of it \)\.$/,'这张订单最多可用（订单的 $1%）。']);
-AERA_I18N_RE.push([/^Day (\d+)$/,"第 $1 天"],[/^Meal (\d+)$/,"第 $1 餐"],[/^(\d+) Days · (\d+) Meals? a Day · (\d+) Meals$/,"$1 天 · 每天 $2 餐 · 共 $3 餐"],[/^Personalised Plan · (\d+) Days x (\d+) Meals$/,"个人定制餐单 · $1 天 × 每天 $2 餐"],[/^(\d+) Meals · Packaging included ·$/,"共 $1 餐 · 已含包装 ·"]);
+AERA_I18N_RE.push([/^Day (\d+)$/,"第 $1 天"],[/^Meal (\d+)$/,"第 $1 餐"],[/^(\d+) Days · (\d+) Meals? a Day · (\d+) Meals$/,"$1 天 · 每天 $2 餐 · 共 $3 餐"],[/^Personalised Plan · (\d+) Days x (\d+) Meals$/,"个人定制餐单 · $1 天 × 每天 $2 餐"],[/^(\d+) Meals · Packaging included ·$/,"共 $1 餐 · 已含包装 ·"],[/^(\d+) Meals · Packaging included$/,"共 $1 餐 · 已含包装"],[/^Personalised Plan · (\d+) Days? x (\d+) Meals?$/,"个人定制餐单 · $1 天 × 每天 $2 餐"]);
 Object.assign(window.AERA_I18N,{
 "Return to Homepage":"返回首页","Home":"首页","Merchandise":"周边商品","My Account":"我的账户","Cart ·":"购物车 ·","AERA Meal Prep":"AERA Meal Prep",
 "Order online":"线上订购","Everything is cooked to Order, weighed to the gram and MAP-Packed to stay fresh for 7 Days in the chiller. Choose Self Pick-Up or Rider Delivery ( Lalamove ) at Checkout.":"所有餐点都是接单后现做，称到克，并以 MAP 保鲜包装，冷藏可放 7 天。结账时可选自取或骑手配送（Lalamove）。",
@@ -3468,6 +3468,6 @@ function f(){btn();H.classList.toggle('aera-coe',!forced&&empty())}
 window.addEventListener('hashchange',function(){if(SHOP.test(location.hash||'')){forced=true;f()}});
 function go(){f();var l=document.getElementById('lines');if(l)new MutationObserver(f).observe(l,{childList:true,subtree:true,characterData:true});setTimeout(f,1500)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
 try{Object.assign(window.AERA_I18N||{},{"Browse the Menu":"浏览菜单"})}catch(e){}})();</script>
-<!-- build 1791955958537 -->
+<!-- build 1791956043928 -->
 </body>
 </html>
