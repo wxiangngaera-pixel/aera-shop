@@ -419,7 +419,7 @@ function plan(){
 
 /* ---------- Checkout : short, with the Pay button always in reach ---------- */
 function checkout(){
- Object.assign(ZH,{'Have a referral code?':'有推荐码吗？','Add a note for the kitchen or rider':'给厨房或骑手留言'});
+ Object.assign(ZH,{'Have a Referral Code?':'有推荐码吗？','Add a Note for the Kitchen or Rider':'给厨房或骑手留言'});
  try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
  css(
  '#side #payBtn{position:sticky;bottom:12px;z-index:5;box-shadow:0 12px 26px rgba(11,28,54,.28)}'+
@@ -436,7 +436,7 @@ function checkout(){
   var d=D.createElement('details');d.className='v2opt';d.setAttribute('data-k',title);d.innerHTML='<summary>'+t(title)+'</summary>';
   side.insertBefore(d,lab);nodes.forEach(function(n){d.appendChild(n)});
   var has=nodes.some(function(n){return (n.value||'').trim()});if(has)d.open=true}
- function run(){try{wrap(/Referral Code/i,['refCode','refMsg'],'Have a referral code?');wrap(/Notes for the Kitchen/i,['notes'],'Add a note for the kitchen or rider')}catch(e){}}
+ function run(){try{wrap(/Referral Code/i,['refCode','refMsg'],'Have a Referral Code?');wrap(/Notes for the Kitchen/i,['notes'],'Add a Note for the Kitchen or Rider')}catch(e){}}
  function empty(){var side=D.getElementById('side'),ln=D.getElementById('lines');if(!side||!ln)return;var e=/empty/i.test(ln.textContent)&&!ln.querySelector('input,img');side.classList.toggle('v2empty',e)}
  ready(function(){run();empty();setTimeout(run,800);setTimeout(run,2500);var ln=D.getElementById('lines');if(ln)new MutationObserver(empty).observe(ln,{childList:true,subtree:true,characterData:true})})}
 
@@ -880,5 +880,5 @@ tapDemo();
 })();
 
 /*AERA-V2-END*/</script>
-<!-- build 1791954389665 -->
+<!-- build 1791955768929 -->
 </body></html>
