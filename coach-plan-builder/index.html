@@ -1795,7 +1795,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 <style id="aera-coach-app-fit">#aaBar{bottom:auto!important;top:calc(70px + env(safe-area-inset-top))!important}@media(max-width:600px){.ab-r #aaGetApp{width:34px!important;height:34px!important}.ab-r #aaGetApp span{display:none!important}.ab-r #aaGetApp img{width:26px!important;height:26px!important}}</style>
 <!-- AERA coach app kit : end -->
 
-<style id="aera-coach-appmode-css">html.coach-app .ab-find,html.coach-app .ab-order,html.coach-app #abCart,html.coach-app #abInbox,html.coach-app #aaGetApp,html.coach-app #aaBar,html.coach-app .ab-sep,html.coach-app header.top a.v2hide{display:none!important}</style>
+<style id="aera-coach-appmode-css">html.coach-app .ab-find,html.coach-app .ab-order,html.coach-app #abCart,html.coach-app #abInbox,html.coach-app #aaGetApp,html.coach-app #aaBar,html.coach-app .ab-sep,html.coach-app #aeraBar a.v2hide{display:none!important}</style>
 <script id="aera-coach-appmode">/* AERA Coach Plan app : opened from the Home Screen it is the Coach Plan Builder and nothing else.
    The bar keeps only the language switch and Log In / Log Out ; signing in comes straight back here. */
 (function(){var D=document,sa=false;try{sa=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}catch(e){}
@@ -1803,13 +1803,13 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  try{if(sa)localStorage.setItem('aera.appmode','coach')}catch(e){}
  D.documentElement.classList.add('coach-app');
  var HERE='https://aeramealprep.net/coach-plan-builder/';
- function fix(){var hd=D.querySelector('header.top');if(!hd)return;
+ function fix(){var hd=D.querySelector('#aeraBar');if(!hd)return;
   [].forEach.call(hd.querySelectorAll('a'),function(a){var hr=a.getAttribute('href')||'';
    if(a.classList.contains('ab-logo')){if(hr!==HERE)a.setAttribute('href',HERE);return}
    if(!hr||hr==='#'||a.classList.contains('ab-out')||a.classList.contains('ab-txt')||a.id==='aaGetApp'||a.classList.contains('ab-lang'))return;
    if(/#(login|signup)$/.test(hr)){if(!/next=coach/.test(hr))a.setAttribute('href',hr.replace(/\/?(\?[^#]*)?#/,'/?next=coach#'));return}
    if(!a.classList.contains('v2hide'))a.classList.add('v2hide')})}
- function boot(){fix();var hd=D.querySelector('header.top');if(hd)new MutationObserver(function(){fix()}).observe(hd,{childList:true,subtree:true})}
+ function boot(){fix();new MutationObserver(function(){fix()}).observe(D.body,{childList:true,subtree:true})}
  if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',boot);else boot();setTimeout(fix,1500)})();</script>
 </body>
 </html>
@@ -1829,4 +1829,4 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 <style id="aera-coach-swap">.rows .row .thumb,.rows .row .nm{cursor:pointer}.rows .row .nm .chg{display:inline-block;margin-left:8px;font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#16479E;border:1.5px solid #16479E;border-radius:999px;padding:1px 8px;vertical-align:2px;white-space:nowrap}.rows .row .nm:hover .chg{background:#16479E;color:#FDB913}</style><script id="aera-coach-swap-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Change ▾":"更换 ▾"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Change (.+)$/,"更换 $1"])}catch(e){}</script><div class="mbento" hidden aria-hidden="true" style="display:none"></div>
 
 <script id="aera-coach-xpk-zh">try{(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^(\d+) Extra Packaging (RM [\d.]+)$/,"$1 份额外包装 $2"])}catch(e){}</script>
-<!-- build 2026-10-14T11:32:05.054Z -->
+<!-- build 2026-10-14T11:34:17.779Z -->
