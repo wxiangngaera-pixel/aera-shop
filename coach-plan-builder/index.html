@@ -1795,6 +1795,22 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 <style id="aera-coach-app-fit">#aaBar{bottom:auto!important;top:calc(70px + env(safe-area-inset-top))!important}@media(max-width:600px){.ab-r #aaGetApp{width:34px!important;height:34px!important}.ab-r #aaGetApp span{display:none!important}.ab-r #aaGetApp img{width:26px!important;height:26px!important}}</style>
 <!-- AERA coach app kit : end -->
 
+<style id="aera-coach-appmode-css">html.coach-app .ab-find,html.coach-app .ab-order,html.coach-app #abCart,html.coach-app #abInbox,html.coach-app #aaGetApp,html.coach-app #aaBar,html.coach-app .ab-sep,html.coach-app header.top a.v2hide{display:none!important}</style>
+<script id="aera-coach-appmode">/* AERA Coach Plan app : opened from the Home Screen it is the Coach Plan Builder and nothing else.
+   The bar keeps only the language switch and Log In / Log Out ; signing in comes straight back here. */
+(function(){var D=document,sa=false;try{sa=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}catch(e){}
+ var app=sa||/[?&]app=1\b/.test(location.search);if(!app)return;
+ try{if(sa)localStorage.setItem('aera.appmode','coach')}catch(e){}
+ D.documentElement.classList.add('coach-app');
+ var HERE='https://aeramealprep.net/coach-plan-builder/';
+ function fix(){var hd=D.querySelector('header.top');if(!hd)return;
+  [].forEach.call(hd.querySelectorAll('a'),function(a){var hr=a.getAttribute('href')||'';
+   if(a.classList.contains('ab-logo')){if(hr!==HERE)a.setAttribute('href',HERE);return}
+   if(!hr||hr==='#'||a.classList.contains('ab-out')||a.classList.contains('ab-txt')||a.id==='aaGetApp'||a.classList.contains('ab-lang'))return;
+   if(/#(login|signup)$/.test(hr)){if(!/next=coach/.test(hr))a.setAttribute('href',hr.replace(/\/?(\?[^#]*)?#/,'/?next=coach#'));return}
+   if(!a.classList.contains('v2hide'))a.classList.add('v2hide')})}
+ function boot(){fix();var hd=D.querySelector('header.top');if(hd)new MutationObserver(function(){fix()}).observe(hd,{childList:true,subtree:true})}
+ if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',boot);else boot();setTimeout(fix,1500)})();</script>
 </body>
 </html>
 <script id="aera-coach-pack-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Packaging Method":"包装方式","MAP Bento Box":"MAP 便当盒","Vacuum Packed":"真空包装","Oxygen replaced with Nitrogen / CO₂ and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life. RM 1.80 per Meal.":"以氮气 / 二氧化碳取代氧气并封顶。食物不会被压扁。请冷藏，保质期 7 天。每餐 RM 1.80。","Same freshness, flatter pack. Takes far less Fridge space, compresses the Food slightly. RM 1.80 per Meal.":"同样新鲜，包装更扁平。更省冰箱空间，食物会被轻微压扁。每餐 RM 1.80。","Home-Sourced. Not cooked by AERA":"自备。非 AERA 烹调","Not Ours":"非我们的"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Protein - ([\d.]+) g$/,"蛋白 $1 克"],[/^Carbs - ([\d.]+) g$/,"碳水 $1 克"],[/^Fat - ([\d.]+) g$/,"脂肪 $1 克"],[/^MAP Bento Box (RM [\d.]+)$/,"MAP 便当盒 $1"],[/^Vacuum Packed (RM [\d.]+)$/,"真空包装 $1"])}catch(e){}</script>
@@ -1813,4 +1829,4 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 <style id="aera-coach-swap">.rows .row .thumb,.rows .row .nm{cursor:pointer}.rows .row .nm .chg{display:inline-block;margin-left:8px;font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#16479E;border:1.5px solid #16479E;border-radius:999px;padding:1px 8px;vertical-align:2px;white-space:nowrap}.rows .row .nm:hover .chg{background:#16479E;color:#FDB913}</style><script id="aera-coach-swap-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Change ▾":"更换 ▾"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Change (.+)$/,"更换 $1"])}catch(e){}</script><div class="mbento" hidden aria-hidden="true" style="display:none"></div>
 
 <script id="aera-coach-xpk-zh">try{(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^(\d+) Extra Packaging (RM [\d.]+)$/,"$1 份额外包装 $2"])}catch(e){}</script>
-<!-- build 2026-10-14T11:22:02.701Z -->
+<!-- build 2026-10-14T11:32:05.054Z -->
