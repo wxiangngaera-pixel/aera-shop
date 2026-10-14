@@ -1658,7 +1658,7 @@ function add(){document.body.appendChild(b);sync()}if(document.body)add();else d
  try{if(window.STEP===4&&window.PLAN)renderPlan()}catch(e){}
 })();
 </script>
-<!-- build 2026-10-14T08:42:46.389Z -->
+<!-- build 2026-10-14T14:22:37.884Z -->
 <script id="aera-prefs-v2">/* Meal Preferences v2 ( live for everyone ).
    Number badge for part-picked cards, two cards a row on phones, folded sections with a summary,
    a Build My Plan bar stuck to the bottom on phones, and a warning when the picks are too narrow. */
@@ -1715,5 +1715,37 @@ function add(){document.body.appendChild(b);sync()}if(document.body)add();else d
  var tm=0;function soon(){if(tm)return;tm=setTimeout(function(){tm=0;try{run()}catch(e){}},120)}
  function boot(){run();var s3=D.getElementById('s3');if(s3)new MutationObserver(soon).observe(s3,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class']})}
  if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',boot);else boot()})();</script>
+<script id="aera-swap-fix-js">
+(function(){if(window.__aeraSwFix)return;window.__aeraSwFix=1;var D=document;
+var st=D.createElement('style');st.id='aera-swap-fix';st.textContent=
+'.swapd[open] .dl{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}'+
+'.swapd .dl .swx{position:sticky;top:-9px;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:8px;background:#fff;margin:-9px -11px 0;padding:10px 11px 6px;font:800 13px Montserrat,system-ui,sans-serif;color:#16479E}'+
+'.swapd .dl .swx button{border:0;background:#FDB913;color:#0B1C36;border-radius:999px;padding:6px 14px;font:800 12.5px Montserrat,system-ui,sans-serif;cursor:pointer}'+
+'.swapd .dl .swx~.dhead{top:24px}'+
+'@media (max-width:760px){.swapd[open] .dl{position:fixed!important;left:10px!important;right:10px!important;top:auto!important;bottom:max(10px,env(safe-area-inset-bottom))!important;width:auto!important;max-width:none!important;max-height:68vh!important;z-index:2147481200!important;border-radius:16px!important;box-shadow:0 -10px 40px rgba(0,0,0,.25)!important}'+
+' #swScrim{position:fixed;inset:0;background:rgba(10,16,32,.45);z-index:2147481100}'+
+' .swapd[open] .srow{padding:8px 5px}}';
+D.head.appendChild(st);
+function sheet(){return innerWidth<=760}
+function scrim(on){var x=D.getElementById('swScrim');if(!on){if(x)x.remove();return}if(x)return;x=D.createElement('div');x.id='swScrim';x.addEventListener('click',function(){[].forEach.call(D.querySelectorAll('details.swapd[open]'),function(d){d.open=false});scrim(false);D.documentElement.style.overflow=''});D.body.appendChild(x)}
+var BB=0;function botBar(){var m=0;[].forEach.call(D.querySelectorAll('body *'),function(e){var c=getComputedStyle(e);if((c.position==='fixed'||c.position==='sticky')&&e.offsetHeight>30&&e.offsetHeight<200&&!e.closest('.dl')){var r=e.getBoundingClientRect();if(r.bottom>=innerHeight-2&&r.top>innerHeight/2&&r.width>innerWidth*0.6)m=Math.max(m,innerHeight-r.top)}});return m}
+function place(d){var dl=d.querySelector('.dl');if(!dl)return;
+ if(!dl.querySelector('.swx')){var x=D.createElement('div');x.className='swx';x.innerHTML='<span>Change This Item</span><button type="button">Done</button>';
+  x.querySelector('button').addEventListener('click',function(e){e.preventDefault();e.stopPropagation();d.open=false});dl.insertBefore(x,dl.firstChild)}
+ if(sheet()){dl.style.cssText='';dl.style.setProperty('bottom',Math.max(10,BB+8)+'px','important');dl.style.setProperty('max-height',Math.round(Math.min(innerHeight*0.68,innerHeight-BB-90))+'px','important');return}
+ var s=d.querySelector('summary').getBoundingClientRect(),vw=innerWidth,vh=innerHeight,w=Math.min(360,vw-24),left=Math.min(Math.max(12,s.left),vw-w-12),below=vh-s.bottom-BB-12,above=s.top-80;
+ var css='position:fixed;left:'+left+'px;width:'+w+'px;max-width:none;z-index:2147481200;';
+ if(below>=300||below>=above)css+='top:'+(s.bottom+6)+'px;max-height:'+Math.max(160,Math.min(440,below))+'px;';
+ else css+='top:auto;bottom:'+(vh-s.top+6)+'px;max-height:'+Math.max(160,Math.min(440,above))+'px;';
+ dl.style.cssText=css}
+D.addEventListener('toggle',function(e){var d=e.target;if(!d||!d.classList||!d.classList.contains('swapd'))return;
+ if(d.open){BB=botBar();[].forEach.call(D.querySelectorAll('details.swapd[open]'),function(o){if(o!==d)o.open=false});place(d);
+  if(sheet()){D.documentElement.style.overflow='hidden';scrim(true)}}
+ else{var dl=d.querySelector('.dl');if(dl)dl.style.cssText='';if(!D.querySelector('details.swapd[open]')){D.documentElement.style.overflow='';scrim(false)}}},true);
+addEventListener('scroll',function(e){if(sheet())return;if(e.target&&e.target.closest&&e.target.closest('.dl'))return;[].forEach.call(D.querySelectorAll('details.swapd[open]'),function(d){place(d)})},true);
+addEventListener('resize',function(){[].forEach.call(D.querySelectorAll('details.swapd[open]'),function(d){place(d)})});
+D.addEventListener('click',function(e){if(e.target.closest('.swapd .srow')){D.documentElement.style.overflow='';scrim(false)}},true);
+})();
+</script>
 </body>
 </html>
