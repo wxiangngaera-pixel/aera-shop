@@ -1151,7 +1151,7 @@ async function doLogout(back){try{await sb.auth.signOut()}catch(e){}
  if(back){location.replace(HOME_URL);return}
  showAuth()}
 /* ===== Account ===== */
-var NEXT={plan:'https://my.chatbees.io/p/SrQzC5m2',shop:'https://my.chatbees.io/p/D2pz8bZ',checkout:'https://my.chatbees.io/p/D2pz8bZ',coach:COACH_URL};
+var NEXT={plan:'https://my.chatbees.io/p/SrQzC5m2',shop:'https://my.chatbees.io/p/D2pz8bZ',checkout:'https://my.chatbees.io/p/D2pz8bZ',coach:COACH_URL,coachplan:'https://aeramealprep.net/account/#coachplan'};
 function nextTarget(){try{var v=new URLSearchParams(location.search).get('next');return v?NEXT[String(v).toLowerCase()]||null:(COACH_APP?COACH_URL:null)}catch(e){return null}}
 /* ===== Customers coming across from the old aeramealprep.net site =====
    Nothing is done to an account until its owner signs in and claims it themselves. */
@@ -3692,6 +3692,37 @@ if(document.readyState==='complete')later();else window.addEventListener('load',
 })();
 </script>
 <!-- AERA notifications on by default : end -->
-<!-- build 2026-10-14T11:31:12.779Z -->
+<!-- build 2026-10-14T11:44:46.627Z -->
+<style id="aera-coach-invites-css">#ciBox{margin:0 0 16px}#ciBox .ci{background:#16479E;color:#fff;border-radius:18px;padding:16px 18px;margin:0 0 10px;box-shadow:0 10px 24px rgba(22,71,158,.25)}
+#ciBox .ci .k{font:800 11px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#FDB913}#ciBox .ci h3{margin:6px 0 4px;font:800 19px Montserrat,sans-serif;color:#fff}
+#ciBox .ci p{margin:4px 0;font-size:14px;line-height:1.5;color:#E3EBFA}#ciBox .ci .m{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}#ciBox .ci .m span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:4px 10px;font:700 12px Montserrat,sans-serif}
+#ciBox .ci .a{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}#ciBox .ci button{border:0;border-radius:999px;padding:11px 18px;font:800 14px Montserrat,sans-serif;cursor:pointer}
+#ciBox .ci .y{background:#FDB913;color:#0B1C36}#ciBox .ci .n{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.6)}#ciBox .ci .er{color:#FFD7D2;font-size:13px;font-weight:700;margin-top:6px}</style>
+<script id="aera-coach-invites">/* A Plan sent by a Coach waits here until the customer accepts it. Accept opens it as their Personalised
+   Meal Plan ( with the Coach's Referral Code ready at checkout ) ; Decline just removes it. */
+(function(){var D=document,SBU='https://swpprjvubgcdsojapaad.supabase.co',AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0',PLAN='https://aeramealprep.net/meal-plan/';
+ try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{'Your Coach sent you a Meal Plan':'您的教练给您发送了餐单','Accept & Open My Plan':'接受并打开我的餐单','Not Now, Decline':'暂不，拒绝'})}catch(e){}
+ function tok(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var o=JSON.parse(localStorage.getItem(k)||'null');if(o&&o.currentSession)o=o.currentSession;if(o&&o.access_token&&o.user&&(!o.expires_at||o.expires_at*1000>Date.now()+30000))return{t:o.access_token,em:String(o.user.email||'').toLowerCase()}}}}catch(e){}return null}
+ function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+ function api(p,o){var a=tok();o=o||{};o.headers=Object.assign({apikey:AK,Authorization:'Bearer '+a.t,'Content-Type':'application/json'},o.headers||{});return fetch(SBU+'/rest/v1/'+p,o)}
+ var ROWS=[];
+ function host(){var v=D.getElementById('acctView');if(!v||getComputedStyle(v).display==='none')return null;var b=D.getElementById('ciBox');if(!b){b=D.createElement('div');b.id='ciBox';var main=v.querySelector('main,.main,section')||v;main.insertBefore(b,main.firstChild)}return b}
+ function paint(){var b=host();if(!b)return false;b.innerHTML=ROWS.map(function(r){var s=r.summary||{},who=r.coach_name||r.coach_email;
+  return '<div class="ci" data-id="'+r.id+'"><div class="k">'+'Your Coach sent you a Meal Plan'+'</div><h3>'+esc(who)+'</h3><p>A Personalised Meal Plan built for you'+(r.client_name?', '+esc(r.client_name):'')+'.</p><div class="m">'+
+   (s.days?'<span>'+s.days+' Day'+(s.days>1?'s':'')+'</span>':'')+(s.meals?'<span>'+s.meals+' Meals</span>':'')+(s.kcal?'<span>≈ '+s.kcal+' KCALs a Day</span>':'')+(s.p?'<span>Protein '+s.p+' g</span>':'')+'</div>'+
+   '<p style="font-size:12.5px">Accept to open it as your Plan. You can still change Portions and Dishes before you order.</p><div class="a"><button type="button" class="y" data-ok="1">'+'Accept & Open My Plan'+'</button><button type="button" class="n" data-no="1">'+'Not Now, Decline'+'</button></div><div class="er"></div></div>'}).join('');
+  if(ROWS.length&&/coachplan/.test(location.hash))try{b.scrollIntoView({block:'start'})}catch(e){}return true}
+ function load(){var a=tok();if(!a)return;api('coach_invites?select=id,coach_name,coach_email,client_name,ref_code,plan,summary,created_at&status=eq.pending&client_email=eq.'+encodeURIComponent(a.em)+'&order=created_at.desc').then(function(r){return r.ok?r.json():[]}).then(function(rows){ROWS=rows||[];if(!ROWS.length)return;var n=0,iv=setInterval(function(){n++;if(paint()||n>60)clearInterval(iv)},300)}).catch(function(){})}
+ D.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#ciBox button');if(!b)return;var card=b.closest('.ci'),id=card.getAttribute('data-id'),r=ROWS.filter(function(x){return x.id===id})[0],ok=b.hasAttribute('data-ok');if(!r)return;
+  [].forEach.call(card.querySelectorAll('button'),function(x){x.disabled=true});b.textContent=ok?'Opening…':'…';
+  api('rpc/respond_coach_invite',{method:'POST',body:JSON.stringify({p_id:id,p_accept:ok})}).then(function(x){if(!x.ok)throw 0;
+   if(!ok){ROWS=ROWS.filter(function(z){return z.id!==id});paint();return}
+   var s=r.summary||{},P=r.plan||{};
+   try{sessionStorage.setItem('aera.planOpen',JSON.stringify({q:P.q,plan:P,step:4}))}catch(e){}
+   try{localStorage.setItem('aera.byop',JSON.stringify({off:s.off||[],basis:s.basis||'raw',pack:s.pack||'bento',at:Date.now(),coach:1,client:r.client_name||''}))}catch(e){}
+   try{if(r.ref_code)localStorage.setItem('aera.refInvite',r.ref_code)}catch(e){}
+   location.href=PLAN}).catch(function(){[].forEach.call(card.querySelectorAll('button'),function(x){x.disabled=false});card.querySelector('.er').textContent='We could not do that just now. Please try again.';card.querySelector('[data-ok]').textContent='Accept & Open My Plan'})});
+ function boot(){var n=0,iv=setInterval(function(){n++;if(tok()){clearInterval(iv);load()}else if(n>40)clearInterval(iv)},500)}
+ if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',boot);else boot()})();</script>
 </body>
 </html>
