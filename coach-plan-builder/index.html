@@ -701,16 +701,16 @@ function paint(){
    return '<div class="row" data-m="'+mi+'" data-i="'+ii+'">'+
     '<button class="grip" type="button" aria-label="Drag to reorder" title="Drag to reorder">'+
     '<span></span><span></span><span></span></button>'+(r?thumb(r):ownThumb(it))+
-    '<div class="nm">'+nm+'<small>'+sub+'</small></div>'+
+    '<div class="nm">'+nm+'<small>'+sub+'</small></div>'+'<div class="pp">'+ppHtml(it)+'</div>'+
     '<div class="wcell wb-'+cur().basis+'"><small class="wh">'+(cur().basis==='raw'?'Raw Weight':'Cooked Weight')+'</small><span class="wbd"><input type="number" min="0" step="'+(r?(r.po[2]||25):5)+'" value="'+(+it.g||0)+'" aria-label="weight in grams, '+cur().basis+'"><em>g</em></span></div>'+
-    '<div class="pr">'+(r?rm(per(r,rw.g).price):(ownMac(it)?'<span class="ownno">Not Ours</span>':'&mdash;'))+
+    '<div class="pr">'+(r?rm(per(r,rw.g).price):'<span class="ownno">Not Ours</span>')+
      '<small>'+(r?Math.round(per(r,rw.g).kcal)+' KCALs':(ownMac(it)?Math.round(ownMac(it).kcal)+' KCALs':'Not Ours'))+'</small></div>'+
     '<button class="x" type="button" data-rm="1" aria-label="Remove">&times;</button></div>'}).join('');
   h+='<div class="meal"><div class="mh">'+
    mealSelect(m,mi)+
    '<span class="mac">'+Math.round(t.kcal)+' KCALs<br>Protein - '+Math.round(t.p)+' g<br>Carbs - '+Math.round(t.c)+' g<br>Fat - '+Math.round(t.f)+' g<br><b>'+rm(t.price)+'</b></span>'+
    '<button class="x" type="button" data-delmeal="'+mi+'" aria-label="Remove this meal">&times;</button>'+
-   '</div><div class="rows">'+(rows||'<div class="empty">Nothing in this Meal yet.</div>')+'</div>'+
+   '</div>'+(m.items.length?'<div class="rhead"><span>Item</span><span>Per Portion</span><span>Weight</span><span>Price</span><span></span></div>':'')+'<div class="rows">'+(rows||'<div class="empty">Nothing in this Meal yet.</div>')+'</div>'+
    mfootHtml(m.items)+
    '<div class="addrow">'+
     '<button class="btn o s" type="button" data-add="'+mi+'">+ Add a Dish</button>'+
@@ -818,6 +818,7 @@ $('#dayPanel').addEventListener('input',function(e){
    row.querySelector('.nm small').textContent=rw.g+' g Raw'+(us2?' ( '+us2+' )':'')+
     (rw.why?' — '+rw.why:'');
    row.querySelector('.pr').innerHTML=rm(x.price)+'<small>'+Math.round(x.kcal)+' KCALs</small>'}else{var om=ownMac(it),ps=row.querySelector('.pr small');if(om&&ps)ps.textContent=Math.round(om.kcal)+' KCALs'}
+  var ppc=row.querySelector('.pp');if(ppc)ppc.innerHTML=ppHtml(it);
   refreshTotals()}});
 /* Typing in a weight box must not repaint the page — that would take the cursor with it — so
    every figure that depends on the weight is refreshed in place instead. */
@@ -974,6 +975,7 @@ function ownMac(it){var b=it&&it.b;if(!b)return null;var s=(b.gs>0&&+it.g>0)?(+i
 function ownServ(it){var q=+it.q||1,b=it.b||{};if(b.gs>0&&+it.g>0)return (+it.g)+' g';return (q===1?'1 Serving':(q+' Servings'))+(it.sv?' ( '+it.sv+' )':'')}
 function ownThumb(it){return it&&it.img?'<div class="thumb" role="img" aria-label="'+esc(it.own||'')+'" style="background-image:url('+esc(it.img)+')"></div>':'<div class="thumb none" aria-hidden="true">+</div>'}
 function gramsOf(s){var m=/(\d+(?:\.\d+)?)\s*(?:g|gram|grams)\b/i.exec(s||'');return m?+m[1]:0}
+function ppHtml(it){var r=BYCODE[it.code],x=r?per(r,rawOf(it).g):ownMac(it);if(!x)return '<span class="ppn">&mdash;</span>';return Math.round(x.kcal)+' KCALs<br>Protein '+r1(x.p)+' g<br>Carbs '+r1(x.c)+' g<br>Fat '+r1(x.f)+' g'}
 function addOwn(){
  var nm=$('#ownq').value.trim();if(!nm||PICK==null||OWNBUSY)return;
  OWNBUSY=true;OWNF=null;var btn=$('#ownAdd');btn.disabled=true;
@@ -1783,4 +1785,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 <style id="aera-coach-own">.ownf{margin-top:12px;border:1.5px solid #16479E;border-radius:14px;padding:12px;background:#fff}.ownf-top{display:flex;gap:12px;align-items:center}.ownf-pic{flex:none;width:76px;height:76px;border-radius:12px;background:#E9EEF5 center/cover no-repeat;border:1px solid #DBE1EA}.ownf-top b{display:block;color:#16479E;font-size:16px;line-height:1.25}.ownf-top small{display:block;color:#5A6478;font-size:12.5px;margin-top:3px;line-height:1.35}.ownf-pics{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;align-items:center}.ownf-pics button{width:46px;height:46px;border-radius:9px;border:2px solid #DBE1EA;background:#E9EEF5 center/cover no-repeat;cursor:pointer;padding:0}.ownf-pics button.on{border-color:#FDB913;box-shadow:0 0 0 2px #16479E}.ownf-pics button.nopic{width:auto;padding:0 10px;font:inherit;font-size:12px;font-weight:700;color:#16479E;background:#fff}.ownf-q{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.ownf-q button{font:inherit;font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;border:1.5px solid #16479E;background:#fff;color:#16479E;cursor:pointer}.ownf-q button.on{background:#16479E;color:#FDB913}.ownf-q input{width:74px}.ownf-tot{margin-top:10px;font-weight:800;color:#16479E;font-size:18px}.ownf-tot small{display:block;font-weight:600;font-size:12.5px;color:#5A6478;margin-top:2px}.ownf-act{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.ownbusy{display:flex;align-items:center;gap:8px;margin:10px 0 0}.ownspin{width:16px;height:16px;border-radius:50%;border:2.5px solid #DBE1EA;border-top-color:#16479E;animation:ownspin .8s linear infinite;flex:none}@keyframes ownspin{to{transform:rotate(360deg)}}.pr .ownno{font-size:12px;font-weight:700;color:#5A6478}</style><script id="aera-coach-own-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Find The Macros":"查询营养值","Looking up the Macros…":"正在查询营养值…","How Much?":"份量多少？","Half":"半份","1 Serving":"1 份","2 Servings":"2 份","3 Servings":"3 份","Servings":"份","Add to this Meal":"加入这一餐","Add Without Macros":"不带营养值加入","Cancel":"取消","No Picture":"不要图片","Estimated Figures. Adjust the Servings to match the portion.":"估计数值。请调整份数以符合实际份量。","We could not find the Macros for this one. Try naming it more simply, or add it without them.":"找不到这项的营养值。请用更简单的名称再试，或不带营养值加入。"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Per Serving : (.+)$/,"每份：$1"],[/^Home-Sourced\. Not cooked by AERA · (.+)$/,"自备。非 AERA 烹调 · $1"])}catch(e){}</script>
 
 <script id="aera-coach-broc-zh">try{(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^(.*)Broccoli, same as Cooked Weight(.*)$/,"$1西兰花，与熟重相同$2"])}catch(e){}</script>
-<!-- build 2026-10-14T06:53:49.906Z -->
+
+<style id="aera-coach-table">.meal{border:1.5px solid #16479E!important;border-radius:14px!important}.meal .rhead{display:grid;grid-template-columns:30px 62px minmax(0,1fr) 150px 124px 92px 44px;background:#16479E;border-bottom:3px solid #FDB913}.meal .rhead span{color:#FDB913;font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;text-align:center;padding:10px 6px;border-left:1px solid rgba(255,255,255,.22)}.meal .rhead span:first-child{grid-column:1/4;border-left:0}.rows .row{grid-template-columns:30px 62px minmax(0,1fr) 150px 124px 92px 44px!important;gap:0!important;padding:0!important;min-height:76px;border-top:1px solid #CBD9F0!important;background-image:linear-gradient(#CBD9F0,#CBD9F0),linear-gradient(#CBD9F0,#CBD9F0),linear-gradient(#CBD9F0,#CBD9F0),linear-gradient(#CBD9F0,#CBD9F0);background-position:right 44px top,right 136px top,right 260px top,right 410px top;background-size:1px 100%;background-repeat:no-repeat;background-color:#fff}.rows .row:first-child{border-top:0!important}.rows .row:nth-child(even){background-color:#F5F8FD}.rows .row .grip{justify-self:center}.rows .row .thumb{width:54px;height:54px;justify-self:center}.rows .row .nm{padding:10px 12px 10px 8px}.rows .row .pp{text-align:center;font-size:12.5px;line-height:1.5;color:#4A5568;padding:8px 6px}.rows .row .pp .ppn{color:#9AA3B2}.rows .row .wcell{justify-self:center;width:104px}.rows .row .pr{text-align:center!important;color:#16479E;font-weight:800;padding:0 6px}.rows .row .pr small{display:none!important}.rows .row .pr .ownno{font-size:12px;color:#5A6478}.rows .row .x{justify-self:center}@media (max-width:620px){.meal .rhead{display:none}.rows .row{grid-template-columns:22px 44px minmax(0,1fr) auto 34px!important;grid-template-areas:"g t n n x" "g t pp pp x" "g w w p x"!important;gap:6px 10px!important;padding:10px 12px!important;background-image:none!important;align-items:center!important}.rows .row .grip{grid-area:g}.rows .row .thumb{grid-area:t;width:44px;height:44px;align-self:start}.rows .row .nm{grid-area:n;padding:0}.rows .row .pp{grid-area:pp;text-align:left;padding:0;font-size:12px;line-height:1.45}.rows .row .wcell{grid-area:w;justify-self:start}.rows .row .pr{grid-area:p;text-align:right!important;padding:0}.rows .row .x{grid-area:x;align-self:start}}</style>
+<script id="aera-coach-table-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Item":"项目","Per Portion":"每份","Weight":"重量","Price":"价格"})}catch(e){}</script>
+<!-- build 2026-10-14T06:57:30.478Z -->
