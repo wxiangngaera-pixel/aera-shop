@@ -1325,5 +1325,22 @@ function mount(){if(!C.box)return;var box=document.querySelector(C.box);if(!box|
 setInterval(mount,1200);if(document.readyState!=='loading')mount();else document.addEventListener('DOMContentLoaded',mount);
 window.aeraSignup=open;
 })();</script>
+<script id="aera-zh-group">
+(function(){try{var D=window.AERA_I18N=window.AERA_I18N||{},R=window.AERA_I18N_RE=window.AERA_I18N_RE||[];
+ Object.assign(D,{'My Cash-Back':'我的回扣','My Group':'我的团队','Group':'团队','Group Override':'团队加成','Adjustment':'调整','Adjustment by AERA':'AERA 调整','Group Orders':'团队订单','Group Sales':'团队销售额','Group Cash-Back':'团队回扣','Your Group Override':'您的团队加成','Referrer':'推荐人',
+  'Group Cash-Back is paid to each Referrer in your Group. Your Group Override is on top, and never comes out of theirs.':'团队回扣直接付给团队里的每位推荐人。您的团队加成是额外的，绝不从他们的回扣中扣除。',
+  'Your Group Override is added to your own Cash-Back and paid with it.':'您的团队加成会加进您自己的回扣，一起支付。',
+  'Cash-back is worked out on the meal subtotal after any discount. Delivery, packaging and processing fees are never counted. We settle by bank transfer after each month closes.':'回扣按折扣后的餐点小计计算，运费、包装费与手续费一律不计。每月结束后以银行转账结算。'});
+ var MO={January:1,February:2,March:3,April:4,May:5,June:6,July:7,August:8,September:9,October:10,November:11,December:12};
+ function ml(s){var m=/^(\w+) (\d{4})$/.exec(s);return m&&MO[m[1]]?m[2]+'年'+MO[m[1]]+'月':s}
+ var TIER={'Normal Referrer':'普通推荐人','Fitness Studio / Gym':'健身房 / 工作室','Fitness Influencer':'健身网红'};
+ R.push([/^Cash-Back is ([\d.]+)% of the meal subtotal(, plus any Group Override or Adjustment by AERA)?\.$/,function(a,p,x){return '回扣为餐点小计的 '+p+'%'+(x?'，另加团队加成或 AERA 调整':'')+'。'}]);
+ R.push([/^([\d.]+)% of RM ([\d.,]+) Group Sales · (\d+) Referrers?(\. It is added to your own Cash-Back and paid with it\.)?$/,function(a,p,s,n,x){return '团队销售额 RM '+s+' 的 '+p+'% · '+n+' 位推荐人'+(x?'。会加进您自己的回扣，一起支付。':'')}]);
+ R.push([/^(Normal Referrer|Fitness Studio \/ Gym|Fitness Influencer) · ([\d.]+)% Cash-Back$/,function(a,t,p){return TIER[t]+' · 回扣 '+p+'%'}]);
+ R.push([/^Your Group In (.+)$/,function(a,m){return ml(m)+' 的团队'}]);
+ R.push([/^Group Orders In (.+)$/,function(a,m){return ml(m)+' 的团队订单'}]);
+ R.push([/^No group orders in (.+)\.$/,function(a,m){return ml(m)+' 没有团队订单。'}]);
+}catch(e){}})();
+</script>
 </body>
 </html>
