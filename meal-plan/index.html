@@ -1658,6 +1658,44 @@ function add(){document.body.appendChild(b);sync()}if(document.body)add();else d
  try{if(window.STEP===4&&window.PLAN)renderPlan()}catch(e){}
 })();
 </script>
-<!-- build 2026-10-14T07:40:28.783Z -->
+<!-- build 2026-10-14T07:46:10.343Z -->
+<script id="aera-prefs-v2">/* Meal Preferences v2 ( PREVIEW : ?prefsv2=1 turns it on for this browser, ?prefsv2=0 turns it off ).
+   Number badge for part-picked cards, two cards a row on phones, folded sections with a summary,
+   a Build My Plan bar stuck to the bottom on phones, and a warning when the picks are too narrow. */
+(function(){var L;try{L=window.localStorage;var q=location.search;if(/[?&]prefsv2=1/.test(q))L.setItem('aera.prefsv2','1');if(/[?&]prefsv2=0/.test(q))L.removeItem('aera.prefsv2');if(L.getItem('aera.prefsv2')!=='1')return}catch(e){return}
+ var D=document;D.documentElement.classList.add('pv2');
+ try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{'None picked':'未选择','Your Week will repeat the same Dishes. Add a few more for variety.':'您的一周会重复同样的菜色。多选几道，餐点更有变化。'});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^(\d+) of (\d+) picked$/,'已选 $1 / $2'],[/^All (\d+) picked$/,'全选 $1 项'])}catch(e){}
+ var st=D.createElement('style');st.id='aera-prefs-v2-css';st.textContent=
+ 'html.pv2 #s3 .ptile.on.part::before{content:attr(data-n)!important;font-size:14px!important}'+
+ 'html.pv2 #s3 .grp.v2fold>.grphd{cursor:pointer;position:relative;padding-right:30px}'+
+ 'html.pv2 #s3 .grp.v2fold>.grphd::after{content:"▾";position:absolute;right:4px;top:50%;transform:translateY(-50%);color:#16479E;font-size:16px;transition:transform .2s}'+
+ 'html.pv2 #s3 .grp.v2fold.v2open>.grphd::after{transform:translateY(-50%) rotate(180deg)}'+
+ 'html.pv2 #s3 .grp.v2fold:not(.v2open)>:not(.grphd):not(.v2pwarn){display:none!important}'+
+ 'html.pv2 #s3 .v2sum{display:inline-block;margin-left:8px;font:800 11px Montserrat,system-ui,sans-serif;color:#16479E;background:#FFF3CC;border:1px solid #FDB913;border-radius:999px;padding:2px 9px;vertical-align:middle;letter-spacing:.02em;text-transform:none}'+
+ 'html.pv2 #s3 .v2pwarn{margin:8px 0 0;background:#FFF4E5;border:1px solid #F5B66B;color:#8A4B00;border-radius:10px;padding:8px 10px;font-size:12.5px;font-weight:600}'+
+ '@media (max-width:640px){html.pv2 #s3 .pgrid{grid-template-columns:1fr 1fr!important;gap:10px!important}'+
+ 'html.pv2 #s3 .ptile span{font-size:12px!important}'+
+ 'html.pv2 #s3 .dishes[open] .dl{position:fixed!important;left:12px!important;right:12px!important;top:auto!important;bottom:84px!important;width:auto!important;max-width:none!important;max-height:58vh!important;z-index:80!important}'+
+ 'html.pv2 body.v2ft-on .v2ftbar.bot{position:fixed;left:0;right:0;bottom:0;margin:0!important;border-radius:16px 16px 0 0;z-index:60;padding:10px 12px calc(10px + env(safe-area-inset-bottom));flex-wrap:nowrap}'+
+ 'html.pv2 body.v2ft-on .v2ftbar.bot span{display:none}html.pv2 body.v2ft-on .v2ftbar.bot .go{flex:1}'+
+ 'html.pv2 body.v2ft-on #s1,html.pv2 body.v2ft-on #s2,html.pv2 body.v2ft-on #s3{padding-bottom:84px}}';
+ D.head.appendChild(st);
+ function cnt(t){var x=(t.querySelector('.dcount')||{}).textContent||'';var m=/^(\d+) of (\d+)/.exec(x);if(m)return +m[1];m=/All (\d+)/.exec(x);if(m)return +m[1];if(/^1 /.test(x))return 1;return 1}
+ function run(){var s3=D.getElementById('s3');if(!s3)return;
+  [].forEach.call(s3.querySelectorAll('.ptile'),function(t){var x=(t.querySelector('.dcount')||{}).textContent||'',m=/^(\d+) of \d+/.exec(x);
+   if(m){if(t.getAttribute('data-n')!==m[1])t.setAttribute('data-n',m[1]);t.classList.add('part')}else if(t.classList.contains('part')){t.classList.remove('part');t.removeAttribute('data-n')}});
+  [].forEach.call(s3.querySelectorAll('.grp'),function(g){var hd=g.querySelector(':scope > .grphd');if(!hd)return;
+   if(!g.classList.contains('v2fold')){g.classList.add('v2fold');hd.addEventListener('click',function(e){if(e.target.closest('button'))return;g.classList.toggle('v2open')})}
+   var tiles=[].slice.call(g.querySelectorAll('.pgrid .ptile')).filter(function(t){return !t.classList.contains('oos')}),on=tiles.filter(function(t){return t.classList.contains('on')});
+   var txt=!tiles.length?'':!on.length?'None picked':(on.length===tiles.length?'All '+tiles.length+' picked':on.length+' of '+tiles.length+' picked');
+   var sm=hd.querySelector('.v2sum');if(!sm){sm=D.createElement('span');sm.className='v2sum';var tt=hd.firstChild;hd.insertBefore(sm,tt&&tt.nextSibling)}
+   var tx=sm.textContent;if(tx!==txt&&!(window.AERA_I18N&&window.AERA_I18N[txt]===tx))sm.textContent=txt;
+   var isPC=!!g.querySelector('#prefP,#prefC'),w=g.querySelector(':scope > .v2pwarn');
+   var dishes=on.reduce(function(a,t){return a+cnt(t)},0),meals=((window.Q&&+Q.days)||7)*((window.Q&&+Q.mpd)||2),bad=isPC&&on.length>0&&dishes<3&&meals>=5;
+   if(bad&&!w){w=D.createElement('div');w.className='v2pwarn';w.textContent='Your Week will repeat the same Dishes. Add a few more for variety.';hd.parentNode.insertBefore(w,hd.nextSibling)}
+   else if(!bad&&w)w.parentNode.removeChild(w)})}
+ var tm=0;function soon(){if(tm)return;tm=setTimeout(function(){tm=0;try{run()}catch(e){}},120)}
+ function boot(){run();var s3=D.getElementById('s3');if(s3)new MutationObserver(soon).observe(s3,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class']})}
+ if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',boot);else boot()})();</script>
 </body>
 </html>
