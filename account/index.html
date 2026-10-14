@@ -3058,7 +3058,7 @@ function apply(row){var loc=snap(),rem=row?{cart:norm(row.cart),plan:row.plan||n
 async function pull(){if(!cli)return;try{var ss=(await cli.auth.getSession()).data.session;if(!ss){tok=null;uid=null;return}
   tok=ss.access_token;uid=ss.user.id;email=String(ss.user.email||'').toLowerCase();
   var q=await cli.from('carts').select('cart,plan,at').eq('user_id',uid).maybeSingle();if(q.error)return;apply(q.data)}catch(e){}}
-function start(){try{cli=window.supabase.createClient(SBU,SBK,{auth:{persistSession:true,autoRefreshToken:false,detectSessionInUrl:false}})}catch(e){return}
+function start(){try{var g0=window.sb;cli=(g0&&g0.auth&&typeof g0.from==='function')?g0:window.supabase.createClient(SBU,SBK,{auth:{persistSession:true,autoRefreshToken:false,detectSessionInUrl:false,lock:function(n,t,f){return f()}}})}catch(e){return}
  pull();setInterval(function(){cli.auth.getSession().then(function(r){var ss=r.data.session;tok=ss?ss.access_token:null})},600000);
  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')pull()});
  window.addEventListener('storage',function(e){if(e.key==='sb-swpprjvubgcdsojapaad-auth-token')pull()})}
@@ -3705,7 +3705,7 @@ if(document.readyState==='complete')later();else window.addEventListener('load',
 <script id="aera-coach-invites">/* A Plan sent by a Coach waits here until the customer accepts it. Accept opens it as their Personalised
    Meal Plan ( with the Coach's Referral Code ready at checkout ) ; Decline just removes it. */
 (function(){var D=document,SBU='https://swpprjvubgcdsojapaad.supabase.co',AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0',PLAN='https://aeramealprep.net/meal-plan/';
- try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{'Your Coach sent you a Meal Plan':'您的教练给您发送了餐单','Accept & Open My Plan':'接受并打开我的餐单','Not Now, Decline':'暂不，拒绝'})}catch(e){}
+ try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{'Your Coach sent you a Meal Plan':'您的教练给您发送了餐单','Accept & Open My Plan':'接受并打开我的餐单','Not Now, Decline':'暂不，拒绝','Accept to open it as your Plan. You can still change Portions and Dishes before you order.':'接受后会作为您的餐单打开。下单前仍可更改分量与菜色。','Opening…':'正在打开…','We could not do that just now. Please try again.':'暂时无法完成，请再试一次。'})}catch(e){}
  function tok(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var o=JSON.parse(localStorage.getItem(k)||'null');if(o&&o.currentSession)o=o.currentSession;if(o&&o.access_token&&o.user&&(!o.expires_at||o.expires_at*1000>Date.now()+30000))return{t:o.access_token,em:String(o.user.email||'').toLowerCase()}}}}catch(e){}return null}
  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
  function api(p,o){var a=tok();o=o||{};o.headers=Object.assign({apikey:AK,Authorization:'Bearer '+a.t,'Content-Type':'application/json'},o.headers||{});return fetch(SBU+'/rest/v1/'+p,o)}
