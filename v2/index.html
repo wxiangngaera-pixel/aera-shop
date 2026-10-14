@@ -442,7 +442,7 @@ function checkout(){
 
 /* ---------- Quick Plan : five taps instead of a long form ---------- */
 function quick(){
- Object.assign(ZH,{'What is your Goal?':'您的目标是什么？','We set your calories and macros around it.':'我们会据此设定您的热量与宏量营养素。',
+ Object.assign(ZH,{'What is your Goal?':'您的目标是什么？','We set your Calories and Macros around it.':'我们会据此设定您的热量与宏量营养素。',
   'Lose Fat':'减脂','Lean and Defined, without going hungry.':'变瘦变结实，不挨饿。','Build Lean Muscle':'增加精瘦肌肉','More Muscle, lesser Fat':'增肌，少长脂肪。',
   'Bulk Up':'增重增肌','Size and Strength, more Carbs.':'追求体型与力量，碳水更多。','Eat Healthy':'健康饮食','Balanced Meals, keep my Weight.':'均衡饮食，保持体重。',
   'About You':'关于您','Used only to work out your Daily Calories.':'仅用于计算您每日所需热量。','Male':'男','Female':'女','Date of Birth':'出生日期','Height ( CM )':'身高（厘米）','Weight ( KG )':'体重（公斤）',
@@ -517,7 +517,7 @@ function quick(){
   if(s==='about')return !!(A.gender&&/^\d{4}-\d{2}-\d{2}$/.test(A.dob)&&+A.height>=120&&+A.height<=230&&+A.weight>=30&&+A.weight<=250);
   return true}
  function paint(){try{if(D.activeElement&&W.contains(D.activeElement))D.activeElement.blur()}catch(x){}var fl=flow(),s=fl[cur],h='';
-  if(s==='goal'){h='<h2>'+t('What is your Goal?')+'</h2><p class="sb">'+t('We set your calories and macros around it.')+'</p>'+cardList(GOALS2,A.goal,'goal');
+  if(s==='goal'){h='<h2>'+t('What is your Goal?')+'</h2><p class="sb">'+t('We set your Calories and Macros around it.')+'</p>'+cardList(GOALS2,A.goal,'goal');
    if(known()){var q=Qg();h+='<div class="known"><span><b>'+t('Using your saved details')+'</b><br>'+esc2((q.gender==='f'?t('Female'):t('Male'))+' · '+(q.age?q.age+' '+t('yrs'):'')+' · '+q.height+' cm · '+q.weight+' kg')+'</span><a href="#" data-edit="1">'+t('Change')+'</a></div>'}}
   else if(s==='about'){var mx=new Date().getFullYear()-14;
    h='<h2>'+t('About You')+'</h2><p class="sb">'+t('Used only to work out your Daily Calories.')+'</p>'+
@@ -881,5 +881,5 @@ tapDemo();
 })();
 
 /*AERA-V2-END*/</script>
-<!-- build 2026-10-14T07:19:47.350Z -->
+<!-- build 2026-10-14T07:25:33.077Z -->
 </body></html>
