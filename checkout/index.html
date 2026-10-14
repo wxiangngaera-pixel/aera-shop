@@ -134,6 +134,7 @@ window.addEventListener('load',function(){coRider();setTimeout(coRider,1500)});
 .apbox td,.apbox td.r{text-align:center!important;padding:5px 6px!important;border-top:1px solid #CBD9F0!important}
 .apbox tr:nth-child(even) td{background:#F5F8FD}
 </style>
+<style id="aera-pv-size">.pvbento{width:176px!important}@media(max-width:520px){.pvbento{width:140px!important}}</style>
 
 <!-- SEO Meta Tags -->
 <title>Order — AERA Meal Prep</title>
@@ -3487,14 +3488,15 @@ try{Object.assign(window.AERA_I18N||{},{"Browse the Menu":"浏览菜单"})}catch
   i.onerror=function(){done('')};i.src=u}
  function get(u,tw,th,cb){var k=u+'|'+tw+'x'+th;if(k in C)return cb(C[k]);(W[k]=W[k]||[]).push(cb);if(W[k].length>1)return;Q.push([k,u,tw,th]);pump()}
  function pump(){if(busy||!Q.length)return;busy=1;var q=Q.shift();make(q[1],q[2],q[3],function(v){C[q[0]]=v;var L=W[q[0]]||[];delete W[q[0]];L.forEach(function(f){try{f(v)}catch(e){}});busy=0;setTimeout(pump,10)})}
- function sharpen(el){if(el.__sharp)return;var u=urlOf(el);if(!u)return;var w=el.offsetWidth,h=el.offsetHeight;if(w<4||h<4)return;
-  var tw=Math.min(600,Math.round(w*DPR*1.5)),th=Math.min(600,Math.round(h*DPR*1.5));el.__sharp=1;
-  get(u,tw,th,function(v){if(!v||!el.isConnected||urlOf(el)!==u)return;el.style.backgroundImage='url("'+v+'")';el.style.backgroundSize='cover';el.style.backgroundPosition='center'})}
+ function sharpen(el){var u=el.__src||urlOf(el);if(!u)return;var w=el.offsetWidth,h=el.offsetHeight;if(w<4||h<4)return;var sz=w+'x'+h;if(el.__sharp===sz)return;
+  var tw=Math.min(600,Math.round(w*DPR*1.5)),th=Math.min(600,Math.round(h*DPR*1.5));el.__src=u;el.__sharp=sz;
+  get(u,tw,th,function(v){if(!v||!el.isConnected||el.__src!==u)return;el.style.backgroundImage='url("'+v+'")';el.style.backgroundSize='cover';el.style.backgroundPosition='center'})}
+ window.addEventListener('resize',function(){clearTimeout(t);t=setTimeout(function(){t=0;scan()},200)});
  function scan(){var l=document.querySelectorAll('.pvbento b');for(var i=0;i<l.length;i++)sharpen(l[i])}
  var t=0;new MutationObserver(function(){if(t)return;t=setTimeout(function(){t=0;scan()},120)}).observe(document.documentElement,{childList:true,subtree:true});
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',scan);else scan();
 })();
 </script>
-<!-- build 1791956151116 -->
+<!-- build 1791956381252 -->
 </body>
 </html>
