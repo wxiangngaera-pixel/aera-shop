@@ -1931,6 +1931,33 @@ body.ct-sent #coachBuild,body.ct-dash #coachBuild,body.ct-sent .finish,body.ct-d
  function boot(){nav();btn();var n=0,iv=setInterval(function(){n++;btn();if(D.getElementById('doClient')&&D.querySelector('.v2cmenu #doSend')||n>40)clearInterval(iv)},300);
   if(/[#&?]sent\b/.test(location.hash+location.search))setTab('sent');if(/[#&?]dash\b/.test(location.hash+location.search))setTab('dash')}
  if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',boot);else setTimeout(boot,0)})();</script>
+<script id="aera-zh-coach2">
+(function(){try{var D=window.AERA_I18N=window.AERA_I18N||{},R=window.AERA_I18N_RE=window.AERA_I18N_RE||[];
+ Object.assign(D,{
+  'Write the Plan straight into our Kitchen List':'把餐单直接写进我们的厨房清单',
+  'Pick the Dishes, set the Weights, and hand it over. Nothing is typed up twice and nothing is read by a machine, so nothing can be misread. Keep as many Clients here as you like.':'选菜、设重量，然后交给我们。不用重复输入，也不经机器读取，所以不会读错。客户数量不限。',
+  'Photo Reader':'照片读取',
+  'will read it out for you. Photograph the sheet, check what it read, and it goes straight to our Kitchen. This Page is for building a Plan from our Dish List.':'会帮您读出内容。拍下餐单、核对读到的内容，就会直接送到我们的厨房。本页用于从我们的菜单编排餐单。',
+  '✓ Email confirmed':'✓ 电邮已确认',
+  'Our Kitchen weighs Raw. Pick Cooked if that is how you write, and we convert every line ourselves. You will see both figures on each row.':'我们的厨房按生重称量。若您习惯写熟重，请选「熟重」，我们会逐行换算，每一行都会显示两个数字。',
+  'DEMO · Nothing is saved or sent ·':'演示 · 不会保存或发送 ·',
+  'Exit Demo':'退出演示',
+  'Plans you sent to your Clients. A Plan only becomes theirs once they tap Accept in their AERA Account.':'您发给客户的餐单。客户在其 AERA 账户点「接受」后，餐单才归他们。',
+  'Clients on AERA':'在 AERA 的客户',
+  'Sales & Cash-Back':'销售与返现',
+  'Orders from Clients who use your Referral Code, your Cash-Back each Month and your Cash-Back receipts. Sign in to the Referrer Portal below with the same email if it asks.':'使用您推荐码的客户订单、每月返现与返现收据。若下方推荐人专区要求登录，请用同一个电邮。',
+  'Pending':'待付','Paid':'已付','Home-Sourced':'自备','1 Extra Packaging':'额外包装 1 个'
+ });
+ var MO={January:'1月',February:'2月',March:'3月',April:'4月',May:'5月',June:'6月',July:'7月',August:'8月',September:'9月',October:'10月',November:'11月',December:'12月'};
+ var WHY={'Raw, as you entered it':'生重，按您输入','Protein, x 1.5':'蛋白质，× 1.5','Broccoli, same as Cooked Weight':'西兰花，与熟重相同','Vegetable, + 25 g':'蔬菜，+ 25 克','No cooked rule yet, we weigh it':'暂无熟重规则，按此称量'};
+ R.push([/^([\d.]+) g Raw — (.+)$/,function(a,g,w){var x=WHY[w]||(/^Rice, ÷ ([\d.]+)$/.test(w)?w.replace(/^Rice, ÷ ([\d.]+)$/,'米饭，÷ $1'):w);return g+' 克生重 — '+x}]);
+ R.push([/^Protein ([\d.]+) g$/,'蛋白质 $1 克']);R.push([/^Carbs ([\d.]+) g$/,'碳水 $1 克']);R.push([/^Fat ([\d.]+) g$/,'脂肪 $1 克']);
+ R.push([/^Food RM ([\d.,]+)$/,'餐费 RM $1']);
+ R.push([/^(\d+) Meals across (\d+) days · RM ([\d.,]+)$/,'$2 天共 $1 餐 · RM $3']);
+ R.push([/^(Sales|Orders|Cash-Back|Paid Out) · (\w+)$/,function(a,k,m){return ({'Sales':'销售','Orders':'订单','Cash-Back':'返现','Paid Out':'已付出'})[k]+' · '+(MO[m]||m)}]);
+ R.push([/^Your Clients are saved to your AERA Account \( (.+) \) and open on any Device\. They are not sent to our Kitchen until you press Send to AERA\.$/,'您的客户保存在您的 AERA 账户（$1），任何设备都能打开。按下「发送给 AERA」之前，不会送到我们的厨房。']);
+}catch(e){}})();
+</script>
 </body>
 </html>
 <script id="aera-coach-pack-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Packaging Method":"包装方式","MAP Bento Box":"MAP 便当盒","Vacuum Packed":"真空包装","Oxygen replaced with Nitrogen / CO₂ and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life. RM 1.80 per Meal.":"以氮气 / 二氧化碳取代氧气并封顶。食物不会被压扁。请冷藏，保质期 7 天。每餐 RM 1.80。","Same freshness, flatter pack. Takes far less Fridge space, compresses the Food slightly. RM 1.80 per Meal.":"同样新鲜，包装更扁平。更省冰箱空间，食物会被轻微压扁。每餐 RM 1.80。","Home-Sourced. Not cooked by AERA":"自备。非 AERA 烹调","Not Ours":"非我们的"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Protein - ([\d.]+) g$/,"蛋白 $1 克"],[/^Carbs - ([\d.]+) g$/,"碳水 $1 克"],[/^Fat - ([\d.]+) g$/,"脂肪 $1 克"],[/^MAP Bento Box (RM [\d.]+)$/,"MAP 便当盒 $1"],[/^Vacuum Packed (RM [\d.]+)$/,"真空包装 $1"])}catch(e){}</script>
