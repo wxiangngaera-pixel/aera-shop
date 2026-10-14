@@ -1139,12 +1139,20 @@ function pour(mb,tray,b,u,d){var m=u&&u.match(/([^\/]+)\.(jpe?g|png|webp)/i),s=m
  var v=D.createElement('video');b._pv=v;v.className='sx30-pour';v.crossOrigin='anonymous';v.muted=true;v.defaultMuted=true;v.setAttribute('muted','');v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';
  v.style.cssText='left:'+vl+'px;top:'+vt+'px;width:'+VW+'px;height:'+VH+'px;clip-path:inset('+y0+'px '+(VW-x-bw)+'px '+(VH-y-bh)+'px '+x+'px round '+r+'px)';
  var pad=bw*((b.offsetTop/h>=.26)?.5:.18),cx=Math.max(0,x-pad),cw=Math.min(VW,x+bw+pad)-cx,ch=Math.max(0,(b.offsetTop/h>=.26)?y:ty),cv=D.createElement('canvas'),dp=Math.min(2,W.devicePixelRatio||1),g=null;
+ /* the compartment itself is drawn through a canvas too, keyed against the clip's empty first frame : only the food
+    shows, landing on OUR tray, so the clip's own tray walls ( the frame ) never appear */
+ var c2=D.createElement('canvas'),g2=null,BG2=null;c2.className='sx30-pin';c2.width=Math.max(1,Math.round(bw*dp));c2.height=Math.max(1,Math.round(bh*dp));
+ c2.style.cssText='position:absolute;left:'+(vl+x)+'px;top:'+(vt+y)+'px;width:'+bw+'px;height:'+bh+'px;border-radius:'+r+'px;pointer-events:none;z-index:7;transition:opacity .3s;opacity:0';try{g2=c2.getContext('2d',{willReadFrequently:true})}catch(e){}
  cv.className='sx30-pout';cv.width=Math.max(1,Math.round(cw*dp));cv.height=Math.max(1,Math.round(ch*dp));cv.style.cssText='left:'+(vl+cx)+'px;top:'+vt+'px;width:'+cw+'px;height:'+ch+'px';
  /* a lower compartment : the falling food is cut out of the shot and carried down OVER the compartment above ( in the air, with a shadow ), then lands */
  var DY=0,BG=null;if(b.offsetTop/h>=.26){side=1;DY=Math.max(0,y-ch);cv.style.mixBlendMode='normal';cv.style.filter='drop-shadow(0 18px 12px rgba(0,0,0,.4))';cv.style.zIndex='8'}try{g=cv.getContext('2d')}catch(e){}
  b.style.visibility='hidden';v.style.opacity='0';cv.style.opacity='0';var done=false,go=false,raf=0,side=side||0;
- function rm(){if(raf)cancelAnimationFrame(raf);raf=0;if(v.parentNode)v.parentNode.removeChild(v);if(cv.parentNode)cv.parentNode.removeChild(cv)}v._rm=rm;
- function draw(){raf=0;if(done||!g)return;var vw=v.videoWidth,vh=v.videoHeight;if(vw&&ch>2){try{g.globalCompositeOperation='source-over';g.drawImage(v,cx/VW*vw,0,cw/VW*vw,ch/VH*vh,0,0,cv.width,cv.height);
+ function rm(){if(raf)cancelAnimationFrame(raf);raf=0;if(v.parentNode)v.parentNode.removeChild(v);if(cv.parentNode)cv.parentNode.removeChild(cv);if(c2.parentNode)c2.parentNode.removeChild(c2)}v._rm=rm;
+ function draw(){raf=0;if(done||!g)return;var vw=v.videoWidth,vh=v.videoHeight;
+  if(g2&&vw){try{var W3=c2.width,H3=c2.height;g2.drawImage(v,x/VW*vw,y/VH*vh,bw/VW*vw,bh/VH*vh,0,0,W3,H3);var id2=g2.getImageData(0,0,W3,H3),q2=id2.data,k2,e1,e2,e3,d3;
+   if(!BG2&&v.currentTime<=.3)BG2=new Uint8ClampedArray(q2);
+   if(BG2){for(k2=0;k2<q2.length;k2+=4){e1=q2[k2]-BG2[k2];e2=q2[k2+1]-BG2[k2+1];e3=q2[k2+2]-BG2[k2+2];d3=Math.sqrt(e1*e1+e2*e2+e3*e3);q2[k2+3]=d3<22?0:d3>55?255:Math.round((d3-22)/33*255)}g2.putImageData(id2,0,0);c2.style.opacity=''}
+   else g2.clearRect(0,0,W3,H3)}catch(e){g2=null;v.style.opacity='';c2.style.opacity='0'}}if(vw&&ch>2){try{g.globalCompositeOperation='source-over';g.drawImage(v,cx/VW*vw,0,cw/VW*vw,ch/VH*vh,0,0,cv.width,cv.height);
   if(1){var W2=cv.width,H2=cv.height,id=g.getImageData(0,0,W2,H2),q=id.data,n=q.length,k,dr,dg,db,dd;
    /* the clip's own first frame ( the empty tray ) is the clean plate : whatever differs from it is food in the air */
    if(!BG){if(v.currentTime>.3){g.clearRect(0,0,W2,H2);raf=requestAnimationFrame(draw);return}BG=new Uint8ClampedArray(q)}
@@ -1152,10 +1160,10 @@ function pour(mb,tray,b,u,d){var m=u&&u.match(/([^\/]+)\.(jpe?g|png|webp)/i),s=m
    var du=v.duration||4,ct=v.currentTime;cv.style.opacity=ct>du-.6?String(Math.max(0,(du-ct)/.6)):''}}catch(e){}}raf=requestAnimationFrame(draw)}
  function fin(fb){if(done)return;done=true;if(raf)cancelAnimationFrame(raf);raf=0;if(b._pv!==v){rm();return}b._pv=null;b.style.visibility='';
   if(fb){rm();if(ppour(mb,tray,b,u,0))return;var dc=dropCls(b,tray);b.classList.remove('sx30-drop','sx30-dropr');void b.offsetWidth;b.classList.add(dc);setTimeout(function(){b.classList.remove(dc)},860);return}
-  v.style.opacity='0';cv.style.opacity='0';setTimeout(rm,320);tray.classList.remove('sx30-pop');void tray.offsetWidth;tray.classList.add('sx30-pop')}
- v.addEventListener('ended',function(){fin(false)});v.addEventListener('error',function(){fin(true)});v.addEventListener('playing',function(){if(done)return;go=true;b.style.visibility='hidden';v.style.opacity='';cv.style.opacity='';if(!raf)draw()});
+  v.style.opacity='0';cv.style.opacity='0';c2.style.opacity='0';setTimeout(rm,320);tray.classList.remove('sx30-pop');void tray.offsetWidth;tray.classList.add('sx30-pop')}
+ v.addEventListener('ended',function(){fin(false)});v.addEventListener('error',function(){fin(true)});v.addEventListener('playing',function(){if(done)return;go=true;b.style.visibility='hidden';v.style.opacity=g2?'0':'';cv.style.opacity='';if(!raf)draw()});
  setTimeout(function(){if(!go)fin(true)},5000+d);setTimeout(function(){fin(false)},9000+d);
- v.src=/^https?:/.test(s)?s:'https://my.chatbees.io/uploads/feedback/upload_'+s+'.mp4';mb.appendChild(v);if(ch>2)mb.appendChild(cv);
+ v.src=/^https?:/.test(s)?s:'https://my.chatbees.io/uploads/feedback/upload_'+s+'.mp4';mb.appendChild(v);mb.appendChild(c2);if(ch>2)mb.appendChild(cv);
  setTimeout(function(){if(done)return;v.playbackRate=1.3;var q=v.play();if(q&&q.catch)q.catch(function(){fin(true)})},d);
  return true}
 /* the sauce goes in its own vacuum bag beside the tray ( the plan names it in the tray's aria-label ) */
@@ -1262,5 +1270,6 @@ try{var _no=D.createElement('style');_no.id='sx30-off';_no.textContent="#sx30Cur
 ready(function(){setTimeout(start,0)});
 })();
 
-/*AERA-MOTION-END*/</script><!-- build 1791928081845 -->
+/*AERA-MOTION-END*/</script>
+<!-- build 1791951591042 -->
 </body></html>
