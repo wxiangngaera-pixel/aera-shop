@@ -523,7 +523,7 @@ function quick(){
    h='<h2>'+t('About You')+'</h2><p class="sb">'+t('Used only to work out your Daily Calories.')+'</p>'+
     '<div class="seg"><button type="button" data-gender="m" class="'+(A.gender==='m'?'on':'')+'">'+t('Male')+'</button><button type="button" data-gender="f" class="'+(A.gender==='f'?'on':'')+'">'+t('Female')+'</button></div>'+
     '<div class="fld"><label class="lb2" for="v2dob">'+t('Date of Birth')+'</label><input type="date" id="v2dob" min="1926-01-01" max="'+mx+'-12-31" value="'+esc2(A.dob)+'"></div>'+
-    '<div class="two2"><div class="fld"><label class="lb2" for="v2h">'+t('Height ( CM )')+'</label><input type="number" id="v2h" inputmode="numeric" min="120" max="230" placeholder="170" value="'+esc2(A.height||'')+'"></div>'+
+    '<div class="two2"><div class="fld"><label class="lb2" for="v2h">'+t('Height ( CM )')+'</label><input type="number" id="v2h" inputmode="decimal" step="0.1" min="120" max="230" placeholder="170" value="'+esc2(A.height||'')+'"></div>'+
     '<div class="fld"><label class="lb2" for="v2w">'+t('Weight ( KG )')+'</label><input type="number" id="v2w" inputmode="decimal" min="30" max="250" step="0.1" placeholder="70" value="'+esc2(A.weight||'')+'"></div></div><div class="er" id="v2er"></div>'}
   else if(s==='act'){h='<h2>'+t('How Active are you?')+'</h2><p class="sb">'+t('Used only to work out your Daily Calories.')+'</p>'+cardList(ACTS,A.act,'act')}
   else if(s==='week'){h='<h2>'+t('Your Week')+'</h2><p class="sb">'+t('How much of your Week should AERA cover?')+'</p><label class="lb2">'+t('How many Days?')+'</label><div class="seg">'+[5,6,7].map(function(d){return '<button type="button" data-days="'+d+'" class="'+(A.days===d?'on':'')+'">'+d+'<small>'+t('Days')+'</small></button>'}).join('')+'</div>'+
@@ -935,5 +935,5 @@ tapDemo();
 })();
 
 /*AERA-V2-END*/</script>
-<!-- build 2026-10-14T07:35:26.257Z -->
+<!-- build 2026-10-14T08:42:18.861Z -->
 </body></html>
