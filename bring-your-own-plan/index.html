@@ -572,7 +572,8 @@ fetch(CAT_URL,{cache:'no-cache'}).then(function(r){return r.text()}).then(functi
   return{code:o.c,name:(d.n[o.n[0]]||'')+nm,cat:L.charAt(o.cat),
    sq:(d.q&&d.q[i])||100,kcal:+o.kcal||0,p:+o.p||0,c:+o.cb||0,f:+o.f||0,pr:+o.pr||0,
    po:(d.o&&d.o[o.po])||[50,300,25],
-   img:(function(){var im=d.i&&d.i[o.img];return im?d.p[im[0]]+im[1]+(im[2]||'.jpg'):''})()}});
+   img:(function(){var im=d.i&&d.i[o.img];return im?d.p[im[0]]+im[1]+(im[2]||'.jpg'):''})(),
+   sub:(d.s&&d.s[o.sub])||''}});
  BYCODE={};MENU.forEach(function(x){BYCODE[x.code]=x});
  if(PLAN)paint()}).catch(function(){});
 /* Macros and price for g grams of one dish, and the kitchen's allowed portions for it. */
@@ -974,7 +975,8 @@ function ppCase(s){s=String(s||'');return s&&s===s.toUpperCase()?s.toLowerCase()
 function picBento(cs){var P=[],C=null,V=[],G=[];
  cs.forEach(function(x){var c=x.r.cat;if(c==='p'){if(P.length<2)P.push(x)}else if(c==='c'){if(!C)C=x}else if(c==='v'){if(V.length<2)V.push(x)}else if(c==='g')G.push(x)});
  var L=V.concat(G).slice(0,2);
- var cell=function(x,cls){if(!x)return '<b class="'+cls+' empty"></b>';return '<b class="'+cls+'"'+(x.r.img?' style="background-image:url('+x.r.img+')"':'')+'></b>'};
+ var pic=function(r){if(r.img)return r.img;for(var i=0;i<MENU.length;i++){if(MENU[i].sub&&MENU[i].sub===r.sub&&MENU[i].img)return MENU[i].img}return ''};
+ var cell=function(x,cls){if(!x)return '<b class="'+cls+' empty"></b>';var u=pic(x.r);return '<b class="'+cls+'"'+(u?' style="background-image:url('+u+')"':'')+'></b>'};
  return '<div class="bento" role="img" aria-label="'+esc(cs.map(function(x){return x.r.name}).join(', '))+'" style="background-image:url('+PP_TRAY+')">'+
   (P.length>1?cell(P[0],'pro h1')+cell(P[1],'pro h2'):cell(P[0],'pro'))+cell(C,'crb')+
   (L.length>1?cell(L[0],'veg w1')+cell(L[1],'veg w2'):cell(L[0],'veg'))+'</div>'}
@@ -1519,6 +1521,6 @@ function done(){if(--left>0)return;READY=true;all(D)}
 ['/img1/','/img2/','/img3/','/img4/'].forEach(function(p){fetch(p).then(function(r){return r.ok?r.text():''}).then(function(t){var a=t.indexOf('/*IMGPACK-START*/'),b=t.indexOf('/*IMGPACK-END*/');if(a>=0&&b>a){var j=JSON.parse(t.slice(a+17,b));for(var k in j){var u=blob(j[k]);if(u)MAP[k]=u+'#/'+k.split('/').pop()}}all(D)}).catch(function(){}).then(done)});
 setTimeout(function(){if(!READY){FAIL=true;all(D)}},9000);
 })();</script>
-<!-- build 1791949148728 -->
+<!-- build 1791949279424 -->
 </body>
 </html>
