@@ -2269,7 +2269,7 @@ if(window.aeraRetranslate)window.aeraRetranslate();
 </script>
 
 <!-- AERA concierge : start -->
-<script src="https://my.chatbees.io/widget.js" data-widget="48507863" async></script>
+<script>/* the concierge loads once the page is up, or straight away if they open the side tab */(function(){var d=0;function go(){if(d)return;d=1;var s=document.createElement('script');s.src='https://my.chatbees.io/widget.js';s.async=true;s.setAttribute('data-widget','48507863');document.body.appendChild(s)}addEventListener('load',function(){setTimeout(go,2500)});document.addEventListener('click',function(e){if(e.target&&e.target.closest&&e.target.closest('#aeraDock'))go()},true);setTimeout(go,8000)})();</script>
 <!-- AERA concierge : end -->
 <!-- AERA concierge face : start -->
 <script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
@@ -3213,5 +3213,79 @@ function sync(){var o=H.classList.contains('aera-dock-open');b.setAttribute('ari
 b.onclick=function(){H.classList.toggle('aera-dock-open');try{sessionStorage.setItem(K,H.classList.contains('aera-dock-open')?'1':'0')}catch(e){}sync()};
 function add(){document.body.appendChild(b);sync()}if(document.body)add();else document.addEventListener('DOMContentLoaded',add)})();</script>
 <style id="aera-no-card-motion">/* Oct 2026 : no cursor circle, no card animations */#sx30Cur,#sx30Glow{display:none!important}html.sx30 #hub .hacc .hitem{animation:none!important}.sx30-img{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important;transition:none!important;animation:none!important}#sx30MenuPop,.sx30-hv{display:none!important}html.sx .sx-r,html.sx .sx-r.sx-l,html.sx .sx-r.sx-rr,html.sx .sx-r.sx-z,html.sx .sx-r.sx-up{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}</style><!-- build 1791925882731 -->
+<!-- AERA homepage UX pass : start -->
+<style id="aera-ux-pass">
+/* How it Works tucks into the side tab with the chatbot and WhatsApp, like the other helpers */
+#v2help{transition:transform .45s cubic-bezier(.2,.9,.25,1),opacity .3s!important}
+html:not(.aera-dock-open) #v2help{transform:translateX(130%)!important;opacity:0!important;pointer-events:none!important}
+/* Signed in : Order comes straight after the top, the "Good to Know" guide joins the rest of the sales page behind Extend */
+body.signedin:not(.mkExpand) #hub .hubg + .hubg{display:none}
+body.signedin:not(.mkExpand) #hub{padding-bottom:8px}
+#navInboxLi{display:none}
+#meExtBtn{display:none}
+@media(max-width:600px){
+ /* header : Inbox moves into the menu, the menu button gets a proper thumb size */
+ nav.sx-nav #inboxBtn{display:none!important}
+ #navInboxLi{display:list-item}
+ #navInboxLi .cnt{display:inline-block;min-width:18px;padding:0 6px;margin-left:8px;border-radius:9px;background:#FDB913;color:#16479E;font-size:11px;font-weight:800;line-height:18px;text-align:center}
+ #navInboxLi .cnt:empty{display:none}
+ nav.sx-nav .navtoggle{min-width:40px;min-height:40px;font-size:22px;display:inline-flex;align-items:center;justify-content:center;position:relative}
+ nav.sx-nav .navtoggle.hasdot:after{content:'';position:absolute;top:7px;right:5px;width:9px;height:9px;border-radius:50%;background:#FDB913;box-shadow:0 0 0 2px #16479E}
+ nav.sx-nav .langsw{min-height:34px}
+ /* Extend sits in the dashboard as a button, not on the screen edge */
+ body.signedin #meToggle{display:none!important}
+ body.signedin #meExtBtn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;background:#16479E;color:#fff;font:800 12px Montserrat,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:11px 18px;margin:12px 0 0;cursor:pointer}
+ body.signedin #meExtBtn:after{content:'▾'}
+ body.signedin.mkExpand #meExtBtn:after{content:'▴'}
+ /* Get The App : one slim line, and only once they have scrolled past the top */
+ #aaBar.show:not(.aaok){display:none!important}
+ #aaBar{padding:8px 8px 8px 10px!important;gap:10px!important;border-radius:14px!important}
+ #aaBar img{width:34px!important;height:34px!important}
+ #aaBar .t span{display:none!important}
+ #aaBar .t b{font-size:14px}
+ #aaBar .go{padding:9px 16px!important}
+ /* bigger thumbs and text */
+ #meHome .bmchip{min-height:38px}
+ footer .sx-r p a{display:inline-block;padding:7px 0}
+ .cap b,.dpm small{font-size:12.5px!important}
+ #meHome .ovlabel,#meHome .ovap span{font-size:12px!important}
+ .in>p.eb{font-size:12px!important}
+ #hub .htxt em{font-size:11.5px!important}
+ /* Meal Bundles : Fat Loss and Mass Gain clear of the arrow */
+ #hub .hhead .himg.icons{gap:14px!important;padding-right:60px!important;flex-shrink:0}
+ #hub .hhead .himg.icons .ic{width:58px!important;min-width:58px}
+ #hub .hhead .himg.icons .ic img{width:58px!important;height:58px!important}
+ #hub .hhead .himg.icons .ic b{white-space:nowrap;font-size:10.5px!important;letter-spacing:.02em}
+ #hub .hhead .htxt{min-width:0;flex:1 1 auto}
+}
+</style>
+<script id="aera-ux-pass-js">
+(function(){if(window.__aeraUx)return;window.__aeraUx=1;var D=document,MQ=window.matchMedia('(max-width:600px)');
+function $(s){return D.querySelector(s)}
+/* Order before the dashboard */
+function order(){var hub=$('#hub'),me=$('#meHome');if(hub&&me&&me.parentNode&&hub.compareDocumentPosition(me)&D.DOCUMENT_POSITION_PRECEDING)me.parentNode.insertBefore(hub,me)}
+/* Inbox inside the menu, the unread count on the menu button */
+function inbox(){var ul=$('nav.sx-nav .wrap > ul'),btn=$('#inboxBtn'),tg=$('#navToggle');if(!ul||!btn)return;
+ var li=$('#navInboxLi');if(!li){li=D.createElement('li');li.id='navInboxLi';li.innerHTML='<a href="'+btn.getAttribute('href')+'">Inbox<span class="cnt"></span></a>';ul.insertBefore(li,ul.firstChild)}
+ var b=btn.querySelector('.hbn');var n=b&&getComputedStyle(b).display!=='none'?(b.textContent||'').trim():'';if(!/\d/.test(n))n='';
+ li.querySelector('.cnt').textContent=n;if(tg)tg.classList.toggle('hasdot',!!n)}
+/* Extend as a button inside the dashboard on phones ( it presses the original edge tab, which stays where it is ) */
+function ext(){var hd=$('#meHome .ovhead');if(!hd||!$('#meToggle'))return;var p=$('#meExtBtn');
+ if(!p||!hd.contains(p)){if(p)p.remove();p=D.createElement('button');p.type='button';p.id='meExtBtn';p.addEventListener('click',function(){var o=$('#meToggle');if(o)o.click()});hd.appendChild(p)}
+ var tx=D.body.classList.contains('mkExpand')?'Summarise':'Extend';if(p.textContent!==tx)p.textContent=tx}
+/* Get The App waits until they have scrolled past the top */
+function aa(){var b=$('#aaBar');if(b&&!b.classList.contains('aaok')&&(scrollY>500))b.classList.add('aaok')}
+/* image descriptions */
+function alts(){[].forEach.call(D.querySelectorAll('#diy .dpm img:not([data-ax]),#hub .hitem .himg img:not([data-ax])'),function(i){i.setAttribute('data-ax','1');if(i.getAttribute('alt'))return;var c=i.closest('.ic,.dpm,.hitem');var t=c&&(c.querySelector('b,strong')||c);var s=t?(t.textContent||'').trim().replace(/\s+/g,' ').slice(0,80):'';if(s)i.setAttribute('alt',s)})}
+function all(){try{order()}catch(e){}try{inbox()}catch(e){}try{ext()}catch(e){}try{alts()}catch(e){}}
+if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',all);else all();
+addEventListener('load',all);setTimeout(all,2500);setTimeout(all,6000);
+addEventListener('scroll',aa,{passive:true});
+try{new MutationObserver(function(){clearTimeout(window.__aeraUxT);window.__aeraUxT=setTimeout(all,250)}).observe(D.body,{attributes:true,attributeFilter:['class']})}catch(e){}
+try{var mh=$('#meHome');if(mh)new MutationObserver(function(){clearTimeout(window.__aeraUxM);window.__aeraUxM=setTimeout(ext,120)}).observe(mh,{childList:true,subtree:true})}catch(e){}
+try{var ib=$('#inboxBtn');if(ib)new MutationObserver(inbox).observe(ib,{subtree:true,childList:true,characterData:true,attributes:true})}catch(e){}
+})();
+</script>
+<!-- AERA homepage UX pass : end -->
 </body>
 </html>
