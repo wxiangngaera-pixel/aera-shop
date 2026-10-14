@@ -1751,12 +1751,12 @@ D.addEventListener('click',function(e){if(e.target.closest('.swapd .srow')){D.do
 (function(){if(window.__aeraSwTabs||typeof window.swapPanel!=='function')return;window.__aeraSwTabs=1;
 /* Change This Item : four tabs over the dish list.
    Your Preferences = the dishes they selected on the Meal Preferences page.
-   Suitable = Compatible Items, every dish that goes with the rest of this Meal.  ✕ Your Preferences = the dishes they did not select in Meal Preferences.
+   Suitable = Compatible Items, every dish that goes with the rest of this Meal.  ❌ Your Preferences = the dishes they did not select in Meal Preferences.
    All = every dish in the category, the ones the Kitchen does not usually pair with this Meal marked.
    Dishes they asked to avoid and Out of Stock dishes never show. */
-var TABS=[['p','Your Preferences'],['s','Suitable'],['x','✕ Your Preferences'],['a','All']];
+var TABS=[['p','Your Preferences'],['s','Suitable'],['x','❌ Your Preferences'],['a','All']];
 function T(s){var D=window.AERA_I18N;return (D&&document.documentElement.getAttribute('data-lang')==='zh'&&D[s])||s}
-try{var D0=window.AERA_I18N=window.AERA_I18N||{};D0['Your Preferences']=D0['Your Preferences']||'您的偏好';D0['Suitable']=D0['Suitable']||'合适';D0['✕ Your Preferences']=D0['✕ Your Preferences']||'✕ 偏好以外';D0['All']=D0['All']||'全部';D0['Change This Item']=D0['Change This Item']||'更换此项'}catch(e){}
+try{var D0=window.AERA_I18N=window.AERA_I18N||{};D0['Your Preferences']=D0['Your Preferences']||'您的偏好';D0['Suitable']=D0['Suitable']||'合适';D0['❌ Your Preferences']=D0['❌ Your Preferences']||'❌ 偏好以外';D0['All']=D0['All']||'全部';D0['Change This Item']=D0['Change This Item']||'更换此项'}catch(e){}
 window.swapPanel=function(mi,ci,cur,opts){
  var m=PLAN.meals[mi],cp=m&&m.comps[ci];var w=mealRows(m,cp);var used={};(m&&m.comps||[]).forEach(function(o,j){if(j!==ci)used[o.r]=1});
  var P={};pool(cur.cat).forEach(function(o){P[o.c]=1});
