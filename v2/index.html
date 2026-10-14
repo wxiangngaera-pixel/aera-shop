@@ -301,10 +301,10 @@ var D=document,H=D.documentElement,P=(location.pathname||'/').replace(/\/+$/,'')
 function css(t,id){var s=D.createElement('style');if(id)s.id=id;s.textContent=t;(D.head||H).appendChild(s);return s}
 function ready(f){if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',f);else f()}
 function zh(){return H.getAttribute('data-lang')==='zh'}
-var ZH={'Meal prep built around your goal.':'围绕您目标打造的备餐。','Chef-cooked, weighed to the gram, delivered chilled across Klang Valley.':'厨师烹制，精确到克，冷藏配送至巴生谷。',
- 'Build My Plan':'定制我的餐单','Tell us your goal. We build your week to your calories and macros.':'告诉我们您的目标，我们按您的热量与宏量营养素排好一周。','Start':'开始',
- 'Pick a Bundle':'选择套餐','7 days, chef-picked for Fat Loss or Mass Gain.':'7 天，主厨为减脂或增肌挑选。','See Bundles':'查看套餐','From':'低至','a meal':'每餐',
- '29 meals':'29 道餐点','Macros on every box':'每盒标注宏量','7-day fresh':'保鲜 7 天','Delivery or self pick-up':'配送或自取',
+var ZH={'Meal Prep built around your Goal.':'围绕您目标打造的备餐。','Chef-Cooked, weighed to the gram, delivered chilled across Klang Valley.':'厨师烹制，精确到克，冷藏配送至巴生谷。',
+ 'Build My Plan':'定制我的餐单','Tell us your Goal. We build your Week to your Calories and Macros.':'告诉我们您的目标，我们按您的热量与宏量营养素排好一周。','Start':'开始',
+ 'Pick a Bundle':'选择套餐','7 Days, Chef-Picked for Fat Loss or Mass Gain.':'7 天，主厨为减脂或增肌挑选。','See Bundles':'查看套餐','From':'低至','a Meal':'每餐',
+ '29 Meals':'29 道餐点','Macros on every Meal':'每盒标注宏量','7-Day Fresh':'保鲜 7 天','Delivery or Self Pick-Up':'配送或自取',
  'Preview of the new website':'新网站预览','New website preview':'新网站预览','Exit preview':'退出预览','Everything else':'更多选择'};
 try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
 function t(s){return zh()&&ZH[s]?ZH[s]:s}
@@ -352,13 +352,13 @@ function home(){
  var ICB='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M3 12h18M12 7v13M8 7c0-2 1.5-3 4-3s4 1 4 3"/></svg>';
  function paint(){var top=D.getElementById('top');if(!top)return false;var s=D.getElementById('v2hero');if(!s){s=D.createElement('section');s.id='v2hero';top.parentNode.insertBefore(s,top)}
   s.innerHTML='<div class="in"><p class="eb">'+(zh()?'厨师烹制 · 每盒标注宏量 · 巴生谷':'Chef-cooked · Macros on every box · Klang Valley')+'</p>'+
-   '<h1>'+(zh()?ZH['Meal prep built around your goal.']:'Meal prep built around <em>your goal.</em>')+'</h1>'+
-   '<p class="sub">'+t('Chef-cooked, weighed to the gram, delivered chilled across Klang Valley.')+'</p>'+
+   '<h1>'+(zh()?ZH['Meal Prep built around your Goal.']:'Meal Prep built around <em>your Goal.</em>')+'</h1>'+
+   '<p class="sub">'+t('Chef-Cooked, weighed to the gram, delivered chilled across Klang Valley.')+'</p>'+
    '<div class="two">'+
-    '<a class="ch a" href="/meal-plan/"><div><span class="ic">'+ICA+'</span><h2>'+t('Build My Plan')+'</h2><p>'+t('Tell us your goal. We build your week to your calories and macros.')+'</p></div><span class="go">'+t('Start')+' →</span></a>'+
-    '<a class="ch b" href="#bundles" data-v2b="1"><div><span class="ic">'+ICB+'</span><h2>'+t('Pick a Bundle')+'</h2><p>'+t('7 days, chef-picked for Fat Loss or Mass Gain.')+'</p><div class="fr">'+t('From')+' RM 22.50 '+t('a meal')+'</div></div><span class="go">'+t('See Bundles')+' →</span></a>'+
+    '<a class="ch a" href="/meal-plan/"><div><span class="ic">'+ICA+'</span><h2>'+t('Build My Plan')+'</h2><p>'+t('Tell us your Goal. We build your Week to your Calories and Macros.')+'</p></div><span class="go">'+t('Start')+' →</span></a>'+
+    '<a class="ch b" href="#bundles" data-v2b="1"><div><span class="ic">'+ICB+'</span><h2>'+t('Pick a Bundle')+'</h2><p>'+t('7 Days, Chef-Picked for Fat Loss or Mass Gain.')+'</p><div class="fr">'+t('From')+' RM 22.50 '+t('a Meal')+'</div></div><span class="go">'+t('See Bundles')+' →</span></a>'+
    '</div>'+
-   '<ul class="trust"><li>'+t('29 meals')+'</li><li>'+t('Macros on every box')+'</li><li>'+t('7-day fresh')+'</li><li>'+t('Delivery or self pick-up')+'</li></ul></div>';
+   '<ul class="trust"><li>'+t('29 Meals')+'</li><li>'+t('Macros on every Meal')+'</li><li>'+t('7-Day Fresh')+'</li><li>'+t('Delivery or Self Pick-Up')+'</li></ul></div>';
   return true}
  D.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-v2b]');if(!a)return;e.preventDefault();
   var card=D.getElementById('hc-bundles');try{if(card&&!card.classList.contains('open')&&typeof window.hubTog==='function')window.hubTog('bundles')}catch(x){}
