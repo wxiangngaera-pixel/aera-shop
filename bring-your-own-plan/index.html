@@ -84,6 +84,33 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 
 
 
+<style id="aera-byop-pics">
+#planPics{margin:0 0 18px}
+#planPics .pp-head{font:800 13px Montserrat,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#16479E;margin:0 0 10px}
+#planPics .pp-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+#planPics .pp-tab{height:34px;padding:0 14px;border-radius:999px;border:1.5px solid #16479E;background:#fff;color:#16479E;font:inherit;font-weight:800;font-size:13px;cursor:pointer;text-transform:none}
+#planPics .pp-tab.on{background:#16479E;color:#fff}
+#planPics .pp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+#planPics .pp-card{border:1.5px solid #CBD9F0;border-radius:14px;overflow:hidden;background:#fff}
+#planPics .pp-none{aspect-ratio:1536/1024;display:flex;align-items:center;justify-content:center;background:#F3F6FB;color:#6B7690;font-weight:700;font-size:13px}
+#planPics .pp-body{padding:12px 14px 14px}
+#planPics .pp-meal{font:800 15px Montserrat,sans-serif;color:#0B1C36}
+#planPics .pp-mac{font-size:12px;color:#16479E;font-weight:700;margin:3px 0 8px;font-family:Montserrat,sans-serif}
+#planPics .pp-list{list-style:none;margin:0;padding:0;font-size:13px;color:#3A4660}
+#planPics .pp-list li{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-top:1px dashed #E3E8F2}
+#planPics .pp-list li span{color:#6B7690;white-space:nowrap}
+#planPics .pp-list li.mine{color:#8A5A00}
+#planPics .bento{position:relative;width:100%;aspect-ratio:1536/1024;overflow:hidden;background:#E9EEF5 50% 50%/cover no-repeat;container-type:inline-size}
+#planPics .bento b{position:absolute;display:block;background:#0B2450 50% 50%/cover no-repeat;box-shadow:inset 0 0 0 1px rgba(0,0,0,.35);border-radius:2.2cqw;filter:saturate(1.2) contrast(1.13) brightness(1.07)}
+#planPics .bento b.pro{left:19.40%;top:20.31%;width:18.23%;height:52.54%}
+#planPics .bento b.crb{left:38.93%;top:20.31%;width:40.76%;height:26.76%}
+#planPics .bento b.veg{left:38.93%;top:48.63%;width:40.76%;height:24.22%}
+#planPics .bento b.pro.h1{height:25.97%;border-radius:2.2cqw 2.2cqw .3cqw .3cqw}
+#planPics .bento b.pro.h2{top:46.88%;height:25.97%;border-radius:.3cqw .3cqw 2.2cqw 2.2cqw}
+#planPics .bento b.veg.w1{width:20.08%;border-radius:2.2cqw .3cqw .3cqw 2.2cqw}
+#planPics .bento b.veg.w2{left:59.61%;width:20.08%;border-radius:.3cqw 2.2cqw 2.2cqw .3cqw}
+#planPics .bento b.empty{background:#0F2D63}
+</style>
 
 <!-- SEO Meta Tags -->
 <title>Bring Your Own Plan — AERA Meal Prep</title>
@@ -439,10 +466,11 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 
  <div class="card" id="openCard" style="display:none" data-section="open">
   <h2><span class="step">3</span>See It As A Plan</h2>
-  <p class="hint" style="margin:-4px 0 14px">This opens your plan in our plan editor, built from the
-   dishes matched above. Swap any dish, change any portion, and the calories, protein and price move
+  <p class="hint" style="margin:-4px 0 14px">Here is your plan as our kitchen would pack it, built from the
+   dishes matched above. Press Open My Plan to fine-tune it in our plan editor. Swap any dish, change any portion, and the calories, protein and price move
    with it. Your own plan's totals become the target, so you can see where ours drifts from your
    coach's sheet.</p>
+  <div id="planPics"></div>
   <div id="openSum"></div>
   <div style="margin-top:16px"><button class="btn wide" id="open">Open My Plan</button></div>
   <div id="openmsg"></div>
@@ -541,7 +569,8 @@ fetch(CAT_URL,{cache:'no-cache'}).then(function(r){return r.text()}).then(functi
   var nm=o.n[1];(d.t||[]).forEach(function(x){nm=nm.split(x[0]).join(x[1])});
   return{code:o.c,name:(d.n[o.n[0]]||'')+nm,cat:L.charAt(o.cat),
    sq:(d.q&&d.q[i])||100,kcal:+o.kcal||0,p:+o.p||0,c:+o.cb||0,f:+o.f||0,pr:+o.pr||0,
-   po:(d.o&&d.o[o.po])||[50,300,25]}});
+   po:(d.o&&d.o[o.po])||[50,300,25],
+   img:(function(){var im=d.i&&d.i[o.img];return im?d.p[im[0]]+im[1]+(im[2]||'.jpg'):''})()}});
  BYCODE={};MENU.forEach(function(x){BYCODE[x.code]=x});
  if(PLAN)paint()}).catch(function(){});
 /* Macros and price for g grams of one dish, and the kitchen's allowed portions for it. */
@@ -932,7 +961,41 @@ function paintOpen(){
   h+='<div class="note" style="margin-top:12px"><b>These stay yours:</b> '+
    esc(names.join(' · '))+'. We do not cook them, so they are not in the boxes &mdash; they will '+
    'be listed on your plan so nothing goes missing.</div>'}
- $('#openSum').innerHTML=h}
+ $('#openSum').innerHTML=h;try{paintPics()}catch(e){}}
+
+/* ---- step 3 : the plan in pictures ----
+   As soon as the plan is read, each meal is drawn as the box our kitchen would pack : the same
+   tray and food photos the plan editor uses, one card per meal, a tab per day. It redraws with
+   every change made in step 2. */
+var PICDAY=0,PP_TRAY='https://my.chatbees.io/objects/generated-images/1302/1788628096238-5f5755c542d808b9.png';
+function ppCase(s){s=String(s||'');return s&&s===s.toUpperCase()?s.toLowerCase().replace(/\b[a-z]/g,function(c){return c.toUpperCase()}):s}
+function picBento(cs){var P=[],C=null,V=[],G=[];
+ cs.forEach(function(x){var c=x.r.cat;if(c==='p'){if(P.length<2)P.push(x)}else if(c==='c'){if(!C)C=x}else if(c==='v'){if(V.length<2)V.push(x)}else if(c==='g')G.push(x)});
+ var L=V.concat(G).slice(0,2);
+ var cell=function(x,cls){if(!x)return '<b class="'+cls+' empty"></b>';return '<b class="'+cls+'"'+(x.r.img?' style="background-image:url('+x.r.img+')"':'')+'></b>'};
+ return '<div class="bento" role="img" aria-label="'+esc(cs.map(function(x){return x.r.name}).join(', '))+'" style="background-image:url('+PP_TRAY+')">'+
+  (P.length>1?cell(P[0],'pro h1')+cell(P[1],'pro h2'):cell(P[0],'pro'))+cell(C,'crb')+
+  (L.length>1?cell(L[0],'veg w1')+cell(L[1],'veg w2'):cell(L[0],'veg'))+'</div>'}
+function paintPics(){var box=$('#planPics');if(!box)return;var days=[];
+ ((PLAN&&PLAN.days)||[]).forEach(function(d){var ms=[];
+  (d.meals||[]).forEach(function(m){var cs=[],mine=[];
+   (m.items||[]).forEach(function(it){var r=it.code&&BYCODE[it.code];
+    if(!r){if(it.mine&&it.food)mine.push(it.food);return}
+    var rw=rawOf(it.grams,it.food,it.category);cs.push({r:r,g:clampG(r,rw.rule==='q'?r.po[0]:rw.g)})});
+   if(cs.length||mine.length)ms.push({name:m.meal||'',cs:cs,mine:mine})});
+  if(ms.length)days.push({name:d.day||('Day '+(days.length+1)),meals:ms})});
+ if(!days.length){box.innerHTML='';return}
+ if(PICDAY>=days.length)PICDAY=0;
+ var tabs=days.length>1?'<div class="pp-tabs">'+days.map(function(d,i){return '<button type="button" class="pp-tab'+(i===PICDAY?' on':'')+'" data-pd="'+i+'">'+esc(ppCase(d.name))+'</button>'}).join('')+'</div>':'';
+ var cards=days[PICDAY].meals.map(function(m,mi){var t={kcal:0,p:0,c:0,f:0};
+  m.cs.forEach(function(x){var v=per(x.r,x.g);t.kcal+=v.kcal;t.p+=v.p;t.c+=v.c;t.f+=v.f});
+  return '<div class="pp-card">'+(m.cs.length?picBento(m.cs):'<div class="pp-none">Food you buy yourself</div>')+
+   '<div class="pp-body"><div class="pp-meal">'+esc(ppCase(m.name||('Meal '+(mi+1))))+'</div>'+
+   (m.cs.length?'<div class="pp-mac">'+Math.round(t.kcal)+' KCAL · Protein '+Math.round(t.p)+' g · Carbs '+Math.round(t.c)+' g · Fat '+Math.round(t.f)+' g</div>':'')+
+   '<ul class="pp-list">'+m.cs.map(function(x){return '<li>'+esc(x.r.name)+' <span>'+Math.round(x.g)+' g</span></li>'}).join('')+
+   m.mine.map(function(f){return '<li class="mine">'+esc(f)+' <span>Yours</span></li>'}).join('')+'</ul></div></div>'}).join('');
+ box.innerHTML='<div class="pp-head">Your Plan, As Our Kitchen Would Pack It</div>'+tabs+'<div class="pp-grid">'+cards+'</div>';
+ if(!box.__w){box.__w=1;box.addEventListener('click',function(e){var b=e.target.closest('[data-pd]');if(!b)return;PICDAY=+b.dataset.pd;paintPics()})}}
 
 $('#open').addEventListener('click',function(){
  var d=planDraft();
@@ -1435,5 +1498,22 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
   setTimeout(function(){b.click()},500)}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go()}catch(e){}})();</script>
 <!-- AERA order again prefill : end -->
+<script id="aera-imgpack-loader">/* AERA image pack : the meal photos come from small copies on aeramealprep.net ( /img1/ – /img4/ ) instead of the full-size originals on Chatbees, so the pictures appear at once. If the packs cannot load, the originals are used. */
+(function(){if(window.__AERA_IMG)return;window.__AERA_IMG=1;
+var D=document,MAP={},READY=false,FAIL=false,left=4,BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+var RE=/https:\/\/(?:my\.chatbees\.io\/objects\/(?:quick-uploads|generated-images)\/1302\/|aera-assets-production\.sgp1\.digitaloceanspaces\.com\/recipe-images\/)[^"')\s]+/g;
+function blob(d){try{var i=d.indexOf(','),m=d.slice(5,d.indexOf(';')),s=atob(d.slice(i+1)),n=s.length,u=new Uint8Array(n);while(n--)u[n]=s.charCodeAt(n);return URL.createObjectURL(new Blob([u],{type:m}))}catch(e){return ''}}
+function sw(s){return s.replace(RE,function(u){if(MAP[u])return MAP[u];if(READY||FAIL)return u;return BLANK})}
+function fix(el){if(!el||el.nodeType!==1)return;
+ var o=el.__aimgS,s=el.getAttribute('style');
+ if(s&&s.indexOf('url(')>=0){if(!o||s.indexOf(BLANK)<0)o=s;var n=sw(o);if(n!==s){el.__aimgS=o;el.setAttribute('style',n)}else if(n===o)el.__aimgS=null}
+ if(el.tagName==='IMG'){var src=el.__aimgI||el.getAttribute('src')||'';RE.lastIndex=0;if(src&&src.match(RE)&&src.match(RE)[0]===src){var v=MAP[src]||((READY||FAIL)?src:BLANK);if(v!==el.getAttribute('src')){el.__aimgI=src;el.setAttribute('src',v)}if(v===src)el.__aimgI=null}}}
+function all(root){if(!root||!root.querySelectorAll)return;if(root.nodeType===1)fix(root);var l=root.querySelectorAll('[style*="url("],img');for(var i=0;i<l.length;i++)fix(l[i])}
+new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){var m=ms[i];if(m.type==='attributes')fix(m.target);else for(var j=0;j<m.addedNodes.length;j++)all(m.addedNodes[j])}}).observe(D.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['style','src']});
+function done(){if(--left>0)return;READY=true;all(D)}
+['/img1/','/img2/','/img3/','/img4/'].forEach(function(p){fetch(p).then(function(r){return r.ok?r.text():''}).then(function(t){var a=t.indexOf('/*IMGPACK-START*/'),b=t.indexOf('/*IMGPACK-END*/');if(a>=0&&b>a){var j=JSON.parse(t.slice(a+17,b));for(var k in j){var u=blob(j[k]);if(u)MAP[k]=u+'#/'+k.split('/').pop()}}all(D)}).catch(function(){}).then(done)});
+setTimeout(function(){if(!READY){FAIL=true;all(D)}},9000);
+})();</script>
+<!-- build 1791948894110 -->
 </body>
 </html>
