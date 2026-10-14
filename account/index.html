@@ -569,6 +569,9 @@ function dobPicker(hiddenId,minAge,maxAge){var hid=$('#'+hiddenId);var wrap=docu
  return{set:function(v){v=String(v||'');if(/^\d{4}-\d{2}-\d{2}$/.test(v)){yy.value=v.slice(0,4);mm.value=v.slice(5,7);dd.value=v.slice(8,10);if(yy.value!==v.slice(0,4))yy.value=''}else{yy.value='';mm.value='';dd.value=''}hid.value=(yy.value&&mm.value&&dd.value)?v:''}}}
 var SHOP_URL='https://my.chatbees.io/p/D2pz8bZ',TRACK_URL='https://my.chatbees.io/p/8s4Xd6h',PLAN_URL='https://my.chatbees.io/p/SrQzC5m2';
 var HOME_URL='https://my.chatbees.io/p/ZQr9fS2jA9';
+/* Opened from the AERA Coach Plan app : every sign-in, sign-up and sign-out comes back to the Coach Plan Builder, never the shop. */
+var COACH_URL='https://aeramealprep.net/coach-plan-builder/',COACH_APP=(function(){try{if(/[?&]next=coach\b/.test(location.search))return true;var sa=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;return sa&&localStorage.getItem('aera.appmode')==='coach'}catch(e){return false}})();
+if(COACH_APP)HOME_URL=COACH_URL;
 /* Set when a sign-in is meant to end at the homepage but the five-numbers prompt is in
    the way; obLater() carries on to it once the prompt is answered. */
 var GOHOME='';
@@ -1148,8 +1151,8 @@ async function doLogout(back){try{await sb.auth.signOut()}catch(e){}
  if(back){location.replace(HOME_URL);return}
  showAuth()}
 /* ===== Account ===== */
-var NEXT={plan:'https://my.chatbees.io/p/SrQzC5m2',shop:'https://my.chatbees.io/p/D2pz8bZ',checkout:'https://my.chatbees.io/p/D2pz8bZ'};
-function nextTarget(){try{var v=new URLSearchParams(location.search).get('next');return v?NEXT[String(v).toLowerCase()]||null:null}catch(e){return null}}
+var NEXT={plan:'https://my.chatbees.io/p/SrQzC5m2',shop:'https://my.chatbees.io/p/D2pz8bZ',checkout:'https://my.chatbees.io/p/D2pz8bZ',coach:COACH_URL};
+function nextTarget(){try{var v=new URLSearchParams(location.search).get('next');return v?NEXT[String(v).toLowerCase()]||null:(COACH_APP?COACH_URL:null)}catch(e){return null}}
 /* ===== Customers coming across from the old aeramealprep.net site =====
    Nothing is done to an account until its owner signs in and claims it themselves. */
 var AP_AVAIL=null;
@@ -3689,6 +3692,6 @@ if(document.readyState==='complete')later();else window.addEventListener('load',
 })();
 </script>
 <!-- AERA notifications on by default : end -->
-<!-- build 1791953358766 -->
+<!-- build 2026-10-14T11:31:12.779Z -->
 </body>
 </html>
