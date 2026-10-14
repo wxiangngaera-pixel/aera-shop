@@ -368,7 +368,7 @@ function home(){
 
 /* ---------- Meal Plan : one step at a time, one obvious next move ---------- */
 function plan(){
- Object.assign(ZH,{'Answer a few quick questions. We build your week to your calories and macros.':'回答几个简单问题，我们按您的热量与宏量营养素排好一周。',
+ Object.assign(ZH,{'Answer a few quick Questions. We build your Week to your Calories and Macros.':'回答几个简单问题，我们按您的热量与宏量营养素排好一周。',
   'Your answers are saved to your account as you go.':'您的答案会随时保存到账户。','More':'更多','Fine-Tune the whole Plan':'微调整份餐单','Step':'步骤','of':'/','meals':'餐','Add To Cart':'加入购物车','Add to Cart':'加入购物车'});
  try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
  css(
@@ -391,7 +391,7 @@ function plan(){
  '@media (max-width:600px){#planIntro{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}#planIntro.v2open{display:block}}'+
  '@media (min-width:900px){#v2bar{display:none!important}body.v2bar-on{padding-bottom:0}}'
  ,'v2-plan');
- function intro(){var p=D.querySelector('.wrap > p');if(p&&/Tell us about you and your Goal/.test(p.textContent)&&!p.__v2){p.__v2=1;p.textContent=t('Answer a few quick questions. We build your week to your calories and macros.')}
+ function intro(){var p=D.querySelector('.wrap > p');if(p&&/Tell us about you and your Goal/.test(p.textContent)&&!p.__v2){p.__v2=1;p.textContent=t('Answer a few quick Questions. We build your Week to your Calories and Macros.')}
   [].forEach.call(D.querySelectorAll('#s1 .hint'),function(h){if(/Nothing is saved until you Order/.test(h.textContent))h.textContent=t('Your answers are saved to your account as you go.')})}
  function prog(){var sb=D.getElementById('stepbar');if(!sb)return;var on=sb.querySelector('.step.on'),n=on?+on.getAttribute('data-s'):1;
   var pg=D.getElementById('v2prog');if(!pg){pg=D.createElement('div');pg.id='v2prog';pg.innerHTML='<i></i>';sb.parentNode.insertBefore(pg,sb.nextSibling)}
@@ -880,5 +880,5 @@ tapDemo();
 })();
 
 /*AERA-V2-END*/</script>
-<!-- build 1791952748926 -->
+<!-- build 1791954389665 -->
 </body></html>
