@@ -617,7 +617,7 @@ function matchOne(food,category){
    return{code:it.code,name:it.name,s:r.s,tight:r.tight}})
   .sort(function(a,b){return b.s-a.s});
  if(!qc.length)ranked=ranked.filter(function(x){return x.s>0});
- if(!ranked.length)return{state:'none',why:'nothing of ours is close enough'};
+ if(!ranked.length)return{state:'none',why:'Nothing of ours is close enough'};
  var top=ranked[0],second=ranked[1];
  /* An exact name is an exact name — nothing else argues with it, however close it looks. */
  if(top.s===100)return{state:'hit',code:top.code,name:top.name,options:ranked.slice(0,8)};
@@ -626,7 +626,7 @@ function matchOne(food,category){
     salted egg yolk chicken and means nothing of the kind. */
  if(!qc.length){
   if(top.s>=55)return{state:'pick',code:top.code,name:top.name,options:ranked.slice(0,8)};
-  return{state:'none',why:'nothing of ours is close enough'}}
+  return{state:'none',why:'Nothing of ours is close enough'}}
  /* Past here we already know it is the same food — the only question is which of ours.
     A confident answer has to explain almost all of OUR name too, or "grilled chicken
     breast" quietly becomes teriyaki and nobody notices until it is cooked. */
@@ -636,6 +636,20 @@ function matchOne(food,category){
 
 /* The chosen recipe is remembered against the item, so re-painting — which happens every
    time a weight changes or the cooked/raw switch moves — never throws away a choice. */
+
+/* The customer's own words, shown back under each item : food words get capitals ( "150 g Grilled
+   Chicken Breast" ), units after a number and joining words stay small ( "2 slices", "mix with" ). */
+function awCase(s){var U=/^(g|gm|gms|gram|grams|kg|mg|ml|l|cups?|slices?|tbsp|tsp|tablespoons?|teaspoons?|pcs?|pieces?|scoops?|oz|bowls?|handfuls?|servings?|x)$/i,
+ SM=/^(mix|with|and|or|of|in|on|to|a|an|the|plus|for|per|&)$/i,prevNum=false;
+ return String(s||'').split(/(\s+)/).map(function(w,i){if(/^\s+$/.test(w)||!w)return w;
+  var num=/^[\d.,\/½¼¾]+[a-z]*$/i.test(w);
+  if(num){prevNum=/^[\d.,\/½¼¾]+$/.test(w);return w}
+  var out;if(prevNum&&U.test(w))out=w.toLowerCase();else if(SM.test(w)&&i>0)out=w.toLowerCase();
+  else if(w===w.toUpperCase()&&/[A-Z]{2}/.test(w)&&w.length<=4)out=w;
+  else out=w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();
+  prevNum=false;return out}).join('')}
+function noteCase(s){return String(s||'').replace(/\b(cooked|raw) weights?\b/gi,function(m){return m.replace(/\b[a-z]/g,function(c){return c.toUpperCase()})})
+ .replace(/\bplan\b/g,'Plan').replace(/\bmeals\b/g,'Meals').replace(/\bmeal\b/g,'Meal').replace(/\bdaily\b/g,'Daily').replace(/\bdays\b/g,'Days').replace(/\bitems\b/g,'Items')}
 function chosenOf(it,m){
  if(it.pickCode==='-')return null;
  if(it.pickCode){var f=(m.options||[]).filter(function(o){return o.code===it.pickCode})[0];
@@ -831,7 +845,7 @@ function paint(){
     if(undecided||r.rule)look++;
     html+='<div class="it" data-d="'+di+'" data-m="'+mi+'" data-i="'+ii+'">'+
      '<div class="nm">'+esc(it.food)+flag+
-      '<small>'+esc(it.asWritten||'')+'</small></div>'+
+      '<small>'+esc(awCase(it.asWritten||''))+'</small></div>'+
      '<input type="number" min="0" step="5" value="'+(+it.grams||0)+'" aria-label="grams">'+
      rawCell(r,rec)+
      matchRow(it,mm,di,mi,ii)+
@@ -844,14 +858,13 @@ function paint(){
  var f='';
  if(askYou)f+='<div class="note warn"><b>'+askYou+' Item'+(askYou===1?'':'s')+' could be more than one of ours.</b> Pick the one you want from the List under each. We will not choose a Flavour for you.</div>';
  if(youSort)f+='<div class="note"><b>'+youSort+' Item'+(youSort===1?' is':'s are')+
-  ' not on our menu.</b> Eggs, fruit, oats, yoghurt and the like are yours to sort out. '+
-  'We will still list '+(youSort===1?'it':'them')+' on your plan so nothing goes missing.</div>';
+  ' not on our menu.</b> Eggs, Fruit, Oats, Yoghurt and the like are yours to sort out. '+'We will still list '+(youSort===1?'it':'them')+' on your Plan so nothing goes missing.</div>';
  if(noweight)f+='<div class="note warn"><b>'+noweight+' Item'+(noweight===1?' has':'s have')+
-  ' no weight.</b> Your plan did not give one. Put a number in, or leave it and we will ask you.</div>';
+  ' no Weight.</b> Your Plan did not give one. Put a number in, or leave it and we will ask you.</div>';
  if(unknown)f+='<div class="note warn"><b>'+unknown+' Item'+(unknown===1?'':'s')+' we cannot convert yet.</b> We will weigh '+(unknown===1?'it':'them')+' by hand rather than guess.</div>';
  if((PLAN.unreadable||[]).filter(Boolean).length)f+='<div class="note bad"><b>We could not read these lines:</b> '+
   esc(PLAN.unreadable.filter(Boolean).join(' · '))+'</div>';
- if(PLAN.note)f+='<div class="note ok">'+esc(PLAN.note)+'</div>';
+ if(PLAN.note)f+='<div class="note ok">'+esc(noteCase(PLAN.note))+'</div>';
  $('#flags').innerHTML=f;
  if(document.getElementById('openSum'))paintOpen()}
 
@@ -948,9 +961,7 @@ function paintOpen(){
    'lighter day under. That is your plan\'s shape, not our portions.</div>'}
  if(d.off.length){
   var names=[];d.off.forEach(function(o){if(names.indexOf(o.food)<0)names.push(o.food)});
-  h+='<div class="note" style="margin-top:12px"><b>These stay yours:</b> '+
-   esc(names.join(' · '))+'. We do not cook them, so they are not in the boxes &mdash; they will '+
-   'be listed on your plan so nothing goes missing.</div>'}
+  h+='<div class="note" style="margin-top:12px"><b>These stay yours :</b> '+esc(names.join(' · '))+'. We do not cook them, so they are not in the Meals. They will be listed on your Plan so nothing goes missing.</div>'}
  $('#openSum').innerHTML=h;try{paintPics()}catch(e){}}
 
 /* ---- step 3 : the plan in pictures ----
@@ -1510,6 +1521,6 @@ setTimeout(function(){if(!READY){FAIL=true;all(D)}},9000);
 })();</script>
 
 <script id="aera-byop-file-js">(function(){var i=document.getElementById("pdf"),n=document.getElementById("pdfName");if(!i||!n)return;function up(){var f=i.files&&i.files[0];n.textContent=f?f.name:"No File selected"}i.addEventListener("change",up);setInterval(function(){if(!(i.files&&i.files.length)&&n.textContent!=="No File selected"&&n.textContent!=="未选择文件")up()},1500)})();</script>
-<!-- build 1791950412071 -->
+<!-- build 1791950861137 -->
 </body>
 </html>
