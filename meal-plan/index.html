@@ -772,8 +772,7 @@ function havePlan(){var o=document.querySelector('.modal');if(o)o.remove();var d
 /* An uploaded plan has no calorie goal of its own, so the target IS the plan: what the
 customer's own sheet adds up to. Saying so plainly beats leaving the generated-plan
 wording in place, which talks about a macro split they never gave us. */
-if(PLAN.byop)$('#planIntro').textContent=PLAN.days+' Day'+(PLAN.days>1?'s':'')+' x '+PLAN.mpd+' Meal'+(PLAN.mpd>1?'s':'')+' = '+PLAN.meals.length+' box'+(PLAN.meals.length>1?'es':'')+', built '+
-(PLAN.src==='coach'?'by your coach':'from the plan you uploaded')+'. The target is what that plan'+' adds up to, so the bars start on point and only move when you change something of ours.'+' Swap A Dish, Change A Portion or use the Tuning Buttons — everything updates live.';var h=tuneRow('tuneAll(','Tune the Whole Plan',TUNED.all)+(TUNED.allNote?'<div class="tuned">'+esc(TUNED.allNote)+'</div>':'')+'<div class="daytabs">';
+if(PLAN.byop)$('#planIntro').textContent=PLAN.days+' Day'+(PLAN.days>1?'s':'')+' x '+PLAN.mpd+' Meal'+(PLAN.mpd>1?'s':'')+' = '+PLAN.meals.length+' Meal'+(PLAN.meals.length>1?'s':'')+', built '+(PLAN.src==='coach'?'by your Coach':'from the Plan you uploaded')+'. The Target is what that Plan adds up to, so the bars start on point and only move when you change something of ours. Swap a Dish, Change a Portion or use the Tuning Buttons, everything updates live.';var h=tuneRow('tuneAll(','Tune the Whole Plan',TUNED.all)+(TUNED.allNote?'<div class="tuned">'+esc(TUNED.allNote)+'</div>':'')+'<div class="daytabs">';
 /* A plan that came with its own day names keeps them. Numbering a coach's Monday,Wednesday and Friday as Day 1 Mon, Day 2 Tue, Day 3 Wed quietly rewrites their plan. */
 for(var d=1;d<=PLAN.days;d++){var dn=(PLAN.dayNames&&PLAN.dayNames[d-1])||'';h+='<button type="button" class="'+(SELD===d?'on':'')+'" onclick="pickDay('+d+')">Day '+d+'<small>'+esc(dn?dn.slice(0,9):DOW[(d-1)%7])+'</small></button>'}h+='<button type="button" class="adddaybtn" onclick="addDay()" title="Add another day">+ Add Day</button>'+(PLAN.days>1?'<button type="button" class="adddaybtn deldaybtn" onclick="askDelDay(SELD)" title="Delete Day '+SELD+' and its meals">− Delete Day</button>':'')+'</div>';var dc=dayCalc(SELD);
 /* Same reasoning for the day: an uploaded plan's Tuesday is measured against their own
@@ -1583,6 +1582,6 @@ b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 function sync(){var o=H.classList.contains('aera-dock-open');b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Hide help, chat and WhatsApp':'Show help, chat and WhatsApp')}
 b.onclick=function(){H.classList.toggle('aera-dock-open');try{sessionStorage.setItem(K,H.classList.contains('aera-dock-open')?'1':'0')}catch(e){}sync()};
 function add(){document.body.appendChild(b);sync()}if(document.body)add();else document.addEventListener('DOMContentLoaded',add)})();</script>
-<!-- build 1791953361491 -->
+<!-- build 1791953768871 -->
 </body>
 </html>
