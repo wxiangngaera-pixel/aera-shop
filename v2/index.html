@@ -532,7 +532,7 @@ function quick(){
   else if(s==='avoid'){h='<h2>'+t('Anything you do not eat?')+'</h2><p class="sb">'+t('Tap all that apply. We leave them out of every Meal.')+'</p><div class="chips2"><button type="button" class="all'+(A.avoid.length?'':' on')+'" data-none="1">'+t('I eat everything')+'</button>'+
    AV.map(function(a){return '<button type="button" data-av="'+a[0]+'" class="'+(A.avoid.indexOf(a[0])>=0?'on':'')+'">'+t(a[1])+'</button>'}).join('')+'</div>'}
   var last=cur===fl.length-1;
-  W.innerHTML='<div class="qh"><button type="button" class="bk" data-back="1" aria-label="Back"'+(cur?'':' disabled')+'>←</button><div class="pg"><i style="width:'+((cur+1)/fl.length*100)+'%"></i></div><a class="cz" href="#" data-custom="1">'+t('Customise everything')+'</a></div>'+
+  W.innerHTML='<div class="qh"><button type="button" class="bk" data-back="1" aria-label="Back"'+(cur?'':' disabled')+'>←</button><div class="pg"><i style="width:'+((cur+1)/fl.length*100)+'%"></i></div><a class="cz" href="#" data-custom="1">'+t('Close')+'</a></div>'+
    '<div class="qb"><div class="qi"><p class="st">'+t('Quick Plan')+' · '+(cur+1)+' / '+fl.length+'</p>'+h+'</div></div>'+
    '<div class="qf"><button type="button" data-next="1"'+(ok()?'':' disabled')+'>'+(last?t('Build My Plan')+' ✦':t('Next')+' →')+'</button></div>';
   var qb=W.querySelector('.qb');if(qb)qb.scrollTop=0}
@@ -541,7 +541,7 @@ function quick(){
  function pick(sel,attr,val){[].forEach.call(W.querySelectorAll('['+attr+']'),function(b){b.classList.toggle('on',b.getAttribute(attr)===val)})}
  function auto(){setTimeout(function(){if(ok()){cur++;paint()}},220)}
  function onClick(e){var b=e.target.closest('button,a');if(!b||!W.contains(b))return;
-  if(b.hasAttribute('data-custom')){e.preventDefault();try{sessionStorage.setItem('aera.v2qp.off','1')}catch(x){}close();return}
+  if(b.hasAttribute('data-custom')){e.preventDefault();close();if(window.PLAN){try{(window.__v2G0||window.goStep)(4)}catch(x){}}else{location.href='/'}return}
   if(b.hasAttribute('data-edit')){e.preventDefault();editAbout=true;cur=1;paint();return}
   if(b.hasAttribute('data-back')){if(cur>0){cur--;paint()}return}
   if(b.hasAttribute('data-goal')){A.goal=b.getAttribute('data-goal');pick(0,'data-goal',A.goal);setNext();auto();return}
@@ -873,13 +873,64 @@ function coach(){
    D.addEventListener('click',function(e){if(!w.contains(e.target))w.classList.remove('open')})}
  })}
 
+/* ---------- One questionnaire : the 5 quick questions are the only way in. The detailed settings
+   ( Goal & Body Type & Macros, Food Outside AERA, Meal Preferences ) are optional Fine-Tune pages
+   reached from Your Plan, with Back to My Plan / Update My Plan instead of the old Next buttons. ---------- */
+function oneFlow(){
+ Object.assign(ZH,{'Close':'关闭','1 · Your Answers':'1 · 您的回答','2 · Your Plan':'2 · 您的餐单','3 · Order':'3 · 下单','Fine-Tune My Targets':'微调我的目标',
+  'Optional. Change your Targets or how we build your Meals.':'可选。调整您的目标或餐点编排方式。','Goal, Body Type & Macros':'目标、体型与宏量营养素',
+  'Food You Eat Outside AERA':'AERA 以外的饮食','Meal Preferences':'饮食偏好','← Back to My Plan':'← 返回我的餐单','Update My Plan →':'更新我的餐单 →',
+  'Update My Plan rebuilds your Meals to the new Targets.':'「更新我的餐单」会按新目标重新编排餐点。','← Change My Answers':'← 更改我的回答','Fine-Tune':'微调'});
+ try{if(window.AERA_I18N)Object.keys(ZH).forEach(function(k){window.AERA_I18N[k]=ZH[k]})}catch(e){}
+ css(
+ '#stepbar .step[data-s="2"],#stepbar .step[data-s="3"]{display:none!important}#v2qlink{display:none!important}'+
+ '.v2ftbar{display:none}body.v2ft-on .v2ftbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border:1.5px solid #16479E;border-radius:14px;padding:10px 12px;margin:0 0 14px;box-shadow:0 6px 16px rgba(22,71,158,.12)}'+
+ '.v2ftbar.bot{margin:14px 0 0}.v2ftbar span{flex:1;min-width:180px;font-size:12.5px;color:#5A6B87;line-height:1.4}'+
+ '.v2ftbar button{border-radius:999px;padding:9px 15px;font:800 13px Montserrat,system-ui,sans-serif;cursor:pointer}.v2ftbar .bk{border:1.5px solid #16479E;background:#fff;color:#16479E}.v2ftbar .go{border:0;background:#FDB913;color:#0B1C36}'+
+ 'body.v2ft-on #s1 .foot,body.v2ft-on #s2 .foot,body.v2ft-on #s3 .foot{display:none!important}'+
+ '.v2ft{margin:12px 0;border:1.5px solid #16479E;border-radius:14px;background:#fff;overflow:hidden}'+
+ '.v2ft>summary{list-style:none;cursor:pointer;padding:12px 16px;font:800 14px Montserrat,system-ui,sans-serif;color:#16479E;display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px}'+
+ '.v2ft>summary::-webkit-details-marker{display:none}.v2ft>summary:after{content:"▾";margin-left:auto;transition:transform .2s}.v2ft[open]>summary:after{transform:rotate(180deg)}'+
+ '.v2ft>summary small{order:3;flex-basis:100%;font:500 12.5px/1.4 system-ui,sans-serif;color:#5A6B87}'+
+ '.v2ft-in{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 14px}.v2ft-in button{border:0;background:#16479E;color:#FDB913;border-radius:999px;padding:10px 15px;font:700 13px Montserrat,system-ui,sans-serif;cursor:pointer}'
+ ,'v2-oneflow');
+ var FT=false,G0=null;
+ function ftOff(){FT=false;D.body.classList.remove('v2ft-on')}
+ function quickOpen(){ftOff();try{if(typeof window.v2QuickPlan==='function'){window.v2QuickPlan();return}}catch(e){}if(G0)G0(1)}
+ function byop(){return !!(window.PLAN&&window.PLAN.byop)}
+ function fine(k){FT=true;D.body.classList.add('v2ft-on');try{G0(k)}catch(e){}try{W.scrollTo(0,0)}catch(e){}}
+ function bar(cls){var b=D.createElement('div');b.className='v2ftbar'+(cls?' '+cls:'');
+  b.innerHTML='<button type="button" class="bk" data-ftback="1">'+t('← Back to My Plan')+'</button><span>'+t('Update My Plan rebuilds your Meals to the new Targets.')+'</span><button type="button" class="go" data-ftgo="1">'+t('Update My Plan →')+'</button>';return b}
+ function ensure(){
+  [].forEach.call(D.querySelectorAll('#stepbar .step'),function(s){var k=s.getAttribute('data-s'),L={'1':'1 · Your Answers','4':'2 · Your Plan','5':'3 · Order'}[k];
+   if(L&&!s.__v2l){s.__v2l=1;s.textContent=t(L);if(k==='1'){s.removeAttribute('onclick');s.addEventListener('click',function(e){e.preventDefault();quickOpen()})}}});
+  ['s1','s2','s3'].forEach(function(id){var s=D.getElementById(id);if(!s||s.querySelector(':scope > .v2ftbar'))return;s.insertBefore(bar(''),s.firstChild);s.appendChild(bar('bot'))});
+  var s4=D.getElementById('s4'),acts=s4&&s4.querySelector('.planacts');
+  if(acts&&!D.getElementById('v2ftPanel')){var d=D.createElement('details');d.className='v2ft';d.id='v2ftPanel';
+   d.innerHTML='<summary>'+t('Fine-Tune My Targets')+'<small>'+t('Optional. Change your Targets or how we build your Meals.')+'</small></summary><div class="v2ft-in"><button type="button" data-ft="1">'+t('Goal, Body Type & Macros')+'</button><button type="button" data-ft="2">'+t('Food You Eat Outside AERA')+'</button><button type="button" data-ft="3">'+t('Meal Preferences')+'</button></div>';
+   acts.parentNode.insertBefore(d,acts.nextSibling)}
+  var p=D.getElementById('v2ftPanel');if(p)p.style.display=byop()?'none':'';
+  if(s4)[].forEach.call(s4.querySelectorAll('button'),function(b){if(!b.__v2c&&/Back To Meal Preferences/i.test(b.textContent||'')){b.__v2c=1;b.textContent=t('← Change My Answers')}})}
+ function setup(){
+  try{sessionStorage.removeItem('aera.v2qp.off')}catch(e){}
+  G0=window.goStep;window.__v2G0=G0;
+  window.goStep=function(k){if(k>=1&&k<=3&&!FT&&!byop()){quickOpen();return}if(k===4||k===5)ftOff();return G0.apply(this,arguments)};
+  D.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-ft],[data-ftback],[data-ftgo]');if(!b)return;e.preventDefault();
+   if(b.hasAttribute('data-ft')){fine(+b.getAttribute('data-ft'));return}
+   if(b.hasAttribute('data-ftback')){ftOff();G0(4);return}
+   if(b.hasAttribute('data-ftgo')){ftOff();try{window.generate()}catch(x){}G0(4)}},true);
+  ensure();setInterval(ensure,1000);
+  if(window.STEP>=1&&window.STEP<=3&&!byop()){if(window.PLAN)G0(4);else quickOpen()}}
+ ready(function(){var n=0,iv=setInterval(function(){n++;if(typeof window.goStep!=='function'||!window.Q){if(n>80)clearInterval(iv);return}
+  if(n<8)return;clearInterval(iv);if(window.ADMIN_ID||/[?&](edit|next)=/.test(location.search))return;setup()},150)})}
+
 if(P==='/')home();
 if(P==='/checkout')checkout();
 if(P==='/coach-plan-builder')coach();
-if(P==='/meal-plan'){plan();quick();freePlan();mealAdjust()}
+if(P==='/meal-plan'){plan();quick();freePlan();mealAdjust();oneFlow()}
 tapDemo();
 })();
 
 /*AERA-V2-END*/</script>
-<!-- build 2026-10-14T07:25:33.077Z -->
+<!-- build 2026-10-14T07:31:17.347Z -->
 </body></html>
