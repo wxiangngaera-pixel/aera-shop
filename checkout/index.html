@@ -3471,6 +3471,7 @@ function go(){f();var l=document.getElementById('lines');if(l)new MutationObserv
 try{Object.assign(window.AERA_I18N||{},{"Browse the Menu":"浏览菜单"})}catch(e){}})();</script>
 
 
+
 <script id="aera-pv-comp">(function(){
  /* Sharp Bento Box thumbnails : every little Bento Box is painted ONCE into a single picture at the
    screen's real pixel size ( tray + each food in its compartment, rounded corners, thin edge ), with
@@ -3496,25 +3497,33 @@ try{Object.assign(window.AERA_I18N||{},{"Browse the Menu":"浏览菜单"})}catch
   if(pb.__sig===sig)return;pb.__sig=sig;
   if(OUT[sig])return show(pb,OUT[sig]);
   Q.push([pb,sig,tray,cells,W,H]);pump()}
- function show(pb,url){if(!pb.isConnected)return;pb.style.backgroundImage='url("'+url+'")';pb.style.backgroundSize='100% 100%';[].forEach.call(pb.querySelectorAll('b'),function(c){c.style.visibility='hidden'})}
+ function show(pb,url){if(!pb.isConnected)return;pb.style.backgroundImage='url("'+url+'")';pb.style.backgroundSize='100% 100%';pb.style.webkitMaskImage='none';pb.style.maskImage='none';pb.style.backgroundColor='transparent';[].forEach.call(pb.querySelectorAll('b'),function(c){c.style.visibility='hidden'})}
  function pump(){if(busy||!Q.length)return;busy=1;var q=Q.shift(),pb=q[0],sig=q[1],cells=q[3],W=q[4],H=q[5];
   if(OUT[sig]){show(pb,OUT[sig]);busy=0;return setTimeout(pump,0)}
   var need=[q[2]].concat(cells.map(function(x){return x.u}).filter(Boolean)),got={},left=need.length;
   need.forEach(function(u){src(u,function(v){got[u]=v;if(--left)return;
    try{var cv=document.createElement('canvas');cv.width=Math.round(W*D);cv.height=Math.round(H*D);var g=cv.getContext('2d');
-    var t=got[q[2]];if(t)g.drawImage(halve(t,0,0,t.width||t.naturalWidth,t.height||t.naturalHeight,cv.width,cv.height),0,0);
+    var t=got[q[2]];if(t){g.drawImage(halve(t,0,0,t.width||t.naturalWidth,t.height||t.naturalHeight,cv.width,cv.height),0,0);
+     /* the studio backdrop around the tray is lifted out here ( flood-filled from the edges ), so nothing else has to cut this picture */
+     try{var CW0=cv.width,CH0=cv.height,id=g.getImageData(0,0,CW0,CH0),p=id.data,seen=new Uint8Array(CW0*CH0),st=[],k,x0,y0;
+      var lite=function(o){var r=p[o*4],gg=p[o*4+1],b=p[o*4+2],mx=Math.max(r,gg,b),mn=Math.min(r,gg,b);return mn>196&&mx-mn<34};
+      for(x0=0;x0<CW0;x0++){st.push(x0,(CH0-1)*CW0+x0)}for(y0=0;y0<CH0;y0++){st.push(y0*CW0,y0*CW0+CW0-1)}
+      while(st.length){k=st.pop();if(seen[k])continue;seen[k]=1;if(!lite(k))continue;p[k*4+3]=0;var xx=k%CW0,yy=(k-xx)/CW0;
+       if(xx>0)st.push(k-1);if(xx<CW0-1)st.push(k+1);if(yy>0)st.push(k-CW0);if(yy<CH0-1)st.push(k+CW0)}
+      for(k=0;k<CW0*CH0;k++){if(p[k*4+3]===0)continue;var xa=k%CW0,ya=(k-xa)/CW0,n0=0;if(xa>0&&p[(k-1)*4+3]===0)n0++;if(xa<CW0-1&&p[(k+1)*4+3]===0)n0++;if(ya>0&&p[(k-CW0)*4+3]===0)n0++;if(ya<CH0-1&&p[(k+CW0)*4+3]===0)n0++;if(n0)p[k*4+3]=n0>1?110:170}
+      g.putImageData(id,0,0)}catch(e){}}
     cells.forEach(function(x){var X=x.x*D,Y=x.y*D,CW=x.w*D,CH=x.h*D;if(CW<1||CH<1)return;g.save();rr(g,X,Y,CW,CH,x.r);g.clip();
      var im=x.u&&got[x.u];if(im){var iw=im.width||im.naturalWidth,ih=im.height||im.naturalHeight,s=Math.max(CW/iw,CH/ih),sw=CW/s,sh=CH/s;
       g.drawImage(halve(im,(iw-sw)/2,(ih-sh)/2,sw,sh,CW,CH),X,Y)}else{g.fillStyle=x.col||'#0F2D63';g.fillRect(X,Y,CW,CH)}
      g.lineWidth=D;g.strokeStyle='rgba(0,0,0,.35)';rr(g,X+D/2,Y+D/2,CW-D,CH-D,x.r);g.stroke();g.restore()});
-    OUT[sig]=cv.toDataURL('image/jpeg',0.92);MINE[OUT[sig]]=1;show(pb,OUT[sig])}catch(e){}
+    OUT[sig]=cv.toDataURL('image/png');MINE[OUT[sig]]=1;show(pb,OUT[sig])}catch(e){}
    busy=0;setTimeout(pump,0)})})}
- function scan(){[].forEach.call(document.querySelectorAll('.pvbento'),paint)}
+ function scan(){[].forEach.call(document.querySelectorAll('.pvbento'),function(pb){if(!pb.hasAttribute('data-nocut'))pb.setAttribute('data-nocut','1');paint(pb)})}
  var t=0;function soon(){if(t)return;t=setTimeout(function(){t=0;scan()},150)}
  new MutationObserver(soon).observe(document.documentElement,{childList:true,subtree:true});
  window.addEventListener('resize',function(){clearTimeout(t);t=0;soon()});
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',scan);else scan();
 })();</script>
-<!-- build 1791956613335 -->
+<!-- build 1791956770778 -->
 </body>
 </html>
