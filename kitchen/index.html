@@ -47,7 +47,7 @@ Object.defineProperty(P,'innerHTML',{configurable:true,enumerable:D.enumerable,g
 <script id="aera-motion-loader">/* AERA Motion 2030 : runs the shared motion engine ( aeramealprep.net/motion/ ) before the page draws.
    It keeps a copy in this browser so pages open instantly, and quietly picks up a newer engine for next time.
    Preview only until launch : ?scrolly=1 turns it on for this browser, ?scrolly=0 turns it off. */
-(function(){var LIVE=true;try{var q=location.search,L=window.localStorage;
+(function(){var LIVE=false;try{var q=location.search,L=window.localStorage;try{L.removeItem('aera.motion.code');L.removeItem('aera.motion.cv')}catch(e){}
 if(/[?&]scrolly=1/.test(q))L.setItem('aera.scrolly','1');if(/[?&]scrolly=0/.test(q))L.removeItem('aera.scrolly');
 if(!(LIVE||L.getItem('aera.scrolly')==='1'))return;
 if(/(^|\.)my\.chatbees\.io$/i.test(location.hostname))return;
@@ -364,7 +364,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div id="kc-root"><div class="kc-load"><div class="kc-spin"></div>Opening the Kitchen Console…</div></div>
+<div id="kc-root"><div class="kc-load"><div class="kc-spin"></div>Starting the console…</div></div>
 <script>
 var KC_URL='https://swpprjvubgcdsojapaad.supabase.co';
 var KC_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0';
@@ -374,7 +374,7 @@ var KCS={user:null,role:'',err:'',msg:'',busy:false,stats:null,staff:[],hasApp:f
 function kcEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function kcRoot(){return document.getElementById('kc-root')}
 function kcBrand(){return '<div class="kc-brand"><div class="kc-mark">A</div><div><b>AERA Kitchen Console</b><span>kitchen.aeramealprep.net</span></div></div>'}
-function kcLoading(t){kcRoot().innerHTML='<div class="kc-load"><div class="kc-spin"></div>'+kcEsc(t||'Opening the Kitchen Console…')+'</div>'}
+function kcLoading(t){kcRoot().innerHTML='<div class="kc-load"><div class="kc-spin"></div>'+kcEsc(t||'Starting the console…')+'</div>'}
 
 /* ---------- sign in ---------- */
 function kcLogin(){
@@ -413,15 +413,16 @@ function kcDL(){var p=kc.storage.from('kc-app').download('console.html?cb='+Date
  return Promise.race([p,t]).then(function(r){if(r)return r;var s=null;try{s=JSON.parse(localStorage.getItem(KC_KEY)||'null')}catch(e){}if(s&&s.currentSession)s=s.currentSession;var tok=s&&s.access_token;
   return fetch(KC_URL+'/storage/v1/object/authenticated/kc-app/console.html?cb='+Date.now(),{headers:{apikey:KC_ANON,Authorization:'Bearer '+(tok||KC_ANON)},cache:'no-store'}).then(function(x){if(!x.ok)return{error:{message:'HTTP '+x.status}};return x.blob().then(function(b){return{data:b,error:null}})})})}
 async function kcOpen(){
- kcLoading('Loading the console…');
+ kcLoading('Starting the console…');
  var d=await kcDL();
  if(d.error){kcRoot().innerHTML='<div class="kc-card">'+kcBrand()+'<h2>Could not load</h2><div class="kc-err">'+kcEsc(d.error.message)+'</div><button class="kc-btn full" onclick="kcOpen()">Try again</button></div>';return}
  var app=await d.data.text();
  var S='scr'+'ipt';
  var boot='window.__KC_ROLE='+JSON.stringify(KCS.role)+';window.__KC_EMAIL='+JSON.stringify(KCS.user.email||'')+';('+KC_SHIM.toString()+')('+JSON.stringify(KC_URL)+','+JSON.stringify(KC_ANON)+','+JSON.stringify(KC_KEY)+');';
  var html='<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">'+
+  '<style id="kc-pre">html:not(.kc-in){background:linear-gradient(160deg,#16479E 0%,#0E3576 100%) #16479E;min-height:100%}html:not(.kc-in)::before{content:"";position:fixed;left:50%;top:50%;width:34px;height:34px;margin:-40px 0 0 -21px;border-radius:50%;border:4px solid rgba(255,255,255,.25);border-top-color:#FDB913;animation:kcps 1s linear infinite;z-index:2147483001}html:not(.kc-in)::after{content:"Starting the console…";position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding-top:34px;font:600 14px Montserrat,system-ui,-apple-system,sans-serif;color:#fff;background:linear-gradient(160deg,#16479E 0%,#0E3576 100%);z-index:2147483000}@keyframes kcps{to{transform:rotate(360deg)}}</style>'+
   '<'+S+' src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></'+S+'>'+
-  '<'+S+'>'+boot+'</'+S+'>'+(function(){var l=document.getElementById('aera-motion-loader');return l?'<'+S+'>window.__AERA_MOTION=0;'+l.textContent+'</'+S+'>':''})()+app+'</html>';
+  '<'+S+'>'+boot+'</'+S+'>'+app+'</html>';
  kcLoading('Starting the console…');await new Promise(function(r){setTimeout(r,30)});
  document.open();document.write(html);document.close();
 }
