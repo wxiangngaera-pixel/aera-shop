@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script id="aera-acct-guard">/* the page shows "signed in" from a saved copy of the account ; when the sign-in itself is gone ( logged out, expired, cleared by the phone ) that copy is dropped too, so no page claims a sign-in that is not there */(function(){try{var t=localStorage.getItem('sb-swpprjvubgcdsojapaad-auth-token'),ok=false;if(t){var o=JSON.parse(t);if(o&&o.currentSession)o=o.currentSession;ok=!!(o&&(o.refresh_token||o.access_token))}if(!ok){['aera.account','aera.refLock'].forEach(function(k){if(localStorage.getItem(k)!==null)localStorage.removeItem(k)})}}catch(e){}})();</script>
+
 <script id="aera-coach-demo">/* DEMO ( ?demo=1 ) : sample Clients, Sent Plans and Sales so the Coach app can be shown off.
    Nothing is read from or written to the account, nothing is emailed : every call is answered here. */
 (function(){if(!/[?&]demo=1\b/.test(location.search))return;window.__COACH_DEMO=1;
