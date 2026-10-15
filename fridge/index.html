@@ -481,7 +481,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 
   <div class="card" id="pickCard" style="display:none">
    <h2>Which Fridge</h2>
-   <select id="pick" onchange="pickFridge(this.value)"></select>
+   <select id="pick" onchange="pickFridge(this.value,1)"></select>
   </div>
 
   <div class="tabs">
@@ -645,9 +645,15 @@ async function afterSignIn(){
  if(FRIDGES.length>1){
   $('#pickCard').style.display='block';
   $('#pick').innerHTML=FRIDGES.map(function(x){return'<option value="'+esc(x.id)+'">'+esc(x.name)+'</option>'}).join('')}
- pickFridge(FRIDGES[0].id)}
+ var keep=null;try{keep=localStorage.getItem('aera.fridge.pick')}catch(e){}
+ pickFridge((FRIDGES.filter(function(x){return x.id===keep})[0]||FRIDGES[0]).id)}
 
-async function pickFridge(id){
+/* The gym picked in the list is remembered, and only the newest pick may paint : a slower
+   load still in flight from an earlier pick, or a second sign-in pass, can never put the
+   list back on another gym. */
+async function pickFridge(id,user){
+ if(user){try{localStorage.setItem('aera.fridge.pick',id)}catch(e){}}
+ var my=window.__PSEQ=(window.__PSEQ||0)+1;
  CUR=FRIDGES.filter(function(f){return f.id===id})[0]||FRIDGES[0];
  try{if(FRIDGES.length>1){var pc=$('#pickCard'),ps=$('#pick');if(pc)pc.style.display='block';
   if(ps&&ps.options.length!==FRIDGES.length)ps.innerHTML=FRIDGES.map(function(x){return'<option value="'+esc(x.id)+'">'+esc(x.name)+'</option>'}).join('');
@@ -656,12 +662,16 @@ async function pickFridge(id){
  $('#fname').textContent=CUR.name;
  var ym=today().slice(0,7);
  var a=await db.from('fridge_stock').select('*').eq('fridge_id',CUR.id).gt('qty',0).order('expires');
+ if(my!==window.__PSEQ)return;
  STOCK=a.data||[];
  var b=await db.from('fridge_statement').select('*').eq('fridge_id',CUR.id).eq('period',ym).limit(1);
+ if(my!==window.__PSEQ)return;
  STMT=(b.data&&b.data[0])||null;
  var c=await db.from('fridge_messages').select('*').eq('fridge_id',CUR.id).order('created_at',{ascending:false}).limit(60);
+ if(my!==window.__PSEQ)return;
  MSGS=c.data||[];
  var d=await db.from('fridge_invoices').select('*').eq('fridge_id',CUR.id).order('on_date',{ascending:true});
+ if(my!==window.__PSEQ)return;
  BILLS=(d&&d.data)||[];
  MEALS=[];MEALIMG={};var seen={};
  STOCK.forEach(function(r){if(r.image_url&&!MEALIMG[r.meal])MEALIMG[r.meal]=r.image_url;
@@ -669,7 +679,7 @@ async function pickFridge(id){
  MSGS.forEach(function(m){(m.lines||[]).forEach(function(l){if(l&&l.meal&&!seen[l.meal]){seen[l.meal]=1;MEALS.push(l.meal)}})});
  MEALS.sort();
  QTY={count:{},order:{}};SEL={};
- await loadMenu();buildOrderList();
+ await loadMenu();if(my!==window.__PSEQ)return;buildOrderList();
  var e=earliest(),od=$('#odate');
  if(od){od.min=e;od.value=e;
   var mx=new Date(e+'T00:00:00');mx.setDate(mx.getDate()+28);od.max=isoDate(mx)}
