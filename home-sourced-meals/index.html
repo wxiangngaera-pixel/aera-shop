@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script id="aera-acct-guard">/* the page shows "signed in" from a saved copy of the account ; when the sign-in itself is gone ( logged out, expired, cleared by the phone ) that copy is dropped too, so no page claims a sign-in that is not there */(function(){try{var t=localStorage.getItem('sb-swpprjvubgcdsojapaad-auth-token'),ok=false;if(t){var o=JSON.parse(t);if(o&&o.currentSession)o=o.currentSession;ok=!!(o&&(o.refresh_token||o.access_token))}if(!ok){['aera.account','aera.refLock'].forEach(function(k){if(localStorage.getItem(k)!==null)localStorage.removeItem(k)})}}catch(e){}})();</script>
+
 <style id="aera-input-guard-css">
 /* iPhone : a box with text smaller than 16px makes Safari zoom the whole page in when it is tapped */
 @media (hover:none) and (pointer:coarse){input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}}
