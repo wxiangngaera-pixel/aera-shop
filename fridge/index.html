@@ -1123,7 +1123,7 @@ function canUndo(m){if(!m||(m.kind!=='count'&&m.kind!=='expired'))return false;v
 function undoAsk(id){UNDOASK=id||'';UNDOMSG='';paintHist()}
 async function undoDo(id){var m=MSGS.filter(function(x){return x.id===id})[0];if(!m||!CUR)return;
  var b=document.getElementById('undoYes');if(b){b.disabled=true;b.textContent='Sending…'}
- var r=await db.from('fridge_messages').insert({fridge_id:CUR.id,kind:m.kind,on_date:today(),lines:[],total:+m.total||1,by_name:'',note:'undo:'+id,status:'open',sent_by:(ME&&ME.email)||''});
+ var r=await db.from('fridge_messages').insert({fridge_id:CUR.id,kind:m.kind,on_date:today(),lines:m.lines||[],total:+m.total||1,by_name:'',note:'undo:'+id,status:'open',sent_by:(ME&&ME.email)||''});
  if(r.error){UNDOMSG='!That did not go through: '+r.error.message;UNDOASK='';paintHist();return}
  UNDOASK='';await pickFridge(CUR.id);UNDOMSG=(+m.total||0)+' box'+((+m.total||0)===1?'':'es')+' put back on your shelf.';paintHist()}
 window.undoAsk=undoAsk;window.undoDo=undoDo;
