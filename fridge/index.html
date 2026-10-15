@@ -1099,11 +1099,11 @@ function paintHist(){
  var rows=MSGS.filter(function(m){return m.kind!=='order'});
  if(!rows.length){$('#hist').innerHTML='<div class="empty">Nothing marked off yet.</div>';return}
  $('#hist').innerHTML=rows.map(function(m){
-  var ls=(m.lines||[]).map(function(l){return esc(l.meal)+' ×'+esc(l.qty)}).join(', ');
+  var ls=(m.lines||[]).map(function(l){return '<span style="display:flex;justify-content:space-between;gap:12px;padding:3px 0;border-bottom:1px dashed #E3E9F3"><span>'+esc(l.meal)+'</span><b style="white-space:nowrap">×'+esc(l.qty)+'</b></span>'}).join('');
   var word=(m.kind==='expired'?'Expired':'Sold');
   return '<div class="row"><div class="nm">'+word+' · '+esc(m.on_date||'')+
    (m.status==='done'?' <span class="tag warn">Done</span>':'')+
-   '<small>'+(ls||'—')+(m.by_name?' · '+esc(m.by_name):'')+'</small></div>'+
+   '<small style="display:block;margin-top:6px">'+(ls||'—')+(m.by_name?'<span style="display:block;margin-top:4px">'+esc(m.by_name)+'</span>':'')+'</small></div>'+
    '<div class="pill">'+(+m.total||0)+'</div></div>'}).join('')}
 
 /* AERA Fridge : Order More works like a shop. Tap Add To Cart on the meals, open the Cart, pick the
