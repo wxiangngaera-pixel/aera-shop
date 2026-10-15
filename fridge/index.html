@@ -630,6 +630,7 @@ async function signOut(){await db.auth.signOut();
    account is a fridge merchant at all, so someone who shops with us and signs in here
    by mistake gets told why there is nothing to show. */
 async function afterSignIn(){
+ window.__ISADM=undefined;
  var u=await db.auth.getUser();ME=(u.data&&u.data.user)||null;
  var ok=await db.rpc('am_i_a_merchant');
  try{await aeraCacheAccount(!ok.error&&!!ok.data)}catch(e){}
@@ -901,6 +902,7 @@ function showView(v){
    bottom can be checked against their own paperwork rather than taken on trust. */
 function paintBills(){
  var box=$('#month');if(!box)return;
+ if(window.__ISADM===undefined){window.__ISADM=null;db.rpc('is_kitchen_admin').then(function(r){window.__ISADM=!r.error&&!!r.data;if(window.__ISADM)paintBills()},function(){window.__ISADM=false})}
  $('#mtitle').textContent='Balance Payable To AERA';
  if(!BILLS.length){
   box.innerHTML='<div class="empty">Nothing billed yet. Your first Delivery will show here as its own Invoice.</div>';
@@ -914,7 +916,7 @@ function paintBills(){
    '<small>'+niceDate(String(b.on_date).slice(0,10))+(b.note?' · '+esc(b.note):'')+'</small></td>'+
    '<td class="r">'+(+b.boxes||0)+'</td>'+
    '<td class="r'+(cr?' cr':'')+'">'+(cr?'− ':'')+rm(amt)+'</td>'+
-   '<td class="r"><button class="dl" onclick="dlBill(\''+esc(b.id)+'\')">Download</button></td></tr>'}).join('');
+   '<td class="r">'+billBtn(b)+'<button class="dl" onclick="dlBill(\''+esc(b.id)+'\')">Download</button></td></tr>'}).join('');
  box.innerHTML='<div style="overflow-x:auto"><table class="bt">'+
   '<thead><tr><th>Document</th><th class="r">Boxes</th><th class="r">Amount</th><th class="r"></th></tr></thead>'+
   '<tbody>'+rows+
@@ -927,6 +929,25 @@ function paintBills(){
 
 /* A gym asked to pay wants the bill on paper. The page writes one, opens it in its own
    window and lets the browser save or print it — nothing to install, nothing to email. */
+/* AERA staff only : is_kitchen_admin() decides who sees these, and the table's own rules
+   decide who can save them, so a gym can never clear its own bill. The matching Run in the
+   Kitchen Console is marked too, so the next publish from the Console keeps it paid. */
+function billBtn(b){if(!window.__ISADM||b.kind==='refund')return '';
+ var paid=String(b.status||'').toLowerCase()==='paid';
+ return paid?'<button class="dl" style="margin-right:6px" onclick="billPaid(\''+esc(b.id)+'\',false)">Undo</button>'
+  :'<button class="dl" style="margin-right:6px;background:#16479E;color:#FDB913;border-color:#16479E" onclick="billPaid(\''+esc(b.id)+'\',true)">Mark as Paid</button>'}
+async function billPaid(id,on){if(!window.__ISADM)return;
+ var b=BILLS.filter(function(x){return x.id===id})[0];if(!b)return;var ref='';
+ if(on){ref=prompt('Payment reference for '+id+' ( bank reference, optional )');if(ref===null)return}
+ else if(!confirm('Put '+id+' back to unpaid?'))return;
+ var ts=new Date().toISOString();
+ var r=await db.from('fridge_invoices').update({status:on?'paid':'open',updated_at:ts}).eq('id',id).select('id');
+ if(r.error||!r.data||!r.data.length){alert('Could not save : '+((r.error&&r.error.message)||'not allowed for this account'));return}
+ b.status=on?'paid':'open';
+ try{var k=await db.from('kc_docs').select('id').eq('coll','fridge_runs').eq('data->>orderNo','ORD-'+id.replace(/^INV-/,'')).limit(1);
+  if(k.data&&k.data[0])await db.rpc('kc_merge',{p_coll:'fridge_runs',p_id:k.data[0].id,p_patch:on?{paid:ts,payRef:String(ref||'').trim(),updatedAt:ts}:{paid:'',payRef:'',updatedAt:ts}})}catch(e){}
+ paintBills()}
+
 function dlBill(id){
  var b=BILLS.filter(function(x){return x.id===id})[0];if(!b)return;
  var cr=b.kind==='refund',amt=+b.amount||0;
@@ -1264,6 +1285,9 @@ Object.assign(D,{
 "Amount":"金额",
 "Total Payable":"应付总额",
 "Download":"下载",
+"Mark as Paid":"标记已付款",
+"Undo":"撤销",
+
 "You are down to":"目前只剩",
 ", at or below your restock level of":"，已达到或低于您的补货标准",
 "— good time to order. Room for":"— 是时候下单了。还可存放",
