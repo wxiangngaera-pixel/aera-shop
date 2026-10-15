@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://aeramealprep.net/coach-plan-builder/</loc>
-    <lastmod>2026-10-15T02:31:06.428Z</lastmod>
+    <loc>https://aeramealprep.net/</loc>
+    <lastmod>2026-10-15T02:34:04.129Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/merchandise/</loc>
+    <lastmod>2026-10-15T02:33:29.913Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://aeramealprep.net/meal-plan/</loc>
-    <lastmod>2026-10-15T02:30:50.637Z</lastmod>
+    <lastmod>2026-10-15T02:33:27.702Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://aeramealprep.net/checkout/</loc>
-    <lastmod>2026-10-15T02:30:20.195Z</lastmod>
+    <lastmod>2026-10-15T02:33:24.176Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/</loc>
-    <lastmod>2026-10-15T02:29:56.636Z</lastmod>
+    <loc>https://aeramealprep.net/coach-plan-builder/</loc>
+    <lastmod>2026-10-15T02:31:06.428Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -53,11 +58,6 @@
   <url>
     <loc>https://aeramealprep.net/contact/</loc>
     <lastmod>2026-10-15T02:15:16.682Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/merchandise/</loc>
-    <lastmod>2026-10-15T02:14:56.591Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
