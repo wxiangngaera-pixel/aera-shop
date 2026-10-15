@@ -320,7 +320,7 @@
    tag:d.tag||'aera-inbox',renotify:true,data:{url:d.url||INBOX}}));
  });
  self.addEventListener('notificationclick',function(e){
-  e.notification.close();var u=(e.notification.data&&e.notification.data.url)||INBOX;
+  e.notification.close();var u=(e.notification.data&&e.notification.data.url)||INBOX;try{var hi=u.indexOf('#'),bs=hi<0?u:u.slice(0,hi),hs=hi<0?'':u.slice(hi);if(!/[?&]from=/.test(bs))u=bs+(bs.indexOf('?')<0?'?':'&')+'from=push'+hs}catch(x){}
   e.waitUntil(self.clients.matchAll({type:'window',includeUncontrolled:true}).then(function(L){
    for(var i=0;i<L.length;i++){var c=L[i];if(/\/account\//.test(c.url)&&'focus' in c){try{c.postMessage({aera:'inbox'})}catch(x){}return c.focus()}}
    return self.clients.openWindow(u)}));
