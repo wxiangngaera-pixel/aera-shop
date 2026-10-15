@@ -719,6 +719,8 @@ async function pickFridge(id,user){
  MEALS.sort();
  QTY={count:{},order:{}};SEL={};
  await loadMenu();if(my!==window.__PSEQ)return;buildOrderList();
+ /* a meal put back by Undo has no stock row yet : borrow its photo from the menu */
+ try{STOCK.forEach(function(r){if(r.image_url)return;var k=String(r.meal||'').trim().toLowerCase();var mm=(ORDERL||[]).filter(function(x){return String(x.label||'').trim().toLowerCase()===k})[0];if(mm&&mm.img)r.image_url=mm.img;else if(MEALIMG[r.meal])r.image_url=MEALIMG[r.meal]})}catch(e){}
  var e=earliest(),od=$('#odate');
  if(od){od.min=e;od.value=e;
   var mx=new Date(e+'T00:00:00');mx.setDate(mx.getDate()+28);od.max=isoDate(mx)}
