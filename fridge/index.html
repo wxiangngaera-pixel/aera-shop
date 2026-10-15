@@ -807,15 +807,15 @@ function markTally(){
  var n=0,boxes=0;
  Object.keys(SEL).forEach(function(k){n++;boxes+=SEL[k]});
  var s=$('#bSold'),x=$('#bExp'),h=$('#mhint');
- if(s)s.disabled=!n;
- if(x)x.disabled=!n;
- if(h)h.textContent=n?(boxes+' box'+(boxes===1?'':'es')+' selected.'):'Tick a meal first.'}
+ if(s){s.disabled=false;s.style.opacity=n?'':'.55'}
+ if(x){x.disabled=false;x.style.opacity=n?'':'.55'}
+ if(h)h.textContent=n?(boxes+' box'+(boxes===1?'':'es')+' selected.'):'Tap a meal to tick it, then press Sold or Expired.'}
 
 /* Sold takes them off the shelf. Expired sends them back to us as a credit. Same two taps. */
 async function mark(kind){
  var lines=[],total=0;
  Object.keys(SEL).forEach(function(k){var r=STOCK[+k];if(!r)return;lines.push({meal:r.meal,qty:SEL[k]});total+=SEL[k]});
- if(!total)return;
+ if(!total){var th=$('#mhint');if(th){th.style.color='#C8433B';th.style.fontWeight='700';th.textContent='Tap a meal above to tick it first, then press '+(kind==='count'?'Sold':'Expired')+'.';setTimeout(function(){th.style.color='';th.style.fontWeight=''},3500)}return}
  var s=$('#bSold'),x=$('#bExp');s.disabled=true;x.disabled=true;
  (kind==='count'?s:x).textContent='Sending…';
  var r=await db.from('fridge_messages').insert({
