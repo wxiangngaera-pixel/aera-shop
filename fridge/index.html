@@ -939,15 +939,22 @@ function billBtn(b){if(!window.__ISADM||b.kind==='refund')return '';
 /* No prompt() or confirm() : some app windows and embedded frames swallow them, so the
    question is asked right in the row instead. */
 function billAsk(id,on){var sp=document.querySelector('.billpay[data-id="'+id+'"]');if(!sp)return;
- sp.innerHTML=on?'<input class="billref" placeholder="Bank ref ( optional )" style="width:150px;padding:6px 8px;border:1px solid #CBD6E8;border-radius:8px;margin-right:6px;font:inherit;font-size:12px">'+
-   '<button class="dl" style="margin-right:6px;background:#16479E;color:#FDB913;border-color:#16479E" onclick="billPaid(\''+id+'\',true)">Save</button>'+
-   '<button class="dl" style="margin-right:6px" onclick="paintBills()">Cancel</button>'
-  :'<span style="font-size:12px;margin-right:6px">Back to unpaid?</span><button class="dl" style="margin-right:6px" onclick="billPaid(\''+id+'\',false)">Yes</button><button class="dl" style="margin-right:6px" onclick="paintBills()">No</button>';
- var i=sp.querySelector('input');if(i)i.focus()}
+ var old=document.querySelector('tr.billask');if(old)old.remove();
+ var tr=sp.closest('tr');if(!tr)return;var n=tr.children.length;
+ var row=document.createElement('tr');row.className='billask';row.setAttribute('data-id',id);
+ var Y='background:#16479E;color:#FDB913;border-color:#16479E';
+ row.innerHTML='<td colspan="'+n+'" style="background:#F4F7FC;padding:12px">'+
+  '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">'+
+  (on?'<b style="font-size:13px">'+esc(id)+'</b><input class="billref" placeholder="Bank ref ( optional )" style="flex:1 1 180px;min-width:140px;padding:10px 12px;border:1px solid #CBD6E8;border-radius:10px;font:inherit;font-size:14px">'+
+    '<button class="dl" style="padding:10px 18px;'+Y+'" onclick="billPaid(\''+id+'\',true)">Save As Paid</button>'
+   :'<span style="font-size:14px"><b>'+esc(id)+'</b> back to unpaid?</span><button class="dl" style="padding:10px 18px;'+Y+'" onclick="billPaid(\''+id+'\',false)">Yes</button>')+
+  '<button class="dl" style="padding:10px 18px" onclick="paintBills()">Cancel</button></div></td>';
+ tr.parentNode.insertBefore(row,tr.nextSibling);
+ var i=row.querySelector('input');if(i){i.focus();i.addEventListener('keydown',function(ev){if(ev.key==='Enter')billPaid(id,true)})}}
 async function billPaid(id,on){if(!window.__ISADM)return;
  var b=BILLS.filter(function(x){return x.id===id})[0];if(!b)return;
- var sp=document.querySelector('.billpay[data-id="'+id+'"]');var inp=sp&&sp.querySelector('input');var ref=inp?String(inp.value||'').trim():'';
- if(sp)sp.innerHTML='<span style="font-size:12px;margin-right:6px">Saving…</span>';
+ var sp=document.querySelector('tr.billask[data-id="'+id+'"] td')||document.querySelector('.billpay[data-id="'+id+'"]');var inp=sp&&sp.querySelector('input');var ref=inp?String(inp.value||'').trim():'';
+ if(sp)sp.innerHTML='<span style="font-size:13px">Saving…</span>';
  var ts=new Date().toISOString();
  var r=await db.from('fridge_invoices').update({status:on?'paid':'open',updated_at:ts}).eq('id',id).select('id');
  if(r.error||!r.data||!r.data.length){if(sp)sp.innerHTML='<span style="font-size:12px;color:#B42318;margin-right:6px">Could not save : '+esc((r.error&&r.error.message)||'not allowed for this account')+'</span>';return}
@@ -1296,6 +1303,8 @@ Object.assign(D,{
 "Mark as Paid":"标记已付款",
 "Undo":"撤销",
 "Save":"保存",
+"Save As Paid":"确认已付款",
+"back to unpaid?":"改回未付款？",
 "Cancel":"取消",
 "Back to unpaid?":"改回未付款？",
 "Yes":"是",
