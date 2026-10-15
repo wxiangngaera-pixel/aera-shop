@@ -144,6 +144,29 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 #appHow .ok{width:100%;background:#16479E;color:#FDB913;border:0;border-radius:12px;padding:12px;font:inherit;font-weight:800;cursor:pointer}
 </style>
 <!-- AERA fridge app : end -->
+<style id="aera-bills-phone">
+/* Bills on a phone : each document is a small card instead of a squeezed table row */
+@media(max-width:640px){
+ #month table.bt,#month table.bt tbody,#month table.bt tr,#month table.bt td{display:block;width:100%}
+ #month table.bt thead{display:none}
+ #month table.bt tr{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;padding:14px 0;border-bottom:1px solid #E3E9F3}
+ #month table.bt td{padding:0!important;border:0!important;text-align:left!important}
+ #month table.bt td:nth-child(1){grid-column:1/-1}
+ #month table.bt td:nth-child(2){grid-column:1;grid-row:2;font-size:13px;color:#5A6B87}
+ html:not([data-lang="zh"]) #month table.bt td:nth-child(2)::after{content:" boxes"}
+ html[data-lang="zh"] #month table.bt td:nth-child(2)::after{content:" 盒"}
+ #month table.bt td:nth-child(3){grid-column:2;grid-row:2;text-align:right!important;font-weight:800;font-size:17px;white-space:nowrap}
+ #month table.bt td:nth-child(4){grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+ #month table.bt td:nth-child(4) .billpay{display:contents}
+ #month table.bt td:nth-child(4) button{flex:1 1 40%;margin:0!important;min-height:44px;white-space:nowrap}
+ #month table.bt tr.billask td{grid-column:1/-1}
+ #month table.bt tr.billask input{flex:1 1 100%!important}
+ #month table.bt tr.tot td:nth-child(1){grid-column:1;grid-row:1;font-weight:800}
+ #month table.bt tr.tot td:nth-child(2),#month table.bt tr.tot td:nth-child(4){display:none}
+ #month table.bt tr.tot td:nth-child(3){grid-row:1}
+ #month>div{overflow:visible!important}
+}
+</style>
 
 <!-- SEO Meta Tags -->
 <title>AERA Fridge — Merchant Portal</title>
