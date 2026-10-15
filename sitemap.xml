@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://aeramealprep.net/checkout/</loc>
-    <lastmod>2026-10-15T02:52:50.438Z</lastmod>
+    <loc>https://aeramealprep.net/fridge/</loc>
+    <lastmod>2026-10-15T07:33:56.022Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
+    <lastmod>2026-10-15T07:33:00.863Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/</loc>
+    <lastmod>2026-10-15T07:29:05.204Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://aeramealprep.net/terms/</loc>
-    <lastmod>2026-10-15T02:46:50.357Z</lastmod>
+    <lastmod>2026-10-15T02:57:12.821Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/checkout/</loc>
+    <lastmod>2026-10-15T02:52:50.438Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -28,11 +43,6 @@
   <url>
     <loc>https://aeramealprep.net/meal-plan/</loc>
     <lastmod>2026-10-15T02:34:41.125Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/</loc>
-    <lastmod>2026-10-15T02:34:04.129Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -61,11 +71,6 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/fridge/</loc>
-    <lastmod>2026-10-15T02:15:30.363Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
     <loc>https://aeramealprep.net/contact/</loc>
     <lastmod>2026-10-15T02:15:16.682Z</lastmod>
     <changefreq>weekly</changefreq>
@@ -78,11 +83,6 @@
   <url>
     <loc>https://aeramealprep.net/track/</loc>
     <lastmod>2026-10-15T02:14:33.614Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
-    <lastmod>2026-10-15T00:45:32.236Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
