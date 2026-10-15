@@ -306,6 +306,7 @@
    Every part is wrapped on its own, so one failing never stops the rest, and nothing is ever left hidden. */
 (function(){
 if(window.__AERA_MOTION)return;window.__AERA_MOTION=1;
+/* SWITCHED OFF ( Peter, 15 Oct 2026 ) : no intros, page morphs, glides, reveals or cursor light anywhere. Pages show at once and stay still. Delete this one line to turn the motion back on. */return;
 var D=document,H=D.documentElement,W=window;
 var EASE='cubic-bezier(.16,.84,.24,1)',SPRING='cubic-bezier(.34,1.56,.64,1)';
 var FINE=!!(W.matchMedia&&matchMedia('(hover:hover) and (pointer:fine)').matches);
