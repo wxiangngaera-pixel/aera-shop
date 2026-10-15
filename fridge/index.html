@@ -949,7 +949,7 @@ function paintBills(){
    '<small>'+niceDate(String(b.on_date).slice(0,10))+(b.note?' · '+esc(b.note):'')+'</small></td>'+
    '<td class="r">'+(+b.boxes||0)+'</td>'+
    '<td class="r'+(cr?' cr':'')+'">'+(cr?'− ':'')+rm(amt)+'</td>'+
-   '<td class="r">'+billBtn(b)+(cr?'':'<button class="dl" style="margin-right:6px" onclick="dlDO(\''+esc(b.id)+'\')">Delivery Order</button>')+'<button class="dl" onclick="dlBill(\''+esc(b.id)+'\')">Download</button></td></tr>'}).join('');
+   '<td class="r">'+billBtn(b)+(cr?'':'<button class="dl" style="margin-right:6px" onclick="dlDO(\''+esc(b.id)+'\')">Delivery Order</button>')+'<button class="dl" onclick="dlBill(\''+esc(b.id)+'\')">'+(cr?'Credit Note':'Invoice')+'</button></td></tr>'}).join('');
  box.innerHTML='<div style="overflow-x:auto"><table class="bt">'+
   '<thead><tr><th>Document</th><th class="r">Boxes</th><th class="r">Amount</th><th class="r"></th></tr></thead>'+
   '<tbody>'+rows+
@@ -1368,6 +1368,7 @@ Object.assign(D,{
 "Amount":"金额",
 "Total Payable":"应付总额",
 "Download":"下载",
+"Invoice":"发票",
 "Delivery Order":"送货单",
 "Mark as Paid":"标记已付款",
 "Undo":"撤销",
