@@ -33,6 +33,8 @@ input:focus,select:focus{outline:2px solid rgba(22,71,158,.25);border-color:var(
 .kc-foot a{color:var(--navy);cursor:pointer;text-decoration:underline}
 .kc-spin{width:34px;height:34px;border-radius:50%;border:4px solid rgba(255,255,255,.25);border-top-color:var(--y);animation:kcs 1s linear infinite;margin:0 auto 14px}
 @keyframes kcs{to{transform:rotate(360deg)}}
-.kc-load{color:#fff;text-align:center;font-weight:600}
+.kc-load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding-top:34px;color:#fff;font:600 14px Montserrat,system-ui,-apple-system,sans-serif}
+.kc-load .kc-spin{position:fixed;left:50%;top:50%;margin:-40px 0 0 -21px}
+html{background:#16479E}
 .kc-bar{height:8px;background:#EEF1F6;border-radius:99px;overflow:hidden;margin-top:10px}
 .kc-bar i{display:block;height:100%;width:0;background:var(--navy);transition:width .2s}
