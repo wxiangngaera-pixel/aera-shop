@@ -3057,7 +3057,7 @@ function apply(row){var loc=snap(),rem=row?{cart:norm(row.cart),plan:row.plan||n
  if(!out)return;
  var changed=!sameCart(out,loc);if(changed)put(out);
  if(!rem||!sameCart(out,rem)||out.at!==rem.at)push(snap());
- if(changed&&typeof window.renderCart==='function'){var t=+(sessionStorage.getItem('aera.cartReload')||0);if(Date.now()-t>15000){try{sessionStorage.setItem('aera.cartReload',String(Date.now()))}catch(e){}location.reload()}}}
+ if(changed&&typeof window.renderCart==='function'){var t=+(sessionStorage.getItem('aera.cartReload')||0);if(Date.now()-t>15000){try{sessionStorage.setItem('aera.cartReload',String(Date.now()))}catch(e){}try{window.renderCart()}catch(e){}}}}
 async function pull(){if(!cli)return;try{var ss=(await cli.auth.getSession()).data.session;if(!ss){tok=null;uid=null;return}
   tok=ss.access_token;uid=ss.user.id;email=String(ss.user.email||'').toLowerCase();
   var q=await cli.from('carts').select('cart,plan,at').eq('user_id',uid).maybeSingle();if(q.error)return;apply(q.data)}catch(e){}}
