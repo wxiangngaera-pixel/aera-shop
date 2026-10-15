@@ -700,6 +700,10 @@ async function pickFridge(id,user){
  var c=await db.from('fridge_messages').select('*').eq('fridge_id',CUR.id).order('created_at',{ascending:false}).limit(60);
  if(my!==window.__PSEQ)return;
  MSGS=c.data||[];
+ /* what the gym has already marked Sold or Expired comes off its shelf at once ; the kitchen books it later and closes the note */
+ (function(){var take={};MSGS.forEach(function(m){if(m&&(m.kind==='count'||m.kind==='expired')&&String(m.status||'open')==='open')(m.lines||[]).forEach(function(l){if(l&&l.meal)take[l.meal]=(take[l.meal]||0)+(+l.qty||0)})});
+  STOCK.forEach(function(r){var t=take[r.meal]||0;if(!t)return;var q=+r.qty||0,d=Math.min(q,t);r.qty=q-d;take[r.meal]=t-d});
+  STOCK=STOCK.filter(function(r){return (+r.qty||0)>0})})();
  var d=await db.from('fridge_invoices').select('*').eq('fridge_id',CUR.id).order('on_date',{ascending:true});
  if(my!==window.__PSEQ)return;
  BILLS=(d&&d.data)||[];
@@ -751,9 +755,7 @@ function capOf(){var n=+((CUR||{}).cap);return isFinite(n)&&n>0?n:21}
 function floorOf(){var n=+((CUR||{}).floor);return isFinite(n)&&n>=0?n:10}
 function inFridge(){var t=today(),n=0;
  STOCK.forEach(function(r){if(r.expires&&days(t,r.expires)<0)return;n+=+r.qty||0});
- /* boxes the gym has already reported Sold or Expired come off straight away, before the kitchen books them */
- (typeof MSGS!=='undefined'&&MSGS||[]).forEach(function(m){if(m&&m.kind==='count'&&String(m.status||'open')==='open')n-=+m.total||0});
- return Math.max(0,n)}
+return n}
 function roomLeft(){return Math.max(0,capOf()-inFridge())}
 
 function paintOrderGate(){
@@ -820,8 +822,11 @@ async function mark(kind){
   fridge_id:CUR.id,kind:kind,on_date:today(),lines:lines,total:total,
   by_name:'',note:'',status:'open',sent_by:(ME&&ME.email)||''});
  s.textContent='Sold';x.textContent='Expired';
- if(r.error){s.disabled=false;x.disabled=false;alert('That did not send: '+r.error.message);return}
- SEL={};pickFridge(CUR.id)}
+ if(r.error){s.disabled=false;x.disabled=false;var eh=$('#mhint');if(eh){eh.style.color='#C8433B';eh.textContent='That did not send: '+r.error.message+' Please try again.'}return}
+ SEL={};await pickFridge(CUR.id);
+ var mh=$('#mhint');if(mh){mh.style.color='#2E8B57';mh.style.fontWeight='700';
+  mh.textContent='✅ Thank you — '+total+' box'+(total===1?'':'es')+' marked '+(kind==='count'?'Sold':'Expired')+'. Your fridge is updated.';
+  setTimeout(function(){mh.style.color='';mh.style.fontWeight='';markTally()},6000)}}
 
 /* The whole menu, with the ones this fridge has had before at the top. */
 function baseName(s){return String(s||'').replace(/\s*\(\s*(FAT LOSS|MASS GAIN)\s*\)\s*$/i,'').trim()}
