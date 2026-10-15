@@ -750,7 +750,10 @@ function niceDate(s){try{return new Date(s+'T00:00:00').toLocaleDateString('en-M
 function capOf(){var n=+((CUR||{}).cap);return isFinite(n)&&n>0?n:21}
 function floorOf(){var n=+((CUR||{}).floor);return isFinite(n)&&n>=0?n:10}
 function inFridge(){var t=today(),n=0;
- STOCK.forEach(function(r){if(r.expires&&days(t,r.expires)<0)return;n+=+r.qty||0});return n}
+ STOCK.forEach(function(r){if(r.expires&&days(t,r.expires)<0)return;n+=+r.qty||0});
+ /* boxes the gym has already reported Sold or Expired come off straight away, before the kitchen books them */
+ (typeof MSGS!=='undefined'&&MSGS||[]).forEach(function(m){if(m&&m.kind==='count'&&String(m.status||'open')==='open')n-=+m.total||0});
+ return Math.max(0,n)}
 function roomLeft(){return Math.max(0,capOf()-inFridge())}
 
 function paintOrderGate(){
@@ -759,8 +762,7 @@ function paintOrderGate(){
  var when='Earliest delivery is <b>'+niceDate(earliest())+'</b> — we need '+leadDays()+
   ' days’ notice'+(pastCutoff()?', and today’s cut-off has passed':'')+'.';
  if(!room){box.className='remark';
-  box.innerHTML='Your fridge is full at <b>'+have+' of '+capOf()+' boxes</b>, so there is no room for more just yet. '+
-   'Send us a count when some have sold and the order opens again.';return}
+  box.innerHTML='Your fridge looks full at <b>'+have+' of '+capOf()+' boxes</b>. You can still send an order — we will check with you before we deliver. '+when;return}
  if(have>fl){box.className='remark';
   box.innerHTML='You still have <b>'+have+' boxes</b>. We normally restock at <b>'+fl+
    ' or fewer</b>, so there is no hurry — but if you are expecting a busy week, order anyway and we will fit you in. '+
@@ -874,9 +876,9 @@ function tally(kind,sel){
  QTY[kind]={lines:lines,total:total};
  if(!$('#osend')||!$('#ohint'))return;
  var room=roomLeft();
- if(total>room){$('#osend').disabled=true;
-  $('#ohint').textContent='That is '+total+' boxes, but your fridge only has room for '+room+
-   ' more before it is full at '+capOf()+'. Take '+(total-room)+' off and we can send it.';return}
+ if(total>room){$('#osend').disabled=false;
+  $('#ohint').textContent=total+' boxes for delivery on '+niceDate($('#odate').value||earliest())+'. That is more than the '+room+
+   ' spaces we think are free, so we will check with you before we deliver.';return}
  $('#osend').disabled=!total;
  $('#ohint').textContent=total?(total+' box'+(total===1?'':'es')+' to ask for, for delivery on '+niceDate($('#odate').value||earliest())+'.')
   :'Add a number to at least one meal first.'}
