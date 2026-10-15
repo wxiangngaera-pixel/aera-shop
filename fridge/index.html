@@ -701,7 +701,12 @@ async function pickFridge(id,user){
  if(my!==window.__PSEQ)return;
  MSGS=c.data||[];
  /* what the gym has already marked Sold or Expired comes off its shelf at once ; the kitchen books it later and closes the note */
- (function(){var take={};MSGS.forEach(function(m){if(m&&(m.kind==='count'||m.kind==='expired')&&String(m.status||'open')==='open')(m.lines||[]).forEach(function(l){if(l&&l.meal)take[l.meal]=(take[l.meal]||0)+(+l.qty||0)})});
+ (function(){var U={},take={},back={};MSGS.forEach(function(m){var nt=String((m&&m.note)||'');if(nt.indexOf('undo:')===0)U[nt.slice(5)]=m});
+  MSGS.forEach(function(m){if(!m||(m.kind!=='count'&&m.kind!=='expired'))return;if(String(m.note||'').indexOf('undo:')===0)return;var st=String(m.status||'open'),u=U[m.id];
+   if(st==='open'&&!u)(m.lines||[]).forEach(function(l){if(l&&l.meal)take[l.meal]=(take[l.meal]||0)+(+l.qty||0)});
+   else if(st==='done'&&u&&String(u.status||'open')==='open')(m.lines||[]).forEach(function(l){if(l&&l.meal)back[l.meal]=(back[l.meal]||0)+(+l.qty||0)})});
+  /* undone but not yet put back by the kitchen : back on the shelf now */
+  Object.keys(back).forEach(function(k){var r=STOCK.filter(function(x){return x.meal===k})[0];if(r)r.qty=(+r.qty||0)+back[k];else STOCK.push({meal:k,qty:back[k],expires:null,image_url:''})});
   STOCK.forEach(function(r){var t=take[r.meal]||0;if(!t)return;var q=+r.qty||0,d=Math.min(q,t);r.qty=q-d;take[r.meal]=t-d});
   STOCK=STOCK.filter(function(r){return (+r.qty||0)>0})})();
  var d=await db.from('fridge_invoices').select('*').eq('fridge_id',CUR.id).order('on_date',{ascending:true});
@@ -1109,15 +1114,33 @@ function paintOrders(){
    (meta?'<div class="ohmeta">'+meta+'</div>':'')+
    '</div>'}).join('')}
 
+/* Undo : a Sold or Expired sent by mistake goes back on the shelf. The gym sends an undo note ; the kitchen books it back. */
+var UNDOASK='',UNDOMSG='';
+function undoOf(id){return MSGS.filter(function(x){return String(x.note||'')==='undo:'+id})[0]}
+function canUndo(m){if(!m||(m.kind!=='count'&&m.kind!=='expired'))return false;var st=String(m.status||'open');if(st!=='open'&&st!=='done')return false;
+ if(/^Duplicate/i.test(String(m.note||'')))return false;if(undoOf(m.id))return false;
+ return (Date.now()-new Date(m.created_at).getTime())<7*864e5}
+function undoAsk(id){UNDOASK=id||'';UNDOMSG='';paintHist()}
+async function undoDo(id){var m=MSGS.filter(function(x){return x.id===id})[0];if(!m||!CUR)return;
+ var b=document.getElementById('undoYes');if(b){b.disabled=true;b.textContent='Sending…'}
+ var r=await db.from('fridge_messages').insert({fridge_id:CUR.id,kind:m.kind,on_date:today(),lines:[],total:+m.total||1,by_name:'',note:'undo:'+id,status:'open',sent_by:(ME&&ME.email)||''});
+ if(r.error){UNDOMSG='!That did not go through: '+r.error.message;UNDOASK='';paintHist();return}
+ UNDOASK='';await pickFridge(CUR.id);UNDOMSG=(+m.total||0)+' box'+((+m.total||0)===1?'':'es')+' put back on your shelf.';paintHist()}
+window.undoAsk=undoAsk;window.undoDo=undoDo;
 function paintHist(){
- var rows=MSGS.filter(function(m){return m.kind!=='order'});
+ var rows=MSGS.filter(function(m){return m.kind!=='order'&&String(m.note||'').indexOf('undo:')!==0});
+ var top=UNDOMSG?'<div class="hint" style="margin:0 0 10px;font-weight:700;color:'+(UNDOMSG.charAt(0)==='!'?'#C8433B':'#2E8B57')+'">'+(UNDOMSG.charAt(0)==='!'?'':'✅ ')+esc(UNDOMSG.replace(/^!/,''))+'</div>':'';
  if(!rows.length){$('#hist').innerHTML='<div class="empty">Nothing marked off yet.</div>';return}
- $('#hist').innerHTML=rows.map(function(m){
+ $('#hist').innerHTML=top+rows.map(function(m){
   var ls=(m.lines||[]).map(function(l){return '<span style="display:flex;justify-content:space-between;gap:12px;padding:3px 0;border-bottom:1px dashed #E3E9F3"><span>'+esc(l.meal)+'</span><b style="white-space:nowrap">×'+esc(l.qty)+'</b></span>'}).join('');
   var word=(m.kind==='expired'?'Expired':'Sold');
-  return '<div class="row"><div class="nm">'+word+' · '+esc(m.on_date||'')+
-   (m.status==='done'?' <span class="tag warn">Done</span>':'')+
-   '<small style="display:block;margin-top:6px">'+(ls||'—')+(m.by_name?'<span style="display:block;margin-top:4px">'+esc(m.by_name)+'</span>':'')+'</small></div>'+
+  var und=(m.status==='undone'||!!undoOf(m.id)),dup=/^Duplicate/i.test(String(m.note||''));
+  var act=canUndo(m)?(UNDOASK===m.id
+    ?'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><span style="flex:1 1 100%;font-weight:600">Put '+(+m.total||0)+' box'+((+m.total||0)===1?'':'es')+' back on your shelf?</span><button type="button" class="btn" id="undoYes" style="flex:1" onclick="undoDo(\''+esc(m.id)+'\')">Yes, Undo</button><button type="button" class="btn ghost" style="flex:1" onclick="undoAsk(\'\')">Cancel</button></div>'
+    :'<div style="margin-top:8px"><button type="button" class="btn ghost" style="min-height:36px;padding:6px 14px" onclick="undoAsk(\''+esc(m.id)+'\')">↩ Undo</button></div>'):'';
+  return '<div class="row"'+(und||dup?' style="opacity:.55"':'')+'><div class="nm">'+word+' · '+esc(m.on_date||'')+
+   (und?' <span class="tag">Undone</span>':dup?' <span class="tag">Not counted</span>':'')+
+   '<small style="display:block;margin-top:6px">'+(ls||'—')+(m.by_name?'<span style="display:block;margin-top:4px">'+esc(m.by_name)+'</span>':'')+'</small>'+act+'</div>'+
    '<div class="pill">'+(+m.total||0)+'</div></div>'}).join('')}
 
 /* AERA Fridge : Order More works like a shop. Tap Add To Cart on the meals, open the Cart, pick the
