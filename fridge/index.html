@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script id="aera-fresh">/* The installed app keeps a copy of this page for up to 10 minutes. On every open it asks the
+   site for the newest copy, refreshes the stored one, and reloads once if a newer build is out. */
+(function(){var B='1792055459128';try{if(location.hostname.indexOf('chatbees')>=0)return;
+fetch(location.pathname,{cache:'reload'}).then(function(r){return r.text()}).then(function(t){
+ var m=t.match(/aera-fresh">[^']*'(\d+)'/);if(!m||m[1]===B)return;
+ var k='aera.fr.'+m[1];try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1')}catch(e){}
+ location.reload()}).catch(function(){})}catch(e){}})();
+</script>
 <script id="aera-acct-guard">/* the page shows "signed in" from a saved copy of the account ; when the sign-in itself is gone ( logged out, expired, cleared by the phone ) that copy is dropped too, so no page claims a sign-in that is not there */(function(){try{var t=localStorage.getItem('sb-swpprjvubgcdsojapaad-auth-token'),ok=false;if(t){var o=JSON.parse(t);if(o&&o.currentSession)o=o.currentSession;ok=!!(o&&(o.refresh_token||o.access_token))}if(!ok){['aera.account','aera.refLock'].forEach(function(k){if(localStorage.getItem(k)!==null)localStorage.removeItem(k)})}}catch(e){}})();</script>
 
 <style id="aera-input-guard-css">
