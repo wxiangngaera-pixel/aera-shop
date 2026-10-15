@@ -3540,5 +3540,6 @@ html.aa-on a.btn.wa{bottom:calc(96px + 66px)!important}
 html.aa-on [id^="ultra-fast-widget-bubble"]{bottom:calc(20px + 66px)!important}
 </style>
 <script id="aera-float-stack-js">(function(){function u(){var b=document.getElementById('aaBar'),on=false;try{on=!!(b&&b.classList.contains('show')&&getComputedStyle(b).display!=='none')}catch(e){}document.documentElement.classList.toggle('aa-on',on)}setInterval(u,700);addEventListener('scroll',u,{passive:true});u()})();</script>
+<style id="aera-co-scroll">/* the order panel sits in the page ( aera-coe ), so the page itself must scroll : the old full-screen lock is lifted there */html.aera-coe:has(.side.open),html.aera-coe body:has(.side.open){overflow:visible!important;overflow-x:clip!important}@media(min-width:941px){html:not(.aera-coe) .side{max-height:calc(100vh - 96px);overflow:auto;overscroll-behavior:contain}}</style>
 </body>
 </html>
