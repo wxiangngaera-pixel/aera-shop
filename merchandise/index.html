@@ -1138,5 +1138,18 @@ b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 function sync(){var o=H.classList.contains('aera-dock-open');b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Hide help, chat and WhatsApp':'Show help, chat and WhatsApp')}
 b.onclick=function(){H.classList.toggle('aera-dock-open');try{sessionStorage.setItem(K,H.classList.contains('aera-dock-open')?'1':'0')}catch(e){}sync()};
 function add(){document.body.appendChild(b);sync()}if(document.body)add();else document.addEventListener('DOMContentLoaded',add)})();</script>
+<style id="aera-float-stack">
+/* the floating helpers stack instead of overlapping : chatbot at the bottom, WhatsApp above it, How it Works above that, the side tab above them all ; all of it lifts clear of the Get The App bar while that bar shows */
+#v2help{transition:transform .45s cubic-bezier(.2,.9,.25,1),opacity .3s,bottom .25s!important}
+html:not(.aera-dock-open) #v2help{transform:translateX(130%)!important;opacity:0!important;pointer-events:none!important}
+html.aera-dock-open #v2help{bottom:calc(164px + var(--aaLift,0px) + env(safe-area-inset-bottom,0px))!important;right:18px!important;left:auto!important}
+#aeraDock{transition:bottom .25s,width .2s}
+html.aera-dock-open #aeraDock{bottom:calc(216px + var(--aaLift,0px) + env(safe-area-inset-bottom,0px))!important}
+html.aa-on{--aaLift:66px}
+html.aa-on:not(.aera-dock-open) #aeraDock{bottom:calc(170px + 66px + env(safe-area-inset-bottom,0px))!important}
+html.aa-on a.btn.wa{bottom:calc(96px + 66px)!important}
+html.aa-on [id^="ultra-fast-widget-bubble"]{bottom:calc(20px + 66px)!important}
+</style>
+<script id="aera-float-stack-js">(function(){function u(){var b=document.getElementById('aaBar'),on=false;try{on=!!(b&&b.classList.contains('show')&&getComputedStyle(b).display!=='none')}catch(e){}document.documentElement.classList.toggle('aa-on',on)}setInterval(u,700);addEventListener('scroll',u,{passive:true});u()})();</script>
 </body>
 </html>
