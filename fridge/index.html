@@ -933,19 +933,27 @@ function paintBills(){
    decide who can save them, so a gym can never clear its own bill. The matching Run in the
    Kitchen Console is marked too, so the next publish from the Console keeps it paid. */
 function billBtn(b){if(!window.__ISADM||b.kind==='refund')return '';
- var paid=String(b.status||'').toLowerCase()==='paid';
- return paid?'<button class="dl" style="margin-right:6px" onclick="billPaid(\''+esc(b.id)+'\',false)">Undo</button>'
-  :'<button class="dl" style="margin-right:6px;background:#16479E;color:#FDB913;border-color:#16479E" onclick="billPaid(\''+esc(b.id)+'\',true)">Mark as Paid</button>'}
+ var paid=String(b.status||'').toLowerCase()==='paid',id=esc(b.id);
+ return '<span class="billpay" data-id="'+id+'">'+(paid?'<button class="dl" style="margin-right:6px" onclick="billAsk(\''+id+'\',false)">Undo</button>'
+  :'<button class="dl" style="margin-right:6px;background:#16479E;color:#FDB913;border-color:#16479E" onclick="billAsk(\''+id+'\',true)">Mark as Paid</button>')+'</span>'}
+/* No prompt() or confirm() : some app windows and embedded frames swallow them, so the
+   question is asked right in the row instead. */
+function billAsk(id,on){var sp=document.querySelector('.billpay[data-id="'+id+'"]');if(!sp)return;
+ sp.innerHTML=on?'<input class="billref" placeholder="Bank ref ( optional )" style="width:150px;padding:6px 8px;border:1px solid #CBD6E8;border-radius:8px;margin-right:6px;font:inherit;font-size:12px">'+
+   '<button class="dl" style="margin-right:6px;background:#16479E;color:#FDB913;border-color:#16479E" onclick="billPaid(\''+id+'\',true)">Save</button>'+
+   '<button class="dl" style="margin-right:6px" onclick="paintBills()">Cancel</button>'
+  :'<span style="font-size:12px;margin-right:6px">Back to unpaid?</span><button class="dl" style="margin-right:6px" onclick="billPaid(\''+id+'\',false)">Yes</button><button class="dl" style="margin-right:6px" onclick="paintBills()">No</button>';
+ var i=sp.querySelector('input');if(i)i.focus()}
 async function billPaid(id,on){if(!window.__ISADM)return;
- var b=BILLS.filter(function(x){return x.id===id})[0];if(!b)return;var ref='';
- if(on){ref=prompt('Payment reference for '+id+' ( bank reference, optional )');if(ref===null)return}
- else if(!confirm('Put '+id+' back to unpaid?'))return;
+ var b=BILLS.filter(function(x){return x.id===id})[0];if(!b)return;
+ var sp=document.querySelector('.billpay[data-id="'+id+'"]');var inp=sp&&sp.querySelector('input');var ref=inp?String(inp.value||'').trim():'';
+ if(sp)sp.innerHTML='<span style="font-size:12px;margin-right:6px">Saving…</span>';
  var ts=new Date().toISOString();
  var r=await db.from('fridge_invoices').update({status:on?'paid':'open',updated_at:ts}).eq('id',id).select('id');
- if(r.error||!r.data||!r.data.length){alert('Could not save : '+((r.error&&r.error.message)||'not allowed for this account'));return}
+ if(r.error||!r.data||!r.data.length){if(sp)sp.innerHTML='<span style="font-size:12px;color:#B42318;margin-right:6px">Could not save : '+esc((r.error&&r.error.message)||'not allowed for this account')+'</span>';return}
  b.status=on?'paid':'open';
  try{var k=await db.from('kc_docs').select('id').eq('coll','fridge_runs').eq('data->>orderNo','ORD-'+id.replace(/^INV-/,'')).limit(1);
-  if(k.data&&k.data[0])await db.rpc('kc_merge',{p_coll:'fridge_runs',p_id:k.data[0].id,p_patch:on?{paid:ts,payRef:String(ref||'').trim(),updatedAt:ts}:{paid:'',payRef:'',updatedAt:ts}})}catch(e){}
+  if(k.data&&k.data[0])await db.rpc('kc_merge',{p_coll:'fridge_runs',p_id:k.data[0].id,p_patch:on?{paid:ts,payRef:ref,updatedAt:ts}:{paid:'',payRef:'',updatedAt:ts}})}catch(e){}
  paintBills()}
 
 function dlBill(id){
@@ -1106,7 +1114,7 @@ function hook(){
  return true}
 hook();
 })();
-window.signIn=signIn;window.signOut=signOut;window.resetPass=resetPass;window.pickFridge=pickFridge;window.send=send;window.dlBill=dlBill;window.billPaid=billPaid;
+window.signIn=signIn;window.signOut=signOut;window.resetPass=resetPass;window.pickFridge=pickFridge;window.send=send;window.dlBill=dlBill;window.billPaid=billPaid;window.billAsk=billAsk;window.paintBills=paintBills;
 window.mark=mark;window.showView=showView;window.saveDetails=saveDetails;window.savePass=savePass;window.paintAccount=paintAccount;window.paintOrders=paintOrders;
 $('#gpass').addEventListener('keydown',function(e){if(e.key==='Enter')signIn()});
 boot();
@@ -1287,6 +1295,12 @@ Object.assign(D,{
 "Download":"下载",
 "Mark as Paid":"标记已付款",
 "Undo":"撤销",
+"Save":"保存",
+"Cancel":"取消",
+"Back to unpaid?":"改回未付款？",
+"Yes":"是",
+"No":"否",
+"Saving…":"保存中…",
 
 "You are down to":"目前只剩",
 ", at or below your restock level of":"，已达到或低于您的补货标准",
