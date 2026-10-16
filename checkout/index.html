@@ -1565,9 +1565,9 @@ function refKey(email){return sha256hex('aera-ref:'+String(email||'').trim().toL
 function refRows(j){var rows=[],hd=j&&Array.isArray(j.headers)?j.headers:null,raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];
  raw.forEach(function(r){if(Array.isArray(r)&&hd){var o={};hd.forEach(function(k,i){o[k]=r[i]});rows.push(o)}else if(r&&typeof r==='object')rows.push(r)});return rows}
 function loadReferrals(){
- fetch(REF_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){REF.rows=refRows(j)}).catch(function(){REF.rows=[]})
+ fetch(REF_URL,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(j){var rr=refRows(j);if(!rr.length)throw new Error('empty');REF.rows=rr;REF.failed=false}).catch(function(){REF.failed=true;REF.rows=REF.rows||[]})
   .then(function(){return fetch(REFLINK_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){REF.links=refRows(j)}).catch(function(){REF.links=[]})})
-  .then(function(){REF.loaded=true;try{var t=localStorage.getItem('aera.ref');if(t&&!REF.typed){REF.typed=t;var e=document.getElementById('refCode');if(e&&!e.value)e.value=t}}catch(e){}refApply()})}
+  .then(function(){REF.loaded=true;/* the code list did not arrive ( a network or Chatbees hiccup ) : try again, rather than telling the customer their code is wrong */if(REF.failed&&(REF.tries=(REF.tries||0)+1)<6)setTimeout(loadReferrals,2500*REF.tries);try{var t=localStorage.getItem('aera.ref');if(t&&!REF.typed){REF.typed=t;var e=document.getElementById('refCode');if(e&&!e.value)e.value=t}}catch(e){}refApply()})}
 function refFind(code){code=String(code||'').trim().toUpperCase();if(!code)return null;
  for(var i=0;i<REF.rows.length;i++){var r=REF.rows[i];
   if(String(r.Code||'').trim().toUpperCase()!==code)continue;
@@ -1587,13 +1587,13 @@ function refApply(){var em=(document.getElementById('email')||{}).value||'';
  REF.locked=refLocked(em);
  var use=REF.locked||REF.typed;var hit=refFind(use);
  REF.code=hit?hit.code:'';REF.name=hit?hit.name:'';REF.tier=hit?hit.tier:'';REF.rate=hit?hit.rate:0;
- REF.state=!use?'':(hit?(REF.locked?'locked':'ok'):'bad');
+ REF.state=!use?'':(hit?(REF.locked?'locked':'ok'):(!REF.loaded||REF.failed?((REF.failed&&(REF.tries||0)>=6)?'down':'wait'):'bad'));
  var box=document.getElementById('refCode'),msg=document.getElementById('refMsg');
  if(box){box.disabled=!!REF.locked;if(REF.locked&&box.value!==REF.locked)box.value=REF.locked}
  if(!msg)return;
  if(REF.state==='locked')msg.innerHTML='<span style="color:var(--green);font-weight:600">You are registered under '+esc(REF.name)+' ( '+esc(REF.code)+' ).</span> A referral code stays with your account and cannot be swapped.';
  else if(REF.state==='ok')msg.innerHTML='<span style="color:var(--green);font-weight:600">'+esc(REF.name)+' ( '+esc(REF.code)+' ) applied.</span> You earn an extra '+REF_BONUS_PCT+'% of your meal subtotal in AERA Points. Once this order is paid, your account stays with this referrer.';
- else if(REF.state==='bad')msg.innerHTML='<span style="color:var(--bad);font-weight:600">We do not recognise that code.</span> Check it with whoever gave it to you, or leave it blank.';
+ else if(REF.state==='wait')msg.innerHTML='<span style="font-weight:600">Checking your code…</span> One moment.'; else if(REF.state==='down')msg.innerHTML='<span style="color:var(--bad);font-weight:600">We could not check codes just now.</span> Your code is kept. Refresh the page in a minute, or WhatsApp us and we will add it to your order.'; else if(REF.state==='bad')msg.innerHTML='<span style="color:var(--bad);font-weight:600">We do not recognise that code.</span> Check it with whoever gave it to you, or leave it blank.';
  else msg.textContent='Have a Code from a Gym, Studio or Coach? Enter it and you earn extra AERA Points on your Meals.'}
 function refEligible(){return Math.max(0,Math.round((mealBase()-birthdayRM()-discountRM())*100)/100)}
 function refBonusAp(){if(!REF.code)return 0;return Math.max(0,Math.floor(refEligible()*REF_BONUS_PCT/100*100/AP.rmPer100))}
