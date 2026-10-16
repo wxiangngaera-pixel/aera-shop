@@ -1590,7 +1590,9 @@ function refLocked(email){var k=refKey(email);if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.t
  return ''}
 function refInput(){var e=document.getElementById('refCode');if(!e)return;
  var v=e.value.toUpperCase().replace(/[^A-Z0-9-]/g,'');if(e.value!==v)e.value=v;REF.typed=v;
- try{localStorage.setItem('aera.ref',v)}catch(x){}refApply();renderCart()}
+ try{localStorage.setItem('aera.ref',v)}catch(x){}refApply();
+ /* a good code typed here stays with this customer from now on */
+ if(REF.code&&REF.state==='ok'&&!REF.tieUnknown){refLockSave((document.getElementById('email')||{}).value,REF.code);refApply()}renderCart()}
 function refApply(){var em=(document.getElementById('email')||{}).value||'';
  REF.locked=refLocked(em);
  var use=REF.locked||REF.typed;var hit=refFind(use);
@@ -1600,8 +1602,9 @@ function refApply(){var em=(document.getElementById('email')||{}).value||'';
  /* until we know who this customer is tied to, a code they type is not confirmed and the box stays shut */
  var tieUnknown=okEm&&!REF.locked&&(!REF.loaded||REF.linksOk!==true)&&!((REF.tries||0)>=6);
  if(tieUnknown&&(REF.state==='ok'||REF.state===''||REF.state==='bad'))REF.state='wait';
- /* a good code entered here stays with this customer from now on */
- if(okEm&&REF.code&&!tieUnknown)refLockSave(em,REF.locked||REF.code);
+ REF.tieUnknown=tieUnknown;
+ /* a tied customer's box always shows their code ; the device keeps a copy in case the tie list cannot be read next time */
+ if(REF.locked){REF.typed=REF.locked;if(okEm&&REF.linksOk===true)refLockSave(em,REF.locked)}
  var box=document.getElementById('refCode'),msg=document.getElementById('refMsg');
  if(box){
   if(!okEm&&!box.value){var dm=refLocksGet(),vs=Object.keys(dm).map(function(x){return dm[x]}).filter(function(v,i,a){return v&&a.indexOf(v)===i});if(vs.length===1){box.value=vs[0];REF.typed=vs[0]}}
