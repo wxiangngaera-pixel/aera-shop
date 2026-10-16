@@ -1561,12 +1561,19 @@ var REF_URL='/api/public/landing-pages/6947/sheet-data',REFLINK_URL='/api/public
 var REF_TIER={normal:{name:'Referral Partner',rate:5},gym:{name:'Fitness Studio / Gym',rate:6.5},influencer:{name:'Fitness Influencer',rate:8}};
 var REF_BONUS_PCT=3; // extra AERA Points for the customer, worth this % of the meal subtotal after discounts
 var REF={rows:[],links:[],loaded:false,typed:'',locked:'',code:'',name:'',tier:'',rate:0,state:''};
+/* A referral code, once entered, stays with the customer for good ( only AERA changes it, in the Referral Links sheet ).
+   It is kept three ways : the Referral Links sheet, the last copy of that sheet on this device, and this device's own record of codes entered here. */
+try{var _rl=JSON.parse(localStorage.getItem('aera.refLinks')||'null');if(Array.isArray(_rl))REF.links=_rl}catch(e){}
+function refLocksGet(){try{var m=JSON.parse(localStorage.getItem('aera.refLocks')||'{}');return m&&typeof m==='object'?m:{}}catch(e){return{}}}
+function refLockSave(email,code){if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email||''))||!code)return;try{var m=refLocksGet(),k=refKey(email);if(m[k]===code)return;if(!m[k])m[k]=String(code).toUpperCase();localStorage.setItem('aera.refLocks',JSON.stringify(m))}catch(e){}}
 function refKey(email){return sha256hex('aera-ref:'+String(email||'').trim().toLowerCase()).slice(0,24)}
 function refRows(j){var rows=[],hd=j&&Array.isArray(j.headers)?j.headers:null,raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];
  raw.forEach(function(r){if(Array.isArray(r)&&hd){var o={};hd.forEach(function(k,i){o[k]=r[i]});rows.push(o)}else if(r&&typeof r==='object')rows.push(r)});return rows}
 function loadReferrals(){
  fetch(REF_URL,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(j){var rr=refRows(j);if(!rr.length)throw new Error('empty');REF.rows=rr;REF.failed=false}).catch(function(){REF.failed=true;REF.rows=REF.rows||[]})
-  .then(function(){return fetch(REFLINK_URL,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){REF.links=refRows(j)}).catch(function(){REF.links=[]})})
+  .then(function(){return fetch(REFLINK_URL,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(j){var ls=refRows(j);if(!ls.length&&REF.links.length)throw new Error('empty');REF.links=ls;REF.linksOk=true;
+   try{localStorage.setItem('aera.refLinks',JSON.stringify(ls.map(function(l){return{Key:String(l.Key||'').trim(),Code:String(l.Code||'').trim().toUpperCase()}})))}catch(e){}})
+   .catch(function(){/* who the customer is tied to did not arrive : keep the last known list, retry, and keep the box locked meanwhile */REF.linksOk=false;REF.failed=true})})
   .then(function(){REF.loaded=true;/* the code list did not arrive ( a network or Chatbees hiccup ) : try again, rather than telling the customer their code is wrong */if(REF.failed&&(REF.tries=(REF.tries||0)+1)<6)setTimeout(loadReferrals,2500*REF.tries);try{var t=localStorage.getItem('aera.ref');if(t&&!REF.typed){REF.typed=t;var e=document.getElementById('refCode');if(e&&!e.value)e.value=t}}catch(e){}refApply()})}
 function refFind(code){code=String(code||'').trim().toUpperCase();if(!code)return null;
  for(var i=0;i<REF.rows.length;i++){var r=REF.rows[i];
@@ -1578,6 +1585,7 @@ function refFind(code){code=String(code||'').trim().toUpperCase();if(!code)retur
  return null}
 function refLocked(email){var k=refKey(email);if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email||'')))return '';
  for(var i=0;i<REF.links.length;i++){if(String(REF.links[i].Key||'').trim()===k)return String(REF.links[i].Code||'').trim().toUpperCase()}
+ var dm=refLocksGet();if(dm[k])return String(dm[k]).toUpperCase();
  try{var o=JSON.parse(localStorage.getItem('aera.refLock')||'null');if(o&&o.k===k)return String(o.c||'').toUpperCase()}catch(e){}
  return ''}
 function refInput(){var e=document.getElementById('refCode');if(!e)return;
@@ -1588,12 +1596,21 @@ function refApply(){var em=(document.getElementById('email')||{}).value||'';
  var use=REF.locked||REF.typed;var hit=refFind(use);
  REF.code=hit?hit.code:'';REF.name=hit?hit.name:'';REF.tier=hit?hit.tier:'';REF.rate=hit?hit.rate:0;
  REF.state=!use?'':(hit?(REF.locked?'locked':'ok'):(!REF.loaded||REF.failed?((REF.failed&&(REF.tries||0)>=6)?'down':'wait'):'bad'));
+ var okEm=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(em||''));
+ /* until we know who this customer is tied to, a code they type is not confirmed and the box stays shut */
+ var tieUnknown=okEm&&!REF.locked&&(!REF.loaded||REF.linksOk!==true)&&!((REF.tries||0)>=6);
+ if(tieUnknown&&(REF.state==='ok'||REF.state===''||REF.state==='bad'))REF.state='wait';
+ /* a good code entered here stays with this customer from now on */
+ if(okEm&&REF.code&&!tieUnknown)refLockSave(em,REF.locked||REF.code);
  var box=document.getElementById('refCode'),msg=document.getElementById('refMsg');
- if(box){box.disabled=!!REF.locked;if(REF.locked&&box.value!==REF.locked)box.value=REF.locked}
+ if(box){
+  if(!okEm&&!box.value){var dm=refLocksGet(),vs=Object.keys(dm).map(function(x){return dm[x]}).filter(function(v,i,a){return v&&a.indexOf(v)===i});if(vs.length===1){box.value=vs[0];REF.typed=vs[0]}}
+  box.disabled=!!REF.locked||tieUnknown;box.placeholder=tieUnknown&&!box.value?'Checking your code…':'e.g. AERA-GYMNAME';
+  if(REF.locked&&box.value!==REF.locked)box.value=REF.locked}
  if(!msg)return;
  if(REF.state==='locked')msg.innerHTML='<span style="color:var(--green);font-weight:600">You are registered under '+esc(REF.name)+' ( '+esc(REF.code)+' ).</span> A referral code stays with your account and cannot be swapped.';
- else if(REF.state==='ok')msg.innerHTML='<span style="color:var(--green);font-weight:600">'+esc(REF.name)+' ( '+esc(REF.code)+' ) applied.</span> You earn an extra '+REF_BONUS_PCT+'% of your meal subtotal in AERA Points. Once this order is paid, your account stays with this referrer.';
- else if(REF.state==='wait')msg.innerHTML='<span style="font-weight:600">Checking your code…</span> One moment.'; else if(REF.state==='down')msg.innerHTML='<span style="color:var(--bad);font-weight:600">We could not check codes just now.</span> Your code is kept. Refresh the page in a minute, or WhatsApp us and we will add it to your order.'; else if(REF.state==='bad')msg.innerHTML='<span style="color:var(--bad);font-weight:600">We do not recognise that code.</span> Check it with whoever gave it to you, or leave it blank.';
+ else if(REF.state==='ok')msg.innerHTML='<span style="color:var(--green);font-weight:600">'+esc(REF.name)+' ( '+esc(REF.code)+' ) applied.</span> You earn an extra '+REF_BONUS_PCT+'% of your meal subtotal in AERA Points. This code now stays with your account.';
+ else if(REF.state==='wait')msg.innerHTML='<span style="font-weight:600">Checking your code…</span> One moment.'; else if(REF.state==='down')msg.innerHTML='<span style="color:var(--bad);font-weight:600">We could not check codes just now.</span> You can still pay: your code is saved with this order and is credited as soon as we check it.'; else if(REF.state==='bad')msg.innerHTML='<span style="color:var(--bad);font-weight:600">We do not recognise that code.</span> Check it with whoever gave it to you, or leave it blank.';
  else msg.textContent='Have a Code from a Gym, Studio or Coach? Enter it and you earn extra AERA Points on your Meals.'}
 function refEligible(){return Math.max(0,Math.round((mealBase()-birthdayRM()-discountRM())*100)/100)}
 function refBonusAp(){if(!REF.code)return 0;return Math.max(0,Math.floor(refEligible()*REF_BONUS_PCT/100*100/AP.rmPer100))}
@@ -1767,7 +1784,7 @@ function cloApply(){
    refuses to open: "Failed to create donation checkout session" ). Every reader of this JSON ( flows 5486 and
    5490, the Kitchen Console ) treats a missing key as 0 or blank, so when it is too long: first drop keys that
    carry nothing, then shorten the free text ( plan lines, address, notes, preferences ). Email is never dropped. */
-function compactOrder(o){var MAX=495;var c={v:2,n:o.orderNo,f:o.fulfil==='delivery'?o.courier:'pickup',h:o.fulfil==='delivery'?o.handover:'',d:o.date,s:o.slot,g:o.geo?[+o.geo.lat.toFixed(5),+o.geo.lng.toFixed(5),o.geo.km]:null,p:o.phone,i:o.items.map(function(i){return i.sku+'x'+i.qty}).join(','),b:o.boxes,pk:o.packaging,pf:o.packagingFee,pi:o.packagingIncluded,sub:Math.round(o.subtotal*100)/100,fee:o.deliveryFee,bd:o.birthdayDiscount||0,bp:o.birthdayPct||0,fo:o.firstOrderDiscount||0,rd:o.discount||0,cu:o.creditUsed||0,ck:o.creditKey||'',cc:o.costCode||'',rp:o.pointsRedeemed||0,ap:o.pointsEarned||0,ex:o.pointsExpire,vc:o.voucherCode||'',va:o.voucherAp||0,vs:o.voucherSaved||0,rf:o.referralCode||'',rk:o.referralKey||'',rr:o.referralRate||0,rc:o.referralCashback||0,rb:o.referralBonusAp||0,re:o.referralEligible||0,t:o.total,nm:o.name,e:o.email,a:o.address,no:o.notes,pr:o.prefs||'',pl:o.planLines||''};
+function compactOrder(o){var MAX=495;var c={v:2,n:o.orderNo,f:o.fulfil==='delivery'?o.courier:'pickup',h:o.fulfil==='delivery'?o.handover:'',d:o.date,s:o.slot,g:o.geo?[+o.geo.lat.toFixed(5),+o.geo.lng.toFixed(5),o.geo.km]:null,p:o.phone,i:o.items.map(function(i){return i.sku+'x'+i.qty}).join(','),b:o.boxes,pk:o.packaging,pf:o.packagingFee,pi:o.packagingIncluded,sub:Math.round(o.subtotal*100)/100,fee:o.deliveryFee,bd:o.birthdayDiscount||0,bp:o.birthdayPct||0,fo:o.firstOrderDiscount||0,rd:o.discount||0,cu:o.creditUsed||0,ck:o.creditKey||'',cc:o.costCode||'',rp:o.pointsRedeemed||0,ap:o.pointsEarned||0,ex:o.pointsExpire,vc:o.voucherCode||'',va:o.voucherAp||0,vs:o.voucherSaved||0,rf:o.referralCode||'',rk:o.referralKey||'',rr:o.referralRate||0,rc:o.referralCashback||0,rb:o.referralBonusAp||0,re:o.referralEligible||0,rq:o.referralTyped||'',t:o.total,nm:o.name,e:o.email,a:o.address,no:o.notes,pr:o.prefs||'',pl:o.planLines||''};
  var J=function(){return JSON.stringify(c)};var room=function(){return MAX-J().length};
  window.__orderFull=J(); /* the untrimmed copy, kept in the database by orderStash() before payment */
  var KEEP=['v','n','f','d','s','i','b','sub','fee','t','e','nm','p','a'];
@@ -1825,6 +1842,10 @@ async function pay(){var m=document.getElementById('payMsg');m.innerHTML='';
  if(shutWhy)return m.innerHTML='<div class="msg warn">'+esc(cloNice(date))+' — '+esc(shutWhy)+
    ' Please pick another day.</div>';
  if(isDel()){if(!ready())return m.innerHTML='<div class="msg warn">Enter your address and press “Check Delivery Fee” first.</div>';var _am=addrMissing();if(_am)return m.innerHTML='<div class="msg warn">'+_am+'</div>';if(!COURIER)return m.innerHTML='<div class="msg warn">Please choose Lalamove.</div>';if(!HANDOVER||FEE_RM==null)return m.innerHTML='<div class="msg warn">Please choose normal delivery or door-to-door service.</div>'}
+ /* the code list and who this customer is tied to are read before paying ( up to 8 s ), so the right referrer is credited */
+ if(!REF.loaded||REF.failed){var _rb=document.getElementById('payBtn'),_rt=_rb?_rb.textContent:'';if(_rb){_rb.disabled=true;_rb.textContent='Checking your code…'}
+  await new Promise(function(done){var n=0;(function tick(){if(REF.loaded&&!REF.failed)return done();if(++n>16)return done();if(n===1||n===9)loadReferrals();setTimeout(tick,500)})()});
+  if(_rb){_rb.disabled=false;_rb.textContent=_rt}refApply()}
  var items=Object.keys(CART).map(function(k){return{sku:k,name:CAT[k].name,qty:CART[k],price:CAT[k].price,boxes:CAT[k].boxes}});
  apLookup(email);renderCart();
  var sub=subtotal(),fee=isDel()?FEE_RM:0,pkg=packFee(),pki=packIncluded(),bday=birthdayRM(),disc=discountRM(),foRM=firstOrderRM();
@@ -1838,9 +1859,9 @@ async function pay(){var m=document.getElementById('payMsg');m.innerHTML='';
  var order={orderNo:no,fulfil:isDel()?'delivery':'pickup',courier:isDel()?COURIER:'',handover:isDel()?HANDOVER:'',date:date,slot:slot,address:isDel()?addrFull():'',geo:GEO?{lat:GEO.lat,lng:GEO.lng,km:GEO.km}:null,phone:phone,name:name,email:email,notes:notes,prefs:acctPrefs()||(PLANITEM&&CART['PLAN-'+PLANITEM.id]&&PLANITEM.prefs?PLANITEM.prefs.split('/').filter(function(x){return x&&x!=='normal'}).map(function(x){return x.replace('_',' ')}).join(' · '):''),planLines:(PLANITEM&&CART['PLAN-'+PLANITEM.id])?PLANITEM.pl:'',account:ACCT?1:0,items:items,boxes:boxes(),packaging:PACK,packagingFee:pkg,packagingIncluded:pki,subtotal:sub,deliveryFee:fee,birthdayDiscount:bday,birthdayPct:bday>0?BD.pct:0,firstOrderDiscount:foRM,discount:disc,pointsRedeemed:apRedeem,pointsEarned:apEarn,pointsBase:pointsBase(),pointsExpire:apExp,
   creditUsed:cred,creditKey:cred>0?APS.key:'',costCode:ccOn()?CC.on.code:'',gatewayFee:gwf,
   voucherCode:vCode,voucherName:vName,voucherAp:vAp,voucherSaved:vSave,deliveryCharged:Math.round((fee-vSave)*100)/100,total:total,
-  referralCode:REF.code||'',referralName:REF.name||'',referralTier:REF.tier||'',referralRate:REF.code?REF.rate:0,referralEligible:refElig,referralCashback:refCash,referralBonusAp:refBonus,referralKey:REF.code?refKey(email):'',
+  referralCode:REF.code||'',referralName:REF.name||'',referralTier:REF.tier||'',referralRate:REF.code?REF.rate:0,referralEligible:refElig,referralCashback:refCash,referralBonusAp:refBonus,referralKey:REF.code?refKey(email):'',referralTyped:(!REF.code||REF.linksOk!==true)?String(REF.locked||REF.typed||'').trim().toUpperCase():'',
   source:'checkout-page'};
- if(REF.code){try{localStorage.setItem('aera.refLock',JSON.stringify({k:refKey(email),c:REF.code}))}catch(e){}}
+ if(REF.code){try{localStorage.setItem('aera.refLock',JSON.stringify({k:refKey(email),c:REF.code}))}catch(e){}refLockSave(email,REF.code)}
  var desc=items.map(function(i){return i.qty+'× '+i.name}).join(', ')+' · '+PACKAGING[PACK].name+' Packaging Fee '+rm(pkg)+(foRM?' · First Order Voucher −'+rm(foRM):'')+(bday?' · Birthday treat −'+rm(bday):'')+(disc?' · AERA Points −'+rm(disc):'')+(cred?' · AERA Credit −'+rm(cred):'')+' · '+(isDel()?feeName()+' '+rm(fee)+' ( '+(GEO.km||'?')+' km )':'Self Pick-Up')+(REF.code?' · Referral '+REF.code+' ( '+REF.rate+'% = '+rm(refCash)+' ) · Bonus '+refBonus+' AP':'')+(vCode?' · Voucher '+vName+' ( −'+rm(vSave)+' delivery, '+vAp+' AP )':'')+' · '+date+' '+slotLabel(slot);
  var msg=compactOrder(order);window.__foUsed=foRM>0?('aera.foUsed:'+email.toLowerCase()):'';window.__bdayUsed=bday>0?email.toLowerCase()+':'+bdayYear():'';try{if(window.__bdayUsed)localStorage.setItem('aera.bdayPending',window.__bdayUsed);else localStorage.removeItem('aera.bdayPending')}catch(e){}
  if(PAY.gateway==='billplz'){
