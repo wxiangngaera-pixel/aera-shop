@@ -308,9 +308,9 @@ function signedIn(){try{for(var i=0;i<localStorage.length;i++){var k=localStorag
 function nextKey(){if(/^\/meal-plan/.test(P))return'plan';if(/^\/checkout/.test(P))return'checkout';return''}
 function go(mode){var n=nextKey();location.href=ACC+(n?'?next='+n:'')+'#'+mode}
 var css=document.createElement('style');css.id='aera-nudge-css';css.textContent=
-'#aeraNudge{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:9000;display:flex;gap:8px;padding:8px;border-radius:999px;background:#fff;box-shadow:0 10px 30px rgba(11,11,11,.22);border:2px solid #FDB913;transition:bottom .2s ease,opacity .2s ease;font-family:Montserrat,system-ui,-apple-system,sans-serif}'+
-'#aeraNudge button{border:0;border-radius:999px;padding:11px 20px;font:800 13.5px Montserrat,system-ui,sans-serif;cursor:pointer;white-space:nowrap;min-height:44px}'+
-'#aeraNudge .li{background:#16479E;color:#fff}#aeraNudge .su{background:#FDB913;color:#16479E}'+
+'#aeraNudge{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);width:min(520px,calc(100% - 24px));z-index:9000;display:flex;gap:10px;padding:14px;border-radius:20px;background:#fff;border-top:5px solid #FDB913;box-shadow:0 12px 34px rgba(11,11,11,.22);transition:bottom .2s ease;font-family:Montserrat,system-ui,-apple-system,sans-serif;box-sizing:border-box}'+
+'#aeraNudge button{flex:1;border:0;border-radius:14px;padding:14px 10px;font:800 16px Montserrat,system-ui,sans-serif;cursor:pointer;white-space:nowrap;min-height:50px}'+
+'#aeraNudge .li{background:#16479E;color:#fff}#aeraNudge .su{background:#EEF2F8;color:#16479E}'+
 '#aeraNudgeSheet{position:fixed;inset:0;z-index:9500;background:rgba(11,11,11,.45);display:flex;align-items:flex-end;justify-content:center;font-family:Montserrat,system-ui,-apple-system,sans-serif}'+
 '#aeraNudgeSheet .pan{width:100%;max-width:440px;background:#fff;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgba(0,0,0,.2)}'+
 '@media(min-width:700px){#aeraNudgeSheet{align-items:center}#aeraNudgeSheet .pan{border-radius:20px}}'+
