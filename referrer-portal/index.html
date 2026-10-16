@@ -120,6 +120,36 @@ html.rf-acct #pin-gate,html.rf-login #pin-gate{display:none!important}html.rf-ac
   return fetch(window.DATA_URL||"/api/public/landing-pages/6950/sheet-data",{cache:"no-store"}).then(function(r){return r.json()})};
 })();
 </script>
+<script id="aera-ref-demo">/* Sample figures for Peter : an admin account with no Referral Code of its own sees a made-up Referrer here,
+   clearly marked SAMPLE, so the page can be checked and edited. Real Referrers always see their own figures. ?demo=1 shows it too. */
+(function(){var orig=window.aeraRefData;if(typeof orig!=="function")return;
+ var HD=["Email","Code","Referrer","Tier","Month","Date","OrderNo","Customer","CustomerMasked","Sales","Rate","Cashback","BonusAp","Paid","PaidAt","PaidRef"];
+ function row(mo,day,no,mask,sales,paid,pAt,pRef){var cb=Math.round(sales*6.5)/100;return["","SAMPLE","Sample Gym ( Demo )","gym",mo,mo+"-"+day,no,"",mask,sales.toFixed(2),"6.5",cb.toFixed(2),String(Math.round(sales*3)),paid?"yes":"no",paid?pAt:"",paid?pRef:""]}
+ function team(mo,day,code,name,sales){return["",code,name,"normal",mo,mo+"-"+day,"TEAM-"+code+"-"+mo+"-"+day,"","",sales.toFixed(2),"5",(Math.round(sales*5)/100).toFixed(2),"0","no","",""]}
+ function demo(){var D=[["","SAMPLE","Sample Gym ( Demo )","gym","","","PROFILE-SAMPLE","","","0","6.5","0","0","profile","",""],
+  row("2026-08","04","AERA-260804-DEMO1","al\u2022\u2022\u2022\u2022\u2022\u2022@gmail.com",289.40,1,"2026-09-05","DuitNow 0905"),
+  row("2026-08","18","AERA-260818-DEMO2","ja\u2022\u2022\u2022\u2022\u2022\u2022@gmail.com",162.75,1,"2026-09-05","DuitNow 0905"),
+  row("2026-09","02","AERA-260902-DEMO3","al\u2022\u2022\u2022\u2022\u2022\u2022@gmail.com",315.80,1,"2026-10-05","DuitNow 1005"),
+  row("2026-09","15","AERA-260915-DEMO4","me\u2022\u2022\u2022\u2022\u2022\u2022@yahoo.com",131.35,1,"2026-10-05","DuitNow 1005"),
+  row("2026-09","27","AERA-260927-DEMO5","ja\u2022\u2022\u2022\u2022\u2022\u2022@gmail.com",224.10,1,"2026-10-05","DuitNow 1005"),
+  row("2026-10","03","AERA-261003-DEMO6","al\u2022\u2022\u2022\u2022\u2022\u2022@gmail.com",298.60,0),
+  row("2026-10","09","AERA-261009-DEMO7","ra\u2022\u2022\u2022\u2022\u2022\u2022@hotmail.com",136.20,0),
+  row("2026-10","14","AERA-261014-DEMO8","me\u2022\u2022\u2022\u2022\u2022\u2022@yahoo.com",187.90,0),
+  team("2026-09","10","COACHAMY","Coach Amy ( Demo )",410.00),team("2026-09","21","COACHBEN","Coach Ben ( Demo )",265.50),
+  team("2026-10","06","COACHAMY","Coach Amy ( Demo )",352.30),team("2026-10","12","COACHBEN","Coach Ben ( Demo )",198.40),
+  ["","SAMPLE","Sample Gym ( Demo )","gym","2026-09","2026-09-30","OVR-SAMPLE-2026-09","","1% Group Override on your coaches' Sales","0","1","6.76","0","yes","2026-10-05","DuitNow 1005"],
+  ["","SAMPLE","Sample Gym ( Demo )","gym","2026-10","2026-10-31","OVR-SAMPLE-2026-10","","1% Group Override on your coaches' Sales","0","1","5.51","0","no","",""]];
+  return{ok:true,headers:HD,data:D,demo:true}}
+ window.aeraRefData=async function(){var j=await orig();var n=0;try{var d=j&&(j.data||j.rows);n=Array.isArray(d)?d.length:0}catch(e){}
+  if(n)return j;var on=/[?&]demo=1/.test(location.search);
+  if(!on){try{var c=window.__REF_SB;var s=c&&(await c.auth.getSession()).data.session;if(s){var r=await c.rpc("kc_role");on=!!(r&&r.data==="admin")}}catch(e){}}
+  if(!on)return j;window.__REF_DEMO=1;try{var H=document.documentElement;if(/[?&]demo=1/.test(location.search)&&!H.classList.contains("rf-acct")){H.classList.remove("rf-login","rf-pin");H.classList.add("rf-acct")}}catch(e){}return demo()};
+ function banner(){if(!window.__REF_DEMO)return;var st=document.getElementById("state");if(!st||!st.firstChild||document.getElementById("rfDemo"))return;
+  var b=document.createElement("div");b.id="rfDemo";b.style.cssText="margin:0 0 14px;padding:12px 14px;border-radius:14px;background:#FFF2C2;border:2px dashed #FDB913;color:#16479E;font:700 13.5px/1.45 Montserrat,system-ui,sans-serif";
+  b.innerHTML="SAMPLE \u00B7 made-up figures, shown only to AERA admin accounts with no Referral Code of their own. Real Referrers see their own Orders and Cash-Back here.";st.insertBefore(b,st.firstChild)}
+ new MutationObserver(function(){banner()}).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
 
 <!-- SEO Meta Tags -->
 <title>Referrer Portal — AERA Meal Prep</title>
