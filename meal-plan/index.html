@@ -1858,7 +1858,7 @@ html.aa-on [id^="ultra-fast-widget-bubble"]{bottom:calc(20px + 66px)!important}
  try{orderPlan=function(){send()}}catch(e){}
  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b)return;var t=String(b.textContent||'');if(/Add (Plan )?to (Cart|Order)/i.test(t)){e.preventDefault();e.stopImmediatePropagation();send()}},true);
  function relabel(){[].forEach.call(document.querySelectorAll('button'),function(b){var t=String(b.textContent||'').trim();if(/^Add to Cart/.test(t)||/^Add Plan to Cart/.test(t))b.textContent='Add Plan to Order →';if(/^(Save Plan|★ Favourite|Share with my Coach|Download Slides|I already have a Plan|← Change Answers|Start a New Plan|Review My Plan)$/.test(t))b.style.display='none'})}
- var last=0;function post(){try{var h=Math.max(document.documentElement.scrollHeight,document.body.scrollHeight);if(Math.abs(h-last)>4){last=h;parent.postMessage({type:'aera-mp-h',h:h},location.origin)}}catch(e){}}
+ var last=0;function post(){try{var h=document.body.scrollHeight+16;if(Math.abs(h-last)>4){last=h;parent.postMessage({type:'aera-mp-h',h:h},location.origin)}}catch(e){}}
  var mo=new MutationObserver(function(){relabel();post();if(window.STEP===4)addBtns()});mo.observe(document.body,{childList:true,subtree:true});
  window.addEventListener('load',function(){relabel();post();kcBoot()});if(document.readyState==='complete')kcBoot();setInterval(post,800);relabel();post();
 })();</script>
