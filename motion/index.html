@@ -295,6 +295,61 @@
 </script></head>
 <body><p>AERA Motion Engine. Used by every AERA page. Do not delete.</p>
 <script type="text/plain" id="aera-motion-src">/*AERA-MOTION-START*/
+/* AERA sign-in nudge : visitors who are not signed in see Log In / Sign Up pinned to the bottom of every page,
+   and the first time they tap Add To Cart or Checkout in a visit, a short "Sign in before you order?" prompt. */
+(function(){if(window.__AERA_NUDGE)return;window.__AERA_NUDGE=1;
+try{if(/(^|\.)my\.chatbees\.io$/i.test(location.hostname)&&window.top!==window)return}catch(e){}
+var P=location.pathname.toLowerCase();
+if(/^\/(account|fridge|kitchen|referrer|thank-you|coach-plan-builder|motion|v2|push)(\/|$)/.test(P))return;
+var ACC='https://aeramealprep.net/account/';
+function zh(){return document.documentElement.getAttribute('data-lang')==='zh'||(function(){try{return localStorage.getItem('aera_lang')==='zh'}catch(e){return false}})()}
+function signedIn(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var s=JSON.parse(localStorage.getItem(k)||'null');if(s&&s.currentSession)s=s.currentSession;if(s&&(s.refresh_token||(s.expires_at&&s.expires_at*1000>Date.now())))return true}}
+ var a=JSON.parse(localStorage.getItem('aera.account')||'null');return !!(a&&a.email)}catch(e){return false}}
+function nextKey(){if(/^\/meal-plan/.test(P))return'plan';if(/^\/checkout/.test(P))return'checkout';return''}
+function go(mode){var n=nextKey();location.href=ACC+(n?'?next='+n:'')+'#'+mode}
+var css=document.createElement('style');css.id='aera-nudge-css';css.textContent=
+'#aeraNudge{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:9000;display:flex;gap:8px;padding:8px;border-radius:999px;background:#fff;box-shadow:0 10px 30px rgba(11,11,11,.22);border:2px solid #FDB913;transition:bottom .2s ease,opacity .2s ease;font-family:Montserrat,system-ui,-apple-system,sans-serif}'+
+'#aeraNudge button{border:0;border-radius:999px;padding:11px 20px;font:800 13.5px Montserrat,system-ui,sans-serif;cursor:pointer;white-space:nowrap;min-height:44px}'+
+'#aeraNudge .li{background:#16479E;color:#fff}#aeraNudge .su{background:#FDB913;color:#16479E}'+
+'#aeraNudgeSheet{position:fixed;inset:0;z-index:9500;background:rgba(11,11,11,.45);display:flex;align-items:flex-end;justify-content:center;font-family:Montserrat,system-ui,-apple-system,sans-serif}'+
+'#aeraNudgeSheet .pan{width:100%;max-width:440px;background:#fff;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgba(0,0,0,.2)}'+
+'@media(min-width:700px){#aeraNudgeSheet{align-items:center}#aeraNudgeSheet .pan{border-radius:20px}}'+
+'#aeraNudgeSheet h5{margin:0 0 6px;font-size:17px;color:#16479E}#aeraNudgeSheet p{margin:0 0 16px;font-size:13.5px;color:#4B5563;line-height:1.5}'+
+'#aeraNudgeSheet .b{display:flex;gap:8px;flex-wrap:wrap}#aeraNudgeSheet button{flex:1 1 30%;border:0;border-radius:12px;padding:13px 10px;font:800 13.5px Montserrat,system-ui,sans-serif;cursor:pointer}'+
+'#aeraNudgeSheet .li{background:#16479E;color:#fff}#aeraNudgeSheet .su{background:#FDB913;color:#16479E}#aeraNudgeSheet .no{background:#EEF2F8;color:#16479E}'+
+'@media print{#aeraNudge,#aeraNudgeSheet{display:none!important}}';
+var bar=null,pad=0;
+function txt(){var z=zh();return{li:z?'登录':'Log In',su:z?'注册':'Sign Up',h:z?'下单前先登录？':'Sign in before you order?',p:z?'登录后，购物车和餐单会保存在您的账户里，可以追踪送货，这笔订单还能赚取 AERA 积分。':'Your cart and plan are saved to your account, you can track the delivery, and you earn AERA Points on this order.',no:z?'稍后再说':'Not now'}}
+function mount(){if(!document.body)return;if(!document.getElementById('aera-nudge-css'))document.head.appendChild(css);
+ if(signedIn()){if(bar){bar.remove();bar=null;document.body.style.paddingBottom=pad?'':document.body.style.paddingBottom;pad=0}return}
+ var t=txt();
+ if(!bar){bar=document.createElement('div');bar.id='aeraNudge';bar.setAttribute('role','navigation');bar.setAttribute('aria-label','Sign in');
+  bar.innerHTML='<button type="button" class="li"></button><button type="button" class="su"></button>';
+  bar.children[0].onclick=function(){go('login')};bar.children[1].onclick=function(){go('signup')};document.body.appendChild(bar)}
+ if(bar.children[0].textContent!==t.li){bar.children[0].textContent=t.li;bar.children[1].textContent=t.su}
+ place()}
+/* sits above anything else pinned to the bottom ( a cart bar, a chat button ) and leaves room so it never covers the end of the page */
+function place(){if(!bar)return;var h=0;try{var els=document.querySelectorAll('body > *, body > * > *');for(var i=0;i<els.length&&i<600;i++){var e=els[i];if(e===bar||bar.contains(e)||e.id==='aeraNudgeSheet')continue;var cs=getComputedStyle(e);if(cs.position!=='fixed'||cs.display==='none'||cs.visibility==='hidden'||+cs.opacity===0)continue;var r=e.getBoundingClientRect();if(r.height<1||r.height>window.innerHeight*0.5)continue;if(r.bottom>=window.innerHeight-6&&r.width>window.innerWidth*0.5)h=Math.max(h,window.innerHeight-r.top)}}catch(e){}
+ var b=(h?h+10:14)+'px';if(bar.style.bottom!==b)bar.style.bottom=b;var need=Math.round(bar.offsetHeight+(h||0)+24);if(need!==pad){pad=need;document.body.style.paddingBottom=need+'px'}}
+/* the first Add To Cart or Checkout of a visit asks once ; Not now carries on with what was tapped */
+var BYPASS=false;
+function asked(){try{return sessionStorage.getItem('aera.nudged')==='1'}catch(e){return false}}
+function markAsked(){try{sessionStorage.setItem('aera.nudged','1')}catch(e){}}
+function isMoment(el){var b=el&&el.closest&&el.closest('button,a,[role="button"],input[type="submit"]');if(!b)return null;if(b.closest('#aeraNudge,#aeraNudgeSheet'))return null;
+ var s=String(b.textContent||b.value||'').replace(/\s+/g,' ').trim().toLowerCase();if(s.length>40)return null;
+ if(/^add$|^加入$|add to cart|加入购物车|^checkout|check out|go to checkout|place order|pay now|pay securely|去结账|结账|安全付款/.test(s))return b;return null}
+function sheet(target){var t=txt();var w=document.createElement('div');w.id='aeraNudgeSheet';w.setAttribute('role','dialog');w.setAttribute('aria-modal','true');
+ w.innerHTML='<div class="pan"><h5></h5><p></p><div class="b"><button type="button" class="li"></button><button type="button" class="su"></button><button type="button" class="no"></button></div></div>';
+ w.querySelector('h5').textContent=t.h;w.querySelector('p').textContent=t.p;var bs=w.querySelectorAll('button');bs[0].textContent=t.li;bs[1].textContent=t.su;bs[2].textContent=t.no;
+ bs[0].onclick=function(){go('login')};bs[1].onclick=function(){go('signup')};
+ function close(cont){w.remove();if(cont&&target&&document.contains(target)){BYPASS=true;try{target.click()}finally{BYPASS=false}}}
+ bs[2].onclick=function(){close(true)};w.addEventListener('click',function(e){if(e.target===w)close(false)});document.body.appendChild(w)}
+window.addEventListener('click',function(e){if(BYPASS||asked()||signedIn())return;var b=isMoment(e.target);if(!b)return;e.preventDefault();e.stopImmediatePropagation();markAsked();sheet(b)},true);
+function boot(){mount();setInterval(mount,2000);window.addEventListener('resize',place);window.addEventListener('storage',mount);new MutationObserver(function(){if(bar)place()}).observe(document.body,{childList:true,subtree:false})}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
+
+
 /* AERA Motion 2030 : one motion engine for every AERA page.
    Loaded by the small "aera-motion-loader" in each page's head. Three moods :
    full    ( website pages ) : kinetic headlines, blur-in reveals, masked image wipes, liquid-glass bar,
