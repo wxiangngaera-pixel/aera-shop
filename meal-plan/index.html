@@ -1847,8 +1847,14 @@ html.aa-on [id^="ultra-fast-widget-bubble"]{bottom:calc(20px + 66px)!important}
   try{Q.gender=Q.gender||'m';Q.dob=Q.dob||'1990-01-01';Q.height=+Q.height||170;Q.weight=+Q.weight||70;Q.activity=Q.activity||'1.45';Q.done1=1;try{Q.age=ageFromDob(Q.dob)||36}catch(e){Q.age=36}}catch(e){}
   try{if(!PLAN||!PLAN.meals||!PLAN.meals.length){generate();PLAN.meals.forEach(function(m){m.comps=[]})}}catch(e){}
   try{goStep(4)}catch(e){}
+  try{kcAI()}catch(e){}
   try{document.body.classList.remove('v2qp-on');var qp=document.getElementById('v2qp');if(qp)qp.style.display='none'}catch(e){}
   addBtns()}
+ /* The AI pour-in, exactly as the customer site plays it : the meal plan part of the shared AERA Motion Engine ( aeramealprep.net/motion/ ) is run here on its own,
+    so each food's AI clip falls into its compartment. The rest of the engine ( intros, page motion ) stays off. If it cannot load, the simple drop above is used. */
+ function kcAI(){if(window.__KC_AIPOUR||window.__KC_AITRY)return;window.__KC_AITRY=1;fetch('/motion/',{cache:'no-store'}).then(function(r){return r.text()}).then(function(t){var a=t.indexOf('/* personalised meal plan : each food'),b=t.indexOf('var started=false;',a);if(a<0||b<0)return;
+  var pre='var D=document,W=window,H=D.documentElement;function $(s,r){return (r||D).querySelector(s)}function $$(s,r){return [].slice.call((r||D).querySelectorAll(s))}function anim(el,kf,o){try{return el.animate(kf,o)}catch(e){return null}}function safe(f){return function(){try{return f.apply(this,arguments)}catch(e){}}}\n';
+  (new Function(pre+t.slice(a,b)+'\nwindow.__KC_AIPOUR=1;safe(bentoDrop)();'))()}).catch(function(){})}
  function addBtns(){var s4=document.getElementById('s4');if(!s4)return;var card=s4.querySelector('.card');if(!card)return;
   if(!document.getElementById('kcAddTop')){var t=document.createElement('div');t.className='kcadd';t.id='kcAddTop';t.innerHTML='<button type="button">Add Plan to Order →</button>';var pi=document.getElementById('planIntro');if(pi&&pi.parentNode===card)pi.insertAdjacentElement('afterend',t);else card.insertBefore(t,card.firstChild)}
   if(!document.getElementById('kcAddBot')){var b=document.createElement('div');b.className='kcadd';b.id='kcAddBot';b.innerHTML='<button type="button">Add Plan to Order →</button>';card.appendChild(b)}}
@@ -1858,7 +1864,7 @@ html.aa-on [id^="ultra-fast-widget-bubble"]{bottom:calc(20px + 66px)!important}
  var KCSEEN=new WeakMap();
  function kcPour(){if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return;[].forEach.call(document.querySelectorAll('#planCal .mcard'),function(card){var btn=card.querySelector('button[onclick^="dupMeal("]');if(!btn)return;var mi=+(String(btn.getAttribute('onclick')).match(/\d+/)||[])[0];var m=PLAN.meals[mi];if(!m)return;var prev=KCSEEN.get(m)||{};var now={};var k=0,any=false;[].forEach.call(card.querySelectorAll('.bento b'),function(b){var key=String(b.className).replace(/\s*kcpour/,'');var img=b.classList.contains('empty')?'':(b.style.backgroundImage||'x');now[key]=img;if(img&&prev[key]!==img){var dl=k++*140;b.style.animationDelay=dl+'ms';b.classList.add('kcpour');any=true;kcCrumbs(b,dl)}});if(any){var bt=card.querySelector('.bento');if(bt){bt.classList.remove('kcland');void bt.offsetWidth;bt.classList.add('kcland')}card.classList.remove('kcglow');void card.offsetWidth;card.classList.add('kcglow')}KCSEEN.set(m,now)})}
  function kcCrumbs(b,dl){var bt=b.parentNode;if(!bt)return;var cx=b.offsetLeft+b.offsetWidth/2,cy=b.offsetTop+Math.min(b.offsetHeight*.45,40);var cols=['#FDB913','#FFFFFF','#F6D46B','#FFE9A8'];for(var j=0;j<6;j++){var c=document.createElement('i');c.className='kccrumb';c.style.left=(cx-4+(j-2.5)*7)+'px';c.style.top=cy+'px';c.style.background=cols[j%cols.length];c.style.setProperty('--dx',((j-2.5)*9)+'px');c.style.animationDelay=(dl+380+j*40)+'ms';bt.appendChild(c);(function(el){setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el)},dl+1700)})(c)}}
- (function(){var rp=window.renderPlan;if(typeof rp!=='function')return;window.renderPlan=function(){var r=rp.apply(this,arguments);try{kcPour()}catch(e){}return r}})();
+ (function(){var rp=window.renderPlan;if(typeof rp!=='function')return;window.renderPlan=function(){var r=rp.apply(this,arguments);try{if(!window.__KC_AIPOUR)kcPour()}catch(e){}return r}})();
  function send(){try{if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals||!PLAN.meals.length){parent.postMessage({type:'aera-plan-none'},location.origin);return}
   var all=PLAN.meals,built=all.filter(function(m){return m.comps&&m.comps.length});if(!built.length){parent.postMessage({type:'aera-plan-none'},location.origin);return}
   PLAN.meals=built;try{var gone=[];try{gone=oosPlan()||[]}catch(e){}
