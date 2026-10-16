@@ -1381,6 +1381,11 @@ window.aeraSignup=open;
  R.push([/^Your Group In (.+)$/i,function(a,m){return ml(m)+' 的团队'}]);
  R.push([/^Group Orders In (.+)$/i,function(a,m){return ml(m)+' 的团队订单'}]);
  R.push([/^No group orders in (.+)\.$/,function(a,m){return ml(m)+' 没有团队订单。'}]);
+ R.push([/^Orders in (.+)$/i,function(a,m){return ml(m)+' 的订单'}]);
+ R.push([/^A Receipt is available once (.+) has been paid out\.$/i,function(a,m){return ml(m)+' 付款后即可下载收据。'}]);
+ R.push([/^No orders with your code in (.+)\.$/i,function(a,m){return ml(m)+' 没有用您推荐码的订单。'}]);
+ R.push([/^Download Receipt For (.+)$/i,function(a,m){return '下载 '+ml(m)+' 收据'}]);
+ Object.assign(D,{'SAMPLE · made-up figures, shown only to AERA admin accounts with no Referral Code of their own. Real Referrers see their own Orders and Cash-Back here.':'示例 · 虚构的数字，只显示给没有推荐码的 AERA 管理员账户。真正的推荐人在这里看到的是自己的订单和回扣。'});
 }catch(e){}})();
 </script>
 </body>
