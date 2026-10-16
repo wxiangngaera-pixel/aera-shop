@@ -137,8 +137,8 @@ html.rf-acct #pin-gate,html.rf-login #pin-gate{display:none!important}html.rf-ac
   row("2026-10","14","AERA-261014-DEMO8","me\u2022\u2022\u2022\u2022\u2022\u2022@yahoo.com",187.90,0),
   team("2026-09","10","COACHAMY","Coach Amy ( Demo )",410.00),team("2026-09","21","COACHBEN","Coach Ben ( Demo )",265.50),
   team("2026-10","06","COACHAMY","Coach Amy ( Demo )",352.30),team("2026-10","12","COACHBEN","Coach Ben ( Demo )",198.40),
-  ["","SAMPLE","Sample Gym ( Demo )","gym","2026-09","2026-09-30","OVR-SAMPLE-2026-09","","1% Group Override on your coaches' Sales","0","1","6.76","0","yes","2026-10-05","DuitNow 1005"],
-  ["","SAMPLE","Sample Gym ( Demo )","gym","2026-10","2026-10-31","OVR-SAMPLE-2026-10","","1% Group Override on your coaches' Sales","0","1","5.51","0","no","",""]];
+  ["","SAMPLE","Sample Gym ( Demo )","gym","2026-09","2026-09-30","OVR-SAMPLE-2026-09","Group Override","2% of RM 675.50 Group Sales \u00B7 2 Referrers","0","2","13.51","0","yes","2026-10-05","DuitNow 1005"],
+  ["","SAMPLE","Sample Gym ( Demo )","gym","2026-10","2026-10-31","OVR-SAMPLE-2026-10","Group Override","2% of RM 550.70 Group Sales \u00B7 2 Referrers","0","2","11.01","0","no","",""]];
   return{ok:true,headers:HD,data:D,demo:true}}
  window.aeraRefData=async function(){var j=await orig();var n=0;try{var d=j&&(j.data||j.rows);n=Array.isArray(d)?d.length:0}catch(e){}
   if(n)return j;var on=/[?&]demo=1/.test(location.search);
@@ -510,7 +510,7 @@ function monthLabel(m){var p=String(m||'').split('-');if(p.length<2)return Strin
  var d=new Date(+p[0],+p[1]-1,1);return isNaN(d)?String(m):d.toLocaleDateString('en-MY',{month:'long',year:'numeric'})}
 function monthShort(m){var p=String(m||'').split('-');if(p.length<2)return String(m||'');
  var d=new Date(+p[0],+p[1]-1,1);return isNaN(d)?String(m):d.toLocaleDateString('en-MY',{month:'short'})}
-function fmtDate(d){var x=new Date(String(d||'').slice(0,10)+'T00:00:00');return isNaN(x)?String(d||''):x.toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric'})}
+function fmtDate(d){var x=new Date(String(d||'').slice(0,10)+'T00:00:00');if(isNaN(x))return String(d||'');var n=x.getDate(),s=(n%100>=11&&n%100<=13)?'th':(['th','st','nd','rd'][n%10]||'th');return n+s+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][x.getMonth()]+' '+x.getFullYear()}
 function rows(j){var out=[],hd=j&&Array.isArray(j.headers)?j.headers:null,raw=Array.isArray(j)?j:(j&&(j.data||j.rows))||[];
  raw.forEach(function(r){if(Array.isArray(r)&&hd){var o={};hd.forEach(function(k,i){o[k]=r[i]});out.push(o)}else if(r&&typeof r==='object')out.push(r)});return out}
 /* Inside the Kitchen Console the page is fed by the console ( Peter picks any Referrer there ) instead of the sheet. */
@@ -552,10 +552,10 @@ function teamView(){var T=R.team||[];var ys=years();if(!R.year||ys.indexOf(R.yea
  '</div>';
  var by={};L.forEach(function(r){var c=String(r.Code||'').toUpperCase();var b=by[c]||(by[c]={name:String(r.Referrer||c),code:c,n:0,s:0,cb:0,paid:true});b.n++;b.s+=+r.Sales||0;b.cb+=+r.Cashback||0;if(!isPaid(r.Paid))b.paid=false});
  var people=Object.keys(by).map(function(k){return by[k]}).sort(function(a,b){return b.s-a.s});
- h+='<div class="card"><h2>Your Group In '+esc(monthLabel(R.month))+'</h2>'+(people.length?'<div class="tblwrap"><table><thead><tr><th>Referrer</th><th class="r">Orders</th><th class="r">Sales</th><th class="r">Group Cash-Back</th><th>Status</th></tr></thead><tbody>'+
+ h+='<div class="card"><h2>Your Group in '+esc(monthLabel(R.month))+'</h2>'+(people.length?'<div class="tblwrap"><table><thead><tr><th>Referrer</th><th class="r">Orders</th><th class="r">Sales</th><th class="r">Group Cash-Back</th><th>Status</th></tr></thead><tbody>'+
   people.map(function(p){return '<tr><td><b>'+esc(p.name)+'</b><div class="hint" style="margin:0">'+esc(p.code)+'</div></td><td class="r">'+p.n+'</td><td class="r">'+rm(p.s)+'</td><td class="r"><b>'+rm(p.cb)+'</b></td><td><span class="chip '+(p.paid?'ok':'warn')+'">'+(p.paid?'Paid':'Pending')+'</span></td></tr>'}).join('')+
   '<tr><td><b>Total</b></td><td class="r"><b>'+L.length+'</b></td><td class="r"><b>'+rm(sum(L,'Sales'))+'</b></td><td class="r"><b>'+rm(sum(L,'Cashback'))+'</b></td><td></td></tr></tbody></table></div>':'<div class="empty">No group orders in '+esc(monthLabel(R.month))+'.</div>')+'</div>';
- h+='<div class="card"><h2>Group Orders In '+esc(monthLabel(R.month))+'</h2>'+(L.length?'<div class="tblwrap"><table><thead><tr><th>Date</th><th>Referrer</th><th>Order</th><th>Customer</th><th class="r">Meal Subtotal</th><th class="r">Rate</th><th class="r">Group Cash-Back</th><th>Status</th></tr></thead><tbody>'+
+ h+='<div class="card"><h2>Group Orders in '+esc(monthLabel(R.month))+'</h2>'+(L.length?'<div class="tblwrap"><table><thead><tr><th>Date</th><th>Referrer</th><th>Order</th><th>Customer</th><th class="r">Meal Subtotal</th><th class="r">Rate</th><th class="r">Group Cash-Back</th><th>Status</th></tr></thead><tbody>'+
   L.slice().sort(function(a,b){return String(b.Date||'').localeCompare(String(a.Date||''))}).map(function(r){
    return '<tr><td>'+esc(fmtDate(r.Date))+'</td><td><b>'+esc(r.Referrer||r.Code||'')+'</b></td><td>'+esc(String(r.OrderNo||'').replace(/^TEAM-/i,''))+'</td><td><b>'+esc(r.Customer||'Customer')+'</b>'+(r.CustomerMasked?'<div class="hint" style="margin:0">'+esc(r.CustomerMasked)+'</div>':'')+'</td>'+
     '<td class="r">'+rm(r.Sales)+'</td><td class="r">'+(+r.Rate||0)+'%</td><td class="r"><b>'+rm(r.Cashback)+'</b></td><td><span class="chip '+(isPaid(r.Paid)?'ok':'warn')+'">'+(isPaid(r.Paid)?'Paid':'Pending')+'</span></td></tr>'}).join('')+
@@ -570,8 +570,8 @@ function shareText(code,name){return 'Hi,\n\nI order my Meal Preps from AERA Mea
  'Use my Referral Code '+code+' at Checkout and you earn extra AERA Points on your Meals.\n\nOrder here : '+SHOP_LINK+encodeURIComponent(code)+'\n\n'+(name||'')}
 function shareCard(code,name){if(!code)return '';
  return '<div class="card sharecard"><div class="shl">Your Referral Code</div><div class="shcode">'+esc(code)+'</div>'+
-  '<p class="shhint">Share it with friends, clients and members. Every Order placed with your code earns you Cash-Back, and they earn extra AERA Points.</p>'+
-  '<div class="shacts"><button type="button" class="shbtn y" onclick="location.href=\'https://my.chatbees.io/p/dtTMaV#refs\'"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg><span>Send To An AERA Account</span></button>'+
+  '<p class="shhint">Share it with Friends, Clients and Members. Every Order placed with your Code earns you Cash-Back, and they earn extra AERA Points.</p>'+
+  '<div class="shacts"><button type="button" class="shbtn y" onclick="location.href=\'https://my.chatbees.io/p/dtTMaV#refs\'"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg><span>Send to an AERA Account</span></button>'+
   '<button type="button" class="shbtn n" onclick="shareCopy(\'code\',this)"><span>Copy Code</span></button>'+
   '<button type="button" class="shbtn n" onclick="shareCopy(\'link\',this)"><span>Copy Link</span></button></div></div>'}
 function shareWho(){var p=R.prof||R.rows[0]||{};return{code:String(p.Code||'').toUpperCase(),name:String(p.Referrer||'')}}
@@ -607,13 +607,13 @@ function render(){
     tr('Cash-Back Earned',rm(sum(mine,'Cashback')),rm(sum(R.rows,'Cashback')))+
     tr('Pending Cash-Back',rm(sum(pM,'Cashback')),rm(sum(pendAll,'Cashback')),'background:#FFF2C2')+
     tr('Paid Cash-Back',rm(sum(dM,'Cashback')),rm(sum(paidAll,'Cashback')),'background:#EDF3FD')+
-   '</tbody></table></div><p class="hint" style="margin:8px 0 0">Cash-Back is '+rate+'% of the meal subtotal'+(mine.some(isAdj)?', plus any Group Override or Adjustment by AERA':'')+'.</p>'})()+
+   '</tbody></table></div><p class="hint" style="margin:8px 0 0">Cash-Back is '+rate+'% of the Meal Subtotal'+(mine.some(isAdj)?', plus any Group Override or Adjustment by AERA':'')+'.</p>'})()+
   '<div class="row" style="margin-top:14px">'+
-   (mPaid?'<button class="btn btn-y" type="button" onclick="receipt()">Download Receipt For '+esc(monthLabel(R.month))+'</button>':'<span class="hint" style="margin:0">A receipt is available once '+esc(monthLabel(R.month))+' has been paid out.</span>')+
-   (mPaid?'<span class="chip ok">Paid'+(mine[0].PaidAt?' · '+esc(fmtDate(mine[0].PaidAt)):'')+'</span>':'<span class="chip warn">Awaiting payment</span>')+
+   (mPaid?'<button class="btn btn-y" type="button" onclick="receipt()">Download Receipt For '+esc(monthLabel(R.month))+'</button>':'<span class="hint" style="margin:0">A Receipt is available once '+esc(monthLabel(R.month))+' has been paid out.</span>')+
+   (mPaid?'<span class="chip ok">Paid'+(mine[0].PaidAt?' · '+esc(fmtDate(mine[0].PaidAt)):'')+'</span>':'<span class="chip warn">Awaiting Payment</span>')+
   '</div>'+
  '</div>';
- h+='<div class="card"><h2>Orders In '+esc(monthLabel(R.month))+'</h2>'+
+ h+='<div class="card"><h2>Orders in '+esc(monthLabel(R.month))+'</h2>'+
   (mine.length?'<div class="tblwrap"><table><thead><tr><th>Date</th><th>Order</th><th>Customer</th><th class="r">Meal Subtotal</th><th class="r">Rate</th><th class="r">Your Cash-Back</th><th>Status</th></tr></thead><tbody>'+
    mine.slice().sort(function(a,b){return String(b.Date||'').localeCompare(String(a.Date||''))}).map(function(r){
     if(isAdj(r))return'<tr class="adj"><td>'+esc(fmtDate(r.Date))+'</td><td><span class="chip">'+(isOvr(r)?'Group':'Adjustment')+'</span></td><td><b>'+adjName(r)+'</b>'+(r.CustomerMasked?'<div class="hint" style="margin:0">'+esc(r.CustomerMasked)+'</div>':'')+'</td><td class="r">—</td><td class="r">'+(isOvr(r)?(+r.Rate||0)+'%':'—')+'</td><td class="r"><b>'+(+r.Cashback<0?'− '+rm(-r.Cashback):rm(r.Cashback))+'</b></td><td><span class="chip '+(isPaid(r.Paid)?'ok':'warn')+'">'+(isPaid(r.Paid)?'Paid':'Pending')+'</span></td></tr>';
@@ -623,7 +623,7 @@ function render(){
    '<tr><td colspan="3"><b>Total</b></td><td class="r"><b>'+rm(sum(mine,'Sales'))+'</b></td><td></td><td class="r"><b>'+rm(sum(mine,'Cashback'))+'</b></td><td></td></tr>'+
    '</tbody></table></div>'
   :'<div class="empty">No orders with your code in '+esc(monthLabel(R.month))+'.</div>')+
-  '<div class="hint">Cash-back is worked out on the meal subtotal after any discount. Delivery, packaging and processing fees are never counted. We settle by bank transfer after each month closes.</div>'+
+  '<div class="hint">Cash-Back is worked out on the Meal Subtotal after any Discount. Delivery, Packaging and Processing Fees are never counted. We settle by Bank Transfer after each Month closes.</div>'+
  '</div>';
  h+='<div class="card"><h2>Every Month</h2><div class="tblwrap"><table><thead><tr><th>Month</th><th class="r">Orders</th><th class="r">Sales</th><th class="r">Cash-Back</th><th>Status</th><th></th></tr></thead><tbody>'+
   allMonths().map(function(m){var L=inMonth(m),p=L.length&&L.every(function(r){return isPaid(r.Paid)});
@@ -659,7 +659,7 @@ function receipt(mo){mo=mo||R.month;var L=inMonth(mo);if(!L.length)return;
    if(isAdj(r))return'<tr><td>'+esc(fmtDate(r.Date))+'</td><td>'+(isOvr(r)?'Group':'Adjustment')+'</td><td>'+adjName(r)+(r.CustomerMasked?' · '+esc(r.CustomerMasked):'')+'</td><td class="r">—</td><td class="r">—</td><td class="r">'+rm(r.Cashback)+'</td></tr>';
    return'<tr><td>'+esc(fmtDate(r.Date))+'</td><td>'+esc(r.OrderNo||'')+'</td><td>'+esc(r.Customer||'Customer')+'</td><td class="r">'+rm(r.Sales)+'</td><td class="r">'+(+r.Rate||0)+'%</td><td class="r">'+rm(r.Cashback)+'</td></tr>'}).join('')+
   '</tbody><tfoot><tr><td colspan="3">Total</td><td class="r">'+rm(sum(L,'Sales'))+'</td><td></td><td class="r">'+rm(sum(L,'Cashback'))+'</td></tr></tfoot></table>'+
-  '<div class="ft">Cash-back is worked out on the meal subtotal after any discount. Delivery, packaging and processing fees are not included. Generated '+esc(fmtDate(new Date().toISOString()))+'.</div>'+
+  '<div class="ft">Cash-Back is worked out on the Meal Subtotal after any Discount. Delivery, Packaging and Processing Fees are not included. Generated '+esc(fmtDate(new Date().toISOString()))+'.</div>'+
   '</body></html>';
  w.document.open();w.document.write(html);w.document.close();
  setTimeout(function(){try{w.focus();w.print()}catch(e){}},600)}
@@ -702,9 +702,9 @@ window.AERA_I18N={};window.AERA_I18N_RE=[];
 </script>
 <script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 Object.assign(window.AERA_I18N,{
-"Your Referral Code":"您的推荐码","Share it with friends, clients and members. Every Order placed with your code earns you Cash-Back, and they earn extra AERA Points.":"分享给朋友、客户和会员。每张用您推荐码下的订单都给您现金回馈，他们也会多赚 AERA 积分。","Send To An AERA Account":"发给 AERA 账户","Copy Code":"复制推荐码","Copy Link":"复制链接","Copied":"已复制",
+"Your Referral Code":"您的推荐码","Share it with Friends, Clients and Members. Every Order placed with your Code earns you Cash-Back, and they earn extra AERA Points.":"分享给朋友、客户和会员。每张用您推荐码下的订单都给您现金回馈，他们也会多赚 AERA 积分。","Send to an AERA Account":"发给 AERA 账户","Copy Code":"复制推荐码","Copy Link":"复制链接","Copied":"已复制",
 "Home":"首页","Order Now":"立即订购","Referrer Portal":"推荐人专区","Terms & Conditions":"条款与细则",
-"Your Cash-Back":"您的回扣","Every Order placed with your Referral Code, month by month. What it earned you, and what has been paid.":"每一笔使用您推荐码的订单，按月列出 — 为您赚了多少，以及已经付了多少。","Loading your figures…":"正在载入您的数字…","We could not load your figures just now. Please refresh the page.":"目前无法载入您的数字，请重新整理页面。","Nothing here yet.":"这里还没有内容。","Once someone orders with your Referral Code, every Order shows up here with the Cash-Back it earned you.":"只要有人使用您的推荐码下单，每一笔订单都会显示在这里，并附上为您赚到的回扣。","Year":"年","Month":"月","Sales This Month":"本月销售额","Cash-Back This Month":"本月回扣","Pending Cash-Back":"待付回扣","Across every month, not yet paid":"所有月份合计，尚未支付","Paid Cash-Back":"已付回扣","Received all time":"历来已收到","Awaiting payment":"等待付款","Date":"日期","Order":"订单","Customer":"顾客","Meal Subtotal":"餐点小计","Rate":"比率","Status":"状态","Total":"合计","Every Month":"所有月份","Orders":"订单数","Sales":"销售额","Cash-Back":"回扣","Receipt":"收据","Cash-Back Receipt":"回扣收据","Normal Referrer":"一般推荐人","Fitness Studio / Gym":"健身工作室 / 健身房","Fitness Influencer":"健身网红","Cashback":"回扣","Pending":"待付","Paid":"已付","Allow pop-ups for this page, then press the receipt button again.":"请允许此页面弹出视窗，然后再按一次收据按钮。","Referrer Portal — AERA Meal Prep":"推荐人专区 — AERA Meal Prep"
+"Your Cash-Back":"您的回扣","Every Order placed with your Referral Code, month by month. What it earned you, and what has been paid.":"每一笔使用您推荐码的订单，按月列出 — 为您赚了多少，以及已经付了多少。","Loading your figures…":"正在载入您的数字…","We could not load your figures just now. Please refresh the page.":"目前无法载入您的数字，请重新整理页面。","Nothing here yet.":"这里还没有内容。","Once someone orders with your Referral Code, every Order shows up here with the Cash-Back it earned you.":"只要有人使用您的推荐码下单，每一笔订单都会显示在这里，并附上为您赚到的回扣。","Year":"年","Month":"月","Sales This Month":"本月销售额","Cash-Back This Month":"本月回扣","Pending Cash-Back":"待付回扣","Across every month, not yet paid":"所有月份合计，尚未支付","Paid Cash-Back":"已付回扣","Received all time":"历来已收到","Awaiting Payment":"等待付款","Date":"日期","Order":"订单","Customer":"顾客","Meal Subtotal":"餐点小计","Rate":"比率","Status":"状态","Total":"合计","Every Month":"所有月份","Orders":"订单数","Sales":"销售额","Cash-Back":"回扣","Receipt":"收据","Cash-Back Receipt":"回扣收据","Normal Referrer":"一般推荐人","Fitness Studio / Gym":"健身工作室 / 健身房","Fitness Influencer":"健身网红","Cashback":"回扣","Pending":"待付","Paid":"已付","Allow pop-ups for this page, then press the receipt button again.":"请允许此页面弹出视窗，然后再按一次收据按钮。","Referrer Portal — AERA Meal Prep":"推荐人专区 — AERA Meal Prep"
 });
 window.AERA_I18N_RE.push([/^([\d.]+)% of the meal subtotal$/,"餐点小计的 $1%"]);
 if(window.aeraRetranslate)window.aeraRetranslate();
@@ -730,7 +730,7 @@ if(window.aeraRetranslate)window.aeraRetranslate();
    function(_,a,d,mo){return m(mo)+'月'+d+'日 '+w(a)}],
   [/\b(\d{1,2}) (January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})\b/g,
    function(_,d,mo,y){return y+'年'+m(mo)+'月'+d+'日'}],
-  [/\b(\d{1,2}) (Sept|Sep|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Nov|Dec) (\d{4})\b/g,
+  [/\b(\d{1,2})(?:st|nd|rd|th)? (Sept|Sep|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Nov|Dec) (\d{4})\b/g,
    function(_,d,mo,y){return y+'年'+m(mo)+'月'+d+'日'}],
   [/\b(\d{1,2}) (January|February|March|April|May|June|July|August|September|October|November|December)\b/g,
    function(_,d,mo){return m(mo)+'月'+d+'日'}],
@@ -1362,15 +1362,15 @@ window.aeraSignup=open;
  Object.assign(D,{'My Cash-Back':'我的回扣','My Group':'我的团队','Group':'团队','Group Override':'团队加成','Adjustment':'调整','Adjustment by AERA':'AERA 调整','Group Orders':'团队订单','Group Sales':'团队销售额','Group Cash-Back':'团队回扣','Your Group Override':'您的团队加成','Referrer':'推荐人',
   'Group Cash-Back is paid to each Referrer in your Group. Your Group Override is on top, and never comes out of theirs.':'团队回扣直接付给团队里的每位推荐人。您的团队加成是额外的，绝不从他们的回扣中扣除。',
   'Your Group Override is added to your own Cash-Back and paid with it.':'您的团队加成会加进您自己的回扣，一起支付。',
-  'Cash-back is worked out on the meal subtotal after any discount. Delivery, packaging and processing fees are never counted. We settle by bank transfer after each month closes.':'回扣按折扣后的餐点小计计算，运费、包装费与手续费一律不计。每月结束后以银行转账结算。'});
+  'Cash-Back is worked out on the Meal Subtotal after any Discount. Delivery, Packaging and Processing Fees are never counted. We settle by Bank Transfer after each Month closes.':'回扣按折扣后的餐点小计计算，运费、包装费与手续费一律不计。每月结束后以银行转账结算。'});
  var MO={January:1,February:2,March:3,April:4,May:5,June:6,July:7,August:8,September:9,October:10,November:11,December:12};
  function ml(s){var m=/^(\w+) (\d{4})$/.exec(s);return m&&MO[m[1]]?m[2]+'年'+MO[m[1]]+'月':s}
  var TIER={'Normal Referrer':'普通推荐人','Fitness Studio / Gym':'健身房 / 工作室','Fitness Influencer':'健身网红'};
- R.push([/^Cash-Back is ([\d.]+)% of the meal subtotal(, plus any Group Override or Adjustment by AERA)?\.$/,function(a,p,x){return '回扣为餐点小计的 '+p+'%'+(x?'，另加团队加成或 AERA 调整':'')+'。'}]);
+ R.push([/^Cash-Back is ([\d.]+)% of the meal subtotal(, plus any Group Override or Adjustment by AERA)?\.$/i,function(a,p,x){return '回扣为餐点小计的 '+p+'%'+(x?'，另加团队加成或 AERA 调整':'')+'。'}]);
  R.push([/^([\d.]+)% of RM ([\d.,]+) Group Sales · (\d+) Referrers?(\. It is added to your own Cash-Back and paid with it\.)?$/,function(a,p,s,n,x){return '团队销售额 RM '+s+' 的 '+p+'% · '+n+' 位推荐人'+(x?'。会加进您自己的回扣，一起支付。':'')}]);
  R.push([/^(Normal Referrer|Fitness Studio \/ Gym|Fitness Influencer) · ([\d.]+)% Cash-Back$/,function(a,t,p){return TIER[t]+' · 回扣 '+p+'%'}]);
- R.push([/^Your Group In (.+)$/,function(a,m){return ml(m)+' 的团队'}]);
- R.push([/^Group Orders In (.+)$/,function(a,m){return ml(m)+' 的团队订单'}]);
+ R.push([/^Your Group In (.+)$/i,function(a,m){return ml(m)+' 的团队'}]);
+ R.push([/^Group Orders In (.+)$/i,function(a,m){return ml(m)+' 的团队订单'}]);
  R.push([/^No group orders in (.+)\.$/,function(a,m){return ml(m)+' 没有团队订单。'}]);
 }catch(e){}})();
 </script>
