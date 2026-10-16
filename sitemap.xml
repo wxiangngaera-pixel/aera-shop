@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://aeramealprep.net/referrer-portal/</loc>
+    <lastmod>2026-10-16T08:09:15.009Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/</loc>
+    <lastmod>2026-10-16T08:02:17.346Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
+    <lastmod>2026-10-16T07:36:03.339Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://aeramealprep.net/coach-plan-builder/</loc>
     <lastmod>2026-10-16T07:35:11.697Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
-    <lastmod>2026-10-16T07:33:53.848Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
     <loc>https://aeramealprep.net/meal-plan/</loc>
     <lastmod>2026-10-16T07:22:02.052Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/</loc>
-    <lastmod>2026-10-16T06:57:39.049Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -88,11 +93,6 @@
   <url>
     <loc>https://aeramealprep.net/push/</loc>
     <lastmod>2026-10-15T02:41:29.041Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/referrer-portal/</loc>
-    <lastmod>2026-10-15T02:14:43.821Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
