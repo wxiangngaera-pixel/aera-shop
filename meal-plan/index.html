@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script id="aera-console-mode">/* Kitchen Console mode : this page opened inside the Console's New Order page ( ?console=1 ).
+   It builds a plan for a client, so nothing of the person signed in on this browser is read or written,
+   the site's own bars are hidden, and "Add to Cart" hands the plan to the Console instead. */
+(function(){try{if(!/[?&]console=1/.test(location.search)||window.top===window)return;window.__AERA_CONSOLE=1;
+ var gi=Storage.prototype.getItem;Storage.prototype.getItem=function(k){if(k==='aera.cat'||k==='aera.planDraft'||k==='aera.account'||k==='aera.plan'||k==='aera.planGate')return null;return gi.apply(this,arguments)};
+ var si=Storage.prototype.setItem;Storage.prototype.setItem=function(k){if(k==='aera.planDraft'||k==='aera.plan'||k==='aera.cart'||k==='aera.planGate')return;return si.apply(this,arguments)};
+ document.documentElement.classList.add('aera-console');
+ var st=document.createElement('style');st.textContent='html.aera-console #aeraBar,html.aera-console body>nav,html.aera-console .aeralegal,html.aera-console #aeraDock,html.aera-console #aeraNudge,html.aera-console #aeraNudgeSheet,html.aera-console #v2badge,html.aera-console #v2bar,html.aera-console #v2help,html.aera-console #atHelp,html.aera-console [id^="ultra-fast-widget"]{display:none!important}html.aera-console body{padding-bottom:0!important;background:#fff}';
+ (document.head||document.documentElement).appendChild(st)}catch(e){}})();</script>
 <script id="aera-acct-guard">/* the page shows "signed in" from a saved copy of the account ; when the sign-in itself is gone ( logged out, expired, cleared by the phone ) that copy is dropped too, so no page claims a sign-in that is not there */(function(){try{var t=localStorage.getItem('sb-swpprjvubgcdsojapaad-auth-token'),ok=false;if(t){var o=JSON.parse(t);if(o&&o.currentSession)o=o.currentSession;ok=!!(o&&(o.refresh_token||o.access_token))}if(!ok){['aera.account','aera.refLock'].forEach(function(k){if(localStorage.getItem(k)!==null)localStorage.removeItem(k)})}}catch(e){}})();</script>
 
 <style id="aera-input-guard-css">
@@ -1823,5 +1832,21 @@ html.aa-on a.btn.wa{bottom:calc(96px + 66px)!important}
 html.aa-on [id^="ultra-fast-widget-bubble"]{bottom:calc(20px + 66px)!important}
 </style>
 <script id="aera-float-stack-js">(function(){function u(){var b=document.getElementById('aaBar'),on=false;try{on=!!(b&&b.classList.contains('show')&&getComputedStyle(b).display!=='none')}catch(e){}document.documentElement.classList.toggle('aa-on',on)}setInterval(u,700);addEventListener('scroll',u,{passive:true});u()})();</script>
+<script id="aera-console-mode-2">(function(){if(!window.__AERA_CONSOLE)return;
+ function noop(){}
+ try{saveDraft=noop}catch(e){}try{acctSync=noop}catch(e){}try{subCheck=noop}catch(e){}try{initSupabase=noop}catch(e){}try{mpWait=noop}catch(e){}
+ try{saveProfileNumbers=async function(){}}catch(e){}try{syncPlan=async function(){}}catch(e){}try{savePlan=noop}catch(e){}try{favPlan=noop}catch(e){}
+ try{loadDraft=function(){try{loadDraftValues()}catch(e){}}}catch(e){}
+ try{signedIn=function(){return true}}catch(e){}
+ function send(){try{if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals||!PLAN.meals.length){parent.postMessage({type:'aera-plan-none'},location.origin);return}
+  var gone=[];try{gone=oosPlan()||[]}catch(e){}
+  parent.postMessage({type:'aera-plan',plan:planPayload(),price:planPrice(),oos:gone},location.origin)}catch(e){parent.postMessage({type:'aera-plan-err',msg:String(e&&e.message||e)},location.origin)}}
+ try{orderPlan=function(){send()}}catch(e){}
+ document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b)return;var t=String(b.textContent||'');if(/Add (Plan )?to (Cart|Order)/i.test(t)){e.preventDefault();e.stopImmediatePropagation();send()}},true);
+ function relabel(){[].forEach.call(document.querySelectorAll('button'),function(b){var t=String(b.textContent||'').trim();if(/^Add to Cart/.test(t)||/^Add Plan to Cart/.test(t))b.textContent='Add Plan to Order →';if(/^(Save Plan|★ Favourite|Share with my Coach|Download Slides)$/.test(t))b.style.display='none'})}
+ var last=0;function post(){try{var h=Math.max(document.documentElement.scrollHeight,document.body.scrollHeight);if(Math.abs(h-last)>4){last=h;parent.postMessage({type:'aera-mp-h',h:h},location.origin)}}catch(e){}}
+ var mo=new MutationObserver(function(){relabel();post()});mo.observe(document.body,{childList:true,subtree:true});
+ window.addEventListener('load',function(){relabel();post()});setInterval(post,800);relabel();post();
+})();</script>
 </body>
 </html>
