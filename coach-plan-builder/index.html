@@ -627,7 +627,7 @@ function riceF(n){if(/classic meal prep brown rice|spiced long rice/.test(n))ret
  var best=0,len=-1;for(var k in RICE){if(n.indexOf(k)>=0&&k.length>len){best=RICE[k];len=k.length}}
  return best}
 /* Each item can be Raw or Cooked on its own ( tap the RAW WEIGHT / COOKED WEIGHT label ) ; an item with no choice of its own follows the client's switch. */
-function bOf(it){return (it&&(it.b==='raw'||it.b==='cooked'))?it.b:cur().basis}
+function bOf(it){return (it&&(it.wb==='raw'||it.wb==='cooked'))?it.wb:cur().basis}
 function mixedOf(c){c=c||cur();var m=false;(c.days||[]).forEach(function(d){(d.meals||[]).forEach(function(ml){(ml.items||[]).forEach(function(it){if(BYCODE[it.code]&&bOf(it)!==c.basis)m=true})})});return m}
 function sheetB(c){return mixedOf(c)?'raw':(c||cur()).basis}
 function conv(r,g,b){
@@ -803,8 +803,8 @@ function flipItem(lab){var row=lab.closest('.row');if(!row)return;var d=day(),m=
  var now=bOf(it),raw=rawOf(it).g;
  if(now==='raw'){var t=conv(r,100,'cooked');if(!t.ok){say('',esc(r.name)+' has no Cooked Weight rule yet, so it stays in Raw Weight.');return}
   var lo=0,hi=Math.max(50,raw*3);for(var k=0;k<40;k++){var mid=(lo+hi)/2;if(conv(r,mid,'cooked').g<raw)lo=mid;else hi=mid}
-  mark();it.b='cooked';it.g=Math.max(0,Math.round(hi/5)*5)}
- else{mark();it.b='raw';it.g=raw}
+  mark();it.wb='cooked';it.g=Math.max(0,Math.ceil(hi))}
+ else{mark();it.wb='raw';it.g=raw}
  save();paint()}
 document.addEventListener('click',function(e){var lab=e.target&&e.target.closest&&e.target.closest('.wcell small.wh.wflip');if(!lab)return;e.preventDefault();flipItem(lab)});
 document.addEventListener('keydown',function(e){if(e.key!=='Enter'&&e.key!==' ')return;var lab=e.target&&e.target.closest&&e.target.closest('.wcell small.wh.wflip');if(!lab)return;e.preventDefault();flipItem(lab)});
