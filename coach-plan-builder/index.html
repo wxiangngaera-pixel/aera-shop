@@ -626,9 +626,13 @@ var RICE={'basmati long rice':2.90,'fragrant white rice':2.10,'brown rice':2.50,
 function riceF(n){if(/classic meal prep brown rice|spiced long rice/.test(n))return 0;
  var best=0,len=-1;for(var k in RICE){if(n.indexOf(k)>=0&&k.length>len){best=RICE[k];len=k.length}}
  return best}
-function conv(r,g){
+/* Each item can be Raw or Cooked on its own ( tap the RAW WEIGHT / COOKED WEIGHT label ) ; an item with no choice of its own follows the client's switch. */
+function bOf(it){return (it&&(it.b==='raw'||it.b==='cooked'))?it.b:cur().basis}
+function mixedOf(c){c=c||cur();var m=false;(c.days||[]).forEach(function(d){(d.meals||[]).forEach(function(ml){(ml.items||[]).forEach(function(it){if(BYCODE[it.code]&&bOf(it)!==c.basis)m=true})})});return m}
+function sheetB(c){return mixedOf(c)?'raw':(c||cur()).basis}
+function conv(r,g,b){
  g=+g||0;
- if(cur().basis==='raw')return{g:g,why:'Raw, as you entered it',ok:true};
+ if((b||cur().basis)==='raw')return{g:g,why:'Raw, as you entered it',ok:true};
  var n=r.name.toLowerCase();
  if(r.cat==='c'){var f=riceF(n);
   if(f)return{g:g/f,why:'Rice, ÷ '+(+f.toFixed(2)),ok:true};
@@ -641,7 +645,7 @@ function conv(r,g){
  return{g:g,why:'No cooked rule yet, we weigh it',ok:false}}
 /* What the kitchen would actually weigh: converted, then held inside that dish's portion range. */
 function rawOf(it){var r=BYCODE[it.code];if(!r)return{g:+it.g||0,why:'',ok:true,own:true};
- var entered=+it.g||0,c=conv(r,entered),g=clampG(r,c.g);
+ var entered=+it.g||0,c=conv(r,entered,bOf(it)),g=clampG(r,c.g);
  /* The figure on the right is what the kitchen weighs, and it is often not the number the
     coach typed — we cook in 25 g steps between a smallest and a largest portion. Saying
     "as you entered it" beside a number they did not enter is the sort of small lie that
@@ -650,7 +654,7 @@ function rawOf(it){var r=BYCODE[it.code];if(!r)return{g:+it.g||0,why:'',ok:true,
  if(g!==entered){
   if(g===r.po[1]&&c.g>r.po[1])why='The most we cook in one Meal';
   else if(g===r.po[0]&&c.g<r.po[0])why='The least we cook in one Meal';
-  else if(cur().basis==='raw')why='Rounded to our '+(r.po[2]||25)+' g steps';
+  else if(bOf(it)==='raw')why='Rounded to our '+(r.po[2]||25)+' g steps';
   else why=c.why+', Rounded to '+(r.po[2]||25)+' g';}
  return{g:g,why:why,ok:c.ok}}
 
@@ -726,7 +730,7 @@ function paint(){
     '<button class="grip" type="button" aria-label="Drag to reorder" title="Drag to reorder">'+
     '<span></span><span></span><span></span></button>'+(r?thumb(r):ownThumb(it))+
     '<div class="nm">'+nm+(r?'<i class="chg">Change &#9662;</i>':'')+'<small>'+sub+'</small></div>'+'<div class="pp">'+ppHtml(it)+'</div>'+
-    '<div class="wcell wb-'+cur().basis+'"><small class="wh">'+(cur().basis==='raw'?'Raw Weight':'Cooked Weight')+'</small><span class="wbd"><input type="number" min="0" step="'+(r?(r.po[2]||25):5)+'" value="'+(+it.g||0)+'" aria-label="weight in grams, '+cur().basis+'"><em>g</em></span></div>'+
+    '<div class="wcell wb-'+bOf(it)+'"><small class="wh'+(r?' wflip':'')+'"'+(r?' role="button" tabindex="0" title="Tap to switch this item to '+(bOf(it)==='raw'?'Cooked':'Raw')+' Weight"':'')+'>'+(bOf(it)==='raw'?'Raw Weight':'Cooked Weight')+'</small><span class="wbd"><input type="number" min="0" step="'+(r?(r.po[2]||25):5)+'" value="'+(+it.g||0)+'" aria-label="weight in grams, '+bOf(it)+'"><em>g</em></span></div>'+
     '<div class="pr">'+(r?rm(per(r,rw.g).price):'<span class="ownno">Not Ours</span>')+
      '<small>'+(r?Math.round(per(r,rw.g).kcal)+' KCALs':(ownMac(it)?Math.round(ownMac(it).kcal)+' KCALs':'Not Ours'))+'</small></div>'+
     '<button class="x" type="button" data-rm="1" aria-label="Remove">&times;</button></div>'}).join('');
@@ -793,6 +797,17 @@ $('#coachname').addEventListener('input',function(){ST.coach=this.value;save()})
 function packOf(c){return (c||cur()).pack==='vacuum'?'vacuum':'bento'}
 function packPaint(c){var p=packOf(c);[].forEach.call(document.querySelectorAll('#packSeg button'),function(b){b.classList.toggle('on',b.dataset.p===p)});var ph=document.getElementById('packHint');if(ph)ph.textContent=p==='vacuum'?'Same freshness, flatter pack. Takes far less Fridge space, compresses the Food slightly. RM 1.80 per Meal.':'Oxygen replaced with Nitrogen / CO₂ and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life. RM 1.80 per Meal.'}
 $('#packSeg').addEventListener('click',function(e){var b=e.target.closest('button[data-p]');if(!b||b.dataset.p===packOf())return;mark();cur().pack=b.dataset.p;save();paint()});
+/* tap an item's RAW WEIGHT / COOKED WEIGHT label : that item flips, and its number is converted so the Kitchen still cooks the same amount */
+(function(){var st=document.createElement('style');st.textContent='.wcell small.wh.wflip{cursor:pointer;user-select:none;-webkit-user-select:none}.wcell small.wh.wflip:after{content:" \\21C4"}.wcell small.wh.wflip:hover{filter:brightness(1.15)}';document.head.appendChild(st)})();
+function flipItem(lab){var row=lab.closest('.row');if(!row)return;var d=day(),m=d&&d.meals[+row.dataset.m],it=m&&m.items[+row.dataset.i],r=it&&BYCODE[it.code];if(!r)return;
+ var now=bOf(it),raw=rawOf(it).g;
+ if(now==='raw'){var t=conv(r,100,'cooked');if(!t.ok){say('',esc(r.name)+' has no Cooked Weight rule yet, so it stays in Raw Weight.');return}
+  var lo=0,hi=Math.max(50,raw*3);for(var k=0;k<40;k++){var mid=(lo+hi)/2;if(conv(r,mid,'cooked').g<raw)lo=mid;else hi=mid}
+  mark();it.b='cooked';it.g=Math.max(0,Math.round(hi/5)*5)}
+ else{mark();it.b='raw';it.g=raw}
+ save();paint()}
+document.addEventListener('click',function(e){var lab=e.target&&e.target.closest&&e.target.closest('.wcell small.wh.wflip');if(!lab)return;e.preventDefault();flipItem(lab)});
+document.addEventListener('keydown',function(e){if(e.key!=='Enter'&&e.key!==' ')return;var lab=e.target&&e.target.closest&&e.target.closest('.wcell small.wh.wflip');if(!lab)return;e.preventDefault();flipItem(lab)});
 $('#basisSeg').addEventListener('click',function(e){
  var b=e.target.closest('button[data-b]');if(!b||b.dataset.b===cur().basis)return;
  mark();cur().basis=b.dataset.b;save();paint()});
@@ -1093,7 +1108,7 @@ function sheetText(){
   'Email:    '+(c.email||''),
   'Mobile:   '+phoneOut(c.phone),
   'Coach:    '+(ST.coach||''),
-  'Weights:  '+(c.basis==='raw'?'RAW':'COOKED'),
+  'Weights:  '+(sheetB(c)==='raw'?'RAW':'COOKED'),
   'Packaging: '+(packOf(c)==='vacuum'?'VACUUM PACKED':'MAP BENTO BOX'),
   'Covers:   '+c.days.length+' day'+(c.days.length===1?'':'s'),''];
  var W=nameWidth(c);
@@ -1104,7 +1119,8 @@ function sheetText(){
    L.push('  '+(m.name||'Meal'));
    m.items.forEach(function(it){var r=BYCODE[it.code];
     var u=r?unitStr(r,+it.g||0):'';
-    L.push('    '+pad(r?r.name:(it.own||''),W)+String(+it.g||0).padStart(5)+' g'+
+    var mx=r&&sheetB(c)!==bOf(it),sg=mx?rawOf(it).g:(+it.g||0);
+    L.push('    '+pad(r?r.name:(it.own||''),W)+String(sg).padStart(5)+' g'+(mx?'  ( Cooked '+(+it.g||0)+' g )':'')+
      (u?'  ( '+u+' )':'')+(ownMac(it)?'  ( Home-Sourced · '+Math.round(ownMac(it).kcal)+' KCALs · Protein '+Math.round(ownMac(it).p)+' g · Carbs '+Math.round(ownMac(it).c)+' g · Fat '+Math.round(ownMac(it).f)+' g )':''))})});
   L.push('')});
  return L.join('\n')}
@@ -1194,7 +1210,7 @@ $('#doSend').addEventListener('click',function(){
  var how='<ol style="margin:8px 0 0;padding-left:20px">'+
   '<li>Open our upload page.</li>'+
   '<li>Paste the plan into the box and set the weights switch to <b>'+
-   (c.basis==='raw'?'Raw':'Cooked')+'</b>, to match the sheet.</li>'+
+   (sheetB(c)==='raw'?'Raw':'Cooked')+'</b>, to match the sheet.</li>'+
   '<li>Press <b>Read My Plan</b>, then fill in '+esc(c.name||'your client')+
    '&rsquo;s details and send it.</li></ol>'+
   '<p style="margin:10px 0 0"><a class="btn o s" href="'+BYOP_URL+'" target="_blank" '+
