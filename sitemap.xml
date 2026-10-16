@@ -2,7 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aeramealprep.net/checkout/</loc>
-    <lastmod>2026-10-16T01:50:51.246Z</lastmod>
+    <lastmod>2026-10-16T04:48:42.505Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
+    <lastmod>2026-10-16T04:30:15.245Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/track/</loc>
+    <lastmod>2026-10-16T03:10:23.656Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/account/</loc>
+    <lastmod>2026-10-16T03:10:17.987Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/meal-plan/</loc>
+    <lastmod>2026-10-16T03:10:15.966Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -13,11 +33,6 @@
   <url>
     <loc>https://aeramealprep.net/motion/</loc>
     <lastmod>2026-10-16T01:40:49.589Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
-    <lastmod>2026-10-16T01:35:58.148Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -56,23 +71,8 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/track/</loc>
-    <lastmod>2026-10-16T01:17:58.245Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/meal-plan/</loc>
-    <lastmod>2026-10-16T01:17:49.605Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
     <loc>https://aeramealprep.net/fridge/</loc>
     <lastmod>2026-10-15T16:46:04.057Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/account/</loc>
-    <lastmod>2026-10-15T16:45:47.979Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
