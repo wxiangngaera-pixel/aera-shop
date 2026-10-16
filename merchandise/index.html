@@ -53,7 +53,7 @@ Object.defineProperty(P,'innerHTML',{configurable:true,enumerable:D.enumerable,g
 if(/[?&]scrolly=1/.test(q))L.setItem('aera.scrolly','1');if(/[?&]scrolly=0/.test(q))L.removeItem('aera.scrolly');
 if(!(LIVE||L.getItem('aera.scrolly')==='1'))return;
 if(/(^|\.)my\.chatbees\.io$/i.test(location.hostname))return;
-if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+/* reduced motion : the motion engine is switched off, so the loader runs for everyone ( it also carries the sign-in reminder ) */
 var v=L.getItem('aera.motion.v')||'',U='https://aeramealprep.net/motion/'+(v?'?v='+v:''),A='/*AERA-MOTION-START*/',B='/*AERA-MOTION-END*/';
 function cut(t){var a=t.indexOf(A),b=t.indexOf(B);return a<0||b<a?'':t.slice(a,b)}
 var c=L.getItem('aera.motion.code')||'',cv=L.getItem('aera.motion.cv');
