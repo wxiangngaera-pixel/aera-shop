@@ -1994,4 +1994,41 @@ body.ct-sent #coachBuild,body.ct-dash #coachBuild,body.ct-sent .finish,body.ct-d
 <style id="aera-coach-swap">.rows .row .thumb,.rows .row .nm{cursor:pointer}.rows .row .nm .chg{display:inline-block;margin-left:8px;font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#16479E;border:1.5px solid #16479E;border-radius:999px;padding:1px 8px;vertical-align:2px;white-space:nowrap}.rows .row .nm:hover .chg{background:#16479E;color:#FDB913}</style><script id="aera-coach-swap-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Change ▾":"更换 ▾"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Change (.+)$/,"更换 $1"])}catch(e){}</script><div class="mbento" hidden aria-hidden="true" style="display:none"></div>
 
 <script id="aera-coach-xpk-zh">try{(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^(\d+) Extra Packaging (RM [\d.]+)$/,"$1 份额外包装 $2"])}catch(e){}</script>
+<script id="aera-coach-applink">/* Send AERA Meal Prep App Link : one tap emails the Client the link to the AERA Meal Prep App ( it also lands in their AERA Inbox ).
+   Under Client Email. The coach must be signed in ; tap once, then tap again to confirm. */
+(function(){if(window.__AERA_CAL)return;window.__AERA_CAL=1;
+var D=document,FN='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/coach-applink',ARM=0,ARMT=null;
+try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{'Send AERA Meal Prep App Link':'发送 AERA Meal Prep 应用链接','Sending…':'发送中…',
+ 'Fill in your Client’s email first.':'请先填写客户的电邮。','Sign in to your AERA Account first.':'请先登录您的 AERA 账户。',
+ 'We could not send it. Please try again.':'无法发送，请再试一次。','Daily limit reached. Try again tomorrow.':'已达到今日上限，请明天再试。'})}catch(e){}
+function tok(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var o=JSON.parse(localStorage.getItem(k)||'null');if(o&&o.currentSession)o=o.currentSession;if(o&&o.access_token&&(!o.expires_at||o.expires_at*1000>Date.now()+30000))return o.access_token}}}catch(e){}return ''}
+function cur(){try{return (window.__coach&&window.__coach.cur())||{}}catch(e){return {}}}
+function st(){try{return (window.__coach&&window.__coach.state())||{}}catch(e){return {}}}
+function val(id){var e=D.getElementById(id);return e?String(e.value||'').trim():''}
+function msg(t,bad){var m=D.getElementById('calMsg');if(!m)return;m.textContent=t||'';m.style.color=bad?'#B42318':'#14632F'}
+function label(t){var b=D.getElementById('calBtn');if(b)b.lastChild.textContent=t}
+function reset(){ARM=0;clearTimeout(ARMT);label('Send AERA Meal Prep App Link');var b=D.getElementById('calBtn');if(b){b.style.background='#16479E';b.style.color='#FDB913'}}
+function mount(){var inp=D.getElementById('cemail');if(!inp||D.getElementById('calBtn'))return;
+ var w=D.createElement('div');w.id='calWrap';w.style.cssText='margin-top:8px';
+ w.innerHTML='<button type="button" id="calBtn" style="display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:9px 14px;border:0;border-radius:10px;background:#16479E;color:#FDB913;font-weight:800;font-size:13.5px;line-height:1.2;font-family:inherit;cursor:pointer;text-align:left"><span aria-hidden="true">📲</span><span>Send AERA Meal Prep App Link</span></button><div id="calMsg" style="font-size:12.5px;font-weight:700;margin-top:6px;line-height:1.4"></div>';
+ inp.parentNode.appendChild(w);D.getElementById('calBtn').onclick=go;
+ inp.addEventListener('input',function(){if(ARM)reset();msg('')})}
+function go(){var c=cur(),em=(val('cemail')||String(c.email||'')).toLowerCase();
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){msg('Fill in your Client’s email first.',1);return}
+ var t=tok();if(!t){msg('Sign in to your AERA Account first.',1);return}
+ if(!ARM){ARM=1;msg('');label('Tap again to send to '+em);var b0=D.getElementById('calBtn');b0.style.background='#FDB913';b0.style.color='#0B0B0B';ARMT=setTimeout(reset,7000);return}
+ clearTimeout(ARMT);var b=D.getElementById('calBtn');b.disabled=true;label('Sending…');
+ fetch(FN,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+t},body:JSON.stringify({email:em,name:val('cname')||c.name||'',coach:val('coachname')||st().coach||''})})
+ .then(function(r){return r.json().catch(function(){return {}})}).then(function(j){b.disabled=false;reset();
+  if(j&&j.ok&&j.again){msg('Already sent to '+em+' a few minutes ago. Ask them to check their email and Spam.');return}
+  if(j&&j.ok){msg('Sent ✓ to '+em+'. They get it by email ( check Spam too ) and in their AERA Inbox.');return}
+  if(j&&j.error==='limit'){msg('Daily limit reached. Try again tomorrow.',1);return}
+  if(j&&j.error==='signin_required'){msg('Sign in to your AERA Account first.',1);return}
+  if(j&&j.error==='bad_email'){msg('Fill in your Client’s email first.',1);return}
+  msg('We could not send it. Please try again.',1)})
+ .catch(function(){b.disabled=false;reset();msg('We could not send it. Please try again.',1)})}
+function boot(){mount();var n=0,iv=setInterval(function(){mount();if(++n>30)clearInterval(iv)},1000)}
+if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',boot);else boot();
+})();
+</script>
 <!-- build 2026-10-14T12:03:37.929Z -->
