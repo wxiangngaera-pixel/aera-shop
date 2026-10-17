@@ -2032,12 +2032,13 @@ function boot(){mount();var n=0,iv=setInterval(function(){mount();if(++n>30)clea
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 </script>
-<script id="aera-coach-dupmeal">/* Duplicate a Meal : the copy appears right under it, with the next free Meal name ( Lunch -> Afternoon Snack … ), and Undo takes it back.
-   The button sits with + Add Protein / Carbs / Sauce / Vegetables under every Meal ( and as ⧉ beside the Meal name on a computer ). */
-(function(){try{var s=document.createElement('style');s.textContent='.meal>.mh .mdup{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 11px;border:0;border-radius:9px;background:#16479E;color:#FDB913;font-weight:800;font-size:12.5px;font-family:inherit;cursor:pointer;white-space:nowrap}.meal>.mh .mdup:hover{filter:brightness(1.12)}@media(max-width:700px){.meal>.mh .mdup{display:none}}.addrow .mdup2{background:#16479E!important;color:#FDB913!important;border-color:#16479E!important}';document.head.appendChild(s);
+<script id="aera-coach-dupmeal">/* Duplicate a Meal : the button sits right under the Meal name ( Lunch ▾ ). The copy appears right under the Meal, with the next free
+   Meal name ( Lunch -> Afternoon Snack … ), and Undo takes it back. */
+(function(){try{var s=document.createElement('style');s.textContent='.meal>.mh .mselw{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0}.meal>.mh .mselw .msel{max-width:100%}.meal>.mh .mdup{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 13px;border:0;border-radius:10px;background:#16479E;color:#FDB913;font-weight:800;font-size:13px;font-family:inherit;cursor:pointer;white-space:nowrap}.meal>.mh .mdup:hover{filter:brightness(1.12)}.meal>.mh .mselw .mdup{display:inline-flex!important}.meal>.mh .mselw .mdup span{display:inline!important}';document.head.appendChild(s);
 Object.assign(window.AERA_I18N=window.AERA_I18N||{},{'Duplicate':'复制','Duplicate this Meal':'复制这一餐'})}catch(e){}
-function put(){var p=document.getElementById('dayPanel');if(!p)return;var add=0;[].forEach.call(p.querySelectorAll('.meal'),function(m,i){var r=m.querySelector('.addrow');if(!r||r.querySelector('.mdup2'))return;var h=m.querySelector('[data-dupmeal]'),mi=h?h.getAttribute('data-dupmeal'):String(i);
- var b=document.createElement('button');b.type='button';b.className='btn o s mdup2';b.setAttribute('data-dupmeal',mi);b.innerHTML='<span aria-hidden="true">⧉</span> <span>Duplicate this Meal</span>';r.appendChild(b);add=1});if(add&&window.aeraRetranslate)try{window.aeraRetranslate()}catch(e){}}
+function put(){var p=document.getElementById('dayPanel');if(!p)return;var add=0;[].forEach.call(p.querySelectorAll('.meal>.mh'),function(h){if(h.querySelector('.mselw'))return;var sel=h.querySelector('.msel'),b=h.querySelector('.mdup');if(!sel||!b)return;
+ var w=document.createElement('div');w.className='mselw';h.insertBefore(w,sel);w.appendChild(sel);
+ b.innerHTML='<span aria-hidden="true">⧉</span> <span>Duplicate this Meal</span>';w.appendChild(b);add=1});if(add&&window.aeraRetranslate)try{window.aeraRetranslate()}catch(e){}}
 var ON=0;function boot(){var p=document.getElementById('dayPanel');put();if(p&&!ON){ON=1;new MutationObserver(function(){put()}).observe(p,{childList:true,subtree:true})}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();setTimeout(boot,1500)})();
 </script>
