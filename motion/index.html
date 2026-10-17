@@ -295,6 +295,17 @@
 </script></head>
 <body><p>AERA Motion Engine. Used by every AERA page. Do not delete.</p>
 <script type="text/plain" id="aera-motion-src">/*AERA-MOTION-START*/
+/* AERA photos stay put : when a page redraws a list ( a tick, a count, a refresh ), the photos already on screen are kept and moved
+   into the new drawing, so Safari never shows them blank while it decodes them again. That blank was the flashing in the apps. */
+(function(){try{if(window.__AERA_IMGKEEP)return;window.__AERA_IMGKEEP=1;var P=Element.prototype,D=Object.getOwnPropertyDescriptor(P,'innerHTML');if(!D||!D.set)return;
+var set=function(v){var keep=null,me=this;
+ try{if(me.getElementsByTagName&&me.tagName!=='TEMPLATE'){var im=me.getElementsByTagName('img');if(im.length){keep={};for(var i=0;i<im.length;i++){var x=im[i],s=x.getAttribute('src');if(s&&x.complete&&x.naturalWidth)(keep[s]=keep[s]||[]).push(x)}}}}catch(e){keep=null}
+ D.set.call(me,v);
+ if(keep){try{var nw=[].slice.call(me.getElementsByTagName('img'));for(var j=0;j<nw.length;j++){var n=nw[j],q=keep[n.getAttribute('src')],o=q&&q.shift();if(!o||o===n||!n.parentNode||me.contains(o))continue;
+  for(var c=o.attributes.length-1;c>=0;c--){var an=o.attributes[c].name;if(!n.hasAttribute(an))o.removeAttribute(an)}
+  for(var d=0;d<n.attributes.length;d++){var at=n.attributes[d];if(o.getAttribute(at.name)!==at.value)o.setAttribute(at.name,at.value)}
+  n.parentNode.replaceChild(o,n)}}catch(e){}}};
+Object.defineProperty(P,'innerHTML',{configurable:true,enumerable:D.enumerable,get:D.get,set:set})}catch(e){}})();
 /* AERA sign-in nudge : visitors who are not signed in see Log In / Sign Up pinned to the bottom of every page,
    and the first time they tap Add To Cart or Checkout in a visit, a short "Sign in before you order?" prompt. */
 (function(){if(window.__AERA_NUDGE)return;window.__AERA_NUDGE=1;
