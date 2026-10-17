@@ -734,10 +734,10 @@ function paint(){
     '<div class="pr">'+(r?rm(per(r,rw.g).price):'<span class="ownno">Not Ours</span>')+
      '<small>'+(r?Math.round(per(r,rw.g).kcal)+' KCALs':(ownMac(it)?Math.round(ownMac(it).kcal)+' KCALs':'Not Ours'))+'</small></div>'+
     '<button class="x" type="button" data-rm="1" aria-label="Remove">&times;</button></div>'}).join('');
-  h+='<div class="meal"><div class="mh">'+
+     h+='<div class="meal"><div class="mh">'+
    mealSelect(m,mi)+
    '<span class="mac">'+Math.round(t.kcal)+' KCALs<br>Protein - '+Math.round(t.p)+' g<br>Carbs - '+Math.round(t.c)+' g<br>Fat - '+Math.round(t.f)+' g<br><b>'+rm(t.price)+'</b></span>'+
-   '<button class="x" type="button" data-delmeal="'+mi+'" aria-label="Remove this meal">&times;</button>'+
+   '<button class="mdup" type="button" data-dupmeal="'+mi+'" title="Duplicate this Meal"><span aria-hidden="true">⧉</span> <span>Duplicate</span></button><button class="x" type="button" data-delmeal="'+mi+'" aria-label="Remove this meal">&times;</button>'+
    '</div>'+coachBento(m)+(m.items.length?'<div class="rhead"><span>Item</span><span>Per Portion</span><span>Weight</span><span>Price</span><span></span></div>':'')+'<div class="rows">'+(rows||'<div class="empty">Nothing in this Meal yet.</div>')+'</div>'+
    mfootHtml(m.items)+
    '<div class="addrow">'+
@@ -834,6 +834,7 @@ $('#dayPanel').addEventListener('click',function(e){
  else if(b.dataset.add!=null){openPick(+b.dataset.add,false,b.dataset.cat);return}
  else if(b.dataset.own!=null){openPick(+b.dataset.own,true);return}
  else if(b.dataset.delmeal!=null){mark();d.meals.splice(+b.dataset.delmeal,1)}
+ else if(b.dataset.dupmeal!=null){mark();var dmi=+b.dataset.dupmeal,dcp=JSON.parse(JSON.stringify(d.meals[dmi]));dcp.name=nextMeal(d);d.meals.splice(dmi+1,0,dcp)}
  else if(b.dataset.rm){mark();var row=b.closest('.row');
   d.meals[+row.dataset.m].items.splice(+row.dataset.i,1)}
  else return;
@@ -2030,5 +2031,9 @@ function go(){var c=cur(),em=(val('cemail')||String(c.email||'')).toLowerCase();
 function boot(){mount();var n=0,iv=setInterval(function(){mount();if(++n>30)clearInterval(iv)},1000)}
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',boot);else boot();
 })();
+</script>
+<script id="aera-coach-dupmeal">/* Duplicate a Meal : the copy appears right under it, with the next free Meal name ( Lunch -> Dinner … ), and Undo takes it back. */
+(function(){try{var s=document.createElement('style');s.textContent='.meal>.mh .mdup{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 11px;border:0;border-radius:9px;background:#16479E;color:#FDB913;font-weight:800;font-size:12.5px;font-family:inherit;cursor:pointer;white-space:nowrap}.meal>.mh .mdup:hover{filter:brightness(1.12)}@media(max-width:520px){.meal>.mh .mdup span+span{display:none}.meal>.mh .mdup{padding:0 10px}}';document.head.appendChild(s);
+Object.assign(window.AERA_I18N=window.AERA_I18N||{},{'Duplicate':'复制'})}catch(e){}})();
 </script>
 <!-- build 2026-10-14T12:03:37.929Z -->
