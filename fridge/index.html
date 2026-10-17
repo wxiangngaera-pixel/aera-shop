@@ -1898,7 +1898,7 @@ async function savePdf(f,name,btn){
   else{var u=URL.createObjectURL(blob),a=mk('a');a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},60000);note('')}
  }catch(e){note('Could not make the PDF. Try Print, then Save as PDF.',true)}
  btn.disabled=false}
-var FIT='<style>@media (max-width:560px){body{margin:18px!important}th.r,td.r{white-space:nowrap}}</style>';
+var FIT='<style>@media (max-width:560px){body{margin:18px!important}th.r,td.r{white-space:nowrap;padding-left:10px}.bbank b{flex-basis:118px!important}}</style>';
 function show(html,title){shut(true);html=/<\/head>/i.test(html)?html.replace(/<\/head>/i,FIT+'</head>'):FIT+html;
  var w=mk('div','position:fixed;inset:0;z-index:10050;display:flex;flex-direction:column;background:#E9EEF6;font-family:system-ui,-apple-system,"Segoe UI",sans-serif');
  w.id='aeraDocView';w.setAttribute('role','dialog');w.setAttribute('aria-label',title);
@@ -1920,6 +1920,30 @@ function show(html,title){shut(true);html=/<\/head>/i.test(html)?html.replace(/<
  pr.onclick=function(){try{f.contentWindow.focus();f.contentWindow.print()}catch(e){savePdf(f,title,sv)}};
  sv.onclick=function(){savePdf(f,title,sv)};
  if(window.aeraRetranslate)try{window.aeraRetranslate()}catch(e){}}
+/* the gym's logo × the AERA logo and AERA's company details on every Invoice, Credit Note and Delivery Order ( as on the Kitchen Console's copies ) */
+var BRAND={};
+function E(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function U(s){var t=document.createElement('textarea');t.innerHTML=String(s||'');return t.value}
+async function brandFor(name){if(BRAND[name])return BRAND[name];var out={logo:'',aera:'',company:{}};
+ try{var db=window.__AERA_DB;if(db){var f=await db.from('fridges').select('id,name');var row=(f.data||[]).filter(function(x){return String(x.name||'').trim()===String(name||'').trim()})[0];
+  if(row){var r=await db.rpc('fridge_doc_brand',{p_fridge:row.id});if(r.data){out.logo=/^data:image\/(png|jpe?g|webp|svg\+xml);base64,/.test(r.data.logo||'')?r.data.logo:'';out.aera=/^data:image\/svg\+xml;base64,/.test(r.data.aera||'')?r.data.aera:'';out.company=r.data.company||{}}}}}catch(e){}
+ BRAND[name]=out;return out}
+var BCSS='<style>.bttl{font-size:12px;font-weight:800;letter-spacing:.08em;color:#16479E;margin:0 0 14px}'+
+ '.bhd{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap;margin-bottom:6px}'+
+ '.bco b{display:block;font-size:15px}.bco div{font-size:12px;color:#5A6B87}.bco .bkind{font-size:22px;font-weight:800;color:#0B1C36;letter-spacing:-.01em;margin-bottom:2px}'+
+ '.bmk{display:flex;align-items:center;gap:10px}.bmk .am{height:40px;width:auto;display:block}.bmk .pm{max-height:40px;max-width:120px;width:auto;display:block}.bmk span{font-size:15px;color:#8A97AD}'+
+ '.bbank{margin-top:22px;padding:10px 12px;border:1px solid #CBD6E8;border-radius:8px;font-size:12px;line-height:1.5}.bbank div{display:flex;gap:10px;padding:2px 0}.bbank b{flex:0 0 150px;color:#5A6B87;font-size:10.5px;letter-spacing:.08em;padding-top:1px}</style>';
+async function brand(html){
+ var m=html.match(/<b>Fridge<\/b>([^<]*)<\/div>/),name=m?U(m[1]):'';
+ var B=await brandFor(name),c=B.company||{};if(!B.aera&&!B.logo&&!c.name)delete BRAND[name];
+ var kind=/Delivery Order/.test(html.slice(0,4000))&&/<b>Delivery Order No<\/b>/.test(html)?'Delivery Order':(/<b>Credit Note No<\/b>/.test(html)?'Credit Note':'Invoice');
+ var head=(name?'<p class="bttl">'+E(name.toUpperCase())+' X AERA MEAL PREP</p>':'')+
+  '<div class="bhd"><div class="bco"><div class="bkind">'+kind+'</div><b>'+E(c.name||'AERA Meal Preparation SDN BHD')+'</b>'+(c.reg?'<div>'+E(c.reg)+'</div>':'')+(c.address?'<div>'+E(c.address)+'</div>':'')+'</div>'+
+  '<div class="bmk">'+(B.logo?'<img class="pm" src="'+B.logo+'" alt="'+E(name)+'"><span>×</span>':'')+(B.aera?'<img class="am" src="'+B.aera+'" alt="AERA">':'<b style="font-size:22px;font-style:italic;font-weight:900;color:#16479E;letter-spacing:.04em">AERA</b>')+'</div></div>';
+ html=html.replace(/<\/head>/i,BCSS+'</head>').replace(/<h1>[^<]*<\/h1>\s*(<p class="sub">[^<]*<\/p>)?/,head+'<div style="height:18px"></div>');
+ if(kind==='Invoice'&&(c.bank||c.acct)){var bk='<div class="bbank">'+(c.bank?'<div><b>BANK</b> '+E(c.bank)+'</div>':'')+(c.acct?'<div><b>BANK ACCOUNT NO</b> '+E(c.acct)+'</div>':'')+'<div><b>BENEFICIARY NAME</b> '+E(c.bene||c.name||'')+'</div></div>';
+  html=html.replace(/<p class="ft">/,bk+'<p class="ft">')}
+ return html}
 window.aeraDocView=show;
 /* the portal's own Invoice / Credit Note / Delivery Order makers write into window.open : they now write into the viewer */
 function wrap(name){var fn=window[name];if(typeof fn!=='function'||fn.__dv)return;
@@ -1927,7 +1951,8 @@ function wrap(name){var fn=window[name];if(typeof fn!=='function'||fn.__dv)retur
   var fake={closed:false,focus:function(){},print:function(){},close:function(){},document:{open:function(){},write:function(s){html+=String(s)},writeln:function(s){html+=String(s)+'\n'},close:function(){},get title(){return title},set title(v){title=String(v||'')}}};
   window.open=function(){return fake};
   try{fn.apply(this,arguments)}finally{window.open=oo}
-  if(html){if(!title){var m=html.match(/<title>([^<]*)<\/title>/i);title=m?m[1]:'Document'}show(html,title)}};
+  if(html){if(!title){var m=html.match(/<title>([^<]*)<\/title>/i);title=m?m[1]:'Document'}
+   brand(html).then(function(h){show(h,title)},function(){show(html,title)})}};
  g.__dv=1;window[name]=g}
 function go(){wrap('dlBill');wrap('dlDO')}
 go();if(document.readyState==='loading')addEventListener('DOMContentLoaded',go);addEventListener('load',go);
