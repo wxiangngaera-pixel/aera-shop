@@ -834,7 +834,7 @@ $('#dayPanel').addEventListener('click',function(e){
  else if(b.dataset.add!=null){openPick(+b.dataset.add,false,b.dataset.cat);return}
  else if(b.dataset.own!=null){openPick(+b.dataset.own,true);return}
  else if(b.dataset.delmeal!=null){mark();d.meals.splice(+b.dataset.delmeal,1)}
- else if(b.dataset.dupmeal!=null){mark();var dmi=+b.dataset.dupmeal,dcp=JSON.parse(JSON.stringify(d.meals[dmi]));dcp.name=nextMeal(d);d.meals.splice(dmi+1,0,dcp)}
+ else if(b.dataset.dupmeal!=null){mark();var dmi=+b.dataset.dupmeal,dcp=JSON.parse(JSON.stringify(d.meals[dmi]));dcp.name=(function(){var u={};d.meals.forEach(function(m){u[m.name]=1});var k=MEALS.indexOf(dcp.name);for(var j=1;j<=MEALS.length;j++){var x=MEALS[(k+j+MEALS.length)%MEALS.length];if(!u[x])return x}return dcp.name})();d.meals.splice(dmi+1,0,dcp)}
  else if(b.dataset.rm){mark();var row=b.closest('.row');
   d.meals[+row.dataset.m].items.splice(+row.dataset.i,1)}
  else return;
