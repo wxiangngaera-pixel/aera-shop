@@ -2001,7 +2001,7 @@ body.ct-sent #coachBuild,body.ct-dash #coachBuild,body.ct-sent .finish,body.ct-d
 var D=document,FN='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/coach-applink',ARM=0,ARMT=null;
 try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{'Send AERA Meal Prep App Link':'发送 AERA Meal Prep 应用链接','Sending…':'发送中…',
  'Fill in your Client’s email first.':'请先填写客户的电邮。','Sign in to your AERA Account first.':'请先登录您的 AERA 账户。',
- 'We could not send it. Please try again.':'无法发送，请再试一次。','Daily limit reached. Try again tomorrow.':'已达到今日上限，请明天再试。'})}catch(e){}
+ 'We could not send it. Please try again.':'无法发送，请再试一次。','Daily limit reached. Try again tomorrow.':'已达到今日上限，请明天再试。','Send AERA Coach Plan App Link':'发送 AERA Coach Plan App 链接','AERA Coach Plan App':'AERA Coach Plan App','Send the AERA Coach Plan App to other Coaches. They sign in with their AERA Account.':'把 AERA Coach Plan App 发给其他教练。他们用自己的 AERA 账户登录。','Build and send your Clients’ Meal Plans straight to the AERA Kitchen. Open this link on your phone, then tap Share → Add to Home Screen :':'为学员编排餐单，直接发送到 AERA 厨房。在手机上打开这个链接，然后点 分享 → 添加到主屏幕：','Share…':'分享…','Email':'电邮','Copy Link':'复制链接','Copied':'已复制','Close':'关闭'})}catch(e){}
 function tok(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var o=JSON.parse(localStorage.getItem(k)||'null');if(o&&o.currentSession)o=o.currentSession;if(o&&o.access_token&&(!o.expires_at||o.expires_at*1000>Date.now()+30000))return o.access_token}}}catch(e){}return ''}
 function cur(){try{return (window.__coach&&window.__coach.cur())||{}}catch(e){return {}}}
 function st(){try{return (window.__coach&&window.__coach.state())||{}}catch(e){return {}}}
@@ -2009,13 +2009,11 @@ function val(id){var e=D.getElementById(id);return e?String(e.value||'').trim():
 function msg(t,bad){var m=D.getElementById('calMsg');if(!m)return;m.textContent=t||'';m.style.color=bad?'#B42318':'#14632F'}
 function label(t){var b=D.getElementById('calBtn');if(b)b.lastChild.textContent=t}
 function reset(){ARM=0;clearTimeout(ARMT);label('Send AERA Meal Prep App Link');var b=D.getElementById('calBtn');if(b){b.style.background='#16479E';b.style.color='#FDB913'}}
-function mount(){if(D.getElementById('calBtn'))return;var h1=D.querySelector('.wrap > h1');if(!h1)return;
- /* Peter : Send AERA Meal Prep App Link sits in the header ( top right ), it sends to the Client Email filled in below */
- if(!D.getElementById('calCss')){var cs=D.createElement('style');cs.id='calCss';cs.textContent='#calWrap{float:right;max-width:330px;margin:0 0 10px 14px;text-align:right}#calWrap #calMsg{text-align:left}@media (max-width:640px){#calWrap{float:none;max-width:none;margin:4px 0 12px;text-align:left}}';D.head.appendChild(cs)}
- var w=D.createElement('div');w.id='calWrap';
- w.innerHTML='<button type="button" id="calBtn" style="display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:9px 16px;border:0;border-radius:999px;background:#16479E;color:#FDB913;font-weight:800;font-size:13.5px;line-height:1.2;font-family:inherit;cursor:pointer;text-align:left;box-shadow:0 2px 8px rgba(22,71,158,.25)"><span aria-hidden="true">📲</span><span>Send AERA Meal Prep App Link</span></button><div id="calMsg" style="font-size:12.5px;font-weight:700;margin-top:6px;line-height:1.4"></div>';
- h1.parentNode.insertBefore(w,h1);D.getElementById('calBtn').onclick=go;
- D.addEventListener('input',function(e){if(e.target&&e.target.id==='cemail'){if(ARM)reset();msg('')}})}
+function mount(){var inp=D.getElementById('cemail');if(!inp||D.getElementById('calBtn'))return;
+ var w=D.createElement('div');w.id='calWrap';w.style.cssText='margin-top:8px';
+ w.innerHTML='<button type="button" id="calBtn" style="display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:9px 14px;border:0;border-radius:10px;background:#16479E;color:#FDB913;font-weight:800;font-size:13.5px;line-height:1.2;font-family:inherit;cursor:pointer;text-align:left"><span aria-hidden="true">📲</span><span>Send AERA Meal Prep App Link</span></button><div id="calMsg" style="font-size:12.5px;font-weight:700;margin-top:6px;line-height:1.4"></div>';
+ inp.parentNode.appendChild(w);D.getElementById('calBtn').onclick=go;
+ inp.addEventListener('input',function(){if(ARM)reset();msg('')})}
 function go(){var c=cur(),em=(val('cemail')||String(c.email||'')).toLowerCase();
  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){msg('Fill in your Client’s email first.',1);return}
  var t=tok();if(!t){msg('Sign in to your AERA Account first.',1);return}
@@ -2030,7 +2028,30 @@ function go(){var c=cur(),em=(val('cemail')||String(c.email||'')).toLowerCase();
   if(j&&j.error==='bad_email'){msg('Fill in your Client’s email first.',1);return}
   msg('We could not send it. Please try again.',1)})
  .catch(function(){b.disabled=false;reset();msg('We could not send it. Please try again.',1)})}
-function boot(){mount();var n=0,iv=setInterval(function(){mount();if(++n>30)clearInterval(iv)},1000)}
+/* Peter : Send AERA Coach Plan App Link in the header ( top right ) : share the Coach Plan App with other coaches */
+var CAPP='https://aeramealprep.net/coach-plan-builder/?install=1';
+function cmsg(){return T('AERA Coach Plan App')+'\n'+T('Build and send your Clients’ Meal Plans straight to the AERA Kitchen. Open this link on your phone, then tap Share → Add to Home Screen :')+'\n'+CAPP}
+function T(s){try{var z=(document.documentElement.lang||'').toLowerCase().indexOf('zh')===0&&window.AERA_I18N&&window.AERA_I18N[s];return z||s}catch(e){return s}}
+function share(){var old=D.getElementById('cpaSheet');if(old)old.remove();var m=cmsg();
+ var w=D.createElement('div');w.id='cpaSheet';w.style.cssText='position:fixed;inset:0;z-index:9990;background:rgba(11,20,40,.5);display:flex;align-items:flex-end;justify-content:center;padding:12px';
+ var bs='display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:48px;margin-top:8px;border-radius:12px;font-weight:800;font-size:15px;font-family:inherit;text-decoration:none;cursor:pointer;box-sizing:border-box;';
+ w.innerHTML='<div style="background:#fff;border-radius:18px;max-width:440px;width:100%;padding:18px 16px calc(14px + env(safe-area-inset-bottom));font-family:inherit;color:#0B0B0B;box-shadow:0 20px 50px rgba(0,0,0,.3)">'+
+  '<div style="font-size:18px;font-weight:800;color:#16479E">📲 '+T('Send AERA Coach Plan App Link')+'</div><div style="font-size:13px;color:#3A3F4A;margin:4px 0 8px;line-height:1.45">'+T('Send the AERA Coach Plan App to other Coaches. They sign in with their AERA Account.')+'</div>'+
+  '<div style="font-size:12.5px;background:#F1F4F9;border-radius:10px;padding:8px 10px;word-break:break-all;font-weight:700;color:#16479E">'+CAPP+'</div>'+
+  (navigator.share?'<button type="button" data-x="share" style="'+bs+'border:0;background:#FDB913;color:#0B0B0B">📤 '+T('Share…')+'</button>':'')+
+  '<a href="https://wa.me/?text='+encodeURIComponent(m)+'" target="_blank" rel="noopener" style="'+bs+'background:#25D366;color:#fff">WhatsApp</a>'+
+  '<a href="mailto:?subject='+encodeURIComponent(T('AERA Coach Plan App'))+'&body='+encodeURIComponent(m)+'" style="'+bs+'background:#fff;color:#16479E;border:1.5px solid #16479E">✉️ '+T('Email')+'</a>'+
+  '<button type="button" data-x="copy" style="'+bs+'background:#fff;color:#16479E;border:1.5px solid #16479E">📋 '+T('Copy Link')+'</button>'+
+  '<button type="button" data-x="no" style="'+bs+'border:0;background:#F1F4F9;color:#3A3F4A">'+T('Close')+'</button></div>';
+ D.body.appendChild(w);
+ w.addEventListener('click',async function(e){if(e.target===w)return w.remove();var b=e.target.closest&&e.target.closest('button');if(!b)return;var x=b.dataset.x;
+  if(x==='no')return w.remove();
+  if(x==='share'){try{await navigator.share({title:T('AERA Coach Plan App'),text:m.replace('\n'+CAPP,''),url:CAPP});w.remove()}catch(_){}}
+  if(x==='copy'){try{await navigator.clipboard.writeText(CAPP);b.textContent='✓ '+T('Copied')}catch(_){prompt(T('Copy Link'),CAPP)}}})}
+function mountHd(){if(D.getElementById('cpaBtn'))return;var h1=D.querySelector('.wrap > h1');if(!h1)return;
+ if(!D.getElementById('cpaCss')){var cs=D.createElement('style');cs.id='cpaCss';cs.textContent='#cpaBtn{float:right;display:inline-flex;align-items:center;gap:7px;min-height:42px;margin:0 0 10px 14px;padding:9px 16px;border:0;border-radius:999px;background:#16479E;color:#FDB913;font-weight:800;font-size:13.5px;line-height:1.2;font-family:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(22,71,158,.25)}@media (max-width:640px){#cpaBtn{float:none;margin:4px 0 12px}}';D.head.appendChild(cs)}
+ var b=D.createElement('button');b.type='button';b.id='cpaBtn';b.innerHTML='<span aria-hidden="true">📲</span><span>Send AERA Coach Plan App Link</span>';b.onclick=share;h1.parentNode.insertBefore(b,h1)}
+function boot(){mount();mountHd();var n=0,iv=setInterval(function(){mount();mountHd();if(++n>30)clearInterval(iv)},1000)}
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 </script>
