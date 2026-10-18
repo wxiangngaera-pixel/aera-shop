@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style id="aera-fridge-steady-css">html.aera-signed #gate{display:none}html.aera-signed #out{display:block!important}html.aera-signed:not(.aera-ready) #app{visibility:hidden}</style>
+<script id="aera-fridge-steady">/* Peter ( 18th Oct 2026 ) : no jumping when the Fridge App opens. When this phone is already signed in, the Sign In box is not
+   shown first, the Sign out button keeps its place from the start, and the fridge appears once it is loaded ( not in pieces ). */
+(function(){var R=document.documentElement;try{var t=localStorage.getItem('sb-swpprjvubgcdsojapaad-auth-token'),o=t&&JSON.parse(t);if(o&&o.currentSession)o=o.currentSession;if(o&&o.refresh_token)R.classList.add('aera-signed')}catch(e){}
+function ready(){R.classList.add('aera-ready')}setTimeout(ready,5000);
+document.addEventListener('DOMContentLoaded',function(){var f=document.getElementById('fname'),g=document.getElementById('gate');if(!f)return ready();
+ new MutationObserver(function(){if(f.textContent.trim()!=='Your Fridge')ready()}).observe(f,{childList:true,characterData:true,subtree:true});
+ if(g)new MutationObserver(function(){if(g.style.display==='block'){R.classList.remove('aera-signed');ready()}}).observe(g,{attributes:true,attributeFilter:['style']})})})();</script>
 <script id="aera-fresh">/* The installed app keeps a copy of this page for up to 10 minutes. On every open it asks the
    site for the newest copy, refreshes the stored one, and reloads once if a newer build is out. */
 (function(){var B='1792055459128';try{if(location.hostname.indexOf('chatbees')>=0)return;
