@@ -2113,6 +2113,18 @@ var q=0;function sch(){if(q)return;q=requestAnimationFrame(function(){q=0;wrap()
 function boot(){wrap();new MutationObserver(sch).observe(document.body,{childList:true,subtree:true,characterData:true})}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot()})();
 </script>
+<script id="aera-coach-refhint">/* Peter : reminds coaches where to see their Sales ( 18th Oct 2026 ) */
+(function(){if(window.__AERA_REFHINT)return;window.__AERA_REFHINT=1;var D=document;
+var EN='Go to <b>Referral Portal</b> to check on your Sales',ZH='前往 <b>推荐门户</b> 查看您的销售';
+function txt(){return (D.documentElement.lang||'').toLowerCase().indexOf('zh')===0?ZH:EN}
+function put(){var n=D.getElementById('coachNav');if(!n)return;var p=D.getElementById('cpRefHint');
+ if(!p){if(!D.getElementById('cpRefCss')){var cs=D.createElement('style');cs.id='cpRefCss';cs.textContent='#cpRefHint{display:flex;align-items:center;gap:8px;max-width:1100px;margin:8px auto 4px;width:calc(100% - 32px);box-sizing:border-box;padding:10px 14px;border-radius:12px;border:1.5px solid #FDB913;background:#FFF8E1;color:#16479E;font:700 13.5px/1.35 Montserrat,system-ui,sans-serif;cursor:pointer;text-align:left}#cpRefHint b{font-weight:800}#cpRefHint .ar{margin-left:auto;font-size:18px;line-height:1}#cpRefHint .ic{font-size:18px;line-height:1}';D.head.appendChild(cs)}
+  p=D.createElement('button');p.type='button';p.id='cpRefHint';p.className='noi18n';p.onclick=function(){var b=D.querySelector('#coachNav button[data-ct="dash"]');if(b)b.click();else location.href='/referrer-portal/?install=1'};
+  n.insertAdjacentElement('afterend',p)}
+ var h='<span class="ic" aria-hidden="true">💰</span><span>'+txt()+'</span><span class="ar" aria-hidden="true">›</span>';if(p.innerHTML!==h)p.innerHTML=h}
+function boot(){put();var k=0,iv=setInterval(function(){put();if(++k>20)clearInterval(iv)},500);new MutationObserver(put).observe(D.documentElement,{attributes:true,attributeFilter:['lang']})}
+if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',boot);else boot()})();
+</script>
 
 <script id="aera-coach-dupmeal">/* Duplicate a Meal : the button sits right under the Meal name ( Lunch ▾ ). The copy appears right under the Meal, with the next free
    Meal name ( Lunch -> Afternoon Snack … ), and Undo takes it back. */
