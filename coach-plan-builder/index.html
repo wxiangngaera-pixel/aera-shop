@@ -2009,11 +2009,13 @@ function val(id){var e=D.getElementById(id);return e?String(e.value||'').trim():
 function msg(t,bad){var m=D.getElementById('calMsg');if(!m)return;m.textContent=t||'';m.style.color=bad?'#B42318':'#14632F'}
 function label(t){var b=D.getElementById('calBtn');if(b)b.lastChild.textContent=t}
 function reset(){ARM=0;clearTimeout(ARMT);label('Send AERA Meal Prep App Link');var b=D.getElementById('calBtn');if(b){b.style.background='#16479E';b.style.color='#FDB913'}}
-function mount(){var inp=D.getElementById('cemail');if(!inp||D.getElementById('calBtn'))return;
- var w=D.createElement('div');w.id='calWrap';w.style.cssText='margin-top:8px';
- w.innerHTML='<button type="button" id="calBtn" style="display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:9px 14px;border:0;border-radius:10px;background:#16479E;color:#FDB913;font-weight:800;font-size:13.5px;line-height:1.2;font-family:inherit;cursor:pointer;text-align:left"><span aria-hidden="true">📲</span><span>Send AERA Meal Prep App Link</span></button><div id="calMsg" style="font-size:12.5px;font-weight:700;margin-top:6px;line-height:1.4"></div>';
- inp.parentNode.appendChild(w);D.getElementById('calBtn').onclick=go;
- inp.addEventListener('input',function(){if(ARM)reset();msg('')})}
+function mount(){if(D.getElementById('calBtn'))return;var h1=D.querySelector('.wrap > h1');if(!h1)return;
+ /* Peter : Send AERA Meal Prep App Link sits in the header ( top right ), it sends to the Client Email filled in below */
+ if(!D.getElementById('calCss')){var cs=D.createElement('style');cs.id='calCss';cs.textContent='#calWrap{float:right;max-width:330px;margin:0 0 10px 14px;text-align:right}#calWrap #calMsg{text-align:left}@media (max-width:640px){#calWrap{float:none;max-width:none;margin:4px 0 12px;text-align:left}}';D.head.appendChild(cs)}
+ var w=D.createElement('div');w.id='calWrap';
+ w.innerHTML='<button type="button" id="calBtn" style="display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:9px 16px;border:0;border-radius:999px;background:#16479E;color:#FDB913;font-weight:800;font-size:13.5px;line-height:1.2;font-family:inherit;cursor:pointer;text-align:left;box-shadow:0 2px 8px rgba(22,71,158,.25)"><span aria-hidden="true">📲</span><span>Send AERA Meal Prep App Link</span></button><div id="calMsg" style="font-size:12.5px;font-weight:700;margin-top:6px;line-height:1.4"></div>';
+ h1.parentNode.insertBefore(w,h1);D.getElementById('calBtn').onclick=go;
+ D.addEventListener('input',function(e){if(e.target&&e.target.id==='cemail'){if(ARM)reset();msg('')}})}
 function go(){var c=cur(),em=(val('cemail')||String(c.email||'')).toLowerCase();
  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){msg('Fill in your Client’s email first.',1);return}
  var t=tok();if(!t){msg('Sign in to your AERA Account first.',1);return}
