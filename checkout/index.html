@@ -3619,8 +3619,45 @@ async function run(){var s=sess();if(!s)return;var a=app();
 function later(){setTimeout(function(){run().catch(function(){})},6000)}
 if(D.readyState==='complete')later();else window.addEventListener('load',later);
 /* opening the App clears its notifications and the red number on its icon */
-function clr(){try{if(navigator.serviceWorker&&navigator.serviceWorker.getRegistrations)navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){if(r.getNotifications)r.getNotifications().then(function(l){l.forEach(function(n){n.close()})}).catch(function(){})})}).catch(function(){});if(navigator.clearAppBadge)navigator.clearAppBadge().catch(function(){})}catch(e){}}
+function clr(){try{if(navigator.serviceWorker&&navigator.serviceWorker.getRegistrations)navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){try{r.update().catch(function(){})}catch(_){}try{if(r.active)r.active.postMessage({aera:'clear'})}catch(_){}if(r.getNotifications)r.getNotifications().then(function(l){l.forEach(function(n){n.close()})}).catch(function(){})})}).catch(function(){});if(navigator.clearAppBadge)navigator.clearAppBadge().catch(function(){})}catch(e){}}
 clr();D.addEventListener('visibilitychange',function(){if(!D.hidden){clr();setTimeout(function(){run().catch(function(){})},1500)}});setTimeout(function(){run().catch(function(){})},20000);
+})();
+</script>
+<script id="aera-owner-sendapp">/* Peter ( 18th Oct 2026 ) : Send AERA Corporate App Link : only Peter's own sign-ins see this button.
+   It opens a sheet : WhatsApp, Email, Share, Copy Link. */
+(function(){if(window.__AERA_OSA)return;window.__AERA_OSA=1;
+var D=document,NAME='%NAME%',URL_='https://aeramealprep.net/checkout/?app=corp',ICO='https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/sign/kc-app/icons/corporate-180.png?token=eyJraWQiOiJjNjRlYTIxMi01YmFiLTRjNmMtODcwNS00ZGE3Y2U5YmZiMTYiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJrYy1hcHAvaWNvbnMvY29ycG9yYXRlLTE4MC5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzkxMjU3NDcxLCJleHAiOjIxMDY2MTc0NzF9.osCyv62HIEOcoV_y7HyyHvnmO84aKCv-c9xFodR_tdUzGwzJUAmtEdvZ-9jXE0P5Mz2d6lW_ahB6JHkBVVTzsQ',MODE='corp',SK='sb-swpprjvubgcdsojapaad-auth-token';
+var OWN=['wxiangng@hotmail.com','wxiangngaera@gmail.com','tanjc1994@hotmail.com'];
+function me(){try{var v=JSON.parse(localStorage.getItem(SK)||'null');if(v&&v.currentSession)v=v.currentSession;if(!v||!v.user||!(v.refresh_token||v.access_token))return '';return String(v.user.email||'').toLowerCase()}catch(e){return ''}}
+function corp(){try{var q=new URLSearchParams(location.search);return q.get('app')==='corp'||sessionStorage.getItem('aera.corpApp')==='1'||!!D.getElementById('corpTop')}catch(e){return false}}
+function host(){if(MODE==='corp'){if(!corp())return null;var t=D.getElementById('corpTop');return t?{el:t,how:'before'}:null}
+ var w=D.querySelector('header.top .wrap');return w?{el:w,how:'append'}:null}
+var MSG='Get the '+NAME+' : open this link on your phone, then tap Get The App.\n'+URL_;
+function sheet(){var o=D.getElementById('osaSheet');if(o)o.remove();var w=D.createElement('div');w.id='osaSheet';
+ w.style.cssText='position:fixed;inset:0;z-index:2147483000;background:rgba(11,11,11,.45);display:flex;align-items:flex-end;justify-content:center';
+ var bs='display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:46px;border-radius:12px;font:800 15px Montserrat,system-ui,sans-serif;text-decoration:none;cursor:pointer;margin-top:8px;box-sizing:border-box;';
+ w.innerHTML='<div style="width:100%;max-width:440px;background:#fff;border-radius:18px 18px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));font-family:Montserrat,system-ui,sans-serif;color:#0B0B0B;box-shadow:0 20px 50px rgba(0,0,0,.3)">'+
+  '<div style="display:flex;align-items:center;gap:10px;font-size:18px;font-weight:800;color:#16479E"><img src="'+ICO+'" alt="" style="width:32px;height:32px;border-radius:8px;flex:none"><span>Send '+NAME+' Link</span></div>'+
+  '<div style="font-size:13px;color:#3A3F4A;margin:6px 0 8px;line-height:1.45">Anyone with this link can install the '+NAME+'. They still need their own sign-in to use it.</div>'+
+  (navigator.share?'<button type="button" data-x="share" style="'+bs+'border:0;background:#16479E;color:#FDB913">Share…</button>':'')+
+  '<a href="https://wa.me/?text='+encodeURIComponent(MSG)+'" target="_blank" rel="noopener" style="'+bs+'background:#25D366;color:#fff">WhatsApp</a>'+
+  '<a href="mailto:?subject='+encodeURIComponent(NAME)+'&body='+encodeURIComponent(MSG)+'" style="'+bs+'background:#fff;color:#16479E;border:1.5px solid #16479E">Email</a>'+
+  '<button type="button" data-x="copy" style="'+bs+'background:#fff;color:#16479E;border:1.5px solid #16479E">Copy Link</button>'+
+  '<button type="button" data-x="no" style="'+bs+'border:0;background:#F1F4F9;color:#3A3F4A">Close</button></div>';
+ D.body.appendChild(w);
+ w.addEventListener('click',async function(e){if(e.target===w)return w.remove();var b=e.target.closest&&e.target.closest('button');if(!b)return;var x=b.dataset.x;
+  if(x==='no')return w.remove();
+  if(x==='share'){try{await navigator.share({title:NAME,text:MSG.split('\n')[0],url:URL_});w.remove()}catch(_){}}
+  if(x==='copy'){try{await navigator.clipboard.writeText(URL_);b.textContent='✓ Copied'}catch(_){prompt('Copy Link',URL_)}}})}
+function css(){if(D.getElementById('osaCss'))return;var s=D.createElement('style');s.id='osaCss';s.textContent=
+ '#osaRow{display:flex;justify-content:flex-end;margin:10px 0 0}#osaRow.c{margin:0 0 10px}'+
+ '#osaBtn{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px 0 5px;border-radius:999px;border:1.5px solid #FDB913;background:#16479E;color:#FDB913;font:800 13.5px Montserrat,system-ui,sans-serif;line-height:1;cursor:pointer;white-space:nowrap}'+
+ '#osaBtn img{width:28px;height:28px;border-radius:7px;display:block;flex:none}';D.head.appendChild(s)}
+function paint(){var row=D.getElementById('osaRow'),ok=OWN.indexOf(me())>=0,h=ok&&host();
+ if(!h){if(row)row.remove();return}
+ if(!row){css();row=D.createElement('div');row.id='osaRow';row.innerHTML='<button type="button" id="osaBtn"><img src="'+ICO+'" alt="" aria-hidden="true"><span>Send '+NAME+' Link</span></button>';row.querySelector('button').onclick=sheet}
+ if(h.how==='before'){row.className='c';if(row.nextElementSibling!==h.el)h.el.parentNode.insertBefore(row,h.el)}else if(row.parentNode!==h.el)h.el.appendChild(row)}
+paint();setInterval(paint,1500);D.addEventListener('visibilitychange',function(){if(!D.hidden)paint()});
 })();
 </script>
 </body>
