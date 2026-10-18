@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style id="aera-nobar-css">html.aera-nobar #aeraBar{position:static!important;background:transparent!important;box-shadow:none!important}html.aera-nobar #aeraBar .ab-in{height:auto!important;min-height:0!important;padding:10px 0 0!important;justify-content:flex-end!important}html.aera-nobar #aeraBar .ab-in>:not(.ab-r),html.aera-nobar #aeraBar .ab-r>:not(.cpaHb),html.aera-nobar .ab-panel{display:none!important}#aeraFootOut{display:none}html.aera-nobar #aeraFootOut.on{display:flex;justify-content:center;padding:26px 16px calc(26px + env(safe-area-inset-bottom))}#aeraFootOut button{background:none;border:0;color:#6B7280;font:600 13px Montserrat,system-ui,sans-serif;text-decoration:underline;cursor:pointer;padding:8px 12px;width:auto;margin:0;text-transform:none}</style>
+<script id="aera-nobar">/* Peter ( 18th Oct 2026 ) : inside the installed App there is no title bar, the same as AERA Order. On the website it stays. */
+(function(){try{var S=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;if(!S)return;var M='coach';
+ if(M==='corp'){var q=new URLSearchParams(location.search),c=q.get('app')==='corp';try{c=c||sessionStorage.getItem('aera.corpApp')==='1'}catch(e){}if(!c)return}
+ document.documentElement.classList.add('aera-nobar')}catch(e){}})();</script>
+
 <script id="aera-acct-guard">/* the page shows "signed in" from a saved copy of the account ; when the sign-in itself is gone ( logged out, expired, cleared by the phone ) that copy is dropped too, so no page claims a sign-in that is not there */(function(){try{var t=localStorage.getItem('sb-swpprjvubgcdsojapaad-auth-token'),ok=false;if(t){var o=JSON.parse(t);if(o&&o.currentSession)o=o.currentSession;ok=!!(o&&(o.refresh_token||o.access_token))}if(!ok){['aera.account','aera.refLock'].forEach(function(k){if(localStorage.getItem(k)!==null)localStorage.removeItem(k)})}}catch(e){}})();</script>
 
 <script id="aera-coach-demo">/* DEMO ( ?demo=1 ) : sample Clients, Sent Plans and Sales so the Coach app can be shown off.
@@ -2102,6 +2108,14 @@ function clr(){try{if(navigator.serviceWorker&&navigator.serviceWorker.getRegist
 clr();D.addEventListener('visibilitychange',function(){if(!D.hidden){clr();setTimeout(function(){run().catch(function(){})},1500)}});setTimeout(function(){run().catch(function(){})},20000);
 })();
 </script>
+<div id="aeraFootOut"><button type="button">Log Out</button></div>
+<script id="aera-foot-out">/* Peter : with no title bar, Log Out sits quietly at the very bottom of the App */
+(function(){var D=document,M='coach',el=D.getElementById('aeraFootOut');if(!el)return;
+function signed(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var o=JSON.parse(localStorage.getItem(k)||'null');if(o&&o.currentSession)o=o.currentSession;if(o&&(o.refresh_token||o.access_token))return true}}}catch(e){}return false}
+function upd(){var s=signed();if(el.classList.contains('on')!==s)el.classList.toggle('on',s)}upd();setInterval(upd,3000);
+el.querySelector('button').onclick=function(){var o=null;
+ if(M==='fridge')o=D.getElementById('out');if(M==='corp')o=D.getElementById('corpOut')||D.getElementById('corpChg');if(o)return o.click();
+ try{['aera.account','aera.refLock'].forEach(function(x){localStorage.removeItem(x)})}catch(x){}location.href='https://aeramealprep.net/account/#logout'}})();</script>
 </body>
 </html>
 <script id="aera-coach-pack-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Packaging Method":"包装方式","MAP Bento Box":"MAP 便当盒","Vacuum Packed":"真空包装","Oxygen replaced with Nitrogen / CO₂ and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life. RM 1.80 per Meal.":"以氮气 / 二氧化碳取代氧气并封顶。食物不会被压扁。请冷藏，保质期 7 天。每餐 RM 1.80。","Same freshness, flatter pack. Takes far less Fridge space, compresses the Food slightly. RM 1.80 per Meal.":"同样新鲜，包装更扁平。更省冰箱空间，食物会被轻微压扁。每餐 RM 1.80。","Home-Sourced. Not cooked by AERA":"自备。非 AERA 烹调","Not Ours":"非我们的"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Protein - ([\d.]+) g$/,"蛋白 $1 克"],[/^Carbs - ([\d.]+) g$/,"碳水 $1 克"],[/^Fat - ([\d.]+) g$/,"脂肪 $1 克"],[/^MAP Bento Box (RM [\d.]+)$/,"MAP 便当盒 $1"],[/^Vacuum Packed (RM [\d.]+)$/,"真空包装 $1"])}catch(e){}</script>
