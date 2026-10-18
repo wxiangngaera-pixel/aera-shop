@@ -3731,5 +3731,53 @@ if(document.readyState==='complete')later();else window.addEventListener('load',
    location.href=PLAN}).catch(function(){[].forEach.call(card.querySelectorAll('button'),function(x){x.disabled=false});card.querySelector('.er').textContent='We could not do that just now. Please try again.';card.querySelector('[data-ok]').textContent='Accept & Open My Plan'})});
  function boot(){var n=0,iv=setInterval(function(){n++;if(tok()){clearInterval(iv);load()}else if(n>40)clearInterval(iv)},500)}
  if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',boot);else boot()})();</script>
+<script id="aera-push-app">/* Peter ( 18th Oct 2026 ) : each AERA App only gets its own Notifications.
+   This tells AERA which App this phone's notifications were turned on in ( push_tag ). Where the App has no
+   Turn On of its own ( Coach Plan, Referral, Fridge ), it offers one, once. */
+(function(){if(window.__AERA_PUSH_APP)return;window.__AERA_PUSH_APP=1;
+var SB='https://swpprjvubgcdsojapaad.supabase.co',ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0',SK='sb-swpprjvubgcdsojapaad-auth-token',FN=SB+'/functions/v1/aera-push',D=document;
+var OWN=!!window.__AERA_PUSH_AUTO;
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){return null}}
+function app(){var p=location.pathname,q=new URLSearchParams(location.search);
+ if(/^\/coach-plan-builder/.test(p))return 'coach';if(/^\/referrer-portal/.test(p))return 'referral';if(/^\/fridge/.test(p))return 'fridge';
+ if(/^\/checkout/.test(p)){if(q.get('app')==='corp')try{sessionStorage.setItem('aera.corpApp','1')}catch(e){}
+  var c=false;try{c=sessionStorage.getItem('aera.corpApp')==='1'}catch(e){}if(c||q.get('app')==='corp'||D.getElementById('corpTop'))return 'corporate'}
+ return 'mealprep'}
+function sess(){try{var v=JSON.parse(ls(SK)||'null');if(v&&v.currentSession)v=v.currentSession;if(!v||!v.access_token||!v.user)return null;if(v.expires_at&&v.expires_at*1000<Date.now()-60000)return null;return{tok:v.access_token,uid:v.user.id}}catch(e){return null}}
+function ok(){return 'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window}
+function key(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return Uint8Array.from(atob(s),function(c){return c.charCodeAt(0)})}
+function rpc(s,fn,body){return fetch(SB+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'Content-Type':'application/json',apikey:ANON,Authorization:'Bearer '+s.tok},body:JSON.stringify(body||{})})}
+async function tag(s){try{if(!ok())return;var reg=await navigator.serviceWorker.getRegistration('/push/');var sub=reg&&await reg.pushManager.getSubscription();if(!sub)return;
+ var a=app(),k='aera.push.tag.'+a,mk=sub.endpoint.slice(-32);if(ls(k)===mk)return;
+ var r=await rpc(s,'push_tag',{p_endpoint:sub.endpoint,p_app:a});if(r.ok&&(await r.json())===true)ls(k,mk)}catch(e){}}
+async function connect(s){var reg=await navigator.serviceWorker.register('/push/script.js',{scope:'/push/'});var w=reg.installing||reg.waiting||reg.active;
+ if(w&&w.state!=='activated')await new Promise(function(res){var t=setTimeout(res,8000);w.addEventListener('statechange',function(){if(w.state==='activated'){clearTimeout(t);res()}})});
+ var k=await fetch(FN+'?vapid').then(function(r){return r.json()});if(!k||!k.key)throw new Error('The notification service did not answer. Please try again.');
+ var sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:key(k.key)});
+ var j=sub.toJSON();var r=await rpc(s,'push_save',{p_endpoint:j.endpoint,p_p256dh:j.keys.p256dh,p_auth:j.keys.auth,p_ua:navigator.userAgent});
+ if(!r.ok)throw new Error('Could not save this device. Please try again.');await tag(s)}
+var MSG={coach:'Know the moment a Client accepts your Plan or orders with your Referral Code.',referral:'Know the moment a Client accepts your Plan or orders with your Referral Code.',fridge:'Know the moment a Gym marks Meals Sold or Expired.'};
+function css(){if(D.getElementById('aeraPushAppCss'))return;var st=D.createElement('style');st.id='aeraPushAppCss';st.textContent=
+ '#aeraPushApp{position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:2147480000;max-width:440px;margin:0 auto;background:#16479E;color:#fff;border-radius:16px;padding:14px 14px 12px;box-shadow:0 10px 30px rgba(0,0,0,.3);font:600 14px/1.45 Montserrat,system-ui,sans-serif}'+
+ '#aeraPushApp b{display:block;color:#FDB913;font-weight:800;margin-bottom:2px}#aeraPushApp .r{display:flex;gap:8px;margin-top:10px}#aeraPushApp button{flex:1;border:0;border-radius:10px;padding:10px;font:800 14px Montserrat,system-ui,sans-serif;cursor:pointer}'+
+ '#aeraPushApp .go{background:#FDB913;color:#0B0B0B}#aeraPushApp .no{background:rgba(255,255,255,.15);color:#fff}#aeraPushApp .m{margin-top:6px;font-size:12.5px}';D.head.appendChild(st)}
+function ask(s,a){if(D.getElementById('aeraPushApp'))return;css();var d=D.createElement('div');d.id='aeraPushApp';d.setAttribute('role','dialog');
+ d.innerHTML='<b>🔔 Turn On Notifications</b>'+MSG[a]+'<div class="r"><button type="button" class="go">Turn On</button><button type="button" class="no">Not Now</button></div><div class="m"></div>';
+ D.body.appendChild(d);
+ d.querySelector('.no').onclick=function(){ls('aera.push.ask.'+a,String(Date.now()+7*864e5));d.remove()};
+ d.querySelector('.go').onclick=async function(){var b=this,m=d.querySelector('.m');b.disabled=true;b.textContent='Turning on…';
+  try{var p=await Notification.requestPermission();if(p!=='granted'){ls('aera.push.ask.'+a,String(Date.now()+30*864e5));d.remove();return}
+   await connect(s);ls('aera.push.off',null);m.textContent='Done. This App will now notify you.';b.remove();setTimeout(function(){d.remove()},2500)}
+  catch(e){m.textContent=String(e&&e.message||e);b.disabled=false;b.textContent='Try Again'}}}
+async function run(){var s=sess();if(!s||!ok())return;await tag(s);
+ var a=app();if(OWN||!MSG[a]||ls('aera.push.off')==='1')return;var P=Notification.permission;if(P==='denied')return;
+ if(a==='fridge'){try{var r=await rpc(s,'is_kitchen_admin');if(!r.ok||(await r.json())!==true)return}catch(e){return}}
+ if(P==='granted'){try{var reg=await navigator.serviceWorker.getRegistration('/push/');var sub=reg&&await reg.pushManager.getSubscription();if(!sub)await connect(s)}catch(e){}return}
+ if(Date.now()<(+ls('aera.push.ask.'+a)||0))return;ask(s,a)}
+function later(){setTimeout(function(){run().catch(function(){})},6000)}
+if(D.readyState==='complete')later();else window.addEventListener('load',later);
+D.addEventListener('visibilitychange',function(){if(!D.hidden){var s=sess();if(s)setTimeout(function(){tag(s)},1500)}});
+})();
+</script>
 </body>
 </html>
