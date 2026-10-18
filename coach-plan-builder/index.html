@@ -2082,14 +2082,22 @@ function ask(s,a){if(D.getElementById('aeraPushApp'))return;css();var d=D.create
   try{var p=await Notification.requestPermission();if(p!=='granted'){ls('aera.push.ask.'+a,String(Date.now()+30*864e5));d.remove();return}
    await connect(s);ls('aera.push.off',null);m.textContent='Done. This App will now notify you.';b.remove();setTimeout(function(){d.remove()},2500)}
   catch(e){m.textContent=String(e&&e.message||e);b.disabled=false;b.textContent='Try Again'}}}
-async function run(){var s=sess();if(!s||!ok())return;await tag(s);
- var a=app();if(OWN||!MSG[a]||ls('aera.push.off')==='1')return;var P=Notification.permission;if(P==='denied')return;
+function info(a,html){if(D.getElementById('aeraPushApp')||ls('aera.push.info.'+a)===new Date().toISOString().slice(0,10))return;css();var d=D.createElement('div');d.id='aeraPushApp';d.setAttribute('role','dialog');
+ d.innerHTML='<b>🔔 Notifications</b>'+html+'<div class="r"><button type="button" class="no">OK</button></div>';D.body.appendChild(d);
+ d.querySelector('.no').onclick=function(){ls('aera.push.info.'+a,new Date().toISOString().slice(0,10));d.remove()}}
+async function run(){var s=sess();if(!s)return;var a=app();
+ if(ok())await tag(s);
+ if(OWN||!MSG[a])return;
  if(a==='fridge'){try{var r=await rpc(s,'is_kitchen_admin');if(!r.ok||(await r.json())!==true)return}catch(e){return}}
+ var NM={coach:'AERA Coach Plan',referral:'AERA Referral',fridge:'AERA Fridge'}[a];
+ if(!ok()){info(a,'To get notifications, open '+NM+' from the icon on your Home Screen ( not from Safari ), then come back here.');return}
+ var P=Notification.permission;
+ if(P==='denied'){info(a,'Notifications are switched off for '+NM+'. Turn them on in your iPhone Settings → Notifications → '+NM+'.');return}
  if(P==='granted'){try{var reg=await navigator.serviceWorker.getRegistration('/push/');var sub=reg&&await reg.pushManager.getSubscription();if(!sub)await connect(s)}catch(e){}return}
  if(Date.now()<(+ls('aera.push.ask.'+a)||0))return;ask(s,a)}
 function later(){setTimeout(function(){run().catch(function(){})},6000)}
 if(D.readyState==='complete')later();else window.addEventListener('load',later);
-D.addEventListener('visibilitychange',function(){if(!D.hidden){var s=sess();if(s)setTimeout(function(){tag(s)},1500)}});
+D.addEventListener('visibilitychange',function(){if(!D.hidden)setTimeout(function(){run().catch(function(){})},1500)});setTimeout(function(){run().catch(function(){})},20000);
 })();
 </script>
 </body>
