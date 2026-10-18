@@ -319,6 +319,10 @@
    body:d.body||'You have a new message in your AERA Inbox.',icon:ICON,badge:BADGE,
    tag:d.tag||'aera-inbox',renotify:true,data:{url:d.url||INBOX}}));
  });
+ /* Peter 18th Oct 2026 : opening an App clears its notifications and the red number on its icon */
+ self.addEventListener('message',function(e){var m=e.data||{};if(m.aera!=='clear')return;
+  e.waitUntil(Promise.all([self.registration.getNotifications().then(function(L){L.forEach(function(x){x.close()})}).catch(function(){}),
+   (self.navigator&&self.navigator.clearAppBadge?self.navigator.clearAppBadge().catch(function(){}):Promise.resolve())]))});
  self.addEventListener('notificationclick',function(e){
   e.notification.close();var u=(e.notification.data&&e.notification.data.url)||INBOX;try{var hi=u.indexOf('#'),bs=hi<0?u:u.slice(0,hi),hs=hi<0?'':u.slice(hi);if(!/[?&]from=/.test(bs))u=bs+(bs.indexOf('?')<0?'?':'&')+'from=push'+hs}catch(x){}
   e.waitUntil(self.clients.matchAll({type:'window',includeUncontrolled:true}).then(function(L){
