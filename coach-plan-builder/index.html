@@ -1093,14 +1093,14 @@ $('#chips').addEventListener('click',function(e){var b=e.target.closest('button[
 
 /* ---- Peter : Food Item dropdown, like the Personalised Meal Plan ( 18th Oct 2026 ) ----
    Tap a dish ( or + Add ... ) and pick from our list, grouped the way the kitchen groups it :
-   Carbs - Rice, Pasta, Toast · Protein - Chicken, Fish, Beef, Stir-Fried Menu · Vegetables - Oil-Free, Oil · Garnish · Sauce / Gravy */
+   Carbs - Rice, Pasta, Toast · Protein - Chicken, Seafood, Beef, Stir-Fried Menu · Vegetables - Oil-Free, Oil · Garnish · Sauce / Gravy */
 var DD=null;
-var DDSUB={c:['Rice','Pasta','Toast','Potato'],p:['Chicken','Fish','Beef','Stir-Fried Menu'],v:['Oil-Free','Oil'],g:[],s:[]};
+var DDSUB={c:['Rice','Pasta','Toast','Potato'],p:['Chicken','Seafood','Beef','Stir-Fried Menu'],v:['Oil-Free','Oil'],g:[],s:[]};
 var DDT={p:'Add Protein',c:'Add Carbs',v:'Add Vegetables',g:'Add Garnish',s:'Add Sauce / Gravy'};
-try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{'Rice':'米饭','Pasta':'意面','Toast':'吐司','Potato':'马铃薯','Chicken':'鸡肉','Fish':'鱼','Beef':'牛肉','Stir-Fried Menu':'小炒','Oil-Free':'无油','Oil':'有油','Change This Item':'更换这道菜','Add Garnish':'加入配菜','+ Add Garnish':'+ 加入配菜','Add Sauce / Gravy':'加入酱汁','Done':'完成','Nothing here.':'这里没有。'})}catch(e){}
+try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{'Rice':'米饭','Pasta':'意面','Toast':'吐司','Potato':'马铃薯','Chicken':'鸡肉','Seafood':'海鲜','Beef':'牛肉','Stir-Fried Menu':'小炒','Oil-Free':'无油','Oil':'有油','Change This Item':'更换这道菜','Add Garnish':'加入配菜','+ Add Garnish':'+ 加入配菜','Add Sauce / Gravy':'加入酱汁','Done':'完成','Nothing here.':'这里没有。'})}catch(e){}
 function ddSub(r){var s=r.sub||'';
  if(r.cat==='c')return s==='rice'?'Rice':s==='pasta'?'Pasta':s==='toast'?'Toast':'Potato';
- if(r.cat==='p')return s==='chicken'?'Chicken':s==='beef'?'Beef':s==='stir_fried'?'Stir-Fried Menu':'Fish';
+ if(r.cat==='p')return s==='chicken'?'Chicken':s==='beef'?'Beef':s==='stir_fried'?'Stir-Fried Menu':'Seafood';
  if(r.cat==='v')return /oil[\s-]*free/i.test(r.name)?'Oil-Free':'Oil';
  return ''}
 function dr1(v){return Math.round((+v||0)*10)/10}
