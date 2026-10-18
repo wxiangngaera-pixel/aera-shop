@@ -3657,8 +3657,17 @@ function paint(){var row=D.getElementById('osaRow'),ok=OWN.indexOf(me())>=0,h=ok
  if(!h){if(row)row.remove();return}
  if(!row){css();row=D.createElement('div');row.id='osaRow';row.innerHTML='<button type="button" id="osaBtn"><img src="'+ICO+'" alt="" aria-hidden="true"><span>Send '+NAME+' Link</span></button>';row.querySelector('button').onclick=sheet}
  if(h.how==='before'){row.className='c';if(row.nextElementSibling!==h.el)h.el.parentNode.insertBefore(row,h.el)}else if(row.parentNode!==h.el)h.el.appendChild(row)}
-paint();setInterval(paint,1500);D.addEventListener('visibilitychange',function(){if(!D.hidden)paint()});
+paint();setInterval(paint,1500);new MutationObserver(function(){if(!D.getElementById('osaRow')&&host()&&OWN.indexOf(me())>=0)paint()}).observe(D.documentElement,{childList:true,subtree:true}); /* the moment its place appears, not 1.5 seconds later */D.addEventListener('visibilitychange',function(){if(!D.hidden)paint()});
 })();
 </script>
+<script id="aera-corp-steady">/* Peter ( 18th Oct 2026 ) : no jumping when AERA Corporate opens. The company line ( Ordering for … ) is remembered on this
+   phone and shown straight away, instead of "Checking your company account…" and then three lines pushing everything down. */
+(function(){var D=document,SK='sb-swpprjvubgcdsojapaad-auth-token';
+function em(){try{var v=JSON.parse(localStorage.getItem(SK)||'null');if(v&&v.currentSession)v=v.currentSession;return v&&v.user?String(v.user.email||'').toLowerCase():''}catch(e){return ''}}
+function fix(){var w=D.getElementById('corpWho');if(!w)return;var e=em();if(!e)return;var K='aera.corpWho.'+e,t=w.textContent.trim();
+ if(/^Checking your company account/.test(t)){var c=null;try{c=localStorage.getItem(K)}catch(x){}if(c)w.innerHTML=c;return}
+ if(/^Ordering for/.test(t)){try{if(localStorage.getItem(K)!==w.innerHTML)localStorage.setItem(K,w.innerHTML)}catch(x){}}}
+new MutationObserver(fix).observe(D.documentElement,{childList:true,subtree:true,characterData:true});fix();
+})();</script>
 </body>
 </html>
