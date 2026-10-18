@@ -2048,16 +2048,18 @@ function share(){var old=D.getElementById('cpaSheet');if(old)old.remove();var m=
   if(x==='no')return w.remove();
   if(x==='share'){try{await navigator.share({title:T('AERA Coach Plan App'),text:m.replace('\n'+CAPP,''),url:CAPP});w.remove()}catch(_){}}
   if(x==='copy'){try{await navigator.clipboard.writeText(CAPP);b.textContent='✓ '+T('Copied')}catch(_){prompt(T('Copy Link'),CAPP)}}})}
-function mountHd(){var bar=D.querySelector('.ab-r'),ab=D.getElementById('aeraBar');if(!bar)return;
- /* Peter : Send App Link sits in the Title Bar, next to Download App, with the AERA Coach Plan App logo. On phones it has its own slim row under the Title Bar, with the words, like the Website */
+function mountHd(){var bar=D.querySelector('.ab-r'),ab=D.getElementById('aeraBar'),inn=D.querySelector('.ab-in');if(!bar)return;
+ /* Peter : Send App Link sits in the Title Bar, next to Download App, with the AERA Coach Plan App logo. On phones it stays in the Title Bar whenever it fits ( e.g. inside the App ), and only drops to a slim row under the Title Bar when the bar is full */
  if(!D.getElementById('cpaCss')){var cs=D.createElement('style');cs.id='cpaCss';cs.textContent='#cpaBtn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px 0 5px;border-radius:999px;border:1.5px solid #FDB913;background:#16479E;color:#FDB913;font-weight:800;font-size:13px;line-height:1;font-family:inherit;cursor:pointer;white-space:nowrap;flex:none}#cpaRow{display:flex;justify-content:flex-end;padding:0 12px 8px}#cpaBtn img{width:24px;height:24px;border-radius:6px;display:block;flex:none}#cpaRow #cpaBtn{height:30px;padding:0 12px 0 4px;font-size:12.5px}#cpaRow #cpaBtn img{width:22px;height:22px}';D.head.appendChild(cs)}
- var ph=window.matchMedia('(max-width:640px)').matches,row=D.getElementById('cpaRow');
- if(ph&&ab){if(!row){row=D.createElement('div');row.id='cpaRow';ab.appendChild(row)}}else if(row){row.remove();row=null}
- var ib=D.getElementById('aaBar');if(ib){if(row)ib.style.setProperty('top',(ab.offsetHeight+4)+'px','important');else ib.style.removeProperty('top')}
- var host=row||bar,b=D.getElementById('cpaBtn');if(b&&b.parentNode===host)return;
+ var b=D.getElementById('cpaBtn'),row=D.getElementById('cpaRow');
  if(!b){b=D.createElement('button');b.type='button';b.id='cpaBtn';b.title='Send AERA Coach Plan App Link';b.setAttribute('aria-label','Send AERA Coach Plan App Link');b.innerHTML='<img src="https://swpprjvubgcdsojapaad.supabase.co/storage/v1/object/public/motion/app-icons/coach-plan-180.png" alt="" aria-hidden="true"><span>Send App Link</span>';b.onclick=share}
- if(row){row.appendChild(b);return}
- var ref=D.getElementById('aaGetApp');if(ref&&ref.parentNode===bar)ref.insertAdjacentElement('afterend',b);else bar.insertBefore(b,bar.firstChild)}
+ var useRow=false;
+ if(ab&&inn&&window.matchMedia('(max-width:640px)').matches){var lg=inn.querySelector('.ab-logo'),lr=lg?lg.getBoundingClientRect().right:inn.getBoundingClientRect().left,bl=bar.getBoundingClientRect().left;
+  if(b.parentNode===bar){var vis=[].filter.call(bar.children,function(c){return c.offsetWidth>0}),last=vis[vis.length-1];useRow=bl-lr<9||(last&&last.getBoundingClientRect().right>inn.getBoundingClientRect().right+1)}
+  else useRow=bl-lr-10<(b.offsetWidth||132)+14}
+ if(useRow){if(!row){row=D.createElement('div');row.id='cpaRow';ab.appendChild(row)}if(b.parentNode!==row)row.appendChild(b)}
+ else{if(b.parentNode!==bar){var ref=D.getElementById('aaGetApp');if(ref&&ref.parentNode===bar)ref.insertAdjacentElement('afterend',b);else bar.insertBefore(b,bar.firstChild)}if(row){row.remove();row=null}}
+ var ib=D.getElementById('aaBar');if(ib){if(row)ib.style.setProperty('top',(ab.offsetHeight+4)+'px','important');else ib.style.removeProperty('top')}}
 function boot(){mount();mountHd();var n=0,iv=setInterval(function(){mount();if(++n>30)clearInterval(iv)},1000);setInterval(mountHd,1500)}
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',boot);else boot();
 })();
