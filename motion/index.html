@@ -311,7 +311,7 @@ Object.defineProperty(P,'innerHTML',{configurable:true,enumerable:D.enumerable,g
 (function(){if(window.__AERA_NUDGE)return;window.__AERA_NUDGE=1;
 try{if(/(^|\.)my\.chatbees\.io$/i.test(location.hostname)&&window.top!==window)return}catch(e){}
 var P=location.pathname.toLowerCase();
-if(/^\/(account|fridge|kitchen|referrer|thank-you|coach-plan-builder|motion|v2|push)(\/|$)/.test(P))return;
+if(/^\/(account|fridge|kitchen[a-z-]*|referrer|thank-you|coach-plan-builder|motion|v2|push)(\/|$)/.test(P))return;
 var ACC='https://aeramealprep.net/account/';
 function zh(){return document.documentElement.getAttribute('data-lang')==='zh'||(function(){try{return localStorage.getItem('aera_lang')==='zh'}catch(e){return false}})()}
 function signedIn(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var s=JSON.parse(localStorage.getItem(k)||'null');if(s&&s.currentSession)s=s.currentSession;if(s&&(s.refresh_token||(s.expires_at&&s.expires_at*1000>Date.now())))return true}}
