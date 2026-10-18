@@ -3784,7 +3784,9 @@ async function run(){var s=sess();if(!s)return;var a=app();
  if(Date.now()<(+ls('aera.push.ask.'+a)||0))return;ask(s,a)}
 function later(){setTimeout(function(){run().catch(function(){})},6000)}
 if(D.readyState==='complete')later();else window.addEventListener('load',later);
-D.addEventListener('visibilitychange',function(){if(!D.hidden)setTimeout(function(){run().catch(function(){})},1500)});setTimeout(function(){run().catch(function(){})},20000);
+/* opening the App clears its notifications and the red number on its icon */
+function clr(){try{if(navigator.serviceWorker&&navigator.serviceWorker.getRegistrations)navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){if(r.getNotifications)r.getNotifications().then(function(l){l.forEach(function(n){n.close()})}).catch(function(){})})}).catch(function(){});if(navigator.clearAppBadge)navigator.clearAppBadge().catch(function(){})}catch(e){}}
+clr();D.addEventListener('visibilitychange',function(){if(!D.hidden){clr();setTimeout(function(){run().catch(function(){})},1500)}});setTimeout(function(){run().catch(function(){})},20000);
 })();
 </script>
 </body>
