@@ -3661,7 +3661,7 @@ function css(){if(D.getElementById('osaCss'))return;var s=D.createElement('style
  '#osaBtn img{width:28px;height:28px;border-radius:7px;display:block;flex:none}';D.head.appendChild(s)}
 function paint(){var row=D.getElementById('osaRow'),ok=OWN.indexOf(me())>=0,h=ok&&host();
  if(!h){if(row)row.remove();return}
- if(!row){css();row=D.createElement('div');row.id='osaRow';row.innerHTML='<button type="button" id="osaBtn"><img src="'+ICO+'" alt="" aria-hidden="true"><span>Send '+NAME+' Link</span></button>';row.querySelector('button').onclick=sheet}
+ if(!row){css();row=D.createElement('div');row.id='osaRow';row.innerHTML='<button type="button" id="osaBtn"><img src="'+ICO+'" alt="" aria-hidden="true"><span>Send '+NAME+' Link</span></button>';row.querySelector('button').onclick=function(){/* Peter ( 19th Oct 2026 ) : the AERA Invite Template, same design as every AERA App Link */var go=function(){window.aeraInvite({app:MODE==='corp'?'corp':'fridge',icon:ICO})};if(window.aeraInvite)return go();var s=D.createElement('script');s.src='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-invite';s.onload=go;s.onerror=sheet;D.head.appendChild(s)}}
  if(h.how==='before'){row.className='c';if(row.nextElementSibling!==h.el)h.el.parentNode.insertBefore(row,h.el)}else if(row.parentNode!==h.el)h.el.appendChild(row)}
 paint();setInterval(paint,1500);new MutationObserver(function(){if(!D.getElementById('osaRow')&&host()&&OWN.indexOf(me())>=0)paint()}).observe(D.documentElement,{childList:true,subtree:true}); /* the moment its place appears, not 1.5 seconds later */D.addEventListener('visibilitychange',function(){if(!D.hidden)paint()});
 })();
