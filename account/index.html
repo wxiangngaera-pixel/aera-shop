@@ -1599,7 +1599,7 @@ function refShareBar(code,name){if(!code)return '';window.__REFSH={code:code,nam
   '<div class="refsendrow"><input type="email" id="refTo" placeholder="Their AERA Account Email" autocomplete="off" onkeydown="if(event.key===\'Enter\')refSendInbox()">'+
   '<button type="button" class="btn btn-y s" id="refSendBtn" onclick="refSendInbox()">Send To Their Inbox</button></div>'+
   '<div class="hint" id="refSendMsg" style="margin-top:6px">It lands in their AERA Inbox, with a button that puts your Code in at Checkout.</div></div>'+
-  '<div class="refshare"><button type="button" class="btn btn-o s" onclick="refShareCopy(\'code\',this)">Copy Code</button>'+
+  '<div class="refshare"><button type="button" class="btn btn-y s" onclick="refShareApp()">📲 Send AERA Meal Prep App</button><button type="button" class="btn btn-o s" onclick="refShareCopy(\'code\',this)">Copy Code</button>'+
   '<button type="button" class="btn btn-o s" onclick="refShareCopy(\'link\',this)">Copy Link</button></div>'}
 async function refSendInbox(){var el=$('#refTo'),m=$('#refSendMsg'),b=$('#refSendBtn');if(!el)return;
  var to=String(el.value||'').trim();if(!to){m.textContent='Type their AERA Account Email first.';return}
@@ -1609,6 +1609,9 @@ async function refSendInbox(){var el=$('#refTo'),m=$('#refSendMsg'),b=$('#refSen
  if(r.error){m.innerHTML='<span style="color:var(--bad,#B3272D)">'+esc(r.error.message)+'.</span>';return}
  el.value='';m.innerHTML='<span style="color:var(--green,#127C4A);font-weight:600">Sent. Your Code '+esc(r.data||'')+' is in their AERA Inbox.</span>'}
 window.refSendInbox=refSendInbox;
+/* Send AERA Meal Prep App : the AERA Invite Template with this Account's Referral Code ( Peter, 19th Oct 2026 ) */
+function refShareApp(){var w=window.__REFSH;if(!w)return;var go=function(){window.aeraInvite({code:w.code,name:w.name})};if(window.aeraInvite)return go();var s=document.createElement('script');s.src='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-invite';s.onload=go;document.head.appendChild(s)}
+window.refShareApp=refShareApp;
 function refShareCopy(what,btn){var w=window.__REFSH;if(!w)return;var t=what==='link'?REF_SHOP+encodeURIComponent(w.code):w.code;
  var done=function(){if(!btn)return;var o=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=o},1600)};
  try{navigator.clipboard.writeText(t).then(done,function(){prompt('Copy this',t)})}catch(e){prompt('Copy this',t)}}
