@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta name="color-scheme" content="light only">
 <style id="aera-nobar-css">html.aera-nobar #aeraBar{position:static!important;background:transparent!important;box-shadow:none!important}html.aera-nobar #aeraBar .ab-in{height:auto!important;min-height:0!important;padding:10px 0 0!important;justify-content:flex-end!important}html.aera-nobar #aeraBar .ab-in>:not(.ab-r),html.aera-nobar #aeraBar .ab-r>:not(.cpaHb),html.aera-nobar .ab-panel{display:none!important}#aeraFootOut{display:none}html.aera-nobar #aeraFootOut.on{display:flex;justify-content:center;padding:26px 16px calc(26px + env(safe-area-inset-bottom))}#aeraFootOut button{background:none;border:0;color:#6B7280;font:600 13px Montserrat,system-ui,sans-serif;text-decoration:underline;cursor:pointer;padding:8px 12px;width:auto;margin:0;text-transform:none}</style>
 <script id="aera-nobar">/* Peter ( 18th Oct 2026 ) : inside the installed App there is no title bar, the same as AERA Order. On the website it stays. */
 (function(){try{var S=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;if(!S)return;var M='coach';
@@ -2116,6 +2117,13 @@ function upd(){var s=signed();if(el.classList.contains('on')!==s)el.classList.to
 el.querySelector('button').onclick=function(){var o=null;
  if(M==='fridge')o=D.getElementById('out');if(M==='corp')o=D.getElementById('corpOut')||D.getElementById('corpChg');if(o)return o.click();
  try{['aera.account','aera.refLock'].forEach(function(x){localStorage.removeItem(x)})}catch(x){}location.href='https://aeramealprep.net/account/#logout'}})();</script>
+<script id="aera-coach-nav-fit">/* Peter ( 19th Oct 2026 ) : the Build Plans / Sent Plans / Referral Portal tabs sit right under the title bar while scrolling ( no gap, no overlap ), on the website and in the AERA Coach Plan App */
+(function(){if(window.__cpNavFit)return;window.__cpNavFit=1;
+function fix(){var n=document.getElementById('coachNav');if(!n)return;var b=document.getElementById('aeraBar'),t=0;if(b){var cs=getComputedStyle(b),r=b.getBoundingClientRect();if((cs.position==='sticky'||cs.position==='fixed')&&cs.display!=='none'&&r.bottom>0)t=Math.round(r.bottom)}
+ var v=t+'px';if(n.style.top!==v)n.style.top=v;var p=t?'10px':'calc(10px + env(safe-area-inset-top))';if(n.style.paddingTop!==p)n.style.paddingTop=p}
+var q=0;function tick(){if(q)return;q=1;requestAnimationFrame(function(){q=0;fix()})}
+addEventListener('scroll',tick,{passive:true});addEventListener('resize',tick);setInterval(fix,1500);
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fix);else fix()})();</script>
 </body>
 </html>
 <script id="aera-coach-pack-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Packaging Method":"包装方式","MAP Bento Box":"MAP 便当盒","Vacuum Packed":"真空包装","Oxygen replaced with Nitrogen / CO₂ and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life. RM 1.80 per Meal.":"以氮气 / 二氧化碳取代氧气并封顶。食物不会被压扁。请冷藏，保质期 7 天。每餐 RM 1.80。","Same freshness, flatter pack. Takes far less Fridge space, compresses the Food slightly. RM 1.80 per Meal.":"同样新鲜，包装更扁平。更省冰箱空间，食物会被轻微压扁。每餐 RM 1.80。","Home-Sourced. Not cooked by AERA":"自备。非 AERA 烹调","Not Ours":"非我们的"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Protein - ([\d.]+) g$/,"蛋白 $1 克"],[/^Carbs - ([\d.]+) g$/,"碳水 $1 克"],[/^Fat - ([\d.]+) g$/,"脂肪 $1 克"],[/^MAP Bento Box (RM [\d.]+)$/,"MAP 便当盒 $1"],[/^Vacuum Packed (RM [\d.]+)$/,"真空包装 $1"])}catch(e){}</script>
