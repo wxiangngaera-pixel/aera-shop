@@ -589,12 +589,9 @@ function shareCopy(what,btn){var w=shareWho();if(!w.code)return;var t=what==='li
  try{navigator.clipboard.writeText(t).then(done,function(){prompt('Copy this',t)})}catch(e){prompt('Copy this',t)}}
 /* Send AERA Meal Prep App : the phone's own Share sheet ( WhatsApp, Telegram, SMS … ) with the app link and the Referral Code; copies it where there is no Share sheet */
 var APP_LINK='https://aeramealprep.net/?install=1&ref=';
-function shareApp(btn){var w=shareWho();if(!w.code)return;var link=APP_LINK+encodeURIComponent(w.code);
- var t='Hi,\n\nI order my Meal Preps from AERA Meal Prep. Every Meal is cooked to Order, weighed to the gram and delivered chilled around the Klang Valley.\n\n'+
-  'Get the AERA Meal Prep App here : '+link+'\n\nUse my Referral Code '+w.code+' at Checkout and you earn extra AERA Points on your Meals.'+(w.name?'\n\n'+w.name:'');
- var s=btn&&btn.querySelector('span'),o=s?s.textContent:'';function say(x){if(!s)return;s.textContent=x;setTimeout(function(){s.textContent=o},2200)}
- if(navigator.share){navigator.share({title:'AERA Meal Prep App',text:t}).catch(function(){});return}
- try{navigator.clipboard.writeText(t).then(function(){say('Copied. Paste it in WhatsApp')},function(){prompt('Copy this',t)})}catch(e){prompt('Copy this',t)}}
+/* Send AERA Meal Prep App : the AERA Invite Template ( Invitation Card + Message with the Referral Code ), Peter 19th Oct 2026 */
+function shareApp(btn){var w=shareWho();if(!w.code)return;var go=function(){window.aeraInvite({code:w.code,name:w.name})};
+ if(window.aeraInvite)return go();var s=document.createElement('script');s.src='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-invite';s.onload=go;document.head.appendChild(s)}
 window.shareEmail=shareEmail;window.shareCopy=shareCopy;window.shareApp=shareApp;
 function render(){
  var box=$('#state');
