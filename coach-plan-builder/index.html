@@ -2163,7 +2163,10 @@ function okEm(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)}
 function reset(){ARM=0;clearTimeout(ARMT);var e=em0();label(okEm(e)?T('Email to')+' '+e:T('Email to Client'));var b=D.getElementById('calBtn');if(b){b.style.background='#16479E';b.style.color='#FDB913'}}
 function mount(){var w=D.getElementById('calWrap');if(w)w.remove()}
 function mmsg(){var n=String(val('cname')||cur().name||'').trim().split(/\s+/)[0];return (n?T('Hi')+' '+n+', ':'')+T('track your Deliveries, see your Orders and collect AERA Points in the AERA Meal Prep App. Open this link on your phone :')+'\n'+MAPP+'\n'+T('Then Log In with your email and tap Add to Home Screen.')}
-function mpShare(){var old=D.getElementById('cpaSheet');if(old)old.remove();ARM=0;clearTimeout(ARMT);var m=mmsg(),e=em0(),ph=String(val('cphone')||cur().phone||'').replace(/\D/g,'');if(/^0/.test(ph))ph='6'+ph;
+/* Peter ( 19th Oct 2026 ) : Meal Prep App Link opens the AERA Invite Template ( the same Card + Message design as every AERA App Link ). The old sheet stays for Email to Client. */
+function mpShare(){var cs={};try{cs=st()||{}}catch(e){}var go2=function(){window.aeraInvite({app:'shop',code:cs.refCode||'',name:val('coachname')||cs.coach||'',to:val('cname')||(cur()||{}).name||'',phone:val('cphone')||(cur()||{}).phone||'',extra:[{label:'✉️ '+T('Email to Client')+' ( '+T('Also in Their AERA Inbox')+' )',run:mpShareOld}]})};
+ if(window.aeraInvite)return go2();var sc=D.createElement('script');sc.src='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-invite';sc.onload=go2;sc.onerror=mpShareOld;D.head.appendChild(sc)}
+function mpShareOld(){var old=D.getElementById('cpaSheet');if(old)old.remove();ARM=0;clearTimeout(ARMT);var m=mmsg(),e=em0(),ph=String(val('cphone')||cur().phone||'').replace(/\D/g,'');if(/^0/.test(ph))ph='6'+ph;
  var w=D.createElement('div');w.id='cpaSheet';w.style.cssText='position:fixed;inset:0;z-index:9990;background:rgba(11,20,40,.5);display:flex;align-items:flex-end;justify-content:center;padding:12px';
  var bs='display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;margin-top:8px;padding:6px 12px;border-radius:12px;font-weight:800;font-size:15px;font-family:inherit;text-decoration:none;cursor:pointer;box-sizing:border-box;text-align:center;word-break:break-all;';
  w.innerHTML='<div style="background:#fff;border-radius:18px;max-width:440px;width:100%;padding:18px 16px calc(14px + env(safe-area-inset-bottom));font-family:inherit;color:#0B0B0B;box-shadow:0 20px 50px rgba(0,0,0,.3)">'+
@@ -2199,7 +2202,10 @@ function go(){var c=cur(),em=em0();
 var CAPP='https://aeramealprep.net/coach-plan-builder/?install=1';
 function cmsg(){return T('AERA Coach Plan App')+'\n'+T('Build and send your Clients’ Meal Plans straight to the AERA Kitchen. Open this link on your phone, then tap Share → Add to Home Screen :')+'\n'+CAPP}
 function T(s){try{var z=(document.documentElement.lang||'').toLowerCase().indexOf('zh')===0&&window.AERA_I18N&&window.AERA_I18N[s];return z||s}catch(e){return s}}
-function share(){var old=D.getElementById('cpaSheet');if(old)old.remove();var m=cmsg();
+/* Peter ( 19th Oct 2026 ) : Coach Plan App Link opens the AERA Invite Template ( same design as every AERA App Link ) */
+function share(){var nm='';try{nm=val('coachname')||(st()||{}).coach||''}catch(e){}var ic=(window.AERA_APP&&AERA_APP.icons&&AERA_APP.icons['180'])||'';var go2=function(){window.aeraInvite({app:'coach',icon:ic,name:nm})};
+ if(window.aeraInvite)return go2();var sc=D.createElement('script');sc.src='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-invite';sc.onload=go2;sc.onerror=shareOld;D.head.appendChild(sc)}
+function shareOld(){var old=D.getElementById('cpaSheet');if(old)old.remove();var m=cmsg();
  var w=D.createElement('div');w.id='cpaSheet';w.style.cssText='position:fixed;inset:0;z-index:9990;background:rgba(11,20,40,.5);display:flex;align-items:flex-end;justify-content:center;padding:12px';
  var bs='display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:48px;margin-top:8px;border-radius:12px;font-weight:800;font-size:15px;font-family:inherit;text-decoration:none;cursor:pointer;box-sizing:border-box;';
  w.innerHTML='<div style="background:#fff;border-radius:18px;max-width:440px;width:100%;padding:18px 16px calc(14px + env(safe-area-inset-bottom));font-family:inherit;color:#0B0B0B;box-shadow:0 20px 50px rgba(0,0,0,.3)">'+
