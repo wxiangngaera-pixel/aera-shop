@@ -2118,7 +2118,7 @@ el.querySelector('button').onclick=function(){var o=null;
  if(M==='fridge')o=D.getElementById('out');if(M==='corp')o=D.getElementById('corpOut')||D.getElementById('corpChg');if(o)return o.click();
  try{['aera.account','aera.refLock'].forEach(function(x){localStorage.removeItem(x)})}catch(x){}location.href='https://aeramealprep.net/account/#logout'}})();</script>
 <script id="aera-coach-nav-fit">/* Peter ( 19th Oct 2026 ) : the Build Plans / Sent Plans / Referral Portal tabs sit right under the title bar while scrolling ( no gap, no overlap ), on the website and in the AERA Coach Plan App */
-(function(){if(window.__cpNavFit)return;window.__cpNavFit=1;
+(function(){if(window.__cpNavFit)return;window.__cpNavFit=1;document.documentElement.setAttribute('data-theme','light');
 function fix(){var n=document.getElementById('coachNav');if(!n)return;var b=document.getElementById('aeraBar'),t=0;if(b){var cs=getComputedStyle(b),r=b.getBoundingClientRect();if((cs.position==='sticky'||cs.position==='fixed')&&cs.display!=='none'&&r.bottom>0)t=Math.round(r.bottom)}
  var v=t+'px';if(n.style.top!==v)n.style.top=v;var p=t?'10px':'calc(10px + env(safe-area-inset-top))';if(n.style.paddingTop!==p)n.style.paddingTop=p}
 var q=0;function tick(){if(q)return;q=1;requestAnimationFrame(function(){q=0;fix()})}
