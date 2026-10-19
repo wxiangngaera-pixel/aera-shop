@@ -7,7 +7,7 @@
  --bad:#A32318; --bad-soft:#FBECEA;
  --sh:0 1px 2px rgba(19,26,46,.05),0 10px 26px -14px rgba(19,26,46,.22);
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+@media (prefers-color-scheme: dark) and (max-width: 0px){:root:not([data-theme="light"]){
  --paper:#0C111B; --card:#151C2A; --sunk:#111826;
  --ink:#E9EDF5; --ink2:#9CA6BB; --ink3:#737E95;
  --line:#253044; --line2:#33405C;
@@ -25,7 +25,7 @@ h1,h2,h3{font-family:Montserrat,system-ui,sans-serif;color:var(--navy);margin:0;
 
 .top{background:var(--navy);color:#fff;padding-block:22px}
 :root:not([data-theme="light"]) .top{background:#0A1020}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .top{background:#0A1020}}
+@media (prefers-color-scheme: dark) and (max-width: 0px){:root:not([data-theme="light"]) .top{background:#0A1020}}
 .top .wrap{padding-block:0}
 .brand{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 /* The real AERA mark already carries the wordmark, so the page title sits beside it
@@ -69,13 +69,13 @@ input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid 
 .seg button{font:inherit;font-size:14px;font-weight:700;padding:8px 16px;border:0;cursor:pointer;
  background:transparent;color:var(--ink2)}
 .seg button.on{background:var(--navy);color:#fff}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .seg button.on{color:#0C111B}}
+@media (prefers-color-scheme: dark) and (max-width: 0px){:root:not([data-theme="light"]) .seg button.on{color:#0C111B}}
 
 .tabs{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
 .tab{font:inherit;font-size:14px;font-weight:700;padding:8px 14px;border-radius:9px;cursor:pointer;
  border:1px solid var(--line2);background:var(--card);color:var(--ink2);white-space:nowrap}
 .tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tab.on{color:#0C111B}}
+@media (prefers-color-scheme: dark) and (max-width: 0px){:root:not([data-theme="light"]) .tab.on{color:#0C111B}}
 .tab small{display:block;font-size:10.5px;font-weight:600;opacity:.75;letter-spacing:.04em}
 .daytab{display:inline-flex;align-items:stretch;border:1px solid var(--line2);border-radius:9px;
  overflow:hidden;background:var(--card)}
@@ -89,7 +89,7 @@ input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid 
 .daytab.on{background:var(--navy);border-color:var(--navy)}
 .daytab.on>button:first-child{color:#fff}
 .daytab.on .dx{color:#B9C6E6;border-left-color:rgba(255,255,255,.25)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .daytab.on>button:first-child{color:#0C111B}
+@media (prefers-color-scheme: dark) and (max-width: 0px){:root:not([data-theme="light"]) .daytab.on>button:first-child{color:#0C111B}
  :root:not([data-theme="light"]) .daytab.on .dx{color:#0C111B}}
 
 .meal{border:1px solid var(--line);border-radius:10px;background:var(--sunk);margin-bottom:12px;
