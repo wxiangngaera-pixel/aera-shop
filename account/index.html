@@ -1613,7 +1613,8 @@ window.refSendInbox=refSendInbox;
 function refShareApp(){var w=window.__REFSH;if(!w)return;var go=function(){window.aeraInvite({code:w.code,name:w.name})};if(window.aeraInvite)return go();var s=document.createElement('script');s.src='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-invite';s.onload=go;document.head.appendChild(s)}
 window.refShareApp=refShareApp;
 function refShareCopy(what,btn){var w=window.__REFSH;if(!w)return;var t=what==='link'?REF_SHOP+encodeURIComponent(w.code):w.code;
- var done=function(){if(!btn)return;var o=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=o},1600)};
+ var done=function(){if(!btn)return;var o=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=o},1600);if(what==='link')setTimeout(function(){refShareApp()},500)};
+ /* Peter 20th Oct 2026 : Copy Link also opens the Invitation Card, so the Card goes out with the Link */
  try{navigator.clipboard.writeText(t).then(done,function(){prompt('Copy this',t)})}catch(e){prompt('Copy this',t)}}
 var PLANORD={};
 function renderPlans(){var el=$('#plansList');if(!el)return;var rows=PLANS||[],ordered=PLANORD||{};
