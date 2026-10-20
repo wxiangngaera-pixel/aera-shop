@@ -586,7 +586,8 @@ function shareWho(){var p=R.prof||R.rows[0]||{};return{code:String(p.Code||'').t
 function shareEmail(){var w=shareWho();if(!w.code)return;
  location.href='mailto:?subject='+encodeURIComponent('My AERA Meal Prep Referral Code : '+w.code)+'&body='+encodeURIComponent(shareText(w.code,w.name))}
 function shareCopy(what,btn){var w=shareWho();if(!w.code)return;var t=what==='link'?SHOP_LINK+encodeURIComponent(w.code):w.code;
- var done=function(){var s=btn&&btn.querySelector('span');if(s){var o=s.textContent;s.textContent='Copied';setTimeout(function(){s.textContent=o},1600)}};
+ var done=function(){var s=btn&&btn.querySelector('span');if(s){var o=s.textContent;s.textContent='Copied';setTimeout(function(){s.textContent=o},1600)}if(what==='link')setTimeout(function(){shareApp()},500)};
+ /* Peter 20th Oct 2026 : Copy Link also opens the Invitation Card, so the Card goes out with the Link */
  try{navigator.clipboard.writeText(t).then(done,function(){prompt('Copy this',t)})}catch(e){prompt('Copy this',t)}}
 /* Send AERA Meal Prep App : the phone's own Share sheet ( WhatsApp, Telegram, SMS … ) with the app link and the Referral Code; copies it where there is no Share sheet */
 var APP_LINK='https://aeramealprep.net/?install=1&ref=';
