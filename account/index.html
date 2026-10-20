@@ -1591,7 +1591,7 @@ async function planDelGo(i){asClose();var p=PLANS[i];if(!p)return;
  if(r.error)return asModal('<h3>Could Not Delete</h3><p class="asp">'+esc(friendly(r.error))+'</p>','<button class="btn btn-y" type="button" onclick="asClose()">Close</button>');
  PLANS.splice(i,1);try{renderOverview()}catch(e){}renderPlans()}
 /* Share the Referral Code : by email, or copy the code / the ordering link that fills it in */
-var REF_SHOP='https://aeramealprep.net/checkout/?ref=';
+var REF_SHOP='https://aeramealprep.net/?ref=';
 function refShareText(code,name){return 'Hi,\n\nI order my Meal Preps from AERA Meal Prep. Every Meal is cooked to Order, weighed to the gram and delivered chilled around the Klang Valley.\n\n'+
  'Use my Referral Code '+code+' at Checkout and you earn extra AERA Points on your Meals.\n\nOrder here : '+REF_SHOP+encodeURIComponent(code)+'\n\n'+(name||'')}
 function refShareBar(code,name){if(!code)return '';window.__REFSH={code:code,name:name};
@@ -1599,7 +1599,7 @@ function refShareBar(code,name){if(!code)return '';window.__REFSH={code:code,nam
   '<div class="refsendrow"><input type="email" id="refTo" placeholder="Their AERA Account Email" autocomplete="off" onkeydown="if(event.key===\'Enter\')refSendInbox()">'+
   '<button type="button" class="btn btn-y s" id="refSendBtn" onclick="refSendInbox()">Send To Their Inbox</button></div>'+
   '<div class="hint" id="refSendMsg" style="margin-top:6px">It lands in their AERA Inbox, with a button that puts your Code in at Checkout.</div></div>'+
-  '<div class="refshare"><button type="button" class="btn btn-y s" onclick="refShareApp()">📲 Send AERA Meal Prep App</button><button type="button" class="btn btn-o s" onclick="refShareCopy(\'code\',this)">Copy Code</button>'+
+  '<div class="refshare"><button type="button" class="btn btn-y s" style="min-height:48px;font-size:16px" onclick="refShareApp()">📤 Send Invitation Card</button><button type="button" class="btn btn-o s" onclick="refShareCopy(\'code\',this)">Copy Code</button>'+
   '<button type="button" class="btn btn-o s" onclick="refShareCopy(\'link\',this)">Copy Link</button></div>'}
 async function refSendInbox(){var el=$('#refTo'),m=$('#refSendMsg'),b=$('#refSendBtn');if(!el)return;
  var to=String(el.value||'').trim();if(!to){m.textContent='Type their AERA Account Email first.';return}
