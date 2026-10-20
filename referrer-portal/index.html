@@ -117,10 +117,10 @@ html.rf-acct #pin-gate,html.rf-login #pin-gate{display:none!important}html.rf-ac
  var c=null;try{c=window.supabase.createClient(U,K,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}})}catch(e){}window.__REF_SB=c;
  function sess(){try{var v=JSON.parse(localStorage.getItem(SK)||"null");if(v&&v.currentSession)v=v.currentSession;if(v&&v.access_token&&v.user)return v}catch(e){}return null}
  function pin(){try{return sessionStorage.getItem("lp_access_"+LP)||localStorage.getItem("lp_pin_"+LP)}catch(e){return null}}
- window.aeraRefSess=sess;var H=document.documentElement,emb=false;try{emb=window.top!==window&&typeof window.parent.aeraRefFeed==="function"}catch(e){}H.classList.add(emb?"rf-acct":(sess()&&c?"rf-acct":(pin()?"rf-pin":"rf-login")));
+ window.aeraRefSess=sess;/* Peter 20th Oct 2026 : an AERA admin opens any Referrer's page with ?as=CODE */try{window.__REF_AS=(new URLSearchParams(location.search).get("as")||"").toUpperCase().replace(/[^A-Z0-9-]/g,"")}catch(e){}var H=document.documentElement,emb=false;try{emb=window.top!==window&&typeof window.parent.aeraRefFeed==="function"}catch(e){}H.classList.add(emb?"rf-acct":(sess()&&c?"rf-acct":(pin()?"rf-pin":"rf-login")));
  window.aeraRefData=async function(){
   if(H.classList.contains("rf-acct")){var s=null;try{s=(await c.auth.getSession()).data.session}catch(e){}
-   if(s){var r=await fetch(RF,{method:"POST",headers:{"Content-Type":"application/json",apikey:K,Authorization:"Bearer "+s.access_token},body:"{}"});var j=await r.json().catch(function(){return{}});if(r.ok&&j.ok!==false)return j;throw new Error(j.error||("HTTP "+r.status))}
+   if(s){var r=await fetch(RF,{method:"POST",headers:{"Content-Type":"application/json",apikey:K,Authorization:"Bearer "+s.access_token},body:JSON.stringify(window.__REF_AS?{as:window.__REF_AS}:{})});var j=await r.json().catch(function(){return{}});if(r.ok&&j.ok!==false)return j;throw new Error(j.error||("HTTP "+r.status))}
    H.classList.remove("rf-acct");H.classList.add(pin()?"rf-pin":"rf-login");if(!pin())return{headers:[],data:[]}}
   if(H.classList.contains("rf-login"))return{headers:[],data:[]};
   return fetch(window.DATA_URL||"/api/public/landing-pages/6950/sheet-data",{cache:"no-store"}).then(function(r){return r.json()})};
@@ -147,7 +147,7 @@ html.rf-acct #pin-gate,html.rf-login #pin-gate{display:none!important}html.rf-ac
   ["","SAMPLE","Sample Gym ( Demo )","gym","2026-10","2026-10-31","OVR-SAMPLE-2026-10","Group Override","2% of RM 550.70 Group Sales \u00B7 2 Referrers","0","2","11.01","0","no","",""]];
   return{ok:true,headers:HD,data:D,demo:true}}
  window.aeraRefData=async function(){var j=await orig();var n=0;try{var d=j&&(j.data||j.rows);n=Array.isArray(d)?d.length:0}catch(e){}
-  if(n)return j;var on=/[?&]demo=1/.test(location.search);
+  if(n||window.__REF_AS)return j;var on=/[?&]demo=1/.test(location.search);
   if(!on){try{var c=window.__REF_SB;var s=c&&(await c.auth.getSession()).data.session;if(s){var r=await c.rpc("kc_role");on=!!(r&&r.data==="admin")}}catch(e){}}
   if(!on)return j;window.__REF_DEMO=1;try{var H=document.documentElement;if(/[?&]demo=1/.test(location.search)&&!H.classList.contains("rf-acct")){H.classList.remove("rf-login","rf-pin");H.classList.add("rf-acct")}}catch(e){}return demo()};
  function banner(){if(!window.__REF_DEMO)return;var st=document.getElementById("state");if(!st||!st.firstChild||document.getElementById("rfDemo"))return;
