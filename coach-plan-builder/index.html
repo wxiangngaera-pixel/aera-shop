@@ -2184,7 +2184,7 @@ function mpShareOld(){var old=D.getElementById('cpaSheet');if(old)old.remove();A
   if(x==='inv'){w.remove();var cs=st()||{},go2=function(){window.aeraInvite({code:cs.refCode,name:val('coachname')||cs.coach||'',to:val('cname')||cur().name||'',phone:val('cphone')||cur().phone||''})};if(window.aeraInvite)go2();else{var sc=D.createElement('script');sc.src='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-invite';sc.onload=go2;D.head.appendChild(sc)}return}
   if(x==='mail')return go();
   if(x==='share'){try{await navigator.share({title:T('AERA Meal Prep App'),text:m.replace('\n'+MAPP,''),url:MAPP});w.remove()}catch(_){}}
-  if(x==='copy'){try{await navigator.clipboard.writeText(MAPP);b.textContent='✓ '+T('Copied')}catch(_){prompt(T('Copy Link'),MAPP)}}})}
+  if(x==='copy'){try{await navigator.clipboard.writeText(MAPP);b.textContent='✓ '+T('Copied');/* Peter 20th Oct 2026 : Copy Link also opens the Invitation Card */setTimeout(function(){var ib=w.querySelector('[data-x=inv]');if(ib)return ib.click();w.remove();var g3=function(){window.aeraInvite({app:'shop',to:val('cname')||cur().name||'',phone:val('cphone')||cur().phone||''})};if(window.aeraInvite)g3();else{var sc=D.createElement('script');sc.src='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-invite';sc.onload=g3;D.head.appendChild(sc)}},500)}catch(_){prompt(T('Copy Link'),MAPP)}}})}
 function go(){var c=cur(),em=em0();
  if(!okEm(em)){msg(T('Fill in your Client’s email first.'),1);return}
  var t=tok();if(!t){msg(T('Sign in to your AERA Account first.'),1);return}
