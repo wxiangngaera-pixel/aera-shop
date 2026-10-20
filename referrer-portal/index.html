@@ -622,7 +622,7 @@ function render(){
     tr('Paid Cash-Back',rm(sum(dM,'Cashback')),rm(sum(paidAll,'Cashback')),'background:#EDF3FD')+
    '</tbody></table></div><p class="hint" style="margin:8px 0 0">Cash-Back is '+rate+'% of the Meal Subtotal'+(mine.some(isAdj)?', plus any Group Override or Adjustment by AERA':'')+'.</p>'})()+
   '<div class="row" style="margin-top:14px">'+
-   (mPaid?'<button class="btn btn-y" type="button" onclick="receipt()">Download Receipt For '+esc(monthLabel(R.month))+'</button>':'<span class="hint" style="margin:0">A Receipt is available once '+esc(monthLabel(R.month))+' has been paid out.</span>')+
+   (mine.length?'<button class="btn btn-y" type="button" onclick="receipt()">'+(mPaid?'🖨 Download / Print Receipt For ':'🖨 Download / Print Statement For ')+esc(monthLabel(R.month))+'</button>':'<span class="hint" style="margin:0">No Orders in '+esc(monthLabel(R.month))+' Yet.</span>')+
    (mPaid?'<span class="chip ok">Paid'+(mine[0].PaidAt?' · '+esc(fmtDate(mine[0].PaidAt)):'')+'</span>':'<span class="chip warn">Awaiting Payment</span>')+
   '</div>'+
  '</div>';
@@ -649,8 +649,8 @@ function allMonths(){var m={};R.rows.forEach(function(r){var s=String(r.Month||'
 function receipt(mo){mo=mo||R.month;var L=inMonth(mo);if(!L.length)return;
  var name=String(L[0].Referrer||''),code=String(L[0].Code||'').toUpperCase(),rate=+L[0].Rate||0;
  var paidAt=L[0].PaidAt?fmtDate(L[0].PaidAt):'',ref=L[0].PaidRef||'';
- var w=window.open('','_blank');
- if(!w)return alert('Allow pop-ups for this page, then press the receipt button again.');
+ var T=paidAt?'Cash-Back Receipt':'Cash-Back Statement';var w=window.open('','_blank');
+ if(!w)return alert('Allow pop-ups for this page, then press the button again.');
  var css='*{box-sizing:border-box}body{margin:0;font:13px Montserrat,system-ui,sans-serif;color:#0B0B0B;background:#fff;padding:36px}'+
   '.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:3px solid #16479E;padding-bottom:14px}'+
   'h1{font-size:24px;margin:0 0 4px;letter-spacing:-.02em}.mut{color:#6B7280;font-size:12px}'+
@@ -664,7 +664,7 @@ function receipt(mo){mo=mo||R.month;var L=inMonth(mo);if(!L.length)return;
   '@media print{body{padding:0}}';
  var html='<!DOCTYPE html><html><head><meta charset="utf-8">'+
   '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap"><style>'+css+'</style></head><body>'+
-  '<div class="hd"><div><h1>Cash-Back Receipt</h1><div class="mut">AERA Meal Preparation SDN BHD · 202001037122 ( 1393443-P )<br>35, Jalan Equine 9A, Taman Equine, 43300 Seri Kembangan, Selangor</div></div>'+
+  '<div class="hd"><div><h1>'+T+'</h1><div class="mut">AERA Meal Preparation SDN BHD · 202001037122 ( 1393443-P )<br>35, Jalan Equine 9A, Taman Equine, 43300 Seri Kembangan, Selangor</div></div>'+
   '<div style="text-align:right"><div class="mut">'+esc(monthLabel(mo))+'</div><div class="big">'+rm(sum(L,'Cashback'))+'</div><div class="mut">'+(paidAt?'Paid '+esc(paidAt):'Pending')+(ref?' · Ref '+esc(ref):'')+'</div></div></div>'+
   '<div class="box"><b>'+esc(name)+'</b><div class="mut">Referral Code '+esc(code)+' · '+rate+'% of the meal subtotal · '+cnt(L)+' order'+(cnt(L)===1?'':'s')+' in '+esc(monthLabel(mo))+'</div></div>'+
   '<table><thead><tr><th>Date</th><th>Order</th><th>Customer</th><th class="r">Meal Subtotal</th><th class="r">Rate</th><th class="r">Cash-Back</th></tr></thead><tbody>'+
@@ -717,7 +717,7 @@ window.AERA_I18N={};window.AERA_I18N_RE=[];
 Object.assign(window.AERA_I18N,{
 "Your Referral Code":"您的推荐码","Share it with Friends, Clients and Members. Every Order placed with your Code earns you Cash-Back, and they earn extra AERA Points.":"分享给朋友、客户和会员。每张用您推荐码下的订单都给您现金回馈，他们也会多赚 AERA 积分。","Send to an AERA Account":"发给 AERA 账户","Copy Code":"复制推荐码","Send AERA Meal Prep App":"发送 AERA Meal Prep 应用","📤 Send Invitation Card":"📤 发送邀请卡","Copied. Paste it in WhatsApp":"已复制，贴到 WhatsApp 发送","Copy Link":"复制链接","Copied":"已复制",
 "Home":"首页","Order Now":"立即订购","Referrer Portal":"推荐人专区","Terms & Conditions":"条款与细则",
-"Your Cash-Back":"您的回扣","Every Order placed with your Referral Code, month by month. What it earned you, and what has been paid.":"每一笔使用您推荐码的订单，按月列出 — 为您赚了多少，以及已经付了多少。","Loading your figures…":"正在载入您的数字…","We could not load your figures just now. Please refresh the page.":"目前无法载入您的数字，请重新整理页面。","Nothing here yet.":"这里还没有内容。","Once someone orders with your Referral Code, every Order shows up here with the Cash-Back it earned you.":"只要有人使用您的推荐码下单，每一笔订单都会显示在这里，并附上为您赚到的回扣。","Year":"年","Month":"月","Sales This Month":"本月销售额","Cash-Back This Month":"本月回扣","Pending Cash-Back":"待付回扣","Across every month, not yet paid":"所有月份合计，尚未支付","Paid Cash-Back":"已付回扣","Received all time":"历来已收到","Awaiting Payment":"等待付款","Date":"日期","Order":"订单","Customer":"顾客","Meal Subtotal":"餐点小计","Rate":"比率","Status":"状态","Total":"合计","Every Month":"所有月份","Orders":"订单数","Sales":"销售额","Cash-Back":"回扣","Receipt":"收据","Cash-Back Receipt":"回扣收据","Normal Referrer":"一般推荐人","Fitness Studio / Gym":"健身工作室 / 健身房","Fitness Influencer":"健身网红","Cashback":"回扣","Pending":"待付","Paid":"已付","Allow pop-ups for this page, then press the receipt button again.":"请允许此页面弹出视窗，然后再按一次收据按钮。","Referrer Portal — AERA Meal Prep":"推荐人专区 — AERA Meal Prep"
+"Your Cash-Back":"您的回扣","Every Order placed with your Referral Code, month by month. What it earned you, and what has been paid.":"每一笔使用您推荐码的订单，按月列出 — 为您赚了多少，以及已经付了多少。","Loading your figures…":"正在载入您的数字…","We could not load your figures just now. Please refresh the page.":"目前无法载入您的数字，请重新整理页面。","Nothing here yet.":"这里还没有内容。","Once someone orders with your Referral Code, every Order shows up here with the Cash-Back it earned you.":"只要有人使用您的推荐码下单，每一笔订单都会显示在这里，并附上为您赚到的回扣。","Year":"年","Month":"月","Sales This Month":"本月销售额","Cash-Back This Month":"本月回扣","Pending Cash-Back":"待付回扣","Across every month, not yet paid":"所有月份合计，尚未支付","Paid Cash-Back":"已付回扣","Received all time":"历来已收到","Awaiting Payment":"等待付款","Date":"日期","Order":"订单","Customer":"顾客","Meal Subtotal":"餐点小计","Rate":"比率","Status":"状态","Total":"合计","Every Month":"所有月份","Orders":"订单数","Sales":"销售额","Cash-Back":"回扣","Receipt":"收据","Cash-Back Receipt":"回扣收据","Cash-Back Statement":"回扣结算单","Normal Referrer":"一般推荐人","Fitness Studio / Gym":"健身工作室 / 健身房","Fitness Influencer":"健身网红","Cashback":"回扣","Pending":"待付","Paid":"已付","Allow pop-ups for this page, then press the receipt button again.":"请允许此页面弹出视窗，然后再按一次收据按钮。","Referrer Portal — AERA Meal Prep":"推荐人专区 — AERA Meal Prep"
 });
 window.AERA_I18N_RE.push([/^([\d.]+)% of the meal subtotal$/,"餐点小计的 $1%"]);
 if(window.aeraRetranslate)window.aeraRetranslate();
