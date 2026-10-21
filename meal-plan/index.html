@@ -1903,5 +1903,33 @@ html.aa-on [id^="ultra-fast-widget-bubble"]{bottom:calc(20px + 66px)!important}
 
 <!-- AERA Concierge chat bubble ( Peter, 19th Oct 2026 ) -->
 <script id="aera-concierge" src="https://my.chatbees.io/widget.js" data-widget="48507863" async></script>
+<script id="aera-console-draft">/* Peter 21st Oct 2026 : New Order ( Kitchen Console ) · 💾 Save Draft keeps the Meal Plan being built on this device ;
+   it comes back the next time New Order is opened, until it is Discarded or the Plan is added to an Order. */
+(function(){if(!window.__AERA_CONSOLE)return;var K='kc.planDraft',done=false;
+var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function fmt(ms){var d=new Date(ms),n=d.getDate(),s=['th','st','nd','rd'],v=n%100,h=d.getHours(),m=d.getMinutes();
+ return n+(s[(v-20)%10]||s[v]||s[0])+' '+MN[d.getMonth()]+' '+d.getFullYear()+', '+(h%12||12)+':'+String(m).padStart(2,'0')+' '+(h>=12?'PM':'AM')}
+function note(t){var e=document.getElementById('kcDraftNote');if(!e){e=document.createElement('div');e.id='kcDraftNote';e.style.cssText='position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:99999;background:#16479E;color:#FDB913;font:700 14px Montserrat,system-ui,sans-serif;padding:11px 18px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:opacity .3s';document.body.appendChild(e)}
+ e.textContent=t;e.style.opacity='1';clearTimeout(note.t);note.t=setTimeout(function(){e.style.opacity='0'},2600)}
+function get(){try{return JSON.parse(localStorage.getItem(K)||'null')}catch(e){return null}}
+function has(){var d=get();return !!(d&&d.plan&&d.plan.meals)}
+window.kcSaveDraft=function(){try{if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return note('Nothing to save yet');
+ localStorage.setItem(K,JSON.stringify({at:Date.now(),plan:PLAN,q:(typeof Q!=='undefined'?Q:null)}));note('💾 Draft Saved · '+fmt(Date.now()));paintBar()}catch(e){note('Could not save the Draft')}};
+window.kcDiscardDraft=function(){try{localStorage.removeItem(K)}catch(e){}note('Draft Discarded');paintBar()};
+function paintBar(){var t=document.getElementById('kcAddTop');if(!t)return;var b=document.getElementById('kcDraftBar'),d=get();
+ if(!(d&&d.plan)){if(b)b.remove();return}
+ if(!b){b=document.createElement('div');b.id='kcDraftBar';b.style.cssText='width:100%;font:600 12.5px Montserrat,system-ui,sans-serif;color:#16479E;margin:6px 0 0';t.parentNode.insertBefore(b,t.nextSibling)}
+ var html='Draft Saved · '+fmt(d.at)+' <a href="#" onclick="kcDiscardDraft();return false" style="color:#B42318;margin-left:8px;text-decoration:underline">Discard Draft</a>';if(b.__h!==html){b.__h=html;b.innerHTML=html}}
+function addBtn(){['kcAddTop','kcAddBot'].forEach(function(id){var w=document.getElementById(id);if(!w||w.querySelector('.kcsave'))return;
+ var b=document.createElement('button');b.type='button';b.className='kcsave';b.textContent='💾 Save Draft';b.onclick=function(e){e.preventDefault();window.kcSaveDraft()};
+ b.style.cssText='background:#16479E!important;color:#FDB913!important;border-color:#16479E!important';
+ var dl=w.querySelector('.kcdl');w.insertBefore(b,dl||w.lastChild)});paintBar()}
+var seen=0;function restore(){if(done)return;if(typeof PLAN==='undefined'||!PLAN||!document.getElementById('kcAddTop')||!(window.CATALOG&&CATALOG.length)){seen=0;return}if(++seen<3)return;done=true;var d=get();if(!(d&&d.plan&&d.plan.meals))return;
+ try{if(d.q&&typeof Q!=='undefined')Object.assign(Q,d.q);PLAN=d.plan;try{renderTargets()}catch(e){}renderPlan();note('Draft from '+fmt(d.at)+' opened')}catch(e){}}
+/* adding the Plan to the Order finishes the Draft */
+window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(b&&/Add (Plan )?to Order/i.test(String(b.textContent||''))&&has()){try{localStorage.removeItem(K)}catch(x){}setTimeout(paintBar,50)}},true);
+var n=0,iv=setInterval(function(){addBtn();restore();if(done&&++n>40)clearInterval(iv)},400);
+new MutationObserver(function(){addBtn()}).observe(document.documentElement,{childList:true,subtree:true});
+})();</script>
 </body>
 </html>
