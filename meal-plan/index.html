@@ -1912,7 +1912,7 @@ var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 function fmt(ms){var d=new Date(ms),n=d.getDate(),s=['th','st','nd','rd'],v=n%100,h=d.getHours(),m=d.getMinutes();
  return n+(s[(v-20)%10]||s[v]||s[0])+' '+MN[d.getMonth()]+' '+d.getFullYear()+', '+(h%12||12)+':'+String(m).padStart(2,'0')+' '+(h>=12?'PM':'AM')}
 function E(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function note(t){var e=D.getElementById('kcDraftNote');if(!e){e=D.createElement('div');e.id='kcDraftNote';e.style.cssText='position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:99999;background:#16479E;color:#FDB913;font:700 14px Montserrat,system-ui,sans-serif;padding:11px 18px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:opacity .3s;max-width:90%;text-align:center';D.body.appendChild(e)}
+function note(t){try{var pp=P();if(pp&&typeof pp.toast==='function')pp.toast(t)}catch(e){}var e=D.getElementById('kcDraftNote');if(!e){e=D.createElement('div');e.id='kcDraftNote';e.style.cssText='position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:99999;background:#16479E;color:#FDB913;font:700 14px Montserrat,system-ui,sans-serif;padding:11px 18px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:opacity .3s;max-width:90%;text-align:center';D.body.appendChild(e)}
  e.textContent=t;e.style.opacity='1';clearTimeout(note.t);note.t=setTimeout(function(){e.style.opacity='0'},3200)}
 function P(){try{return window.parent&&window.parent!==window?window.parent:null}catch(e){return null}}
 function sb(){var p=P();try{return p&&p.__KC_SB||null}catch(e){return null}}
@@ -1934,7 +1934,7 @@ window.kcSaveDraft=async function(){try{if(typeof PLAN==='undefined'||!PLAN||!PL
  var data={status:'open',name:c.name||'',email:c.email||'',at:Date.now(),by:me(),meals:meals(PLAN),days:(typeof Q!=='undefined'&&+Q.days)||0,mpd:(typeof Q!=='undefined'&&+Q.mpd)||0,
   plan:JSON.parse(JSON.stringify(PLAN)),q:(typeof Q!=='undefined'?JSON.parse(JSON.stringify(Q)):null)};
  try{await put(id,data)}catch(e){try{localStorage.setItem(K,JSON.stringify({at:Date.now(),plan:PLAN,q:(typeof Q!=='undefined'?Q:null)}))}catch(x){}return note('Saved on this device only : '+(e.message||e))}
- ST.cur=id;try{localStorage.removeItem(K)}catch(x){}
+ ST.cur=id;try{localStorage.removeItem(K)}catch(x){}D.querySelectorAll('.kcsave').forEach(function(b){b.textContent='✓ Draft Saved';setTimeout(function(){b.textContent='💾 Save Draft'},2500)});lastNet=sig();
  note('💾 Draft Saved'+(c.name?' for '+c.name:'')+' · '+fmt(data.at)+(c.name||c.email?'':' · pick the customer next time so it is easy to find'));load(true)}catch(e){note('Could not save the Draft')}};
 function openDraft(id){var d=(ST.list||[]).filter(function(x){return x.id===id})[0];if(!d)return;var x=d.data;
  try{if(x.q&&typeof Q!=='undefined')Object.assign(Q,x.q);PLAN=x.plan;/* a Draft without daily targets ( e.g. brought over from the old website ) gets them from its answers */try{if(!(PLAN.targets&&+PLAN.targets.kcal>0)){var tt=planTargets();if(tt)PLAN.targets=tt}}catch(e){}try{renderTargets()}catch(e){}renderPlan();ST.cur=id;ST.open=false;lastSig='';lastNet=sig();liveSave();
@@ -1995,6 +1995,17 @@ async function netSave(){if(!ST.cur||typeof PLAN==='undefined'||!PLAN||!PLAN.mea
  var d=(ST.list||[]).filter(function(x){return x.id===ST.cur})[0];if(!d)return;netAt=Date.now();
  try{await put(ST.cur,Object.assign({},d.data,{at:Date.now(),by:me(),meals:meals(PLAN),plan:JSON.parse(JSON.stringify(PLAN)),q:(typeof Q!=='undefined'?JSON.parse(JSON.stringify(Q)):d.data.q)}));lastNet=s;d.data.at=Date.now();d.data.plan=PLAN;paint()}catch(e){}}
 setInterval(function(){liveRestore();/* never keep the empty start before the kept Plan is back */if(restored){liveSave();netSave()}},2000);
+
+/* Peter 22nd Oct 2026 : Salt Level and Spice Level for this Meal Plan, right under the buttons. They travel with the Plan into the Order ( each box ) and the Kitchen Docket. */
+var SALTS=[['normal','Normal Salt'],['less_salt','Less Salt'],['no_salt','No Salt']],SPICES=[['normal','Normal Spice'],['less_spicy','Less Spicy'],['no_spice','No Spice']];
+function seasBar(){var t=D.getElementById('kcAddTop');if(!t||typeof Q==='undefined')return;var b=D.getElementById('kcSeasBar');
+ if(!b){b=D.createElement('div');b.id='kcSeasBar';b.style.cssText='width:100%;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:10px 0 0;font:600 13px Montserrat,system-ui,sans-serif;color:#16479E';
+  var sel=function(id,lbl,L){return '<label style="display:flex;gap:6px;align-items:center">'+lbl+' <select id="'+id+'" style="padding:6px 10px;border:1.5px solid #16479E;border-radius:9px;font:600 13px Montserrat,system-ui,sans-serif;color:#0B0B0B;background:#fff">'+L.map(function(o){return '<option value="'+o[0]+'">'+o[1]+'</option>'}).join('')+'</select></label>'};
+  b.innerHTML=sel('kcSalt','🧂 Salt Level',SALTS)+sel('kcSpice','🌶️ Spice Level',SPICES);t.parentNode.insertBefore(b,t.nextSibling);
+  b.addEventListener('change',function(e){if(e.target.id==='kcSalt')Q.seasoning=e.target.value;if(e.target.id==='kcSpice')Q.spice=e.target.value;try{if(PLAN&&PLAN.q){PLAN.q.seasoning=Q.seasoning;PLAN.q.spice=Q.spice}}catch(x){}lastSig='';liveSave();note((e.target.id==='kcSalt'?'Salt Level : ':'Spice Level : ')+e.target.options[e.target.selectedIndex].text)})}
+ var sv=Q.seasoning||'normal',pv=/no/.test(Q.spice||'')?'no_spice':(/less/.test(Q.spice||'')?'less_spicy':'normal');
+ var x=D.getElementById('kcSalt'),y=D.getElementById('kcSpice');if(x&&D.activeElement!==x&&x.value!==sv)x.value=sv;if(y&&D.activeElement!==y&&y.value!==pv)y.value=pv}
+setInterval(seasBar,800);
 var lastKey='';setInterval(function(){addBtn();moveLocal();var k=keyFor(cust());if(k!==lastKey){lastKey=k;load(true)}else if(!ST.list)load()},1200);
 new MutationObserver(function(){addBtn()}).observe(D.documentElement,{childList:true,subtree:true});
 })();</script>
