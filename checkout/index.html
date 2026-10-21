@@ -3687,5 +3687,27 @@ el.querySelector('button').onclick=function(){var o=null;
  if(M==='fridge')o=D.getElementById('out');if(M==='corp')o=D.getElementById('corpOut')||D.getElementById('corpChg');if(o)return o.click();
  try{['aera.account','aera.refLock'].forEach(function(x){localStorage.removeItem(x)})}catch(x){}location.href='https://aeramealprep.net/account/#logout'}})();</script>
 <style id="aera-checkout-onlymp">/* Peter ( 19th Oct 2026 ) : the Corporate App Link is sent from the AERA Console only */#osaRow{display:none!important}</style>
+<script id="aera-checkout-together">/* Peter ( 21st Oct 2026 ) : 🤝 Deliver Together with a Friend. Two customers ordering to the same address each pay as
+   normal; the Order Notes carry "🤝 Deliver Together with : <friend>" so the Kitchen Console puts both on ONE Rider and
+   gives each of them half of the Delivery Fee back as AERA Credit. */
+(function(){var D=document;
+function del(){try{return typeof isDel==='function'?!!isDel():true}catch(e){return true}}
+function box(){var n=D.getElementById('notes');if(!n)return null;var b=D.getElementById('coTog');
+ if(!b){b=D.createElement('div');b.id='coTog';b.style.cssText='margin:12px 0 4px;padding:12px 14px;border:1.5px solid #16479E;border-radius:12px;background:#F5F8FD';
+  b.innerHTML='<label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer"><input id="coTogOn" type="checkbox" style="margin-top:3px;width:18px;height:18px;accent-color:#16479E"><span><b style="color:#16479E">🤝 Deliver Together with a Friend</b><br><span style="font-size:13px;color:#475569">Ordering with a friend to the same address? Each of you places your own Order and pays as normal. We send both Orders on ONE Rider and give each of you half of the Delivery Fee back as AERA Credit.</span></span></label>'+
+   '<div id="coTogMore" style="display:none;margin-top:10px"><input id="coTogWho" maxlength="60" placeholder="Friend’s Name or Order No." style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #CBD5E1;border-radius:10px;font:inherit">'+
+   '<div style="font-size:12px;color:#475569;margin-top:6px">Use the same Delivery Address, Date and Time Slot as your friend. The AERA Credit is added once both Orders are put together.</div></div>';
+  n.parentNode.insertBefore(b,n.nextSibling)}
+ return b}
+function paint(){var b=box();if(!b)return;b.style.display=del()?'':'none';var on=D.getElementById('coTogOn');var m=D.getElementById('coTogMore');if(on&&m)m.style.display=on.checked?'':'none'}
+function tag(){var on=D.getElementById('coTogOn');if(!on||!on.checked||!del())return '';
+ var w=String((D.getElementById('coTogWho')||{}).value||'').replace(/[·\n\r]+/g,' ').replace(/\s+/g,' ').trim().slice(0,60);
+ return '🤝 Deliver Together with : '+(w||'a friend')}
+function wrap(){if(typeof window.coNotes!=='function'||window.coNotes.__tog)return;var orig=window.coNotes;
+ var w=function(){var r=orig.apply(this,arguments);var t=tag();return t?(r?t+' · '+r:t):r};w.__tog=1;window.coNotes=w}
+D.addEventListener('change',function(e){if(e.target&&e.target.id==='coTogOn'){paint();if(e.target.checked){var i=D.getElementById('coTogWho');if(i)i.focus()}}},true);
+function tick(){wrap();paint()}
+if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',tick);else tick();
+setInterval(tick,1500);})();</script>
 </body>
 </html>
