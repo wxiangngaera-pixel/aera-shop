@@ -1937,12 +1937,12 @@ window.kcSaveDraft=async function(){try{if(typeof PLAN==='undefined'||!PLAN||!PL
  ST.cur=id;try{localStorage.removeItem(K)}catch(x){}
  note('💾 Draft Saved'+(c.name?' for '+c.name:'')+' · '+fmt(data.at)+(c.name||c.email?'':' · pick the customer next time so it is easy to find'));load(true)}catch(e){note('Could not save the Draft')}};
 function openDraft(id){var d=(ST.list||[]).filter(function(x){return x.id===id})[0];if(!d)return;var x=d.data;
- try{if(x.q&&typeof Q!=='undefined')Object.assign(Q,x.q);PLAN=x.plan;/* a Draft without daily targets ( e.g. brought over from the old website ) gets them from its answers */try{if(!(PLAN.targets&&+PLAN.targets.kcal>0)){var tt=planTargets();if(tt)PLAN.targets=tt}}catch(e){}try{renderTargets()}catch(e){}renderPlan();ST.cur=id;ST.open=false;
+ try{if(x.q&&typeof Q!=='undefined')Object.assign(Q,x.q);PLAN=x.plan;/* a Draft without daily targets ( e.g. brought over from the old website ) gets them from its answers */try{if(!(PLAN.targets&&+PLAN.targets.kcal>0)){var tt=planTargets();if(tt)PLAN.targets=tt}}catch(e){}try{renderTargets()}catch(e){}renderPlan();ST.cur=id;ST.open=false;lastSig='';lastNet=sig();liveSave();
   var c=cust();var p=P();
-  if(!c.name&&!c.email&&(x.name||x.email)){try{var n=p.noState();if(n){n.name=x.name||'';n.email=x.email||'';if(typeof p.render==='function')p.render(true)}}catch(e){}}
+  if(!c.name&&!c.email&&(x.name||x.email)){try{var n=p.noState();if(n){n.name=x.name||'';n.email=x.email||'';lastSig='';liveSave();if(typeof p.render==='function')p.render(true)}}catch(e){}}
   note('📂 Draft opened'+(x.name?' · '+x.name:'')+' · saved '+fmt(x.at));paint()}catch(e){note('Could not open the Draft')}}
 async function closeDraft(id,status){var d=(ST.list||[]).filter(function(x){return x.id===id})[0];if(!d)return;
- try{await put(id,Object.assign({},d.data,{status:status,closedAt:Date.now(),closedBy:me()}));if(ST.cur===id)ST.cur='';
+ try{await put(id,Object.assign({},d.data,{status:status,closedAt:Date.now(),closedBy:me()}));if(ST.cur===id){ST.cur='';if(status==='discarded')liveClear()}
   if(status==='discarded')note('Draft Discarded'+(d.data.name?' · '+d.data.name:''));load(true)}catch(e){note('Could not update the Draft : '+(e.message||e))}}
 window.kcDiscardDraft=function(id){var d=(ST.list||[]).filter(function(x){return x.id===id})[0];
  if(!confirm('Discard the Draft'+(d&&d.data.name?' for '+d.data.name:'')+'?'))return;closeDraft(id,'discarded')};
@@ -1959,7 +1959,7 @@ function paint(){var t=D.getElementById('kcAddTop');if(!t)return;var b=D.getElem
  if(!b){b=D.createElement('div');b.id='kcDraftBar';b.style.cssText='width:100%;font:600 13px Montserrat,system-ui,sans-serif;color:#16479E;margin:8px 0 0';t.parentNode.insertBefore(b,t.nextSibling)}
  var n=(ST.list||[]).length,m=mine(),h='';
  if(m&&ST.cur!==m.id)h+='<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:9px 12px;border-radius:10px;background:#FFF4CC;color:#0B0B0B;margin-bottom:6px">📂 <b>'+E(m.data.name||m.data.email)+'</b> has a Draft saved '+E(fmt(m.data.at))+' <a href="#" onclick="kcOpenDraft(\''+E(m.id)+'\');return false" style="color:#16479E;font-weight:800;text-decoration:underline">Open Draft</a></div>';
- else if(ST.cur){var c=(ST.list||[]).filter(function(x){return x.id===ST.cur})[0];if(c)h+='<div style="margin-bottom:6px">Working on the Draft'+(c.data.name?' for <b>'+E(c.data.name)+'</b>':'')+' · saved '+E(fmt(c.data.at))+' · press 💾 Save Draft to update it</div>'}
+ else if(ST.cur){var c=(ST.list||[]).filter(function(x){return x.id===ST.cur})[0];if(c)h+='<div style="margin-bottom:6px">Working on the Draft'+(c.data.name?' for <b>'+E(c.data.name)+'</b>':'')+' · saved '+E(fmt(c.data.at))+' · saves itself as you edit</div>'}
  if(ST.open){h+='<div style="padding:10px;border:1.5px solid #16479E;border-radius:12px;background:#F5F8FD;display:flex;flex-direction:column;gap:8px">'+
    '<div style="display:flex;align-items:center"><b style="font-size:14px">📂 Saved Drafts</b><a href="#" onclick="kcToggleDrafts();return false" style="margin-left:auto;color:#16479E">Close</a></div>'+
    (ST.err?'<div style="color:#B42318">'+E(ST.err)+'</div>':(!ST.list?'<div>Loading…</div>':(n?ST.list.map(row).join(''):'<div style="color:#475569">No Saved Drafts.</div>')))+'</div>'}
@@ -1975,7 +1975,26 @@ var moved=false;async function moveLocal(){if(moved||!sb())return;moved=true;var
  if(!(d&&d.plan&&d.plan.meals))return;try{await put('t:'+Number(d.at||Date.now()).toString(36),{status:'open',name:'Earlier Draft ( this device )',email:'',at:d.at||Date.now(),by:me(),meals:meals(d.plan),days:(d.q&&+d.q.days)||0,mpd:(d.q&&+d.q.mpd)||0,plan:d.plan,q:d.q||null});localStorage.removeItem(K);load(true)}catch(e){moved=false}}
 /* adding the Plan to the Order closes its Draft */
 window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b||!/Add (Plan )?to Order/i.test(String(b.textContent||'')))return;
- var id=ST.cur||(mine()&&mine().id);if(id)setTimeout(function(){closeDraft(id,'used')},300)},true);
+ var id=ST.cur||(mine()&&mine().id);liveClear();if(id)setTimeout(function(){closeDraft(id,'used')},300)},true);
+/* Peter 22nd Oct 2026 : nothing typed into the Meal Plan is lost when the Console redraws New Order ( which reloads this page ).
+   Every change is kept in this browser tab and comes back by itself; a Saved Draft that is open also saves itself online. */
+var LK='kc.mpLive',lastSig='',lastNet='',netAt=0;
+function sig(){try{return JSON.stringify(PLAN&&PLAN.meals||null)}catch(e){return ''}}
+function liveSave(){try{if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return;var s=sig();if(s===lastSig)return;lastSig=s;
+ sessionStorage.setItem(LK,JSON.stringify({key:keyFor(cust()),cur:ST.cur,at:Date.now(),plan:PLAN,q:(typeof Q!=='undefined'?Q:null)}))}catch(e){}}
+window.kcLiveSave=liveSave;
+function liveClear(){try{sessionStorage.removeItem(LK)}catch(e){}lastSig=''}
+var restored=false,seen2=0;
+function liveRestore(){if(restored)return;if(typeof PLAN==='undefined'||!PLAN||!D.getElementById('kcAddTop')||!(window.CATALOG&&CATALOG.length)){seen2=0;return}if(++seen2<3)return;restored=true;
+ var d=null;try{d=JSON.parse(sessionStorage.getItem(LK)||'null')}catch(e){}
+ if(!(d&&d.plan&&d.plan.meals)||Date.now()-(+d.at||0)>12*3600e3)return;
+ if(d.key&&d.key!==keyFor(cust()))return;
+ try{if(d.q&&typeof Q!=='undefined')Object.assign(Q,d.q);PLAN=d.plan;try{if(!(PLAN.targets&&+PLAN.targets.kcal>0)){var tt=planTargets();if(tt)PLAN.targets=tt}}catch(e){}
+  try{renderTargets()}catch(e){}renderPlan();ST.cur=d.cur||ST.cur;lastSig=sig();note('↩︎ Your Meal Plan is back, as you left it');paint()}catch(e){}}
+async function netSave(){if(!ST.cur||typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return;var s=sig();if(s===lastNet||Date.now()-netAt<15000)return;
+ var d=(ST.list||[]).filter(function(x){return x.id===ST.cur})[0];if(!d)return;netAt=Date.now();
+ try{await put(ST.cur,Object.assign({},d.data,{at:Date.now(),by:me(),meals:meals(PLAN),plan:JSON.parse(JSON.stringify(PLAN)),q:(typeof Q!=='undefined'?JSON.parse(JSON.stringify(Q)):d.data.q)}));lastNet=s;d.data.at=Date.now();d.data.plan=PLAN;paint()}catch(e){}}
+setInterval(function(){liveRestore();liveSave();netSave()},2000);
 var lastKey='';setInterval(function(){addBtn();moveLocal();var k=keyFor(cust());if(k!==lastKey){lastKey=k;load(true)}else if(!ST.list)load()},1200);
 new MutationObserver(function(){addBtn()}).observe(D.documentElement,{childList:true,subtree:true});
 })();</script>
