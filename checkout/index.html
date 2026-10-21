@@ -3688,26 +3688,69 @@ el.querySelector('button').onclick=function(){var o=null;
  try{['aera.account','aera.refLock'].forEach(function(x){localStorage.removeItem(x)})}catch(x){}location.href='https://aeramealprep.net/account/#logout'}})();</script>
 <style id="aera-checkout-onlymp">/* Peter ( 19th Oct 2026 ) : the Corporate App Link is sent from the AERA Console only */#osaRow{display:none!important}</style>
 <script id="aera-checkout-together">/* Peter ( 21st Oct 2026 ) : 🤝 Deliver Together with a Friend. Two customers ordering to the same address each pay as
-   normal; the Order Notes carry "🤝 Deliver Together with : <friend>" so the Kitchen Console puts both on ONE Rider and
-   gives each of them half of the Delivery Fee back as AERA Credit. */
+   normal. The customer types their friend's Login Email and taps "Send to AERA" : AERA's Order App is told at once
+   ( rpc aera_together_request ), and the Order Notes carry "🤝 Deliver Together with : <email>" so the Kitchen merges
+   both Orders in the Console and gives each of them half of the Delivery Fee back as AERA Credit.
+   Also : AERA Credit is no longer taken off by itself. The customer ticks "Use my AERA Credit" to use it. */
 (function(){var D=document;
+var SBU='https://swpprjvubgcdsojapaad.supabase.co',SBK='sb_publishable_GkaEU-PTeQLuzR9oydDiaA_Zc1AkhAB';
 function del(){try{return typeof isDel==='function'?!!isDel():true}catch(e){return true}}
+function okEm(v){return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(v||'').trim())}
+var SENT='';
 function box(){var n=D.getElementById('notes');if(!n)return null;var b=D.getElementById('coTog');
  if(!b){b=D.createElement('div');b.id='coTog';b.style.cssText='margin:12px 0 4px;padding:12px 14px;border:1.5px solid #16479E;border-radius:12px;background:#F5F8FD';
-  b.innerHTML='<label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer"><input id="coTogOn" type="checkbox" style="margin-top:3px;width:18px;height:18px;accent-color:#16479E"><span><b style="color:#16479E">🤝 Deliver Together with a Friend</b><br><span style="font-size:13px;color:#475569">Ordering with a friend to the same address? Each of you places your own Order and pays as normal. We send both Orders on ONE Rider and give each of you half of the Delivery Fee back as AERA Credit.</span></span></label>'+
-   '<div id="coTogMore" style="display:none;margin-top:10px"><input id="coTogWho" maxlength="60" placeholder="Friend’s Name or Order No." style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #CBD5E1;border-radius:10px;font:inherit">'+
-   '<div style="font-size:12px;color:#475569;margin-top:6px">Use the same Delivery Address, Date and Time Slot as your friend. The AERA Credit is added once both Orders are put together.</div></div>';
+  b.innerHTML='<label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer"><input id="coTogOn" type="checkbox" style="margin-top:3px;width:18px;height:18px;accent-color:#16479E"><span><b style="color:#16479E">🤝 Deliver Together with a Friend</b><br><span style="font-size:13px;color:#475569">Ordering with a friend to the same address? Each of you places your own Order and pays as normal. We put both Orders on ONE Rider and give each of you half of the Delivery Fee back as AERA Credit.</span></span></label>'+
+   '<div id="coTogMore" style="display:none;margin-top:10px"><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="coTogWho" type="email" inputmode="email" autocomplete="off" maxlength="120" placeholder="Friend’s Login Email" style="flex:1 1 200px;min-width:0;box-sizing:border-box;padding:10px 12px;border:1px solid #CBD5E1;border-radius:10px;font:inherit">'+
+   '<button type="button" id="coTogSend" style="flex:0 0 auto;background:#16479E;color:#FDB913;border:0;border-radius:10px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer">Send to AERA</button></div>'+
+   '<div id="coTogMsg" style="font-size:12px;color:#475569;margin-top:6px">Use the same Delivery Details ( Address, Date and Time Slot ) as your friend. We merge both Orders from our side.</div></div>';
   n.parentNode.insertBefore(b,n.nextSibling)}
  return b}
+function msg(t,bad){var m=D.getElementById('coTogMsg');if(m){m.innerHTML=t;m.style.color=bad?'#B42318':'#475569'}}
 function paint(){var b=box();if(!b)return;b.style.display=del()?'':'none';var on=D.getElementById('coTogOn');var m=D.getElementById('coTogMore');if(on&&m)m.style.display=on.checked?'':'none'}
-function tag(){var on=D.getElementById('coTogOn');if(!on||!on.checked||!del())return '';
- var w=String((D.getElementById('coTogWho')||{}).value||'').replace(/[·\n\r]+/g,' ').replace(/\s+/g,' ').trim().slice(0,60);
+function who(){return String((D.getElementById('coTogWho')||{}).value||'').trim().toLowerCase().slice(0,120)}
+function tag(){var on=D.getElementById('coTogOn');if(!on||!on.checked||!del())return '';var w=who().replace(/[·\n\r\s]+/g,'');
  return '🤝 Deliver Together with : '+(w||'a friend')}
 function wrap(){if(typeof window.coNotes!=='function'||window.coNotes.__tog)return;var orig=window.coNotes;
  var w=function(){var r=orig.apply(this,arguments);var t=tag();return t?(r?t+' · '+r:t):r};w.__tog=1;window.coNotes=w}
+function token(){try{var t=JSON.parse(localStorage.getItem('sb-swpprjvubgcdsojapaad-auth-token')||'null');if(t&&t.currentSession)t=t.currentSession;return t&&t.access_token||''}catch(e){return ''}}
+async function send(){var em=who(),btn=D.getElementById('coTogSend');
+ if(!okEm(em))return msg('Please type your friend’s Login Email.',1);
+ if(em===SENT)return msg('✓ Sent to AERA. Now complete your Order and pay as normal.');
+ var tk=token();if(!tk)return msg('Please sign in first, then tap Send to AERA. You can still pay : your friend’s email goes with your Order.',1);
+ var nm=String((D.getElementById('name')||{}).value||'').trim().slice(0,60);
+ if(btn){btn.disabled=true;btn.textContent='Sending…'}
+ try{var r=await fetch(SBU+'/rest/v1/rpc/aera_together_request',{method:'POST',headers:{'Content-Type':'application/json',apikey:SBK,Authorization:'Bearer '+tk},body:JSON.stringify({p_friend:em,p_name:nm})});
+  var j=await r.json().catch(function(){return null});
+  if(r.status===401||(j&&j.error==='signin_required'))msg('Please sign in again, then tap Send to AERA.',1);
+  else if(j&&j.ok){SENT=em;msg('✓ Sent to AERA. Now complete your Order and pay as normal. Your friend does the same with YOUR Login Email.')}
+  else if(j&&j.error==='same_email')msg('That is your own email. Type your friend’s Login Email.',1);
+  else if(j&&j.error==='bad_email')msg('That email does not look right. Check it and try again.',1);
+  else if(j&&j.error==='too_many')msg('You have sent a few already today. WhatsApp us if you need help.',1);
+  else msg('Could not send just now. You can still pay : your friend’s email goes with your Order.',1)}
+ catch(e){msg('Could not send just now. You can still pay : your friend’s email goes with your Order.',1)}
+ if(btn){btn.disabled=false;btn.textContent='Send to AERA'}}
 D.addEventListener('change',function(e){if(e.target&&e.target.id==='coTogOn'){paint();if(e.target.checked){var i=D.getElementById('coTogWho');if(i)i.focus()}}},true);
-function tick(){wrap();paint()}
+D.addEventListener('click',function(e){if(e.target&&e.target.id==='coTogSend'){e.preventDefault();send()}},true);
+D.addEventListener('input',function(e){if(e.target&&e.target.id==='coTogWho'&&SENT&&who()!==SENT){SENT='';msg('Tap Send to AERA again for the new email.')}},true);
+
+/* ===== AERA Credit : optional ( Peter, 21st Oct 2026 ) =====
+   The balance waits until the customer ticks "Use my AERA Credit". Coming back from a Top-Up it starts ticked. */
+var CRUSE=false;try{CRUSE=sessionStorage.getItem('aera.crUse')==='1'||!!sessionStorage.getItem('aera.topupPending')||!!localStorage.getItem('aera.topupPending')}catch(e){}
+function rm2(v){return 'RM '+(Math.round((+v||0)*100)/100).toFixed(2)}
+function crWrap(){if(typeof window.crApplied!=='function'||window.crApplied.__opt)return;var orig=window.crApplied;
+ var w=function(t){return CRUSE?orig.apply(this,arguments):0};w.__opt=1;window.crApplied=w;try{renderCart()}catch(e){}}
+function crPaint(){var row=D.getElementById('crRow');if(!row)return;var el=D.getElementById('crUse');
+ var a=0;try{a=(typeof crAvail==='function')?crAvail():0}catch(e){}var cc=false;try{cc=typeof ccOn==='function'&&ccOn()}catch(e){}
+ if(!(a>0)||cc){if(el)el.style.display='none';return}
+ if(!el){el=D.createElement('label');el.id='crUse';el.style.cssText='display:flex;gap:10px;align-items:center;cursor:pointer;margin:8px 0;padding:10px 12px;border:1.5px solid #16479E;border-radius:12px;background:#F5F8FD;font-size:14px';
+  el.innerHTML='<input id="crUseOn" type="checkbox" style="width:18px;height:18px;accent-color:#16479E;flex:0 0 auto"><span><b style="color:#16479E">Use my AERA Credit</b> <span id="crUseAmt" style="color:#475569"></span></span>';
+  row.parentNode.insertBefore(el,row)}
+ el.style.display='';var cb=D.getElementById('crUseOn');if(cb&&cb.checked!==CRUSE)cb.checked=CRUSE;
+ var s=D.getElementById('crUseAmt');var tx='( '+rm2(a)+' available'+(CRUSE?'':' · tick to use it on this Order')+' )';if(s&&s.textContent!==tx)s.textContent=tx}
+D.addEventListener('change',function(e){if(e.target&&e.target.id==='crUseOn'){CRUSE=!!e.target.checked;try{sessionStorage.setItem('aera.crUse',CRUSE?'1':'0')}catch(x){}try{renderCart()}catch(x){}crPaint()}},true);
+
+function tick(){wrap();paint();crWrap();crPaint()}
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',tick);else tick();
-setInterval(tick,1500);})();</script>
+setInterval(tick,1000);})();</script>
 </body>
 </html>
