@@ -528,6 +528,8 @@ function rawOf(g,name,cat){
  g=+g||0;cat=String(cat||'').toLowerCase();
  if(!g)return{g:0,rule:'q',why:'no weight given'};
  if(BASIS==='raw')return{g:g,rule:'',why:'Already Raw'};
+ /* Peter 21st Oct 2026 : Baked Potato / Sweet Potato, 100 g Cooked = 150 g Raw */
+ if(/baked (sweet )?potato/.test(norm(name)))return{g:g*1.5,rule:'',why:'Baked Potato x 1.5'};
  var rf=riceFactor(name);
  if(rf)return{g:g/rf,rule:'',why:'Rice ÷ '+rf.toFixed(2)};
  if(cat==='protein')return{g:g*PROTEIN_F,rule:'',why:'Protein x 1.5'};
