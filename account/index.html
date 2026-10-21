@@ -599,7 +599,7 @@ async function creditLoad(){var el=$('#creditBox');if(!el||!USER)return;
   if(c>0)hist.push({d:d,t:'Top-Up',v:c});if(s>0)hist.push({d:d,t:'Spent On An Order',v:-s})});
  var bal=Math.max(0,Math.round((g-u)*100)/100);hist.sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0});
  el.innerHTML='<div class="crbal"><div><div class="crlb">Your Balance</div><div class="crnum">'+rm(bal)+'</div></div><a class="btn btn-y" href="'+esc(crTopUpUrl())+'">Top Up</a></div>'+
-  '<p class="hint" style="margin:10px 0 0">AERA Credit comes off your next Order automatically at Checkout. If it does not cover the whole Order, you pay the rest by card. You earn AERA Points when you spend your Credit on Meals.</p>'+
+  '<p class="hint" style="margin:10px 0 0">Use your AERA Credit on any Order : tick Use my AERA Credit at Checkout. If it does not cover the whole Order, you pay the rest by card. You earn AERA Points when you spend your Credit on Meals.</p>'+
   (hist.length?'<h3 class="crh">History</h3><div class="crlist">'+hist.map(function(x){return'<div class="crrow"><span><b>'+x.t+'</b><small>'+esc(fmtDate(x.d))+'</small></span><b class="'+(x.v>0?'crp':'crm')+'">'+(x.v>0?'+ ':'− ')+rm(Math.abs(x.v))+'</b></div>'}).join('')+'</div>'
    :'<div class="empty" style="margin-top:14px">No Top-Ups yet.</div>')+
   '<p class="hint" style="margin-top:14px">Want unused Credit back? WhatsApp us and we refund it.</p>'}
@@ -3367,7 +3367,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  var MO={JAN:1,FEB:2,MAR:3,APR:4,MAY:5,JUN:6,JUL:7,AUG:8,SEP:9,SEPT:9,OCT:10,NOV:11,DEC:12},WK={MON:'一',TUE:'二',WED:'三',THU:'四',FRI:'五',SAT:'六',SUN:'日'};
  Object.assign(D,{"Packaging fee":"包装费","AERA Points Discount":"AERA 积分折抵","Order This Again":"再次订购","Order Again":"再次订购",
   "Search by Order No or Meal":"按订单号或餐点搜索","Meals":"餐点","Paid":"已付款",
-  "AERA Credit comes off your next Order automatically at Checkout. If it does not cover the whole Order, you pay the rest by card. You earn AERA Points when you spend your Credit on Meals.":"结账时，AERA 储值金会自动抵扣您的下一笔订单。若不足以支付整笔订单，余额以银行卡支付。用储值金购买餐点，同样可以赚取 AERA 积分。",
+  "Use your AERA Credit on any Order : tick Use my AERA Credit at Checkout. If it does not cover the whole Order, you pay the rest by card. You earn AERA Points when you spend your Credit on Meals.":"结账时勾选「使用我的 AERA 储值金」即可抵扣任何订单。若不足以支付整笔订单，余额以银行卡支付。使用储值金购买餐点同样可赚取 AERA 积分。",
   "Top-Up":"充值","Spent On An Order":"用于订单","History":"记录",
   ". With less notice, a":"。若通知不足，",".":"。"});
  R.unshift([/^on a Plan you have ordered before\. You need at least (RM [\d,.]+) in AERA Credit to start\.$/,"（须是您订购过的餐单）。启动前，AERA 储值金至少需要 $1。"]);
