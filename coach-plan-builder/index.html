@@ -641,6 +641,8 @@ function conv(r,g,b){
  g=+g||0;
  if((b||cur().basis)==='raw')return{g:g,why:'Raw, as you entered it',ok:true};
  var n=r.name.toLowerCase();
+ /* Peter 21st Oct 2026 : Baked Potato / Sweet Potato, 100 g Cooked = 150 g Raw */
+ if(/baked (sweet )?potato/.test(n))return{g:g*1.5,why:'Baked Potato, x 1.5',ok:true};
  if(r.cat==='c'){var f=riceF(n);
   if(f)return{g:g/f,why:'Rice, ÷ '+(+f.toFixed(2)),ok:true};
   return{g:g,why:'No cooked rule yet, we weigh it',ok:false}}
