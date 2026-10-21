@@ -1937,7 +1937,7 @@ window.kcSaveDraft=async function(){try{if(typeof PLAN==='undefined'||!PLAN||!PL
  ST.cur=id;try{localStorage.removeItem(K)}catch(x){}
  note('💾 Draft Saved'+(c.name?' for '+c.name:'')+' · '+fmt(data.at)+(c.name||c.email?'':' · pick the customer next time so it is easy to find'));load(true)}catch(e){note('Could not save the Draft')}};
 function openDraft(id){var d=(ST.list||[]).filter(function(x){return x.id===id})[0];if(!d)return;var x=d.data;
- try{if(x.q&&typeof Q!=='undefined')Object.assign(Q,x.q);PLAN=x.plan;try{renderTargets()}catch(e){}renderPlan();ST.cur=id;ST.open=false;
+ try{if(x.q&&typeof Q!=='undefined')Object.assign(Q,x.q);PLAN=x.plan;/* a Draft without daily targets ( e.g. brought over from the old website ) gets them from its answers */try{if(!(PLAN.targets&&+PLAN.targets.kcal>0)){var tt=planTargets();if(tt)PLAN.targets=tt}}catch(e){}try{renderTargets()}catch(e){}renderPlan();ST.cur=id;ST.open=false;
   var c=cust();var p=P();
   if(!c.name&&!c.email&&(x.name||x.email)){try{var n=p.noState();if(n){n.name=x.name||'';n.email=x.email||'';if(typeof p.render==='function')p.render(true)}}catch(e){}}
   note('📂 Draft opened'+(x.name?' · '+x.name:'')+' · saved '+fmt(x.at));paint()}catch(e){note('Could not open the Draft')}}
