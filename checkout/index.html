@@ -1887,10 +1887,13 @@ function bpRows(){return fetch(PAY.lookupUrl,{cache:'no-store'}).then(function(r
 function bpPoll(matchFn,tries){return new Promise(function(res){var n=0;(function tick(){bpRows().then(function(rows){var hit=null;rows.forEach(function(r){if(matchFn(r))hit=r});if(hit)return res(hit);if(++n>=tries)return res(null);setTimeout(tick,PAY.pollMs)}).catch(function(){if(++n>=tries)return res(null);setTimeout(tick,PAY.pollMs)})})()})}
 function bpShow(html){document.getElementById('bpOverlayBody').innerHTML=html;document.getElementById('bpOverlay').style.display='flex'}
 function bpClose(){document.getElementById('bpOverlay').style.display='none'}
+/* Peter 21st Oct 2026 : Billplz only takes a Malaysian mobile. An overseas number ( or one saved without its country code or leading 0 ) made it refuse the bill,
+   so only a clear Malaysian mobile ( 01… / 601… / +601… ) is sent ; any other number is left out and Billplz uses the customer's email. */
+function bpPhone(p){var s=String(p||'').trim(),d=s.replace(/\D/g,'');if(/^(\+|00)/.test(s))d=d.replace(/^00/,'');else if(!/^(0|60)/.test(d))return '';if(!/^(0|60)/.test(d))return '';try{return coMy(s)?p:''}catch(e){return ''}}
 function payBillplz(order,msg,total,name,email,phone){var m=document.getElementById('payMsg');var btn=document.getElementById('payBtn');btn.disabled=true;btn.textContent='Preparing secure payment…';
  var pending={orderNo:order.orderNo,msg:msg,email:email.toLowerCase(),total:total,at:Date.now()};try{sessionStorage.setItem('aera.pendingOrder',JSON.stringify(pending));localStorage.setItem('aera.pendingOrder',JSON.stringify(pending))}catch(e){}
  var key=billKey(order.orderNo,email);
- fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact(order.orderNo),data:{action:'create',orderNo:order.orderNo,amountCents:Math.round(total*100),custEmail:email,custName:name,custPhone:phone}})})
+ fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact(order.orderNo),data:{action:'create',orderNo:order.orderNo,amountCents:Math.round(total*100),custEmail:email,custName:name,custPhone:bpPhone(phone)}})})
  .then(function(r){return r.json()}).then(function(j){if(!j||!j.success)throw new Error('flow');return bpPoll(function(r){return String(r.Key||'')===key},PAY.pollMax)})
  .then(function(row){if(row&&row['Bill URL']&&String(row.Status||'')==='created'){btn.textContent='Opening secure payment…';var go=function(){location.href=row['Bill URL']};if(!row['Bill ID'])return go();Promise.race([fetch(ORD_SB+'/rest/v1/rpc/order_bill',{method:'POST',headers:{apikey:ORD_ANON,Authorization:'Bearer '+ORD_ANON,'Content-Type':'application/json'},body:JSON.stringify({p_no:order.orderNo,p_bill:String(row['Bill ID'])})}).catch(function(){}),new Promise(function(r){setTimeout(r,3000)})]).then(go);return}
   btn.disabled=false;renderCart();m.innerHTML='<div class="msg bad">Could not start payment'+(row&&/^failed/.test(String(row.Status||''))?' (payment provider error)':'')+'. Please try again or WhatsApp us.</div>'})
@@ -1902,7 +1905,7 @@ function tuBillplz(no,msg,email,name,a,tb){var m=document.getElementById('tuMsg'
  var tup={n:no,e:email,a:a,tb:tb,before:(APS.loaded&&!APS.failed&&APS.key===apKey(email)?crAvail():null),at:Date.now()};
  var pending={kind:'topup',orderNo:no,msg:msg,email:email,total:a,at:Date.now(),tup:tup};try{sessionStorage.setItem('aera.pendingOrder',JSON.stringify(pending));localStorage.setItem('aera.pendingOrder',JSON.stringify(pending))}catch(e){}
  var phone=coPhone();var key=billKey(no,email);
- fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact(no),data:{action:'create',orderNo:no,amountCents:Math.round(a*100),custEmail:email,custName:name,custPhone:phone}})})
+ fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact(no),data:{action:'create',orderNo:no,amountCents:Math.round(a*100),custEmail:email,custName:name,custPhone:bpPhone(phone)}})})
  .then(function(r){return r.json()}).then(function(j){if(!j||!j.success)throw new Error('flow');return bpPoll(function(r){return String(r.Key||'')===key},PAY.pollMax)})
  .then(function(row){if(row&&row['Bill URL']&&String(row.Status||'')==='created'){location.href=row['Bill URL'];return}throw new Error('nobill')})
  .catch(function(){btn.disabled=false;btn.textContent='Pay Securely';try{sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(x){}m.innerHTML='<div class="msg bad">Could not start payment. Please try again or WhatsApp us.</div>'})}
