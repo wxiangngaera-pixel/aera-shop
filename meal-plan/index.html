@@ -1931,5 +1931,45 @@ window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.
 var n=0,iv=setInterval(function(){addBtn();restore();if(done&&++n>40)clearInterval(iv)},400);
 new MutationObserver(function(){addBtn()}).observe(document.documentElement,{childList:true,subtree:true});
 })();</script>
+<script id="aera-console-build">/* Peter 21st Oct 2026 : New Order ( Kitchen Console ) · build the whole Meal Plan in one go from the customer's
+   saved Meal Preferences and / or Macros the kitchen presets ( per Meal or per Day ). The Console sends
+   { type:'aera-kc-build', q, profile, macros:{mode,p,c,f}, days, mpd } ; this page answers 'aera-kc-built'. */
+(function(){if(!window.__AERA_CONSOLE)return;
+function reply(o){try{parent.postMessage(Object.assign({type:'aera-kc-built'},o),location.origin)}catch(e){}}
+var GOALS={fat_loss:1,lean_gain:1,mass_gain:1,healthy:1,custom:1},BODIES={ectomorph:1,mesomorph:1,endomorph:1};
+window.addEventListener('message',function(ev){var d=ev.data;if(ev.origin!==location.origin||!d||d.type!=='aera-kc-build')return;
+ try{
+  if(!(window.CATALOG&&CATALOG.length))return reply({ok:false,error:'The kitchen list is still loading, try again in a moment'});
+  var q=d.q&&typeof d.q==='object'?d.q:null,p=d.profile||{};
+  if(q){var keep={done1:1};Object.keys(q).forEach(function(k){if(k!=='home'&&k!=='picked')Q[k]=JSON.parse(JSON.stringify(q[k]))});Object.assign(Q,keep)}
+  /* the profile fills anything the answers do not have */
+  if(p.gender&&!(q&&q.gender))Q.gender=String(p.gender).charAt(0).toLowerCase()==='f'?'f':'m';
+  if(p.birth_date&&!(q&&q.dob))Q.dob=String(p.birth_date).slice(0,10);
+  if(+p.height_cm>0&&!(q&&+q.height>0))Q.height=+p.height_cm;
+  if(+p.weight_kg>0&&!(q&&+q.weight>0))Q.weight=+p.weight_kg;
+  if(+p.activity>0&&!(q&&q.activity))Q.activity=String(+p.activity);
+  if(BODIES[p.body_type]&&!(q&&q.body))Q.body=p.body_type;
+  if(GOALS[p.goal]&&!(q&&q.goal))Q.goal=p.goal;
+  if(p.seasoning&&!(q&&q.seasoning))Q.seasoning=p.seasoning;
+  if(p.spice&&!(q&&q.spice))Q.spice=p.spice;
+  try{if(Q.dob){var a=ageFromDob(Q.dob);if(a)Q.age=a}}catch(e){}
+  if(!Q.age)Q.age=30;if(!(+Q.height>0))Q.height=170;if(!(+Q.weight>0))Q.weight=70;if(!Q.activity)Q.activity='1.375';
+  if(+d.days>0)Q.days=Math.min(31,Math.round(+d.days));
+  if(+d.mpd>0)Q.mpd=Math.min(6,Math.round(+d.mpd));
+  var m=d.macros;
+  if(m&&(+m.p>0||+m.c>0||+m.f>0)){var k=m.mode==='day'?1:Q.mpd;
+   Q.goal='custom';Q.customMode='g';Q.customG=[Math.round((+m.p||0)*k),Math.round((+m.c||0)*k),Math.round((+m.f||0)*k)];Q.total=Q.mpd;Q.kcalEdit=null}
+  else if(!q){Q.total=Math.max(Q.mpd,+Q.total||Q.mpd)}
+  Q.done1=1;
+  generate();
+  try{renderTargets()}catch(e){}
+  try{goStep(4)}catch(e){}
+  renderPlan();
+  var t=null;try{t=planTargets()}catch(e){}
+  var meals=(PLAN&&PLAN.meals)||[],filled=meals.filter(function(x){return x.comps&&x.comps.length}).length;
+  reply({ok:true,meals:meals.length,filled:filled,perMeal:t?{kcal:Math.round(t.kcal/Math.max(1,Q.mpd)),p:Math.round(t.p/Math.max(1,Q.mpd)),c:Math.round(t.c/Math.max(1,Q.mpd)),f:Math.round(t.f/Math.max(1,Q.mpd))}:null});
+ }catch(e){reply({ok:false,error:String(e&&e.message||e)})}
+});
+})();</script>
 </body>
 </html>
