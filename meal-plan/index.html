@@ -1903,33 +1903,81 @@ html.aa-on [id^="ultra-fast-widget-bubble"]{bottom:calc(20px + 66px)!important}
 
 <!-- AERA Concierge chat bubble ( Peter, 19th Oct 2026 ) -->
 <script id="aera-concierge" src="https://my.chatbees.io/widget.js" data-widget="48507863" async></script>
-<script id="aera-console-draft">/* Peter 21st Oct 2026 : New Order ( Kitchen Console ) · 💾 Save Draft keeps the Meal Plan being built on this device ;
-   it comes back the next time New Order is opened, until it is Discarded or the Plan is added to an Order. */
-(function(){if(!window.__AERA_CONSOLE)return;var K='kc.planDraft',done=false;
+<script id="aera-console-draft">/* Peter 21st Oct 2026 : New Order ( Kitchen Console ) · 💾 Save Draft saves the Meal Plan being built ONLINE, one Draft per
+   customer, so it opens on any device. 📂 Saved Drafts lists them : Open or Discard. Adding the Plan to an Order closes its Draft.
+   Stored in kc_docs coll 'plan_drafts' through the Console's own sign-in ( staff only ). */
+(function(){if(!window.__AERA_CONSOLE)return;var K='kc.planDraft',COLL='plan_drafts',D=document;
+var ST={list:null,open:false,busy:false,err:'',cur:'',loadedAt:0};
 var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function fmt(ms){var d=new Date(ms),n=d.getDate(),s=['th','st','nd','rd'],v=n%100,h=d.getHours(),m=d.getMinutes();
  return n+(s[(v-20)%10]||s[v]||s[0])+' '+MN[d.getMonth()]+' '+d.getFullYear()+', '+(h%12||12)+':'+String(m).padStart(2,'0')+' '+(h>=12?'PM':'AM')}
-function note(t){var e=document.getElementById('kcDraftNote');if(!e){e=document.createElement('div');e.id='kcDraftNote';e.style.cssText='position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:99999;background:#16479E;color:#FDB913;font:700 14px Montserrat,system-ui,sans-serif;padding:11px 18px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:opacity .3s';document.body.appendChild(e)}
- e.textContent=t;e.style.opacity='1';clearTimeout(note.t);note.t=setTimeout(function(){e.style.opacity='0'},2600)}
-function get(){try{return JSON.parse(localStorage.getItem(K)||'null')}catch(e){return null}}
-function has(){var d=get();return !!(d&&d.plan&&d.plan.meals)}
-window.kcSaveDraft=function(){try{if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return note('Nothing to save yet');
- localStorage.setItem(K,JSON.stringify({at:Date.now(),plan:PLAN,q:(typeof Q!=='undefined'?Q:null)}));note('💾 Draft Saved · '+fmt(Date.now()));paintBar()}catch(e){note('Could not save the Draft')}};
-window.kcDiscardDraft=function(){try{localStorage.removeItem(K)}catch(e){}note('Draft Discarded');paintBar()};
-function paintBar(){var t=document.getElementById('kcAddTop');if(!t)return;var b=document.getElementById('kcDraftBar'),d=get();
- if(!(d&&d.plan)){if(b)b.remove();return}
- if(!b){b=document.createElement('div');b.id='kcDraftBar';b.style.cssText='width:100%;font:600 12.5px Montserrat,system-ui,sans-serif;color:#16479E;margin:6px 0 0';t.parentNode.insertBefore(b,t.nextSibling)}
- var html='Draft Saved · '+fmt(d.at)+' <a href="#" onclick="kcDiscardDraft();return false" style="color:#B42318;margin-left:8px;text-decoration:underline">Discard Draft</a>';if(b.__h!==html){b.__h=html;b.innerHTML=html}}
-function addBtn(){['kcAddTop','kcAddBot'].forEach(function(id){var w=document.getElementById(id);if(!w||w.querySelector('.kcsave'))return;
- var b=document.createElement('button');b.type='button';b.className='kcsave';b.textContent='💾 Save Draft';b.onclick=function(e){e.preventDefault();window.kcSaveDraft()};
- b.style.cssText='background:#16479E!important;color:#FDB913!important;border-color:#16479E!important';
- var dl=w.querySelector('.kcdl');w.insertBefore(b,dl||w.lastChild)});paintBar()}
-var seen=0;function restore(){if(done)return;if(typeof PLAN==='undefined'||!PLAN||!document.getElementById('kcAddTop')||!(window.CATALOG&&CATALOG.length)){seen=0;return}if(++seen<3)return;done=true;var d=get();if(!(d&&d.plan&&d.plan.meals))return;
- try{if(d.q&&typeof Q!=='undefined')Object.assign(Q,d.q);PLAN=d.plan;try{renderTargets()}catch(e){}renderPlan();note('Draft from '+fmt(d.at)+' opened')}catch(e){}}
-/* adding the Plan to the Order finishes the Draft */
-window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(b&&/Add (Plan )?to Order/i.test(String(b.textContent||''))&&has()){try{localStorage.removeItem(K)}catch(x){}setTimeout(paintBar,50)}},true);
-var n=0,iv=setInterval(function(){addBtn();restore();if(done&&++n>40)clearInterval(iv)},400);
-new MutationObserver(function(){addBtn()}).observe(document.documentElement,{childList:true,subtree:true});
+function E(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function note(t){var e=D.getElementById('kcDraftNote');if(!e){e=D.createElement('div');e.id='kcDraftNote';e.style.cssText='position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:99999;background:#16479E;color:#FDB913;font:700 14px Montserrat,system-ui,sans-serif;padding:11px 18px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:opacity .3s;max-width:90%;text-align:center';D.body.appendChild(e)}
+ e.textContent=t;e.style.opacity='1';clearTimeout(note.t);note.t=setTimeout(function(){e.style.opacity='0'},3200)}
+function P(){try{return window.parent&&window.parent!==window?window.parent:null}catch(e){return null}}
+function sb(){var p=P();try{return p&&p.__KC_SB||null}catch(e){return null}}
+function me(){var p=P();try{return String(p&&p.__KC_EMAIL||'')}catch(e){return ''}}
+function cust(){var p=P();try{var n=p&&p.noState&&p.noState();return n?{name:String(n.name||'').trim(),email:String(n.email||'').trim().toLowerCase()}:{name:'',email:''}}catch(e){return{name:'',email:''}}}
+function slug(s){return String(s||'').toLowerCase().replace(/[^a-z0-9@._-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80)}
+function keyFor(c){return c.email?'e:'+slug(c.email):(c.name?'n:'+slug(c.name):'')}
+function meals(pl){try{return (pl.meals||[]).filter(function(m){return m.comps&&m.comps.length}).length}catch(e){return 0}}
+async function load(force){var s=sb();if(!s){ST.err='Sign in to the Console to see Saved Drafts';paint();return}
+ if(ST.busy||(!force&&ST.list&&Date.now()-ST.loadedAt<20000))return;ST.busy=true;
+ try{var r=await s.from('kc_docs').select('id,data,updated_at').eq('coll',COLL).order('updated_at',{ascending:false}).limit(200);if(r.error)throw r.error;
+  ST.list=(r.data||[]).filter(function(x){return x.data&&x.data.status==='open'&&x.data.plan});ST.err='';ST.loadedAt=Date.now()}
+ catch(e){ST.err='Could not read Saved Drafts : '+(e.message||e)}
+ ST.busy=false;paint()}
+async function put(id,data){var s=sb();if(!s)throw new Error('not signed in to the Console');
+ var r=await s.from('kc_docs').upsert({coll:COLL,id:id,data:data,updated_at:new Date().toISOString(),updated_by:me()||null},{onConflict:'coll,id'});if(r.error)throw r.error}
+window.kcSaveDraft=async function(){try{if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals||!meals(PLAN))return note('Add some food to the Meal Plan first');
+ var c=cust();var id=keyFor(c)||ST.cur||('t:'+Date.now().toString(36));
+ var data={status:'open',name:c.name||'',email:c.email||'',at:Date.now(),by:me(),meals:meals(PLAN),days:(typeof Q!=='undefined'&&+Q.days)||0,mpd:(typeof Q!=='undefined'&&+Q.mpd)||0,
+  plan:JSON.parse(JSON.stringify(PLAN)),q:(typeof Q!=='undefined'?JSON.parse(JSON.stringify(Q)):null)};
+ try{await put(id,data)}catch(e){try{localStorage.setItem(K,JSON.stringify({at:Date.now(),plan:PLAN,q:(typeof Q!=='undefined'?Q:null)}))}catch(x){}return note('Saved on this device only : '+(e.message||e))}
+ ST.cur=id;try{localStorage.removeItem(K)}catch(x){}
+ note('💾 Draft Saved'+(c.name?' for '+c.name:'')+' · '+fmt(data.at)+(c.name||c.email?'':' · pick the customer next time so it is easy to find'));load(true)}catch(e){note('Could not save the Draft')}};
+function openDraft(id){var d=(ST.list||[]).filter(function(x){return x.id===id})[0];if(!d)return;var x=d.data;
+ try{if(x.q&&typeof Q!=='undefined')Object.assign(Q,x.q);PLAN=x.plan;try{renderTargets()}catch(e){}renderPlan();ST.cur=id;ST.open=false;
+  var c=cust();var p=P();
+  if(!c.name&&!c.email&&(x.name||x.email)){try{var n=p.noState();if(n){n.name=x.name||'';n.email=x.email||'';if(typeof p.render==='function')p.render(true)}}catch(e){}}
+  note('📂 Draft opened'+(x.name?' · '+x.name:'')+' · saved '+fmt(x.at));paint()}catch(e){note('Could not open the Draft')}}
+async function closeDraft(id,status){var d=(ST.list||[]).filter(function(x){return x.id===id})[0];if(!d)return;
+ try{await put(id,Object.assign({},d.data,{status:status,closedAt:Date.now(),closedBy:me()}));if(ST.cur===id)ST.cur='';
+  if(status==='discarded')note('Draft Discarded'+(d.data.name?' · '+d.data.name:''));load(true)}catch(e){note('Could not update the Draft : '+(e.message||e))}}
+window.kcDiscardDraft=function(id){var d=(ST.list||[]).filter(function(x){return x.id===id})[0];
+ if(!confirm('Discard the Draft'+(d&&d.data.name?' for '+d.data.name:'')+'?'))return;closeDraft(id,'discarded')};
+window.kcOpenDraft=openDraft;
+window.kcToggleDrafts=function(){ST.open=!ST.open;if(ST.open)load(true);paint()};
+function mine(){var c=cust(),k=keyFor(c);if(!k||!ST.list)return null;return ST.list.filter(function(x){return x.id===k})[0]||null}
+function row(x){var d=x.data;var who=d.name||d.email||'No customer picked';
+ return '<div style="display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:9px 10px;border:1px solid #D6DEEC;border-radius:10px;background:#fff">'+
+  '<div style="flex:1 1 220px;min-width:0"><b style="color:#0B0B0B">'+E(who)+'</b>'+(d.name&&d.email?' <span style="color:#64748B">· '+E(d.email)+'</span>':'')+
+  '<br><span style="color:#475569">'+(d.meals||0)+' Meal'+(d.meals===1?'':'s')+(d.days?' · '+d.days+' Day'+(d.days==1?'':'s'):'')+' · Saved '+E(fmt(d.at))+(d.by?' by '+E(String(d.by).split('@')[0]):'')+'</span></div>'+
+  '<button type="button" onclick="kcOpenDraft(\''+E(x.id)+'\')" style="background:#16479E;color:#FDB913;border:0;border-radius:9px;padding:7px 14px;font:700 13px Montserrat,system-ui,sans-serif;cursor:pointer">Open</button>'+
+  '<button type="button" onclick="kcDiscardDraft(\''+E(x.id)+'\')" style="background:#fff;color:#B42318;border:1px solid #F1C4BF;border-radius:9px;padding:7px 12px;font:700 13px Montserrat,system-ui,sans-serif;cursor:pointer">Discard</button></div>'}
+function paint(){var t=D.getElementById('kcAddTop');if(!t)return;var b=D.getElementById('kcDraftBar');
+ if(!b){b=D.createElement('div');b.id='kcDraftBar';b.style.cssText='width:100%;font:600 13px Montserrat,system-ui,sans-serif;color:#16479E;margin:8px 0 0';t.parentNode.insertBefore(b,t.nextSibling)}
+ var n=(ST.list||[]).length,m=mine(),h='';
+ if(m&&ST.cur!==m.id)h+='<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:9px 12px;border-radius:10px;background:#FFF4CC;color:#0B0B0B;margin-bottom:6px">📂 <b>'+E(m.data.name||m.data.email)+'</b> has a Draft saved '+E(fmt(m.data.at))+' <a href="#" onclick="kcOpenDraft(\''+E(m.id)+'\');return false" style="color:#16479E;font-weight:800;text-decoration:underline">Open Draft</a></div>';
+ else if(ST.cur){var c=(ST.list||[]).filter(function(x){return x.id===ST.cur})[0];if(c)h+='<div style="margin-bottom:6px">Working on the Draft'+(c.data.name?' for <b>'+E(c.data.name)+'</b>':'')+' · saved '+E(fmt(c.data.at))+' · press 💾 Save Draft to update it</div>'}
+ if(ST.open){h+='<div style="padding:10px;border:1.5px solid #16479E;border-radius:12px;background:#F5F8FD;display:flex;flex-direction:column;gap:8px">'+
+   '<div style="display:flex;align-items:center"><b style="font-size:14px">📂 Saved Drafts</b><a href="#" onclick="kcToggleDrafts();return false" style="margin-left:auto;color:#16479E">Close</a></div>'+
+   (ST.err?'<div style="color:#B42318">'+E(ST.err)+'</div>':(!ST.list?'<div>Loading…</div>':(n?ST.list.map(row).join(''):'<div style="color:#475569">No Saved Drafts.</div>')))+'</div>'}
+ if(b.__h!==h){b.__h=h;b.innerHTML=h}
+ D.querySelectorAll('.kcdrafts').forEach(function(x){var tx='📂 Saved Drafts'+(n?' ( '+n+' )':'');if(x.textContent!==tx)x.textContent=tx})}
+function addBtn(){['kcAddTop','kcAddBot'].forEach(function(id){var w=D.getElementById(id);if(!w)return;var dl=w.querySelector('.kcdl');
+ if(!w.querySelector('.kcsave')){var b=D.createElement('button');b.type='button';b.className='kcsave';b.textContent='💾 Save Draft';b.onclick=function(e){e.preventDefault();window.kcSaveDraft()};
+  b.style.cssText='background:#16479E!important;color:#FDB913!important;border-color:#16479E!important';w.insertBefore(b,dl||w.lastChild)}
+ if(!w.querySelector('.kcdrafts')){var c=D.createElement('button');c.type='button';c.className='kcdrafts';c.textContent='📂 Saved Drafts';c.onclick=function(e){e.preventDefault();window.kcToggleDrafts();if(id==='kcAddBot')try{D.getElementById('kcAddTop').scrollIntoView({behavior:'smooth',block:'start'})}catch(x){}};
+  c.style.cssText='background:#FDB913!important;color:#0B0B0B!important;border-color:#FDB913!important';w.insertBefore(c,dl||w.lastChild)}});paint()}
+/* a Draft kept on this device by the earlier version goes online once, as "Earlier Draft" */
+var moved=false;async function moveLocal(){if(moved||!sb())return;moved=true;var d=null;try{d=JSON.parse(localStorage.getItem(K)||'null')}catch(e){}
+ if(!(d&&d.plan&&d.plan.meals))return;try{await put('t:'+Number(d.at||Date.now()).toString(36),{status:'open',name:'Earlier Draft ( this device )',email:'',at:d.at||Date.now(),by:me(),meals:meals(d.plan),days:(d.q&&+d.q.days)||0,mpd:(d.q&&+d.q.mpd)||0,plan:d.plan,q:d.q||null});localStorage.removeItem(K);load(true)}catch(e){moved=false}}
+/* adding the Plan to the Order closes its Draft */
+window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b||!/Add (Plan )?to Order/i.test(String(b.textContent||'')))return;
+ var id=ST.cur||(mine()&&mine().id);if(id)setTimeout(function(){closeDraft(id,'used')},300)},true);
+var lastKey='';setInterval(function(){addBtn();moveLocal();var k=keyFor(cust());if(k!==lastKey){lastKey=k;load(true)}else if(!ST.list)load()},1200);
+new MutationObserver(function(){addBtn()}).observe(D.documentElement,{childList:true,subtree:true});
 })();</script>
 <script id="aera-console-build">/* Peter 21st Oct 2026 : New Order ( Kitchen Console ) · build the whole Meal Plan in one go from the customer's
    saved Meal Preferences and / or Macros the kitchen presets ( per Meal or per Day ). The Console sends
