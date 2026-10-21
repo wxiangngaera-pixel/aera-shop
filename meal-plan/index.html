@@ -2007,6 +2007,8 @@ window.addEventListener('message',function(ev){var d=ev.data;if(ev.origin!==loca
   var m=d.macros;
   if(m&&(+m.p>0||+m.c>0||+m.f>0)){var k=m.mode==='day'?1:Q.mpd;
    Q.goal='custom';Q.customMode='g';Q.customG=[Math.round((+m.p||0)*k),Math.round((+m.c||0)*k),Math.round((+m.f||0)*k)];Q.total=Q.mpd;Q.kcalEdit=null}
+  else if(m&&+m.kcal>0){/* Calories only : the day's KCALs follow the Goal's macro split */var dk=Math.round(m.mode==='day'?+m.kcal:+m.kcal*Q.mpd);
+   if(Q.goal==='custom'&&Q.customMode==='g')Q.customMode='pct';Q.kcalEdit=dk;Q.total=Q.mpd}
   else if(!q){Q.total=Math.max(Q.mpd,+Q.total||Q.mpd)}
   Q.done1=1;
   generate();
