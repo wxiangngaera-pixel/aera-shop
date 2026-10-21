@@ -538,6 +538,8 @@ function rawOf(g,name,cat){
   return{g:g+VEG_ADD,rule:'',why:'Vegetable + 25 g'}}
  return{g:g,rule:'n',why:'no conversion for this yet'}}
 function snap25(g){return Math.max(0,Math.round((+g||0)/25)*25)}
+/* Peter 22nd Oct 2026 : each dish keeps its own Kitchen steps ( Sauces & Gravies go in 15 g ) */
+function kg(it,g){try{var rc=it&&it.code&&typeof BYCODE!=='undefined'?BYCODE[it.code]:null;if(rc&&rc.po)return clampG(rc,g)}catch(e){}return snap25(g)}
 /* What goes in the right-hand column. An item with no factor is NEVER shown snapped to
    the 25 g grid — a rounded number reads as a converted one, and this is exactly the
    case where nothing has been converted. It shows the weight as written and says so. */
@@ -1041,10 +1043,10 @@ $('#send').addEventListener('click',async function(){
  (PLAN.days||[]).forEach(function(d){(d.meals||[]).forEach(function(m){(m.items||[]).forEach(function(it){
   var r=rawOf(it.grams,it.food,it.category);
   var shown=r.rule==='q'?'no weight given':r.rule==='n'?((+r.g||0)+'g as written, needs weighing')
-   :(snap25(r.g)+'g raw');
+   :(kg(it,r.g)+'g raw');
   var cook=it.code?(it.recipe+' ['+it.code+']'):'NOT ON OUR MENU — customer sorts this';
   lines.push([d.day,m.meal,it.food,it.category,(+it.grams||0)+'g '+BASIS,shown,cook].join(' | '));
-  if(it.code)codes.push(it.code+' x'+(r.rule==='q'?'?':snap25(r.g))+'g');
+  if(it.code)codes.push(it.code+' x'+(r.rule==='q'?'?':kg(it,r.g))+'g');
   else offmenu.push(d.day+' '+m.meal+' '+it.food);
   if(r.rule)unmatched.push(d.day+' '+m.meal+' '+it.food+' ('+r.why+')')})})});
 /* The kitchen tells a coach's plan from a customer's own by a leading "Coach: ..." line.
