@@ -1994,7 +1994,7 @@ function liveRestore(){if(restored)return;if(typeof PLAN==='undefined'||!PLAN||!
 async function netSave(){if(!ST.cur||typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return;var s=sig();if(s===lastNet||Date.now()-netAt<15000)return;
  var d=(ST.list||[]).filter(function(x){return x.id===ST.cur})[0];if(!d)return;netAt=Date.now();
  try{await put(ST.cur,Object.assign({},d.data,{at:Date.now(),by:me(),meals:meals(PLAN),plan:JSON.parse(JSON.stringify(PLAN)),q:(typeof Q!=='undefined'?JSON.parse(JSON.stringify(Q)):d.data.q)}));lastNet=s;d.data.at=Date.now();d.data.plan=PLAN;paint()}catch(e){}}
-setInterval(function(){liveRestore();liveSave();netSave()},2000);
+setInterval(function(){liveRestore();/* never keep the empty start before the kept Plan is back */if(restored){liveSave();netSave()}},2000);
 var lastKey='';setInterval(function(){addBtn();moveLocal();var k=keyFor(cust());if(k!==lastKey){lastKey=k;load(true)}else if(!ST.list)load()},1200);
 new MutationObserver(function(){addBtn()}).observe(D.documentElement,{childList:true,subtree:true});
 })();</script>
