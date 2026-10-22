@@ -2135,6 +2135,21 @@ window.__cpSalt=sv;window.__cpSpice=pv;
 function paint(){var c=C()&&C().cur();if(!c)return;var a=sv(c),b=pv(c);[].forEach.call(D.querySelectorAll("#saltSeg button"),function(x){x.classList.toggle("on",x.getAttribute("data-s")===a)});[].forEach.call(D.querySelectorAll("#spiceSeg button"),function(x){x.classList.toggle("on",x.getAttribute("data-s")===b)})}
 D.addEventListener("click",function(e){var b=e.target&&e.target.closest&&e.target.closest("#saltSeg button,#spiceSeg button");if(!b)return;var c=C()&&C().cur();if(!c)return;if(b.closest("#saltSeg"))c.salt=b.getAttribute("data-s");else c.spice=b.getAttribute("data-s");try{C().save()}catch(x){}paint()});
 setInterval(paint,700);if(D.readyState==="loading")D.addEventListener("DOMContentLoaded",paint);else paint();})();</script>
+<script id="aera-coach-noverify">
+/* Peter 22nd Oct 2026 : no 6-digit email code. The Client email still gets the spelling and domain check,
+   and counts as confirmed as soon as it passes. The code box and Send code button are hidden. */
+(function(){if(window.__aeraNoVerify)return;window.__aeraNoVerify=1;var D=document;
+function norm(e){return String(e||'').trim().toLowerCase()}
+var RE=/^[a-z0-9._%+'-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/;
+var st=D.createElement('style');st.textContent='#cvBox #cvSend,#cvBox #cvCode,#cvBox #cvOk{display:none!important}';D.head.appendChild(st);
+function ok(){try{var a=window.__coach;if(!a||!a.cur)return;var c=a.cur();if(!c)return;var inp=D.getElementById('cemail');
+ var e=norm(inp?inp.value:c.email);if(!e||norm(c.email)!==e||norm(c.ev)===e||!RE.test(e))return;
+ if(D.querySelector('#cvBox #cvUse')||(inp&&inp.classList.contains('cv-bad')))return;
+ c.ev=e;c.evAt=new Date().toISOString();try{a.save()}catch(x){}
+ if(inp){try{inp.dispatchEvent(new Event('input',{bubbles:true}))}catch(x){}}}catch(x){}}
+setInterval(ok,500);D.addEventListener('input',function(){setTimeout(ok,700)},true);D.addEventListener('pointerdown',function(){ok()},true);
+})();
+</script>
 </body>
 </html>
 <script id="aera-coach-pack-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Packaging Method":"包装方式","MAP Bento Box":"MAP 便当盒","Vacuum Packed":"真空包装","Oxygen replaced with Nitrogen / CO₂ and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life. RM 1.80 per Meal.":"以氮气 / 二氧化碳取代氧气并封顶。食物不会被压扁。请冷藏，保质期 7 天。每餐 RM 1.80。","Same freshness, flatter pack. Takes far less Fridge space, compresses the Food slightly. RM 1.80 per Meal.":"同样新鲜，包装更扁平。更省冰箱空间，食物会被轻微压扁。每餐 RM 1.80。","Home-Sourced. Not cooked by AERA":"自备。非 AERA 烹调","Not Ours":"非我们的"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Protein - ([\d.]+) g$/,"蛋白 $1 克"],[/^Carbs - ([\d.]+) g$/,"碳水 $1 克"],[/^Fat - ([\d.]+) g$/,"脂肪 $1 克"],[/^MAP Bento Box (RM [\d.]+)$/,"MAP 便当盒 $1"],[/^Vacuum Packed (RM [\d.]+)$/,"真空包装 $1"])}catch(e){}</script>
