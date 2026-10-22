@@ -703,7 +703,7 @@ function mealAdjust(){
  var qq=0;ready(function(){add();new MutationObserver(function(ms){if(qq)return;var dm=D.getElementById('v2demo');if(ms.every(function(m){return (S&&S.contains(m.target))||(dm&&dm.contains(m.target))||m.target===dm||(m.addedNodes.length===1&&m.addedNodes[0].id==='v2demo')}))return;qq=setTimeout(function(){qq=0;add();if(S&&S.classList.contains('on'))paint()},80)}).observe(D.body,{childList:true,subtree:true})})}
 
 /* ---------- "How it Works" : a finger taps the real buttons, instead of pop-up text ---------- */
-function tapDemo(){
+function tapDemo(){if(window.__AERA_CONSOLE||/[?&]console=1/.test(location.search))return; /* Peter 22nd Oct 2026 : no How it Works tour inside the Kitchen Console ( it covered the screen and blocked the buttons ) */
  var DEMOS={
   home:[
    {sel:['#v2hero .ch.a'],t:['Build your own plan','定制您的餐单'],s:['Tap here. Answer 5 quick questions and we build your week.','点这里，回答 5 个简单问题，我们为您排好一周。']},
@@ -719,7 +719,7 @@ function tapDemo(){
    {sel:['#v2adj [data-run^="tuneMeal("]'],t:['Tune it','微调'],s:['Fit your calories, more protein, less carbs, less fat or a lower price.','贴合热量、更多蛋白质、更少碳水或脂肪、更低价格。'],wait:500},
    {sel:['#v2adj [data-run^="addComp("]'],t:['Add more food','加量'],s:['Add Protein, Carbs or Vegetables for RM 0.50.','加蛋白质、碳水或蔬菜，每份 RM 0.50。']},
    {sel:['#v2adj .ft .ok'],t:['Done','完成'],s:['Tap Done to go back to your plan.','点“完成”回到餐单。'],act:'click'},
-   {sel:['details.v2tune > summary'],t:['Change every meal at once','一次调整所有餐点'],s:['Tap here to tune the whole week together.','点这里，一次调整整周。']},
+   {sel:['details.v2tune > summary'],t:['Change every Meal at once','一次调整所有餐点'],s:['Tap here to tune the whole Week together.','点这里，一次调整整周。']},
    {sel:['.planacts [onclick*="savePlan"]'],t:['Save it','保存'],s:['Keeps the plan in your account for next time.','把餐单保存到您的账户。']},
    {sel:['#v2bar.on button','#stepbar .step[data-s="5"]'],t:['Order','下单'],s:['Happy with it? Tap Add To Cart.','满意了？点“加入购物车”。']}],
   plan5:[
