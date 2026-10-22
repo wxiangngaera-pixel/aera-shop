@@ -2,32 +2,47 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aeramealprep.net/meal-plan/</loc>
-    <lastmod>2026-10-21T16:46:13.920Z</lastmod>
+    <lastmod>2026-10-22T02:30:32.880Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/account/</loc>
-    <lastmod>2026-10-21T16:40:32.541Z</lastmod>
+    <loc>https://aeramealprep.net/fridge/</loc>
+    <lastmod>2026-10-22T01:35:36.725Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://aeramealprep.net/data/kitchen-list/</loc>
-    <lastmod>2026-10-21T16:26:23.773Z</lastmod>
+    <lastmod>2026-10-22T01:05:22.304Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/</loc>
+    <lastmod>2026-10-21T23:06:19.133Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/terms/</loc>
+    <lastmod>2026-10-21T21:08:21.874Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/merchandise/</loc>
+    <lastmod>2026-10-21T20:32:12.354Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/checkout/</loc>
+    <lastmod>2026-10-21T17:48:38.124Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/account/</loc>
+    <lastmod>2026-10-21T16:50:00.761Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://aeramealprep.net/bring-your-own-plan/</loc>
     <lastmod>2026-10-21T16:25:23.670Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/</loc>
-    <lastmod>2026-10-21T10:30:37.845Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/checkout/</loc>
-    <lastmod>2026-10-21T08:39:37.585Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -46,28 +61,13 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/merchandise/</loc>
-    <lastmod>2026-10-20T20:14:58.878Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
     <loc>https://aeramealprep.net/track/</loc>
     <lastmod>2026-10-20T19:16:08.894Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/fridge/</loc>
-    <lastmod>2026-10-20T18:15:39.945Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
     <loc>https://aeramealprep.net/referrer-signup/</loc>
     <lastmod>2026-10-20T16:41:54.696Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/terms/</loc>
-    <lastmod>2026-10-20T16:41:53.180Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
