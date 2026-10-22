@@ -490,7 +490,7 @@ try{Object.assign(window.AERA_I18N||{},{'Write the Plan straight into our Kitche
     </div>
    </div>
    <p class="hint" style="font-size:13.5px;color:var(--ink2);margin:0;flex:1;min-width:240px">Our Kitchen weighs Raw. Pick Cooked if that is how you write, and we convert every line ourselves. You will see both figures on each row.</p>
-  </div><div id="packRow" style="margin-top:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end"><div><label class="lb">Packaging Method</label><div class="seg" id="packSeg"><button type="button" data-p="bento" class="on">MAP Bento Box</button><button type="button" data-p="vacuum">Vacuum Packed</button></div></div><p class="hint" id="packHint" style="font-size:13.5px;color:var(--ink2);margin:0;flex:1;min-width:240px">Oxygen replaced with Nitrogen / CO₂ and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life. RM 1.80 per Meal.</p></div>
+  </div><div id="packRow" style="margin-top:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end"><div><label class="lb">Packaging Method</label><div class="seg" id="packSeg"><button type="button" data-p="bento" class="on">MAP Bento Box</button><button type="button" data-p="vacuum">Vacuum Packed</button></div></div><p class="hint" id="packHint" style="font-size:13.5px;color:var(--ink2);margin:0;flex:1;min-width:240px">Oxygen replaced with Nitrogen / CO₂ and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life. RM 1.80 per Meal.</p></div><div id="seasRow" style="margin-top:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end"><div><label class="lb">🧂 Salt Level</label><div class="seg" id="saltSeg"><button type="button" data-s="normal" class="on">Normal</button><button type="button" data-s="less_salt">Less Salt</button><button type="button" data-s="no_salt">No Salt</button></div></div><div><label class="lb">🌶️ Spice Level</label><div class="seg" id="spiceSeg"><button type="button" data-s="normal" class="on">Normal</button><button type="button" data-s="less_spicy">Less Spicy</button><button type="button" data-s="no_spice">No Spice</button></div></div><p class="hint" style="font-size:13.5px;color:var(--ink2);margin:0;flex:1;min-width:240px">Our Kitchen seasons every Meal of this Plan this way.</p></div>
  </div>
 
  <div class="card" data-section="days">
@@ -1231,7 +1231,8 @@ function draft(){
   days:nd,mpd:mpd,meals:meals,byop:1,src:'coach',dayNames:names,
   targets:{kcal:Math.round(tot.kcal/nd),p:Math.round(tot.p/nd),
            c:Math.round(tot.c/nd),f:Math.round(tot.f/nd)},
-  q:{days:nd,mpd:mpd,total:mpd,plan:'macros'}}}}
+  q:{days:nd,mpd:mpd,total:mpd,plan:'macros',seasoning:(window.__cpSalt?window.__cpSalt(c):'normal'),spice:(window.__cpSpice?window.__cpSpice(c):'normal')},
+  prefs:{seasoning:(window.__cpSalt?window.__cpSalt(c):'normal'),spice:(window.__cpSpice?window.__cpSpice(c):'normal')}}}}
 
 $('#doOpen').addEventListener('click',function(){
  var d=draft();if(!d)return say('bad','There are no AERA dishes in this plan yet.');
@@ -2127,6 +2128,13 @@ var q=0;function tick(){if(q)return;q=1;requestAnimationFrame(function(){q=0;fix
 addEventListener('scroll',tick,{passive:true});addEventListener('resize',tick);setInterval(fix,1500);
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fix);else fix()})();</script>
 <style id="aera-coach-onlymp">/* Peter ( 19th Oct 2026 ) : the Coach Plan App sends only the AERA Meal Prep App ; every other App Link is sent from the AERA Console */#cpaBtn{display:none!important}</style>
+<script id="aera-coach-seas">/* Peter 22nd Oct 2026 : Salt Level and Spice Level for each Client's Plan. Kept with the Client, and sent with the Plan ( to the Client and into the Order ), so the Kitchen seasons it that way. */
+(function(){var D=document;function C(){return window.__coach}
+function sv(c){return /^(less_salt|no_salt)$/.test(c&&c.salt||"")?c.salt:"normal"}function pv(c){return /^(less_spicy|no_spice)$/.test(c&&c.spice||"")?c.spice:"normal"}
+window.__cpSalt=sv;window.__cpSpice=pv;
+function paint(){var c=C()&&C().cur();if(!c)return;var a=sv(c),b=pv(c);[].forEach.call(D.querySelectorAll("#saltSeg button"),function(x){x.classList.toggle("on",x.getAttribute("data-s")===a)});[].forEach.call(D.querySelectorAll("#spiceSeg button"),function(x){x.classList.toggle("on",x.getAttribute("data-s")===b)})}
+D.addEventListener("click",function(e){var b=e.target&&e.target.closest&&e.target.closest("#saltSeg button,#spiceSeg button");if(!b)return;var c=C()&&C().cur();if(!c)return;if(b.closest("#saltSeg"))c.salt=b.getAttribute("data-s");else c.spice=b.getAttribute("data-s");try{C().save()}catch(x){}paint()});
+setInterval(paint,700);if(D.readyState==="loading")D.addEventListener("DOMContentLoaded",paint);else paint();})();</script>
 </body>
 </html>
 <script id="aera-coach-pack-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Packaging Method":"包装方式","MAP Bento Box":"MAP 便当盒","Vacuum Packed":"真空包装","Oxygen replaced with Nitrogen / CO₂ and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life. RM 1.80 per Meal.":"以氮气 / 二氧化碳取代氧气并封顶。食物不会被压扁。请冷藏，保质期 7 天。每餐 RM 1.80。","Same freshness, flatter pack. Takes far less Fridge space, compresses the Food slightly. RM 1.80 per Meal.":"同样新鲜，包装更扁平。更省冰箱空间，食物会被轻微压扁。每餐 RM 1.80。","Home-Sourced. Not cooked by AERA":"自备。非 AERA 烹调","Not Ours":"非我们的"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Protein - ([\d.]+) g$/,"蛋白 $1 克"],[/^Carbs - ([\d.]+) g$/,"碳水 $1 克"],[/^Fat - ([\d.]+) g$/,"脂肪 $1 克"],[/^MAP Bento Box (RM [\d.]+)$/,"MAP 便当盒 $1"],[/^Vacuum Packed (RM [\d.]+)$/,"真空包装 $1"])}catch(e){}</script>
