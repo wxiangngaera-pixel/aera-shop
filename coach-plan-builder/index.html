@@ -2136,17 +2136,35 @@ function paint(){var c=C()&&C().cur();if(!c)return;var a=sv(c),b=pv(c);[].forEac
 D.addEventListener("click",function(e){var b=e.target&&e.target.closest&&e.target.closest("#saltSeg button,#spiceSeg button");if(!b)return;var c=C()&&C().cur();if(!c)return;if(b.closest("#saltSeg"))c.salt=b.getAttribute("data-s");else c.spice=b.getAttribute("data-s");try{C().save()}catch(x){}paint()});
 setInterval(paint,700);if(D.readyState==="loading")D.addEventListener("DOMContentLoaded",paint);else paint();})();</script>
 <script id="aera-coach-noverify">
-/* Peter 22nd Oct 2026 : no 6-digit email code. The Client email still gets the spelling and domain check,
-   and counts as confirmed as soon as it passes. The code box and Send code button are hidden. */
+/* Peter 22nd Oct 2026 : no 6-digit email code. The Client email must belong to an AERA Account :
+   if it does, it is confirmed straight away ; if not, the Coach sees "Email not found" and cannot send. */
 (function(){if(window.__aeraNoVerify)return;window.__aeraNoVerify=1;var D=document;
+var SBU='https://swpprjvubgcdsojapaad.supabase.co',AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0';
+var NF='Email not found',NFT=' : no AERA Account uses this email. Check the spelling with your Client, or ask them to sign up at aeramealprep.net/account first.';
 function norm(e){return String(e||'').trim().toLowerCase()}
-var RE=/^[a-z0-9._%+'-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/;
-var st=D.createElement('style');st.textContent='#cvBox #cvSend,#cvBox #cvCode,#cvBox #cvOk{display:none!important}';D.head.appendChild(st);
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+var RE=/^[a-z0-9._%+'-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/,REG={};
+var st=D.createElement('style');st.textContent='#cvBox #cvSend,#cvBox #cvCode,#cvBox #cvOk{display:none!important}#nfBox{margin-top:8px;padding:9px 12px;border-radius:10px;background:#FEF3F2;border:1.5px solid #F04438;color:#B42318;font-size:13.5px;line-height:1.45}';D.head.appendChild(st);
+function tok(){try{var o=JSON.parse(localStorage.getItem('sb-swpprjvubgcdsojapaad-auth-token')||'null');if(o&&o.currentSession)o=o.currentSession;return (o&&o.access_token)||''}catch(e){return ''}}
+function look(e){var t=tok();if(!t)return;REG[e]='busy';
+ fetch(SBU+'/rest/v1/rpc/aera_email_registered',{method:'POST',headers:{apikey:AK,Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify({p_email:e})})
+ .then(function(r){return r.ok?r.json():null}).then(function(v){if(v===true||v===false)REG[e]=v;else delete REG[e];ok()}).catch(function(){delete REG[e]})}
+function nf(e){var b=D.getElementById('nfBox'),cv=D.getElementById('cvBox');
+ if(!e){if(b)b.remove();return}if(!cv)return;
+ if(!b){b=D.createElement('div');b.id='nfBox'}if(b.previousElementSibling!==cv)cv.insertAdjacentElement('afterend',b);
+ var h='<b>⚠️ '+NF+'</b>'+NFT.replace(' : ',' : <b>'+esc(e)+'</b> · ');if(b.__h!==h){b.__h=h;b.innerHTML=h}}
 function ok(){try{var a=window.__coach;if(!a||!a.cur)return;var c=a.cur();if(!c)return;var inp=D.getElementById('cemail');
- var e=norm(inp?inp.value:c.email);if(!e||norm(c.email)!==e||norm(c.ev)===e||!RE.test(e))return;
- if(D.querySelector('#cvBox #cvUse')||(inp&&inp.classList.contains('cv-bad')))return;
- c.ev=e;c.evAt=new Date().toISOString();try{a.save()}catch(x){}
- if(inp){try{inp.dispatchEvent(new Event('input',{bubbles:true}))}catch(x){}}}catch(x){}}
+ var e=norm(inp?inp.value:c.email);
+ if(!e||norm(c.email)!==e||!RE.test(e)||D.querySelector('#cvBox #cvUse')){nf('');return}
+ var r=REG[e];if(r===undefined){look(e);return}if(r==='busy')return;
+ if(r===false){nf(e);if(inp)inp.classList.add('cv-bad');if(norm(c.ev)===e){c.ev='';c.evAt='';try{a.save()}catch(x){}}return}
+ nf('');if(inp&&inp.classList.contains('cv-bad')&&norm(c.ev)!==e)return;
+ if(norm(c.ev)!==e){c.ev=e;c.evAt=new Date().toISOString();try{a.save()}catch(x){}if(inp){try{inp.dispatchEvent(new Event('input',{bubbles:true}))}catch(x){}}}}catch(x){}}
+/* the old "Confirm the email first" messages now say Email not found ( or that it is still being checked ) */
+function words(){try{var a=window.__coach,c=a&&a.cur&&a.cur(),e=c?norm(c.email):'',bad=REG[e]===false;
+ var m=D.querySelector('#csModal.on h3');if(m&&/Confirm the email first/i.test(m.textContent)){m.textContent=bad?NF:'Checking the Client email';var p=m.parentNode.querySelector('p');if(p)p.innerHTML=bad?'<b>'+esc(e)+'</b>'+NFT:'One moment, we are checking this email has an AERA Account. Tap Send again in a few seconds.'}
+ var g=D.querySelector('#msg .note.bad b');if(g&&/confirm the Client/i.test(g.textContent)){var n=g.parentNode;n.innerHTML=bad?'<b>'+NF+'</b>'+NFT:'<b>Checking the Client email</b> : tap Send again in a few seconds.'}}catch(x){}}
+new MutationObserver(words).observe(D.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
 setInterval(ok,500);D.addEventListener('input',function(){setTimeout(ok,700)},true);D.addEventListener('pointerdown',function(){ok()},true);
 })();
 </script>
