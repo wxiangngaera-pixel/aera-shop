@@ -2075,5 +2075,11 @@ window.addEventListener('message',function(ev){var d=ev.data;if(ev.origin!==loca
 });
 })();</script>
 <style id="aera-console-top">/* Peter 22nd Oct 2026 : New Order ( Console ) · Save Draft, Saved Drafts, Download Meal Plan and Add Plan to Order only at the bottom. The top keeps Raw / Cooked Weight, Salt and Spice. */html.aera-console #kcAddTop>button{display:none!important}</style>
+<script id="aera-console-tap">/* Peter 22nd Oct 2026 : New Order ( Console ) · Add Plan to Order works on the first tap. It sends the Plan the moment the button is pressed, and the click that follows is not sent again. */
+(function(){if(!window.__AERA_CONSOLE&&!/[?&]console=1/.test(location.search))return;var last=0;
+function btn(e){var b=e.target&&e.target.closest&&e.target.closest("button");return b&&/Add (Plan )?to (Cart|Order)/i.test(String(b.textContent||""))&&!b.disabled?b:null}
+window.addEventListener("pointerdown",function(e){if(e.button)return;if(!btn(e))return;e.preventDefault();last=Date.now();try{orderPlan()}catch(x){}},true);
+window.addEventListener("click",function(e){if(!btn(e))return;if(e.isTrusted&&Date.now()-last<1500){e.preventDefault();e.stopImmediatePropagation()}},true);
+})();</script>
 </body>
 </html>
