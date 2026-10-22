@@ -2009,6 +2009,29 @@ setInterval(seasBar,800);
 var lastKey='';setInterval(function(){addBtn();moveLocal();var k=keyFor(cust());if(k!==lastKey){lastKey=k;load(true)}else if(!ST.list)load()},1200);
 new MutationObserver(function(){addBtn()}).observe(D.documentElement,{childList:true,subtree:true});
 })();</script>
+<script id="aera-console-stick">/* Peter 22nd Oct 2026 : New Order ( Kitchen Console ) · the Day's totals follow you down the page.
+   The Console tells this page which part of it is on screen ( aera-kc-view ) ; once the Day heading and its
+   Protein / Carbs / Fat bars have scrolled away, a copy of them stays pinned at the top until the Day ends. */
+(function(){if(!window.__AERA_CONSOLE)return;var D=document,VT=0,bar=null,last='',q=0;
+function mk(){bar=D.createElement('div');bar.id='kcStick';
+ bar.style.cssText='position:absolute;z-index:60;display:none;background:#fff;box-shadow:0 8px 20px rgba(22,71,158,.18);border-bottom:3px solid #FDB913;border-radius:0 0 14px 14px;padding:10px 14px 6px;box-sizing:border-box;pointer-events:none';
+ D.body.appendChild(bar)}
+function inBar(n){return bar&&bar.contains(n)}
+function panel(){var sy=window.scrollY||0,ps=D.querySelectorAll('.dpanel');for(var i=0;i<ps.length;i++){var p=ps[i];if(inBar(p))continue;var r=p.getBoundingClientRect();if(r.height&&r.top+sy<=VT+40&&r.bottom+sy>VT)return p}return null}
+function upd(){q=0;if(!bar)mk();var p=VT>0?panel():null;if(!p){bar.style.display='none';return}
+ var mh=null,dt=null;for(var i=0;i<p.children.length;i++){var c=p.children[i];if(!mh&&c.classList.contains('mh'))mh=c;if(!dt&&c.classList.contains('dtot'))dt=c}
+ if(!mh||!dt){bar.style.display='none';return}
+ var sy=window.scrollY||0,pr=p.getBoundingClientRect(),dtB=dt.getBoundingClientRect().bottom+sy,pB=pr.bottom+sy;
+ if(VT<=dtB-8||VT>pB-140){bar.style.display='none';return}
+ var h='<div class="dpanel" style="margin:0;padding:0;border:0;box-shadow:none;background:transparent">'+mh.outerHTML+dt.outerHTML+'</div>';
+ if(h!==last){last=h;bar.innerHTML=h}
+ bar.style.top=VT+'px';bar.style.left=(pr.left+(window.scrollX||0))+'px';bar.style.width=pr.width+'px';bar.style.display='block'}
+function soon(){if(!q)q=requestAnimationFrame(upd)}
+window.addEventListener('message',function(e){if(e.origin!==location.origin||!e.data||e.data.type!=='aera-kc-view')return;VT=Math.max(0,+e.data.top||0);soon()});
+new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){if(!inBar(ms[i].target)){soon();return}}}).observe(D.documentElement,{childList:true,subtree:true,characterData:true});
+window.addEventListener('resize',soon);
+})();
+</script>
 <script id="aera-console-build">/* Peter 21st Oct 2026 : New Order ( Kitchen Console ) · build the whole Meal Plan in one go from the customer's
    saved Meal Preferences and / or Macros the kitchen presets ( per Meal or per Day ). The Console sends
    { type:'aera-kc-build', q, profile, macros:{mode,p,c,f}, days, mpd } ; this page answers 'aera-kc-built'. */
