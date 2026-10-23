@@ -2100,5 +2100,14 @@ new MutationObserver(function(){try{fix()}catch(e){}}).observe(D.documentElement
 try{fix()}catch(e){}
 })();
 </script>
+<script id="aera-plan-wb">/* Peter 23rd Oct 2026 : a Plan written in Cooked weights ( Cooked Weight typed on any item, or an uploaded Plan in Cooked ) is saved
+   with prefs.wb = "cooked", so the Kitchen's Order Card shows Raw Weight + Cooked Weight. Every other Plan stays Raw Weight. */
+(function(){if(window.__aeraWb)return;window.__aeraWb=1;
+function cooked(){try{if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return false;var b='';try{var x=JSON.parse(localStorage.getItem('aera.byop')||'null');b=(x&&x.basis)||''}catch(e){}
+ if(PLAN.byop&&String(b).toLowerCase()==='cooked')return true;
+ return PLAN.meals.some(function(m){return (m.comps||[]).some(function(cp){return +cp.ck>0})})}catch(e){return false}}
+function wrap(){var f=window.planPayload;if(typeof f!=='function'||f.__wb)return;var w=function(){var p=f.apply(this,arguments);try{if(p&&cooked()){p.prefs=p.prefs||{};p.prefs.wb='cooked'}}catch(e){}return p};w.__wb=1;window.planPayload=w}
+wrap();setInterval(wrap,1500)})();
+</script>
 </body>
 </html>
