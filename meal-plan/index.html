@@ -2081,5 +2081,24 @@ function btn(e){var b=e.target&&e.target.closest&&e.target.closest("button");ret
 window.addEventListener("pointerdown",function(e){if(e.button)return;var b=btn(e);if(!b)return;e.preventDefault();last=Date.now();try{b.click()}catch(x){}},true);
 window.addEventListener("click",function(e){if(!e.isTrusted||!btn(e))return;if(Date.now()-last<1500){e.preventDefault();e.stopImmediatePropagation()}},true);
 })();</script>
+<script id="aera-mp-nojump">
+/* Peter 23rd Oct 2026 : the Meal Plan jumped every time a Meal changed ( a customer saw it shake ). The plan redraws, and about
+   0.1 s later the v2 look is put back on : Per Portion one figure per line, + Protein / + Vegetable above the table, the Adjust button
+   and the Fine-Tune fold. For that moment every row was shorter, so the page jumped up and down. Now the same look is put on in the same
+   instant as the redraw, before the screen is drawn, so nothing moves. Only runs where the v2 look is on. */
+(function(){if(window.__aeraNoJump)return;window.__aeraNoJump=1;var D=document,ON=false;
+function zh(){return D.documentElement.getAttribute('data-lang')==='zh'}
+function idxOf(card){var b=card.querySelector('.tune [onclick^="tuneMeal("],.addrow [onclick^="addComp("]');var m=b&&/\((\d+)/.exec(b.getAttribute('onclick'));return m?+m[1]:null}
+function fix(){if(!ON){if(D.querySelector('.v2adjb,details.v2tune,#v2bar,.v2pp'))ON=true;else return}
+ var tds=D.querySelectorAll('#planCal .etbl td.mac');for(var i=0;i<tds.length;i++){var td=tds[i];if(td.querySelector('.v2pp'))continue;var t=td.textContent.trim();if(t.indexOf(' · ')<0)continue;
+  td.innerHTML='<span class="v2pp">'+t.split(' · ').map(function(x){return x.replace(/[<>&]/g,'')}).join('<br>')+'</span>'}
+ var cs=D.querySelectorAll('#s4 .mcard');for(var j=0;j<cs.length;j++){var card=cs[j];
+  var ar=card.querySelector('.mmain .addrow'),tw=card.querySelector('.mmain .tblwrap');if(ar&&tw){if(!ar.classList.contains('v2top'))ar.classList.add('v2top');if(ar.nextElementSibling!==tw)tw.parentNode.insertBefore(ar,tw)}
+  var mh=card.querySelector('.mh');if(mh&&!mh.querySelector('.v2adjb')){var k=idxOf(card);if(k!=null){var b=D.createElement('button');b.type='button';b.className='v2adjb';b.setAttribute('data-i',k);b.innerHTML='⚙︎ '+(zh()?'调整':'Adjust');mh.appendChild(b)}}}
+ var tu=D.querySelector('#planCal .tune');if(tu&&!tu.parentNode.classList.contains('v2tune')){var d=D.createElement('details');d.className='v2tune';d.innerHTML='<summary>'+(zh()?'微调整份餐单':'Fine-Tune the whole Plan')+'</summary>';tu.parentNode.insertBefore(d,tu);d.appendChild(tu)}}
+new MutationObserver(function(){try{fix()}catch(e){}}).observe(D.documentElement,{childList:true,subtree:true});
+try{fix()}catch(e){}
+})();
+</script>
 </body>
 </html>
