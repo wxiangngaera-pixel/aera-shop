@@ -3752,5 +3752,37 @@ D.addEventListener('change',function(e){if(e.target&&e.target.id==='crUseOn'){CR
 function tick(){wrap();paint();crWrap();crPaint()}
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',tick);else tick();
 setInterval(tick,1000);})();</script>
+<script id="aera-ful-guard">
+/* Peter 23rd Oct 2026 : a customer chose Delivery but the Order came in as Self Pick-Up.
+   1 ) The Pick-Up / Delivery choice is read again from the ticked option ( a phone that brings the page back can show
+       Delivery ticked while the page still thinks Self Pick-Up ).
+   2 ) Paying as Self Pick-Up asks once : "Self Pick-Up at our Kitchen ?" with Yes or Change to Delivery. */
+(function(){if(window.__aeraFulGuard)return;window.__aeraFulGuard=1;var D=document;
+function zh(){return D.documentElement.getAttribute('data-lang')==='zh'}
+function picked(){var r=D.querySelector('input[name="ful"]:checked');return r?r.value:''}
+function sync(){try{var v=picked();if(v&&typeof window.setFul==='function'&&window.FUL!==v)window.setFul(v)}catch(e){}}
+window.addEventListener('pageshow',function(){setTimeout(sync,0);setTimeout(sync,400)});
+if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',function(){setTimeout(sync,300)});else setTimeout(sync,300);
+var css=D.createElement('style');css.textContent='#aeraFulAsk{position:fixed;inset:0;z-index:2147483000;background:rgba(11,11,11,.55);display:flex;align-items:center;justify-content:center;padding:16px}'+
+ '#aeraFulAsk .bx{background:#fff;border-radius:18px;max-width:400px;width:100%;padding:22px 20px;box-shadow:0 20px 60px rgba(0,0,0,.3);font-family:inherit;color:#0B0B0B}'+
+ '#aeraFulAsk h3{margin:0 0 8px;font-size:19px;color:#16479E}#aeraFulAsk p{margin:0 0 16px;font-size:14.5px;line-height:1.5;color:#334155}'+
+ '#aeraFulAsk button{display:block;width:100%;border:0;border-radius:12px;padding:13px;font:inherit;font-weight:800;font-size:15px;cursor:pointer;margin-top:8px}'+
+ '#aeraFulAsk .y{background:#16479E;color:#FDB913}#aeraFulAsk .n{background:#FDB913;color:#0B0B0B}';
+(D.head||D.documentElement).appendChild(css);
+function ask(go){var o=D.getElementById('aeraFulAsk');if(o)o.remove();o=D.createElement('div');o.id='aeraFulAsk';
+ o.innerHTML='<div class="bx" role="dialog" aria-modal="true"><h3>'+(zh()?'到厨房自取？':'Self Pick-Up at Our Kitchen ?')+'</h3><p>'+
+  (zh()?'您选择了<b>自取</b>：No.35, Jalan Equine 9A, Taman Equine, 43300 Seri Kembangan。我们不会送货。':'You chose <b>Self Pick-Up</b> at No.35, Jalan Equine 9A, Taman Equine, 43300 Seri Kembangan. We will not deliver this Order.')+'</p>'+
+  '<button type="button" class="y" data-a="yes">'+(zh()?'是的，我会自取':'Yes, I Will Pick Up')+'</button><button type="button" class="n" data-a="del">'+(zh()?'改为送货':'Change to Delivery')+'</button></div>';
+ o.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button[data-a]');if(!b){if(e.target===o)o.remove();return}o.remove();
+  if(b.getAttribute('data-a')==='yes')return go();
+  try{var r=D.querySelector('input[name="ful"][value="delivery"]');if(r)r.checked=true;window.setFul('delivery')}catch(x){}
+  var box=D.getElementById('deliveryBox')||D.getElementById('optDelivery');if(box)box.scrollIntoView({behavior:'smooth',block:'center'})});
+ D.body.appendChild(o)}
+function wrap(){var p=window.pay;if(typeof p!=='function'||p.__fg)return;
+ var w=function(){var a=arguments,t=this;sync();if(window.FUL==='pickup'&&!w.__ok){return ask(function(){w.__ok=1;try{return p.apply(t,a)}finally{w.__ok=0}})}return p.apply(t,a)};
+ w.__fg=1;window.pay=w}
+wrap();setInterval(wrap,2000);
+})();
+</script>
 </body>
 </html>
