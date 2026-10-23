@@ -2110,5 +2110,28 @@ function basis(){try{if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return '';
 function wrap(){var f=window.planPayload;if(typeof f!=='function'||f.__wb)return;var w=function(){var p=f.apply(this,arguments);try{var b=basis();if(p&&b){p.prefs=p.prefs||{};p.prefs.wb=b}}catch(e){}return p};w.__wb=1;window.planPayload=w}
 wrap();setInterval(wrap,1500)})();
 </script>
+<script id="aera-min-hint">/* Peter 23rd Oct 2026 : a portion already at the Kitchen's smallest ( or largest ) size used to ignore − ( or + ) without a word,
+   so customers thought the page was broken ( Celine Hiew ). Now that button is greyed out, and tapping it says why and what to do instead. */
+(function(){if(window.__aeraMinHint)return;window.__aeraMinHint=1;var D=document,LAST=null;
+function zh(){var h=D.documentElement;return h.getAttribute('data-lang')==='zh'||/^zh/i.test(h.lang||'')}
+function lim(mi,ci){try{var cp=PLAN.meals[mi].comps[ci],r=BYCODE[cp.r];if(!r||!r.po)return null;return{g:+cp.g,min:+r.po[0],max:+r.po[1],n:r.n||''}}catch(e){return null}}
+function tip(el,t){var d=D.getElementById('aeraMinTip');if(!d){d=D.createElement('div');d.id='aeraMinTip';d.setAttribute('role','status');d.style.cssText='position:absolute;z-index:2147483000;max-width:290px;background:#16479E;color:#fff;font:600 13px/1.45 Montserrat,system-ui,sans-serif;padding:11px 13px;border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,.22);cursor:pointer';D.body.appendChild(d);d.onclick=function(){d.style.display='none'}}
+ d.innerHTML=t;d.style.display='block';var r=el&&el.getBoundingClientRect?el.getBoundingClientRect():{left:innerWidth/2,bottom:innerHeight/2};var vw=D.documentElement.clientWidth;
+ d.style.left=Math.max(8,Math.min(scrollX+r.left-140,scrollX+vw-300))+'px';d.style.top=(scrollY+r.bottom+8)+'px';clearTimeout(tip._t);tip._t=setTimeout(function(){d.style.display='none'},7000)}
+function say(L,dir){var n='<b style="color:#FDB913">'+String(L.n).replace(/[<>&]/g,'')+'</b>';
+ if(dir<0)return zh()?n+' 最小份量是 <b>'+L.min+' g</b>，厨房无法再减少。<br>想降低卡路里：换成较轻的菜、删除一项，或点 ⚙︎ 调整 → 符合我的卡路里。'
+  :n+' is already at its smallest portion, <b>'+L.min+' g</b>. Our Kitchen can’t go lower.<br>To cut Calories : swap it for a lighter dish, remove an item, or tap ⚙︎ Adjust → Fit My Calories.';
+ return zh()?n+' 最大份量是 <b>'+L.max+' g</b>。想要更多：点 ⚙︎ 调整 → + 蛋白质 / + 碳水 / + 蔬菜。'
+  :n+' is already at its largest portion, <b>'+L.max+' g</b>.<br>For more : tap ⚙︎ Adjust → + Protein, + Carb or + Vegetable.'}
+D.addEventListener('pointerdown',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(b)LAST=b},true);
+function wrap(){var f=window.bump;if(typeof f!=='function'||f.__lim)return;var w=function(mi,ci,dir){var L=lim(mi,ci);
+  if(L&&((dir<0&&L.g<=L.min)||(dir>0&&L.g>=L.max))){tip(LAST,say(L,dir));return}return f.apply(this,arguments)};w.__lim=1;window.bump=w}
+function paint(){[].forEach.call(D.querySelectorAll('button[onclick^="bump("]'),function(b){var m=/bump\((\d+),(\d+),(-?1)\)/.exec(b.getAttribute('onclick')||'');if(!m)return;var L=lim(+m[1],+m[2]);if(!L)return;
+  var off=(+m[3]<0&&L.g<=L.min)||(+m[3]>0&&L.g>=L.max);if(b.__off===off)return;b.__off=off;b.style.opacity=off?'.35':'';b.style.cursor=off?'help':'';b.setAttribute('aria-disabled',off?'true':'false');
+  b.title=off?(+m[3]<0?(zh()?'已是最小份量':'Smallest portion'):(zh()?'已是最大份量':'Largest portion')):''})}
+wrap();var q=0;new MutationObserver(function(){if(q)return;q=1;requestAnimationFrame(function(){q=0;try{wrap();paint()}catch(e){}})}).observe(D.documentElement,{childList:true,subtree:true});
+setInterval(function(){try{wrap();paint()}catch(e){}},1500);
+})();
+</script>
 </body>
 </html>
