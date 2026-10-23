@@ -3784,5 +3784,53 @@ function wrap(){var p=window.pay;if(typeof p!=='function'||p.__fg)return;
 wrap();setInterval(wrap,2000);
 })();
 </script>
+<script id="aera-pin-checkout">
+/* Peter 23rd Oct 2026 : Exact Pin at Checkout. After "Check Delivery Fee" the customer sees a small map and drags the pin onto their
+   building, then taps "My Building is Here". The Delivery Fee is priced to that pin, and the pin travels with the Order ( g, gp = 1 ),
+   so the kitchen's rider booking sends the Lalamove Rider straight there and keeps it as the address's Exact Pin. Optional. */
+(function(){if(window.__aeraPinCo)return;window.__aeraPinCo=1;var D=document,PIN=null,BASE=null,MAP=null,MK=null,LAY=null,SAT=false,LASTG=null;
+function zh(){return D.documentElement.getAttribute('data-lang')==='zh'}
+function T(en,z){return zh()?z:en}
+function km(a,b){var r=Math.PI/180,x=Math.sin((b.lat-a.lat)*r/2),y=Math.sin((b.lng-a.lng)*r/2);return 2*6371*Math.asin(Math.sqrt(x*x+Math.cos(a.lat*r)*Math.cos(b.lat*r)*y*y))}
+function akey(){try{return String(addrFull()||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}catch(e){return ''}}
+function leaflet(cb){if(window.L&&L.map)return cb();if(!D.getElementById('aeraLfCss')){var l=D.createElement('link');l.id='aeraLfCss';l.rel='stylesheet';l.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';D.head.appendChild(l)}
+ var s=D.getElementById('aeraLfJs');if(!s){s=D.createElement('script');s.id='aeraLfJs';s.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';D.head.appendChild(s)}s.addEventListener('load',function(){cb()})}
+var css=D.createElement('style');css.textContent='#aeraPinBox{margin:10px 0 4px;padding:12px;border:1.5px solid #16479E;border-radius:14px;background:#F5F8FD}'+
+ '#aeraPinBox h4{margin:0 0 4px;font-size:15px;color:#16479E}#aeraPinBox p{margin:0 0 8px;font-size:13px;line-height:1.45;color:#475569}'+
+ '#aeraPinMap{height:240px;border-radius:10px;overflow:hidden;border:1px solid #CBD5E1}'+
+ '#aeraPinBox .r{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}#aeraPinBox button{border:0;border-radius:10px;padding:11px 14px;font:inherit;font-weight:800;font-size:14px;cursor:pointer}'+
+ '#aeraPinBox .ok{background:#16479E;color:#FDB913;flex:1 1 180px}#aeraPinBox .sv{background:#fff;color:#16479E;border:1.5px solid #16479E}'+
+ '#aeraPinBox .st{margin-top:8px;font-size:13px;font-weight:700}#aeraPinBox .st.g{color:#15803D}#aeraPinBox .st.b{color:#B42318}';
+D.head.appendChild(css);
+function tiles(){if(!MAP)return;if(LAY)MAP.removeLayer(LAY);LAY=SAT?L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Esri'}):L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'});LAY.addTo(MAP)}
+function stat(t,c){var s=D.querySelector('#aeraPinBox .st');if(s){s.className='st '+(c||'');s.innerHTML=t}}
+function far(){if(!MK||!BASE)return false;var p=MK.getLatLng();return km(BASE,{lat:p.lat,lng:p.lng})>1.5}
+function build(box){box.innerHTML='<h4>📍 '+T('Pin Your Exact Building','标出您的确切位置')+'</h4><p>'+T('Drag the pin onto your building’s entrance or lobby, so the Rider comes straight to you.','把图钉拖到您大楼的入口或大堂，骑手就能直接找到您。')+'</p>'+
+ '<div id="aeraPinMap"></div><div class="r"><button type="button" class="ok" data-p="ok">✓ '+T('My Building is Here','我的大楼在这里')+'</button><button type="button" class="sv" data-p="sat">'+T('Satellite','卫星图')+'</button></div><div class="st"></div>';
+ box.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button[data-p]');if(!b)return;
+  if(b.getAttribute('data-p')==='sat'){SAT=!SAT;b.textContent=SAT?T('Map','地图'):T('Satellite','卫星图');tiles();return}
+  if(far())return stat(T('That spot is far from the address you typed. Check the address, or move the pin closer.','这个位置离您填写的地址太远。请检查地址，或把图钉移近一点。'),'b');
+  var p=MK.getLatLng();PIN={lat:+p.lat.toFixed(6),lng:+p.lng.toFixed(6),k:akey()};
+  try{GEO.lat=PIN.lat;GEO.lng=PIN.lng;GEO.km=Math.round(hav(KITCHEN,GEO)*ROAD_FACTOR*10)/10;GEO.pinned=1;LASTG=GEO;refee()}catch(x){}
+  stat('✓ '+T('Pinned. The Delivery Fee is for this exact spot.','已标定。运费按这个位置计算。'),'g')})}
+function show(){var fm=D.getElementById('feeMsg'),box=D.getElementById('aeraPinBox');
+ var ok=false;try{ok=isDel()&&GEO&&GEO.lat!=null&&GEO.km!=null&&GEO.km<=MAX_KM}catch(e){}
+ if(!ok||!fm){if(box)box.style.display='none';return}
+ if(GEO!==LASTG){LASTG=GEO;var keep=PIN&&PIN.k===akey()&&GEO.pinned;if(!keep){PIN=null;BASE={lat:+GEO.lat,lng:+GEO.lng}}if(MK){MK.setLatLng([GEO.lat,GEO.lng]);MAP.setView([GEO.lat,GEO.lng],18);stat('')}}
+ if(PIN&&PIN.k!==akey()){PIN=null;stat('')}
+ if(!box){box=D.createElement('div');box.id='aeraPinBox';fm.insertAdjacentElement('afterend',box);build(box)}
+ if(box.previousElementSibling!==fm)fm.insertAdjacentElement('afterend',box);
+ box.style.display='';
+ if(!MAP){var el=D.getElementById('aeraPinMap');if(!el||el.__busy)return;el.__busy=1;leaflet(function(){if(MAP)return;MAP=L.map(el,{zoomControl:true,attributionControl:true}).setView([GEO.lat,GEO.lng],18);tiles();
+  MK=L.marker([GEO.lat,GEO.lng],{draggable:true,autoPan:true}).addTo(MAP);
+  MK.on('dragend',function(){if(PIN){PIN=null}stat(far()?T('That spot is far from the address you typed.','这个位置离您填写的地址太远。'):T('Tap “My Building is Here” to use this spot.','点击“我的大楼在这里”使用这个位置。'),far()?'b':'')});
+  MAP.on('click',function(e){MK.setLatLng(e.latlng);MK.fire('dragend')});setTimeout(function(){MAP.invalidateSize()},200)})}
+ else{try{MAP.invalidateSize()}catch(e){}}}
+/* the pin goes with the Order : gp = 1 tells the kitchen it was confirmed by the customer */
+function wrap(){var c=window.compactOrder;if(typeof c!=='function'||c.__pin)return;var w=function(o){var r=c.apply(this,arguments);
+ try{if(PIN&&o&&o.fulfil==='delivery'&&o.geo&&Math.abs(o.geo.lat-PIN.lat)<1e-5&&Math.abs(o.geo.lng-PIN.lng)<1e-5&&PIN.k===akey()){var f=JSON.parse(window.__orderFull||'null');if(f&&f.n===o.orderNo){f.gp=1;window.__orderFull=JSON.stringify(f)}}}catch(e){}return r};w.__pin=1;window.compactOrder=w}
+wrap();setInterval(function(){wrap();try{show()}catch(e){}},700);
+})();
+</script>
 </body>
 </html>
