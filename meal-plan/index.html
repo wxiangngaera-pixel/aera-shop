@@ -1948,6 +1948,7 @@ window.kcDiscardDraft=function(id){var d=(ST.list||[]).filter(function(x){return
  if(!confirm('Discard the Draft'+(d&&d.data.name?' for '+d.data.name:'')+'?'))return;closeDraft(id,'discarded')};
 window.kcOpenDraft=openDraft;
 window.kcToggleDrafts=function(){ST.open=!ST.open;if(ST.open)load(true);paint()};
+window.kcOpenDrafts=function(){ST.open=true;load(true);paint()};
 function mine(){var c=cust(),k=keyFor(c);if(!k||!ST.list)return null;return ST.list.filter(function(x){return x.id===k})[0]||null}
 function row(x){var d=x.data;var who=d.name||d.email||'No customer picked';
  return '<div style="display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:9px 10px;border:1px solid #D6DEEC;border-radius:10px;background:#fff">'+
@@ -1968,7 +1969,7 @@ function paint(){var t=D.getElementById('kcAddTop');if(!t)return;var b=D.getElem
 function addBtn(){['kcAddTop','kcAddBot'].forEach(function(id){var w=D.getElementById(id);if(!w)return;var dl=w.querySelector('.kcdl');
  if(!w.querySelector('.kcsave')){var b=D.createElement('button');b.type='button';b.className='kcsave';b.textContent='💾 Save Draft';b.onclick=function(e){e.preventDefault();window.kcSaveDraft()};
   b.style.cssText='background:#16479E!important;color:#FDB913!important;border-color:#16479E!important';w.insertBefore(b,dl||w.lastChild)}
- if(!w.querySelector('.kcdrafts')){var c=D.createElement('button');c.type='button';c.className='kcdrafts';c.textContent='📂 Saved Drafts';c.onclick=function(e){e.preventDefault();window.kcToggleDrafts();if(id==='kcAddBot')try{D.getElementById('kcAddTop').scrollIntoView({behavior:'smooth',block:'start'})}catch(x){}};
+ if(!w.querySelector('.kcdrafts')){var c=D.createElement('button');c.type='button';c.className='kcdrafts';c.textContent='📂 Saved Drafts';c.onclick=function(e){e.preventDefault();e.stopPropagation();/* Peter 24th Oct 2026 : always opens ( a second tap no longer closes it again ), then shows the list */if(Date.now()-(window.__kcDrT||0)<700)return;window.__kcDrT=Date.now();window.kcOpenDrafts();setTimeout(function(){try{(D.getElementById('kcDraftBar')||D.getElementById('kcAddTop')).scrollIntoView({behavior:'auto',block:'center'})}catch(x){}},80)};
   c.style.cssText='background:#FDB913!important;color:#0B0B0B!important;border-color:#FDB913!important';w.insertBefore(c,dl||w.lastChild)}});paint()}
 /* a Draft kept on this device by the earlier version goes online once, as "Earlier Draft" */
 var moved=false;async function moveLocal(){if(moved||!sb())return;moved=true;var d=null;try{d=JSON.parse(localStorage.getItem(K)||'null')}catch(e){}
