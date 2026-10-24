@@ -3832,5 +3832,43 @@ function wrap(){var c=window.compactOrder;if(typeof c!=='function'||c.__pin)retu
 wrap();setInterval(function(){wrap();try{show()}catch(e){}},700);
 })();
 </script>
+<script id="aera-await-checkout">/* Peter 24th Oct 2026 : Pay Now for an Order the Kitchen made for this customer ( My Account -> /checkout/?awaiting=<id> ).
+   The server re-reads the Order and stashes it ( aera_pay_awaiting ), then the usual Billplz payment runs. Their own Cart is kept
+   aside and put back after paying, so nothing they had in it is lost. */
+(function(){if(window.__aeraAwaitCo)return;window.__aeraAwaitCo=1;var D=document,Q=new URLSearchParams(location.search),AID=Q.get('awaiting'),SNAPK='aera.kcpay.snap';
+var SBU='https://swpprjvubgcdsojapaad.supabase.co';
+function zh(){return D.documentElement.getAttribute('data-lang')==='zh'}
+function T(e,z){return zh()?z:e}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+function tok(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var s=JSON.parse(localStorage.getItem(k)||'null');if(s&&s.access_token)return s.access_token}}}catch(e){}return ''}
+function show(h){try{bpShow(h)}catch(e){alert(String(h).replace(/<[^>]+>/g,' '))}}
+var BTN='display:inline-block;margin-top:12px;padding:12px 18px;border-radius:12px;background:#16479E;color:#FDB913;font-weight:800;text-decoration:none';
+/* put their own Cart back once the payment page has been dealt with */
+(function(){var s=null;try{s=JSON.parse(localStorage.getItem(SNAPK)||'null')}catch(e){}if(!s)return;
+ if(Date.now()-(+s.at||0)>3*3600e3){try{localStorage.removeItem(SNAPK)}catch(e){}return}if(!s.sent)return;
+ var n=0,t=setInterval(function(){n++;var p=null;try{p=localStorage.getItem('aera.pendingOrder')}catch(e){}
+  var gone=!p||p.indexOf(s.no)<0;if(!gone&&n<240)return;clearInterval(t);if(!gone)return;
+  try{if(s.cart!=null)localStorage.setItem('aera.cart',s.cart);if(s.plan)localStorage.setItem('aera.plan',s.plan);CART=JSON.parse(s.cart||'{}');save();renderCart();if(typeof render==='function')render()}catch(e){}
+  try{localStorage.removeItem(SNAPK)}catch(e){}},500)})();
+if(!AID||Q.get('billplz[id]'))return;
+async function go(){show('<h2>'+T('Preparing your payment…','正在准备付款…')+'</h2><p style="color:var(--ink2)">'+T('One moment.','请稍候。')+'</p>');
+ var t0=Date.now();while(!(window.PAY&&PAY.flowUrl)&&Date.now()-t0<15000)await sleep(300);
+ if(!(window.PAY&&PAY.flowUrl))return show('<h2>'+T('Payment is not available right now','暂时无法付款')+'</h2><p>'+T('Please try again in a moment, or WhatsApp us.','请稍后再试，或用 WhatsApp 联系我们。')+'</p>');
+ var tk=tok();if(!tk)return show('<h2>'+T('Please sign in first','请先登录')+'</h2><p>'+T('Sign in to My Account with the email we have for your Order, then tap Pay Now again.','请用您订单上的电邮登录「我的账户」，然后再点「立即付款」。')+'</p><a href="/account/?from=pay" style="'+BTN+'">'+T('Go to My Account','前往我的账户')+'</a>');
+ var j=null;try{var r=await fetch(SBU+'/rest/v1/rpc/aera_pay_awaiting',{method:'POST',headers:{apikey:ORD_ANON,Authorization:'Bearer '+tk,'Content-Type':'application/json'},body:JSON.stringify({p_id:AID})});j=await r.json();if(r.status===401||r.status===403)j={ok:false,error:'sign_in'}}catch(e){j=null}
+ if(!j||!j.ok){var er=j&&j.error;
+  var txt=er==='already_paid'||er==='not_awaiting'?T('This Order is already paid, or no longer waiting for payment. Thank you!','此订单已付款或无需付款。谢谢！')
+   :er==='not_found'?T('We could not find this Order under the email you are signed in with. Please sign in with the email on your Order, or WhatsApp us.','在您登录的电邮下找不到此订单。请用订单上的电邮登录，或用 WhatsApp 联系我们。')
+   :er==='sign_in'?T('Please sign in to My Account first.','请先登录我的账户。')
+   :T('Could not start payment. Please try again, or WhatsApp us.','无法开始付款。请重试，或用 WhatsApp 联系我们。');
+  return show('<h2>'+T('Pay Now','立即付款')+'</h2><p>'+txt+'</p><a href="/account/" style="'+BTN+'">'+T('Back to My Account','返回我的账户')+'</a>')}
+ try{localStorage.setItem(SNAPK,JSON.stringify({no:j.orderNo,at:Date.now(),sent:1,cart:localStorage.getItem('aera.cart'),plan:localStorage.getItem('aera.plan')}))}catch(e){}
+ show('<h2>'+T('Opening secure payment…','正在打开安全付款…')+'</h2><p style="color:var(--ink2)">'+T('Order','订单')+' <b>'+esc(j.orderNo)+'</b> · RM '+(+j.total).toFixed(2)+'</p>');
+ try{payBillplz({orderNo:j.orderNo},'AERA Order '+j.orderNo,+j.total,String(j.name||''),String(j.email||''),String(j.phone||''))}catch(e){}
+ setTimeout(function(){show('<h2>'+T('Could not open the payment','无法打开付款')+'</h2><p>'+T('Please try again, or WhatsApp us.','请重试，或用 WhatsApp 联系我们。')+'</p><a href="'+esc(location.pathname+'?awaiting='+encodeURIComponent(AID))+'" style="'+BTN+'">'+T('Try Again','重试')+'</a>')},45000)}
+if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',function(){setTimeout(go,300)});else setTimeout(go,300);
+})();
+</script>
 </body>
 </html>
