@@ -2177,5 +2177,15 @@ function add(){var w=D.getElementById('kcAddBot');if(!w)return;var b=w.querySele
  var t=ck?'\u21C4 Switch All to Raw Weight':'\u21C4 Switch All to Cooked Weight';if(b.textContent!==t)b.textContent=t}
 setInterval(add,800);new MutationObserver(function(){try{add()}catch(e){}}).observe(D.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['class']})})();
 </script>
+<script id="aera-console-load">/* Peter 24th Oct 2026 : Edit Order shows the Order's Meal Plan in the MAP Bento Boxes ( the Console hands its meals in ), ready to change and add again */
+(function(){if(!window.__AERA_CONSOLE)return;
+window.kcPlanEmpty=function(){try{return !(PLAN&&PLAN.meals&&PLAN.meals.some(function(m){return m.comps&&m.comps.length}))}catch(e){return true}};
+window.kcLoadMeals=function(meals,pid){try{if(!(window.CATALOG&&CATALOG.length))return false;var per={},ms=[],days=0,mpd=0;
+ (meals||[]).forEach(function(m){var cs=(m.comps||[]).filter(function(c){return c&&BYCODE[c.r]}).map(function(c){var o={r:c.r,g:+c.g||0};if(+c.ck>0){o.ck=Math.round(+c.ck);o.wb='c'}else if(m.wbx)o.wb='r';return o});if(!cs.length)return;var d=Math.max(1,+m.day||1);per[d]=(per[d]||0)+1;ms.push({day:d,slot:per[d],comps:cs})});
+ if(!ms.length)return false;Object.keys(per).forEach(function(k){days=Math.max(days,+k);mpd=Math.max(mpd,per[k])});
+ if(typeof Q!=='undefined'){Q.days=days;Q.mpd=mpd}
+ PLAN={id:pid||('PL-'+Date.now().toString(36).toUpperCase()),days:days,mpd:mpd,meals:ms};try{var tt=planTargets();if(tt)PLAN.targets=tt}catch(e){}try{renderTargets()}catch(e){}renderPlan();try{if(window.kcLiveSave)window.kcLiveSave()}catch(e){}return true}catch(e){return false}};
+})();
+</script>
 </body>
 </html>
