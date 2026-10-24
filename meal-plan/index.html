@@ -2169,5 +2169,13 @@ function wrap(){var f=window.planPayload;if(typeof f!=='function'||f.__ck)return
  for(var k in f)try{w[k]=f[k]}catch(x){}w.__ck=1;window.planPayload=w}
 setInterval(wrap,700);wrap()})();
 </script>
+<script id="aera-console-wtbtn">/* Peter 24th Oct 2026 : one button beside Add Plan to Order switches the whole Meal Plan between Raw Weight and Cooked Weight ( each item can still be flipped on its own by tapping its label ) */
+(function(){if(!window.__AERA_CONSOLE)return;var D=document;
+function add(){var w=D.getElementById('kcAddBot');if(!w)return;var b=w.querySelector('.kcwtsw');var ck=D.documentElement.classList.contains('kc-ck');
+ if(!b){b=D.createElement('button');b.type='button';b.className='kcwtsw';b.style.cssText='background:#fff!important;color:#16479E!important;border:2px solid #16479E!important;font-weight:800';
+  b.onclick=function(e){e.preventDefault();e.stopPropagation();var on=!D.documentElement.classList.contains('kc-ck');try{window.kcWt(on)}catch(x){}add();try{if(window.kcLiveSave)window.kcLiveSave()}catch(x){}};w.insertBefore(b,w.firstChild)}
+ var t=ck?'\u21C4 Switch All to Raw Weight':'\u21C4 Switch All to Cooked Weight';if(b.textContent!==t)b.textContent=t}
+setInterval(add,800);new MutationObserver(function(){try{add()}catch(e){}}).observe(D.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['class']})})();
+</script>
 </body>
 </html>
