@@ -673,7 +673,11 @@ function load(){try{var d=JSON.parse(localStorage.getItem(KEY)||'null');
  if(!ST.clients.length)ST.clients=[blank('Client 1')];
  if(typeof ST.coach!=='string')ST.coach='';
  if(!ST.sel||!byId(ST.sel))ST.sel=ST.clients[0].id}
-function save(){try{if(window.__coachAcct)window.__coachAcct.push(ST)}catch(e){}try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){
+/* Peter 24th Oct 2026 : every Client's Plan keeps the Date and Time it was last changed ( shown on its tab, with when it was Sent ) */
+var __SIG={};function __sigOf(x){try{return JSON.stringify([x.name,x.email,x.phone,x.basis,x.pack,x.salt,x.spice,x.days])}catch(e){return ''}}
+function __sigInit(){(ST.clients||[]).forEach(function(x){if(x&&x.id&&__SIG[x.id]===undefined)__SIG[x.id]=__sigOf(x)})}
+function __when(t){var d=new Date(+t||t);if(isNaN(d))return '';var n=d.getDate(),v=n%100,sf=(v>10&&v<14)?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th'),hh=d.getHours(),mi=d.getMinutes();return n+sf+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+' '+d.getFullYear()+', '+(hh%12||12)+':'+String(mi).padStart(2,'0')+' '+(hh>=12?'PM':'AM')}
+function save(){try{(ST.clients||[]).forEach(function(x){if(!x||!x.id)return;var s=__sigOf(x);if(__SIG[x.id]===undefined){__SIG[x.id]=s;if(!x._at)x._at=Date.now();return}if(__SIG[x.id]!==s){__SIG[x.id]=s;x._at=Date.now()}})}catch(e){}try{if(window.__coachAcct)window.__coachAcct.push(ST)}catch(e){}try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){
  say('bad','<b>This browser will not let us save.</b> Your work is still on screen, but it will '+
   'be lost if you close the tab — copy the sheet before you do.')}}
 function blank(n){return{id:uid(),name:n,email:'',phone:'',basis:'raw',
@@ -695,9 +699,9 @@ function day(){var c=cur();if(DAY>=c.days.length)DAY=c.days.length-1;if(DAY<0)DA
 /* ---- painting ---- */
 function paint(){
  var c=cur();packPaint(c);
- $('#clientTabs').innerHTML=ST.clients.map(function(x){
+ try{__sigInit()}catch(e){}$('#clientTabs').innerHTML=ST.clients.map(function(x){
   return '<button class="tab'+(x.id===c.id?' on':'')+'" type="button" data-c="'+x.id+'">'+
-   esc(x.name||'Unnamed')+'<small>'+boxCount(x)+' Meal'+(boxCount(x)===1?'':'s')+
+   esc(x.name||'Unnamed')+'<small>'+boxCount(x)+' Meal'+(boxCount(x)===1?'':'s')+(x._at?' · Saved '+__when(x._at):'')+(x.sentAt?' · Sent '+__when(Date.parse(x.sentAt)):'')+
    '</small></button>'}).join('')+
   '<button class="tab" type="button" data-new="1">+ New Client</button>'+
   (ST.clients.length>1?'<button class="x" type="button" data-del="1" aria-label="Remove this client">&times;</button>':'');
