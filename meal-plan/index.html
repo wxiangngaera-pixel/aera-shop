@@ -1924,14 +1924,15 @@ function keyFor(c){return c.email?'e:'+slug(c.email):(c.name?'n:'+slug(c.name):'
 function meals(pl){try{return (pl.meals||[]).filter(function(m){return m.comps&&m.comps.length}).length}catch(e){return 0}}
 async function load(force){var s=sb();if(!s){ST.err='Sign in to the Console to see Saved Drafts';paint();return}
  if(ST.busy||(!force&&ST.list&&Date.now()-ST.loadedAt<20000))return;ST.busy=true;
- try{var r=await s.from('kc_docs').select('id,data,updated_at').eq('coll',COLL).order('updated_at',{ascending:false}).limit(200);if(r.error)throw r.error;
+ try{try{var rc=await s.rpc('kc_coach_drafts');ST.coach=(rc&&!rc.error&&Array.isArray(rc.data))?rc.data:[]}catch(x){ST.coach=ST.coach||[]}
+  var r=await s.from('kc_docs').select('id,data,updated_at').eq('coll',COLL).order('updated_at',{ascending:false}).limit(200);if(r.error)throw r.error;
   ST.list=(r.data||[]).filter(function(x){return x.data&&x.data.status==='open'&&x.data.plan});ST.err='';ST.loadedAt=Date.now()}
  catch(e){ST.err='Could not read Saved Drafts : '+(e.message||e)}
  ST.busy=false;paint()}
 async function put(id,data){var s=sb();if(!s)throw new Error('not signed in to the Console');
  var r=await s.from('kc_docs').upsert({coll:COLL,id:id,data:data,updated_at:new Date().toISOString(),updated_by:me()||null},{onConflict:'coll,id'});if(r.error)throw r.error}
 window.kcSaveDraft=async function(){try{if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals||!meals(PLAN))return note('Add some food to the Meal Plan first');
- var c=cust();var id=keyFor(c)||ST.cur||('t:'+Date.now().toString(36));
+ var c=cust();var id=ST.cur||newId();
  var data={status:'open',name:c.name||'',email:c.email||'',at:Date.now(),by:me(),meals:meals(PLAN),days:(typeof Q!=='undefined'&&+Q.days)||0,mpd:(typeof Q!=='undefined'&&+Q.mpd)||0,
   plan:JSON.parse(JSON.stringify(PLAN)),q:(typeof Q!=='undefined'?JSON.parse(JSON.stringify(Q)):null)};
  try{await put(id,data)}catch(e){try{localStorage.setItem(K,JSON.stringify({at:Date.now(),plan:PLAN,q:(typeof Q!=='undefined'?Q:null)}))}catch(x){}return note('Saved on this device only : '+(e.message||e))}
@@ -1948,23 +1949,39 @@ async function closeDraft(id,status){var d=(ST.list||[]).filter(function(x){retu
 window.kcDiscardDraft=function(id){var d=(ST.list||[]).filter(function(x){return x.id===id})[0];
  if(!confirm('Discard the Draft'+(d&&d.data.name?' for '+d.data.name:'')+'?'))return;closeDraft(id,'discarded')};
 window.kcOpenDraft=openDraft;
+/* Peter 24th Oct 2026 : Coach Plans ( AERA Coach Plan App ) show here too, newest first, and open into this Meal Plan ( it then saves itself as a Kitchen Draft ) */
+function coachRows(){var L=ST.coach||[];if(!L.length)return '';return '<div style="margin-top:6px;font-weight:800;color:#16479E">🧑‍🏫 Coach Plans</div>'+L.map(function(x,i){var c=x.client||{};var at=+c.at||Date.parse(x.storeAt)||0;var nb=0;(c.days||[]).forEach(function(d){(d.meals||[]).forEach(function(m){if((m.items||[]).some(function(it){return it&&it.code&&typeof BYCODE!=='undefined'&&BYCODE[it.code]}))nb++})});
+ return '<div style="display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:9px 10px;border:1px solid #D6DEEC;border-radius:10px;background:#FFFBEB">'+
+  '<div style="flex:1 1 220px;min-width:0"><b style="color:#0B0B0B">'+E(c.name||c.email||'Client')+'</b>'+(c.name&&c.email?' <span style="color:#64748B">· '+E(c.email)+'</span>':'')+
+  '<br><span style="color:#475569">Coach '+E(String(x.coachName||x.coachEmail||'').trim())+' · '+nb+' Meal'+(nb===1?'':'s')+(at?' · Saved '+E(fmt(at)):'')+(c.sentAt?' · Sent '+E(fmt(Date.parse(c.sentAt))):'')+(c.basis==='cooked'?' · Cooked Weight':'')+'</span></div>'+
+  '<button type="button" onclick="kcOpenCoach('+i+')" style="background:#16479E;color:#FDB913;border:0;border-radius:9px;padding:7px 14px;font:700 13px Montserrat,system-ui,sans-serif;cursor:pointer">Open</button></div>'}).join('')}
+window.kcOpenCoach=function(i){var x=(ST.coach||[])[i];if(!x)return;var c=x.client||{};try{var ms=[],dayN=0,mpd=0;(c.days||[]).forEach(function(d){var pend=[];(d.meals||[]).forEach(function(m){var cs=[];(m.items||[]).forEach(function(it){var r=BYCODE[it&&it.code];if(!r)return;var wb=(it.wb==='raw'||it.wb==='cooked')?it.wb:(c.basis==='cooked'?'cooked':'raw');var g=+it.g||0;
+   if(wb==='cooked'){var rw=null;try{rw=rawFromCooked(r,g)}catch(e){}if(rw==null||!(rw>0))rw=g;cs.push({r:it.code,g:clampG(r,rw),ck:Math.round(g),wb:'c'})}else cs.push({r:it.code,g:clampG(r,g),wb:'r'})});if(cs.length)pend.push(cs)});
+  if(!pend.length)return;dayN++;if(pend.length>mpd)mpd=pend.length;pend.forEach(function(cs,k){ms.push({day:dayN,slot:k+1,comps:cs})})});
+ if(!ms.length)return note('This Coach Plan has no AERA Dishes yet');
+ if(typeof Q!=='undefined'){Q.days=Math.max(1,dayN);Q.mpd=Math.max(1,mpd);if(c.salt)Q.seasoning=c.salt;if(c.spice)Q.spice=c.spice}
+ PLAN={id:'PL-'+Date.now().toString(36).toUpperCase(),days:Math.max(1,dayN),mpd:Math.max(1,mpd),meals:ms,src:'coach',byop:1,q:(typeof Q!=='undefined'?JSON.parse(JSON.stringify(Q)):{})};
+ try{var tt=planTargets();if(tt)PLAN.targets=tt}catch(e){}try{renderTargets()}catch(e){}renderPlan();ST.cur='';ST.open=false;lastSig='';lastNet='';liveSave();
+ var cu=cust(),p=P();if(!cu.name&&!cu.email&&(c.name||c.email)){try{var nn=p.noState();if(nn){nn.name=c.name||'';nn.email=String(c.email||'').toLowerCase();lastSig='';liveSave();if(typeof p.render==='function')p.render(true)}}catch(e){}}
+ note('\uD83D\uDCC2 Coach Plan opened · '+(c.name||'')+' · it saves itself in Saved Drafts');paint()}catch(e){note('Could not open the Coach Plan')}};
 window.kcToggleDrafts=function(){ST.open=!ST.open;if(ST.open)load(true);paint()};
 window.kcOpenDrafts=function(){ST.open=true;load(true);paint()};
-function mine(){var c=cust(),k=keyFor(c);if(!k||!ST.list)return null;return ST.list.filter(function(x){return x.id===k})[0]||null}
+function mine(){var c=cust();if(!ST.list||(!c.email&&!c.name))return null;var em=String(c.email||'').toLowerCase(),nm=String(c.name||'').toLowerCase();var L=ST.list.filter(function(x){if(x.id===ST.cur)return false;var d=x.data||{};return em?String(d.email||'').toLowerCase()===em:String(d.name||'').toLowerCase()===nm});L.sort(function(a,b){return (+b.data.at||0)-(+a.data.at||0)});return L[0]||null}
+function newId(){return 'd:'+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
 function row(x){var d=x.data;var who=d.name||d.email||'No customer picked';
  return '<div style="display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:9px 10px;border:1px solid #D6DEEC;border-radius:10px;background:#fff">'+
   '<div style="flex:1 1 220px;min-width:0"><b style="color:#0B0B0B">'+E(who)+'</b>'+(d.name&&d.email?' <span style="color:#64748B">· '+E(d.email)+'</span>':'')+
-  '<br><span style="color:#475569">'+(d.meals||0)+' Meal'+(d.meals===1?'':'s')+(d.days?' · '+d.days+' Day'+(d.days==1?'':'s'):'')+' · Saved '+E(fmt(d.at))+(d.by?' by '+E(String(d.by).split('@')[0]):'')+'</span></div>'+
+  '<br><span style="color:#475569">'+(d.meals||0)+' Meal'+(d.meals===1?'':'s')+(d.days?' · '+d.days+' Day'+(d.days==1?'':'s'):'')+' · Saved '+E(fmt(d.at))+(d.by?' by '+E(String(d.by).split('@')[0]):'')+(d.addedAt?' · <b style="color:#05603A">✓ Added to an Order '+E(fmt(d.addedAt))+'</b>':'')+'</span></div>'+
   '<button type="button" onclick="kcOpenDraft(\''+E(x.id)+'\')" style="background:#16479E;color:#FDB913;border:0;border-radius:9px;padding:7px 14px;font:700 13px Montserrat,system-ui,sans-serif;cursor:pointer">Open</button>'+
   '<button type="button" onclick="kcDiscardDraft(\''+E(x.id)+'\')" style="background:#fff;color:#B42318;border:1px solid #F1C4BF;border-radius:9px;padding:7px 12px;font:700 13px Montserrat,system-ui,sans-serif;cursor:pointer">Discard</button></div>'}
 function paint(){var t=D.getElementById('kcAddTop');if(!t)return;var b=D.getElementById('kcDraftBar');
  if(!b){b=D.createElement('div');b.id='kcDraftBar';b.style.cssText='width:100%;font:600 13px Montserrat,system-ui,sans-serif;color:#16479E;margin:8px 0 0';t.parentNode.insertBefore(b,t.nextSibling)}
- var n=(ST.list||[]).length,m=mine(),h='';
+ var n=(ST.list||[]).length+((ST.coach||[]).length),m=mine(),h='';
  if(m&&ST.cur!==m.id)h+='<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:9px 12px;border-radius:10px;background:#FFF4CC;color:#0B0B0B;margin-bottom:6px">📂 <b>'+E(m.data.name||m.data.email)+'</b> has a Draft saved '+E(fmt(m.data.at))+' <a href="#" onclick="kcOpenDraft(\''+E(m.id)+'\');return false" style="color:#16479E;font-weight:800;text-decoration:underline">Open Draft</a></div>';
  else if(ST.cur){var c=(ST.list||[]).filter(function(x){return x.id===ST.cur})[0];if(c)h+='<div style="margin-bottom:6px">Working on the Draft'+(c.data.name?' for <b>'+E(c.data.name)+'</b>':'')+' · saved '+E(fmt(c.data.at))+' · saves itself as you edit</div>'}
  if(ST.open){h+='<div style="padding:10px;border:1.5px solid #16479E;border-radius:12px;background:#F5F8FD;display:flex;flex-direction:column;gap:8px">'+
    '<div style="display:flex;align-items:center"><b style="font-size:14px">📂 Saved Drafts</b><a href="#" onclick="kcToggleDrafts();return false" style="margin-left:auto;color:#16479E">Close</a></div>'+
-   (ST.err?'<div style="color:#B42318">'+E(ST.err)+'</div>':(!ST.list?'<div>Loading…</div>':(n?ST.list.map(row).join(''):'<div style="color:#475569">No Saved Drafts.</div>')))+'</div>'}
+   (ST.err?'<div style="color:#B42318">'+E(ST.err)+'</div>':(!ST.list?'<div>Loading…</div>':((ST.list.length?ST.list.map(row).join(''):'<div style="color:#475569">No Saved Drafts.</div>')+coachRows())))+'</div>'}
  if(b.__h!==h){b.__h=h;b.innerHTML=h}
  D.querySelectorAll('.kcdrafts').forEach(function(x){var tx='📂 Saved Drafts'+(n?' ( '+n+' )':'');if(x.textContent!==tx)x.textContent=tx})}
 function addBtn(){['kcAddTop','kcAddBot'].forEach(function(id){var w=D.getElementById(id);if(!w)return;var dl=w.querySelector('.kcdl');
@@ -1977,7 +1994,9 @@ var moved=false;async function moveLocal(){if(moved||!sb())return;moved=true;var
  if(!(d&&d.plan&&d.plan.meals))return;try{await put('t:'+Number(d.at||Date.now()).toString(36),{status:'open',name:'Earlier Draft ( this device )',email:'',at:d.at||Date.now(),by:me(),meals:meals(d.plan),days:(d.q&&+d.q.days)||0,mpd:(d.q&&+d.q.mpd)||0,plan:d.plan,q:d.q||null});localStorage.removeItem(K);load(true)}catch(e){moved=false}}
 /* adding the Plan to the Order closes its Draft */
 window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b||!/Add (Plan )?to Order/i.test(String(b.textContent||'')))return;
- var id=ST.cur||(mine()&&mine().id);liveClear();if(id)setTimeout(function(){closeDraft(id,'used')},300)},true);
+ liveClear();setTimeout(function(){added()},300)},true);
+/* Peter 24th Oct 2026 : a Plan added to an Order stays in Saved Drafts, marked with when it was added */
+async function added(){try{if(!ST.cur)await autoSave(true);var id=ST.cur;var d=(ST.list||[]).filter(function(x){return x.id===id})[0];if(!d)return;var nd=Object.assign({},d.data,{status:'open',addedAt:Date.now(),addedN:(+d.data.addedN||0)+1,at:Date.now(),meals:meals(PLAN),plan:JSON.parse(JSON.stringify(PLAN))});await put(id,nd);d.data=nd;lastNet=sig();paint();load(true)}catch(e){}}
 /* Peter 22nd Oct 2026 : nothing typed into the Meal Plan is lost when the Console redraws New Order ( which reloads this page ).
    Every change is kept in this browser tab and comes back by itself; a Saved Draft that is open also saves itself online. */
 var LK='kc.mpLive',lastSig='',lastNet='',netAt=0;
@@ -1993,10 +2012,14 @@ function liveRestore(){if(restored)return;if(typeof PLAN==='undefined'||!PLAN||!
  if(d.key&&d.key!==keyFor(cust()))return;
  try{if(d.q&&typeof Q!=='undefined')Object.assign(Q,d.q);PLAN=d.plan;try{if(!(PLAN.targets&&+PLAN.targets.kcal>0)){var tt=planTargets();if(tt)PLAN.targets=tt}}catch(e){}
   try{renderTargets()}catch(e){}renderPlan();ST.cur=d.cur||ST.cur;lastSig=sig();note('↩︎ Your Meal Plan is back, as you left it');paint()}catch(e){}}
-async function netSave(){if(!ST.cur||typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return;var s=sig();if(s===lastNet||Date.now()-netAt<15000)return;
+async function netSave(){if(!ST.cur||typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return;var s=sig();if(s===lastNet||Date.now()-netAt<4000)return;
  var d=(ST.list||[]).filter(function(x){return x.id===ST.cur})[0];if(!d)return;netAt=Date.now();
- try{await put(ST.cur,Object.assign({},d.data,{at:Date.now(),by:me(),meals:meals(PLAN),plan:JSON.parse(JSON.stringify(PLAN)),q:(typeof Q!=='undefined'?JSON.parse(JSON.stringify(Q)):d.data.q)}));lastNet=s;d.data.at=Date.now();d.data.plan=PLAN;paint()}catch(e){}}
-setInterval(function(){liveRestore();/* never keep the empty start before the kept Plan is back */if(restored){liveSave();netSave()}},2000);
+ try{var _cu=cust();await put(ST.cur,Object.assign({},d.data,{name:_cu.name||d.data.name||'',email:_cu.email||d.data.email||'',at:Date.now(),by:me(),meals:meals(PLAN),plan:JSON.parse(JSON.stringify(PLAN)),q:(typeof Q!=='undefined'?JSON.parse(JSON.stringify(Q)):d.data.q)}));lastNet=s;d.data.at=Date.now();d.data.plan=PLAN;paint()}catch(e){}}
+setInterval(function(){liveRestore();/* never keep the empty start before the kept Plan is back */if(restored){liveSave();if(ST.cur)netSave();else autoSave()}},2000);
+/* Peter 24th Oct 2026 : every new Plan saves itself into Saved Drafts as soon as it has food in it */
+var AUTO=0;async function autoSave(force){if(ST.cur||AUTO)return;if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals||!meals(PLAN))return;if(!sb())return;AUTO=1;
+ try{var c=cust(),id=newId(),data={status:'open',name:c.name||'',email:c.email||'',at:Date.now(),by:me(),meals:meals(PLAN),days:(typeof Q!=='undefined'&&+Q.days)||0,mpd:(typeof Q!=='undefined'&&+Q.mpd)||0,plan:JSON.parse(JSON.stringify(PLAN)),q:(typeof Q!=='undefined'?JSON.parse(JSON.stringify(Q)):null),auto:1};
+  await put(id,data);ST.cur=id;ST.list=[{id:id,data:data,updated_at:new Date().toISOString()}].concat(ST.list||[]);lastNet=sig();note('💾 Saved in Saved Drafts'+(c.name?' · '+c.name:''));paint()}catch(e){}finally{AUTO=0}}
 
 /* Peter 22nd Oct 2026 : Salt Level and Spice Level for this Meal Plan, right under the buttons. They travel with the Plan into the Order ( each box ) and the Kitchen Docket. */
 var SALTS=[['normal','Normal Salt'],['less_salt','Less Salt'],['no_salt','No Salt']],SPICES=[['normal','Normal Spice'],['less_spicy','Less Spicy'],['no_spice','No Spice']];
