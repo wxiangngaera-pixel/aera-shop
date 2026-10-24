@@ -595,7 +595,8 @@ var PACK_PER_BOX=1.80, EXTRA_COMP=0.50;
 function boxExtras(items){var p=0,v=0;
  items.forEach(function(it){var r=BYCODE[it.code];if(!r)return;
   if(r.cat==='p')p++;else if(r.cat==='v')v++});
- return Math.max(0,p-1)+Math.max(0,v-1)}
+ var o=0;items.forEach(function(it){var r=BYCODE[it.code];if(r&&r.po&&rawOf(it).g>r.po[1])o++});
+ return Math.max(0,p-1)+Math.max(0,v-1)+o}
 /* A box is food plus a bento plus a compartment for each extra protein or vegetable. It is
    worked out once, here, and both the breakdown line and the total are read off it — so the
    numbers on screen can never drift apart from each other. */
@@ -616,8 +617,9 @@ function mfootHtml(items){
   '<span class="pk">'+(packOf()==='vacuum'?'Vacuum Packed ':'MAP Bento Box ')+rm(c.pack)+'</span>'+
   (c.extras?'<span class="pk">'+c.extras+' Extra Packaging '+rm(c.extraCost)+'</span>':'')+
   '<b>'+rm(c.total)+'</b></div>'}
-function clampG(r,g){var st=r.po[2]||25;g=Math.round((+g||0)/st)*st;
- return Math.max(r.po[0],Math.min(r.po[1],g))}
+function clampG(r,g,ov){var st=r.po[2]||25;g=Math.round((+g||0)/st)*st;
+ /* Peter 24th Oct 2026 : above the Maximum Serving is allowed ( up to twice it ) for + RM 0.50 Packaging on that item */
+ return Math.max(r.po[0],Math.min(ov?r.po[1]*2:r.po[1],g))}
 /* Toast is counted, not weighed: a slice is 10 g, so 40 g is four slices. Coaches think in
    slices, and a weight box that only says "40 g" makes them do the division themselves. */
 function unitOf(r){return (r&&r.sq&&r.sq<=10&&/toast|bread/i.test(r.name||''))
@@ -654,7 +656,7 @@ function conv(r,g,b){
  return{g:g,why:'No cooked rule yet, we weigh it',ok:false}}
 /* What the kitchen would actually weigh: converted, then held inside that dish's portion range. */
 function rawOf(it){var r=BYCODE[it.code];if(!r)return{g:+it.g||0,why:'',ok:true,own:true};
- var entered=+it.g||0,c=conv(r,entered,bOf(it)),g=clampG(r,c.g);
+ var entered=+it.g||0,c=conv(r,entered,bOf(it)),g=clampG(r,c.g,1);
  /* The figure on the right is what the kitchen weighs, and it is often not the number the
     coach typed — we cook in 25 g steps between a smallest and a largest portion. Saying
     "as you entered it" beside a number they did not enter is the sort of small lie that
