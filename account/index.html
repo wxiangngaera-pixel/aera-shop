@@ -3793,5 +3793,38 @@ function clr(){try{if(navigator.serviceWorker&&navigator.serviceWorker.getRegist
 clr();D.addEventListener('visibilitychange',function(){if(!D.hidden){clr();setTimeout(function(){run().catch(function(){})},1500)}});setTimeout(function(){run().catch(function(){})},20000);
 })();
 </script>
+<script id="aera-await-account">/* Peter 24th Oct 2026 : Orders the AERA Kitchen made for this customer that are waiting for payment ( "Customer Pays in My Account"
+   in the Kitchen Console ). Shown at the top of My Account with what is in them and a Pay Now button ( Billplz, like the website ). */
+(function(){if(window.__aeraAwaitAc)return;window.__aeraAwaitAc=1;var D=document,ROWS=null,LAST=0,BUSY=0,UID='';
+function zh(){return D.documentElement.getAttribute('data-lang')==='zh'}
+function T(e,z){return zh()?z:e}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function day(s){var d=new Date(String(s)+'T00:00:00');if(isNaN(d))return esc(s||'');var n=d.getDate();
+ if(zh())return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+n+'日';
+ var x=(n%10===1&&n!==11)?'st':(n%10===2&&n!==12)?'nd':(n%10===3&&n!==13)?'rd':'th';return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+', '+n+x+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+' '+d.getFullYear()}
+function slot(s){var m=/^(\d{1,2}):(\d{2})\s*-\s*(\d{1,2}):(\d{2})$/.exec(String(s||''));if(!m)return esc(s||'');function f(h,mi){h=+h;var ap=h>=12?'PM':'AM';var hh=h%12||12;return hh+':'+mi+' '+ap}return f(m[1],m[2])+' - '+f(m[3],m[4])}
+async function load(force){if(BUSY)return;var u=(typeof USER!=='undefined'&&USER)?USER:null;if(!u||typeof sb==='undefined'||!sb){if(ROWS){ROWS=null;paint()}return}
+ if(UID!==u.id){UID=u.id;ROWS=null;LAST=0}if(!force&&Date.now()-LAST<30000)return;BUSY=1;LAST=Date.now();
+ try{var r=await sb.rpc('aera_my_awaiting');if(!r.error)ROWS=Array.isArray(r.data)?r.data:[]}catch(e){}finally{BUSY=0}paint()}
+function card(o){var L=(o.lines||[]).map(function(l){return '<div style="display:flex;justify-content:space-between;gap:10px;padding:3px 0"><span>'+esc(l.n)+'</span><b style="white-space:nowrap">× '+(+l.q||1)+'</b></div>'}).join('');
+ var where=o.type==='pickup'?T('Self Pick-Up at Our Kitchen','自取'):(o.address?esc(o.address):T('Delivery','送餐'));
+ return '<div style="border:1.5px solid #E5E7EB;border-radius:14px;padding:14px;margin-top:10px;background:#fff">'+
+  '<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline"><b style="color:#16479E;font-size:15px">'+esc(o.no)+'</b><span style="color:#475569;font-size:13px">'+day(o.date)+(o.slot?' · '+slot(o.slot):'')+'</span></div>'+
+  '<div style="color:#475569;font-size:13px;margin-top:2px">'+where+'</div>'+
+  (L?'<div style="margin-top:10px;font-size:14px;border-top:1px dashed #E5E7EB;padding-top:8px">'+L+'</div>':'')+
+  '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px"><div style="font-size:13px;color:#475569">'+T('Total','合计')+'<br><b style="font-size:22px;color:#1F2430">RM '+(+o.total||0).toFixed(2)+'</b></div>'+
+  '<a href="/checkout/?awaiting='+encodeURIComponent(o.id)+'" style="display:inline-block;padding:13px 22px;border-radius:12px;background:#16479E;color:#FDB913;font-weight:800;text-decoration:none;font-size:15px">'+T('Pay Now','立即付款')+' · RM '+(+o.total||0).toFixed(2)+'</a></div></div>'}
+function paint(){var host=D.getElementById('welcomeBack'),box=D.getElementById('aeraAwait');
+ if(!host||!host.parentNode||!ROWS||!ROWS.length){if(box)box.remove();return}
+ if(!box||box.previousElementSibling!==host){if(box)box.remove();box=D.createElement('div');box.id='aeraAwait';host.insertAdjacentElement('afterend',box)}
+ var h='<div class="card" style="border:2px solid #FDB913;background:#FFFBEB;margin-bottom:16px"><h2 style="margin:0 0 4px">⏳ '+T('Awaiting Payment','待付款')+'</h2>'+
+  '<p style="margin:0;color:#475569;font-size:14px">'+T('Our Kitchen has prepared '+(ROWS.length>1?'these Orders':'this Order')+' for you. Check it, then tap Pay Now to pay online ( FPX, Touch ’n Go, GrabPay, Boost, ShopeePay, DuitNow QR or card ). We start cooking once it is paid.',
+   '我们的厨房已为您准备好订单。请核对后点「立即付款」在线付款（FPX、Touch ’n Go、GrabPay、Boost、ShopeePay、DuitNow QR 或信用卡）。付款后我们便开始烹调。')+'</p>'+
+  ROWS.map(card).join('')+'</div>';
+ var sig=h;if(box.__s!==sig){box.__s=sig;box.innerHTML=h}}
+setInterval(function(){load(false)},3000);D.addEventListener('visibilitychange',function(){if(!D.hidden)load(true)});
+var q=0;new MutationObserver(function(){if(q)return;q=1;setTimeout(function(){q=0;try{paint()}catch(e){}},120)}).observe(D.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['data-lang']});
+})();
+</script>
 </body>
 </html>
