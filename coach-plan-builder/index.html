@@ -1210,7 +1210,7 @@ function draft(){
    m.items.forEach(function(it){
     var r=BYCODE[it.code];
     if(!r){if(it.own)off.push({day:d.name||'',meal:m.name||'',food:it.own,g:+it.g||0,mac:ownMac(it)});return}
-    comps.push({r:it.code,g:rawOf(it).g})});
+    /* Peter 24th Oct 2026 : each item keeps how the Coach wrote it ( Raw or Cooked ), so the Order Card and Kitchen Docket show it the same way */var _c={r:it.code,g:rawOf(it).g};if(bOf(it)==='cooked'&&+it.g>0){_c.ck=Math.round(+it.g);_c.wb='c'}else _c.wb='r';comps.push(_c)});
    if(comps.length)pending.push(comps)});
   if(!pending.length)return;
   dayN++;names.push(d.name||('Day '+dayN));
