@@ -1862,13 +1862,14 @@ html.aa-on [id^="ultra-fast-widget-bubble"]{bottom:calc(20px + 66px)!important}
  var KCK=false;try{KCK=localStorage.getItem('kc.ck')==='1'}catch(e){}
  if(KCK)document.documentElement.classList.add('kc-ck');
  /* each item can also be flipped on its own : tap the RAW WEIGHT or COOKED WEIGHT label of that item */
- var KCI=new WeakMap();function itemCk(mi,code){var m=(mi!=null&&typeof PLAN!=='undefined'&&PLAN&&PLAN.meals)?PLAN.meals[mi]:null;var o=m&&KCI.get(m);if(o&&o[code])return o[code]==='c';return KCK}
+ var KCI=new WeakMap();function itemCk(mi,code){var m=(mi!=null&&typeof PLAN!=='undefined'&&PLAN&&PLAN.meals)?PLAN.meals[mi]:null;/* Peter 24th Oct 2026 : the choice is kept on the item itself, so it travels with the Draft and into the Order */var cp0=m&&(m.comps||[]).filter(function(c){return c.r===code})[0];if(cp0&&(cp0.wb==='c'||cp0.wb==='r'))return cp0.wb==='c';var o=m&&KCI.get(m);if(o&&o[code])return o[code]==='c';if(cp0&&+cp0.ck>0)return true;return KCK}
+ window.kcItemCk=itemCk;
  try{var _wl=wLab;wLab=function(r,g,mi,ci){if(typeof PLAN==='undefined'||!PLAN)return '';var s=PLAN.src;PLAN.src='coach';try{return _wl(r,g,mi,ci)}finally{PLAN.src=s}}}catch(e){}
  function kcMarks(){if(typeof PLAN==='undefined'||!PLAN)return;[].forEach.call(document.querySelectorAll('#planCal .etbl td'),function(td){if(!td.querySelector('.qbox'))return;var bt=td.querySelector('button[onclick^="bump("]');var a=bt&&String(bt.getAttribute('onclick')).match(/bump\((\d+),(\d+)/);if(!a)return;var m=PLAN.meals[+a[1]],cp=m&&m.comps[+a[2]];var on=!!(cp&&td.querySelector('.cbox')&&itemCk(+a[1],cp.r));if(td.classList.contains('kc-ckon')!==on)td.classList.toggle('kc-ckon',on)})}
  document.addEventListener('click',function(e){var lab=e.target&&e.target.closest&&e.target.closest('.etbl .wlab.wraw,.etbl .wlab.wck');if(!lab)return;var td=lab.closest('td'),bt=td&&td.querySelector('button[onclick^="bump("]');if(!bt)return;var a=String(bt.getAttribute('onclick')).match(/bump\((\d+),(\d+)/);if(!a)return;var mi=+a[1],ci=+a[2],m=PLAN.meals[mi],cp=m&&m.comps[ci],r=cp&&BYCODE[cp.r];if(!r)return;e.preventDefault();e.stopPropagation();
   var toCk=lab.classList.contains('wraw');if(toCk){var ck=null;try{ck=cookedOf(r,cp.g)}catch(x){}if(!ck){try{msg(r.n+' has no Cooked Weight, so it stays in Raw Weight.')}catch(x){}return}}
-  var o=KCI.get(m)||{};o[cp.r]=toCk?'c':'r';KCI.set(m,o);kcMarks()},true);
- window.kcWt=function(on){KCK=!!on;KCI=new WeakMap();try{localStorage.setItem('kc.ck',KCK?'1':'0')}catch(e){}document.documentElement.classList.toggle('kc-ck',KCK);[].forEach.call(document.querySelectorAll('.kcwt button'),function(b){b.classList.toggle('on',(b.getAttribute('data-ck')==='1')===KCK)});kcMarks()};
+  var o=KCI.get(m)||{};o[cp.r]=toCk?'c':'r';KCI.set(m,o);(m.comps||[]).forEach(function(c){if(c.r===cp.r)c.wb=toCk?'c':'r'});kcMarks();try{if(window.kcLiveSave)window.kcLiveSave()}catch(x){}},true);
+ window.kcWt=function(on){KCK=!!on;KCI=new WeakMap();try{(PLAN&&PLAN.meals||[]).forEach(function(m){(m.comps||[]).forEach(function(c){c.wb=on?'c':'r'})})}catch(e){}try{localStorage.setItem('kc.ck',KCK?'1':'0')}catch(e){}document.documentElement.classList.toggle('kc-ck',KCK);[].forEach.call(document.querySelectorAll('.kcwt button'),function(b){b.classList.toggle('on',(b.getAttribute('data-ck')==='1')===KCK)});kcMarks()};
  function addBtns(){var s4=document.getElementById('s4');if(!s4)return;var card=s4.querySelector('.card');if(!card)return;
   if(!document.getElementById('kcAddTop')){var t=document.createElement('div');t.className='kcadd';t.id='kcAddTop';t.innerHTML='<span class="kcwt" role="group" aria-label="Weights shown"><button type="button" data-ck="0" class="'+(KCK?'':'on')+'" onclick="kcWt(0)">Raw Weight</button><button type="button" data-ck="1" class="'+(KCK?'on':'')+'" onclick="kcWt(1)">Cooked Weight</button></span><button type="button" class="kcdl" onclick="slideDeck()" style="background:#FDB913!important;color:#0B0B0B!important;border-color:#FDB913!important">📄 Download Meal Plan</button><button type="button">Add Plan to Order →</button>';var pi=document.getElementById('planIntro');if(pi&&pi.parentNode===card)pi.insertAdjacentElement('afterend',t);else card.insertBefore(t,card.firstChild)}
   if(!document.getElementById('kcAddBot')){var b=document.createElement('div');b.className='kcadd';b.id='kcAddBot';b.innerHTML='<button type="button" class="kcdl" onclick="slideDeck()" style="background:#FDB913!important;color:#0B0B0B!important;border-color:#FDB913!important">📄 Download Meal Plan</button><button type="button">Add Plan to Order →</button>';card.appendChild(b)}}
@@ -2133,6 +2134,17 @@ function paint(){[].forEach.call(D.querySelectorAll('button[onclick^="bump("]'),
 wrap();var q=0;new MutationObserver(function(){if(q)return;q=1;requestAnimationFrame(function(){q=0;try{wrap();paint()}catch(e){}})}).observe(D.documentElement,{childList:true,subtree:true});
 setInterval(function(){try{wrap();paint()}catch(e){}},1500);
 })();
+</script>
+<script id="aera-plan-ck">/* Peter 24th Oct 2026 : Raw Weight and Cooked Weight travel with every item. Each item is sent exactly as it was built :
+   an item shown in Cooked Weight carries its Cooked grams ( ck ), an item shown in Raw Weight carries none. The Kitchen weighs the Raw grams either way. */
+(function(){if(window.__aeraPlanCk)return;window.__aeraPlanCk=1;
+function ckOf(mi,cp){var r=(typeof BYCODE!=='undefined')?BYCODE[cp.r]:null;if(!r)return 0;var on=(window.__AERA_CONSOLE&&window.kcItemCk)?window.kcItemCk(mi,cp.r):(+cp.ck>0||cp.wb==='c');if(!on)return 0;
+ var ck=null;try{ck=cookedOf(r,cp.g)}catch(e){}if(+cp.ck>0){try{var rw=rawFromCooked(r,cp.ck);if(rw!=null&&clampG(r,rw)===cp.g&&Math.abs(rw-cp.g)<((r.po&&r.po[2])||25))ck=cp.ck}catch(e){}}return ck>0?Math.round(ck):0}
+function wrap(){var f=window.planPayload;if(typeof f!=='function'||f.__ck)return;var w=function(){var p=f.apply(this,arguments);try{var ms=(typeof PLAN!=='undefined'&&PLAN&&PLAN.meals)||[];var built=ms.filter(function(m){return m.comps&&m.comps.length});
+ if(p&&p.meals&&p.meals.length===built.length){var bi=0;ms.forEach(function(m,mi){if(!(m.comps&&m.comps.length))return;var pm=p.meals[bi++];if(!pm||!pm.comps)return;
+  pm.comps.forEach(function(pc,j){var cp=m.comps[j];if(!cp||String(cp.r)!==String(pc.code))return;var c=ckOf(mi,cp);if(c>0)pc.ck=c;else delete pc.ck})});p.wbx=1}}catch(e){}return p};
+ for(var k in f)try{w[k]=f[k]}catch(x){}w.__ck=1;window.planPayload=w}
+setInterval(wrap,700);wrap()})();
 </script>
 </body>
 </html>
