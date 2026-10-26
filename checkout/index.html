@@ -533,12 +533,13 @@ window.addEventListener('load',function(){coRider();setTimeout(coRider,1500)});
     <label class="opt" id="optDelivery"><input type="radio" name="ful" value="delivery" onchange="setFul('delivery')"><svg class="pkico" viewBox="0 0 40 30" aria-hidden="true"><path d="M3 18.5V7h20.5v11.5z"/><path d="M23.5 11.5h8l5 7v0h-13z"/><path class="d" d="M25.5 13h4.8l2.9 3.6h-7.7z"/><circle cx="10.5" cy="21.3" r="2.9"/><circle cx="30.5" cy="21.3" r="2.9"/></svg><span><b>Rider Delivery</b><small>A Lalamove Rider brings your whole Order in one trip, anywhere in Klang Valley. Fee calculated live from your address.</small></span><span class="fee">from RM <span id="feeFromAny">6</span></span></label>
 
     <div id="deliveryBox" style="display:none">
-      <label class="lb">Building or Street ( Search )</label>
       <div id="savedAddr"></div>
       <div class="acwrap"><input type="text" id="address" placeholder="Start typing your building, condo or street…" autocomplete="off" oninput="acInput()" onkeydown="acKey(event)" onblur="setTimeout(acHide,200)"><div class="ac" id="acList"></div></div>
-      <div style="margin-top:8px"><label class="lb" for="addrUnit">Address Line 1 *</label><input type="text" id="addrUnit" placeholder="Unit / House No. — e.g. B1-3A-05 or No. 12" autocomplete="address-line1"></div>
-      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:10px"><div><label class="lb" for="addrLine2">Address Line 2</label><input type="text" id="addrLine2" placeholder="Taman / Area ( optional )" autocomplete="address-line2"></div><div><label class="lb" for="addrPost">Postcode *</label><input type="text" id="addrPost" inputmode="numeric" maxlength="5" placeholder="e.g. 51200" autocomplete="postal-code" oninput="this.value=this.value.replace(/\D/g,'').slice(0,5)"></div></div>
-      <div class="hint">Pick your Address from the suggestions, then fill in Address Line 1 ( Unit / House No. ) and Postcode — both are required.</div>
+      <div style="margin-top:8px"><label class="lb" for="addrUnit">Unit / House No. *</label><input type="text" id="addrUnit" placeholder="e.g. B-12-3 or No. 12" autocomplete="address-line1"></div>
+      <div><label class="lb" for="addrBldg">Building, Tower / Block</label><input type="text" id="addrBldg" placeholder="e.g. Sunway Geo Residences, Tower B ( blank for landed homes )" autocomplete="off"></div>
+      <div class="aeraAddr2"><div><label class="lb" for="addrSt1">Street 1</label><input type="text" id="addrSt1" placeholder="e.g. Jalan Lagoon Selatan" autocomplete="address-line2"></div><div><label class="lb" for="addrLine2">Street 2 / Taman</label><input type="text" id="addrLine2" placeholder="e.g. Bandar Sunway ( optional )" autocomplete="address-line3"></div></div>
+      <div class="aeraAddr3"><div><label class="lb" for="addrPost">Postcode *</label><input type="text" id="addrPost" inputmode="numeric" maxlength="5" placeholder="e.g. 47500" autocomplete="postal-code" oninput="this.value=this.value.replace(/\D/g,'').slice(0,5)"></div><div><label class="lb" for="addrCity">City *</label><input type="text" id="addrCity" placeholder="e.g. Subang Jaya" autocomplete="address-level2"></div><div><label class="lb" for="addrState">State *</label><select id="addrState" autocomplete="address-level1"><option value="">Choose State</option><option>Kuala Lumpur</option><option>Selangor</option><option>Putrajaya</option><option>Negeri Sembilan</option><option>Melaka</option><option>Johor</option><option>Pahang</option><option>Perak</option><option>Penang</option><option>Kedah</option><option>Perlis</option><option>Kelantan</option><option>Terengganu</option><option>Sabah</option><option>Sarawak</option><option>Labuan</option></select></div></div>
+      <div class="hint">Fill in your Building or Street — the pin is set for you, no dragging needed.</div>
       <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-k" type="button" onclick="checkFee()" id="feeBtn">Check Delivery Fee</button></div>
       <div id="feeMsg"></div>
 
@@ -3891,9 +3892,9 @@ function J(u){return fetch(u,{headers:{'Accept':'application/json'}}).then(funct
 var K={lat:2.9976100,lng:101.6742575};
 function photon(q){return J('https://photon.komoot.io/api/?q='+encodeURIComponent(q)+'&limit=10&lang=en&lat='+K.lat+'&lon='+K.lng).then(function(j){
  return ((j&&j.features)||[]).filter(function(f){return f.properties&&String(f.properties.countrycode||'').toUpperCase()==='MY'}).map(function(f){var p=f.properties;
-  return{src:'p',lat:f.geometry.coordinates[1],lng:f.geometry.coordinates[0],name:p.name||'',hn:p.housenumber||'',road:p.street||'',area:p.district||p.locality||'',city:p.city||'',post:p.postcode||'',kind:String(p.osm_key||'')+':'+String(p.osm_value||'')}})})}
+  return{src:'p',lat:f.geometry.coordinates[1],lng:f.geometry.coordinates[0],name:p.name||'',hn:p.housenumber||'',road:p.street||'',area:p.district||p.locality||'',city:p.city||'',state:p.state||'',post:p.postcode||'',kind:String(p.osm_key||'')+':'+String(p.osm_value||'')}})})}
 function nomi(q){return J('https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=8&countrycodes=my&q='+encodeURIComponent(q)).then(function(j){
- return (j||[]).map(function(x){var a=x.address||{};return{src:'n',lat:+x.lat,lng:+x.lon,name:x.name||'',hn:a.house_number||'',road:a.road||'',area:a.suburb||a.neighbourhood||a.quarter||a.residential||'',city:a.city||a.town||a.village||'',post:a.postcode||'',kind:String(x.category||'')+':'+String(x.type||'')}})})}
+ return (j||[]).map(function(x){var a=x.address||{};return{src:'n',lat:+x.lat,lng:+x.lon,name:x.name||'',hn:a.house_number||'',road:a.road||'',area:a.suburb||a.neighbourhood||a.quarter||a.residential||'',city:a.city||a.town||a.village||'',state:a.state||'',post:a.postcode||'',kind:String(x.category||'')+':'+String(x.type||'')}})})}
 function parts(a,l2,u){var B=[],S=[],A=[];String(a).split(/\s*,\s*/).forEach(function(seg){seg=seg.trim();if(!seg||/^\d{5}$/.test(seg)||CITY.test(seg))return;if(STREET.test(seg))S.push(seg);else if(AREA.test(seg))A.push(seg);else if(/[a-z]{3,}/i.test(seg))B.push(seg)});
  if(l2)String(l2).split(/\s*,\s*/).forEach(function(seg){if(!seg||CITY.test(seg))return;if(STREET.test(seg))S.push(seg);else A.push(seg)});
  var hn=(String(u||'').match(/^(?:no\.?\s*)?(\d+[a-z]?)$/i)||[])[1]||'';return{b:toks(B.join(' ')),bAll:toks(B.join(' '),1),s:toks(S.join(' '),1),a:toks(A.join(' ')),hn:hn,sTxt:S[0]||'',bTxt:B[0]||''}}
@@ -3910,8 +3911,10 @@ function score(c,P,post){var nm=toks(c.name),nmAll=toks(c.name,1),rd=toks(c.road
  if(/^(place:(city|town|state|county|region|country|suburb|postcode|quarter|neighbourhood)|boundary)/.test(c.kind))s-=3;
  if(hav(K,c)>60)s-=10;
  c.s=Math.round(s*100)/100;c.bm=bm;c.extra=extra;c.sm=sm;c.why=why;c.isRoad=isRoad;return c}
-/* q : { a: building / street ( search box ), u: unit / house no., l2: taman / area, p: postcode } */
-function resolve(q){var a=tidy(q.a),l2=tidy(q.l2),p=String(q.p||'').trim(),P=parts(a,l2,q.u);
+/* q : { b: building, s: street 1, u: unit / house no., l2: street 2 / taman, p: postcode } or the older { a: building / street } */
+function resolve(q){var p=String(q.p||'').trim(),l2=tidy(q.l2),a,P;
+ if(q.b!=null||q.s!=null){var bb=tidy(q.b),ss=tidy(q.s);a=[bb,ss].filter(Boolean).join(', ');P=parts('',l2,q.u);P.b=toks(bb);P.bAll=toks(bb,1);P.bTxt=bb.split(/\s*,\s*/)[0]||'';if(ss){P.s=toks(ss,1).concat(P.s);P.sTxt=ss}}
+ else{a=tidy(q.a);P=parts(a,l2,q.u)}
  var Q=[];function add(s){s=s.replace(/^[\s,]+|[\s,]+$/g,'').replace(/(,\s*)+/g,', ');if(s&&Q.indexOf(s)<0)Q.push(s)}
  add([a,l2,p].filter(Boolean).join(', '));add([P.bTxt,p].filter(Boolean).join(', '));add([P.sTxt,l2,p].filter(Boolean).join(', '));add([a,p].filter(Boolean).join(', '));add(a);
  var jobs=Q.slice(0,4).map(photon);var nq=Q.slice(0,2),chain=Promise.resolve([]);
@@ -3920,53 +3923,97 @@ function resolve(q){var a=tidy(q.a),l2=tidy(q.l2),p=String(q.p||'').trim(),P=par
   all.sort(function(x,y){return y.s-x.s});var b=all[0];if(!b)return null;var pcOk=!p||b.post===p||!b.post;
   var exact=pcOk&&((b.why==='b'&&b.bm>=0.8&&b.extra<=0.34)||(b.why==='s'&&b.sm>=0.9&&(b.isRoad||(P.hn&&b.hn))));
   var rd=[b.hn,b.road].filter(Boolean).join(' ');
-  var label=[b.name,rd!==b.name?rd:'',b.area,b.post||p,b.city].filter(function(x,i,A){return x&&A.indexOf(x)===i}).join(', ');
-  return{lat:+(+b.lat).toFixed(6),lng:+(+b.lng).toFixed(6),label:label,exact:!!exact,level:b.why,name:b.name,road:b.road,post:b.post,area:b.area,city:b.city,
+  var cty=String(b.city||'').replace(/\s+(City|Municipal|District)\s+Council$/i,'');b.city=cty;var label=[b.name,rd!==b.name?rd:'',b.area,b.post||p,cty].filter(function(x,i,A){return x&&A.indexOf(x)===i}).join(', ');
+  return{lat:+(+b.lat).toFixed(6),lng:+(+b.lng).toFixed(6),label:label,exact:!!exact,level:b.why,name:b.name,road:b.road,post:b.post,area:b.area,city:b.city,state:b.state||'',
    top:all.slice(0,3).map(function(c){return c.s+' '+c.src+' '+c.kind+' '+c.name+' | '+c.road+' | '+c.post})}})}
-return{tidy:tidy,resolve:resolve,parts:parts}})();
-(function(){if(window.__aeraGeoPlus)return;window.__aeraGeoPlus=1;var D=document,G=window.AERA_GEO,SHOW=false,RUNK='',AUTO_T=0;
+function postArea(pc){if(!/^\d{5}$/.test(String(pc||'')))return Promise.resolve(null);
+ return J('https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=1&country=Malaysia&postalcode='+pc).then(function(j){var x=j&&j[0],a=x&&x.address;if(!a)return null;
+  return{city:a.city||a.town||a.municipality||a.suburb||a.county||'',state:a.state||(/kuala lumpur/i.test(a.city||'')?'Kuala Lumpur':'')}})}
+return{tidy:tidy,resolve:resolve,parts:parts,postArea:postArea,STREET:STREET,CITY:CITY}})();
+
+/* Peter 26th Oct 2026 : the address is asked for part by part ( Unit · Building, Tower / Block · Street 1 · Street 2 · Postcode · City · State ),
+   so each part is matched for what it is. The old single box ( #address ) stays hidden and is kept as "Building, Street 1" for everything else on the page. */
+(function(){if(window.__aeraGeoPlus)return;window.__aeraGeoPlus=1;var D=document,G=window.AERA_GEO,SHOW=false,RUNK='',AUTO_T=0,LASTA=null,PCK='';
+try{Object.assign(window.AERA_I18N||{},{'Unit / House No. *':'单位 / 门牌号 *','Building, Tower / Block':'大楼、座 / 栋','Street 1':'街道 1','Street 2 / Taman':'街道 2 / 花园','City *':'城市 *','State *':'州属 *',
+ 'Choose State':'选择州属','Fill in your Building or Street — the pin is set for you, no dragging needed.':'填写大楼或街道 — 系统会自动定位，无需拖动图钉。'})}catch(e){}
 function V(id){var e=D.getElementById(id);return e?String(e.value||'').trim():''}
-function S(id,v){var e=D.getElementById(id);if(e)e.value=v}
-function key(){return [V('address'),V('addrUnit'),V('addrLine2'),V('addrPost')].join('|').toLowerCase()}
+function S(id,v){var e=D.getElementById(id);if(e)e.value=v==null?'':v}
+function key(){return [V('addrUnit'),V('addrBldg'),V('addrSt1'),V('addrLine2'),V('addrPost'),V('addrCity'),V('addrState')].join('|').toLowerCase()}
 function zh(){return D.documentElement.getAttribute('data-lang')==='zh'}
 function T(en,z){return zh()?z:en}
 function esc2(s){return String(s||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+var STATES=['Kuala Lumpur','Selangor','Putrajaya','Negeri Sembilan','Melaka','Johor','Pahang','Perak','Penang','Kedah','Perlis','Kelantan','Terengganu','Sabah','Sarawak','Labuan'];
+function stateOf(s){s=String(s||'').toLowerCase();if(!s)return '';if(/kuala lumpur/.test(s))return 'Kuala Lumpur';if(/putrajaya/.test(s))return 'Putrajaya';if(/labuan/.test(s))return 'Labuan';if(/pinang|penang/.test(s))return 'Penang';if(/malacca|melaka/.test(s))return 'Melaka';
+ for(var i=0;i<STATES.length;i++)if(s.indexOf(STATES[i].toLowerCase())>=0)return STATES[i];return ''}
 var css=D.createElement('style');css.textContent='#aeraPinBox.aera-auto{display:none!important}#aeraGeoOk{margin:8px 0 2px;padding:9px 12px;border-radius:12px;background:#ECFDF3;border:1px solid #A6F4C5;font-size:13px;line-height:1.45;color:#05603A}'+
- '#aeraGeoOk b{color:#05603A}#aeraGeoOk a{color:#16479E;font-weight:800;cursor:pointer;text-decoration:underline;white-space:nowrap}';D.head.appendChild(css);
+ '#aeraGeoOk b{color:#05603A}#aeraGeoOk a{color:#16479E;font-weight:800;cursor:pointer;text-decoration:underline;white-space:nowrap}'+
+ '#deliveryBox .acwrap{display:none!important}.aeraAddr2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.aeraAddr3{display:grid;grid-template-columns:.8fr 1.1fr 1.1fr;gap:10px}@media(max-width:420px){.aeraAddr3{grid-template-columns:1fr 1fr}.aeraAddr3>div:first-child{grid-column:1 / -1}}'+
+ '#deliveryBox select#addrState{width:100%;box-sizing:border-box}';D.head.appendChild(css);
+/* keep the hidden #address = "Building, Street 1" ; and when the page itself fills #address ( a Saved Address ), split it back into the boxes */
+function syncDown(){var v=[V('addrBldg'),V('addrSt1')].filter(Boolean).join(', ');var a=D.getElementById('address');if(a&&a.value!==v){a.value=v}LASTA=v}
+function splitUp(full){var bl=[],st=[],segs=String(full||'').split(/\s*,\s*/).filter(Boolean);
+ segs.forEach(function(seg){if(/^\d{5}$/.test(seg)||/^(malaysia|my)$/i.test(seg))return;var sv=stateOf(seg);if(sv&&seg.toLowerCase().replace(/^(wp|wilayah persekutuan)\s*/,'')===sv.toLowerCase()){if(!V('addrState'))S('addrState',sv);return}
+  if(G.CITY.test(seg)){if(!V('addrCity'))S('addrCity',seg);return}if(G.STREET.test(seg)||/^(jln|lrg|psn)\b/i.test(seg)){st.push(seg);return}var l2=V('addrLine2');if(l2&&l2.toLowerCase()===seg.toLowerCase())return;
+  if(/^(taman|tmn|bandar|bdr|seksyen|section|kampung|kg|desa|pusat bandar|ss ?\d)/i.test(seg)||st.length){if(!l2)S('addrLine2',seg);return}bl.push(seg)});
+ S('addrBldg',bl.join(', '));S('addrSt1',st.join(', '))}
+function watch(){var a=D.getElementById('address');if(!a)return;if(LASTA===null){if(a.value)splitUp(a.value);syncDown();return}if(a.value!==LASTA){splitUp(a.value);syncDown();cityFill()}}
+function reset(){try{GEO=null;FEE_RM=null;var m=D.getElementById('feeMsg');if(m)m.innerHTML='';renderCart()}catch(e){}}
+D.addEventListener('input',function(e){var id=e.target&&e.target.id;if(id==='addrBldg'||id==='addrSt1'){syncDown();reset()}if(id==='addrLine2'||id==='addrCity'||id==='addrState'||id==='addrUnit')reset();if(id==='addrPost'){reset();if(V('addrPost').length===5)cityFill(1)}},true);
+D.addEventListener('change',function(e){var id=e.target&&e.target.id;if(id==='addrState')reset()},true);
+/* Postcode fills City and State */
+function cityFill(force){var pc=V('addrPost');if(!/^\d{5}$/.test(pc)||(PCK===pc&&!force))return;PCK=pc;G.postArea(pc).then(function(r){if(!r||V('addrPost')!==pc)return;
+ if(r.city&&(!V('addrCity')||force))S('addrCity',r.city.replace(/\s+City Council$/i,''));var st=stateOf(r.state);if(st&&(!V('addrState')||force))S('addrState',st)})}
+/* the full address the Order, Rider and Kitchen see */
+/* Unit, Building, Street 1, Street 2, Postcode City, State : the order a Malaysian Rider reads an address in */
+var oFull=window.addrFull;if(typeof oFull==='function'&&!oFull.__geo){var wf=function(){if(!D.getElementById('addrBldg'))return oFull.apply(this,arguments);var out=[],seen={};
+ [V('addrUnit'),V('addrBldg'),V('addrSt1'),V('addrLine2'),[V('addrPost'),V('addrCity')].filter(Boolean).join(' '),V('addrState').toLowerCase()===V('addrCity').toLowerCase()?'':V('addrState')].forEach(function(x){var k=String(x||'').toLowerCase();if(k&&!seen[k]){seen[k]=1;out.push(x)}});return out.join(', ')};wf.__geo=1;window.addrFull=wf}
+var oMis=window.addrMissing;if(typeof oMis==='function'&&!oMis.__geo){var wm=function(){var r=oMis.apply(this,arguments);if(r)return r;if(!V('addrBldg')&&!V('addrSt1'))return 'Please enter your Building or Street 1.';
+ if(!V('addrCity'))return 'Please enter your City.';if(!V('addrState'))return 'Please choose your State.';return ''};wm.__geo=1;window.addrMissing=wm}
+/* a Saved / past address fills each box in its place */
+function fillParts(full){var segs=String(full||'').split(/\s*,\s*/).map(function(s){return s.trim()}).filter(function(s){return s&&!/^(malaysia|my)$/i.test(s)});
+ var o={u:'',b:[],s1:'',l2:[],p:'',c:'',st:''};
+ if(segs.length&&stateOf(segs[segs.length-1])&&segs[segs.length-1].toLowerCase().replace(/^(wp|wilayah persekutuan)\s*/,'').replace(/^federal territory of\s*/,'')===stateOf(segs[segs.length-1]).toLowerCase()){o.st=stateOf(segs.pop())}
+ segs=segs.filter(function(seg){var m=seg.match(/\b(\d{5})\b/);if(m&&!o.p){o.p=m[1];var rest=seg.replace(m[0],'').replace(/^[\s,]+|[\s,]+$/g,'');if(rest&&!o.c)o.c=rest;return false}if(G.CITY.test(seg)&&!/^(malaysia|my)$/i.test(seg)){if(!o.c)o.c=seg;else if(!o.st)o.st=stateOf(seg)||'';return false}return true});
+ if(segs.length&&!G.STREET.test(segs[0])){var um=segs[0].match(/^((?:no\.?|unit|lot)\s*)?[a-z]{0,3}[\s-]*\d+[a-z]?(\s*[-\/]\s*[a-z0-9]+)*(?=\s|$)/i);if(um&&!/^ss\s?\d/i.test(segs[0])){o.u=um[0].trim();var rest0=segs[0].slice(um[0].length).replace(/^[\s,]+/,'');if(rest0)segs[0]=rest0;else segs.shift()}}
+ segs.forEach(function(seg){if(G.STREET.test(seg)||/^(jln|lrg|psn)\b/i.test(seg)){if(!o.s1)o.s1=seg;else o.l2.push(seg);return}if(/^(taman|tmn|bandar|bdr|seksyen|section|kampung|kg|desa|pusat bandar|ss ?\d)/i.test(seg)||o.s1){o.l2.push(seg);return}o.b.push(seg)});
+ if(o.st&&o.c&&o.c.toLowerCase()===o.st.toLowerCase()&&!/kuala lumpur|putrajaya|labuan/i.test(o.c))o.c='';
+ S('addrUnit',o.u);S('addrBldg',o.b.join(', '));S('addrSt1',o.s1);S('addrLine2',o.l2.join(', '));S('addrPost',o.p);S('addrCity',o.c);S('addrState',o.st);syncDown();if(o.p&&(!o.c||!o.st))cityFill()}
+var oFill=window.addrFillFrom;if(typeof oFill==='function'&&!oFill.__geo){var wfill=function(full){if(!D.getElementById('addrBldg'))return oFill.apply(this,arguments);fillParts(full)};wfill.__geo=1;window.addrFillFrom=wfill}
+var oPick=window.pickSavedAddr;if(typeof oPick==='function'&&!oPick.__geo){var wp=function(i){LASTA='\u0000';if(i<0){['addrBldg','addrSt1','addrLine2','addrPost','addrCity','addrState','addrUnit'].forEach(function(id){S(id,'')})}var r=oPick.apply(this,arguments);watch();if(i<0){var u=D.getElementById('addrUnit');if(u)u.focus()}return r};wp.__geo=1;window.pickSavedAddr=wp}
 function apply(r){var g={lat:r.lat,lng:r.lng,label:r.label,auto:1};
- /* the address is written the way the map knows it ( spelling, short forms ) ; Unit / House No. stays as typed */
- var nn=String(r.name||''),tw=/\s*\b(tower|block|blok|menara|wing|phase|fasa)\s*[A-Z0-9]{1,3}\b/i,tm=nn.match(tw);if(tm&&V('address').toLowerCase().indexOf(tm[0].trim().toLowerCase())<0)nn=nn.replace(tw,'').trim();/* the map's own tower / block is not written over the customer's */
- var nm=[nn,r.road&&r.road!==nn?r.road:''].filter(Boolean).join(', ');if(nm)S('address',nm);
+ /* spelling is set the way the map knows it ; the customer's own Tower / Block and Unit stay as typed */
+ if(r.level==='b'&&r.name){var nn=String(r.name),tw=/\s*\b(tower|block|blok|menara|wing|phase|fasa)\s*[A-Z0-9]{1,3}\b/i,tm=nn.match(tw);if(tm)nn=nn.replace(tw,'').trim();
+  var ub=V('addrBldg'),rest=ub.indexOf(',')>=0?ub.slice(ub.indexOf(',')):'';if(nn)S('addrBldg',nn+rest);if(!V('addrSt1')&&r.road)S('addrSt1',r.road)}
+ else if(r.level==='s'){var rn=r.road||r.name;if(rn)S('addrSt1',rn)}
  if(!V('addrPost')&&/^\d{5}$/.test(String(r.post||'')))S('addrPost',r.post);
- if(!V('addrLine2')&&r.area&&V('address').toLowerCase().indexOf(String(r.area).toLowerCase())<0)S('addrLine2',r.area);
- var m=D.getElementById('feeMsg');g.km=Math.round(hav(KITCHEN,g)*ROAD_FACTOR*10)/10;GEO=g;FEE_RM=null;SHOW=false;RUNK=key();
+ if(V('addrLine2'))S('addrLine2',G.tidy(V('addrLine2')));if(V('addrSt1'))S('addrSt1',G.tidy(V('addrSt1')));
+ if(!V('addrLine2')&&r.area&&[V('addrBldg'),V('addrSt1')].join(' ').toLowerCase().indexOf(String(r.area).toLowerCase())<0)S('addrLine2',r.area);
+ if(!V('addrCity')&&r.city)S('addrCity',String(r.city).replace(/\s+City Council$/i,''));if(!V('addrState')&&stateOf(r.state))S('addrState',stateOf(r.state));
+ syncDown();var m=D.getElementById('feeMsg');g.km=Math.round(hav(KITCHEN,g)*ROAD_FACTOR*10)/10;GEO=g;FEE_RM=null;SHOW=false;RUNK=key();
  if(g.km>MAX_KM){if(m)m.innerHTML='<div class="msg bad">That address is about '+g.km+' km from our kitchen — outside our delivery area. Please choose self pick-up or WhatsApp us.</div>';renderCart();return}
  refee()}
-/* Check Delivery Fee : our two-map search first ; only when it cannot find the exact place does the old search ( and the pin map ) take over */
+function Q(){return{b:V('addrBldg'),s:V('addrSt1'),u:V('addrUnit'),l2:V('addrLine2'),p:V('addrPost')}}
+/* Check Delivery Fee : our two-map search on the parts first ; only when it cannot find the exact place does the old search ( and the pin map ) take over */
 var orig=window.checkFee;
-if(typeof orig==='function'&&!orig.__geo){var w=function(){var self=this,args=arguments;var q=V('address');if(q.length<3)return orig.apply(self,args);
- var b=D.getElementById('feeBtn'),m=D.getElementById('feeMsg');try{addrTidy()}catch(e){}
+if(typeof orig==='function'&&!orig.__geo){var w=function(){var self=this,args=arguments;syncDown();var m=D.getElementById('feeMsg'),b=D.getElementById('feeBtn');
+ if(!V('addrBldg')&&!V('addrSt1')){if(m)m.innerHTML='<div class="msg warn">'+T('Please enter your Building or Street 1.','请填写大楼或街道 1。')+'</div>';return}
  if(b){b.disabled=true;b.textContent=T('Finding your building…','正在查找您的大楼…')}if(m)m.innerHTML='';try{GEO=null;FEE_RM=null;renderCart()}catch(e){}
  var done=function(){if(b){b.disabled=false;b.textContent='Check Delivery Fee'}};
- G.resolve({a:V('address'),u:V('addrUnit'),l2:V('addrLine2'),p:V('addrPost')}).then(function(r){done();if(r&&r.exact){apply(r);return}return orig.apply(self,args)})
-  .catch(function(){done();return orig.apply(self,args)})};w.__geo=1;window.checkFee=w}
-/* a suggestion picked from the list : checked the same way, so a picked building needs no pin either */
-var oa=window.acApply;if(typeof oa==='function'&&!oa.__geo){var wa=function(g){var r0=oa.apply(this,arguments);var k=key();
- G.resolve({a:V('address'),u:V('addrUnit'),l2:V('addrLine2'),p:V('addrPost')}).then(function(r){if(!r||!r.exact||key()!==k)return;try{if(GEO&&GEO.pinned)return}catch(e){return}
-  try{var near=GEO&&GEO.lat!=null?hav(GEO,r):0;if(near>3)return}catch(e){}apply(r)}).catch(function(){});return r0};wa.__geo=1;window.acApply=wa}
+ G.resolve(Q()).then(function(r){done();if(r&&r.exact){apply(r);return}syncDown();var a=D.getElementById('address');if(a&&a.value.length<8){var x=[a.value,V('addrLine2'),V('addrPost'),V('addrCity')].filter(Boolean).join(', ');a.value=x;LASTA=x}return orig.apply(self,args)})
+  .catch(function(){done();syncDown();return orig.apply(self,args)})};w.__geo=1;window.checkFee=w}
 /* filled in and left : the fee and pin are worked out by themselves */
 function auto(){clearTimeout(AUTO_T);AUTO_T=setTimeout(function(){try{if(!isDel())return}catch(e){return}var b=D.getElementById('feeBtn');if(!b||b.disabled)return;
- if(V('address').length<3||!/^\d{5}$/.test(V('addrPost'))||!V('addrUnit'))return;if(GEO&&GEO.lat!=null&&RUNK===key())return;if(GEO&&GEO.lat!=null&&!GEO.auto&&!GEO.approx)return;
- RUNK=key();window.checkFee()},700)}
-D.addEventListener('change',function(e){var id=e.target&&e.target.id;if(id==='address'||id==='addrUnit'||id==='addrLine2'||id==='addrPost')auto()},true);
+ if((!V('addrBldg')&&!V('addrSt1'))||!/^\d{5}$/.test(V('addrPost'))||!V('addrUnit'))return;if(GEO&&GEO.lat!=null&&RUNK===key())return;if(GEO&&GEO.lat!=null&&!GEO.auto&&!GEO.approx)return;
+ RUNK=key();window.checkFee()},800)}
+D.addEventListener('change',function(e){var id=e.target&&e.target.id;if(/^(addrUnit|addrBldg|addrSt1|addrLine2|addrPost|addrCity|addrState)$/.test(id||''))auto()},true);
 /* the pin map stays closed when the building was found exactly ; one tap opens it */
-function ui(){var box=D.getElementById('aeraPinBox'),fm=D.getElementById('feeMsg'),ok=false;try{ok=isDel()&&GEO&&GEO.auto&&GEO.lat!=null&&GEO.km<=MAX_KM&&!SHOW}catch(e){}
+function ui(){watch();var box=D.getElementById('aeraPinBox'),fm=D.getElementById('feeMsg'),ok=false;try{ok=isDel()&&GEO&&GEO.auto&&GEO.lat!=null&&GEO.km<=MAX_KM&&!SHOW}catch(e){}
  if(box)box.classList.toggle('aera-auto',ok);var n=D.getElementById('aeraGeoOk');
  if(!ok){if(n)n.remove();return}
  if(!n&&fm){n=D.createElement('div');n.id='aeraGeoOk';n.addEventListener('click',function(e){if(e.target&&e.target.tagName==='A'){SHOW=true;ui();try{var b=D.getElementById('aeraPinBox');if(b)b.scrollIntoView({behavior:'smooth',block:'center'})}catch(x){}}})}
- if(!n)return;var html='📍 <b>'+T('Pinned automatically','已自动定位')+'</b> : '+esc2(GEO.label)+'. '+T('The Rider is sent straight here.','骑手会直接送到这里。')+' <a>'+T('Not right? Adjust the Pin','不对？调整图钉')+'</a>';
+ if(!n)return;var html='📍 <b>'+T('Pinned automatically','已自动定位')+'</b> — '+T('no need to drag the pin, the Rider is sent straight here.','无需拖动图钉，骑手会直接送到这里。')+' <a>'+T('Not right? Adjust the Pin','不对？调整图钉')+'</a>';
  if(n.__h!==html){n.innerHTML=html;n.__h=html}var after=D.getElementById('feeMsg');if(after&&n.previousElementSibling!==after)after.insertAdjacentElement('afterend',n)}
-setInterval(function(){try{ui()}catch(e){}},600);
+setInterval(function(){try{ui()}catch(e){}},600);watch();
 })();
 </script>
 </body>
