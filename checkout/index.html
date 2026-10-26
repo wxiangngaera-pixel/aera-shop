@@ -3935,7 +3935,8 @@ var css=D.createElement('style');css.textContent='#aeraPinBox.aera-auto{display:
  '#aeraGeoOk b{color:#05603A}#aeraGeoOk a{color:#16479E;font-weight:800;cursor:pointer;text-decoration:underline;white-space:nowrap}';D.head.appendChild(css);
 function apply(r){var g={lat:r.lat,lng:r.lng,label:r.label,auto:1};
  /* the address is written the way the map knows it ( spelling, short forms ) ; Unit / House No. stays as typed */
- var nm=[r.name,r.road&&r.road!==r.name?r.road:''].filter(Boolean).join(', ');if(nm)S('address',nm);
+ var nn=String(r.name||''),tw=/\s*\b(tower|block|blok|menara|wing|phase|fasa)\s*[A-Z0-9]{1,3}\b/i,tm=nn.match(tw);if(tm&&V('address').toLowerCase().indexOf(tm[0].trim().toLowerCase())<0)nn=nn.replace(tw,'').trim();/* the map's own tower / block is not written over the customer's */
+ var nm=[nn,r.road&&r.road!==nn?r.road:''].filter(Boolean).join(', ');if(nm)S('address',nm);
  if(!V('addrPost')&&/^\d{5}$/.test(String(r.post||'')))S('addrPost',r.post);
  if(!V('addrLine2')&&r.area&&V('address').toLowerCase().indexOf(String(r.area).toLowerCase())<0)S('addrLine2',r.area);
  var m=D.getElementById('feeMsg');g.km=Math.round(hav(KITCHEN,g)*ROAD_FACTOR*10)/10;GEO=g;FEE_RM=null;SHOW=false;RUNK=key();
