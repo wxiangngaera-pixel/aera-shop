@@ -228,7 +228,7 @@ window.addEventListener('load',function(){coRider();setTimeout(coRider,1500)});
       var overlay=document.createElement('div');overlay.id='donation-success-overlay';
       overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
       function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">'+esc(thankYouMsg)+'</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(successSubtext)+'</p><button id="lp-don-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">'+esc(thankYouMsg)+'</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(successSubtext)+'</p><button id="lp-don-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
       document.body.appendChild(overlay);
       var dBtn=document.getElementById('lp-don-success-btn');
       if(dBtn){dBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
@@ -416,7 +416,7 @@ window.addEventListener('load',function(){coRider();setTimeout(coRider,1500)});
       overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
       function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
       document.body.appendChild(overlay);
       var pBtn=document.getElementById('lp-pay-success-btn');
       if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
@@ -493,7 +493,7 @@ window.addEventListener('load',function(){coRider();setTimeout(coRider,1500)});
       overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
       function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var subTxt=successSubtext||'Thank you for your order.';
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
       document.body.appendChild(overlay);
       var cBtn=document.getElementById('lp-cart-success-btn');
       if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
@@ -3868,6 +3868,104 @@ async function go(){show('<h2>'+T('Preparing your payment…','正在准备付�
  try{payBillplz({orderNo:j.orderNo},'AERA Order '+j.orderNo,+j.total,String(j.name||''),String(j.email||''),String(j.phone||''))}catch(e){}
  setTimeout(function(){show('<h2>'+T('Could not open the payment','无法打开付款')+'</h2><p>'+T('Please try again, or WhatsApp us.','请重试，或用 WhatsApp 联系我们。')+'</p><a href="'+esc(location.pathname+'?awaiting='+encodeURIComponent(AID))+'" style="'+BTN+'">'+T('Try Again','重试')+'</a>')},45000)}
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',function(){setTimeout(go,300)});else setTimeout(go,300);
+})();
+</script>
+<script id="aera-geo-plus">
+/* Peter 26th Oct 2026 : the address the customer types is looked up on two free maps ( Photon + OpenStreetMap ), short forms are
+   written out ( Jln → Jalan, Tmn → Taman … ), the closest match inside their Postcode is chosen and the pin is set there by itself.
+   The map with the pin only opens when the building cannot be found exactly. */
+window.AERA_GEO=(function(){
+var AB=[[/\bjln\.?(?=\s|\d|$)/gi,'Jalan '],[/\btmn\.?(?=\s|$)/gi,'Taman '],[/\blrg\.?(?=\s|\d|$)/gi,'Lorong '],[/\bpsn\.?(?=\s|$)/gi,'Persiaran '],[/\bpers\.?(?=\s|$)/gi,'Persiaran '],
+ [/\bbkt\.?(?=\s|$)/gi,'Bukit '],[/\b(kg|kpg)\.?(?=\s|$)/gi,'Kampung '],[/\bbdr\.?(?=\s|$)/gi,'Bandar '],[/\bsg\.?(?=\s|$)/gi,'Sungai '],[/\bsek\.?(?=\s|\d|$)/gi,'Seksyen '],
+ [/\bsri\b/gi,'Seri '],[/\bapt\.?(?=\s|$)/gi,'Apartment '],[/\bkondo\b/gi,'Condominium '],[/\bcondo\b/gi,'Condominium '],[/\bresi\b/gi,'Residensi '],[/\bpngsapuri\b/gi,'Pangsapuri '],
+ [/\bkl\b/gi,'Kuala Lumpur'],[/\bpj\b/gi,'Petaling Jaya'],[/\bkj\b/gi,'Kelana Jaya'],[/\bttdi\b/gi,'Taman Tun Dr Ismail'],[/\bopr\b/gi,'Old Klang Road'],
+ [/\bjalan(?=\d)/gi,'Jalan '],[/\bss\s?(\d)/gi,'SS $1'],[/\s{2,}/g,' ']];
+function tidy(s){s=String(s||'');AB.forEach(function(a){s=s.replace(a[0],a[1])});return s.replace(/\s+,/g,',').replace(/\s+/g,' ').trim()}
+var GEN={the:1,at:1,no:1,lot:1,unit:1,block:1,blok:1,tower:1,menara:1,kuala:1,lumpur:1,selangor:1,malaysia:1,wilayah:1,persekutuan:1,darul:1,ehsan:1,city:1,council:1,of:1,and:1,
+ condominium:1,condo:1,residensi:1,residences:1,residence:1,apartment:1,apartments:1,pangsapuri:1,suites:1,service:1,serviced:1};
+var CITY=/^(kuala lumpur|selangor|petaling jaya|subang jaya|shah alam|puchong|cheras|kajang|seri kembangan|putrajaya|cyberjaya|klang|ampang|bangi|wp kuala lumpur|wilayah persekutuan.*|malaysia|my)$/i;
+var STREET=/^(jalan|lorong|persiaran|lebuh|lebuhraya|lingkaran|road|street|lane|avenue|jln)\b/i,AREA=/^(taman|bandar|seksyen|kampung|desa|bukit|pusat bandar|section|ss \d)/i;
+function toks(s,keep){return String(s||'').toLowerCase().normalize('NFKD').replace(/[^a-z0-9 ]+/g,' ').split(' ').filter(function(w){return w&&!/^\d{5}$/.test(w)&&(keep||!GEN[w])&&(w.length>1||/\d/.test(w))})}
+function hav(a,b){var R=6371,r=Math.PI/180,x=Math.sin((b.lat-a.lat)*r/2),y=Math.sin((b.lng-a.lng)*r/2);return 2*R*Math.asin(Math.sqrt(x*x+Math.cos(a.lat*r)*Math.cos(b.lat*r)*y*y))}
+function J(u){return fetch(u,{headers:{'Accept':'application/json'}}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
+var K={lat:2.9976100,lng:101.6742575};
+function photon(q){return J('https://photon.komoot.io/api/?q='+encodeURIComponent(q)+'&limit=10&lang=en&lat='+K.lat+'&lon='+K.lng).then(function(j){
+ return ((j&&j.features)||[]).filter(function(f){return f.properties&&String(f.properties.countrycode||'').toUpperCase()==='MY'}).map(function(f){var p=f.properties;
+  return{src:'p',lat:f.geometry.coordinates[1],lng:f.geometry.coordinates[0],name:p.name||'',hn:p.housenumber||'',road:p.street||'',area:p.district||p.locality||'',city:p.city||'',post:p.postcode||'',kind:String(p.osm_key||'')+':'+String(p.osm_value||'')}})})}
+function nomi(q){return J('https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=8&countrycodes=my&q='+encodeURIComponent(q)).then(function(j){
+ return (j||[]).map(function(x){var a=x.address||{};return{src:'n',lat:+x.lat,lng:+x.lon,name:x.name||'',hn:a.house_number||'',road:a.road||'',area:a.suburb||a.neighbourhood||a.quarter||a.residential||'',city:a.city||a.town||a.village||'',post:a.postcode||'',kind:String(x.category||'')+':'+String(x.type||'')}})})}
+function parts(a,l2,u){var B=[],S=[],A=[];String(a).split(/\s*,\s*/).forEach(function(seg){seg=seg.trim();if(!seg||/^\d{5}$/.test(seg)||CITY.test(seg))return;if(STREET.test(seg))S.push(seg);else if(AREA.test(seg))A.push(seg);else if(/[a-z]{3,}/i.test(seg))B.push(seg)});
+ if(l2)String(l2).split(/\s*,\s*/).forEach(function(seg){if(!seg||CITY.test(seg))return;if(STREET.test(seg))S.push(seg);else A.push(seg)});
+ var hn=(String(u||'').match(/^(?:no\.?\s*)?(\d+[a-z]?)$/i)||[])[1]||'';return{b:toks(B.join(' ')),bAll:toks(B.join(' '),1),s:toks(S.join(' '),1),a:toks(A.join(' ')),hn:hn,sTxt:S[0]||'',bTxt:B[0]||''}}
+function frac(need,have){if(!need.length)return 0;return need.filter(function(w){return have.indexOf(w)>=0}).length/need.length}
+function score(c,P,post){var nm=toks(c.name),nmAll=toks(c.name,1),rd=toks(c.road,1),inp=P.bAll.concat(P.s,P.a);
+ var isRoad=/^highway:/.test(c.kind),s=0,why='';
+ var bm=frac(P.b,nm),extra=nm.length?nm.filter(function(w){return inp.indexOf(w)<0}).length/nm.length:1;
+ var sm=P.s.length?frac(P.s,isRoad?nmAll:rd):0;
+ if(P.b.length){s=bm*10-extra*5;if(bm===1)s+=2;if(sm>=0.8)s+=2;if(isRoad)s-=4;if(/^(railway|public_transport|highway)/.test(c.kind))s-=2;why='b'}
+ else if(P.s.length){s=sm*9-(isRoad?0:3);if(P.hn&&c.hn&&String(c.hn).toLowerCase()===P.hn.toLowerCase())s+=4;why='s'}
+ else{s=frac(P.a,nm)*6;why='a'}
+ if(post){if(c.post===post)s+=3;else if(c.post)s-=6}
+ if(frac(P.a,toks([c.name,c.area,c.road].join(' ')))>0.6)s+=1;
+ if(/^(place:(city|town|state|county|region|country|suburb|postcode|quarter|neighbourhood)|boundary)/.test(c.kind))s-=3;
+ if(hav(K,c)>60)s-=10;
+ c.s=Math.round(s*100)/100;c.bm=bm;c.extra=extra;c.sm=sm;c.why=why;c.isRoad=isRoad;return c}
+/* q : { a: building / street ( search box ), u: unit / house no., l2: taman / area, p: postcode } */
+function resolve(q){var a=tidy(q.a),l2=tidy(q.l2),p=String(q.p||'').trim(),P=parts(a,l2,q.u);
+ var Q=[];function add(s){s=s.replace(/^[\s,]+|[\s,]+$/g,'').replace(/(,\s*)+/g,', ');if(s&&Q.indexOf(s)<0)Q.push(s)}
+ add([a,l2,p].filter(Boolean).join(', '));add([P.bTxt,p].filter(Boolean).join(', '));add([P.sTxt,l2,p].filter(Boolean).join(', '));add([a,p].filter(Boolean).join(', '));add(a);
+ var jobs=Q.slice(0,4).map(photon);var nq=Q.slice(0,2),chain=Promise.resolve([]);
+ nq.forEach(function(x,i){chain=chain.then(function(acc){return (i?new Promise(function(r){setTimeout(r,1100)}):Promise.resolve()).then(function(){return nomi(x)}).then(function(r){return acc.concat(r||[])})})});jobs.push(chain);
+ return Promise.all(jobs).then(function(rs){var all=[].concat.apply([],rs),seen={};all=all.filter(function(c){var k=c.lat.toFixed(4)+','+c.lng.toFixed(4)+'|'+c.name;if(seen[k])return false;seen[k]=1;return true}).map(function(c){return score(c,P,p)});
+  all.sort(function(x,y){return y.s-x.s});var b=all[0];if(!b)return null;var pcOk=!p||b.post===p||!b.post;
+  var exact=pcOk&&((b.why==='b'&&b.bm>=0.8&&b.extra<=0.34)||(b.why==='s'&&b.sm>=0.9&&(b.isRoad||(P.hn&&b.hn))));
+  var rd=[b.hn,b.road].filter(Boolean).join(' ');
+  var label=[b.name,rd!==b.name?rd:'',b.area,b.post||p,b.city].filter(function(x,i,A){return x&&A.indexOf(x)===i}).join(', ');
+  return{lat:+(+b.lat).toFixed(6),lng:+(+b.lng).toFixed(6),label:label,exact:!!exact,level:b.why,name:b.name,road:b.road,post:b.post,area:b.area,city:b.city,
+   top:all.slice(0,3).map(function(c){return c.s+' '+c.src+' '+c.kind+' '+c.name+' | '+c.road+' | '+c.post})}})}
+return{tidy:tidy,resolve:resolve,parts:parts}})();
+(function(){if(window.__aeraGeoPlus)return;window.__aeraGeoPlus=1;var D=document,G=window.AERA_GEO,SHOW=false,RUNK='',AUTO_T=0;
+function V(id){var e=D.getElementById(id);return e?String(e.value||'').trim():''}
+function S(id,v){var e=D.getElementById(id);if(e)e.value=v}
+function key(){return [V('address'),V('addrUnit'),V('addrLine2'),V('addrPost')].join('|').toLowerCase()}
+function zh(){return D.documentElement.getAttribute('data-lang')==='zh'}
+function T(en,z){return zh()?z:en}
+function esc2(s){return String(s||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+var css=D.createElement('style');css.textContent='#aeraPinBox.aera-auto{display:none!important}#aeraGeoOk{margin:8px 0 2px;padding:9px 12px;border-radius:12px;background:#ECFDF3;border:1px solid #A6F4C5;font-size:13px;line-height:1.45;color:#05603A}'+
+ '#aeraGeoOk b{color:#05603A}#aeraGeoOk a{color:#16479E;font-weight:800;cursor:pointer;text-decoration:underline;white-space:nowrap}';D.head.appendChild(css);
+function apply(r){var g={lat:r.lat,lng:r.lng,label:r.label,auto:1};
+ /* the address is written the way the map knows it ( spelling, short forms ) ; Unit / House No. stays as typed */
+ var nm=[r.name,r.road&&r.road!==r.name?r.road:''].filter(Boolean).join(', ');if(nm)S('address',nm);
+ if(!V('addrPost')&&/^\d{5}$/.test(String(r.post||'')))S('addrPost',r.post);
+ if(!V('addrLine2')&&r.area&&V('address').toLowerCase().indexOf(String(r.area).toLowerCase())<0)S('addrLine2',r.area);
+ var m=D.getElementById('feeMsg');g.km=Math.round(hav(KITCHEN,g)*ROAD_FACTOR*10)/10;GEO=g;FEE_RM=null;SHOW=false;RUNK=key();
+ if(g.km>MAX_KM){if(m)m.innerHTML='<div class="msg bad">That address is about '+g.km+' km from our kitchen — outside our delivery area. Please choose self pick-up or WhatsApp us.</div>';renderCart();return}
+ refee()}
+/* Check Delivery Fee : our two-map search first ; only when it cannot find the exact place does the old search ( and the pin map ) take over */
+var orig=window.checkFee;
+if(typeof orig==='function'&&!orig.__geo){var w=function(){var self=this,args=arguments;var q=V('address');if(q.length<3)return orig.apply(self,args);
+ var b=D.getElementById('feeBtn'),m=D.getElementById('feeMsg');try{addrTidy()}catch(e){}
+ if(b){b.disabled=true;b.textContent=T('Finding your building…','正在查找您的大楼…')}if(m)m.innerHTML='';try{GEO=null;FEE_RM=null;renderCart()}catch(e){}
+ var done=function(){if(b){b.disabled=false;b.textContent='Check Delivery Fee'}};
+ G.resolve({a:V('address'),u:V('addrUnit'),l2:V('addrLine2'),p:V('addrPost')}).then(function(r){done();if(r&&r.exact){apply(r);return}return orig.apply(self,args)})
+  .catch(function(){done();return orig.apply(self,args)})};w.__geo=1;window.checkFee=w}
+/* a suggestion picked from the list : checked the same way, so a picked building needs no pin either */
+var oa=window.acApply;if(typeof oa==='function'&&!oa.__geo){var wa=function(g){var r0=oa.apply(this,arguments);var k=key();
+ G.resolve({a:V('address'),u:V('addrUnit'),l2:V('addrLine2'),p:V('addrPost')}).then(function(r){if(!r||!r.exact||key()!==k)return;try{if(GEO&&GEO.pinned)return}catch(e){return}
+  try{var near=GEO&&GEO.lat!=null?hav(GEO,r):0;if(near>3)return}catch(e){}apply(r)}).catch(function(){});return r0};wa.__geo=1;window.acApply=wa}
+/* filled in and left : the fee and pin are worked out by themselves */
+function auto(){clearTimeout(AUTO_T);AUTO_T=setTimeout(function(){try{if(!isDel())return}catch(e){return}var b=D.getElementById('feeBtn');if(!b||b.disabled)return;
+ if(V('address').length<3||!/^\d{5}$/.test(V('addrPost'))||!V('addrUnit'))return;if(GEO&&GEO.lat!=null&&RUNK===key())return;if(GEO&&GEO.lat!=null&&!GEO.auto&&!GEO.approx)return;
+ RUNK=key();window.checkFee()},700)}
+D.addEventListener('change',function(e){var id=e.target&&e.target.id;if(id==='address'||id==='addrUnit'||id==='addrLine2'||id==='addrPost')auto()},true);
+/* the pin map stays closed when the building was found exactly ; one tap opens it */
+function ui(){var box=D.getElementById('aeraPinBox'),fm=D.getElementById('feeMsg'),ok=false;try{ok=isDel()&&GEO&&GEO.auto&&GEO.lat!=null&&GEO.km<=MAX_KM&&!SHOW}catch(e){}
+ if(box)box.classList.toggle('aera-auto',ok);var n=D.getElementById('aeraGeoOk');
+ if(!ok){if(n)n.remove();return}
+ if(!n&&fm){n=D.createElement('div');n.id='aeraGeoOk';n.addEventListener('click',function(e){if(e.target&&e.target.tagName==='A'){SHOW=true;ui();try{var b=D.getElementById('aeraPinBox');if(b)b.scrollIntoView({behavior:'smooth',block:'center'})}catch(x){}}})}
+ if(!n)return;var html='📍 <b>'+T('Pinned automatically','已自动定位')+'</b> : '+esc2(GEO.label)+'. '+T('The Rider is sent straight here.','骑手会直接送到这里。')+' <a>'+T('Not right? Adjust the Pin','不对？调整图钉')+'</a>';
+ if(n.__h!==html){n.innerHTML=html;n.__h=html}var after=D.getElementById('feeMsg');if(after&&n.previousElementSibling!==after)after.insertAdjacentElement('afterend',n)}
+setInterval(function(){try{ui()}catch(e){}},600);
 })();
 </script>
 </body>
