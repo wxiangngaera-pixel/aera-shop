@@ -1337,6 +1337,45 @@ try{var _no=D.createElement('style');_no.id='sx30-off';_no.textContent="#sx30Cur
 ready(function(){setTimeout(start,0)});
 })();
 
+/* AERA Flash Detector ( Peter 27th Oct 2026 ) : once a customer page has settled ( 3 seconds after it loads ), any part that redraws by itself
+   is counted for 60 seconds and reported to flash-report. Changes within 1.5 seconds of a tap, key or scroll are the customer's own and are skipped.
+   Only which parts redraw ( tag, id, class ) is sent : never text, names, addresses or anything typed. Nothing shows on screen.
+   Max 1 report per page per device every 6 hours. ?flashcheck=1 reports at once ( for testing ). */
+(function(){try{if(window.__AERA_FLASHDET)return;window.__AERA_FLASHDET=1;
+var L=location,P=L.pathname||'/';if(/^\/(kitchen|kitchen-app|motion)(\/|$)/.test(P)||document.documentElement.classList.contains('aera-console'))return;
+var Q=/[?&]flashcheck=1/.test(L.search),K='aera.fd.'+P,last=0;try{last=+localStorage.getItem(K)||0}catch(e){}
+if(!Q&&Date.now()-last<6*3600e3)return;
+var dev='';try{dev=localStorage.getItem('aera.fd.dev')||'';if(!dev){dev=Math.random().toString(36).slice(2,12);localStorage.setItem('aera.fd.dev',dev)}}catch(e){}
+var inAt=0,C={},n=0,t0=0,done=false,mo=null;
+['pointerdown','touchstart','keydown','wheel','touchmove','input','change','click'].forEach(function(ev){addEventListener(ev,function(){inAt=Date.now()},{capture:true,passive:true})});
+addEventListener('scroll',function(){inAt=Date.now()},{capture:true,passive:true});
+function bad(c){return !c||c.length>28||/\d{4,}|^(on|active|show|hide|hidden|open|is-|js-)/.test(c)}
+function one(e){if(!e||e.nodeType!==1)return '';var s=e.tagName.toLowerCase();if(e.id&&!/\d{5,}/.test(e.id))s+='#'+e.id.slice(0,40);
+ var cl=(typeof e.className==='string'?e.className:'').trim().split(/\s+/).filter(function(c){return !bad(c)}).slice(0,2);if(cl.length)s+='.'+cl.join('.');return s}
+function sel(e){var a=[],x=e;for(var i=0;i<3&&x&&x.nodeType===1&&x!==document.body&&x!==document.documentElement;i++){a.unshift(one(x));if(x.id)break;x=x.parentElement}return a.join(' > ')||one(e)}
+function skip(e){return !e||!e.closest||!!e.closest('[id^="ultra-fast-widget"],iframe,video,canvas,svg,#aeraFlashDet')}
+function add(e,k){if(skip(e))return;var s=sel(e)+' | '+k;C[s]=(C[s]||0)+1;n++}
+function send(){if(done)return;done=true;try{if(mo)mo.disconnect()}catch(e){}
+ var top=Object.keys(C).map(function(k){return [C[k],k]}).sort(function(a,b){return b[0]-a[0]}).slice(0,30);
+ try{localStorage.setItem(K,String(Date.now()))}catch(e){}
+ if(!top.length)return;
+ var body=JSON.stringify({page:P,w:innerWidth,touch:('ontouchstart' in window)||navigator.maxTouchPoints>0,dev:dev,secs:Math.round((Date.now()-t0)/1000),top:top});
+ var u='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/flash-report';
+ try{if(navigator.sendBeacon&&navigator.sendBeacon(u,new Blob([body],{type:'text/plain'})))return}catch(e){}
+ try{fetch(u,{method:'POST',headers:{'Content-Type':'text/plain'},body:body,keepalive:true})}catch(e){}}
+function start(){t0=Date.now();
+ mo=new MutationObserver(function(ms){if(done||Date.now()-inAt<1500)return;
+  for(var i=0;i<ms.length;i++){var m=ms[i];
+   if(m.type==='attributes'){var nm=m.attributeName;if(m.target.getAttribute&&m.target.getAttribute(nm)===m.oldValue)continue;add(m.target,'a:'+nm)}
+   else if(m.type==='characterData')add(m.target.parentElement,'text');
+   else if(m.addedNodes.length||m.removedNodes.length)add(m.target,'children')}
+  if(Q&&n>0&&Date.now()-t0>8000)send()});
+ mo.observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeOldValue:true,attributeFilter:['class','style','hidden','src','disabled','aria-expanded','aria-checked','aria-hidden','title','open']});
+ setTimeout(send,Q?10000:60000);addEventListener('pagehide',send)}
+function go(){setTimeout(start,3000)}
+if(document.readyState==='complete')go();else addEventListener('load',go);
+}catch(e){}})();
+
 /*AERA-MOTION-END*/</script>
 <!-- build 1791951591042 -->
 </body></html>
