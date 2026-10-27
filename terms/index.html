@@ -297,7 +297,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
       overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
       function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
       document.body.appendChild(overlay);
       var pBtn=document.getElementById('lp-pay-success-btn');
       if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
@@ -374,7 +374,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
       overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
       function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var subTxt=successSubtext||'Thank you for your order.';
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
       document.body.appendChild(overlay);
       var cBtn=document.getElementById('lp-cart-success-btn');
       if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
@@ -388,7 +388,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 <div class="top"><div class="in"><b>AERA</b><a href="https://my.chatbees.io/p/ZQr9fS2jA9">← Back to AERA Meal Prep</a></div></div>
 <div class="hero"><div class="in">
  <h1 id="ttl">Terms &amp; Conditions</h1>
- <p id="upd">Last updated 1 October 2026</p>
+ <p id="upd">Last updated 27th Oct 2026</p>
  <div class="sw" aria-label="Language"><button type="button" id="bEN" class="on" onclick="setL('en')">English</button><button type="button" id="bZH" onclick="setL('zh')">中文</button></div>
 </div></div>
 
@@ -518,7 +518,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
  <li><span class="n">11.9</span><b>AERA Credit</b> is money held for you in your AERA account. It comes from a <b>Top-Up</b> you pay for, or from us, for example after a problem in section 7. It comes off your next order automatically at checkout, any balance carries forward, and it does not expire.</li>
  <li><span class="n">11.10</span><b>Top-Ups</b> : you can add AERA Credit from your account or at checkout, from <b>RM 500</b> per Top-Up. If your Credit does not cover a whole order, the rest is paid by the payment methods shown at checkout.</li>
  <li><span class="n">11.11</span><b>Top-Up bonus</b> : a Top-Up earns bonus AERA Points at the rates shown when you top up ( for example RM 500 earns 2,500 AP and RM 2,000 earns 20,000 AP ), added once the payment is confirmed. Bonus AP expire 6 months after the Top-Up. You also earn AP when you spend your AERA Credit on Meals, the same as any order ( 11.1 ).</li>
- <li><span class="n">11.12</span><b>No refunds</b> : AERA Credit from a Top-Up is <b>non-refundable</b> and cannot be exchanged for cash, except where the law requires. It stays in your account to spend on future orders and does not expire. Credit we gave you after a problem is refunded only where section 7 or the law allows.</li>
+ <li><span class="n">11.12</span><b>No refunds</b> : AERA Credit from a Top-Up is <b>non-refundable</b> and cannot be exchanged for cash, except where the law requires. It stays in your account to spend on future orders and does not expire. Credit we gave you after a problem is refunded only where section 7 or the law allows. <b>If we stop the service</b> : if AERA permanently stops providing Meals, we refund any unused Top-Up Credit <b>in full</b> to the payment method you paid with, within 30 days. Bonus AP have no cash value.</li>
 </ol>
 <ol class="cl">
  <li><span class="n">11.13</span>We may change or end AP, vouchers or treats with reasonable notice on our website. Anything you have already earned or bought stays valid until its expiry date. We may cancel AP, vouchers or credit obtained by fraud or misuse.</li>
@@ -709,7 +709,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
  <li><span class="n">11.9</span><b>AERA 抵用金</b>是存放在你的 AERA 账户中的款项，来自你付款的<b>充值</b>，或由我们发放，例如在第 7 条所述的问题之后。它会在结账时自动从你的下一张订单中扣除，余额会结转，且不会过期。</li>
  <li><span class="n">11.10</span><b>充值</b>：你可以在账户或结账页面充值 AERA 抵用金，每次充值最低 <b>RM 500</b>。如果抵用金不足以支付整张订单，余额可用结账页面所示的付款方式支付。</li>
  <li><span class="n">11.11</span><b>充值奖励</b>：充值可按充值时所示的比例获得 AERA 奖励积分（例如充值 RM 500 获得 2,500 AP，充值 RM 2,000 获得 20,000 AP），在付款确认后发放。奖励积分在充值后 6 个月到期。你在用 AERA 抵用金购买餐点时，也会像任何订单一样获得 AP（第 11.1 条）。</li>
- <li><span class="n">11.12</span><b>不予退款</b>：充值所得的 AERA 抵用金<b>不予退款</b>，也不能兑换现金，法律另有规定者除外。抵用金会保留在你的账户中供日后订单使用，且不会过期。我们因问题而发放的抵用金，仅在第 7 条或法律允许时退款。</li>
+ <li><span class="n">11.12</span><b>不予退款</b>：充值所得的 AERA 抵用金<b>不予退款</b>，也不能兑换现金，法律另有规定者除外。抵用金会保留在你的账户中供日后订单使用，且不会过期。我们因问题而发放的抵用金，仅在第 7 条或法律允许时退款。<b>若我们停止服务</b>：若 AERA 永久停止提供餐点，我们会在 30 天内将未使用的充值抵用金<b>全额退回</b>至你原本的付款方式。赠送的 AP 没有现金价值。</li>
 </ol>
 <ol class="cl">
  <li><span class="n">11.13</span>我们可能在网站上合理通知后更改或终止 AP、优惠券或礼遇。你已赚取或购买的项目在到期日前仍然有效。以欺诈或滥用方式获得的 AP、优惠券或抵用金，我们可以取消。</li>
@@ -777,7 +777,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 </article>
 </main>
 <script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
-var TX={en:{t:"Terms & Conditions",u:"Last updated 1 October 2026"},zh:{t:"条款与条件",u:"最后更新：2026年9月21日"}};
+var TX={en:{t:"Terms & Conditions",u:"Last updated 27th Oct 2026"},zh:{t:"条款与条件",u:"最后更新：2026年10月27日"}};
 function setL(l){if(!TX[l])l="en";
  document.getElementById("en").hidden=(l!=="en");document.getElementById("zh").hidden=(l!=="zh");
  document.getElementById("bEN").className=l==="en"?"on":"";document.getElementById("bZH").className=l==="zh"?"on":"";
