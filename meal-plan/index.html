@@ -1654,7 +1654,7 @@ function add(){document.body.appendChild(b);sync()}if(document.body)add();else d
  function line(x){return '<small>'+Math.round(+x.k||0)+' KCALs · Protein '+(Math.round((+x.p||0)*10)/10)+' g</small>'}
  window.hmDropHtml=function(){var have=(window.Q&&Q.home)||[];
   var saved=lib().filter(function(x){return !have.some(function(y){return y.n===x.n})}).slice(0,8);
-  var cur=have.length?'<div class="hmd-h">In your Day</div>'+have.map(function(x,i){return '<div class="hmd-row"><span><b>'+esc(x.n)+'</b>'+line(x)+'</span><button type="button" class="hmd-x" onclick="hmDropDel('+i+')" aria-label="Remove">×</button></div>'}).join(''):'';
+  var cur=have.length?'<div class="hmd-h">In your Day</div>'+have.map(function(x,i){return '<div class="hmd-row"><span><b>'+esc(x.n)+'</b>'+line(x)+'</span><span class="hmd-q"><button type="button" onclick="hmDropQty('+i+',-1)" aria-label="Fewer servings">−</button><b>× '+(x.q||1)+'</b><button type="button" onclick="hmDropQty('+i+',1)" aria-label="More servings">+</button></span><button type="button" class="hmd-x" onclick="hmDropDel('+i+')" aria-label="Remove">×</button></div>'}).join(''):'';
   var sv=saved.length?'<div class="hmd-h">Your Saved Home-Sourced Meals</div>'+saved.map(function(x){return '<div class="hmd-row"><span><b>'+esc(x.n)+'</b>'+line(x)+'</span><button type="button" class="btn btn-y s" data-hmn="'+esc(x.n)+'" onclick="hmDropAddSaved(this.getAttribute(\'data-hmn\'))">Add</button></div>'}).join(''):'';
   return '<details class="hmdrop"'+(OPEN?' open':'')+' ontoggle="hmDropToggle(this.open)"><summary class="btn btn-o s">+ Add a Home-Sourced Meal <span aria-hidden="true">▾</span></summary>'+
    '<div class="hmd-panel">'+(MSG?'<div class="hmd-msg">'+MSG+'</div>':'')+cur+sv+'<div class="hmd-h">Something New</div><div id="hmDropSlot"></div></div></details>'};
@@ -1672,6 +1672,11 @@ function add(){document.body.appendChild(b);sync()}if(document.body)add();else d
  window.hmDropAddSaved=function(n){var x=lib().filter(function(y){return y.n===n})[0];if(!x||!window.Q)return;
   Q.home.push({n:x.n,k:x.k,p:x.p,c:x.c,f:x.f});try{renderStep2()}catch(e){}
   refit('Added <b>'+esc(x.n)+'</b>. Your Targets are updated. Use Fine-Tune the whole Plan to fit the Meals to them.')};
+ /* Peter 29th Oct 2026 : servings for a Home-Sourced Meal already in the Day, right here on the Meal Plan ( half a serving at a time ) */
+ (function(){try{if(document.getElementById('hmdQCss'))return;var st=document.createElement('style');st.id='hmdQCss';st.textContent='.hmd-q{display:inline-flex;align-items:center;gap:2px;margin-left:auto;margin-right:6px;border:1.5px solid #16479E;border-radius:999px;overflow:hidden;flex:0 0 auto}.hmd-q button{border:0;background:#EEF3FC;color:#16479E;font-weight:800;font-size:17px;width:32px;height:30px;cursor:pointer;line-height:1}.hmd-q b{min-width:46px;text-align:center;color:#16479E;font-size:13.5px}';document.head.appendChild(st)}catch(e){}})();
+ window.hmDropQty=function(i,d){if(!window.Q)return;var h=Q.home[i];if(!h)return;var q0=+h.q||1,q=Math.max(0.5,Math.min(10,Math.round((q0+d*0.5)*2)/2));if(q===q0)return;var f=q/q0;
+  h.q=q;h.k=Math.round((+h.k||0)*f);h.p=Math.round((+h.p||0)*f*10)/10;h.c=Math.round((+h.c||0)*f*10)/10;h.f=Math.round((+h.f||0)*f*10)/10;h.n=String(h.n).replace(/ ×\s*\d+(\.\d+)?$/,'')+(q!==1?' × '+q:'');
+  try{renderStep2()}catch(e){}refit('<b>'+esc(h.n)+'</b> · '+Math.round(h.k)+' KCALs. Your Targets are updated.')};
  window.hmDropDel=function(i){if(!window.Q)return;var x=Q.home[i];if(!x)return;Q.home.splice(i,1);try{renderStep2()}catch(e){}
   refit('Removed <b>'+esc(x.n)+'</b>. Your Targets are updated.')};
  ['addHome','addFoundHome'].forEach(function(f){var o=window[f];if(typeof o!=='function')return;
