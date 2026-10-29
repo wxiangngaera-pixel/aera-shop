@@ -2207,5 +2207,17 @@ var q=0;new MutationObserver(function(){if(q)return;q=1;requestAnimationFrame(fu
 setInterval(function(){try{wrap();mark()}catch(e){}},1500);try{wrap();mark()}catch(e){}
 })();
 </script>
+<script id="aera-inapp">/* Peter 29th Oct 2026 : inside the AERA Calculator App ( ?inapp=1 ) this page is only the Personalised Meal Plan.
+   The 5 quick questions still open, but Close shows the Meal Plan saved in the account ( or an empty one to fill ), never the Homepage. */
+(function(){try{if(!/[?&]inapp=1\b/.test(location.search)||window.top===window)return;window.__AERA_INAPP=1;var D=document;
+function show(){try{(window.__v2G0||window.goStep)(4)}catch(x){try{window.goStep(4)}catch(y){}}}
+function empty(){try{var Q0=window.Q||{},d=+Q0.days||7,m=+Q0.mpd||2,ms=[];for(var i=1;i<=d;i++)for(var j=1;j<=m;j++)ms.push({day:i,slot:j,comps:[]});
+ var T=null;try{T=planTargets()}catch(x){}var Z={kcal:0,p:0,c:0,f:0};
+ window.PLAN={id:'PL-'+Date.now().toString(36).toUpperCase(),days:d,mpd:m,meals:ms,q:JSON.parse(JSON.stringify(Q0)),targets:T||{kcal:0,p:0,c:0,f:0,share:100,full:Z,home:Z,remainder:Z}}}catch(x){}show()}
+D.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#v2qp [data-custom]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();
+ var W=D.getElementById('v2qp');if(W)W.style.display='none';D.body.classList.remove('v2qp-on');try{sessionStorage.setItem('aera.v2qp.off','1')}catch(x){}
+ var n=0;(function go(){if(window.PLAN&&window.PLAN.meals)return show();if(++n<30&&(window.__MPW||n<6))return setTimeout(go,150);empty()})()},true);
+}catch(e){}})();
+</script>
 </body>
 </html>
