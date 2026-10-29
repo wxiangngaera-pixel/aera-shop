@@ -677,6 +677,20 @@ function mpSkipAnswers(){try{if(window.__MPSK||PLAN||STEP!==1||ADMIN_ID||(SUB&&S
  if(!(age>=14&&age<=100&&h>=120&&w>=30&&Q.activity))return;window.__MPSK=1;goStep(2)}catch(e){}}
 /* Signed in : while the saved plan is fetched from the account, the questionnaire stays out of sight, so a returning customer lands on Your Plan without seeing Step 1 first */
 function mpWait(){if(window.__MPW)return;window.__MPW=1;try{if(!document.getElementById('mpWaitCss')){var st=document.createElement('style');st.id='mpWaitCss';st.textContent='html.mpwait #s1{display:none!important}#mpWaitNote{display:none;padding:28px 0;text-align:center;color:#6B7280;font-weight:600}html.mpwait #mpWaitNote{display:block}';document.head.appendChild(st)}var s1=document.getElementById('s1');if(s1&&!document.getElementById('mpWaitNote')){var n=document.createElement('div');n.id='mpWaitNote';n.textContent='Opening your plan…';s1.parentNode.insertBefore(n,s1)}document.documentElement.classList.add('mpwait')}catch(e){}setTimeout(mpReveal,4500)}
+/* Peter 29th Oct 2026 : a returning customer whose account has no plan in progress sees their last saved Meal Plan straight away.
+   The questions only open from Start a New Plan ( or ?new=1 ). */
+function mpLastPlan(){var fresh=/[?&]new=1/.test(location.search)||location.hash==='#new';
+ if(PLAN||fresh||ADMIN_ID||window.__AERA_CONSOLE||/[?&](edit|next|coach)=/.test(location.search)||typeof USER==='undefined'||!USER||!sb||(SUB&&SUB.locked)){mpReveal();mpSkipAnswers();return}
+ window.__MPLAST=1;var fail=function(){window.__MPLAST=0;mpReveal();mpSkipAnswers()};
+ try{sb.from('meal_plans').select('id,days,meals_per_day,targets,prefs,meals,created_at').order('created_at',{ascending:false}).limit(1).then(function(r){
+  var p=r&&!r.error&&r.data&&r.data[0];var meals=(p&&Array.isArray(p.meals)?p.meals:[]).map(function(m){return{day:+m.day||1,slot:+m.slot||1,comps:(m.comps||[]).map(function(c){return{r:c.code,g:+c.grams||0}}).filter(function(c){return c.r&&(typeof BYCODE==='undefined'||BYCODE[c.r])})}}).filter(function(m){return m.comps.length});
+  if(PLAN||!meals.length)return fail();
+  var pr=p.prefs||{};var q=pr.q||{goal:pr.goal,plan:pr.plan,body:pr.body,activity:pr.activity,dob:pr.dob,kcalEdit:pr.kcalEdit,seasoning:pr.seasoning,spice:pr.spice,avoid:pr.avoid||[],home:pr.home||[]};
+  q.days=+p.days||q.days||7;q.mpd=+p.meals_per_day||q.mpd||1;
+  Object.assign(Q,q);Q.done1=1;PLAN={id:p.id,days:q.days,mpd:q.mpd,meals:meals,targets:p.targets||{},q:q};BASE=JSON.stringify(PLAN);window.__MPLASTOK=1;window.__MPLAST=0;
+  try{var W=document.getElementById('v2qp');if(W)W.style.display='none';document.body.classList.remove('v2qp-on')}catch(e){}
+  try{loadDraftValues()}catch(e){}try{renderTargets()}catch(e){}renderPlan();mpReveal();goStep(4);try{saveDraft()}catch(e){}
+ },fail)}catch(e){fail()}}
 function mpReveal(){if(!window.__MPW)return;window.__MPW=0;try{document.documentElement.classList.remove('mpwait')}catch(e){}}
 /* Subscription: free first month from the account's first visit, then the builder locks.
 Payment Link URLs live in the AERA Settings sheet, so they change without a republish. */
@@ -817,9 +831,9 @@ h+='<div class="daynav">'+(SELD>1?'<button class="btn btn-o s" type="button" onc
  /* A copy left on this device ( from before signing in ) only wins when it holds a plan and is newer than the account's.
     Otherwise the account's saved plan and answers are used, and are never overwritten by an empty copy. */
  var lPlan=!!(L&&L.plan&&L.plan.meals),sPlan=!!(d&&d.plan&&d.plan.meals);
- if(L&&(!d||!d.q||(lPlan&&(!sPlan||(L.at||0)>dAt)))){saveDraft();mpReveal();mpSkipAnswers();return}
- if(!d||!d.q){mpReveal();mpSkipAnswers();return}
- Object.assign(Q,d.q);if(+d.step>=2)Q.done1=1;PLAN=sPlan?d.plan:null;try{loadDraftValues()}catch(e){}if(!PLAN){mpReveal();mpSkipAnswers();return}BASE=JSON.stringify(PLAN);try{renderTargets()}catch(e){}renderPlan();var fresh=/[?&]new=1/.test(location.search)||location.hash==='#new';if(!fresh)goStep(4)})})}/* Admin : open a customer's saved plan ( ?edit=PL-… from the Kitchen Console ), change it here, and Save writes it
+ if(L&&(!d||!d.q||(lPlan&&(!sPlan||(L.at||0)>dAt)))){saveDraft();mpLastPlan();return}
+ if(!d||!d.q){mpLastPlan();return}
+ Object.assign(Q,d.q);if(+d.step>=2)Q.done1=1;PLAN=sPlan?d.plan:null;try{loadDraftValues()}catch(e){}if(!PLAN){mpLastPlan();return}BASE=JSON.stringify(PLAN);try{renderTargets()}catch(e){}renderPlan();var fresh=/[?&]new=1/.test(location.search)||location.hash==='#new';if(!fresh)goStep(4)})})}/* Admin : open a customer's saved plan ( ?edit=PL-… from the Kitchen Console ), change it here, and Save writes it
    straight back to that customer's account. Only kitchen admins can open or save someone else's plan ( admin_plan_get /
    admin_plan_save ), and nothing here touches the admin's own plan. */
 var ASB=null,ADMIN_EDIT=null,ADMIN_ID=(location.search.match(/[?&]edit=([A-Za-z0-9-]+)/)||[])[1]||'';
