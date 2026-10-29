@@ -3835,5 +3835,31 @@ setInterval(function(){load(false)},3000);D.addEventListener('visibilitychange',
 var q=0;new MutationObserver(function(){if(q)return;q=1;setTimeout(function(){q=0;try{paint()}catch(e){}},120)}).observe(D.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['data-lang']});
 })();
 </script>
+<!--AERA-HOME-SYNC-START--><script>
+/* Peter 29th Oct 2026 : Home-Sourced Meals kept in the account ( plan_store.home ), not only in this browser — wxiangng@hotmail.com only for now.
+   On load the account's list is merged into this browser's list ; whatever changes here is saved back to the account. */
+(function(){try{if(window.__AERA_HOME_SYNC)return;window.__AERA_HOME_SYNC=1;
+var K='aera.home',SK='aera.home.synced',OWN=['wxiangng@hotmail.com'],U='https://swpprjvubgcdsojapaad.supabase.co/rest/v1/plan_store',AK='sb_publishable_GkaEU-PTeQLuzR9oydDiaA_Zc1AkhAB';
+function sess(){try{var s=JSON.parse(localStorage.getItem('sb-swpprjvubgcdsojapaad-auth-token')||'null');if(s&&s.currentSession)s=s.currentSession;
+ if(!s||!s.access_token||!s.user)return null;if(OWN.indexOf(String(s.user.email||'').toLowerCase())<0)return null;if(s.expires_at&&s.expires_at*1000<Date.now()+20000)return null;return s}catch(e){return null}}
+function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function put(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function arr(t){try{var a=JSON.parse(t||'[]');return Array.isArray(a)?a:[]}catch(e){return[]}}
+function nk(h){return String(h&&h.n||'').trim().toLowerCase()}
+function paint(){try{if(typeof renderLib==='function')renderLib()}catch(e){}try{if(typeof renderHome==='function')renderHome()}catch(e){}}
+var busy=false;
+async function push(list){var s=sess();if(!s)return false;try{var r=await fetch(U+'?user_id=eq.'+encodeURIComponent(s.user.id),{method:'PATCH',headers:{apikey:AK,Authorization:'Bearer '+s.access_token,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({home:list.slice(0,40),home_at:new Date().toISOString()})});return r.ok}catch(e){return false}}
+async function pull(){var s=sess();if(!s||busy)return;busy=true;
+ try{var r=await fetch(U+'?select=home&user_id=eq.'+encodeURIComponent(s.user.id),{headers:{apikey:AK,Authorization:'Bearer '+s.access_token}});if(!r.ok){busy=false;return}
+  var j=await r.json();var srv=(j[0]&&Array.isArray(j[0].home))?j[0].home:[];var loc=arr(get(K)),snap=get(SK);
+  var merged;if(snap!==null&&JSON.stringify(loc)===snap)merged=srv;else{var seen={};merged=[];srv.concat(loc).forEach(function(h){var k=nk(h);if(!k||seen[k])return;seen[k]=1;merged.push(h)})}
+  merged=merged.slice(0,40);var mj=JSON.stringify(merged);if(mj!==JSON.stringify(loc)){put(K,mj);paint()}put(SK,mj);
+  if(mj!==JSON.stringify(srv))await push(merged)}catch(e){}busy=false}
+/* changes made on this page go back to the account */
+setInterval(function(){if(busy||!sess())return;var cur=get(K)||'[]',snap=get(SK);if(snap===null||cur===snap)return;busy=true;push(arr(cur)).then(function(ok){if(ok)put(SK,cur);busy=false})},1500);
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')pull()});
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(pull,300)});else setTimeout(pull,300);
+}catch(e){}})();
+</script><!--AERA-HOME-SYNC-END-->
 </body>
 </html>
