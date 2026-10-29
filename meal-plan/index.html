@@ -2211,7 +2211,7 @@ setInterval(function(){try{wrap();mark()}catch(e){}},1500);try{wrap();mark()}cat
    The 5 quick questions still open, but Close shows the Meal Plan saved in the account ( or an empty one to fill ), never the Homepage. */
 (function(){try{if(!/[?&]inapp=1\b/.test(location.search)||window.top===window)return;window.__AERA_INAPP=1;var D=document;
 /* no way out to the Homepage from inside the App : the Return to Homepage button is hidden and the logo does nothing */
-try{var st=D.createElement('style');st.id='aeraInappCss';st.textContent='nav .homebtn{display:none!important}nav .wrap>a[aria-label="AERA Meal Prep"]{pointer-events:none;cursor:default}';(D.head||D.documentElement).appendChild(st)}catch(x){}
+try{var st=D.createElement('style');st.id='aeraInappCss';st.textContent='nav .homebtn,nav #navAcct,nav #langSw,nav .shopwrap{display:none!important}nav .wrap>a[aria-label="AERA Meal Prep"]{pointer-events:none;cursor:default}';(D.head||D.documentElement).appendChild(st)}catch(x){}
 function show(){try{(window.__v2G0||window.goStep)(4)}catch(x){try{window.goStep(4)}catch(y){}}}
 function empty(){try{var Q0=window.Q||{},d=+Q0.days||7,m=+Q0.mpd||2,ms=[];for(var i=1;i<=d;i++)for(var j=1;j<=m;j++)ms.push({day:i,slot:j,comps:[]});
  var T=null;try{T=planTargets()}catch(x){}var Z={kcal:0,p:0,c:0,f:0};
