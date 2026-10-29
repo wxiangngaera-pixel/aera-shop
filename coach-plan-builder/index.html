@@ -747,7 +747,7 @@ function paint(){
     '<button class="grip" type="button" aria-label="Drag to reorder" title="Drag to reorder">'+
     '<span></span><span></span><span></span></button>'+(r?thumb(r):ownThumb(it))+
     '<div class="nm">'+nm+(r?'<i class="chg">Change &#9662;</i>':'')+'<small>'+sub+'</small></div>'+'<div class="pp">'+ppHtml(it)+'</div>'+
-    '<div class="wcell wb-'+bOf(it)+'"><small class="wh'+(r?' wflip':'')+'"'+(r?' role="button" tabindex="0" title="Tap to switch this item to '+(bOf(it)==='raw'?'Cooked':'Raw')+' Weight"':'')+'>'+(bOf(it)==='raw'?'Raw Weight':'Cooked Weight')+'</small><span class="wbd"><input type="number" min="0" step="'+(r?(r.po[2]||25):5)+'" value="'+(+it.g||0)+'" aria-label="weight in grams, '+bOf(it)+'"><em>g</em></span></div>'+
+    '<div class="wcell wb-'+bOf(it)+'"><small class="wh'+(r?' wflip':'')+'"'+(r?' role="button" tabindex="0" title="Tap to switch this item to '+(bOf(it)==='raw'?'Cooked':'Raw')+' Weight"':'')+'>'+(bOf(it)==='raw'?'Raw Weight':'Cooked Weight')+'</small><span class="wbd"><input type="number" min="0" step="'+(r?10:5)+'" value="'+(+it.g||0)+'" aria-label="weight in grams, '+bOf(it)+'"><em>g</em></span></div>'+
     '<div class="pr">'+(r?rm(per(r,rw.g).price):'<span class="ownno">Not Ours</span>')+
      '<small>'+(r?Math.round(per(r,rw.g).kcal)+' KCALs':(ownMac(it)?Math.round(ownMac(it).kcal)+' KCALs':'Not Ours'))+'</small></div>'+
     '<button class="x" type="button" data-rm="1" aria-label="Remove">&times;</button></div>'}).join('');
@@ -1317,6 +1317,12 @@ var OWNBF=false;function ownBackfill(){if(OWNBF)return;var todo=[];ST.clients.fo
    if(x&&x.name&&+x.kcal>0){var gs=gramsOf(x.serving||'');it.b={k:+x.kcal||0,p:+x.p||0,c:+x.c||0,f:+x.f||0,gs:gs};it.q=it.q||1;it.sv=x.serving||'1 Serving';if(gs&&!(+it.g>0))it.g=Math.round(gs*it.q)}
    save();paint();next()})})()}
 load();paint();setTimeout(ownBackfill,1500);setTimeout(ownBackfill,6000);
+/* Peter 29th Oct 2026 : Coach servings go in 10 g steps ( 50, 60, 70 … ), so no odd numbers like 56 g.
+   A typed weight rounds to the nearest 10 g when the box is left, and weights already saved are tidied the same way. */
+function to10(g){g=+g||0;return g>0?Math.max(10,Math.round(g/10)*10):0}
+function norm10(){var ch=false;(ST.clients||[]).forEach(function(c){(c.days||[]).forEach(function(d){(d.meals||[]).forEach(function(m){(m.items||[]).forEach(function(it){if(it&&BYCODE[it.code]&&+it.g>0){var v=to10(it.g);if(v!==+it.g){it.g=v;ch=true}}})})})});return ch}
+try{$('#dayPanel').addEventListener('change',function(e){var t=e.target,row=t&&t.closest&&t.closest('.row');if(!row||t.type!=='number')return;var d=day(),m=d&&d.meals[+row.dataset.m],it=m&&m.items[+row.dataset.i];if(!it||!BYCODE[it.code])return;var v=to10(t.value);if(v!==+it.g||String(v)!==String(t.value)){it.g=v;save();paint()}})}catch(e){}
+setInterval(function(){try{if(!READY)return;var a=document.activeElement;if(a&&a.type==='number'&&a.closest&&a.closest('#dayPanel'))return;if(norm10()){save();paint()}}catch(e){}},1200);
 window.__coach={cur:function(){return cur()},save:function(){save()},draft:function(){return draft()},state:function(){return ST},paint:function(){paint()}};
 try{if(window.__coachAcct)window.__coachAcct.pull(ST,function(d){if(!d||!d.clients||!d.clients.length)return;ST=d;if(typeof ST.coach!=='string')ST.coach='';if(!ST.sel||!byId(ST.sel))ST.sel=ST.clients[0].id;DAY=0;try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}paint()})}catch(e){}
 })();
