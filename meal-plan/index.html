@@ -2265,38 +2265,50 @@ window.saveFoundOnly=function(){try{if(typeof FOOD==='undefined'||!FOOD)return;v
  FOOD=null;var e=document.getElementById('hmName');if(e)e.value='';try{renderFound()}catch(x){}say('💾 Saved to your Home-Sourced Meals · '+nm.replace(/</g,'&lt;'),1)}catch(e){say('Could not save just now.')}};
 })();
 </script>
-<script id="aera-home-inday">/* Peter 29th Oct 2026 : the Home-Sourced Meals added to the Day sit in the Day itself, under that Day's AERA Meals,
-   with − / + servings and the Day's total including them, for a better overview. ( They count on every Day of the Plan. ) */
+<script id="aera-home-inday">/* Peter 29th Oct 2026 : the Home-Sourced Meals added to the Day sit in the Day itself, under that Day's AERA Meals, with − / + servings.
+   The Day's macros are one total : AERA Meals and Home-Sourced Meals together, shown in the Day header, and in a bar that stays
+   at the top of the screen while scrolling through the Day. ( Home-Sourced Meals count on every Day of the Plan. ) */
 (function(){if(window.__hsDay)return;window.__hsDay=1;window.__hmInDay=1;var D=document;
 function E(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function r1(x){return Math.round((+x||0)*10)/10}
+function n0(x){return Math.round(+x||0).toLocaleString('en-US')}
 function css(){if(D.getElementById('hsDayCss'))return;var s=D.createElement('style');s.id='hsDayCss';
  s.textContent='.hsday{margin:14px 0 6px;border:1.5px solid #FDB913;border-radius:16px;background:#FFFBEB;overflow:hidden}'+
- '.hsday .hsh{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 12px;padding:10px 14px;background:#FDB913;color:#16479E;font-weight:800}'+
- '.hsday .hsh small{font-weight:700;color:#16479E;opacity:.75;margin-left:6px}.hsday .hsh .mac{font-size:12.5px;font-weight:700}'+
+ '.hsday .hsh{display:flex;align-items:center;gap:6px;padding:10px 14px;background:#FDB913;color:#16479E;font-weight:800}'+
+ '.hsday .hsh small{font-weight:700;color:#16479E;opacity:.75;margin-left:6px}'+
  '.hsday .hsr{display:flex;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid #F5DFA0}.hsday .hsr:first-of-type{border-top:0}'+
  '.hsday .hsn{flex:1;min-width:0}.hsday .hsn b{display:block;color:#0B0B0B;font-size:14.5px;overflow-wrap:anywhere}.hsday .hsn small{color:#5a6378;font-size:12px}'+
  '.hsday .hsq{display:inline-flex;align-items:center;border:1.5px solid #16479E;border-radius:999px;overflow:hidden;flex:0 0 auto;background:#fff}'+
  '.hsday .hsq button{border:0;background:#EEF3FC;color:#16479E;font-weight:800;font-size:18px;width:34px;height:32px;cursor:pointer;line-height:1}.hsday .hsq b{min-width:48px;text-align:center;color:#16479E;font-size:13.5px}'+
  '.hsday .hsx{border:0;background:transparent;color:#9AA3B5;font-size:20px;width:30px;height:32px;cursor:pointer;flex:0 0 auto}'+
- '.hsday .hsf{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;border-top:1.5px solid #FDB913;background:#fff;font-size:13px;color:#1c2333}'+
- '.hsday .hsf b{color:#16479E}.hsday .hse{padding:12px 14px;color:#5a6378;font-size:13px}';
+ '.hsday .hsf{display:flex;justify-content:flex-end;padding:10px 14px;border-top:1.5px solid #FDB913;background:#fff}.hsday .hse{padding:12px 14px;color:#5a6378;font-size:13px}'+
+ '#hsBar{position:fixed;left:0;right:0;top:0;z-index:2147480000;background:#16479E;color:#fff;font-family:Montserrat,system-ui,sans-serif;padding:8px 14px;padding-top:calc(8px + env(safe-area-inset-top));box-shadow:0 2px 10px rgba(0,0,0,.2);transform:translateY(-110%);transition:transform .2s ease;display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px}'+
+ '#hsBar.on{transform:none}#hsBar b{color:#FDB913;font-size:13px;letter-spacing:.02em}#hsBar span{font-size:13.5px;font-weight:700}';
  D.head.appendChild(s)}
-function card(){var H=(window.Q&&Q.home)||[];var t={k:0,p:0,c:0,f:0};H.forEach(function(x){t.k+=+x.k||0;t.p+=+x.p||0;t.c+=+x.c||0;t.f+=+x.f||0});
- var dc=null;try{dc=dayCalc(SELD)}catch(e){}
+function homeTot(){var H=(window.Q&&Q.home)||[],t={k:0,p:0,c:0,f:0};H.forEach(function(x){t.k+=+x.k||0;t.p+=+x.p||0;t.c+=+x.c||0;t.f+=+x.f||0});return t}
+function dayTot(){var dc=null;try{dc=dayCalc(SELD)}catch(e){}if(!dc)return null;var t=homeTot();return{k:dc.kcal+t.k,p:dc.p+t.p,c:dc.c+t.c,f:dc.f+t.f,price:dc.price}}
+function macTxt(T){return n0(T.k)+' KCALs · Protein '+Math.round(T.p)+' g · Carbs '+Math.round(T.c)+' g · Fat '+Math.round(T.f)+' g'}
+function card(){var H=(window.Q&&Q.home)||[];
  var rows=H.map(function(x,i){return '<div class="hsr"><div class="hsn"><b>'+E(String(x.n).replace(/ ×\s*\d+(\.\d+)?$/,''))+'</b><small>'+Math.round(+x.k||0)+' KCALs · Protein '+r1(x.p)+' g · Carbs '+r1(x.c)+' g · Fat '+r1(x.f)+' g</small></div>'+
   '<span class="hsq"><button type="button" onclick="hmDropQty('+i+',-1)" aria-label="Fewer servings">−</button><b>× '+(+x.q||1)+'</b><button type="button" onclick="hmDropQty('+i+',1)" aria-label="More servings">+</button></span>'+
   '<button type="button" class="hsx" onclick="hmDropDel('+i+')" aria-label="Remove">×</button></div>'}).join('');
- var tot=dc?'Day Total with Home-Sourced : <b>'+Math.round(dc.kcal+t.k).toLocaleString('en-US')+' KCALs · Protein '+Math.round(dc.p+t.p)+' g · Carbs '+Math.round(dc.c+t.c)+' g · Fat '+Math.round(dc.f+t.f)+' g</b>':'';
- return '<div class="hsday"><div class="hsh"><span>🏠 Home-Sourced Meals<small>Every Day</small></span>'+(H.length?'<span class="mac">'+Math.round(t.k)+' KCALs · Protein '+r1(t.p)+' g</span>':'')+'</div>'+
+ return '<div class="hsday"><div class="hsh"><span>🏠 Home-Sourced Meals<small>Every Day</small></span></div>'+
   (rows||'<div class="hse">No Home-Sourced Meals in your Day yet.</div>')+
-  '<div class="hsf"><span>'+tot+'</span><button type="button" class="btn btn-o s" onclick="hsOpenDrop()">+ Add a Home-Sourced Meal</button></div></div>'}
+  '<div class="hsf"><button type="button" class="btn btn-o s" onclick="hsOpenDrop()">+ Add a Home-Sourced Meal</button></div></div>'}
 window.hsOpenDrop=function(){var d=D.querySelector('#sideTargets details.hmdrop')||D.querySelector('details.hmdrop');if(!d)return;d.open=true;try{hmDropToggle(true)}catch(e){}try{d.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}};
+function header(dp,T){var mac=dp.querySelector('.mh .mac');if(!mac||!T)return;var h=macTxt(T)+' · <b>'+(typeof rm==='function'?rm(T.price):'RM '+(+T.price||0).toFixed(2))+'</b>';if(mac.__hs!==h||mac.innerHTML!==mac.__hh){mac.innerHTML=h;mac.__hs=h;mac.__hh=mac.innerHTML}}
+function bar(T){var b=D.getElementById('hsBar');if(!b){b=D.createElement('div');b.id='hsBar';b.setAttribute('aria-live','polite');D.body.appendChild(b)}
+ var dp=D.querySelector('#planCal .dpanel'),mh=dp&&dp.querySelector('.mh');var s4=D.getElementById('s4');
+ var show=!!(T&&mh&&s4&&s4.offsetParent!==null&&mh.getBoundingClientRect().bottom<0&&dp.getBoundingClientRect().bottom>60);
+ if(show){var dn='';try{dn=(PLAN.dayNames&&PLAN.dayNames[SELD-1])||DOW[(SELD-1)%7]}catch(e){}var h='<b>Day '+SELD+(dn?' ( '+E(dn)+' )':'')+' · Total</b><span>'+macTxt(T)+'</span>';if(b.__h!==h){b.innerHTML=h;b.__h=h}}
+ b.classList.toggle('on',show)}
 function inject(){if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return;var dp=D.querySelector('#planCal .dpanel');if(!dp)return;css();
- var html=card(),old=dp.querySelector('.hsday');if(old){if(old.__h===html)return;old.remove()}
- var w=D.createElement('div');w.innerHTML=html;var el=w.firstChild;el.__h=html;var nav=dp.querySelector('.daynav');if(nav&&nav.parentNode===dp)dp.insertBefore(el,nav);else dp.appendChild(el)}
+ var T=dayTot();header(dp,T);
+ var html=card(),old=dp.querySelector('.hsday');if(!old||old.__h!==html){if(old)old.remove();var w=D.createElement('div');w.innerHTML=html;var el=w.firstChild;el.__h=html;var nav=dp.querySelector('.daynav');if(nav&&nav.parentNode===dp)dp.insertBefore(el,nav);else dp.appendChild(el)}
+ bar(T)}
 function wrap(){var f=window.renderPlan;if(typeof f!=='function'||f.__hs)return;var g=function(){var r=f.apply(this,arguments);try{inject()}catch(e){}return r};g.__hs=1;window.renderPlan=g}
 wrap();setInterval(function(){try{wrap();inject()}catch(e){}},1000);
+var q=0;window.addEventListener('scroll',function(){if(q)return;q=1;requestAnimationFrame(function(){q=0;try{bar(dayTot())}catch(e){}})},{passive:true});
 })();
 </script>
 </body>
