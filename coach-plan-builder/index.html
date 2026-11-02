@@ -2342,6 +2342,15 @@ function vview(){var bar=D.getElementById('cvBar');if(!bar)return;var v=D.getEle
   ((p.orders||[]).length?'<div class="sub" style="margin-top:12px">Orders from this plan : '+p.orders.map(function(o){var od=myt(o.at);return e(o.no)+(od?' ( '+e(nice(ymd(od)))+' )':'')}).join(', ')+'</div>':'')+'</div>';
  [].forEach.call(v.querySelectorAll('.tabs2 [data-i]'),function(b){b.onclick=function(){V.client=+b.dataset.i;vview()}})}
 async function vinit(){if(!A.data)await load();if(A.data){vbar();vview()}}
+/* Peter 2nd Nov 2026 : a Log In button in the title bar whenever nobody is signed in ( or the sign-in has run out ),
+   so a Coach can always sign in from the App. It comes straight back to the Coach Plan App. */
+function loginBtn(){var bar=D.querySelector('.ab-r');if(!bar)return;var b=D.getElementById('cpLogin'),out=!tok()||DEAD;
+ if(!out){if(b)b.remove();return}if(b)return;b=D.createElement('a');b.id='cpLogin';b.href='https://aeramealprep.net/account/?next=coach#login';
+ b.style.cssText='display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 16px;border-radius:999px;border:1.5px solid #FDB913;background:#FDB913;color:#16479E;font-weight:800;font-size:14px;font-family:inherit;text-decoration:none;white-space:nowrap;flex:none';
+ b.innerHTML='<span aria-hidden="true">\ud83d\udd11</span><span>Log In</span>';
+ b.onclick=function(){try{if(DEAD){for(var i=localStorage.length-1;i>=0;i--){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k))localStorage.removeItem(k)}}}catch(x){}};
+ bar.insertBefore(b,bar.firstChild)}
+setTimeout(loginBtn,800);setInterval(loginBtn,2000);
 window.__aeraCoachAdminOpen=openCal;
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',function(){setTimeout(init,500)});else setTimeout(init,500);
 })();
