@@ -2182,6 +2182,117 @@ new MutationObserver(words).observe(D.documentElement,{childList:true,subtree:tr
 setInterval(ok,500);D.addEventListener('input',function(){setTimeout(ok,700)},true);D.addEventListener('pointerdown',function(){ok()},true);
 })();
 </script>
+<script id="aera-coach-admin">/* Peter 2nd Nov 2026 : "Coaches' Plans" \u2014 on Peter's own accounts only, a button in the Title Bar opens a Calendar.
+   Days with a dot are days a Coach sent a Meal Plan. Pick a Coach and a Day to see those plans ( view only ), and
+   "Assign Coach" marks an AERA account as an official AERA Coach ( name, gym, Referral Code ). */
+(function(){if(window.__aeraCoachAdmin)return;window.__aeraCoachAdmin=1;
+var SBU='https://swpprjvubgcdsojapaad.supabase.co',AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0',D=document;
+var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],WD=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+var A={data:null,coach:'',ym:'',day:'',open:null,view:'cal',busy:false,err:''};
+function e(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function tok(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var o=JSON.parse(localStorage.getItem(k)||'null');if(o&&o.currentSession)o=o.currentSession;if(o&&o.access_token)return o.access_token}}}catch(x){}return''}
+async function rpc(fn,args){var t=tok();if(!t)throw new Error('Please sign in');
+ var r=await fetch(SBU+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'Content-Type':'application/json',apikey:AK,Authorization:'Bearer '+t},body:JSON.stringify(args||{})});
+ var j=await r.json().catch(function(){return null});if(!r.ok)throw new Error((j&&(j.message||j.error))||('HTTP '+r.status));return j}
+function ord(n){var s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])}
+function myt(iso){if(!iso)return null;var t=String(iso).replace(' ','T').replace(/([+-]\d\d)$/,'$1:00');var d=new Date(t);if(isNaN(d))return null;return new Date(d.getTime()+8*3600e3)}
+function ymd(d){return d.toISOString().slice(0,10)}
+function nice(s){var p=String(s).split('-');return ord(+p[2])+' '+MON[+p[1]-1]+' '+p[0]}
+function nm(code){return(A.data&&A.data.names&&A.data.names[code])||code}
+function daysOf(p){
+ if(p.days&&p.days.length)return p.days.map(function(d,i){return{name:(p.dayNames&&p.dayNames[i])||d.name||'',meals:(d.meals||[]).map(function(m){return{name:m.name||'',items:(m.items||[]).filter(function(it){return it.code||it.own}).map(function(it){
+   var b=(it.wb==='raw'||it.wb==='cooked')?it.wb:(p.basis||'raw');return{name:it.own?it.own:nm(it.code),g:+it.g||0,b:b}})}}).filter(function(m){return m.items.length})}}).filter(function(d){return d.meals.length});
+ var by={};(p.meals||[]).forEach(function(m){var k=+m.day||1;(by[k]=by[k]||[]).push(m)});
+ return Object.keys(by).sort(function(a,b){return a-b}).map(function(k){return{name:(p.dayNames&&p.dayNames[k-1])||'',meals:by[k].sort(function(a,b){return(a.slot||0)-(b.slot||0)}).map(function(m){
+  return{name:'Meal '+(m.slot||1),items:(m.comps||[]).map(function(c){return c.ck>0?{name:nm(c.r),g:+c.ck,b:'cooked'}:{name:nm(c.r),g:+c.g||0,b:'raw'}})}})}})}
+function plans(){var P=(A.data&&A.data.plans)||[];return P.filter(function(p){return p.sent&&(!A.coach||p.coachEmail===A.coach)})}
+function coaches(){var by={},R=(A.data&&A.data.roster)||[];R.forEach(function(r){if(r.active)by[r.email]={email:r.email,label:(r.name||r.email)+(r.gym?' \u00b7 '+r.gym:''),official:1}});
+ ((A.data&&A.data.plans)||[]).forEach(function(p){if(p.coachEmail&&!by[p.coachEmail])by[p.coachEmail]={email:p.coachEmail,label:p.coach||p.coachEmail,official:0}});
+ return Object.keys(by).map(function(k){return by[k]}).sort(function(a,b){return(b.official-a.official)||a.label.localeCompare(b.label)})}
+var CSS='#cadW{position:fixed;inset:0;z-index:9995;background:rgba(11,20,40,.55);display:flex;align-items:flex-start;justify-content:center;padding:max(12px,env(safe-area-inset-top)) 10px 12px;overflow:auto;font-family:inherit}'+
+'#cadW .cad{background:#F4F6FA;border-radius:18px;max-width:760px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.3);overflow:hidden;color:#1A2B4A}'+
+'#cadW .hd{background:#16479E;color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px}#cadW .hd b{font-size:18px;flex:1}#cadW .hd button{border:0;background:rgba(255,255,255,.15);color:#fff;border-radius:999px;height:34px;padding:0 14px;font:inherit;font-weight:800;cursor:pointer}'+
+'#cadW .bd{padding:14px 16px 18px}#cadW .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}'+
+'#cadW select,#cadW input{height:40px;border:1px solid #CBD9F0;border-radius:10px;padding:0 10px;font:inherit;font-size:14px;background:#fff;color:#16479E;font-weight:700;min-width:0}'+
+'#cadW .btn{height:38px;border-radius:999px;border:1.5px solid #16479E;background:#fff;color:#16479E;font:inherit;font-weight:800;font-size:13px;padding:0 14px;cursor:pointer}#cadW .btn.y{background:#FDB913;border-color:#FDB913;color:#16479E}'+
+'#cadW .cal{background:#fff;border:1px solid #DCE3EF;border-radius:14px;padding:10px}#cadW .mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}#cadW .mh b{font-size:16px;color:#0E2F6B}'+
+'#cadW .mh button{width:36px;height:36px;border-radius:50%;border:1px solid #DCE3EF;background:#fff;color:#16479E;font-size:18px;cursor:pointer}'+
+'#cadW .g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}#cadW .wd{font-size:11px;font-weight:800;color:#5B6B86;text-align:center;padding:4px 0}'+
+'#cadW .dd{height:46px;border-radius:10px;border:0;background:#F4F6FA;color:#1A2B4A;font:inherit;font-weight:700;font-size:14px;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center}'+
+'#cadW .dd.x{background:transparent;cursor:default}#cadW .dd.has{background:#EDF3FD;color:#16479E}#cadW .dd.has i{position:absolute;top:3px;right:3px;min-width:16px;height:16px;border-radius:8px;background:#FDB913;color:#16479E;font-style:normal;font-size:10px;line-height:16px;padding:0 4px}'+
+'#cadW .dd.on{background:#16479E;color:#fff}#cadW .dd.tdy{outline:2px solid #FDB913}'+
+'#cadW .card{display:block;width:100%;text-align:left;background:#fff;border:1px solid #DCE3EF;border-radius:14px;padding:12px 14px;margin-top:10px;cursor:pointer;font:inherit;color:#16479E}'+
+'#cadW .card h4{margin:0;font-size:16px;color:#0E2F6B}#cadW .sub{font-size:12.5px;color:#5B6B86}#cadW .chip{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:#EEF3FB;color:#16479E;margin:6px 4px 0 0}'+
+'#cadW .chip.ok{background:#E3F6EA;color:#17713A}#cadW .chip.w{background:#FFF4D6;color:#8A5A00}#cadW .chip.y{background:#FDB913}'+
+'#cadW .day{background:#fff;border:1px solid #DCE3EF;border-radius:14px;overflow:hidden;margin-top:10px}#cadW .day>div:first-child{background:#16479E;color:#fff;font-weight:800;padding:8px 12px;font-size:14px}'+
+'#cadW .ml{padding:8px 12px;border-top:1px solid #EEF1F6}#cadW .ml>b{display:block;font-size:11.5px;color:#5B6B86;text-transform:uppercase;letter-spacing:.04em}'+
+'#cadW .it{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:3px 0}#cadW .it span:last-child{white-space:nowrap;font-weight:800;color:#16479E}#cadW .it small{font-size:10px;padding:1px 6px;border-radius:999px;background:#EEF3FB;margin-left:4px}#cadW .it small.c{background:#FDB913}'+
+'#cadW .note{font-size:12.5px;background:#FFF8E5;color:#8A5A00;border-radius:10px;padding:8px 10px;margin:8px 0}#cadW .er{color:#B3261E;font-size:13px;font-weight:700;margin-top:6px}'+
+'#cadW .lst{background:#fff;border:1px solid #DCE3EF;border-radius:12px;margin-top:10px}#cadW .lst>div{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 12px;border-top:1px solid #EEF1F6;font-size:13.5px}#cadW .lst>div:first-child{border-top:0}'+
+'#cadW label{display:block;font-size:12px;font-weight:800;color:#5B6B86;margin:10px 0 4px}#cadW .fi{width:100%;box-sizing:border-box}';
+function shell(title,body,back){var w=D.getElementById('cadW');if(!w){w=D.createElement('div');w.id='cadW';var st=D.createElement('style');st.textContent=CSS;w.appendChild(st);var box=D.createElement('div');box.className='cad';w.appendChild(box);D.body.appendChild(w);
+  w.addEventListener('click',function(ev){if(ev.target===w)close()})}
+ w.querySelector('.cad').innerHTML='<div class="hd">'+(back?'<button type="button" data-a="back">\u2190</button>':'')+'<b>'+e(title)+'</b><button type="button" data-a="close">Close</button></div><div class="bd">'+body+'</div>';
+ w.querySelector('[data-a=close]').onclick=close;var bk=w.querySelector('[data-a=back]');if(bk)bk.onclick=back;return w.querySelector('.bd')}
+function close(){var w=D.getElementById('cadW');if(w)w.remove();A.open=null;A.view='cal'}
+async function load(){A.busy=true;A.err='';try{A.data=await rpc('coach_plans_all');if(!A.data)throw new Error('Not allowed')}catch(x){A.err=x.message||'Could not read the plans'}A.busy=false}
+async function openCal(){if(!A.data){shell("Coaches' Plans",'<div class="sub">Reading the plans\u2026</div>');await load()}
+ if(!A.ym){var t=myt(new Date().toISOString()),P=plans();var last=P.length?myt(P[0].sent):t;A.ym=ymd(last||t).slice(0,7)}drawCal()}
+function drawCal(){A.view='cal';var P=plans(),cnt={};P.forEach(function(p){var d=myt(p.sent);if(d){var k=ymd(d);cnt[k]=(cnt[k]||0)+1}});
+ var y=+A.ym.slice(0,4),m=+A.ym.slice(5,7)-1,first=new Date(Date.UTC(y,m,1)),n=new Date(Date.UTC(y,m+1,0)).getUTCDate(),lead=(first.getUTCDay()+6)%7,today=ymd(myt(new Date().toISOString()));
+ var cs=coaches(),g='';WD.forEach(function(w){g+='<div class="wd">'+w+'</div>'});for(var i=0;i<lead;i++)g+='<div class="dd x"></div>';
+ for(var d=1;d<=n;d++){var k=A.ym+'-'+(d<10?'0':'')+d,c=cnt[k]||0;g+='<button type="button" class="dd'+(c?' has':'')+(k===A.day?' on':'')+(k===today?' tdy':'')+'" data-d="'+k+'">'+d+(c?'<i>'+c+'</i>':'')+'</button>'}
+ var list='';if(A.day){var L=P.filter(function(p){var d=myt(p.sent);return d&&ymd(d)===A.day});
+  list='<div style="margin-top:14px;font-weight:800;color:#0E2F6B">'+e(nice(A.day))+' \u00b7 '+L.length+' plan'+(L.length===1?'':'s')+' sent</div>'+
+   (L.length?L.map(function(p){var D2=daysOf(p),ml=D2.reduce(function(a,x){return a+x.meals.length},0),i=(A.data.plans||[]).indexOf(p);
+    return'<button type="button" class="card" data-p="'+i+'"><h4>'+e(p.client||'Client')+'</h4><div class="sub">Coach '+e(p.coach)+'</div>'+
+     '<span class="chip '+(p.status==='accepted'?'ok':'w')+'">'+(p.status==='accepted'?'Accepted by Client':p.status==='pending'?'Waiting for Client':e(p.status))+'</span>'+
+     '<span class="chip'+(p.basis==='cooked'?' y':'')+'">'+(p.basis==='cooked'?'Cooked':'Raw')+' Weight</span><span class="chip">'+D2.length+' Days \u00b7 '+ml+' Meals</span></button>'}).join('')
+   :'<div class="sub" style="margin-top:6px">No plan was sent that day.</div>')}
+ else list='<div class="sub" style="margin-top:12px">Days with a number are days a Coach sent a Meal Plan. Tap one to see them.</div>';
+ var bd=shell("Coaches' Plans",(A.err?'<div class="er">'+e(A.err)+'</div>':'')+
+  '<div class="row"><select id="cadC" style="flex:1"><option value="">All Coaches</option>'+cs.map(function(c){return'<option value="'+e(c.email)+'"'+(c.email===A.coach?' selected':'')+'>'+e(c.label)+(c.official?' \u2713':'')+'</option>'}).join('')+'</select>'+
+  '<button type="button" class="btn y" id="cadAs">\uff0b Assign Coach</button></div>'+
+  '<div class="cal"><div class="mh"><button type="button" data-m="-1">\u2039</button><b>'+MON[m]+' '+y+'</b><button type="button" data-m="1">\u203a</button></div><div class="g">'+g+'</div></div>'+list);
+ bd.querySelector('#cadC').onchange=function(){A.coach=this.value;A.day='';drawCal()};bd.querySelector('#cadAs').onclick=drawRoster;
+ [].forEach.call(bd.querySelectorAll('[data-m]'),function(b){b.onclick=function(){var dt=new Date(Date.UTC(y,m+(+b.dataset.m),1));A.ym=dt.toISOString().slice(0,7);A.day='';drawCal()}});
+ [].forEach.call(bd.querySelectorAll('.dd[data-d]'),function(b){b.onclick=function(){A.day=b.dataset.d===A.day?'':b.dataset.d;drawCal()}});
+ [].forEach.call(bd.querySelectorAll('[data-p]'),function(b){b.onclick=function(){drawPlan(A.data.plans[+b.dataset.p])}})}
+function drawPlan(p){A.view='plan';var D2=daysOf(p),t=p.targets||{},d=myt(p.sent);
+ var bd=shell(p.client||'Client','<div class="sub">Coach <b>'+e(p.coach)+'</b> \u00b7 Sent '+(d?e(nice(ymd(d))):'')+' \u00b7 written in <b>'+(p.basis==='cooked'?'Cooked':'Raw')+' Weight</b></div>'+
+  (t.kcal?'<div class="row" style="margin-top:8px"><span class="chip">'+Math.round(t.kcal)+' kcal a day</span><span class="chip">P '+Math.round(t.p||0)+' g</span><span class="chip">C '+Math.round(t.c||0)+' g</span><span class="chip">F '+Math.round(t.f||0)+' g</span></div>':'')+
+  (p.days&&p.days.length?'':'<div class="note">The Coach no longer keeps this Client in his Coach Plan App, so this is the plan as it was sent.</div>')+
+  '<div class="note" style="background:#EDF3FD;color:#16479E">View only \u2014 this is the Coach\'s plan.</div>'+
+  D2.map(function(dy,i){return'<div class="day"><div>Day '+(i+1)+(dy.name&&!/^day\s*\d+$/i.test(dy.name)?' \u00b7 '+e(dy.name):'')+'</div>'+dy.meals.map(function(ml){return'<div class="ml"><b>'+e(ml.name)+'</b>'+ml.items.map(function(it){
+   return'<div class="it"><span>'+e(it.name)+'</span><span>'+Math.round(it.g)+' g<small'+(it.b==='cooked'?' class="c"':'')+'>'+(it.b==='cooked'?'Cooked':'Raw')+'</small></span></div>'}).join('')+'</div>'}).join('')+'</div>'}).join('')+
+  ((p.orders||[]).length?'<div class="sub" style="margin-top:12px">Orders from this plan : '+p.orders.map(function(o){var od=myt(o.at);return e(o.no)+(od?' ( '+e(nice(ymd(od)))+' )':'')}).join(', ')+'</div>':''),drawCal)}
+function drawRoster(){A.view='roster';var R=(A.data&&A.data.roster)||[],cs=coaches().filter(function(c){return!c.official});
+ var bd=shell('Assign Coach','<div class="sub">Mark an AERA account as an official AERA Coach. They then show by name in the Coach list.</div>'+
+  '<label>AERA Account Email</label><input class="fi" id="caE" type="email" list="caL" placeholder="coach@email.com" autocomplete="off"><datalist id="caL">'+cs.map(function(c){return'<option value="'+e(c.email)+'">'+e(c.label)+'</option>'}).join('')+'</datalist>'+
+  '<label>Coach Name</label><input class="fi" id="caN" placeholder="e.g. Ng Say Seong">'+
+  '<label>Gym / Studio</label><input class="fi" id="caG" placeholder="e.g. TNT Fitness">'+
+  '<label>Referral Code ( optional )</label><input class="fi" id="caC" placeholder="e.g. SAYSEONGPREP" style="text-transform:uppercase">'+
+  '<div class="er" id="caEr"></div><div class="row" style="margin-top:12px"><button type="button" class="btn y" id="caSave">Assign as Coach</button></div>'+
+  '<div style="margin-top:14px;font-weight:800;color:#0E2F6B">AERA Coaches</div>'+
+  (R.length?'<div class="lst">'+R.map(function(r,i){return'<div><span><b>'+e(r.name||r.email)+'</b>'+(r.gym?' \u00b7 '+e(r.gym):'')+(r.code?' \u00b7 '+e(r.code):'')+'<br><span class="sub">'+e(r.email)+(r.active?'':' \u00b7 removed')+'</span></span>'+
+   '<button type="button" class="btn" data-r="'+i+'">'+(r.active?'Remove':'Restore')+'</button></div>'}).join('')+'</div>':'<div class="sub" style="margin-top:6px">No Coach assigned yet.</div>'),drawCal);
+ bd.querySelector('#caE').onchange=function(){var v=this.value.trim().toLowerCase(),c=coaches().filter(function(x){return x.email===v})[0];if(c&&!bd.querySelector('#caN').value)bd.querySelector('#caN').value=String(c.label).split(',')[0]};
+ bd.querySelector('#caSave').onclick=async function(){var er=bd.querySelector('#caEr');er.textContent='';this.disabled=true;
+  try{var j=await rpc('coach_roster_set',{p_email:bd.querySelector('#caE').value,p_name:bd.querySelector('#caN').value,p_gym:bd.querySelector('#caG').value,p_code:bd.querySelector('#caC').value,p_active:true});
+   if(!j||!j.ok){er.textContent=({bad_email:'Please enter a valid email.',no_account:'No AERA account uses that email yet. Ask them to sign up first.',not_allowed:'Only your accounts can assign Coaches.'})[j&&j.error]||'Could not save.';this.disabled=false;return}
+   await load();drawRoster()}catch(x){er.textContent=x.message;this.disabled=false}};
+ [].forEach.call(bd.querySelectorAll('[data-r]'),function(b){b.onclick=async function(){var r=R[+b.dataset.r];b.disabled=true;
+  try{await rpc('coach_roster_set',{p_email:r.email,p_name:r.name,p_gym:r.gym,p_code:r.code,p_active:!r.active});await load();drawRoster()}catch(x){b.disabled=false}}})}
+function btn(){var bar=D.querySelector('.ab-r');if(!bar||D.getElementById('cadBtn'))return;var b=D.createElement('button');b.type='button';b.id='cadBtn';
+ b.style.cssText='display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border-radius:999px;border:1.5px solid #FDB913;background:#FDB913;color:#16479E;font-weight:800;font-size:13px;font-family:inherit;cursor:pointer;white-space:nowrap;flex:none';
+ b.innerHTML='<span aria-hidden="true">\ud83d\udcc5</span><span>Coaches\' Plans</span>';b.onclick=openCal;bar.insertBefore(b,bar.firstChild)}
+var tries=0;async function init(){if(!tok()){if(++tries<40)setTimeout(init,1500);return}
+ try{var ok=await rpc('aera_owner');if(ok!==true)return}catch(x){if(++tries<40)setTimeout(init,3000);return}
+ btn();setInterval(btn,2000)}
+window.__aeraCoachAdminOpen=openCal;
+if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',function(){setTimeout(init,500)});else setTimeout(init,500);
+})();
+</script>
 </body>
 </html>
 <script id="aera-coach-pack-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Packaging Method":"包装方式","MAP Bento Box":"MAP 便当盒","Vacuum Packed":"真空包装","Oxygen replaced with Nitrogen / CO₂ and Top-Sealed. Food is never compressed. Keep chilled, 7 Days Shelf Life. RM 1.80 per Meal.":"以氮气 / 二氧化碳取代氧气并封顶。食物不会被压扁。请冷藏，保质期 7 天。每餐 RM 1.80。","Same freshness, flatter pack. Takes far less Fridge space, compresses the Food slightly. RM 1.80 per Meal.":"同样新鲜，包装更扁平。更省冰箱空间，食物会被轻微压扁。每餐 RM 1.80。","Home-Sourced. Not cooked by AERA":"自备。非 AERA 烹调","Not Ours":"非我们的"});(window.AERA_I18N_RE=window.AERA_I18N_RE||[]).push([/^Protein - ([\d.]+) g$/,"蛋白 $1 克"],[/^Carbs - ([\d.]+) g$/,"碳水 $1 克"],[/^Fat - ([\d.]+) g$/,"脂肪 $1 克"],[/^MAP Bento Box (RM [\d.]+)$/,"MAP 便当盒 $1"],[/^Vacuum Packed (RM [\d.]+)$/,"真空包装 $1"])}catch(e){}</script>
