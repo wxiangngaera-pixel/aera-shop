@@ -2298,7 +2298,7 @@ function drawRoster(){A.view='roster';var R=(A.data&&A.data.roster)||[],cs=coach
   try{await rpc('coach_roster_set',{p_email:r.email,p_name:r.name,p_gym:r.gym,p_code:r.code,p_active:!r.active});await load();drawRoster()}catch(x){b.disabled=false}}})}
 function btn(){var bar=D.querySelector('.ab-r');if(!bar||D.getElementById('cadBtn'))return;var b=D.createElement('button');b.type='button';b.id='cadBtn';
  b.style.cssText='display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border-radius:999px;border:1.5px solid #FDB913;background:#FDB913;color:#16479E;font-weight:800;font-size:13px;font-family:inherit;cursor:pointer;white-space:nowrap;flex:none';
- b.innerHTML='<span aria-hidden="true">\ud83d\udcc5</span><span>Coaches\' Plans</span>';b.onclick=openCal;bar.insertBefore(b,bar.firstChild)}
+ b.innerHTML='<span aria-hidden="true">\ud83d\udcc5</span><span>Coaches\' Plans</span>';b.onclick=openCal;if(!pin(b))bar.insertBefore(b,bar.firstChild)}
 /* Peter 2nd Nov 2026 : when the saved sign-in can no longer be renewed, say so plainly and offer one tap to sign in again
    ( it comes straight back to the Coach Plan App ). Shown to anyone whose sign-in has run out, so nothing they save is lost quietly. */
 function relog(){if(D.getElementById('cpRelog'))return;var w=D.createElement('div');w.id='cpRelog';
@@ -2344,12 +2344,13 @@ function vview(){var bar=D.getElementById('cvBar');if(!bar)return;var v=D.getEle
 async function vinit(){if(!A.data)await load();if(A.data){vbar();vview()}}
 /* Peter 2nd Nov 2026 : a Log In button in the title bar whenever nobody is signed in ( or the sign-in has run out ),
    so a Coach can always sign in from the App. It comes straight back to the Coach Plan App. */
+function pin(b){if(D.documentElement.classList.contains('aera-nobar')){b.style.setProperty('position','fixed');b.style.setProperty('top','calc(env(safe-area-inset-top) + 10px)');b.style.setProperty('left','12px');b.style.setProperty('z-index','9998');D.body.appendChild(b);return true}return false}
 function loginBtn(){var bar=D.querySelector('.ab-r');if(!bar)return;var b=D.getElementById('cpLogin'),out=!tok()||DEAD;
  if(!out){if(b)b.remove();return}if(b)return;b=D.createElement('a');b.id='cpLogin';b.href='https://aeramealprep.net/account/?next=coach#login';
  b.style.cssText='display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 16px;border-radius:999px;border:1.5px solid #FDB913;background:#FDB913;color:#16479E;font-weight:800;font-size:14px;font-family:inherit;text-decoration:none;white-space:nowrap;flex:none';
  b.innerHTML='<span aria-hidden="true">\ud83d\udd11</span><span>Log In</span>';
  b.onclick=function(){try{if(DEAD){for(var i=localStorage.length-1;i>=0;i--){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k))localStorage.removeItem(k)}}}catch(x){}};
- bar.insertBefore(b,bar.firstChild)}
+ if(!pin(b))bar.insertBefore(b,bar.firstChild)}
 setTimeout(loginBtn,800);setInterval(loginBtn,2000);
 window.__aeraCoachAdminOpen=openCal;
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',function(){setTimeout(init,500)});else setTimeout(init,500);
