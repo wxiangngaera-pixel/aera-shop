@@ -2325,5 +2325,14 @@ wrap();setInterval(function(){try{wrap();inject()}catch(e){}},1000);
 var q=0;window.addEventListener('scroll',function(){if(q)return;q=1;requestAnimationFrame(function(){q=0;try{bar(dayTot())}catch(e){}})},{passive:true});
 })();
 </script>
+<script id="aera-meal-dayrow">/* Peter 2nd Nov 2026 : + Add Day and Delete Day sit on their own row under the Day tabs, always in sight. With many Days
+   the tabs scroll sideways, and at the end of that row the two buttons were out of view. */
+(function(){if(window.__mpDayRow)return;window.__mpDayRow=1;
+var S=document.createElement('style');S.textContent='#mpDayAct{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}#mpDayAct button{border:2px dashed var(--line,#CBD9F0);border-radius:11px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;background:#fff;color:var(--navy,#16479E);font-family:inherit}#mpDayAct .deldaybtn{border-style:solid;border-color:#E5A3A1;color:#C9302C}#mpDayAct .deldaybtn:hover{border-color:#E5484D;background:#FFF5F5}';document.head.appendChild(S);
+function fix(){try{[].forEach.call(document.querySelectorAll('.daytabs'),function(t){var bs=t.querySelectorAll('.adddaybtn');if(!bs.length)return;
+ var row=t.nextElementSibling&&t.nextElementSibling.id==='mpDayAct'?t.nextElementSibling:null;if(!row){row=document.createElement('div');row.id='mpDayAct';t.insertAdjacentElement('afterend',row)}
+ row.innerHTML='';[].forEach.call(bs,function(b){if(b.classList.contains('deldaybtn')){var d=(typeof SELD!=='undefined'&&SELD)||'';b.textContent='\u2715 Delete Day '+d}row.appendChild(b)})})}catch(e){}}
+var T=0;new MutationObserver(function(){clearTimeout(T);T=setTimeout(fix,40)}).observe(document.body,{childList:true,subtree:true});setTimeout(fix,400);
+})();</script>
 </body>
 </html>
