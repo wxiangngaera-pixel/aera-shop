@@ -2194,11 +2194,11 @@ function e(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{
    Renew it here ( once, shared ) and save it back the same way, so this page and the rest of the App keep working. */
 function sess0(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var raw=JSON.parse(localStorage.getItem(k)||'null'),o=raw&&raw.currentSession?raw.currentSession:raw;if(o&&(o.access_token||o.refresh_token))return{k:k,raw:raw,o:o}}}}catch(x){}return null}
 function tok(){var s=sess0();return s&&s.o.access_token||''}
-var RF=null;function fresh(force){var s=sess0();if(!s)return Promise.resolve('');var o=s.o;
+var RF=null,DEAD=false;function fresh(force){if(DEAD)return Promise.resolve('');var s=sess0();if(!s)return Promise.resolve('');var o=s.o;
  if(!force&&o.access_token&&(!o.expires_at||o.expires_at*1000>Date.now()+60000))return Promise.resolve(o.access_token);
  if(!o.refresh_token)return Promise.resolve(o.access_token||'');if(RF)return RF;
  RF=fetch(SBU+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{'Content-Type':'application/json',apikey:AK},body:JSON.stringify({refresh_token:o.refresh_token})})
-  .then(function(r){return r.ok?r.json():null}).then(function(n){RF=null;if(!n||!n.access_token){var s2=sess0();return s2&&s2.o.access_token!==o.access_token?s2.o.access_token:''}
+  .then(function(r){if(r.status===400||r.status===401)DEAD=true;return r.ok?r.json():null}).then(function(n){RF=null;if(!n||!n.access_token){var s2=sess0();return s2&&s2.o.access_token!==o.access_token?s2.o.access_token:''}
    var cur=sess0();if(cur&&cur.o.refresh_token!==o.refresh_token)return cur.o.access_token;
    var v={access_token:n.access_token,refresh_token:n.refresh_token,token_type:n.token_type||'bearer',expires_in:n.expires_in,expires_at:n.expires_at||Math.floor(Date.now()/1000)+(+n.expires_in||3600),user:n.user||o.user};
    try{var raw=s.raw;if(raw&&raw.currentSession){raw.currentSession=Object.assign({},raw.currentSession,v);if('expiresAt' in raw)raw.expiresAt=v.expires_at}else raw=Object.assign({},raw,v);localStorage.setItem(s.k,JSON.stringify(raw))}catch(x){}
@@ -2299,8 +2299,16 @@ function drawRoster(){A.view='roster';var R=(A.data&&A.data.roster)||[],cs=coach
 function btn(){var bar=D.querySelector('.ab-r');if(!bar||D.getElementById('cadBtn'))return;var b=D.createElement('button');b.type='button';b.id='cadBtn';
  b.style.cssText='display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border-radius:999px;border:1.5px solid #FDB913;background:#FDB913;color:#16479E;font-weight:800;font-size:13px;font-family:inherit;cursor:pointer;white-space:nowrap;flex:none';
  b.innerHTML='<span aria-hidden="true">\ud83d\udcc5</span><span>Coaches\' Plans</span>';b.onclick=openCal;bar.insertBefore(b,bar.firstChild)}
+/* Peter 2nd Nov 2026 : when the saved sign-in can no longer be renewed, say so plainly and offer one tap to sign in again
+   ( it comes straight back to the Coach Plan App ). Shown to anyone whose sign-in has run out, so nothing they save is lost quietly. */
+function relog(){if(D.getElementById('cpRelog'))return;var w=D.createElement('div');w.id='cpRelog';
+ w.style.cssText='position:sticky;top:0;z-index:9000;margin:10px auto;max-width:960px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;border-radius:14px;background:#FFF4D6;border:1px solid #F5C451;color:#5C3D00;font-weight:700;font-size:14px';
+ w.innerHTML='<span style="flex:1;min-width:200px">Your sign-in has expired. Sign in again to keep your Clients in your AERA Account.</span><button type="button" style="height:38px;border:0;border-radius:999px;background:#16479E;color:#fff;font:inherit;font-weight:800;padding:0 16px;cursor:pointer">Sign In Again</button>';
+ w.querySelector('button').onclick=function(){try{for(var i=localStorage.length-1;i>=0;i--){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k))localStorage.removeItem(k)}['aera.account','aera.refLock'].forEach(function(x){localStorage.removeItem(x)})}catch(x){}
+  location.href='https://aeramealprep.net/account/?next=coach#login'};
+ var c=D.querySelector('[data-section=client]');if(c&&c.parentNode)c.parentNode.insertBefore(w,c);else D.body.insertBefore(w,D.body.firstChild)}
 var tries=0;async function init(){if(!tok()){if(++tries<40)setTimeout(init,1500);return}
- try{var ok=await rpc('aera_owner');if(ok!==true)return}catch(x){if(++tries<40)setTimeout(init,3000);return}
+ try{var ok=await rpc('aera_owner');if(ok!==true)return}catch(x){if(DEAD){relog();return}if(++tries<40)setTimeout(init,3000);return}
  btn();setInterval(btn,2000);vinit()}
 /* Peter 2nd Nov 2026 : "Viewing as" dropdown at the top of the Coach Plan App ( like AERA Referral and AERA Fridge ).
    Pick a Coach : the page shows that Coach's Clients and their Meal Plans, read only, and the builder is hidden so nothing
