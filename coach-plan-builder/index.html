@@ -2235,7 +2235,7 @@ function shell(title,body,back){var w=D.getElementById('cadW');if(!w){w=D.create
  w.querySelector('.cad').innerHTML='<div class="hd">'+(back?'<button type="button" data-a="back">\u2190</button>':'')+'<b>'+e(title)+'</b><button type="button" data-a="close">Close</button></div><div class="bd">'+body+'</div>';
  w.querySelector('[data-a=close]').onclick=close;var bk=w.querySelector('[data-a=back]');if(bk)bk.onclick=back;return w.querySelector('.bd')}
 function close(){var w=D.getElementById('cadW');if(w)w.remove();A.open=null;A.view='cal'}
-async function load(){A.busy=true;A.err='';try{A.data=await rpc('coach_plans_all');if(!A.data)throw new Error('Not allowed')}catch(x){A.err=x.message||'Could not read the plans'}A.busy=false}
+async function load(){A.busy=true;A.err='';try{A.data=await rpc('coach_plans_all');if(!A.data)throw new Error('Not allowed')}catch(x){A.err=x.message||'Could not read the plans'}A.busy=false;try{if(D.getElementById('cvBar')){vbar();vview()}}catch(x){}}
 async function openCal(){if(!A.data){shell("Coaches' Plans",'<div class="sub">Reading the plans\u2026</div>');await load()}
  if(!A.ym){var t=myt(new Date().toISOString()),P=plans();var last=P.length?myt(P[0].sent):t;A.ym=ymd(last||t).slice(0,7)}drawCal()}
 function drawCal(){A.view='cal';var P=plans(),cnt={};P.forEach(function(p){var d=myt(p.sent);if(d){var k=ymd(d);cnt[k]=(cnt[k]||0)+1}});
@@ -2288,7 +2288,39 @@ function btn(){var bar=D.querySelector('.ab-r');if(!bar||D.getElementById('cadBt
  b.innerHTML='<span aria-hidden="true">\ud83d\udcc5</span><span>Coaches\' Plans</span>';b.onclick=openCal;bar.insertBefore(b,bar.firstChild)}
 var tries=0;async function init(){if(!tok()){if(++tries<40)setTimeout(init,1500);return}
  try{var ok=await rpc('aera_owner');if(ok!==true)return}catch(x){if(++tries<40)setTimeout(init,3000);return}
- btn();setInterval(btn,2000)}
+ btn();setInterval(btn,2000);vinit()}
+/* Peter 2nd Nov 2026 : "Viewing as" dropdown at the top of the Coach Plan App ( like AERA Referral and AERA Fridge ).
+   Pick a Coach : the page shows that Coach's Clients and their Meal Plans, read only, and the builder is hidden so nothing
+   of yours or the Coach's can be changed. "My own Clients" brings your builder back. */
+var V={coach:'',client:0};
+function vplans(){return((A.data&&A.data.plans)||[]).filter(function(p){return p.coachEmail===V.coach}).sort(function(a,b){return String(b.sent||'').localeCompare(String(a.sent||''))})}
+function vcss(){if(D.getElementById('cvCss'))return;var s=D.createElement('style');s.id='cvCss';s.textContent=CSS.replace(/^#cadW\{[^}]*\}/,'').replace(/#cadW/g,'#cvView')+
+ 'body.cv-on [data-section=client],body.cv-on [data-section=days],body.cv-on #outCard,body.cv-on .finish,body.cv-on #msg{display:none!important}'+
+ '#cvBar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:16px 0;padding:10px 14px;border-radius:14px;background:#EDF3FD;border:1px solid #CBD9F0}'+
+ '#cvBar b{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#16479E}#cvBar select{flex:1;min-width:220px;max-width:420px;height:42px;padding:0 12px;border-radius:10px;border:1px solid #CBD9F0;font:inherit;font-weight:700;color:#16479E;background:#fff}'+
+ '#cvBar span{font-size:12px;color:#5B6B86}#cvView .tabs2{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 12px}#cvView .tabs2 button{height:38px;border-radius:999px;border:1.5px solid #16479E;background:#fff;color:#16479E;font:inherit;font-weight:800;font-size:13.5px;padding:0 14px;cursor:pointer}'+
+ '#cvView .tabs2 button.on{background:#16479E;color:#fff}#cvView .days2{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}#cvView .days2 .day{margin-top:0}';D.head.appendChild(s)}
+function vbar(){var card=D.querySelector('[data-section=client]');if(!card||!A.data)return;vcss();var bar=D.getElementById('cvBar');
+ if(!bar){bar=D.createElement('div');bar.id='cvBar';card.parentNode.insertBefore(bar,card)}
+ var cs=coaches();bar.innerHTML='<b>Viewing as</b><select id="cvSel"><option value="">My own Clients</option>'+cs.map(function(c){return'<option value="'+e(c.email)+'"'+(c.email===V.coach?' selected':'')+'>'+e(c.label)+(c.official?' \u2713':'')+'</option>'}).join('')+'</select><span>Only your accounts see this.</span>';
+ bar.querySelector('#cvSel').onchange=function(){V.coach=this.value;V.client=0;vview();try{scrollTo({top:bar.getBoundingClientRect().top+scrollY-80,behavior:'smooth'})}catch(x){}}}
+function vview(){var bar=D.getElementById('cvBar');if(!bar)return;var v=D.getElementById('cvView');
+ if(!V.coach){D.body.classList.remove('cv-on');if(v)v.remove();return}
+ D.body.classList.add('cv-on');if(!v){v=D.createElement('div');v.id='cvView';bar.parentNode.insertBefore(v,bar.nextSibling)}
+ var P=vplans(),c=coaches().filter(function(x){return x.email===V.coach})[0]||{label:V.coach};
+ if(!P.length){v.innerHTML='<div class="card"><h2>'+e(c.label)+'</h2><div class="sub">This Coach has no Clients with a Meal Plan yet.</div></div>';return}
+ if(V.client>=P.length)V.client=0;var p=P[V.client],D2=daysOf(p),t=p.targets||{},d=myt(p.sent);
+ v.innerHTML='<div class="card"><h2>Clients of '+e(c.label)+'</h2><div class="tabs2">'+P.map(function(x,i){return'<button type="button" data-i="'+i+'"'+(i===V.client?' class="on"':'')+'>'+e(x.client||'Client')+'</button>'}).join('')+'</div>'+
+  '<div class="sub">'+(d?'Sent '+e(nice(ymd(d))):'Not sent yet')+' \u00b7 written in <b>'+(p.basis==='cooked'?'Cooked':'Raw')+' Weight</b></div>'+
+  '<div style="margin:6px 0 4px"><span class="chip '+(p.status==='accepted'?'ok':'w')+'">'+(p.status==='accepted'?'Accepted by Client':p.status==='pending'?'Waiting for Client':p.status==='draft'?'Draft ( not sent )':e(p.status))+'</span>'+
+   (t.kcal?'<span class="chip">'+Math.round(t.kcal)+' kcal a day</span><span class="chip">P '+Math.round(t.p||0)+' g</span><span class="chip">C '+Math.round(t.c||0)+' g</span><span class="chip">F '+Math.round(t.f||0)+' g</span>':'')+'</div>'+
+  (p.days&&p.days.length?'':'<div class="note">The Coach no longer keeps this Client in his Coach Plan App, so this is the plan as it was sent.</div>')+
+  '<div class="note" style="background:#EDF3FD;color:#16479E">View only \u2014 this is the Coach\u2019s plan. Pick \u201cMy own Clients\u201d above to go back to yours.</div>'+
+  '<div class="days2">'+D2.map(function(dy,i){return'<div class="day"><div>Day '+(i+1)+(dy.name&&!/^day\s*\d+$/i.test(dy.name)?' \u00b7 '+e(dy.name):'')+'</div>'+dy.meals.map(function(ml){return'<div class="ml"><b>'+e(ml.name)+'</b>'+ml.items.map(function(it){
+   return'<div class="it"><span>'+e(it.name)+'</span><span>'+Math.round(it.g)+' g<small'+(it.b==='cooked'?' class="c"':'')+'>'+(it.b==='cooked'?'Cooked':'Raw')+'</small></span></div>'}).join('')+'</div>'}).join('')+'</div>'}).join('')+'</div>'+
+  ((p.orders||[]).length?'<div class="sub" style="margin-top:12px">Orders from this plan : '+p.orders.map(function(o){var od=myt(o.at);return e(o.no)+(od?' ( '+e(nice(ymd(od)))+' )':'')}).join(', ')+'</div>':'')+'</div>';
+ [].forEach.call(v.querySelectorAll('.tabs2 [data-i]'),function(b){b.onclick=function(){V.client=+b.dataset.i;vview()}})}
+async function vinit(){if(!A.data)await load();if(A.data){vbar();vview()}}
 window.__aeraCoachAdminOpen=openCal;
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',function(){setTimeout(init,500)});else setTimeout(init,500);
 })();
