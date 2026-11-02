@@ -2334,5 +2334,21 @@ function fix(){try{[].forEach.call(document.querySelectorAll('.daytabs'),functio
  row.innerHTML='';[].forEach.call(bs,function(b){if(b.classList.contains('deldaybtn')){var d=(typeof SELD!=='undefined'&&SELD)||'';b.textContent='\u2715 Delete Day '+d}row.appendChild(b)})})}catch(e){}}
 var T=0;new MutationObserver(function(){clearTimeout(T);T=setTimeout(fix,40)}).observe(document.body,{childList:true,subtree:true});setTimeout(fix,400);
 })();</script>
+<script id="aera-ck-keep">/* Peter 2nd Nov 2026 : Console New Order : a Cooked Weight typed is never changed behind your back. If anything else moves an item's
+   Raw grams ( Fine-Tune, meal split ), the Raw grams go back to match the Cooked Weight shown. - / + on a Cooked item moves the Cooked grams
+   one Kitchen step. The Order saves exactly the Cooked grams on screen. */
+(function(){if(window.__aeraCkKeep)return;window.__aeraCkKeep=1;
+function con(){return !!window.__AERA_CONSOLE}
+function ckOn(mi,cp){try{return con()&&typeof window.kcItemCk==='function'?!!window.kcItemCk(mi,cp.r):false}catch(e){return false}}
+function fixAll(){try{if(!con()||typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return;PLAN.meals.forEach(function(m,mi){(m.comps||[]).forEach(function(cp){
+ if(!cp||!(+cp.ck>0))return;var r=BYCODE[cp.r];if(!r||!ckOn(mi,cp))return;var rw=rawFromCooked(r,cp.ck);if(rw==null||!(rw>0))return;var g=clampG(r,rw,1);if(g!==cp.g)cp.g=g})})}catch(e){}}
+function cp2(f,w,flag){for(var k in f)try{w[k]=f[k]}catch(x){}w[flag]=1;return w}
+function wrapR(){var f=window.renderPlan;if(typeof f!=='function'||f.__ckk)return;window.renderPlan=cp2(f,function(){fixAll();return f.apply(this,arguments)},'__ckk')}
+function wrapP(){var f=window.planPayload;if(typeof f!=='function'||f.__ckp)return;window.planPayload=cp2(f,function(){fixAll();return f.apply(this,arguments)},'__ckp')}
+function wrapB(){var f=window.bump;if(typeof f!=='function'||f.__ckb)return;window.bump=cp2(f,function(mi,ci,dir){try{if(con()&&typeof cookSet==='function'){var cp=PLAN.meals[mi].comps[ci],r=BYCODE[cp.r];
+ if(r&&ckOn(mi,cp)){var cur=+cp.ck>0?+cp.ck:(cookedOf(r,cp.g)||0),s=(r.po&&r.po[2])||25;if(cur>0){cp.wb='c';return cookSet(mi,ci,Math.max(s,cur+dir*s))}}}}catch(e){}return f.apply(this,arguments)},'__ckb')}
+function all(){wrapR();wrapP();wrapB()}
+setInterval(all,700);all()})();
+</script>
 </body>
 </html>
