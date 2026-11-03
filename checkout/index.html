@@ -1958,13 +1958,26 @@ function chipPick(total,cb){var D=document,old=D.getElementById('aeraPay');if(ol
  +'#aeraPay .ft{display:flex;gap:8px;align-items:center;justify-content:center;padding:14px 16px 22px;font-size:12px;color:#3A3A3A;text-align:center}'
  +'#aeraPay .busy{position:absolute;inset:0;background:rgba(255,255,255,.92);display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;font-weight:700;color:#16479E;border-radius:inherit}'
  +'#aeraPay .busy:before{content:"";width:36px;height:36px;border-radius:50%;border:4px solid #E3E8F2;border-top-color:#16479E;animation:apSp 1s linear infinite}'
+ +'#aeraPay .fl{display:block;font-size:12px;font-weight:700;color:#16479E;margin:0 0 12px}'
+ +'#aeraPay .in{display:block;width:100%;margin-top:6px;border:2px solid #E3E8F2;border-radius:12px;padding:13px 14px;font:600 16px Montserrat,system-ui,sans-serif;color:#0B0B0B;outline:none;background:#fff}'
+ +'#aeraPay .in:focus{border-color:#16479E}#aeraPay .in.bad{border-color:#D92D20}'
+ +'#aeraPay .cw{position:relative;display:block}#aeraPay .br{position:absolute;right:12px;top:50%;transform:translateY(-35%);font-size:11px;font-weight:800;letter-spacing:.08em;color:#16479E}'
+ +'#aeraPay .r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}'
+ +'#aeraPay .er{background:#FEF3F2;color:#B42318;border-radius:10px;padding:10px 12px;font-size:13px;font-weight:600;margin:0 0 10px}'
  +'@keyframes apSp{to{transform:rotate(360deg)}}';
  function e(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
  function ini(n){return n.replace(/[^A-Za-z ]/g,'').split(' ').filter(Boolean).slice(0,2).map(function(w){return w[0]}).join('').toUpperCase()}
  var amt='RM '+(+total).toFixed(2);
  var fpx='<div class="lb">POPULAR BANKS</div><div class="g6">'+TOP.map(function(b){return '<button class="bk" data-b="'+b[0]+'"><em style="background:'+b[2]+';color:'+b[3]+'">'+e(ini(b[1]))+'</em>'+e(b[1])+'</button>'}).join('')+'</div>'
   +'<input class="sr" type="search" placeholder="Search Other Banks" autocomplete="off"><div class="ls">'+MORE.map(function(b){return '<button data-b="'+b[0]+'" data-n="'+e(b[1].toLowerCase())+'">'+e(b[1])+'</button>'}).join('')+'</div>';
- var card='<div class="lb">CREDIT OR DEBIT CARD</div><p class="tx">Visa or Mastercard. You type your card on the secure card page next.</p><button class="big" data-m="visa">Pay '+amt+' by Card</button>';
+ /* Peter 3rd Nov 2026 : the card form is AERA's own. It posts the card straight to CHIP ( direct post ), never through AERA. */
+ var card='<form class="cf" method="POST" autocomplete="on" novalidate><div class="lb">CREDIT OR DEBIT CARD</div>'
+  +'<label class="fl">Cardholder Name<input class="in" name="cardholder_name" autocomplete="cc-name" placeholder="Name on the Card" maxlength="80"></label>'
+  +'<label class="fl">Card Number<span class="cw"><input class="in" data-k="num" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="23"><b class="br"></b></span></label>'
+  +'<div class="r2"><label class="fl">Expiry ( MM/YY )<input class="in" data-k="exp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5"></label>'
+  +'<label class="fl">CVC<input class="in" name="cvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4"></label></div>'
+  +'<input type="hidden" name="card_number"><input type="hidden" name="expires">'
+  +'<div class="er" hidden></div><button class="big" type="submit">Pay '+amt+' by Card</button><p class="tx" style="text-align:center;margin-top:8px">Visa or Mastercard. Your bank may ask for an OTP next.</p></form>';
  var qr='<div class="lb">DUITNOW QR</div><p class="tx">Scan the QR with any Malaysian banking or e-wallet app ( Touch ’n Go, GrabPay, Boost and more ).</p><button class="big" data-m="dnqr">Show DuitNow QR</button>';
  var sp='<div class="lb">SHOPEEPAY</div><p class="tx">Pay in the Shopee app with ShopeePay.</p><button class="big" data-m="shopee_pay">Pay '+amt+' with ShopeePay</button>';
  var w=D.createElement('div');w.id='aeraPay';
@@ -1974,7 +1987,7 @@ function chipPick(total,cb){var D=document,old=D.getElementById('aeraPay');if(ol
   +'<div class="pn" data-p="fpx">'+fpx+'</div><div class="pn" data-p="card" hidden>'+card+'</div><div class="pn" data-p="qr" hidden>'+qr+'</div><div class="pn" data-p="sp" hidden>'+sp+'</div>'
   +'<div class="ft">🔒 Secure Payment : We never see your Card or Bank Details.</div><div class="busy">Opening secure payment…</div></div>';
  D.body.appendChild(w);
- try{if(window.AERA_I18N)Object.assign(window.AERA_I18N,{"SECURE PAYMENT":"安全付款","to AERA Meal Prep":"付款给 AERA Meal Prep","Online Banking":"网上银行","Card":"银行卡","POPULAR BANKS":"常用银行","CREDIT OR DEBIT CARD":"信用卡或借记卡","Visa or Mastercard. You type your card on the secure card page next.":"Visa 或 Mastercard。下一步在安全的银行卡页面输入卡号。","Scan the QR with any Malaysian banking or e-wallet app ( Touch ’n Go, GrabPay, Boost and more ).":"用任何马来西亚银行或电子钱包 App 扫码（Touch ’n Go、GrabPay、Boost 等）。","Show DuitNow QR":"显示 DuitNow QR","Pay in the Shopee app with ShopeePay.":"在 Shopee App 用 ShopeePay 付款。","🔒 Secure Payment : We never see your Card or Bank Details.":"🔒 安全付款：我们不会看到您的银行卡或银行资料。","Opening secure payment…":"正在打开安全付款…"});
+ try{if(window.AERA_I18N)Object.assign(window.AERA_I18N,{"SECURE PAYMENT":"安全付款","to AERA Meal Prep":"付款给 AERA Meal Prep","Online Banking":"网上银行","Card":"银行卡","POPULAR BANKS":"常用银行","CREDIT OR DEBIT CARD":"信用卡或借记卡","Visa or Mastercard. You type your card on the secure card page next.":"Visa 或 Mastercard。下一步在安全的银行卡页面输入卡号。","Scan the QR with any Malaysian banking or e-wallet app ( Touch ’n Go, GrabPay, Boost and more ).":"用任何马来西亚银行或电子钱包 App 扫码（Touch ’n Go、GrabPay、Boost 等）。","Show DuitNow QR":"显示 DuitNow QR","Pay in the Shopee app with ShopeePay.":"在 Shopee App 用 ShopeePay 付款。","🔒 Secure Payment : We never see your Card or Bank Details.":"🔒 安全付款：我们不会看到您的银行卡或银行资料。","Opening secure payment…":"正在打开安全付款…","Cardholder Name":"持卡人姓名","Card Number":"卡号","Expiry ( MM/YY )":"有效期（MM/YY）","Visa or Mastercard. Your bank may ask for an OTP next.":"支持 Visa 或 Mastercard。银行可能会要求输入 OTP。","Please check the card details.":"请检查银行卡资料。"});
   if(window.AERA_I18N_RE&&!window.__apRe){window.__apRe=1;window.AERA_I18N_RE.push([/^Pay RM ([\d,.]+) by Card$/,"用银行卡支付 RM $1"],[/^Pay RM ([\d,.]+) with ShopeePay$/,"用 ShopeePay 支付 RM $1"])}}catch(x){}
  try{if(window.aeraRetranslate)window.aeraRetranslate()}catch(x){}
  var close=function(){try{w.parentNode.removeChild(w)}catch(x){}cb(null)};
@@ -1984,6 +1997,19 @@ function chipPick(total,cb){var D=document,old=D.getElementById('aeraPay');if(ol
  var go=function(q){w.querySelector('.busy').style.display='flex';cb(q,function(){w.querySelector('.busy').style.display='none'},close)};
  [].forEach.call(w.querySelectorAll('[data-b]'),function(b){b.onclick=function(){go('preferred=fpx&fpx_bank_code='+encodeURIComponent(b.getAttribute('data-b')))}});
  [].forEach.call(w.querySelectorAll('[data-m]'),function(b){b.onclick=function(){go('preferred='+encodeURIComponent(b.getAttribute('data-m')))}});
+ var cf=w.querySelector('.cf');if(cf){var num=cf.querySelector('[data-k="num"]'),exp=cf.querySelector('[data-k="exp"]'),cvc=cf.querySelector('[name="cvc"]'),nm=cf.querySelector('[name="cardholder_name"]'),br=cf.querySelector('.br'),er=cf.querySelector('.er');
+  var dg=function(s){return String(s||'').replace(/\D/g,'')};
+  var brand=function(d){return /^4/.test(d)?'VISA':/^(5[1-5]|2[2-7])/.test(d)?'MASTERCARD':''};
+  var luhn=function(d){var s=0,a=false;for(var i=d.length-1;i>=0;i--){var n=+d[i];if(a){n*=2;if(n>9)n-=9}s+=n;a=!a}return d.length>=13&&s%10===0};
+  num.oninput=function(){var d=dg(num.value).slice(0,19);num.value=d.replace(/(\d{4})(?=\d)/g,'$1 ');br.textContent=brand(d);num.classList.remove('bad')};
+  exp.oninput=function(){var d=dg(exp.value).slice(0,4);if(d.length===1&&+d>1)d='0'+d;exp.value=d.length>2?d.slice(0,2)+'/'+d.slice(2):d;exp.classList.remove('bad')};
+  cvc.oninput=function(){cvc.value=dg(cvc.value).slice(0,4);cvc.classList.remove('bad')};nm.oninput=function(){nm.classList.remove('bad')};
+  cf.onsubmit=function(ev){ev.preventDefault();var d=dg(num.value),x=dg(exp.value),mm=+x.slice(0,2),yy=+x.slice(2),now=new Date(),cy=now.getFullYear()%100,cm=now.getMonth()+1;
+   var bad=[];if(nm.value.trim().length<2)bad.push(nm);if(!luhn(d)||!brand(d))bad.push(num);if(x.length!==4||mm<1||mm>12||yy<cy||(yy===cy&&mm<cm))bad.push(exp);if(!/^\d{3,4}$/.test(cvc.value))bad.push(cvc);
+   [nm,num,exp,cvc].forEach(function(i){i.classList.toggle('bad',bad.indexOf(i)>=0)});
+   if(bad.length){er.hidden=false;er.textContent='Please check the card details.';try{if(window.aeraRetranslate)window.aeraRetranslate()}catch(z){}return}
+   er.hidden=true;cf.querySelector('[name="card_number"]').value=d;cf.querySelector('[name="expires"]').value=x.slice(0,2)+'/'+x.slice(2);
+   w.querySelector('.busy').style.display='flex';cb('card',function(){w.querySelector('.busy').style.display='none'},close,cf)}}
 }
 /* coming back with the phone's Back button : close the sheet so the customer can pay again */
 window.addEventListener('pageshow',function(ev){if(!ev.persisted)return;var x=document.getElementById('aeraPay');if(x){try{x.parentNode.removeChild(x)}catch(e){}}var b=document.getElementById('payBtn');if(b&&b.disabled){b.disabled=false;try{renderCart()}catch(e){}}});
@@ -1991,11 +2017,11 @@ function payChip(order,msg,total,name,email,phone){var m=document.getElementById
  var pending={orderNo:order.orderNo,msg:msg,email:email.toLowerCase(),total:total,at:Date.now()};try{sessionStorage.setItem('aera.pendingOrder',JSON.stringify(pending));localStorage.setItem('aera.pendingOrder',JSON.stringify(pending))}catch(e){}
  var fail=function(t){btn.disabled=false;renderCart();m.innerHTML='<div class="msg bad">Could not start payment'+(t?' ( '+esc(t)+' )':'')+'. Please try again or WhatsApp us.</div>'};
  var URL0=null;
- chipPick(total,function(q,unbusy,close){if(!q){if(!URL0){btn.disabled=false;renderCart()}return}
-  var go=function(u){btn.textContent='Opening secure payment…';location.href=u+(u.indexOf('?')<0?'?':'&')+q};
-  if(URL0)return go(URL0);
+ var POST0=null;chipPick(total,function(q,unbusy,close,form){if(!q){if(!URL0){btn.disabled=false;renderCart()}return}
+  var go=function(u,p){btn.textContent='Opening secure payment…';if(q==='card'&&form&&p){form.action=p;HTMLFormElement.prototype.submit.call(form);return}location.href=u+(u.indexOf('?')<0?'?':'&')+(q==='card'?'preferred=visa':q)};
+  if(URL0)return go(URL0,POST0);
   fetch(CHIP_FN,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'create',orderNo:order.orderNo})}).then(function(r){return r.json()})
-  .then(function(j){if(j&&j.ok&&j.url){URL0=j.url;return go(j.url)}unbusy();close();fail(j&&j.error==='already_paid'?'already paid':'')})
+  .then(function(j){if(j&&j.ok&&j.url){URL0=j.url;POST0=j.post||null;return go(j.url,POST0)}unbusy();close();fail(j&&j.error==='already_paid'?'already paid':'')})
   .catch(function(){unbusy();close();fail('')})})}
 var BP_CB='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/billplz-callback'; // Billplz callback_url too: books paid orders even if the customer never comes back
 function bpReturn(){var q=new URLSearchParams(location.search);var id=q.get('billplz[id]');if(!id)return false;var paid=q.get('billplz[paid]')==='true';history.replaceState(null,'',location.pathname);
