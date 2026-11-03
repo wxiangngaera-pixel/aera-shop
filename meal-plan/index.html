@@ -2350,5 +2350,20 @@ function wrapB(){var f=window.bump;if(typeof f!=='function'||f.__ckb)return;wind
 function all(){wrapR();wrapP();wrapB()}
 setInterval(all,700);all()})();
 </script>
+<script id="aera-console-plansync">/* Peter 3rd Nov 2026 : Console Edit Order. A change made to an Order's Meal Plan here is copied into the Order when the Console moves
+   on ( Next, a step, Review & Save ), the same as tapping Add Plan to Order. Only a Plan that is already in that Order, and only when it changed. */
+(function(){if(!window.__AERA_CONSOLE||window.__aeraPlanSync)return;window.__aeraPlanSync=1;
+var SENT=null,TOUCHED=false;
+function sig(){try{if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return '';var b=PLAN.meals.filter(function(m){return m&&m.comps&&m.comps.length});if(!b.length)return '';
+ return String(PLAN.id||'')+'|'+JSON.stringify(b.map(function(m){return[m.day,m.slot,m.comps.map(function(c){return[c.r,+c.g||0,+c.ck||0,c.wb||'']})]}))}catch(e){return ''}}
+['pointerdown','keydown','input','change'].forEach(function(t){window.addEventListener(t,function(){TOUCHED=true},true)});
+setInterval(function(){if(!TOUCHED){var s=sig();if(s)SENT=s}},300);
+window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b)return;if(/Add (Plan )?to (Cart|Order)/i.test(String(b.textContent||'')))setTimeout(function(){SENT=sig()},60)},true);
+window.addEventListener('message',function(e){if(e.origin!==location.origin||!e.data||e.data.type!=='aera-kc-plan-sync')return;var sent=false;
+ try{var ids=(e.data.ids||[]).map(String),s=sig(),pid=(typeof PLAN!=='undefined'&&PLAN&&PLAN.id)?String(PLAN.id):'';
+  if(s&&pid&&ids.indexOf(pid)>=0&&s!==SENT&&typeof orderPlan==='function'){orderPlan();SENT=s;sent=true}}catch(x){}
+ try{parent.postMessage({type:'aera-kc-plan-synced',sent:sent},location.origin)}catch(x){}});
+})();
+</script>
 </body>
 </html>
