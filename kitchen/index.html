@@ -279,7 +279,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
       overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
       function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
       document.body.appendChild(overlay);
       var pBtn=document.getElementById('lp-pay-success-btn');
       if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
@@ -356,7 +356,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
       overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
       function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var subTxt=successSubtext||'Thank you for your order.';
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
       document.body.appendChild(overlay);
       var cBtn=document.getElementById('lp-cart-success-btn');
       if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
@@ -393,7 +393,7 @@ async function kcDoLogin(e){e.preventDefault();var b=document.getElementById('kc
  var r=await kc.auth.signInWithPassword({email:document.getElementById('kcE').value.trim().toLowerCase(),password:document.getElementById('kcP').value});
  if(r.error){KCS.err=r.error.message==='Invalid login credentials'?'That email and password did not work.':r.error.message;return kcLogin()}
  kcStart()}
-async function kcSignOut(){try{await kc.auth.signOut()}catch(e){}try{localStorage.removeItem(KC_KEY)}catch(e){}KCS.user=null;KCS.role='';location.hash='';kcLogin()}
+async function kcSignOut(){try{await kc.auth.signOut()}catch(e){}try{indexedDB.deleteDatabase('aera-kc-cache')}catch(e){}try{localStorage.removeItem(KC_KEY)}catch(e){}KCS.user=null;KCS.role='';location.hash='';kcLogin()}
 
 /* ---------- start ---------- */
 async function kcStart(){
@@ -406,15 +406,25 @@ async function kcStart(){
  if(!KCS.role){kcRoot().innerHTML='<div class="kc-card">'+kcBrand()+'<h2>Not on the kitchen list</h2><p class="sub">'+kcEsc(s.user.email)+' is not set up for the Kitchen Console. Ask Peter to add it.</p><button class="kc-btn ghost" onclick="kcSignOut()">Use another account</button></div>';return}
  var a=await kc.storage.from('kc-app').list('',{search:'console.html'});
  KCS.hasApp=!!(a.data&&a.data.some(function(f){return f.name==='console.html'}));
+ /* Peter 3rd Nov 2026 : the console file's version, so an unchanged console is opened from this device instead of downloaded again */
+ try{var _f=(a.data||[]).filter(function(f){return f.name==='console.html'})[0];KCS.appVer=_f?[_f.updated_at||'',(_f.metadata&&(_f.metadata.eTag||_f.metadata.size))||''].join('|'):''}catch(e){KCS.appVer=''}
  if(KCS.role==='admin'&&(location.hash==='#setup'||!KCS.hasApp))return kcSetup();
  if(!KCS.hasApp){kcRoot().innerHTML='<div class="kc-card">'+kcBrand()+'<h2>Almost ready</h2><p class="sub">The console has not been set up yet. Ask Peter to finish the set up.</p><button class="kc-btn ghost" onclick="kcSignOut()">Sign out</button></div>';return}
  kcOpen();
 }
 
 /* ---------- open the console ---------- */
-function kcDL(){var p=kc.storage.from('kc-app').download('console.html?cb='+Date.now());var t=new Promise(function(res){setTimeout(function(){res(null)},8000)});
+function kcDL0(){var p=kc.storage.from('kc-app').download('console.html?cb='+Date.now());var t=new Promise(function(res){setTimeout(function(){res(null)},8000)});
  return Promise.race([p,t]).then(function(r){if(r)return r;var s=null;try{s=JSON.parse(localStorage.getItem(KC_KEY)||'null')}catch(e){}if(s&&s.currentSession)s=s.currentSession;var tok=s&&s.access_token;
   return fetch(KC_URL+'/storage/v1/object/authenticated/kc-app/console.html?cb='+Date.now(),{headers:{apikey:KC_ANON,Authorization:'Bearer '+(tok||KC_ANON)},cache:'no-store'}).then(function(x){if(!x.ok)return{error:{message:'HTTP '+x.status}};return x.blob().then(function(b){return{data:b,error:null}})})})}
+/* Peter 3rd Nov 2026 : the console ( about 2 MB ) is kept on this device and only downloaded again when it has changed.
+   This, and the lists kept on the device below, keep AERA well inside the database's monthly download allowance. */
+var KIDB=(function(){var dbp=null;function lim(p,ms){return Promise.race([p,new Promise(function(r){setTimeout(function(){r(null)},ms)})])}
+ function db(){if(dbp)return dbp;dbp=lim(new Promise(function(res){try{var r=indexedDB.open('aera-kc-cache',1);r.onupgradeneeded=function(){try{r.result.createObjectStore('kv')}catch(e){}};r.onsuccess=function(){res(r.result)};r.onerror=function(){res(null)};r.onblocked=function(){res(null)}}catch(e){res(null)}}),2500);return dbp}
+ return{get:function(k){return db().then(function(d){if(!d)return null;return lim(new Promise(function(res){try{var q=d.transaction('kv').objectStore('kv').get(k);q.onsuccess=function(){res(q.result||null)};q.onerror=function(){res(null)}}catch(e){res(null)}}),2500)})},
+  set:function(k,v){return db().then(function(d){if(!d)return;return new Promise(function(res){try{var t=d.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=function(){res()};t.onerror=function(){res()};t.onabort=function(){res()}}catch(e){res()}})})}}})();
+function kcDL(){var ver=KCS.appVer||'';return KIDB.get('app').then(function(c){if(ver&&c&&c.v===ver&&c.t)return{data:new Blob([c.t],{type:'text/html'}),error:null};
+ return kcDL0().then(function(d){try{if(d&&d.data&&!d.error&&ver)d.data.text().then(function(t){if(t&&t.length>1000)KIDB.set('app',{v:ver,t:t})})}catch(e){}return d})},function(){return kcDL0()})}
 async function kcOpen(){
  kcLoading('Starting the console…');
  var d=await kcDL();
@@ -442,10 +452,25 @@ function KC_SHIM(URL_,ANON_,KEY_){
  function snapColl(m){var docs=Object.keys(m).map(function(id){return snapDoc(id,m[id])});return{docs:docs,size:docs.length,empty:!docs.length,forEach:function(f){docs.forEach(f)}}}
  var C={}; /* coll -> {m:{id:data}, ls:[fn], ready:bool, loading:promise} */
  function cc(c){return C[c]||(C[c]={m:{},ls:[],dls:{},ready:false,loading:null,t:0})}
- async function fetchColl(c){var out={},from=0,N=500;
+ async function fullColl(c){var out={},from=0,N=500;
   for(;;){var r=await sb.from('kc_docs').select('id,data').eq('coll',c).order('id').range(from,from+N-1);
    if(r.error)throw E(r.error);(r.data||[]).forEach(function(x){out[x.id]=x.data});
    if(!r.data||r.data.length<N)break;from+=N}
+  return out}
+ /* Peter 3rd Nov 2026 : every list is kept on this device. Opening the console, or coming back to it, asks the database only for a
+    short fingerprint of each row ( kc_docs_sig ) and downloads just the rows that changed. If that fails it reads the whole list as before. */
+ var KIDB=(function(){var dbp=null;function lim(p,ms){return Promise.race([p,new Promise(function(r){setTimeout(function(){r(null)},ms)})])}
+  function db(){if(dbp)return dbp;dbp=lim(new Promise(function(res){try{var r=indexedDB.open('aera-kc-cache',1);r.onupgradeneeded=function(){try{r.result.createObjectStore('kv')}catch(e){}};r.onsuccess=function(){res(r.result)};r.onerror=function(){res(null)};r.onblocked=function(){res(null)}}catch(e){res(null)}}),2500);return dbp}
+  return{get:function(k){return db().then(function(d){if(!d)return null;return lim(new Promise(function(res){try{var q=d.transaction('kv').objectStore('kv').get(k);q.onsuccess=function(){res(q.result||null)};q.onerror=function(){res(null)}}catch(e){res(null)}}),2500)})},
+   set:function(k,v){return db().then(function(d){if(!d)return;return new Promise(function(res){try{var t=d.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=function(){res()};t.onerror=function(){res()};t.onabort=function(){res()}}catch(e){res()}})})}}})();
+  async function fetchColl(c){var key='c:'+EMAIL+':'+c,cache=null;try{cache=await KIDB.get(key)}catch(e){}
+  var sg=null;try{sg=await sb.rpc('kc_docs_sig',{p_coll:c})}catch(e){sg=null}
+  if(!sg||sg.error||!Array.isArray(sg.data)){var all=await fullColl(c);return all}
+  var m=(cache&&cache.m)||{},hs=(cache&&cache.h)||{},want=[],out={},nh={};
+  sg.data.forEach(function(x){nh[x.id]=x.h;if(hs[x.id]===x.h&&m[x.id]!==undefined)out[x.id]=m[x.id];else want.push(x.id)});
+  for(var i=0;i<want.length;i+=80){var r=await sb.from('kc_docs').select('id,data').eq('coll',c).in('id',want.slice(i,i+80));if(r.error)throw E(r.error);(r.data||[]).forEach(function(x){out[x.id]=x.data})}
+  want.forEach(function(id){if(out[id]===undefined)nh[id]=undefined});
+  try{KIDB.set(key,{m:out,h:nh,at:Date.now()})}catch(e){}
   return out}
  function emit(c){var o=cc(c);if(o.t)return;o.t=setTimeout(function(){o.t=0;
   var s=snapColl(o.m);o.ls.slice().forEach(function(f){try{f(s)}catch(e){console.error(e)}});
@@ -484,7 +509,7 @@ function KC_SHIM(URL_,ANON_,KEY_){
    .subscribe(function(st){if(st==='SUBSCRIBED'){if(rtDown){rtDown=false;reloadAll()}}
     else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'||st==='CLOSED'){rtDown=true;var old=RT;RT=null;setTimeout(function(){try{sb.removeChannel(old)}catch(e){}ensureRT()},3000)}})})}
  document.addEventListener('visibilitychange',function(){if(document.hidden){hidAt=Date.now()}else if(hidAt&&Date.now()-hidAt>30000){hidAt=0;reloadAll()}});
- sb.auth.onAuthStateChange(function(ev){if(ev==='SIGNED_OUT'){location.reload()}});
+ sb.auth.onAuthStateChange(function(ev){if(ev==='SIGNED_OUT'){try{indexedDB.deleteDatabase('aera-kc-cache')}catch(e){}location.reload()}});
  var DB={doc:docRef,collection:collRef};
  var MCP={callTool:async function(server,name,args){
    var s=(await sb.auth.getSession()).data.session;if(!s)throw new Error('Please sign in again.');
