@@ -154,7 +154,7 @@ window.addEventListener('load',function(){coRider();setTimeout(coRider,1500)});
 <meta name="twitter:title" content="Order — AERA Meal Prep" />
 <meta name="twitter:description" content="Order AERA fat-loss and mass-gain meal preps. Self pick-up in Seri Kembangan or Lalamove / Grab delivery across Klang Valley." />
 <!-- End SEO Meta Tags -->
-<meta name="sheet-data-url" content="https://my.chatbees.io/api/public/landing-pages/6927/sheet-data">
+<meta name="sheet-data-url" content="https://paymegpt.com/api/public/landing-pages/6927/sheet-data">
 <script data-lp-token-hydrate>
 (function(){try{
   var slug="lp-mtqu0yej-h1a6q";
@@ -176,66 +176,6 @@ window.addEventListener('load',function(){coRider();setTimeout(coRider,1500)});
 }catch(e){}})();
 </script>
 
-<script data-gate>
-(function(){
-  var slug='lp-mtqu0yej-h1a6q';var apiBase='https://my.chatbees.io';var currency='MYR';var presets=[2500,5000,10000,25000];var minAmt=100;var maxAmt=500000;var thankYouMsg='Order received — thank you!';
-  var successSubtext='Payment received — thank you! We\'ll cook your meals fresh for your chosen date. A receipt is on its way to your email, and you\'ll get your rider\'s tracking link once your order is packed — or use "Track my order" in the menu any time.';var successBtnLabel='Close';var successBtnColor='#F5A623';var successRedirect='';
-  function getLang(){var l=(document.documentElement.lang||navigator.language||'en').toLowerCase();return l.split('-')[0];}
-  function getLocale(){return (document.documentElement.lang||navigator.language||'en');}
-  var I18N={en:{min:'Minimum is ',max:'Maximum is ',emailPrompt:'Enter your email for the receipt:',emailRequired:'An email address is required to complete checkout.',failed:'Failed to process donation'},fr:{min:'Le minimum est ',max:'Le maximum est ',emailPrompt:'Entrez votre adresse e-mail pour le reçu :',emailRequired:'Une adresse e-mail est requise pour finaliser le paiement.',failed:'Échec du traitement du don'},es:{min:'El mínimo es ',max:'El máximo es ',emailPrompt:'Introduce tu correo electrónico para el recibo:',emailRequired:'Se requiere una dirección de correo electrónico para completar el pago.',failed:'No se pudo procesar la donación'},pt:{min:'O mínimo é ',max:'O máximo é ',emailPrompt:'Insira seu e-mail para o recibo:',emailRequired:'Um endereço de e-mail é necessário para concluir o pagamento.',failed:'Falha ao processar a doação'},de:{min:'Mindestbetrag ist ',max:'Höchstbetrag ist ',emailPrompt:'Geben Sie Ihre E-Mail-Adresse für die Quittung ein:',emailRequired:'Eine E-Mail-Adresse ist erforderlich, um den Checkout abzuschließen.',failed:'Spende konnte nicht verarbeitet werden'},it:{min:'Il minimo è ',max:'Il massimo è ',emailPrompt:'Inserisci la tua email per la ricevuta:',emailRequired:"È richiesto un indirizzo email per completare il pagamento.",failed:'Impossibile elaborare la donazione'}};
-  function t(k){var L=getLang();return (I18N[L]&&I18N[L][k])||I18N.en[k];}
-  function fmtD(c){try{return new Intl.NumberFormat(getLocale(),{style:'currency',currency:currency}).format(c/100);}catch(e){return new Intl.NumberFormat('en-US',{style:'currency',currency:currency}).format(c/100);}}
-  function findDonEmail(){var ids=['email','emailAddress','buyer-email','buyerEmail','donor-email','donorEmail','user-email','userEmail','contact-email'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.indexOf('@')>-1)return el.value.trim();}var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.indexOf('@')>-1)return inputs[j].value.trim();}return '';}
-  function findDonName(){var ids=['name','fullName','full-name','donor-name','donorName','customer-name','user-name'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"])');for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}return '';}
-  function findDonPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
-  window.__processDonation=function(a,b,c,d){
-    var amountCents,email='',donorName='',donorMessage='',productName='',productDescription='',quantity=1;
-    if(a&&typeof a==='object'){
-      amountCents=a.amountCents||(a.amount?Math.round(Number(a.amount)*100):0);
-      email=a.email||'';
-      productName=a.productName||a.label||'';
-      productDescription=a.productDescription||a.description||'';
-      donorName=a.name||a.donorName||'';
-      donorMessage=a.message||a.donorMessage||'';
-      quantity=a.quantity&&parseInt(a.quantity,10)>0?parseInt(a.quantity,10):1;
-    }else{
-      amountCents=typeof a==='number'?a:(parseInt(a,10)||0);
-      var rest=[b,c,d];var nonEmail=[];
-      for(var i=0;i<rest.length;i++){var v=rest[i];if(typeof v==='string'&&v){if(!email&&v.indexOf('@')>-1&&/^[^s@]+@[^s@]+.[^s@]+$/.test(v.trim())){email=v.trim();}else{nonEmail.push(v);}}}
-      donorName=nonEmail[0]||'';donorMessage=nonEmail[1]||'';
-    }
-    if(!email)email=findDonEmail();
-    if(!donorName)donorName=findDonName();
-    var donorPhone=findDonPhone();
-    if(!amountCents||amountCents<minAmt){alert(t('min')+fmtD(minAmt));return Promise.reject('below_min');}
-    if(amountCents>maxAmt){alert(t('max')+fmtD(maxAmt));return Promise.reject('above_max');}
-    if(!email){var p=window.prompt(t('emailPrompt'),'');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert(t('emailRequired'));return Promise.reject('no_email');}}
-    var successBase=window.location.href.split('?')[0];
-    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/donation/checkout',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email:email,name:donorName||'',phone:donorPhone||'',amountCents:amountCents,message:donorMessage||'',productName:productName||'',productDescription:productDescription||'',quantity:quantity,locale:getLocale(),successUrl:successBase+'?donation=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?donation=cancelled'})
-    }).then(function(r){return r.json();}).then(function(d){
-      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
-      else{alert(d.error||t('failed'));throw new Error(d.error);}
-    });
-  };
-  window.__donationConfig={currency:currency,presets:presets.map(function(c){return c/100;}),minAmount:minAmt/100,maxAmount:maxAmt/100,formatAmount:fmtD};
-  document.addEventListener('DOMContentLoaded',function(){
-    var urlParams=new URLSearchParams(window.location.search);
-    if(urlParams.get('donation')==='success'){
-      var sidD=urlParams.get('session_id');
-      if(sidD){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidD})}).catch(function(){});}catch(e){}}
-      var overlay=document.createElement('div');overlay.id='donation-success-overlay';
-      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
-      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">'+esc(thankYouMsg)+'</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(successSubtext)+'</p><button id="lp-don-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
-      document.body.appendChild(overlay);
-      var dBtn=document.getElementById('lp-don-success-btn');
-      if(dBtn){dBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
-    }
-  });
-})();
-</script>
 <script data-field-replace>
 (function(){
   var params=new URLSearchParams(window.location.search);
@@ -420,6 +360,69 @@ window.addEventListener('load',function(){coRider();setTimeout(coRider,1500)});
       document.body.appendChild(overlay);
       var pBtn=document.getElementById('lp-pay-success-btn');
       if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-donation>
+(function(){
+  var slug='D2pz8bZ';
+  var apiBase='https://my.chatbees.io';
+  var currency='USD';
+  var minAmt=100;var maxAmt=500000;
+  var thankYouMsg='Order received — thank you!';var successSubtext='Payment received — thank you! We\'ll cook your meals fresh for your chosen date. A receipt is on its way to your email, and you\'ll get your rider\'s tracking link once your order is packed — or use "Track my order" in the menu any time.';var successBtnLabel='Close';var successBtnColor='#F5A623';var successRedirect='';
+  function getLang(){var l=(document.documentElement.lang||navigator.language||'en').toLowerCase();return l.split('-')[0];}
+  function getLocale(){return (document.documentElement.lang||navigator.language||'en');}
+  var I18N={en:{min:'Minimum is ',max:'Maximum is ',emailPrompt:'Enter your email for the receipt:',emailRequired:'An email address is required to complete checkout.',failed:'Failed to process donation'},fr:{min:'Le minimum est ',max:'Le maximum est ',emailPrompt:'Entrez votre adresse e-mail pour le reçu :',emailRequired:'Une adresse e-mail est requise pour finaliser le paiement.',failed:'Échec du traitement du don'},es:{min:'El mínimo es ',max:'El máximo es ',emailPrompt:'Introduce tu correo electrónico para el recibo:',emailRequired:'Se requiere una dirección de correo electrónico para completar el pago.',failed:'No se pudo procesar la donación'},pt:{min:'O mínimo é ',max:'O máximo é ',emailPrompt:'Insira seu e-mail para o recibo:',emailRequired:'Um endereço de e-mail é necessário para concluir o pagamento.',failed:'Falha ao processar a doação'},de:{min:'Mindestbetrag ist ',max:'Höchstbetrag ist ',emailPrompt:'Geben Sie Ihre E-Mail-Adresse für die Quittung ein:',emailRequired:'Eine E-Mail-Adresse ist erforderlich, um den Checkout abzuschließen.',failed:'Spende konnte nicht verarbeitet werden'},it:{min:'Il minimo è ',max:'Il massimo è ',emailPrompt:'Inserisci la tua email per la ricevuta:',emailRequired:"È richiesto un indirizzo email per completare il pagamento.",failed:'Impossibile elaborare la donazione'}};
+  function t(k){var L=getLang();return (I18N[L]&&I18N[L][k])||I18N.en[k];}
+  function fmtD(c){try{return new Intl.NumberFormat(getLocale(),{style:'currency',currency:currency}).format(c/100);}catch(e){return new Intl.NumberFormat('en-US',{style:'currency',currency:currency}).format(c/100);}}
+  window.__donationConfig={currency:currency,presets:[25,50,100,250],minAmount:100/100,maxAmount:500000/100,formatAmount:fmtD,buttonColor:'#4f46e5',buttonText:'Donate Now',thankYouMessage:'Order received — thank you!'};
+  function findDonEmail2(){var ids=['email','emailAddress','buyer-email','buyerEmail','donor-email','donorEmail','user-email','userEmail','contact-email'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.indexOf('@')>-1)return el.value.trim();}var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.indexOf('@')>-1)return inputs[j].value.trim();}return '';}
+  function findDonName2(){var ids=['name','fullName','full-name','donor-name','donorName','customer-name','user-name'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"])');for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}return '';}
+  function findDonPhone2(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  window.__processDonation=function(a,b,c,d){
+    var amountCents,email='',name='',donorMessage='',productName='',productDescription='',quantity=1;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents||(a.amount?Math.round(Number(a.amount)*100):0);
+      email=a.email||'';
+      productName=a.productName||a.label||'';
+      productDescription=a.productDescription||a.description||'';
+      name=a.name||a.donorName||'';
+      donorMessage=a.message||a.donorMessage||'';
+      quantity=a.quantity&&parseInt(a.quantity,10)>0?parseInt(a.quantity,10):1;
+    }else{
+      amountCents=typeof a==='number'?a:(parseInt(a,10)||0);
+      var rest=[b,c,d];var nonEmail=[];
+      for(var i=0;i<rest.length;i++){var v=rest[i];if(typeof v==='string'&&v){if(!email&&v.indexOf('@')>-1&&/^[^s@]+@[^s@]+.[^s@]+$/.test(v.trim())){email=v.trim();}else{nonEmail.push(v);}}}
+      name=nonEmail[0]||'';donorMessage=nonEmail[1]||'';
+    }
+    if(!email)email=findDonEmail2();
+    if(!name)name=findDonName2();
+    var donorPhone=findDonPhone2();
+    if(!amountCents||amountCents<minAmt){alert(t('min')+fmtD(minAmt));return Promise.reject('below_min');}
+    if(amountCents>maxAmt){alert(t('max')+fmtD(maxAmt));return Promise.reject('above_max');}
+    if(!email){var p=window.prompt(t('emailPrompt'),'');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert(t('emailRequired'));return;}}
+    var successBase=window.location.href.split('?')[0];
+    fetch(apiBase+'/api/landing-pages/public/'+slug+'/donation/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:name||'',phone:donorPhone||'',amountCents:amountCents,message:donorMessage||'',productName:productName||'',productDescription:productDescription||'',quantity:quantity,locale:getLocale(),successUrl:successBase+'?donation=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?donation=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||t('failed'));}
+    }).catch(function(){alert(t('failed'));});
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('donation')==='success'){
+      var sidD=urlParams.get('session_id');
+      if(sidD){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidD})}).catch(function(){});}catch(e){}}
+      var overlay=document.createElement('div');overlay.id='donation-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">'+esc(thankYouMsg)+'</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(successSubtext)+'</p><button id="lp-don-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var dBtn=document.getElementById('lp-don-success-btn');
+      if(dBtn){dBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
     }
   });
 })();
@@ -739,7 +742,7 @@ function bdayMarkUsed(){voucherMarkUsed();foMarkUsed();try{var bu=window.__bdayU
 function bdayEligible(){if(!ACCT||!ACCT.dob||!BD.pct||!count())return false;var m=+String(ACCT.dob).slice(5,7);if(m!==myNow().getMonth()+1)return false;var y=bdayYear();if(+ACCT.bdayUsed===y)return false;try{if(localStorage.getItem('aera.bdayUsed')===ACCT.email.toLowerCase()+':'+y)return false}catch(e){}return mealBase()>=BD.minRm}
 function birthdayRM(){if(ccOn())return 0;if(firstOrderRM()>0)return 0;return bdayEligible()?Math.round(mealBase()*BD.pct)/100:0} // My Account page (Supabase sign-in); it leaves a small copy of the profile in this browser that the checkout reads
 var ACCT=null;
-(function(){try{var g=new URLSearchParams(location.search).get('gw');if(g==='billplz'||g==='stripe'||g==='reset'){if(g==='reset')localStorage.removeItem('aera.gw');else localStorage.setItem('aera.gw',g)}var s=localStorage.getItem('aera.gw');if(s==='billplz'||s==='stripe')PAY.gateway=s}catch(e){}})(); // testing switch: open the page with ?gw=billplz (or ?gw=stripe / ?gw=reset) to override the gateway in this browser only
+(function(){try{var g=new URLSearchParams(location.search).get('gw');if(g==='billplz'||g==='stripe'||g==='chip'||g==='reset'){if(g==='reset')localStorage.removeItem('aera.gw');else localStorage.setItem('aera.gw',g)}var s=localStorage.getItem('aera.gw');if(s==='billplz'||s==='stripe'||s==='chip')PAY.gateway=s}catch(e){}})(); // testing switch: open the page with ?gw=billplz (or ?gw=stripe / ?gw=reset) to override the gateway in this browser only
 var AP={perRM:5,rmPer100:1,capPct:10,expiryMonths:6}; // 5 AP per RM 1 on meals; 100 AP = RM 1; max 10% of the order per checkout; points expire 6 months after earning
 var ROAD_FACTOR=1.25,MAX_KM=60;
 var COURIERS={lalamove:{name:'Lalamove',rate:{base:6,baseKm:10,perKm:1.0,cap:25,freeAbove:0}},grab:{name:'Grab',rate:{base:7,baseKm:10,perKm:1.1,cap:27,freeAbove:0}}}; // Normal delivery rate per courier (RM): base covers baseKm, then perKm per extra km, capped at cap; freeAbove = free delivery for subtotals ≥ this (0 = never). PLACEHOLDER numbers until AERA confirms.
@@ -1874,6 +1877,8 @@ async function pay(){var m=document.getElementById('payMsg');m.innerHTML='';
  if(REF.code){try{localStorage.setItem('aera.refLock',JSON.stringify({k:refKey(email),c:REF.code}))}catch(e){}refLockSave(email,REF.code)}
  var desc=items.map(function(i){return i.qty+'× '+i.name}).join(', ')+' · '+PACKAGING[PACK].name+' Packaging Fee '+rm(pkg)+(foRM?' · First Order Voucher −'+rm(foRM):'')+(bday?' · Birthday treat −'+rm(bday):'')+(disc?' · AERA Points −'+rm(disc):'')+(cred?' · AERA Credit −'+rm(cred):'')+' · '+(isDel()?feeName()+' '+rm(fee)+' ( '+(GEO.km||'?')+' km )':'Self Pick-Up')+(REF.code?' · Referral '+REF.code+' ( '+REF.rate+'% = '+rm(refCash)+' ) · Bonus '+refBonus+' AP':'')+(vCode?' · Voucher '+vName+' ( −'+rm(vSave)+' delivery, '+vAp+' AP )':'')+' · '+date+' '+slotLabel(slot);
  var msg=compactOrder(order);window.__foUsed=foRM>0?('aera.foUsed:'+email.toLowerCase()):'';window.__bdayUsed=bday>0?email.toLowerCase()+':'+bdayYear():'';try{if(window.__bdayUsed)localStorage.setItem('aera.bdayPending',window.__bdayUsed);else localStorage.removeItem('aera.bdayPending')}catch(e){}
+ /* Peter 3rd Nov 2026 : CHIP ( test switch ?gw=chip ) */
+ if(PAY.gateway==='chip')return orderStash(order.orderNo).then(function(){payChip(order,msg,total,name,email,phone)});
  if(PAY.gateway==='billplz'){
    if(!PAY.flowUrl)return msg.innerHTML='<div class="msg warn">Billplz is not configured on this page. Add the flow webhook address to the settings sheet under <b>billplz_flow_url</b>, or open this page with <b>?gw=stripe</b>.</div>';
    return orderStash(order.orderNo).then(function(){payBillplz(order,msg,total,name,email,phone)})}
@@ -1913,6 +1918,16 @@ function tuBillplz(no,msg,email,name,a,tb){var m=document.getElementById('tuMsg'
  .then(function(r){return r.json()}).then(function(j){if(!j||!j.success)throw new Error('flow');return bpPoll(function(r){return String(r.Key||'')===key},PAY.pollMax)})
  .then(function(row){if(row&&row['Bill URL']&&String(row.Status||'')==='created'){var go=function(){location.href=row['Bill URL']};if(!row['Bill ID'])return go();tuBill(no,row['Bill ID']).then(go);return}throw new Error('nobill')})
  .catch(function(){btn.disabled=false;btn.textContent='Pay Securely';try{sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(x){}m.innerHTML='<div class="msg bad">Could not start payment. Please try again or WhatsApp us.</div>'})}
+/* Peter 3rd Nov 2026 : CHIP payments. The Order is stashed like Billplz, chip-pay makes the CHIP checkout link ( amount read from the stash, never this page ),
+   CHIP sends the customer back here as billplz[id]=chip_<Order No>, and chip-pay books it once ( its own callback books it too if the customer never comes back ). */
+var CHIP_FN='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/chip-pay';
+function bpCb(id){if(/^chip_/.test(String(id||'')))return fetch(CHIP_FN,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'finalize',billId:id})});return fetch(BP_CB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id,paid:'true'})})}
+function payChip(order,msg,total,name,email,phone){var m=document.getElementById('payMsg');var btn=document.getElementById('payBtn');btn.disabled=true;btn.textContent='Preparing secure payment…';
+ var pending={orderNo:order.orderNo,msg:msg,email:email.toLowerCase(),total:total,at:Date.now()};try{sessionStorage.setItem('aera.pendingOrder',JSON.stringify(pending));localStorage.setItem('aera.pendingOrder',JSON.stringify(pending))}catch(e){}
+ var fail=function(t){btn.disabled=false;renderCart();m.innerHTML='<div class="msg bad">Could not start payment'+(t?' ( '+esc(t)+' )':'')+'. Please try again or WhatsApp us.</div>'};
+ fetch(CHIP_FN,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'create',orderNo:order.orderNo})}).then(function(r){return r.json()})
+ .then(function(j){if(j&&j.ok&&j.url){btn.textContent='Opening secure payment…';location.href=j.url;return}fail(j&&j.error==='already_paid'?'already paid':'')})
+ .catch(function(){fail('')})}
 var BP_CB='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/billplz-callback'; // Billplz callback_url too: books paid orders even if the customer never comes back
 function bpReturn(){var q=new URLSearchParams(location.search);var id=q.get('billplz[id]');if(!id)return false;var paid=q.get('billplz[paid]')==='true';history.replaceState(null,'',location.pathname);
  var pending=null;try{pending=JSON.parse(sessionStorage.getItem('aera.pendingOrder')||localStorage.getItem('aera.pendingOrder')||'null')}catch(e){}
@@ -1922,16 +1937,16 @@ function bpReturn(){var q=new URLSearchParams(location.search);var id=q.get('bil
  var thanks=function(no){CART={};save();try{localStorage.removeItem('aera.plan')}catch(e){}bdayMarkUsed();render();renderCart();try{localStorage.setItem(doneKey,'1');sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(e){}bpShow('<h2>Order received — thank you!</h2><p style="color:var(--ink2)">'+(no?'Order <b>'+esc(no)+'</b>. ':'')+'Payment confirmed. Your receipt is on its way by email, and you can follow the order on <a href="'+(ACCT?'https://my.chatbees.io/p/dtTMaV#orders':'https://my.chatbees.io/p/8s4Xd6h')+'">Track My Order</a>.</p>')};
  if(pending&&pending.kind==='topup'&&pending.tup){if(!done){var tuDirect=function(){fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact('verify'),data:{action:'verify',billId:id,message:pending.msg,custEmail:pending.email}})}).catch(function(){})};
   /* billplz-callback claims the Top-Up once ( it may already be booked by Billplz's own callback ) ; only a Top-Up that was never stashed goes to the flow directly */
-  var tuCb=function(t){return fetch(BP_CB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id,paid:'true'})}).then(function(r){return r.json()}).catch(function(){return null}).then(function(j){if(j&&j.reason==='no_pending')return tuDirect();if(!j&&t<2)return new Promise(function(r){setTimeout(r,3000)}).then(function(){return tuCb(t+1)})})};tuCb(0)}
+  var tuCb=function(t){return bpCb(id).then(function(r){return r.json()}).catch(function(){return null}).then(function(j){if(j&&j.reason==='no_pending')return tuDirect();if(!j&&t<2)return new Promise(function(r){setTimeout(r,3000)}).then(function(){return tuCb(t+1)})})};tuCb(0)}
   try{localStorage.setItem(doneKey,'1');var tp=JSON.stringify(pending.tup);sessionStorage.setItem('aera.topupPending',tp);localStorage.setItem('aera.topupPending',tp);sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(e){}
   tuReturn();return true}
  if(done){thanks(pending&&pending.orderNo);return true}
  if(!pending||!pending.msg){bpShow('<h2>Confirming your payment…</h2><p style="color:var(--ink2)">One moment while we verify it with Billplz.</p>');
-  fetch(BP_CB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id,paid:'true'})}).then(function(r){return r.json()}).catch(function(){return null})
+  bpCb(id).then(function(r){return r.json()}).catch(function(){return null})
   .then(function(j){if(!j||!(j.claimed||j.reason==='already'))return null;return bpPoll(function(r){return String(r.Key||'')==='paid:'+id},75)})
   .then(function(row){if(row&&String(row.Status||'')==='paid')thanks('');else bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! We could not match this payment to an order in this browser — please WhatsApp us your Billplz receipt so the kitchen can confirm your order.</p>')});return true}
  bpShow('<h2>Confirming your payment…</h2><p style="color:var(--ink2)">One moment while we verify it with Billplz.</p>');
- fetch(BP_CB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id,paid:'true'})}).then(function(r){return r.json()}).catch(function(){return null})
+ bpCb(id).then(function(r){return r.json()}).catch(function(){return null})
  .then(function(j){if(j&&j.ok&&(j.claimed||j.reason==='already'))return null;return fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact('verify'),data:{action:'verify',billId:id,message:pending.msg,custEmail:pending.email}})}).then(function(r){return r.json()},function(){return null})})
  .then(function(){return bpPoll(function(r){return String(r.Key||'')==='paid:'+id},75)})
  .then(function(row){if(row&&String(row.Status||'')==='paid')thanks(pending.orderNo);else bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! Billplz confirmed the payment but our system could not record order <b>'+esc(pending.orderNo)+'</b> automatically'+(row?' ( '+esc(String(row.Status||''))+' )':'')+'. Please WhatsApp us and we will confirm it by hand.</p>')})
@@ -2000,10 +2015,10 @@ function tuPay(){var m=document.getElementById('tuMsg');m.innerHTML='';var a=TU.
  var email=String(document.getElementById('tuEmail').value||'').trim().toLowerCase();
  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){m.innerHTML='<div class="msg bad">Please enter your email, so the Credit goes to your account.</div>';document.getElementById('tuEmail').focus();return}
  var name=String((document.getElementById('name')||{}).value||'').trim()||(ACCT&&ACCT.name)||email.split('@')[0];
- if(PAY.gateway!=='billplz'&&typeof window.__processDonation!=='function'){m.innerHTML='<div class="msg bad">Top-Up is not available right now. Please WhatsApp us.</div>';return}
+ if(PAY.gateway!=='billplz'&&PAY.gateway!=='chip'&&typeof window.__processDonation!=='function'){m.innerHTML='<div class="msg bad">Top-Up is not available right now. Please WhatsApp us.</div>';return}
  var no=tuNo(),tb=tuBonusAP(a);
  var msg=JSON.stringify({v:3,k:'topup',n:no,e:email,nm:name,tu:a,tb:tb,ex:''});
- if(PAY.gateway==='billplz')return tuBillplz(no,msg,email,name,a,tb);
+ if(PAY.gateway==='billplz'||PAY.gateway==='chip')return tuBillplz(no,msg,email,name,a,tb);
  try{var em=document.getElementById('email');if(em&&!em.value){em.value=email;apInput(true)}}catch(e){}
  try{sessionStorage.setItem('aera.topupPending',JSON.stringify({n:no,e:email,a:a,tb:tb,before:(APS.loaded&&!APS.failed&&APS.key===apKey(email)?crAvail():null),at:Date.now()}));localStorage.setItem('aera.topupPending',sessionStorage.getItem('aera.topupPending'))}catch(e){}
  var btn=document.getElementById('tuPay');btn.disabled=true;btn.textContent='Opening secure payment…';
@@ -2035,7 +2050,7 @@ function tuReturn(){var p=null;try{p=JSON.parse(sessionStorage.getItem('aera.top
 (function(){var _rc=renderCart;renderCart=function(){var r=_rc.apply(this,arguments);try{tuPaint()}catch(e){}return r};
  try{var q=new URLSearchParams(location.search);if(q.get('topup')!=null&&location.search.indexOf('donation=success')<0){var amt=+q.get('topup')||0;setTimeout(function(){tuOpen(amt)},400)}}catch(e){}})();
 /* ===== After payment ===== */
-(function(){if(PAY.gateway==='billplz'){document.getElementById('secureTxt').textContent="FPX Online Banking, Touch N Go eWallet, GrabPay, Boost, ShopeePay, DuitNow QR or Card. Secured by Billplz. We never see your Card or Bank Details."}var q=location.search;if(bpReturn())return;if(q.indexOf('donation=success')>=0){if(tuReturn())return;CART={};save();try{localStorage.removeItem('aera.plan')}catch(e){}bdayMarkUsed();return}var m=/[?&]add=([A-Z0-9-]+)/i.exec(q);if(m&&CAT[m[1].toUpperCase()]){var sku=m[1].toUpperCase();CART[sku]=(CART[sku]||0)+1;save();FILTER=sku.indexOf('BUNDLE')===0?'fat':CAT[sku].goal;document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.dataset.f===FILTER)});if(window.innerWidth<=940)openCart();history.replaceState(null,'',location.pathname)}})();
+(function(){if(PAY.gateway==='chip'){document.getElementById('secureTxt').textContent="FPX Online Banking, ShopeePay, DuitNow QR or Card. Secured by CHIP. We never see your Card or Bank Details."}if(PAY.gateway==='billplz'){document.getElementById('secureTxt').textContent="FPX Online Banking, Touch N Go eWallet, GrabPay, Boost, ShopeePay, DuitNow QR or Card. Secured by Billplz. We never see your Card or Bank Details."}var q=location.search;if(bpReturn())return;if(q.indexOf('donation=success')>=0){if(tuReturn())return;CART={};save();try{localStorage.removeItem('aera.plan')}catch(e){}bdayMarkUsed();return}var m=/[?&]add=([A-Z0-9-]+)/i.exec(q);if(m&&CAT[m[1].toUpperCase()]){var sku=m[1].toUpperCase();CART[sku]=(CART[sku]||0)+1;save();FILTER=sku.indexOf('BUNDLE')===0?'fat':CAT[sku].goal;document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('on',t.dataset.f===FILTER)});if(window.innerWidth<=940)openCart();history.replaceState(null,'',location.pathname)}})();
 /* ===== Signed-in account (copy left in this browser by the My Account page) ===== */
 function signedIn(){return !!(ACCT&&ACCT.email)}
 function authUrl(a){return 'https://my.chatbees.io/p/dtTMaV?next=checkout#'+a}
