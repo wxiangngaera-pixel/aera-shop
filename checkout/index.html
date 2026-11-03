@@ -1891,7 +1891,7 @@ async function pay(){var m=document.getElementById('payMsg');m.innerHTML='';
 function billKey(orderNo,email){return sha256hex('aera-bill:'+String(orderNo).trim()+'|'+String(email).trim().toLowerCase()).slice(0,24)}
 function bpRows(){return fetch(PAY.lookupUrl,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){return Array.isArray(j)?j:(j&&(j.data||j.rows))||[]})}
 function bpPoll(matchFn,tries){return new Promise(function(res){var n=0;(function tick(){bpRows().then(function(rows){var hit=null;rows.forEach(function(r){if(matchFn(r))hit=r});if(hit)return res(hit);if(++n>=tries)return res(null);setTimeout(tick,PAY.pollMs)}).catch(function(){if(++n>=tries)return res(null);setTimeout(tick,PAY.pollMs)})})()})}
-function bpShow(html){document.getElementById('bpOverlayBody').innerHTML=html;document.getElementById('bpOverlay').style.display='flex'}
+function bpShow(html){try{document.getElementById('bpOverlay').classList.remove('ar-on')}catch(e){}document.getElementById('bpOverlayBody').innerHTML=html;document.getElementById('bpOverlay').style.display='flex'}
 function bpClose(){document.getElementById('bpOverlay').style.display='none'}
 /* Peter 21st Oct 2026 : Billplz only takes a Malaysian mobile. An overseas number ( or one saved without its country code or leading 0 ) made it refuse the bill,
    so only a clear Malaysian mobile ( 01… / 601… / +601… ) is sent ; any other number is left out and Billplz uses the customer's email. */
@@ -2023,24 +2023,78 @@ function payChip(order,msg,total,name,email,phone){var m=document.getElementById
   fetch(CHIP_FN,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'create',orderNo:order.orderNo})}).then(function(r){return r.json()})
   .then(function(j){if(j&&j.ok&&j.url){URL0=j.url;POST0=j.post||null;return go(j.url,POST0)}unbusy();close();fail(j&&j.error==='already_paid'?'already paid':'')})
   .catch(function(){unbusy();close();fail('')})})}
+/* Peter 3rd Nov 2026 : AERA result page after paying : Payment Successful, or Payment Unsuccessful with the reason and what to do. */
+var AERA_WA='60166630205';
+function aeraOrd(d){var n=d.getDate(),s=(n%10===1&&n!==11)?'st':(n%10===2&&n!==12)?'nd':(n%10===3&&n!==13)?'rd':'th';return n+s+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+' '+d.getFullYear()}
+function chipWhy(r){var s=String((r&&r.status)||''),x=(String((r&&r.code)||'')+' '+String((r&&r.message)||'')).toLowerCase();
+ if(/insufficient|not.?sufficient|\bnsf\b|exceed|limit/.test(x))return['Not enough balance, or the card limit was reached.','Top up the account or use another card. You can also pay by Online Banking or DuitNow QR.'];
+ if(/3ds|3-d|3d secure|authenticat|otp|\btac\b/.test(x))return['Your bank could not confirm the OTP ( it was wrong, expired or not entered ).','Tap Try Again and enter the OTP sent to your phone within the time given, or use another card.'];
+ if(/cvc|cvv|security code/.test(x))return['The CVC ( the 3 digits on the back of the card ) was not correct.','Tap Try Again and check the CVC.'];
+ if(/expired card|card.?expired|expiry|exp(iration)? date/.test(x))return['The card has expired, or the expiry date was not correct.','Check the expiry date, or use another card.'];
+ if(/invalid.?card|card.?number|invalid.?number|incorrect.?number|invalid.?pan/.test(x))return['The card number was not accepted.','Tap Try Again and check the card number, or use another card.'];
+ if(/do not hono|declin|restricted|not permitted|not allowed|blocked|fraud|risk|lost|stolen|pick.?up/.test(x)||s==='blocked')return['Your bank declined this payment.','Call the number on the back of your card and ask them to allow online payments, or pay by Online Banking or DuitNow QR.'];
+ if(/timeout|timed out|time out/.test(x)||s==='expired'||s==='overdue')return['The payment timed out before it was finished.','Tap Try Again and finish the payment within 10 minutes.'];
+ if(/cancel/.test(x)||s==='cancelled'||(!/\S/.test(x)&&/^(created|sent|viewed|pending_execute|error)?$/.test(s)))return['The payment was cancelled or not finished.','Tap Try Again whenever you are ready. Your Cart is still here.'];
+ return[(r&&r.message)?('Your bank said : '+r.message):'The payment did not go through.','Tap Try Again or pick another payment method. If money was taken, WhatsApp us and we will sort it out.']}
+function aeraRes(kind,o){o=o||{};var ov=document.getElementById('bpOverlay'),bd=document.getElementById('bpOverlayBody');if(!ov||!bd)return;
+ if(ov.parentNode!==document.body)document.body.appendChild(ov);ov.style.zIndex='2147482000';ov.classList.add('ar-on');
+ var css='<style>#bpOverlay.ar-on>.card>button[onclick="bpClose()"]{display:none}.ar{font-family:Montserrat,system-ui,sans-serif;text-align:center}'
+  +'.ar .ic{width:72px;height:72px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800;color:#fff}'
+  +'.ar.ok .ic{background:#12B76A}.ar.no .ic{background:#D92D20}.ar.in .ic{background:#16479E}'
+  +'.ar h2{margin:0 0 6px;font-size:22px;font-weight:800;color:#16479E}.ar .sub{margin:0 0 16px;color:#3A3A3A;font-size:14px;line-height:1.5}'
+  +'.ar .rows{border:2px solid #E3E8F2;border-radius:14px;text-align:left;margin:0 0 14px}.ar .rw{display:flex;justify-content:space-between;gap:12px;padding:11px 14px;border-top:1px solid #EEF1F6;font-size:14px}.ar .rw:first-child{border-top:0}.ar .rw span{color:#3A3A3A}.ar .rw b{color:#0B0B0B;text-align:right}'
+  +'.ar .why,.ar .fix{border-radius:14px;padding:14px;text-align:left;margin:0 0 10px}.ar .why{background:#FEF3F2}.ar .fix{background:#EEF3FB;margin-bottom:16px}'
+  +'.ar .why small,.ar .fix small{display:block;font-size:11px;font-weight:800;letter-spacing:.14em;margin:0 0 6px}.ar .why small{color:#B42318}.ar .fix small{color:#16479E}.ar .why p,.ar .fix p{margin:0;font-size:14px;line-height:1.5;color:#0B0B0B}'
+  +'.ar .b1{display:block;width:100%;border:0;border-radius:14px;background:#FDB913;color:#0B0B0B;padding:15px;font:800 16px Montserrat,system-ui,sans-serif;cursor:pointer;text-decoration:none;margin:0 0 10px}'
+  +'.ar .b2{display:block;width:100%;border:2px solid #16479E;border-radius:14px;background:#fff;color:#16479E;padding:13px;font:700 15px Montserrat,system-ui,sans-serif;cursor:pointer;text-decoration:none}'
+  +'.ar .sp{width:56px;height:56px;border-radius:50%;border:5px solid #E3E8F2;border-top-color:#16479E;margin:6px auto 16px;animation:arSp 1s linear infinite}@keyframes arSp{to{transform:rotate(360deg)}}</style>';
+ var rows=function(a){return '<div class="rows">'+a.filter(function(x){return x[1]}).map(function(x){return '<div class="rw"><span>'+esc(x[0])+'</span><b>'+esc(x[1])+'</b></div>'}).join('')+'</div>'};
+ var amt=o.total?('RM '+(+o.total).toFixed(2)):'',html='';
+ if(kind==='wait')html='<div class="ar"><div class="sp"></div><h2>'+esc(o.title||'Confirming Your Payment')+'</h2><p class="sub">One moment, please do not close this page.</p></div>';
+ else if(kind==='ok')html='<div class="ar ok"><div class="ic">✓</div><h2>Payment Successful</h2><p class="sub">Thank you for your Order! The Kitchen has it.</p>'+rows([['Order No.',o.no||''],['Amount Paid',amt],['Date',aeraOrd(new Date())]])
+  +'<p class="sub" style="font-size:13px">Your receipt is on its way by email.</p><a class="b1" href="'+esc(o.track||'#')+'">Track My Order</a><button class="b2" type="button" onclick="bpClose()">Continue Shopping</button></div>';
+ else if(kind==='no'){var wa='https://wa.me/'+AERA_WA+'?text='+encodeURIComponent('Hi AERA, my payment for Order '+(o.no||'')+' did not go through.');
+  html='<div class="ar no"><div class="ic">✕</div><h2>Payment Unsuccessful</h2><p class="sub">'+(o.no?'Order <b>'+esc(o.no)+'</b> is not paid yet. ':'')+'Your Cart is still here.</p>'+rows([['Amount',amt],['Date',aeraOrd(new Date())]])
+  +'<div class="why"><small>WHY</small><p>'+esc(o.why||'The payment did not go through.')+'</p></div><div class="fix"><small>WHAT TO DO</small><p>'+esc(o.fix||'Tap Try Again or pick another payment method.')+'</p></div>'
+  +'<button class="b1" type="button" onclick="aeraRetry()">Try Again</button><a class="b2" href="'+esc(wa)+'" target="_blank" rel="noopener">WhatsApp Us</a></div>'}
+ else html='<div class="ar in"><div class="ic">i</div><h2>'+esc(o.title||'Payment Received')+'</h2><p class="sub">'+(o.html||'')+'</p><a class="b1" href="https://wa.me/'+AERA_WA+'" target="_blank" rel="noopener">WhatsApp Us</a><button class="b2" type="button" onclick="bpClose()">Close</button></div>';
+ bd.innerHTML=css+html;ov.style.display='flex';
+ try{if(window.AERA_I18N)Object.assign(window.AERA_I18N,{"Payment Successful":"付款成功","Thank you for your Order! The Kitchen has it.":"谢谢您的订单！厨房已经收到。","Order No.":"订单号","Amount Paid":"已付金额","Amount":"金额","Date":"日期","Your receipt is on its way by email.":"收据会通过电邮寄给您。","Track My Order":"追踪我的订单","Continue Shopping":"继续购物","Payment Unsuccessful":"付款未成功","Your Cart is still here.":"您的购物车还在。","WHY":"原因","WHAT TO DO":"解决方法","Try Again":"再试一次","WhatsApp Us":"WhatsApp 联系我们","Confirming Your Payment":"正在确认您的付款","Checking What Happened":"正在查看原因","One moment, please do not close this page.":"请稍候，请不要关闭此页面。","Payment Received":"已收到付款","Close":"关闭",
+  "Not enough balance, or the card limit was reached.":"余额不足，或已超过银行卡额度。","Top up the account or use another card. You can also pay by Online Banking or DuitNow QR.":"请充值或换一张卡，也可以用网上银行或 DuitNow QR 付款。",
+  "Your bank could not confirm the OTP ( it was wrong, expired or not entered ).":"银行无法确认 OTP（输入错误、已过期或没有输入）。","Tap Try Again and enter the OTP sent to your phone within the time given, or use another card.":"请点击“再试一次”，在时限内输入手机收到的 OTP，或换一张卡。",
+  "The CVC ( the 3 digits on the back of the card ) was not correct.":"CVC（卡背面的 3 位数字）不正确。","Tap Try Again and check the CVC.":"请点击“再试一次”并检查 CVC。",
+  "The card has expired, or the expiry date was not correct.":"银行卡已过期，或有效期填写错误。","Check the expiry date, or use another card.":"请检查有效期，或换一张卡。",
+  "The card number was not accepted.":"卡号未被接受。","Tap Try Again and check the card number, or use another card.":"请点击“再试一次”并检查卡号，或换一张卡。",
+  "Your bank declined this payment.":"您的银行拒绝了这笔付款。","Call the number on the back of your card and ask them to allow online payments, or pay by Online Banking or DuitNow QR.":"请拨打卡背面的电话，要求开通网上付款，或改用网上银行或 DuitNow QR 付款。",
+  "The payment timed out before it was finished.":"付款在完成前已超时。","Tap Try Again and finish the payment within 10 minutes.":"请点击“再试一次”，并在 10 分钟内完成付款。",
+  "The payment was cancelled or not finished.":"付款已取消或未完成。","Tap Try Again whenever you are ready. Your Cart is still here.":"准备好后请点击“再试一次”，您的购物车还在。",
+  "The payment did not go through.":"付款没有成功。","Tap Try Again or pick another payment method. If money was taken, WhatsApp us and we will sort it out.":"请点击“再试一次”或换一种付款方式。如果已被扣款，请 WhatsApp 我们，我们会帮您处理。"});
+  if(window.AERA_I18N_RE&&!window.__arRe){window.__arRe=1;window.AERA_I18N_RE.push([/^Your bank said : (.+)$/,"银行回复：$1"])}}catch(x){}
+ try{if(window.aeraRetranslate)window.aeraRetranslate()}catch(x){}}
+function aeraRetry(){bpClose();try{if(window.innerWidth<=940)openCart()}catch(e){}setTimeout(function(){var b=document.getElementById('payBtn');if(b){b.disabled=false;try{b.scrollIntoView({behavior:'smooth',block:'center'})}catch(e){}}},250)}
+/* CHIP sent the customer back unpaid : ask chip-pay why, then show the reason and what to do */
+function chipFail(id,pending){var no=String(id).replace(/^chip_/,''),tot=pending&&pending.orderNo===no?pending.total:null;aeraRes('wait',{title:'Checking What Happened'});
+ Promise.race([fetch(CHIP_FN,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'status',billId:id})}).then(function(r){return r.json()}),new Promise(function(r){setTimeout(function(){r(null)},12000)})])
+ .catch(function(){return null}).then(function(r){if(r&&r.paid){aeraRes('info',{title:'Payment Received',html:'Your bank says Order <b>'+esc(no)+'</b> is paid. We are recording it now, please WhatsApp us if it does not show in Track My Order within 10 minutes.'});return}
+  var w=chipWhy(r||{});aeraRes('no',{no:no,total:tot,why:w[0],fix:w[1]})})}
 var BP_CB='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/billplz-callback'; // Billplz callback_url too: books paid orders even if the customer never comes back
-function bpReturn(){var q=new URLSearchParams(location.search);var id=q.get('billplz[id]');if(!id)return false;var paid=q.get('billplz[paid]')==='true';history.replaceState(null,'',location.pathname);
+function bpReturn(){var q=new URLSearchParams(location.search);var id=q.get('billplz[id]');if(!id)return false;window.__aeraNoFresh=1;var paid=q.get('billplz[paid]')==='true';history.replaceState(null,'',location.pathname);
  var pending=null;try{pending=JSON.parse(sessionStorage.getItem('aera.pendingOrder')||localStorage.getItem('aera.pendingOrder')||'null')}catch(e){}
  var m=document.getElementById('payMsg');if(window.innerWidth<=940)openCart();
- if(!paid){m.innerHTML='<div class="msg warn">Payment was not completed — your order is still here whenever you are ready.</div>';return true}
+ if(!paid){if(/^chip_/.test(id)){chipFail(id,pending);return true}m.innerHTML='<div class="msg warn">Payment was not completed — your order is still here whenever you are ready.</div>';return true}
  var doneKey='aera.bp.done.'+id;var done=false;try{done=!!localStorage.getItem(doneKey)}catch(e){}
- var thanks=function(no){CART={};save();try{localStorage.removeItem('aera.plan')}catch(e){}bdayMarkUsed();render();renderCart();try{localStorage.setItem(doneKey,'1');sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(e){}bpShow('<h2>Order received — thank you!</h2><p style="color:var(--ink2)">'+(no?'Order <b>'+esc(no)+'</b>. ':'')+'Payment confirmed. Your receipt is on its way by email, and you can follow the order on <a href="'+(ACCT?'https://my.chatbees.io/p/dtTMaV#orders':'https://my.chatbees.io/p/8s4Xd6h')+'">Track My Order</a>.</p>')};
+ var thanks=function(no){CART={};save();try{localStorage.removeItem('aera.plan')}catch(e){}bdayMarkUsed();render();renderCart();try{localStorage.setItem(doneKey,'1');sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(e){}aeraRes('ok',{no:no,total:pending&&pending.total,track:(ACCT?'https://my.chatbees.io/p/dtTMaV#orders':'https://my.chatbees.io/p/8s4Xd6h')})};
  if(pending&&pending.kind==='topup'&&pending.tup){if(!done){var tuDirect=function(){fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact('verify'),data:{action:'verify',billId:id,message:pending.msg,custEmail:pending.email}})}).catch(function(){})};
   /* billplz-callback claims the Top-Up once ( it may already be booked by Billplz's own callback ) ; only a Top-Up that was never stashed goes to the flow directly */
   var tuCb=function(t){return bpCb(id).then(function(r){return r.json()}).catch(function(){return null}).then(function(j){if(j&&j.reason==='no_pending')return tuDirect();if(!j&&t<2)return new Promise(function(r){setTimeout(r,3000)}).then(function(){return tuCb(t+1)})})};tuCb(0)}
   try{localStorage.setItem(doneKey,'1');var tp=JSON.stringify(pending.tup);sessionStorage.setItem('aera.topupPending',tp);localStorage.setItem('aera.topupPending',tp);sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(e){}
   tuReturn();return true}
  if(done){thanks(pending&&pending.orderNo);return true}
- if(!pending||!pending.msg){bpShow('<h2>Confirming your payment…</h2><p style="color:var(--ink2)">One moment while we verify your payment.</p>');
+ if(!pending||!pending.msg){aeraRes('wait');
   bpCb(id).then(function(r){return r.json()}).catch(function(){return null})
   .then(function(j){if(!j||!(j.claimed||j.reason==='already'))return null;return bpPoll(function(r){return String(r.Key||'')==='paid:'+id},75)})
   .then(function(row){if(row&&String(row.Status||'')==='paid')thanks('');else bpShow('<h2>Payment received</h2><p style="color:var(--ink2)">Thank you! We could not match this payment to an order in this browser — please WhatsApp us your payment receipt so the kitchen can confirm your order.</p>')});return true}
- bpShow('<h2>Confirming your payment…</h2><p style="color:var(--ink2)">One moment while we verify your payment.</p>');
+ aeraRes('wait');
  bpCb(id).then(function(r){return r.json()}).catch(function(){return null})
  .then(function(j){if(j&&j.ok&&(j.claimed||j.reason==='already'))return null;return fetch(PAY.flowUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contactEmail:syncContact('verify'),data:{action:'verify',billId:id,message:pending.msg,custEmail:pending.email}})}).then(function(r){return r.json()},function(){return null})})
  .then(function(){return bpPoll(function(r){return String(r.Key||'')==='paid:'+id},75)})
@@ -3588,7 +3642,7 @@ setTimeout(fix,600);setInterval(fix,2000)})();
 <script id="aera-fresh">/* Always the newest version : the phone keeps a copy of this page for up to 10 minutes. If the copy is older than
    what is live, the page swaps itself for the live one once, quietly. */
 (function(){try{if(sessionStorage.getItem('aera.fresh.'+location.pathname))return}catch(e){}
-function go(){var u=location.href.split('#')[0],h=location.hash;
+function go(){if(window.__aeraNoFresh)return;var u=location.href.split('#')[0],h=location.hash;
  Promise.all([fetch(u,{cache:'force-cache'}).then(function(r){return r.text()}),fetch(u,{cache:'no-store'}).then(function(r){return r.text()})]).then(function(a){
   try{sessionStorage.setItem('aera.fresh.'+location.pathname,'1')}catch(e){}
   if(a[0]&&a[1]&&a[0].length>1000&&a[1].length>1000&&a[0]!==a[1]){var n=u.replace(/([?&])_v=\d+&?/,'$1').replace(/[?&]$/,'');location.replace(n+(n.indexOf('?')>=0?'&':'?')+'_v='+Date.now()+h)}}).catch(function(){})}
