@@ -144,3 +144,29 @@ a{color:inherit}
   .steps{grid-template-columns:minmax(0,1fr)}
   .pgrid,.why{grid-template-columns:minmax(0,1fr)}
 }
+
+@keyframes m-air{0%,8%{transform:translate(0,0);opacity:.95}34%,100%{transform:translate(var(--x),-120px);opacity:0}}
+@keyframes m-gas{0%,30%{transform:translate(0,-70px);opacity:0}46%,88%{transform:translate(0,0);opacity:1}100%{transform:translate(0,0);opacity:0}}
+@keyframes m-film{0%,52%{transform:translateY(-46px);opacity:0}62%,90%{transform:translateY(0);opacity:1}100%{transform:translateY(0);opacity:0}}
+@keyframes m-stamp{0%,62%{transform:scale(0);opacity:0}68%{transform:scale(1.18);opacity:1}72%,90%{transform:scale(1);opacity:1}100%{transform:scale(1);opacity:0}}
+@keyframes m-noz{0%,26%{opacity:0}32%,50%{opacity:1}58%,100%{opacity:0}}
+@keyframes m-phase{0%,30%{opacity:1}31%,100%{opacity:0}}
+@keyframes m-phase2{0%,30%{opacity:0}31%,58%{opacity:1}59%,100%{opacity:0}}
+@keyframes m-phase3{0%,58%{opacity:0}59%,100%{opacity:1}}
+.m-air{animation:m-air 7s ease-in infinite;animation-delay:calc(var(--d) * .12s)}
+.m-gas{animation:m-gas 7s ease-out infinite;animation-delay:calc(var(--d) * .08s)}
+.m-film{animation:m-film 7s ease-out infinite}
+.m-stamp{transform-box:fill-box;transform-origin:center;animation:m-stamp 7s ease-out infinite}
+.m-noz{animation:m-noz 7s infinite}
+.m-p1{animation:m-phase 7s infinite}.m-p2{animation:m-phase2 7s infinite}.m-p3{animation:m-phase3 7s infinite}
+.mix{display:flex;height:42px;border-radius:12px;overflow:hidden;border:1.5px solid var(--line);margin-top:18px;font-weight:800;font-size:13px}
+.mix span{display:flex;align-items:center;padding:0 14px;white-space:nowrap}
+.mix .n2{flex:70;background:var(--navy);color:#fff}
+.mix .co2{flex:30;background:var(--yellow);color:var(--ink)}
+.mapsteps{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.mapsteps li{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:14px}
+.mapsteps b{display:flex;align-items:center;gap:8px;font-size:16px;color:var(--line)}
+.mapsteps b span{width:26px;height:26px;border-radius:8px;background:var(--yellow);color:var(--ink);display:grid;place-items:center;font-size:13px;font-weight:900;flex:none}
+.mapsteps p{margin-top:8px;font-size:14px;color:var(--muted)}
+@media (max-width:860px){.mapsteps{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion: reduce){.m-gas,.m-film,.m-stamp,.m-p3{opacity:1!important;transform:none!important}.m-air,.m-noz,.m-p1,.m-p2{opacity:0!important}}
