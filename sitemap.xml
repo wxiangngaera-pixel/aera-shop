@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://aeramealprep.net/kitchen-app/</loc>
+    <lastmod>2026-11-04T09:29:59.966Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://aeramealprep.net/kitchen/</loc>
     <lastmod>2026-11-04T09:29:50.232Z</lastmod>
     <changefreq>weekly</changefreq>
@@ -83,11 +88,6 @@
   <url>
     <loc>https://aeramealprep.net/terms/</loc>
     <lastmod>2026-11-03T09:44:46.922Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/kitchen-app/</loc>
-    <lastmod>2026-11-03T02:14:55.527Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
