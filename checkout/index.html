@@ -2023,6 +2023,19 @@ function payChip(order,msg,total,name,email,phone){var m=document.getElementById
   fetch(CHIP_FN,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'create',orderNo:order.orderNo})}).then(function(r){return r.json()})
   .then(function(j){if(j&&j.ok&&j.url){URL0=j.url;POST0=j.post||null;return go(j.url,POST0)}unbusy();close();fail(j&&j.error==='already_paid'?'already paid':'')})
   .catch(function(){unbusy();close();fail('')})})}
+/* Peter 4th Nov 2026 : AERA Credit Top-Ups on CHIP, the same AERA payment sheet as Checkout. Stashed first ( amount read from the stash by chip-pay ), CHIP returns billplz[id]=chip_<TU no>. */
+function tuChip(no,msg,email,name,a,tb){var m=document.getElementById('tuMsg');var btn=document.getElementById('tuPay');btn.disabled=true;btn.textContent='Preparing secure payment…';
+ var tup={n:no,e:email,a:a,tb:tb,before:(APS.loaded&&!APS.failed&&APS.key===apKey(email)?crAvail():null),at:Date.now()};
+ var pending={kind:'topup',orderNo:no,msg:msg,email:email,total:a,at:Date.now(),tup:tup};try{sessionStorage.setItem('aera.pendingOrder',JSON.stringify(pending));localStorage.setItem('aera.pendingOrder',JSON.stringify(pending))}catch(e){}
+ var reset=function(){btn.disabled=false;btn.textContent='Pay Securely';try{sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(x){}};
+ var fail=function(t){reset();m.innerHTML='<div class="msg bad">Could not start payment'+(t?' ( '+esc(t)+' )':'')+'. Please try again or WhatsApp us.</div>'};
+ var URL0=null,POST0=null;
+ tuStash(no,msg).then(function(){chipPick(a,function(q,unbusy,close,form){if(!q){if(!URL0)reset();return}
+  var go=function(u,p){btn.textContent='Opening secure payment…';if(q==='card'&&form&&p){form.action=p;HTMLFormElement.prototype.submit.call(form);return}location.href=u+(u.indexOf('?')<0?'?':'&')+(q==='card'?'preferred=visa':q)};
+  if(URL0)return go(URL0,POST0);
+  fetch(CHIP_FN,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'create',orderNo:no})}).then(function(r){return r.json()})
+  .then(function(j){if(j&&j.ok&&j.url){URL0=j.url;POST0=j.post||null;return go(j.url,POST0)}unbusy();close();fail(j&&j.error==='already_paid'?'already paid':'')})
+  .catch(function(){unbusy();close();fail('')})})})}
 /* Peter 3rd Nov 2026 : AERA result page after paying : Payment Successful, or Payment Unsuccessful with the reason and what to do. */
 var AERA_WA='60166630205';
 function aeraOrd(d){var n=d.getDate(),s=(n%10===1&&n!==11)?'st':(n%10===2&&n!==12)?'nd':(n%10===3&&n!==13)?'rd':'th';return n+s+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+' '+d.getFullYear()}
@@ -2168,6 +2181,7 @@ function tuPay(){var m=document.getElementById('tuMsg');m.innerHTML='';var a=TU.
  if(PAY.gateway!=='billplz'&&PAY.gateway!=='chip'&&typeof window.__processDonation!=='function'){m.innerHTML='<div class="msg bad">Top-Up is not available right now. Please WhatsApp us.</div>';return}
  var no=tuNo(),tb=tuBonusAP(a);
  var msg=JSON.stringify({v:3,k:'topup',n:no,e:email,nm:name,tu:a,tb:tb,ex:''});
+ if(PAY.gateway==='chip'&&typeof chipPick==='function')return tuChip(no,msg,email,name,a,tb); /* Peter 4th Nov 2026 : Top-Ups on CHIP */
  if(PAY.gateway==='billplz'||PAY.gateway==='chip')return tuBillplz(no,msg,email,name,a,tb);
  try{var em=document.getElementById('email');if(em&&!em.value){em.value=email;apInput(true)}}catch(e){}
  try{sessionStorage.setItem('aera.topupPending',JSON.stringify({n:no,e:email,a:a,tb:tb,before:(APS.loaded&&!APS.failed&&APS.key===apKey(email)?crAvail():null),at:Date.now()}));localStorage.setItem('aera.topupPending',sessionStorage.getItem('aera.topupPending'))}catch(e){}
@@ -4036,6 +4050,18 @@ async function go(){show('<h2>'+T('Preparing your payment…','正在准备付�
   return show('<h2>'+T('Pay Now','立即付款')+'</h2><p>'+txt+'</p><a href="/account/" style="'+BTN+'">'+T('Back to My Account','返回我的账户')+'</a>')}
  try{localStorage.setItem(SNAPK,JSON.stringify({no:j.orderNo,at:Date.now(),sent:1,cart:localStorage.getItem('aera.cart'),plan:localStorage.getItem('aera.plan')}))}catch(e){}
  show('<h2>'+T('Opening secure payment…','正在打开安全付款…')+'</h2><p style="color:var(--ink2)">'+T('Order','订单')+' <b>'+esc(j.orderNo)+'</b> · RM '+(+j.total).toFixed(2)+'</p>');
+ /* Peter 4th Nov 2026 : Pay Now on CHIP, the same AERA payment sheet as Checkout ( ?gw=billplz still uses Billplz ) */
+ var again='<a href="'+esc(location.pathname+'?awaiting='+encodeURIComponent(AID))+'" style="'+BTN+'">'+T('Try Again','重试')+'</a>';
+ if(PAY.gateway==='chip'&&typeof chipPick==='function'&&typeof CHIP_FN==='string'){
+  try{var pend={orderNo:j.orderNo,msg:'AERA Order '+j.orderNo,email:String(j.email||'').toLowerCase(),total:+j.total,at:Date.now()};sessionStorage.setItem('aera.pendingOrder',JSON.stringify(pend));localStorage.setItem('aera.pendingOrder',JSON.stringify(pend))}catch(e){}
+  var U0=null,P0=null,unset=function(){try{sessionStorage.removeItem('aera.pendingOrder');localStorage.removeItem('aera.pendingOrder')}catch(e){}};
+  chipPick(+j.total,function(q,unbusy,close,form){if(!q){if(!U0){unset();show('<h2>'+T('Payment not started','尚未付款')+'</h2><p>'+T('Your Order is still waiting for payment.','您的订单仍在等待付款。')+'</p>'+again)}return}
+   var go=function(u,p){if(q==='card'&&form&&p){form.action=p;HTMLFormElement.prototype.submit.call(form);return}location.href=u+(u.indexOf('?')<0?'?':'&')+(q==='card'?'preferred=visa':q)};
+   if(U0)return go(U0,P0);
+   fetch(CHIP_FN,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'create',orderNo:j.orderNo})}).then(function(r){return r.json()})
+   .then(function(x){if(x&&x.ok&&x.url){U0=x.url;P0=x.post||null;return go(x.url,P0)}unbusy();close();unset();show('<h2>'+T('Could not open the payment','无法打开付款')+'</h2><p>'+(x&&x.error==='already_paid'?T('This Order is already paid. Thank you!','此订单已付款。谢谢！'):T('Please try again, or WhatsApp us.','请重试，或用 WhatsApp 联系我们。'))+'</p>'+again)})
+   .catch(function(){unbusy();close();unset();show('<h2>'+T('Could not open the payment','无法打开付款')+'</h2><p>'+T('Please try again, or WhatsApp us.','请重试，或用 WhatsApp 联系我们。')+'</p>'+again)})});
+  return}
  try{payBillplz({orderNo:j.orderNo},'AERA Order '+j.orderNo,+j.total,String(j.name||''),String(j.email||''),String(j.phone||''))}catch(e){}
  setTimeout(function(){show('<h2>'+T('Could not open the payment','无法打开付款')+'</h2><p>'+T('Please try again, or WhatsApp us.','请重试，或用 WhatsApp 联系我们。')+'</p><a href="'+esc(location.pathname+'?awaiting='+encodeURIComponent(AID))+'" style="'+BTN+'">'+T('Try Again','重试')+'</a>')},45000)}
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',function(){setTimeout(go,300)});else setTimeout(go,300);
