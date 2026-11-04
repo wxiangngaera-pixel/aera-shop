@@ -2,7 +2,20 @@
 <html lang="en">
 <head>
 <!-- AERA host redirect : start -->
-
+<script>/* Customers always stay on aeramealprep.net : a customer page opened on my.chatbees.io ( an old
+   email, a bookmark, a link we missed ) moves itself across straight away, keeping everything after
+   the address. Not inside the Chatbees editor preview, and not with ?stay=1 ( for testing ). */
+(function(){try{
+ if(!/(^|\.)my\.chatbees\.io$/i.test(location.hostname))return;
+ if(window.top!==window)return;
+ var q=location.search||'';
+ if(/[?&]stay=1(&|$)/.test(q)){try{sessionStorage.setItem('aera.stay','1')}catch(e){}return}
+ try{if(sessionStorage.getItem('aera.stay')==='1')return}catch(e){}
+ var M={"ZQr9fS2jA9":"/","xR3Dfd9n":"/fridge","D2pz8bZ":"/checkout","dtTMaV":"/account","SrQzC5m2":"/meal-plan","DSBcJ9bN4":"/bring-your-own-plan","8s4Xd6h":"/track","VMrvEw":"/merchandise","TVRk6bqam":"/corporate","G7mXL4RMz2":"/terms","xXH4dXALg":"/privacy","B2WjrKhnz":"/contact","DiB2ZadptP":"/thank-you","HkKJuxBS":"/referrer-portal","H9H32i9ShW":"/referrer-signup","ZmQYknnnM":"/points-checkout","8kZjg8U5XD":"/home-sourced-meals","vP2uvq":"/coach-plan-builder"};
+ var m=location.pathname.match(/\/p\/([A-Za-z0-9]+)\/?$/);if(!m)return;
+ var t=M[m[1]];if(!t)return;
+ location.replace('https://aeramealprep.net'+(t==='/'?'/':t+'/')+q+(location.hash||''));
+}catch(e){}})();</script>
 <!-- AERA host redirect : end -->
 
 
@@ -24,7 +37,7 @@
 <meta name="twitter:title" content="AERA Points · Order — AERA Meal Prep" />
 <meta name="twitter:description" content="Order AERA fat-loss and mass-gain meal preps. Self pick-up in Seri Kembangan or Lalamove / Grab delivery across Klang Valley." />
 <!-- End SEO Meta Tags -->
-<meta name="sheet-data-url" content="https://my.chatbees.io/api/public/landing-pages/6929/sheet-data">
+<meta name="sheet-data-url" content="https://paymegpt.com/api/public/landing-pages/6929/sheet-data">
 <script data-lp-token-hydrate>
 (function(){try{
   var slug="lp-mtr44xzg-59fwa";
@@ -49,7 +62,8 @@
 <style data-gate>body{visibility:hidden;}</style>
 <script data-gate>
 (function(){
-  var slug='lp-mtr44xzg-59fwa';var apiBase='https://my.chatbees.io';
+  var slug='lp-mtr44xzg-59fwa';
+  var apiBase='https://my.chatbees.io';
   var PIN_TOKEN_KEY='lp_pin_'+slug;var ACCESS_TOKEN_KEY='lp_access_'+slug;var PIN_FRESH_KEY='lp_fresh_'+slug;
   var PIN_SITE_KEY="";var PIN_OWNER="1302";var PIN_MAX_AGE=2592000000;var PIN_PERSIST=true;var pinPassed=false;
   function pinStore(t){try{sessionStorage.setItem(ACCESS_TOKEN_KEY,t);}catch(e){}if(PIN_PERSIST){try{localStorage.setItem(PIN_TOKEN_KEY,t);if(PIN_SITE_KEY)localStorage.setItem(PIN_SITE_KEY,t);}catch(e){}}}
@@ -65,76 +79,77 @@
   if(pinToken){var hp=pinParts(pinToken);var hopOk=pinScopeOk(hp)&&isFinite(parseInt(hp[hp.length-1]))&&(Date.now()-parseInt(hp[hp.length-1]))<900000;var url=new URL(window.location.href);url.searchParams.delete('pin_access_token');window.history.replaceState({},'',url.toString());if(hopOk){pinStore(pinToken);pinPassed=true;}}
   if(pinPassed){document.addEventListener('DOMContentLoaded',function(){document.body.style.visibility='visible';});return;}
   document.addEventListener('DOMContentLoaded',function(){
-  var currentMethod='email';var currentIdentifier='';
-  var gateHtml='<div id="pin-gate" style="position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;padding:16px;"><div style="background:white;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.15);width:100%;max-width:420px;padding:32px;text-align:center;"><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Identity Verification</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">Please verify your identity to access this page.</p><form id="pin-request-form"><label for="pin-full-name" style="display:block;text-align:left;font-size:14px;font-weight:500;color:#374151;margin-bottom:6px;">Full Name <span style="color:#9ca3af;font-weight:400;">(optional)</span></label><input type="text" id="pin-full-name" placeholder="" style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:16px;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" /><input type="email" id="pin-identifier" placeholder="Enter your email address" required style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:16px;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" /><div id="pin-req-error" style="display:none;color:#ef4444;font-size:14px;margin-bottom:12px;"></div><button type="submit" id="pin-send-btn" style="width:100%;height:48px;font-size:16px;font-weight:600;color:white;border:none;border-radius:8px;cursor:pointer;background:#2563eb;">Send Verification Code</button></form><form id="pin-verify-form" style="display:none;"><p id="pin-sent-msg" style="font-size:14px;color:#6b7280;margin-bottom:12px;"></p><input type="text" id="pin-code" placeholder="Enter 6-digit PIN" maxlength="6" style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:20px;text-align:center;letter-spacing:8px;font-family:monospace;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" required /><div id="pin-ver-error" style="display:none;color:#ef4444;font-size:14px;margin-bottom:12px;"></div><button type="submit" id="pin-verify-btn" style="width:100%;height:48px;font-size:16px;font-weight:600;color:white;border:none;border-radius:8px;cursor:pointer;background:#2563eb;">Verify PIN</button><button type="button" id="pin-resend-btn" style="width:100%;margin-top:8px;padding:8px;background:none;border:none;color:#6b7280;cursor:pointer;font-size:14px;">Resend PIN</button><button type="button" id="pin-back-btn" style="width:100%;padding:8px;background:none;border:none;color:#9ca3af;cursor:pointer;font-size:14px;">Use different contact</button></form></div></div>';
-  document.body.insertAdjacentHTML('beforeend',gateHtml);document.body.style.visibility='visible';
-  var reqForm=document.getElementById('pin-request-form');var verForm=document.getElementById('pin-verify-form');var idInput=document.getElementById('pin-identifier');var codeInput=document.getElementById('pin-code');var sendBtn=document.getElementById('pin-send-btn');var verifyBtn=document.getElementById('pin-verify-btn');var reqError=document.getElementById('pin-req-error');var verError=document.getElementById('pin-ver-error');var sentMsg=document.getElementById('pin-sent-msg');
+  var currentMethod='email';
+  var currentIdentifier='';
+  var gateHtml='<div id="pin-gate" style="position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;padding:16px;">' +
+    '<div style="background:white;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.15);width:100%;max-width:420px;padding:32px;text-align:center;">' +
+    '<h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Identity Verification</h2>' +
+    '<p style="margin:0 0 24px;color:#6b7280;font-size:16px;">Please verify your identity to access this page.</p>' +
+    '' +
+    '<form id="pin-request-form">' +
+    '<label for="pin-full-name" style="display:block;text-align:left;font-size:14px;font-weight:500;color:#374151;margin-bottom:6px;">Full Name <span style="color:#9ca3af;font-weight:400;">(optional)</span></label><input type="text" id="pin-full-name" placeholder="" style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:16px;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" />' +
+    '<input type="email" id="pin-identifier" placeholder="Enter your email address" required style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:16px;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" />' +
+    '<div id="pin-req-error" style="display:none;color:#ef4444;font-size:14px;margin-bottom:12px;"></div>' +
+    '<button type="submit" id="pin-send-btn" style="width:100%;height:48px;font-size:16px;font-weight:600;color:white;border:none;border-radius:8px;cursor:pointer;background:#2563eb;">Send Verification Code</button>' +
+    '</form>' +
+    '<form id="pin-verify-form" style="display:none;">' +
+    '<p id="pin-sent-msg" style="font-size:14px;color:#6b7280;margin-bottom:12px;"></p>' +
+    '<input type="text" id="pin-code" placeholder="Enter 6-digit PIN" maxlength="6" style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:20px;text-align:center;letter-spacing:8px;font-family:monospace;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" required />' +
+    '<div id="pin-ver-error" style="display:none;color:#ef4444;font-size:14px;margin-bottom:12px;"></div>' +
+    '<button type="submit" id="pin-verify-btn" style="width:100%;height:48px;font-size:16px;font-weight:600;color:white;border:none;border-radius:8px;cursor:pointer;background:#2563eb;">Verify PIN</button>' +
+    '<button type="button" id="pin-resend-btn" style="width:100%;margin-top:8px;padding:8px;background:none;border:none;color:#6b7280;cursor:pointer;font-size:14px;">Resend PIN</button>' +
+    '<button type="button" id="pin-back-btn" style="width:100%;padding:8px;background:none;border:none;color:#9ca3af;cursor:pointer;font-size:14px;">Use different contact</button>' +
+    '</form></div></div>';
+  document.body.insertAdjacentHTML('beforeend',gateHtml);
+  document.body.style.visibility='visible';
+  var reqForm=document.getElementById('pin-request-form');
+  var verForm=document.getElementById('pin-verify-form');
+  var idInput=document.getElementById('pin-identifier');
+  var codeInput=document.getElementById('pin-code');
+  var sendBtn=document.getElementById('pin-send-btn');
+  var verifyBtn=document.getElementById('pin-verify-btn');
+  var reqError=document.getElementById('pin-req-error');
+  var verError=document.getElementById('pin-ver-error');
+  var sentMsg=document.getElementById('pin-sent-msg');
   
-  function gateName(){var n=document.getElementById('pin-full-name');return (n&&n.value||'').trim();}
-  function gateRequiredNameOk(){return !!gateName();}
-  function sendPin(){var id=idInput.value.trim();if(!id)return;var nm=gateName();sendBtn.disabled=true;sendBtn.textContent='Sending...';reqError.style.display='none';var body=currentMethod==='sms'?{phone:id}:{email:id};if(nm){body.name=nm;}fetch(apiBase+'/api/landing-pages/public/'+slug+'/generate-pin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(d){if(d.success){currentIdentifier=id;reqForm.style.display='none';verForm.style.display='block';sentMsg.textContent='We sent a 6-digit PIN to '+id;codeInput.focus();}else{reqError.textContent=d.message||'Failed to send PIN';reqError.style.display='block';}}).catch(function(){reqError.textContent='Failed to send PIN';reqError.style.display='block';}).finally(function(){sendBtn.disabled=false;sendBtn.textContent='Send Verification Code';});}
-  function verifyPin(){var pin=codeInput.value.trim();if(!pin||pin.length!==6){verError.textContent='Please enter the 6-digit PIN';verError.style.display='block';return;}verifyBtn.disabled=true;verifyBtn.textContent='Verifying...';verError.style.display='none';var body=currentMethod==='sms'?{phone:currentIdentifier,pin:pin}:{email:currentIdentifier,pin:pin};fetch(apiBase+'/api/landing-pages/public/'+slug+'/verify-pin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(d){if(d.verified){pinOnVerified(d.accessToken);}else{verError.textContent=d.message||'Invalid PIN code';verError.style.display='block';}}).catch(function(){verError.textContent='Failed to verify PIN';verError.style.display='block';}).finally(function(){verifyBtn.disabled=false;verifyBtn.textContent='Verify PIN';});}
-  reqForm.addEventListener('submit',function(e){e.preventDefault();sendPin();});verForm.addEventListener('submit',function(e){e.preventDefault();verifyPin();});document.getElementById('pin-resend-btn').addEventListener('click',sendPin);document.getElementById('pin-back-btn').addEventListener('click',function(){verForm.style.display='none';reqForm.style.display='block';codeInput.value='';verError.style.display='none';});codeInput.addEventListener('input',function(e){e.target.value=e.target.value.replace(/[^0-9]/g,'').slice(0,6);});idInput.focus();
-  });
-})();
-</script>
-<script data-gate>
-(function(){
-  var slug='lp-mtr44xzg-59fwa';var apiBase='https://my.chatbees.io';var currency='MYR';var presets=[2500,5000,10000,25000];var minAmt=100;var maxAmt=500000;var thankYouMsg='Order received — thank you!';
-  var successSubtext='Payment received — thank you! We\'ll cook your meals fresh for your chosen date. A receipt is on its way to your email, and you\'ll get your rider\'s tracking link once your order is packed — or use "Track my order" in the menu any time.';var successBtnLabel='Close';var successBtnColor='#16a34a';var successRedirect='';
-  function getLang(){var l=(document.documentElement.lang||navigator.language||'en').toLowerCase();return l.split('-')[0];}
-  function getLocale(){return (document.documentElement.lang||navigator.language||'en');}
-  var I18N={en:{min:'Minimum is ',max:'Maximum is ',emailPrompt:'Enter your email for the receipt:',emailRequired:'An email address is required to complete checkout.',failed:'Failed to process donation'},fr:{min:'Le minimum est ',max:'Le maximum est ',emailPrompt:'Entrez votre adresse e-mail pour le reçu :',emailRequired:'Une adresse e-mail est requise pour finaliser le paiement.',failed:'Échec du traitement du don'},es:{min:'El mínimo es ',max:'El máximo es ',emailPrompt:'Introduce tu correo electrónico para el recibo:',emailRequired:'Se requiere una dirección de correo electrónico para completar el pago.',failed:'No se pudo procesar la donación'},pt:{min:'O mínimo é ',max:'O máximo é ',emailPrompt:'Insira seu e-mail para o recibo:',emailRequired:'Um endereço de e-mail é necessário para concluir o pagamento.',failed:'Falha ao processar a doação'},de:{min:'Mindestbetrag ist ',max:'Höchstbetrag ist ',emailPrompt:'Geben Sie Ihre E-Mail-Adresse für die Quittung ein:',emailRequired:'Eine E-Mail-Adresse ist erforderlich, um den Checkout abzuschließen.',failed:'Spende konnte nicht verarbeitet werden'},it:{min:'Il minimo è ',max:'Il massimo è ',emailPrompt:'Inserisci la tua email per la ricevuta:',emailRequired:"È richiesto un indirizzo email per completare il pagamento.",failed:'Impossibile elaborare la donazione'}};
-  function t(k){var L=getLang();return (I18N[L]&&I18N[L][k])||I18N.en[k];}
-  function fmtD(c){try{return new Intl.NumberFormat(getLocale(),{style:'currency',currency:currency}).format(c/100);}catch(e){return new Intl.NumberFormat('en-US',{style:'currency',currency:currency}).format(c/100);}}
-  function findDonEmail(){var ids=['email','emailAddress','buyer-email','buyerEmail','donor-email','donorEmail','user-email','userEmail','contact-email'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.indexOf('@')>-1)return el.value.trim();}var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.indexOf('@')>-1)return inputs[j].value.trim();}return '';}
-  function findDonName(){var ids=['name','fullName','full-name','donor-name','donorName','customer-name','user-name'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"])');for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}return '';}
-  function findDonPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
-  window.__processDonation=function(a,b,c,d){
-    var amountCents,email='',donorName='',donorMessage='',productName='',productDescription='',quantity=1;
-    if(a&&typeof a==='object'){
-      amountCents=a.amountCents||(a.amount?Math.round(Number(a.amount)*100):0);
-      email=a.email||'';
-      productName=a.productName||a.label||'';
-      productDescription=a.productDescription||a.description||'';
-      donorName=a.name||a.donorName||'';
-      donorMessage=a.message||a.donorMessage||'';
-      quantity=a.quantity&&parseInt(a.quantity,10)>0?parseInt(a.quantity,10):1;
-    }else{
-      amountCents=typeof a==='number'?a:(parseInt(a,10)||0);
-      var rest=[b,c,d];var nonEmail=[];
-      for(var i=0;i<rest.length;i++){var v=rest[i];if(typeof v==='string'&&v){if(!email&&v.indexOf('@')>-1&&/^[^s@]+@[^s@]+.[^s@]+$/.test(v.trim())){email=v.trim();}else{nonEmail.push(v);}}}
-      donorName=nonEmail[0]||'';donorMessage=nonEmail[1]||'';
-    }
-    if(!email)email=findDonEmail();
-    if(!donorName)donorName=findDonName();
-    var donorPhone=findDonPhone();
-    if(!amountCents||amountCents<minAmt){alert(t('min')+fmtD(minAmt));return Promise.reject('below_min');}
-    if(amountCents>maxAmt){alert(t('max')+fmtD(maxAmt));return Promise.reject('above_max');}
-    if(!email){var p=window.prompt(t('emailPrompt'),'');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert(t('emailRequired'));return Promise.reject('no_email');}}
-    var successBase=window.location.href.split('?')[0];
-    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/donation/checkout',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email:email,name:donorName||'',phone:donorPhone||'',amountCents:amountCents,message:donorMessage||'',productName:productName||'',productDescription:productDescription||'',quantity:quantity,locale:getLocale(),successUrl:successBase+'?donation=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?donation=cancelled'})
-    }).then(function(r){return r.json();}).then(function(d){
-      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
-      else{alert(d.error||t('failed'));throw new Error(d.error);}
-    });
-  };
-  window.__donationConfig={currency:currency,presets:presets.map(function(c){return c/100;}),minAmount:minAmt/100,maxAmount:maxAmt/100,formatAmount:fmtD};
-  document.addEventListener('DOMContentLoaded',function(){
-    var urlParams=new URLSearchParams(window.location.search);
-    if(urlParams.get('donation')==='success'){
-      var sidD=urlParams.get('session_id');
-      if(sidD){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidD})}).catch(function(){});}catch(e){}}
-      var overlay=document.createElement('div');overlay.id='donation-success-overlay';
-      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
-      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">'+esc(thankYouMsg)+'</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(successSubtext)+'</p><button id="lp-don-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
-      document.body.appendChild(overlay);
-      var dBtn=document.getElementById('lp-don-success-btn');
-      if(dBtn){dBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
-    }
+  function gateName(){
+    var n=document.getElementById('pin-full-name');return (n&&n.value||'').trim();
+  }
+  function sendPin(){
+    var id=idInput.value.trim();if(!id)return;
+    var nm=gateName();
+    
+    sendBtn.disabled=true;sendBtn.textContent='Sending...';reqError.style.display='none';
+    var body=currentMethod==='sms'?{phone:id}:{email:id};
+    if(nm){body.name=nm;}
+    fetch(apiBase+'/api/landing-pages/public/'+slug+'/generate-pin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.success){currentIdentifier=id;reqForm.style.display='none';verForm.style.display='block';sentMsg.textContent='We sent a 6-digit PIN to '+id;codeInput.focus();}
+      else{reqError.textContent=d.message||'Failed to send PIN';reqError.style.display='block';}
+    })
+    .catch(function(){reqError.textContent='Failed to send PIN';reqError.style.display='block';})
+    .finally(function(){sendBtn.disabled=false;sendBtn.textContent='Send Verification Code';});
+  }
+  function verifyPin(){
+    var pin=codeInput.value.trim();if(!pin||pin.length!==6){verError.textContent='Please enter the 6-digit PIN';verError.style.display='block';return;}
+    verifyBtn.disabled=true;verifyBtn.textContent='Verifying...';verError.style.display='none';
+    var body=currentMethod==='sms'?{phone:currentIdentifier,pin:pin}:{email:currentIdentifier,pin:pin};
+    fetch(apiBase+'/api/landing-pages/public/'+slug+'/verify-pin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.verified){pinOnVerified(d.accessToken);}
+      else{verError.textContent=d.message||'Invalid PIN code';verError.style.display='block';}
+    })
+    .catch(function(){verError.textContent='Failed to verify PIN';verError.style.display='block';})
+    .finally(function(){verifyBtn.disabled=false;verifyBtn.textContent='Verify PIN';});
+  }
+  reqForm.addEventListener('submit',function(e){e.preventDefault();sendPin();});
+  verForm.addEventListener('submit',function(e){e.preventDefault();verifyPin();});
+  document.getElementById('pin-resend-btn').addEventListener('click',sendPin);
+  document.getElementById('pin-back-btn').addEventListener('click',function(){verForm.style.display='none';reqForm.style.display='block';codeInput.value='';verError.style.display='none';});
+  codeInput.addEventListener('input',function(e){e.target.value=e.target.value.replace(/[^0-9]/g,'').slice(0,6);});
+  idInput.focus();
   });
 })();
 </script>
@@ -318,10 +333,73 @@
       overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
       function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
       document.body.appendChild(overlay);
       var pBtn=document.getElementById('lp-pay-success-btn');
       if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-donation>
+(function(){
+  var slug='ZmQYknnnM';
+  var apiBase='https://my.chatbees.io';
+  var currency='USD';
+  var minAmt=100;var maxAmt=500000;
+  var thankYouMsg='Order received — thank you!';var successSubtext='Payment received — thank you! We\'ll cook your meals fresh for your chosen date. A receipt is on its way to your email, and you\'ll get your rider\'s tracking link once your order is packed — or use "Track my order" in the menu any time.';var successBtnLabel='Close';var successBtnColor='#16a34a';var successRedirect='';
+  function getLang(){var l=(document.documentElement.lang||navigator.language||'en').toLowerCase();return l.split('-')[0];}
+  function getLocale(){return (document.documentElement.lang||navigator.language||'en');}
+  var I18N={en:{min:'Minimum is ',max:'Maximum is ',emailPrompt:'Enter your email for the receipt:',emailRequired:'An email address is required to complete checkout.',failed:'Failed to process donation'},fr:{min:'Le minimum est ',max:'Le maximum est ',emailPrompt:'Entrez votre adresse e-mail pour le reçu :',emailRequired:'Une adresse e-mail est requise pour finaliser le paiement.',failed:'Échec du traitement du don'},es:{min:'El mínimo es ',max:'El máximo es ',emailPrompt:'Introduce tu correo electrónico para el recibo:',emailRequired:'Se requiere una dirección de correo electrónico para completar el pago.',failed:'No se pudo procesar la donación'},pt:{min:'O mínimo é ',max:'O máximo é ',emailPrompt:'Insira seu e-mail para o recibo:',emailRequired:'Um endereço de e-mail é necessário para concluir o pagamento.',failed:'Falha ao processar a doação'},de:{min:'Mindestbetrag ist ',max:'Höchstbetrag ist ',emailPrompt:'Geben Sie Ihre E-Mail-Adresse für die Quittung ein:',emailRequired:'Eine E-Mail-Adresse ist erforderlich, um den Checkout abzuschließen.',failed:'Spende konnte nicht verarbeitet werden'},it:{min:'Il minimo è ',max:'Il massimo è ',emailPrompt:'Inserisci la tua email per la ricevuta:',emailRequired:"È richiesto un indirizzo email per completare il pagamento.",failed:'Impossibile elaborare la donazione'}};
+  function t(k){var L=getLang();return (I18N[L]&&I18N[L][k])||I18N.en[k];}
+  function fmtD(c){try{return new Intl.NumberFormat(getLocale(),{style:'currency',currency:currency}).format(c/100);}catch(e){return new Intl.NumberFormat('en-US',{style:'currency',currency:currency}).format(c/100);}}
+  window.__donationConfig={currency:currency,presets:[25,50,100,250],minAmount:100/100,maxAmount:500000/100,formatAmount:fmtD,buttonColor:'#4f46e5',buttonText:'Donate Now',thankYouMessage:'Order received — thank you!'};
+  function findDonEmail2(){var ids=['email','emailAddress','buyer-email','buyerEmail','donor-email','donorEmail','user-email','userEmail','contact-email'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.indexOf('@')>-1)return el.value.trim();}var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.indexOf('@')>-1)return inputs[j].value.trim();}return '';}
+  function findDonName2(){var ids=['name','fullName','full-name','donor-name','donorName','customer-name','user-name'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"])');for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}return '';}
+  function findDonPhone2(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  window.__processDonation=function(a,b,c,d){
+    var amountCents,email='',name='',donorMessage='',productName='',productDescription='',quantity=1;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents||(a.amount?Math.round(Number(a.amount)*100):0);
+      email=a.email||'';
+      productName=a.productName||a.label||'';
+      productDescription=a.productDescription||a.description||'';
+      name=a.name||a.donorName||'';
+      donorMessage=a.message||a.donorMessage||'';
+      quantity=a.quantity&&parseInt(a.quantity,10)>0?parseInt(a.quantity,10):1;
+    }else{
+      amountCents=typeof a==='number'?a:(parseInt(a,10)||0);
+      var rest=[b,c,d];var nonEmail=[];
+      for(var i=0;i<rest.length;i++){var v=rest[i];if(typeof v==='string'&&v){if(!email&&v.indexOf('@')>-1&&/^[^s@]+@[^s@]+.[^s@]+$/.test(v.trim())){email=v.trim();}else{nonEmail.push(v);}}}
+      name=nonEmail[0]||'';donorMessage=nonEmail[1]||'';
+    }
+    if(!email)email=findDonEmail2();
+    if(!name)name=findDonName2();
+    var donorPhone=findDonPhone2();
+    if(!amountCents||amountCents<minAmt){alert(t('min')+fmtD(minAmt));return Promise.reject('below_min');}
+    if(amountCents>maxAmt){alert(t('max')+fmtD(maxAmt));return Promise.reject('above_max');}
+    if(!email){var p=window.prompt(t('emailPrompt'),'');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert(t('emailRequired'));return;}}
+    var successBase=window.location.href.split('?')[0];
+    fetch(apiBase+'/api/landing-pages/public/'+slug+'/donation/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:name||'',phone:donorPhone||'',amountCents:amountCents,message:donorMessage||'',productName:productName||'',productDescription:productDescription||'',quantity:quantity,locale:getLocale(),successUrl:successBase+'?donation=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?donation=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||t('failed'));}
+    }).catch(function(){alert(t('failed'));});
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('donation')==='success'){
+      var sidD=urlParams.get('session_id');
+      if(sidD){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidD})}).catch(function(){});}catch(e){}}
+      var overlay=document.createElement('div');overlay.id='donation-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">'+esc(thankYouMsg)+'</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(successSubtext)+'</p><button id="lp-don-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var dBtn=document.getElementById('lp-don-success-btn');
+      if(dBtn){dBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
     }
   });
 })();
@@ -395,14 +473,15 @@
       overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
       function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var subTxt=successSubtext||'Thank you for your order.';
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
       document.body.appendChild(overlay);
       var cBtn=document.getElementById('lp-cart-success-btn');
       if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
     }
   });
 })();
-</script>  <link rel="stylesheet" href="styles.css">
+</script>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <nav><div class="wrap">
@@ -671,9 +750,93 @@ render();renderCart();loadPoints();
 </script>
 
 <!-- AERA host map : start -->
-
+<script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
+(function(){
+  if(window.__AERA_HOSTMAP) return; window.__AERA_HOSTMAP=1;
+  if(/my\.chatbees\.io$/i.test(location.hostname)) return;
+  var MAP={"ZQr9fS2jA9":"/","xR3Dfd9n":"/fridge","D2pz8bZ":"/checkout","dtTMaV":"/account","SrQzC5m2":"/meal-plan",
+  "DSBcJ9bN4":"/bring-your-own-plan","8s4Xd6h":"/track","VMrvEw":"/merchandise","TVRk6bqam":"/corporate",
+  "G7mXL4RMz2":"/terms","xXH4dXALg":"/privacy","B2WjrKhnz":"/contact","DiB2ZadptP":"/thank-you",
+  "HkKJuxBS":"/referrer-portal","H9H32i9ShW":"/referrer-signup","ZmQYknnnM":"/points-checkout",
+  "8kZjg8U5XD":"/home-sourced-meals","vP2uvq":"/coach-plan-builder"};
+  function baseOf(){
+    var p=location.pathname.replace(/\/+$/,"");
+    for(var k in MAP){ var t=MAP[k];
+      if(t!=="/" && p.length>=t.length && p.slice(-t.length)===t) return p.slice(0,p.length-t.length); }
+    return p;
+  }
+  var BASE=baseOf();
+  function conv(u){
+    if(!u) return u;
+    var m=String(u).match(/^(?:https?:\/\/my\.chatbees\.io)?\/p\/([A-Za-z0-9]+)\/?(\?[^#]*)?(#.*)?$/);
+    if(!m) return u;
+    var t=MAP[m[1]]; if(!t) return u;
+    return location.origin+BASE+(t==="/"?"/":t+"/")+(m[2]||"")+(m[3]||"");
+  }
+  function fix(root){
+    if(!root||!root.querySelectorAll) return;
+    var a=root.querySelectorAll("a[href]");
+    for(var i=0;i<a.length;i++){ var o=a[i].getAttribute("href"), n=conv(o); if(n!==o) a[i].setAttribute("href",n); }
+  }
+  document.addEventListener("click",function(e){
+    var a=e.target&&e.target.closest?e.target.closest("a[href]"):null; if(!a) return;
+    var o=a.getAttribute("href"), n=conv(o); if(n!==o) a.setAttribute("href",n);
+  },true);
+  try{ var _o=window.open; window.open=function(u){ var x=[].slice.call(arguments); x[0]=conv(u); return _o.apply(window,x) }; }catch(e){}
+  try{ var la=Location.prototype.assign, lr=Location.prototype.replace;
+    Location.prototype.assign=function(u){ return la.call(this,conv(u)) };
+    Location.prototype.replace=function(u){ return lr.call(this,conv(u)) }; }catch(e){}
+  /* Chrome and Safari ignore the two lines above ( location.replace / .href cannot be re-wired ), so : */
+  window.aeraUrl=conv;
+  /* 1. re-point the page's own address settings ( HOME_URL, SHOP_URL, NEXT … ) at this site */
+  function sweep(){ try{ for(var k in window){ var v; try{ v=window[k] }catch(e){ continue }
+      if(typeof v==="string"){ var n=conv(v); if(n!==v) try{ window[k]=n }catch(e){} }
+      else if(v&&typeof v==="object"&&Object.getPrototypeOf(v)===Object.prototype){ for(var j in v){ if(typeof v[j]==="string"){ var n2=conv(v[j]); if(n2!==v[j]) try{ v[j]=n2 }catch(e){} } } } } }catch(e){} }
+  sweep(); document.addEventListener("DOMContentLoaded",sweep); window.addEventListener("load",sweep);
+  /* 2. last net : any jump to a my.chatbees.io page that has a home here lands here instead */
+  try{ if(window.navigation) navigation.addEventListener("navigate",function(e){
+      if(e.navigationType==="traverse"||!e.cancelable) return;
+      var u=e.destination&&e.destination.url, n=conv(u); if(u&&n!==u){ e.preventDefault(); location.href=n } }); }catch(e){}
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",function(){fix(document)});
+  else fix(document);
+  try{ new MutationObserver(function(ms){ for(var i=0;i<ms.length;i++){ var n=ms[i].addedNodes; for(var j=0;j<n.length;j++) if(n[j].nodeType===1) fix(n[j]); } })
+    .observe(document.documentElement,{childList:true,subtree:true}); }catch(e){}
+})();
+</script>
 <!-- AERA host map : end -->
 
-  <script src="script.js"></script>
+<script id="aera-watch">/* Peter 4th Nov 2026 : AERA Page Watcher. Counts, per day / page / device, when this page jumps, shifts, reloads itself
+   ( flashing ), stays blank, shows a script error or loads slowly. Read each morning by the AERA Morning Check.
+   No names, emails, phones or addresses are sent : only the page path, the device ( ios / android + version ) and browser or app. */
+(function(){if(window.__aeraWatch)return;window.__aeraWatch=1;
+var U='https://swpprjvubgcdsojapaad.supabase.co/rest/v1/rpc/aera_watch',K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0';
+var N=navigator,ua=N.userAgent||'',m,dev='other';
+if((m=ua.match(/OS (\d+)[_.](\d+)/))&&/iPhone|iPad|iPod/.test(ua))dev='ios '+m[1]+'.'+m[2];
+else if(/Macintosh/.test(ua)&&N.maxTouchPoints>1)dev='ios';
+else if((m=ua.match(/Android (\d+(\.\d+)?)/)))dev='android '+m[1];
+else if(/Macintosh/.test(ua))dev='mac';else if(/Windows/.test(ua))dev='win';
+var app=false;try{app=!!(N.standalone||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||/[?&]app=/.test(location.search))}catch(e){}
+var page=(location.pathname.replace(/\/+$/,'')||'/').slice(0,60),q=location.search.match(/[?&]app=(\w{1,12})/);if(q)page=(page+'/~'+q[1]).slice(0,60);
+var EV=[{e:'view'}],seen={},sent=false,lastIn=0,t0=Date.now();
+function add(e,v,d){var k=e+'|'+(d||'');if(seen[k]||EV.length>=12)return;seen[k]=1;var o={e:e};if(v!=null)o.v=Math.round(v*1000)/1000;if(d)o.d=String(d).slice(0,140);EV.push(o)}
+function send(){if(sent||!EV.length)return;sent=true;try{fetch(U,{method:'POST',keepalive:true,headers:{apikey:K,Authorization:'Bearer '+K,'Content-Type':'application/json'},body:JSON.stringify({p_page:page,p_dev:dev,p_mode:app?'app':'browser',p_ev:EV})}).catch(function(){})}catch(e){}}
+/* reload loop ( the page flashing ) : 3 or more loads of this page inside 20 seconds */
+try{var SK='aera.watch.loads',L=JSON.parse(sessionStorage.getItem(SK)||'[]').filter(function(x){return x[0]===page&&t0-x[1]<20000});L.push([page,t0]);sessionStorage.setItem(SK,JSON.stringify(L.slice(-6)));if(L.length>=3)add('flash',L.length,'reloaded '+L.length+' times in 20 s')}catch(e){}
+/* jump : the page scrolls by itself ( no touch, wheel or key in the last 0.8 s ) */
+['touchstart','touchmove','wheel','keydown','mousedown','pointerdown'].forEach(function(t){addEventListener(t,function(){lastIn=Date.now()},{passive:true,capture:true})});
+var y0=pageYOffset,jumps=0;(function tick(){var y=pageYOffset,d=y-y0;y0=y;if(Math.abs(d)>160&&Date.now()-lastIn>800&&Date.now()-t0>1500&&!document.hidden){jumps++;add('jump',Math.abs(d),(d>0?'down ':'up ')+Math.round(Math.abs(d))+' px')}if(Date.now()-t0<600000)requestAnimationFrame(tick)})();
+/* layout shift ( Chrome / Android only; iPhones do not report it ) */
+try{var cls=0;new PerformanceObserver(function(l){l.getEntries().forEach(function(x){if(!x.hadRecentInput)cls+=x.value})}).observe({type:'layout-shift',buffered:true});addEventListener('pagehide',function(){if(cls>0.25)EV.push({e:'shift',v:Math.round(cls*1000)/1000})},true)}catch(e){}
+/* script errors */
+function clean(s){return String(s||'').replace(/\S+@\S+/g,'[email]').replace(/\d{6,}/g,'[n]').slice(0,140)}
+addEventListener('error',function(ev){if(ev&&ev.message)add('error',null,clean(ev.message+(ev.filename?' @'+String(ev.filename).split('/').pop().split('?')[0]+':'+ev.lineno:'')))},true);
+addEventListener('unhandledrejection',function(ev){var r=ev&&ev.reason;add('error',null,clean('promise : '+(r&&r.message||r)))});
+/* blank page and slow load */
+setTimeout(function(){try{var b=document.body,txt=b?(b.innerText||'').replace(/\s+/g,'').length:0;if(txt<20&&!document.querySelector('img,canvas,svg,video,iframe'))add('blank',txt,'nothing on screen after 6 s')}catch(e){}},6000);
+addEventListener('load',function(){setTimeout(function(){try{var n=performance.getEntriesByType('navigation')[0],s=n?n.loadEventEnd/1000:0;if(s>8)add('slow',s,'loaded in '+Math.round(s)+' s')}catch(e){}},0)});
+addEventListener('pagehide',send,true);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')send()});
+setTimeout(function(){if(!sent){send();sent=false;EV=[];seen={'view|':1}}},45000);
+})();
+</script>
 </body>
 </html>
