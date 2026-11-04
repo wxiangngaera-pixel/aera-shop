@@ -295,7 +295,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
       overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
       function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
       document.body.appendChild(overlay);
       var pBtn=document.getElementById('lp-pay-success-btn');
       if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
@@ -372,7 +372,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
       overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
       function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var subTxt=successSubtext||'Thank you for your order.';
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
       document.body.appendChild(overlay);
       var cBtn=document.getElementById('lp-cart-success-btn');
       if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
@@ -829,5 +829,38 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
 
 <!-- AERA Concierge chat bubble ( Peter, 19th Oct 2026 ) -->
 <script id="aera-concierge" src="https://my.chatbees.io/widget.js" data-widget="48507863" async></script>
+<script id="aera-watch">/* Peter 4th Nov 2026 : AERA Page Watcher. Counts, per day / page / device, when this page jumps, shifts, reloads itself
+   ( flashing ), stays blank, shows a script error or loads slowly. Read each morning by the AERA Morning Check.
+   No names, emails, phones or addresses are sent : only the page path, the device ( ios / android + version ) and browser or app. */
+(function(){if(window.__aeraWatch)return;window.__aeraWatch=1;
+var U='https://swpprjvubgcdsojapaad.supabase.co/rest/v1/rpc/aera_watch',K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0';
+var N=navigator,ua=N.userAgent||'',m,dev='other';
+if((m=ua.match(/OS (\d+)[_.](\d+)/))&&/iPhone|iPad|iPod/.test(ua))dev='ios '+m[1]+'.'+m[2];
+else if(/Macintosh/.test(ua)&&N.maxTouchPoints>1)dev='ios';
+else if((m=ua.match(/Android (\d+(\.\d+)?)/)))dev='android '+m[1];
+else if(/Macintosh/.test(ua))dev='mac';else if(/Windows/.test(ua))dev='win';
+var app=false;try{app=!!(N.standalone||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||/[?&]app=/.test(location.search))}catch(e){}
+var page=(location.pathname.replace(/\/+$/,'')||'/').slice(0,60),q=location.search.match(/[?&]app=(\w{1,12})/);if(q)page=(page+'/~'+q[1]).slice(0,60);
+var EV=[{e:'view'}],seen={},sent=false,lastIn=0,t0=Date.now();
+function add(e,v,d){var k=e+'|'+(d||'');if(seen[k]||EV.length>=12)return;seen[k]=1;var o={e:e};if(v!=null)o.v=Math.round(v*1000)/1000;if(d)o.d=String(d).slice(0,140);EV.push(o)}
+function send(){if(sent||!EV.length)return;sent=true;try{fetch(U,{method:'POST',keepalive:true,headers:{apikey:K,Authorization:'Bearer '+K,'Content-Type':'application/json'},body:JSON.stringify({p_page:page,p_dev:dev,p_mode:app?'app':'browser',p_ev:EV})}).catch(function(){})}catch(e){}}
+/* reload loop ( the page flashing ) : 3 or more loads of this page inside 20 seconds */
+try{var SK='aera.watch.loads',L=JSON.parse(sessionStorage.getItem(SK)||'[]').filter(function(x){return x[0]===page&&t0-x[1]<20000});L.push([page,t0]);sessionStorage.setItem(SK,JSON.stringify(L.slice(-6)));if(L.length>=3)add('flash',L.length,'reloaded '+L.length+' times in 20 s')}catch(e){}
+/* jump : the page scrolls by itself ( no touch, wheel or key in the last 0.8 s ) */
+['touchstart','touchmove','wheel','keydown','mousedown','pointerdown'].forEach(function(t){addEventListener(t,function(){lastIn=Date.now()},{passive:true,capture:true})});
+var y0=pageYOffset,jumps=0;(function tick(){var y=pageYOffset,d=y-y0;y0=y;if(Math.abs(d)>160&&Date.now()-lastIn>800&&Date.now()-t0>1500&&!document.hidden){jumps++;add('jump',Math.abs(d),(d>0?'down ':'up ')+Math.round(Math.abs(d))+' px')}if(Date.now()-t0<600000)requestAnimationFrame(tick)})();
+/* layout shift ( Chrome / Android only; iPhones do not report it ) */
+try{var cls=0;new PerformanceObserver(function(l){l.getEntries().forEach(function(x){if(!x.hadRecentInput)cls+=x.value})}).observe({type:'layout-shift',buffered:true});addEventListener('pagehide',function(){if(cls>0.25)EV.push({e:'shift',v:Math.round(cls*1000)/1000})},true)}catch(e){}
+/* script errors */
+function clean(s){return String(s||'').replace(/\S+@\S+/g,'[email]').replace(/\d{6,}/g,'[n]').slice(0,140)}
+addEventListener('error',function(ev){if(ev&&ev.message)add('error',null,clean(ev.message+(ev.filename?' @'+String(ev.filename).split('/').pop().split('?')[0]+':'+ev.lineno:'')))},true);
+addEventListener('unhandledrejection',function(ev){var r=ev&&ev.reason;add('error',null,clean('promise : '+(r&&r.message||r)))});
+/* blank page and slow load */
+setTimeout(function(){try{var b=document.body,txt=b?(b.innerText||'').replace(/\s+/g,'').length:0;if(txt<20&&!document.querySelector('img,canvas,svg,video,iframe'))add('blank',txt,'nothing on screen after 6 s')}catch(e){}},6000);
+addEventListener('load',function(){setTimeout(function(){try{var n=performance.getEntriesByType('navigation')[0],s=n?n.loadEventEnd/1000:0;if(s>8)add('slow',s,'loaded in '+Math.round(s)+' s')}catch(e){}},0)});
+addEventListener('pagehide',send,true);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')send()});
+setTimeout(function(){if(!sent){send();sent=false;EV=[];seen={'view|':1}}},45000);
+})();
+</script>
 </body>
 </html>
