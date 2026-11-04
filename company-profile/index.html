@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,800&display=swap">
+
+
+<!-- SEO Meta Tags -->
+<title>AERA Company Profile</title>
+<meta name="description" content="AERA Meal Prep : portion-weighed, macro-counted meals for people who train, cooked in Seri Kembangan and delivered across Klang Valley." />
+<meta property="og:title" content="AERA Company Profile" />
+<meta property="og:description" content="AERA Meal Prep : portion-weighed, macro-counted meals for people who train, cooked in Seri Kembangan and delivered across Klang Valley." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="AERA Company Profile" />
+<meta name="twitter:description" content="AERA Meal Prep : portion-weighed, macro-counted meals for people who train, cooked in Seri Kembangan and delivered across Klang Valley." />
+<!-- End SEO Meta Tags -->
+<script data-lp-token-hydrate>
+(function(){try{
+  var slug="lp-mw2086qb-464j1";
+  var SITEK="";
+  var SK='lp_access_'+slug;
+  var map={access_token:'lp_pw_',allowlist_access_token:'lp_al_',pin_access_token:'lp_pin_',paywall_access_token:'lp_paid_'};
+  function siteTok(){try{return SITEK?localStorage.getItem(SITEK):null;}catch(e){return null;}}
+  var u=new URL(location.href);var found=null;var changed=false;
+  var PINP=true;
+  if(!PINP){try{localStorage.removeItem('lp_pin_'+slug);if(SITEK)localStorage.removeItem(SITEK);}catch(e){}}
+  Object.keys(map).forEach(function(p){var v=u.searchParams.get(p);if(v){found=v;try{if(PINP||p!=='pin_access_token'){localStorage.setItem(map[p]+slug,v);if(SITEK&&p==='pin_access_token')localStorage.setItem(SITEK,v);}}catch(e){}if(p==='pin_access_token'){try{sessionStorage.setItem('lp_fresh_'+slug,'1');}catch(e){}}u.searchParams.delete(p);changed=true;}});
+  if(found){try{sessionStorage.setItem(SK,found);}catch(e){}}
+  else{try{if(!sessionStorage.getItem(SK)){var t=localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();if(t)sessionStorage.setItem(SK,t);}}catch(e){}}
+  if(changed){try{history.replaceState(null,'',u.toString());}catch(e){}}
+  function getTok(){try{return sessionStorage.getItem(SK)||localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug)||siteTok();}catch(e){return null;}}
+  function needsToken(url,method){if(!url)return false;var s=String(url);var m=(method||'GET').toUpperCase();var isSheetWrite=(m==='POST'||m==='PATCH'||m==='PUT'||m==='DELETE')&&/\/sheet-rows(\/|$|\?)/.test(s);var isSheetRead=/\/sheet-data(\/|$|\?)/.test(s);var isLlm=/\/api\/landing-pages\/public\/[^/]+\/(llm|llm-config)(\/|$|\?)/.test(s);return isSheetWrite||isSheetRead||isLlm;}
+  if(window.fetch){var _f=window.fetch;window.fetch=function(input,init){try{var url=typeof input==='string'?input:(input&&input.url)||'';var method=(init&&init.method)||(input&&input.method)||'GET';if(needsToken(url,method)){var tok=getTok();if(tok){init=init||{};var h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});if(!h.has('X-Landing-Page-Token'))h.set('X-Landing-Page-Token',tok);init.headers=h;}}}catch(e){}return _f.call(this,input,init);};}
+  if(window.XMLHttpRequest){var _o=XMLHttpRequest.prototype.open;var _s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__lpM=m;this.__lpU=u;return _o.apply(this,arguments);};XMLHttpRequest.prototype.send=function(){try{if(needsToken(this.__lpU,this.__lpM)){var tok=getTok();if(tok)this.setRequestHeader('X-Landing-Page-Token',tok);}}catch(e){}return _s.apply(this,arguments);};}
+}catch(e){}})();
+</script>
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://my.chatbees.io/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=8853');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='9TBwkTMcH';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    var phone=findPhone();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    var __pLoc=(document.documentElement.lang||navigator.language||'en');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,phone:phone||'',amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,locale:__pLoc,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var sidP=urlParams.get('session_id');
+      if(sidP){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidP})}).catch(function(){});}catch(e){}}
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<script data-cart>
+(function(){
+  var slug='9TBwkTMcH';
+  var apiBase='https://my.chatbees.io';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findCartEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  function findCartPhone(){var ids=['phone','phoneNumber','phone-number','tel','telephone','mobile','mobileNumber','cell','contact-phone','buyer-phone'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.trim())return el.value.trim();}var inputs=document.querySelectorAll('input[type="tel"],input[name*="phone"],input[name*="tel"],input[name*="mobile"],input[placeholder*="phone"],input[placeholder*="Phone"]');for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.trim())return inputs[j].value.trim();}return '';}
+  var __realCart=function(arg){
+    var items, email='', customerName='', successUrl, cancelUrl, currency;
+    if(Array.isArray(arg)){items=arg;}
+    else if(arg&&typeof arg==='object'){
+      items=arg.items;email=arg.email||'';customerName=arg.name||arg.customerName||'';
+      successUrl=arg.successUrl;cancelUrl=arg.cancelUrl;currency=arg.currency;
+    }
+    if(!Array.isArray(items)||items.length===0){alert('No items in cart.');return Promise.reject('no_items');}
+    var cleanItems=[];var totalCents=0;
+    for(var i=0;i<items.length;i++){
+      var it=items[i];if(!it||typeof it!=='object'){alert('Invalid item at position '+i);return Promise.reject('bad_item');}
+      var nm=typeof it.name==='string'?it.name.trim():'';
+      if(!nm){alert('Item '+(i+1)+' is missing a name.');return Promise.reject('no_name');}
+      var amt=typeof it.amountCents==='number'?it.amountCents:(typeof it.amount==='number'?Math.round(it.amount*100):NaN);
+      if(!isFinite(amt)||amt<1){alert('Item "'+nm+'" needs a valid amount in cents.');return Promise.reject('bad_amount');}
+      var qty=(typeof it.quantity==='number'&&it.quantity>0)?Math.floor(it.quantity):1;
+      cleanItems.push({name:nm,description:it.description||'',amountCents:amt,quantity:qty});
+      totalCents+=amt*qty;
+    }
+    if(totalCents<50){alert('Cart total must be at least $0.50');return Promise.reject('total_too_low');}
+    if(!email)email=findCartEmail();
+    if(!customerName)customerName=findCartName();
+    var cartPhone=findCartPhone();
+    if(!email){var p=window.prompt('Enter your email for the receipt:','');if(p&&p.indexOf('@')>-1){email=p.trim();}else{alert('An email address is required to complete checkout.');return Promise.reject('no_email');}}
+    var successBase=window.location.href.split('?')[0];
+    var body={email:email,name:customerName,items:cleanItems,locale:(document.documentElement.lang||navigator.language||'en')};
+    if(currency)body.currency=currency;
+    if(cartPhone)body.phone=cartPhone;
+    body.successUrl=successUrl||(successBase+'?cart=success&email='+encodeURIComponent(email)+'&session_id={CHECKOUT_SESSION_ID}');
+    body.cancelUrl=cancelUrl||(successBase+'?cart=cancelled');
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/cart/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process checkout');throw new Error(d.error);}
+    });
+  };
+  try{Object.defineProperty(window,'__processCart',{value:__realCart,writable:false,configurable:false});}catch(e){window.__processCart=__realCart;}
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('cart')==='success'){
+      var sidC=urlParams.get('session_id');
+      if(sidC){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidC})}).catch(function(){});}catch(e){}}
+      if(document.getElementById('payment-success-overlay')||document.getElementById('donation-success-overlay')||document.getElementById('cart-success-overlay'))return;
+      var overlay=document.createElement('div');overlay.id='cart-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||'Thank you for your order.';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var cBtn=document.getElementById('lp-cart-success-btn');
+      if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+
+<header class="hero"><div class="wrap">
+  <div>
+    <span class="logo lg" role="img" aria-label="AERA Meal Prep"></span>
+    <p class="eyebrow">AERA MEAL PREPARATION SDN. BHD. · COMPANY PROFILE</p>
+    <h1>Meals cooked <em>to the gram.</em></h1>
+    <p class="lead">Portion-weighed, macro-counted meals for people who train, cooked in our own kitchen in Seri Kembangan and delivered across Klang Valley.</p>
+    <div class="facts">
+      <div><b>6</b><span>years cooking</span></div>
+      <div><b>29</b><span>meals on the menu</span></div>
+      <div><b>102</b><span>à la carte items</span></div>
+      <div><b>25 g</b><span>portion steps</span></div>
+    </div>
+  </div>
+  <!-- clip : a bento box lands on the kitchen scale and the scale reads its weight -->
+  <div class="clip" role="img" aria-label="Animation : a bento box is weighed on the kitchen scale">
+    <span class="tag">THE KITCHEN SCALE</span><span class="rec"><i></i>LIVE</span>
+    <svg viewBox="0 0 400 400" aria-hidden="true">
+      <rect x="0" y="0" width="400" height="400" fill="var(--clip-bg)"/>
+      <rect x="40" y="300" width="320" height="16" rx="8" fill="var(--clip-soft)"/>
+      <g class="a-press">
+        <rect x="90" y="232" width="220" height="62" rx="12" fill="#ffffff"/>
+        <rect x="120" y="248" width="160" height="32" rx="6" fill="#0B0B0B"/>
+        <text id="scaleTxt" x="270" y="272" text-anchor="end" font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="22" fill="#FDB913">150 g</text>
+        <rect x="70" y="220" width="260" height="14" rx="7" fill="#DDE5F4"/>
+      </g>
+      <g class="a-drop">
+        <rect x="100" y="140" width="200" height="80" rx="12" fill="#0B0B0B"/>
+        <rect x="110" y="150" width="88" height="60" rx="6" fill="#C98A4B"/>
+        <rect x="204" y="150" width="86" height="28" rx="6" fill="#F3EBD9"/>
+        <rect x="204" y="182" width="86" height="28" rx="6" fill="#5DAA5F"/>
+        <rect x="244" y="126" width="56" height="22" rx="6" fill="#FDB913"/>
+        <text x="272" y="142" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="11" fill="#0B0B0B">FAT LOSS</text>
+      </g>
+      <text x="200" y="356" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="15" fill="#ffffff" opacity=".9">Every raw portion weighed</text>
+    </svg>
+  </div>
+</div></header>
+
+<main>
+<!-- 1 · About -->
+<section class="sec" id="about"><div class="wrap">
+  <div class="sec-head"><span class="k">ABOUT</span><h2>About AERA</h2></div>
+  <div class="split">
+    <div>
+      <p class="big">AERA Meal Prep cooks portion-weighed, macro-counted meals for people who train, in Klang Valley, Malaysia.</p>
+      <p>We have been doing it for 6 years, from our own kitchen at No. 35, Jalan Equine 9A, Taman Equine, Seri Kembangan.</p>
+      <p>Our meals are built for two goals, <b>Fat Loss</b> and <b>Mass Gain</b>, and every box states its calories, protein, carbs and fat. Customers order on aeramealprep.net or in the AERA app, and we cook, pack and deliver to their door.</p>
+      <p>AERA Meal Preparation Sdn. Bhd. runs the kitchen, the website and the apps itself, so a plan, a gym fridge or a company order is handled end to end by one team.</p>
+    </div>
+    <!-- clip : the two goals, each box tagged and its macros counting up -->
+    <div class="clip" role="img" aria-label="Animation : a Fat Loss box and a Mass Gain box with their calories">
+      <span class="tag">TWO GOALS</span><span class="rec"><i></i>LIVE</span>
+      <svg viewBox="0 0 400 300" aria-hidden="true">
+        <rect width="400" height="300" fill="var(--clip-bg)"/>
+        <g class="a-bob">
+          <rect x="30" y="80" width="160" height="110" rx="14" fill="#0B0B0B"/>
+          <rect x="40" y="90" width="70" height="90" rx="6" fill="#C98A4B"/><rect x="116" y="90" width="64" height="42" rx="6" fill="#F3EBD9"/><rect x="116" y="138" width="64" height="42" rx="6" fill="#5DAA5F"/>
+          <rect x="30" y="60" width="84" height="24" rx="7" fill="#22B573"/><text x="72" y="77" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="12" fill="#fff">FAT LOSS</text>
+          <text x="110" y="222" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="900" font-size="26" fill="#FDB913"><tspan class="count" data-to="420">420</tspan> KCAL</text>
+          <text x="110" y="246" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="12.5" fill="#fff" opacity=".9">High protein, lower carbs</text>
+        </g>
+        <g class="a-bob" style="animation-delay:-1s">
+          <rect x="210" y="80" width="160" height="110" rx="14" fill="#0B0B0B"/>
+          <rect x="220" y="90" width="70" height="90" rx="6" fill="#9B5B2E"/><rect x="296" y="90" width="64" height="42" rx="6" fill="#F3EBD9"/><rect x="296" y="138" width="64" height="42" rx="6" fill="#F3EBD9"/>
+          <rect x="210" y="60" width="98" height="24" rx="7" fill="#F28C28"/><text x="259" y="77" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="12" fill="#fff">MASS GAIN</text>
+          <text x="290" y="222" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="900" font-size="26" fill="#FDB913"><tspan class="count" data-to="760">760</tspan> KCAL</text>
+          <text x="290" y="246" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="12.5" fill="#fff" opacity=".9">More carbs to build</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</div></section>
+
+<!-- 2 · Offer -->
+<section class="sec" id="offer"><div class="wrap">
+  <div class="sec-head"><span class="k">OFFER</span><h2>What We Offer</h2><p>Five ways to eat AERA, all cooked in the same kitchen to the same weighed portions. Customers earn AERA Points on every meal order ( 5 points per RM 1 ) and can top up AERA Credit for bonus points.</p></div>
+  <div class="items">
+
+    <article class="item">
+      <div class="clip" role="img" aria-label="Animation : the daily protein, carbs and fat ring fills up">
+        <span class="tag">YOUR MACROS</span>
+        <svg viewBox="0 0 320 240" aria-hidden="true">
+          <rect width="320" height="240" fill="var(--clip-bg)"/>
+          <circle cx="160" cy="122" r="74" fill="none" stroke="var(--clip-soft)" stroke-width="18"/>
+          <circle class="a-draw" cx="160" cy="122" r="74" fill="none" stroke="#FDB913" stroke-width="18" stroke-linecap="round" transform="rotate(-90 160 122)" style="--len:465;--to:233"/>
+          <circle class="a-draw" cx="160" cy="122" r="50" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round" transform="rotate(-90 160 122)" style="--len:314;--to:188;animation-delay:.4s"/>
+          <circle class="a-draw" cx="160" cy="122" r="30" fill="none" stroke="#5DAA5F" stroke-width="12" stroke-linecap="round" transform="rotate(-90 160 122)" style="--len:189;--to:151;animation-delay:.8s"/>
+          <text x="160" y="128" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="900" font-size="14" fill="#fff">50 / 30 / 20</text>
+          <text x="30" y="226" font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="11" fill="#FDB913">● PROTEIN</text>
+          <text x="128" y="226" font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="11" fill="#fff">● CARBS</text>
+          <text x="218" y="226" font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="11" fill="#5DAA5F">● FAT</text>
+        </svg>
+      </div>
+      <div><h3>Personalised Meal Plan</h3><span class="who">For anyone with a body goal</span>
+        <p>A plan worked out from their age, height, weight, activity and goal ( Fat Loss, Lean Mass Gain, Mass Gain or their own macros ). 5 or 7 days, 1 – 3 meals a day, with their own choice of protein, carbs, vegetables and sauces.</p></div>
+    </article>
+
+    <article class="item">
+      <div class="clip" role="img" aria-label="Animation : a week of meal boxes appears, Monday to Sunday">
+        <span class="tag">7 DAYS × 2 MEALS</span>
+        <svg viewBox="0 0 320 240" aria-hidden="true">
+          <rect width="320" height="240" fill="var(--clip-bg)"/>
+          <g font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="10" fill="#FDB913" text-anchor="middle">
+            <text x="40" y="62">MON</text><text x="80" y="62">TUE</text><text x="120" y="62">WED</text><text x="160" y="62">THU</text><text x="200" y="62">FRI</text><text x="240" y="62">SAT</text><text x="280" y="62">SUN</text>
+          </g>
+          <g>
+            <rect class="a-pop" style="--d:0" x="24" y="76" width="32" height="44" rx="6" fill="#ffffff"/><rect class="a-pop" style="--d:1" x="64" y="76" width="32" height="44" rx="6" fill="#ffffff"/><rect class="a-pop" style="--d:2" x="104" y="76" width="32" height="44" rx="6" fill="#ffffff"/><rect class="a-pop" style="--d:3" x="144" y="76" width="32" height="44" rx="6" fill="#ffffff"/><rect class="a-pop" style="--d:4" x="184" y="76" width="32" height="44" rx="6" fill="#ffffff"/><rect class="a-pop" style="--d:5" x="224" y="76" width="32" height="44" rx="6" fill="#ffffff"/><rect class="a-pop" style="--d:6" x="264" y="76" width="32" height="44" rx="6" fill="#ffffff"/>
+            <rect class="a-pop" style="--d:7" x="24" y="132" width="32" height="44" rx="6" fill="#FDB913"/><rect class="a-pop" style="--d:8" x="64" y="132" width="32" height="44" rx="6" fill="#FDB913"/><rect class="a-pop" style="--d:9" x="104" y="132" width="32" height="44" rx="6" fill="#FDB913"/><rect class="a-pop" style="--d:10" x="144" y="132" width="32" height="44" rx="6" fill="#FDB913"/><rect class="a-pop" style="--d:11" x="184" y="132" width="32" height="44" rx="6" fill="#FDB913"/><rect class="a-pop" style="--d:12" x="224" y="132" width="32" height="44" rx="6" fill="#FDB913"/><rect class="a-pop" style="--d:13" x="264" y="132" width="32" height="44" rx="6" fill="#FDB913"/>
+          </g>
+          <text x="160" y="212" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="13" fill="#fff">14 meals, one delivery</text>
+        </svg>
+      </div>
+      <div><h3>Meal Bundles</h3><span class="who">For customers who want it simple</span>
+        <p>Ready-made Fat Loss and Mass Gain weeks : 7 Days × 1 Meal or 7 Days × 2 Meals, chosen from 29 meals.</p></div>
+    </article>
+
+    <article class="item">
+      <div class="clip" role="img" aria-label="Animation : a single portion is vacuum sealed in its bag">
+        <span class="tag">VACUUM SEALED</span>
+        <svg viewBox="0 0 320 240" aria-hidden="true">
+          <rect width="320" height="240" fill="var(--clip-bg)"/>
+          <g class="a-seal">
+            <rect x="90" y="40" width="140" height="160" rx="16" fill="rgba(255,255,255,.18)" stroke="#ffffff" stroke-width="2"/>
+            <ellipse cx="160" cy="124" rx="48" ry="40" fill="#F3EBD9"/>
+            <ellipse cx="150" cy="114" rx="18" ry="10" fill="#ffffff" opacity=".6"/>
+          </g>
+          <g class="a-crimp" stroke="#FDB913" stroke-width="3">
+            <path d="M98 50h124M98 56h124M98 62h124"/><path d="M98 180h124M98 186h124M98 192h124"/>
+          </g>
+          <text x="160" y="226" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="13" fill="#fff">One item per bag · Small or Large</text>
+        </svg>
+      </div>
+      <div><h3>À La Carte</h3><span class="who">For customers who build their own box</span>
+        <p>102 single items, Small or Large, vacuum packed : rice, pasta, potato, toast, chicken, seafood, beef, stir-fried dishes and vegetables.</p></div>
+    </article>
+
+    <article class="item">
+      <div class="clip" role="img" aria-label="Animation : a coach ticks off each meal in a client's plan">
+        <span class="tag">THE COACH'S PLAN</span>
+        <svg viewBox="0 0 320 240" aria-hidden="true">
+          <rect width="320" height="240" fill="var(--clip-bg)"/>
+          <rect x="80" y="26" width="160" height="196" rx="14" fill="#ffffff"/>
+          <rect x="130" y="16" width="60" height="22" rx="6" fill="#FDB913"/>
+          <g font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="12" fill="#16479E">
+            <text x="122" y="72">Chicken  150 g</text><text x="122" y="108">Rice  100 g</text><text x="122" y="144">Broccoli  75 g</text><text x="122" y="180">Sauce  15 g</text>
+          </g>
+          <g fill="none" stroke="#22B573" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+            <path class="a-tick" style="--d:0" d="M96 66l6 6 10-12"/><path class="a-tick" style="--d:1" d="M96 102l6 6 10-12"/><path class="a-tick" style="--d:2" d="M96 138l6 6 10-12"/><path class="a-tick" style="--d:3" d="M96 174l6 6 10-12"/>
+          </g>
+        </svg>
+      </div>
+      <div><h3>Coach Plans</h3><span class="who">For fitness coaches and their clients</span>
+        <p>The coach builds each client's plan from our kitchen list, gram by gram, and we cook exactly that.</p></div>
+    </article>
+
+    <article class="item">
+      <div class="clip" role="img" aria-label="Animation : the AERA fridge at the gym opens to shelves of meals">
+        <span class="tag">AT THE GYM</span>
+        <svg viewBox="0 0 320 240" aria-hidden="true">
+          <rect width="320" height="240" fill="var(--clip-bg)"/>
+          <rect x="105" y="20" width="110" height="200" rx="10" fill="#0B1E46"/>
+          <g fill="#ffffff"><rect x="115" y="36" width="90" height="4"/><rect x="115" y="86" width="90" height="4"/><rect x="115" y="136" width="90" height="4"/><rect x="115" y="186" width="90" height="4"/></g>
+          <g>
+            <rect x="118" y="48" width="24" height="36" rx="4" fill="#FDB913"/><rect x="148" y="48" width="24" height="36" rx="4" fill="#ffffff"/><rect x="178" y="48" width="24" height="36" rx="4" fill="#FDB913"/>
+            <rect x="118" y="98" width="24" height="36" rx="4" fill="#ffffff"/><rect x="148" y="98" width="24" height="36" rx="4" fill="#FDB913"/><rect x="178" y="98" width="24" height="36" rx="4" fill="#ffffff"/>
+            <rect x="118" y="148" width="24" height="36" rx="4" fill="#FDB913"/><rect x="148" y="148" width="24" height="36" rx="4" fill="#ffffff"/><rect x="178" y="148" width="24" height="36" rx="4" fill="#FDB913"/>
+          </g>
+          <g class="a-door"><rect x="105" y="20" width="110" height="200" rx="10" fill="#2D5DB3" stroke="#FDB913" stroke-width="3"/><rect x="196" y="96" width="6" height="48" rx="3" fill="#FDB913"/><text x="150" y="122" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="900" font-style="italic" font-size="20" fill="#FDB913">AERA</text></g>
+        </svg>
+      </div>
+      <div><h3>Gym Fridges and Corporate</h3><span class="who">For gyms and companies</span>
+        <p>An AERA fridge stocked at the gym, or meal orders for a company's staff, invoiced per delivery.</p></div>
+    </article>
+
+  </div>
+</div></section>
+
+<!-- 3 · How it works -->
+<section class="sec" id="how"><div class="wrap">
+  <div class="sec-head"><span class="k">PROCESS</span><h2>How It Works</h2><p>From order to door in at least 3 days, so every meal is cooked fresh for its delivery day.</p></div>
+  <!-- clip : the rider rides past the five stops, the matching step lights up below -->
+  <div class="clip road" role="img" aria-label="Animation : an order goes from the kitchen to the customer's door">
+    <svg viewBox="0 0 720 150" aria-hidden="true">
+      <rect width="720" height="150" fill="var(--clip-bg)"/>
+      <rect x="20" y="104" width="680" height="10" rx="5" fill="var(--clip-soft)"/>
+      <path class="a-flow" d="M24 109H696" stroke="#FDB913" stroke-width="2" fill="none"/>
+      <g font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="11" fill="#fff" text-anchor="middle">
+        <circle cx="76" cy="109" r="9" fill="#FDB913"/><text x="76" y="140">ORDER</text>
+        <circle cx="218" cy="109" r="9" fill="#FDB913"/><text x="218" y="140">PREP + COOK</text>
+        <circle cx="360" cy="109" r="9" fill="#FDB913"/><text x="360" y="140">PACK</text>
+        <circle cx="502" cy="109" r="9" fill="#FDB913"/><text x="502" y="140">DELIVER</text>
+        <circle cx="644" cy="109" r="9" fill="#FDB913"/><text x="644" y="140">TRACK</text>
+      </g>
+      <g class="a-ride">
+        <g transform="translate(20,52)">
+          <circle cx="12" cy="44" r="10" fill="#0B0B0B" stroke="#fff" stroke-width="3"/><circle cx="58" cy="44" r="10" fill="#0B0B0B" stroke="#fff" stroke-width="3"/>
+          <path d="M8 34h44l8 10H16z" fill="#FDB913"/><rect x="2" y="10" width="26" height="22" rx="4" fill="#ffffff"/><text x="15" y="25" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="900" font-style="italic" font-size="8" fill="#16479E">AERA</text>
+          <circle cx="44" cy="10" r="7" fill="#ffffff"/><path d="M40 18l6 14" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+  <ol class="steps">
+    <li style="--i:0"><b><span>1</span>Order</b><p>On aeramealprep.net or the AERA app. Pay by online banking, card, DuitNow QR or e-wallet.</p></li>
+    <li style="--i:1"><b><span>2</span>Prep and cook</b><p>The kitchen works back from the delivery day : prep one day, cook and pack the next. Every raw portion is weighed.</p></li>
+    <li style="--i:2"><b><span>3</span>Pack</b><p>MAP Bento Box ( 70% nitrogen, 30% CO₂ ) or vacuum bag, labelled with the meal, macros and expiry date.</p></li>
+    <li style="--i:3"><b><span>4</span>Deliver</b><p>By Lalamove rider, 9 AM – 5 PM, Monday to Saturday, or self pick-up. The rider sends a photo once delivered.</p></li>
+    <li style="--i:4"><b><span>5</span>Track</b><p>Live in My Account, with an email when it is paid and when the rider is booked.</p></li>
+  </ol>
+</div></section>
+
+<!-- 4 · Why -->
+<section class="sec" id="why"><div class="wrap">
+  <div class="sec-head"><span class="k">WHY AERA</span><h2>The numbers on the box are the numbers in the box.</h2></div>
+  <div class="split">
+    <!-- clip : a box label prints with the meal's macros -->
+    <div class="clip" role="img" aria-label="Animation : a box label prints with the meal's calories and macros">
+      <span class="tag">EVERY BOX IS LABELLED</span><span class="rec"><i></i>PRINTING</span>
+      <svg viewBox="0 0 400 300" aria-hidden="true">
+        <rect width="400" height="300" fill="var(--clip-bg)"/>
+        <defs><clipPath id="paper"><rect x="90" y="96" width="220" height="190"/></clipPath></defs>
+        <rect x="70" y="56" width="260" height="48" rx="12" fill="#0B0B0B"/><rect x="96" y="86" width="208" height="8" rx="4" fill="#2A2A2A"/>
+        <circle cx="300" cy="74" r="5" fill="#22B573"/>
+        <g clip-path="url(#paper)"><g class="a-slide">
+          <rect x="110" y="96" width="180" height="150" rx="6" fill="#ffffff"/>
+          <g font-family="Montserrat,Arial,sans-serif" fill="#0B0B0B">
+            <text x="124" y="124" font-weight="900" font-size="15" fill="#16479E">MEAL 1</text>
+            <rect x="214" y="110" width="64" height="18" rx="4" fill="#22B573"/><text x="246" y="123" text-anchor="middle" font-weight="800" font-size="9.5" fill="#fff">FAT LOSS</text>
+            <text x="124" y="146" font-weight="700" font-size="11">Black Pepper Chicken</text>
+            <text x="124" y="174" font-weight="900" font-size="18">420 KCAL</text>
+            <text x="124" y="196" font-weight="700" font-size="11">P 38 g  ·  C 45 g  ·  F 9 g</text>
+            <text x="124" y="226" font-weight="600" font-size="10" fill="#4A5568">Best before : 7 days after delivery</text>
+          </g>
+        </g></g>
+      </svg>
+    </div>
+    <ul class="why">
+      <li><b>Weighed, not guessed</b><span>Every ingredient's calories, protein, carbs and fat are recorded per 100 g, and every portion is weighed raw, in 25 g steps.</span></li>
+      <li><b>Built around the customer</b><span>Allergies, seasoning ( normal, less salt, no salt ) and spice level are set once and printed on the kitchen's prep labels.</span></li>
+      <li><b>Fresh, sealed packaging</b><span>MAP Bento Boxes keep meals fresh in the chiller for the week, and every box shows its expiry date.</span></li>
+      <li><b>Real food, real photos</b><span>Our bento meal photos are of our own meals, from our own kitchen.</span></li>
+      <li><b>Our own technology</b><span>The website, the Kitchen Console and the AERA apps are run by AERA, and checked every 4 hours.</span></li>
+      <li><b>English and 中文</b><span>The website and apps work in both.</span></li>
+    </ul>
+  </div>
+</div></section>
+
+<!-- 5 · Partners -->
+<section class="sec" id="partners"><div class="wrap">
+  <div class="sec-head"><span class="k">PARTNERS</span><h2>Partner With Us</h2><p>Gyms, coaches, companies and referrers each get their own AERA app to run the partnership.</p></div>
+  <div class="pgrid">
+
+    <article class="pcard">
+      <div class="clip" role="img" aria-label="Animation : the gym fridge stock level refills to 21 meals">
+        <span class="tag">RESTOCK</span>
+        <svg viewBox="0 0 400 225" aria-hidden="true">
+          <rect width="400" height="225" fill="var(--clip-bg)"/>
+          <rect x="60" y="30" width="70" height="170" rx="10" fill="#0B1E46" stroke="#fff" stroke-width="2"/>
+          <rect class="a-fill" x="70" y="40" width="50" height="150" rx="6" fill="#FDB913"/>
+          <g font-family="Montserrat,Arial,sans-serif" fill="#fff"><text x="160" y="80" font-weight="900" font-size="30" fill="#FDB913">21 meals</text><text x="160" y="106" font-weight="700" font-size="13">Small fridge · large holds 30</text><text x="160" y="140" font-weight="900" font-size="22">50 / 50</text><text x="160" y="162" font-weight="700" font-size="13">profit split on every meal sold</text></g>
+        </svg>
+      </div>
+      <div class="in"><h3>Gyms</h3>
+        <p>We lend an AERA fridge and keep it stocked. Sale or return : the profit on every meal sold is split 50 / 50, unsold meals are credited back, and each delivery comes with a Delivery Order and Invoice. Restocks follow the kitchen schedule with 4 days' notice. Current partners include TNT Fitness Pro and The Grey Cloud Fitness Studio.</p>
+        <span class="app">AERA Fridge app</span></div>
+    </article>
+
+    <article class="pcard">
+      <div class="clip" role="img" aria-label="Animation : a coach's plan is sent to the client and on to the kitchen">
+        <span class="tag">COACH → CLIENT → KITCHEN</span>
+        <svg viewBox="0 0 400 225" aria-hidden="true">
+          <rect width="400" height="225" fill="var(--clip-bg)"/>
+          <path class="a-flow" d="M95 112H305" stroke="#FDB913" stroke-width="3" fill="none"/>
+          <g font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="12" fill="#fff" text-anchor="middle">
+            <circle cx="70" cy="112" r="34" fill="#ffffff"/><text x="70" y="117" fill="#16479E">COACH</text>
+            <circle cx="200" cy="112" r="34" fill="#FDB913"/><text x="200" y="117" fill="#0B0B0B">CLIENT</text>
+            <circle cx="330" cy="112" r="34" fill="#ffffff"/><text x="330" y="117" fill="#16479E">KITCHEN</text>
+            <text x="200" y="190" font-size="13">The client gets exactly the coach's grams</text>
+          </g>
+          <circle class="a-pulse" cx="200" cy="112" r="6" fill="none" stroke="#FDB913" stroke-width="3"/>
+        </svg>
+      </div>
+      <div class="in"><h3>Coaches</h3>
+        <p>The coach builds a plan for each client from our kitchen list, gram by gram. The client accepts it and orders, and we cook exactly what the coach wrote.</p>
+        <span class="app">AERA Coach Plan app</span></div>
+    </article>
+
+    <article class="pcard">
+      <div class="clip" role="img" aria-label="Animation : the office lights up as staff meals arrive">
+        <span class="tag">AT THE OFFICE</span>
+        <svg viewBox="0 0 400 225" aria-hidden="true">
+          <rect width="400" height="225" fill="var(--clip-bg)"/>
+          <rect x="120" y="30" width="160" height="180" rx="8" fill="#0B1E46" stroke="#fff" stroke-width="2"/>
+          <g fill="#FDB913">
+            <rect class="a-win" style="--d:0" x="138" y="48" width="30" height="24" rx="3"/><rect class="a-win" style="--d:3" x="185" y="48" width="30" height="24" rx="3"/><rect class="a-win" style="--d:1" x="232" y="48" width="30" height="24" rx="3"/>
+            <rect class="a-win" style="--d:4" x="138" y="88" width="30" height="24" rx="3"/><rect class="a-win" style="--d:2" x="185" y="88" width="30" height="24" rx="3"/><rect class="a-win" style="--d:5" x="232" y="88" width="30" height="24" rx="3"/>
+            <rect class="a-win" style="--d:2" x="138" y="128" width="30" height="24" rx="3"/><rect class="a-win" style="--d:0" x="185" y="128" width="30" height="24" rx="3"/><rect class="a-win" style="--d:3" x="232" y="128" width="30" height="24" rx="3"/>
+          </g>
+          <rect x="182" y="168" width="36" height="42" rx="3" fill="#ffffff"/>
+          <g class="a-bob"><rect x="300" y="168" width="40" height="30" rx="5" fill="#ffffff"/><rect x="300" y="160" width="40" height="10" rx="4" fill="#FDB913"/></g>
+        </svg>
+      </div>
+      <div class="in"><h3>Companies</h3>
+        <p>Meal orders for staff, delivered to the office, with one company account.</p>
+        <span class="app">AERA Corporate app</span></div>
+    </article>
+
+    <article class="pcard">
+      <div class="clip" role="img" aria-label="Animation : customers linked to a referrer earn the referrer cash back">
+        <span class="tag">REFERRAL</span>
+        <svg viewBox="0 0 400 225" aria-hidden="true">
+          <rect width="400" height="225" fill="var(--clip-bg)"/>
+          <g stroke="#FDB913" stroke-width="3" fill="none"><path class="a-flow" d="M200 100L100 60"/><path class="a-flow" d="M200 100L300 60"/><path class="a-flow" d="M200 100L110 170"/><path class="a-flow" d="M200 100L290 170"/></g>
+          <g fill="#ffffff"><circle cx="100" cy="60" r="16"/><circle cx="300" cy="60" r="16"/><circle cx="110" cy="170" r="16"/><circle cx="290" cy="170" r="16"/></g>
+          <circle cx="200" cy="100" r="34" fill="#FDB913"/>
+          <text x="200" y="106" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="900" font-size="16" fill="#0B0B0B">RM</text>
+          <circle class="a-pulse" cx="200" cy="100" r="6" fill="none" stroke="#ffffff" stroke-width="3"/>
+        </svg>
+      </div>
+      <div class="in"><h3>Referrers</h3>
+        <p>Customers who order with a referrer's code stay linked to that referrer, and the referrer earns cash back on their orders.</p>
+        <span class="app">AERA Referral app</span></div>
+    </article>
+
+  </div>
+</div></section>
+
+<!-- 6 · Contact + name card -->
+<section class="sec" id="contact"><div class="wrap">
+  <div class="sec-head"><span class="k">CONTACT</span><h2>Let's Work Together</h2></div>
+  <div class="contact">
+    <div class="card"><img id="aeraCard" src="data:image/png;base64,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" alt="AERA Meal Preparation Sdn. Bhd. name card : No. 35, Jalan Equine 9A, Taman Equine, 43300 Seri Kembangan, Selangor. AERA Hotline 016-663 0205. aera_mealprep" width="1138" height="713"></div>
+    <dl class="ctable">
+      <div><dt>Company</dt><dd>AERA Meal Preparation Sdn. Bhd. ( 202001037122 · 1393443-P )</dd></div>
+      <div><dt>Kitchen</dt><dd>No. 35, Jalan Equine 9A, Taman Equine, 43300 Seri Kembangan, Selangor</dd></div>
+      <div><dt>WhatsApp</dt><dd><a href="https://wa.me/60166630205">+60 16-663 0205</a></dd></div>
+      <div><dt>Email</dt><dd>aera.mealprep@gmail.com</dd></div>
+      <div><dt>Website</dt><dd><a href="https://aeramealprep.net">aeramealprep.net</a></dd></div>
+      <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/aera_mealprep">@aera_mealprep</a></dd></div>
+    </dl>
+  </div>
+</div></section>
+</main>
+
+<footer class="foot"><div class="wrap"><span class="lg lg-s" role="img" aria-label="AERA Meal Prep"></span><span>AERA Meal Preparation Sdn. Bhd. · Company Profile · 4th Nov 2026</span></div></footer>
+
+<script>
+(function(){
+  var reduce=false;try{reduce=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
+  if(reduce)return;
+  /* the kitchen scale reading counts up each time the box lands */
+  var s=document.getElementById('scaleTxt');
+  function scale(){var t0=performance.now();function f(t){var p=Math.min(1,Math.max(0,(t-t0-700)/700));s.textContent=Math.round(p*150)+' g';if(t-t0<1500)requestAnimationFrame(f)}requestAnimationFrame(f)}
+  if(s){scale();setInterval(scale,4000)}
+  /* the KCAL figures count up */
+  var cs=[].slice.call(document.querySelectorAll('.count'));
+  function count(){var t0=performance.now();function f(t){var p=Math.min(1,(t-t0)/1200);cs.forEach(function(c){c.textContent=Math.round(p*+c.getAttribute('data-to'))});if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)}
+  if(cs.length){count();setInterval(count,6000)}
+})();
+</script>
+
+</body>
+</html>
