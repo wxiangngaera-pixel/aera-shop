@@ -502,6 +502,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 var READ_HOOK='https://my.chatbees.io/api/webhooks/flow/5768/13c4246e110aa6094e346ecce8276841399bab4eabf172b8c9be95e7f71d3de7';
 var SEND_HOOK='https://my.chatbees.io/api/webhooks/flow/5769/860eb2affebad7fbb92d8d46bf6bbc1f36b4f12d7c291af12f484840b6e42430';
 var PHOTO_HOOK='https://my.chatbees.io/api/webhooks/flow/5771/79e25062e05c3c399b8f303b4b9ef7134c21ca15d0ae1c9b3f1af7fc721c42b6';
+var PHOTO_FN='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/plan-photo';
 var FEED='/api/public/landing-pages/6940/sheet-data';
 var BASIS='cooked',PLAN=null;
 
@@ -719,16 +720,14 @@ function shrink(file,maxPx,quality){
   fr.readAsDataURL(file)})}
 
 async function readPhoto(f){
- msg('#readmsg','warn','<span class="spin"></span>Reading your photo. This takes about half a minute.');
+ msg('#readmsg','warn','<span class="spin"></span>Reading your photo. This takes a few seconds.');
  var uri=await shrink(f,1400,0.72);
  if(uri.length>1200000)uri=await shrink(f,1000,0.6);
  if(uri.length>1600000)throw new Error('That picture is too big to send. Try photographing one page at a time.');
- var key='BYOPIMG-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
- var r=await fetch(PHOTO_HOOK,{method:'POST',headers:{'Content-Type':'application/json'},
-  body:JSON.stringify({contactEmail:once(),
-   data:{key:key,img:uri}})});
- if(!r.ok)throw new Error('We could not send that picture. Try a smaller one.');
- var txt=await pollText(key);
+ var r=await fetch(PHOTO_FN,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({img:uri})});
+ var pj={};try{pj=await r.json()}catch(e){}
+ if(!r.ok)throw new Error(pj.error||'We could not read that picture. Try a smaller one, or type the plan out.');
+ var txt=String(pj.text||'');
  if(/CANNOT READ THIS PICTURE/i.test(txt))
   throw new Error('That picture is too blurred or too dark to read. Try again in better light, straight on — or type the plan out.');
  if(!txt||txt.trim().length<12)throw new Error('Nothing readable came off that picture. Try typing the plan out.');
