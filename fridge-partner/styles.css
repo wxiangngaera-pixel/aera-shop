@@ -1,0 +1,71 @@
+:root{--navy:#16479E;--navy2:#0E3576;--y:#FDB913;--y2:#FFCB4D;--ink:#0B1C36;--ink2:#5A6B87;
+ --line:#E3E9F3;--line2:#CBD6E8;--ok:#127C4A;--ok-soft:#E4F5EC;--warn:#8A5A00;--warn-soft:#FFF1CD;
+ --bad:#B3272D;--bad-soft:#FBE7E8;--bg:#F5F7FB}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+ -webkit-text-size-adjust:100%}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 56px}
+header.top{background:var(--navy);color:#fff;padding:18px 0 22px;margin-bottom:-14px}
+header.top .wrap{padding-bottom:0}
+.brand{display:flex;align-items:center;gap:11px}
+.mark{width:34px;height:26px;flex:0 0 auto}
+.brand b{font-size:15px;letter-spacing:.16em;font-weight:800}
+.brand small{display:block;font-size:10.5px;letter-spacing:.14em;opacity:.72;font-weight:600;text-transform:uppercase}
+h1{font-size:23px;line-height:1.2;margin:16px 0 4px;font-weight:800;letter-spacing:-.01em}
+header.top p{margin:0;font-size:13px;opacity:.8}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:14px;
+ box-shadow:0 1px 2px rgba(11,28,54,.04)}
+.card h2{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin:0 0 12px;font-weight:700}
+.row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0;padding-top:0}
+.row .nm{flex:1;min-width:0;font-weight:600;font-size:14px;line-height:1.3}
+.row .nm small{display:block;font-weight:400;font-size:12px;color:var(--ink2);margin-top:2px}
+.pill{flex:0 0 auto;min-width:38px;text-align:center;font-weight:800;font-size:16px;
+ background:var(--bg);border:1px solid var(--line2);border-radius:9px;padding:5px 9px}
+.tag{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;margin-left:6px;white-space:nowrap}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.bad{background:var(--bad-soft);color:var(--bad)}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.step{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.step button{width:38px;height:38px;border-radius:10px;border:1px solid var(--line2);background:#fff;
+ font-size:19px;font-weight:700;color:var(--ink);line-height:1;cursor:pointer;-webkit-appearance:none}
+.step button:active{background:var(--bg)}
+.step input{width:52px;height:38px;text-align:center;font-size:17px;font-weight:800;color:var(--ink);
+ border:1px solid var(--line2);border-radius:10px;background:#fff;-webkit-appearance:none}
+.sum{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.sum div{background:var(--bg);border-radius:11px;padding:11px 12px}
+.sum .l{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);font-weight:700}
+.sum .v{font-size:20px;font-weight:800;margin-top:2px;letter-spacing:-.01em}
+.sum small{font-size:11.5px;color:var(--ink2)}
+.bal{margin-top:12px;padding:13px 14px;border-radius:11px;background:var(--navy);color:#fff}
+.bal .l{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;font-weight:700}
+.bal .v{font-size:24px;font-weight:800;letter-spacing:-.02em;margin-top:1px}
+.bal small{opacity:.75;font-size:12px}
+label.lb{display:block;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);
+ font-weight:700;margin:0 0 5px}
+input[type=text],input[type=email],input[type=date]{width:100%;height:44px;padding:0 12px;font-size:15px;
+ color:var(--ink);background:#fff;border:1px solid var(--line2);border-radius:10px;-webkit-appearance:none}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{display:block;width:100%;height:50px;border:0;border-radius:12px;background:var(--y);color:#0B0B0B;
+ font-size:16px;font-weight:800;cursor:pointer;letter-spacing:.01em}
+.btn:disabled{opacity:.5;cursor:default}
+.hint{font-size:12.5px;color:var(--ink2);line-height:1.45}
+.note{background:var(--warn-soft);color:var(--warn);border-radius:11px;padding:11px 13px;font-size:13px;font-weight:600}
+.empty{color:var(--ink2);font-size:13.5px;padding:6px 0}
+.foot{margin-top:22px;text-align:center;font-size:12px;color:var(--ink2);line-height:1.6}
+.sent{background:var(--ok-soft);color:var(--ok);border-radius:11px;padding:13px 14px;font-size:14px;font-weight:700}
+@media(min-width:620px){.sum{grid-template-columns:repeat(4,1fr)}h1{font-size:27px}}
+
+/* The real AERA mark already carries the wordmark, so the page's own title sits beside it
+   behind a rule rather than spelling out AERA a second time. */
+.brand{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand img{height:34px;width:auto;flex:none;display:block}
+.brand>div{display:none}
+.brand small{display:block;font-size:11px;font-weight:600;letter-spacing:.12em;
+ text-transform:uppercase;opacity:.85;padding-left:12px;border-left:1px solid currentColor}
+@media(max-width:430px){.brand img{height:27px}
+ .brand small{font-size:10px;padding-left:9px;letter-spacing:.09em}}
+body.gout .wrap>.card:not(#gymIn){display:none}
+body.gout #fsub{display:none}
+#gwho a{color:#fff;font-weight:700}
