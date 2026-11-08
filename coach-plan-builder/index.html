@@ -1030,7 +1030,189 @@ function openPick(mi,own,cat){
 var COACH_URL='https://my.chatbees.io/api/webhooks/flow/5507/ea7799f6789f3ea8762fe9814eeb2d8edfd82f94b81a92d911cc84c067973c9f',COACH_READ='https://my.chatbees.io/api/public/landing-pages/6940/sheet-data';
 var OWNF=null,OWNQ=1,OWNBUSY=false;
 function r1(v){return Math.round((+v||0)*10)/10}
-async function coachFetch(mode,payload){var key='C'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);var ctl=new AbortController();var to=setTimeout(function(){ctl.abort()},60000);await fetch(COACH_URL,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctl.signal,body:JSON.stringify({contactEmail:'sync-coach-'+key.toLowerCase()+'@aera-sync.invalid',data:{mode:mode,key:key,payload:JSON.stringify(payload)}})});clearTimeout(to);var row=null;for(var i=0;i<8&&!row;i++){if(i)await new Promise(function(r){setTimeout(r,1500)});try{var j=await fetch(COACH_READ+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()});(j&&j.data||[]).forEach(function(r){if(r.Key===key)row=r})}catch(e){}}if(!row)throw new Error('timeout');var a=null;try{a=JSON.parse(row.Reply)}catch(e){a=null}if(!a||a.error)throw new Error((a&&a.error)||'bad reply');return a}
+/* ===== AERA free food look-up ( no AI ) : built-in Malaysian table first, Open Food Facts second ===== */
+var AERA_FOODS=[
+/* [ English, 中文, serving, 份量, kcal, protein, carbs, fat, aliases ] — typical Malaysian servings, approximate */
+["Nasi Lemak","椰浆饭","1 plate ( sambal, egg, anchovies, peanuts )","1 碟（参巴、蛋、江鱼仔、花生）",500,14,62,22,"nasi lemak biasa,coconut rice"],
+["Nasi Lemak Bungkus","椰浆饭（包装）","1 packet","1 包",400,10,52,17,"nasi lemak packet,nasi lemak bungkus daun"],
+["Nasi Lemak Ayam Goreng","椰浆饭配炸鸡","1 plate","1 碟",780,32,68,40,"nasi lemak fried chicken,nasi lemak ayam"],
+["Nasi Lemak Rendang","椰浆饭配仁当","1 plate","1 碟",700,30,70,32,"nasi lemak daging"],
+["Roti Canai","印度煎饼","1 piece with dhal","1 片配豆咖喱",300,6,42,12,"roti kosong,roti prata,roti chanai"],
+["Roti Telur","印度煎饼加蛋","1 piece","1 片",390,12,42,18,"roti egg"],
+["Roti Bom","香甜印度煎饼","1 piece","1 片",360,6,48,16,"roti boom"],
+["Thosai","印度薄饼","1 piece plain","1 片",160,4,30,3,"tosai,dosa,dosai"],
+["Chapati","恰巴提","1 piece","1 片",150,5,27,3,"capati"],
+["Chicken Rice","鸡饭","1 plate ( roasted or steamed )","1 碟（烧鸡或白鸡）",620,28,75,22,"nasi ayam,hainanese chicken rice,roast chicken rice,steamed chicken rice"],
+["Claypot Chicken Rice","瓦煲鸡饭","1 pot","1 煲",700,30,85,26,"claypot rice"],
+["Nasi Goreng","炒饭","1 plate with egg","1 碟加蛋",640,18,80,26,"fried rice,nasi goreng biasa,nasi goreng cina"],
+["Nasi Goreng Kampung","甘榜炒饭","1 plate","1 碟",600,18,75,24,"kampung fried rice"],
+["Nasi Goreng Pattaya","芭堤雅炒饭","1 plate","1 碟",720,22,82,32,"pattaya fried rice"],
+["Nasi Kandar","扁担饭","1 plate ( rice, chicken curry, vegetables )","1 碟（饭、咖喱鸡、蔬菜）",800,35,90,32,"nasi kandar ayam"],
+["Nasi Campur","杂饭","1 plate ( rice, 1 meat, 2 vegetables )","1 碟（饭、一肉、两菜）",650,28,80,22,"economy rice,mixed rice,chap fan,nasi berlauk"],
+["Nasi Ayam Penyet","炸鸡饭（印尼式）","1 plate","1 碟",760,36,80,32,"ayam penyet"],
+["Nasi Briyani Ayam","鸡肉香饭","1 plate","1 碟",830,35,95,32,"briyani,biryani,nasi beriani"],
+["Nasi Kerabu","蓝花饭","1 plate","1 碟",450,20,60,14,""],
+["Nasi Impit with Kuah Kacang","马来饭团配花生酱","1 plate","1 碟",480,14,55,22,"nasi impit,ketupat kuah kacang"],
+["Lontong","隆冬","1 bowl","1 碗",450,15,55,20,""],
+["Char Kuey Teow","炒粿条","1 plate","1 碟",740,22,76,38,"char kway teow,ckt,fried kuey teow,kuey teow goreng,kway teow goreng"],
+["Kuey Teow Soup","粿条汤","1 bowl","1 碗",380,18,58,8,"kway teow soup,kuey teow sup"],
+["Mee Goreng Mamak","嘛嘛炒面","1 plate","1 碟",660,20,85,26,"mee goreng,mi goreng,fried noodles,fried mee"],
+["Maggi Goreng","炒美极面","1 plate","1 碟",560,14,70,24,"maggi goreng mamak,fried maggi"],
+["Maggi Soup","美极面汤","1 packet cooked","1 包（煮好）",330,7,45,14,"maggi,instant noodles,maggi kari,maggi curry,cup noodles,indomie,mamee"],
+["Mee Rebus","马来卤面","1 bowl","1 碗",560,18,88,14,""],
+["Mee Siam","暹罗米粉","1 plate","1 碟",520,15,75,18,""],
+["Mee Jawa","爪哇面","1 bowl","1 碗",450,14,70,12,""],
+["Mee Hoon Goreng","炒米粉","1 plate","1 碟",450,12,65,16,"bihun goreng,fried bee hoon,fried mee hoon,bee hoon goreng,fried vermicelli"],
+["Mee Hoon Soup","米粉汤","1 bowl","1 碗",350,15,55,6,"bihun sup,bee hoon soup,vermicelli soup"],
+["Curry Laksa","咖喱叻沙","1 bowl","1 碗",590,22,58,30,"laksa,curry mee,mee kari,mi kari,laksa lemak"],
+["Asam Laksa","亚参叻沙","1 bowl","1 碗",430,20,70,6,"penang laksa,laksa asam"],
+["Wantan Mee","云吞面","1 plate dry with char siu","1 碟干捞配叉烧",500,20,70,14,"wonton mee,wantan noodles,wonton noodles,kolo mee"],
+["Pan Mee","板面","1 bowl soup","1 碗汤",450,18,62,14,"ban mian,chilli pan mee"],
+["Hokkien Mee","福建面","1 plate ( KL style )","1 碟（吉隆坡式）",620,22,70,28,"kl hokkien mee,hokkien char"],
+["Prawn Mee","虾面","1 bowl","1 碗",450,22,60,12,"hae mee,penang prawn mee,mee udang"],
+["Fish Ball Noodle Soup","鱼丸面","1 bowl","1 碗",380,18,60,6,"fishball noodles,fish ball mee"],
+["Yong Tau Foo","酿豆腐","6 pieces in soup","6 件（汤）",250,18,20,10,"yong tofu,ytf"],
+["Bak Kut Teh","肉骨茶","1 bowl with rice","1 碗配饭",650,40,55,28,"bkt"],
+["Chicken Porridge","鸡粥","1 bowl","1 碗",300,15,45,6,"bubur ayam,congee,porridge"],
+["Bubur Lambuk","拉目粥","1 bowl","1 碗",350,14,45,12,""],
+["Tom Yam Soup","冬炎汤","1 bowl","1 碗",180,15,12,8,"tomyam,tom yum"],
+["Satay","沙爹","10 sticks with peanut sauce","10 串配花生酱",550,40,25,32,"sate,satay ayam,chicken satay"],
+["Murtabak","肉饼煎饼","1 piece ( chicken )","1 份（鸡肉）",600,25,55,30,"martabak"],
+["Beef Rendang","仁当牛肉","1 serving ( 100 g )","1 份（100 克）",290,22,8,19,"rendang,rendang daging"],
+["Chicken Curry","咖喱鸡","1 serving","1 份",300,25,8,19,"kari ayam,curry chicken"],
+["Ayam Masak Merah","红烧鸡（马来式）","1 piece","1 块",230,20,8,13,""],
+["Fried Chicken","炸鸡","1 piece ( thigh )","1 块（鸡腿）",280,22,8,18,"ayam goreng,kfc,fried chicken thigh,ayam goreng berempah"],
+["Grilled Chicken Breast","烤鸡胸肉","100 g","100 克",165,31,0,3.6,"chicken breast,dada ayam"],
+["Chicken Thigh","鸡腿肉","100 g roasted, skinless","100 克（烤，去皮）",180,24,0,9,""],
+["Chicken Chop","鸡扒","1 plate with fries and sauce","1 碟配薯条和酱",750,35,55,42,""],
+["Fish and Chips","炸鱼薯条","1 plate","1 碟",800,35,70,42,"fish n chips"],
+["Grilled Fish","烤鱼","1 fish ( 200 g )","1 条（200 克）",300,40,4,13,"ikan bakar"],
+["Fried Fish","炸鱼","1 piece","1 块",220,22,4,14,"ikan goreng"],
+["Salmon","三文鱼","100 g","100 克",208,20,0,13,"pan seared salmon,grilled salmon"],
+["Tuna","金枪鱼","1 can in water ( 150 g )","1 罐（水浸，150 克）",160,35,0,1,"canned tuna,tuna in water"],
+["Sardines","沙丁鱼","1 can in tomato sauce","1 罐（茄汁）",220,22,5,12,"sardin,ayam brand sardines"],
+["Sambal Prawns","参巴虾","1 serving","1 份",200,18,8,11,"sambal udang"],
+["Sambal Squid","参巴苏东","1 serving","1 份",180,16,8,9,"sambal sotong"],
+["Tempeh","天贝","100 g","100 克",190,19,9,11,"tempe"],
+["Tofu","豆腐","100 g","100 克",76,8,2,4,"tauhu,bean curd"],
+["Tau Fu Fa","豆腐花","1 bowl","1 碗",120,5,20,2,"tofu fa,douhua,soya bean curd"],
+["Dhal","豆咖喱","1 small bowl","1 小碗",120,7,18,2,"dal,dhal curry"],
+["Kangkung Belacan","峇拉煎炒蕹菜","1 serving","1 份",90,3,6,6,"kangkung"],
+["Stir-Fried Vegetables","炒青菜","1 serving","1 份",80,3,7,5,"sayur goreng,mixed vegetables,fried vegetables,stir fried veg"],
+["Sambal","参巴酱","1 tablespoon","1 汤匙",40,1,4,2,"sambal belacan"],
+["Telur Dadar","煎蛋饼","2-egg omelette","2 粒蛋的蛋饼",220,13,2,17,"omelette,omelet"],
+["2 Boiled Eggs","2 粒水煮蛋","2 eggs","2 粒",155,13,1,11,"boiled eggs,two boiled eggs,telur rebus"],
+["Boiled Egg","水煮蛋","1 egg","1 粒",78,6,0.6,5,"1 boiled egg,one boiled egg,egg,hard boiled egg"],
+["Half-Boiled Eggs","半熟蛋","2 eggs","2 粒",150,13,1,10,"half boiled egg,telur separuh masak,soft boiled eggs"],
+["Fried Egg","煎蛋","1 egg","1 粒",110,6,0.6,9,"telur goreng,telur mata kerbau,sunny side up"],
+["Kaya Toast","咖椰面包","2 slices with butter","2 片加牛油",320,6,42,14,"roti bakar kaya,kaya butter toast"],
+["White Bread","白面包","1 slice","1 片",75,2.5,14,1,"bread,gardenia,roti putih"],
+["Wholemeal Bread","全麦面包","1 slice","1 片",80,4,13,1,"wholegrain bread,brown bread"],
+["Peanut Butter","花生酱","1 tablespoon","1 汤匙",95,4,3,8,""],
+["White Rice","白饭","1 bowl ( 200 g cooked )","1 碗（熟饭 200 克）",260,5,57,0.5,"rice,nasi putih,plain rice,steamed rice"],
+["Brown Rice","糙米饭","1 bowl ( 200 g cooked )","1 碗（熟饭 200 克）",220,5,46,1.8,"nasi perang"],
+["Oats","燕麦","1 bowl ( 40 g dry, cooked in water )","1 碗（40 克干燕麦，水煮）",150,5,27,3,"oatmeal,oat,quaker oats,overnight oats"],
+["Granola","格兰诺拉麦片","50 g","50 克",230,5,35,8,"muesli"],
+["Cornflakes with Milk","玉米片配牛奶","1 bowl","1 碗",220,7,40,4,"cereal,cornflakes,koko krunch"],
+["Yogurt","酸奶","1 cup plain ( 150 g )","1 杯原味（150 克）",90,9,7,3,"yoghurt,plain yogurt"],
+["Greek Yogurt","希腊酸奶","150 g","150 克",150,15,6,6,"greek yoghurt"],
+["Fresh Milk","鲜奶","1 glass ( 250 ml )","1 杯（250 毫升）",150,8,12,8,"milk,full cream milk,susu"],
+["Soy Milk","豆浆","1 glass sweetened","1 杯（加糖）",130,7,15,4,"soya milk,soya bean,susu soya,tau foo chui"],
+["Protein Shake","蛋白奶昔","1 scoop whey in water","1 勺乳清蛋白加水",120,24,3,1.5,"whey,whey protein,protein powder,protein shake water"],
+["Protein Shake with Milk","蛋白奶昔（牛奶）","1 scoop whey + 250 ml milk","1 勺乳清蛋白 + 250 毫升牛奶",280,32,15,9,"whey with milk,protein milk"],
+["Teh Tarik","拉茶","1 cup","1 杯",130,3,20,4,"teh,teh ais,iced teh tarik,milk tea"],
+["Teh O","清茶（加糖）","1 cup with sugar","1 杯（加糖）",50,0,13,0,"teh o ais,teh o limau,teh o ais limau,iced tea"],
+["Teh O Kosong","清茶（无糖）","1 cup","1 杯",2,0,0,0,"teh kosong,plain tea,green tea,chinese tea"],
+["Kopi O","黑咖啡（加糖）","1 cup with sugar","1 杯（加糖）",60,0,15,0,"kopi o ais,black coffee with sugar"],
+["Kopi O Kosong","黑咖啡（无糖）","1 cup","1 杯",5,0,0,0,"black coffee,americano,long black,kopi kosong"],
+["Kopi","咖啡（炼奶）","1 cup with condensed milk","1 杯（加炼奶）",120,2,20,3,"kopi ais,kopi susu,white coffee,ipoh white coffee,nescafe,nescafe ais"],
+["Latte","拿铁","1 cup ( café )","1 杯（咖啡馆）",150,8,12,8,"cafe latte,flat white,cappuccino,caffe latte"],
+["Milo","美禄","1 cup hot","1 杯（热）",170,5,28,5,"milo panas,hot milo,milo kosong"],
+["Milo Ais","冰美禄","1 glass","1 杯",190,5,32,5,"iced milo,milo ice,milo dinosaur"],
+["Sirap Bandung","玫瑰奶","1 glass","1 杯",180,3,36,3,"bandung,air bandung"],
+["Soft Drink","汽水","1 can ( 325 ml )","1 罐（325 毫升）",140,0,35,0,"coke,coca cola,pepsi,sprite,7up,100 plus,air sirap,sarsi,f&n"],
+["100 Plus","100 号","1 can ( 325 ml )","1 罐（325 毫升）",85,0,21,0,"100plus,isotonic drink"],
+["Bubble Tea","珍珠奶茶","1 regular cup with pearls","1 杯（中杯，加珍珠）",350,3,65,8,"boba,milk tea with pearls,pearl milk tea,tealive,chatime"],
+["Orange Juice","橙汁","1 glass","1 杯",110,2,26,0,"fresh orange,jus oren"],
+["Sugarcane Juice","甘蔗水","1 glass","1 杯",180,0,45,0,"air tebu"],
+["Coconut Water","椰水","1 glass","1 杯",45,1,10,0,"air kelapa,coconut"],
+["Banana","香蕉","1 medium","1 根（中）",105,1.3,27,0.4,"pisang,bananas"],
+["Apple","苹果","1 medium","1 个（中）",95,0.5,25,0.3,"epal,apples"],
+["Orange","橙","1 medium","1 个（中）",62,1,15,0,"oren,mandarin orange"],
+["Papaya","木瓜","1 cup","1 杯",60,1,15,0,"betik"],
+["Watermelon","西瓜","1 cup","1 杯",46,1,11,0,"tembikai"],
+["Mango","芒果","1 medium","1 个（中）",200,3,50,1,"mangga"],
+["Durian","榴莲","3 seeds ( 100 g flesh )","3 粒（果肉 100 克）",150,1.5,27,5,"musang king"],
+["Grapes","葡萄","1 cup","1 杯",100,1,27,0,"anggur"],
+["Dates","椰枣","3 pieces","3 粒",70,0.5,18,0,"kurma"],
+["Mixed Nuts","混合坚果","30 g","30 克",180,5,6,16,"nuts,almonds,cashews,peanuts,kacang"],
+["Curry Puff","咖喱角","1 piece","1 个",130,3,15,7,"karipap,epok epok"],
+["Pisang Goreng","炸香蕉","1 piece","1 个",110,1,16,5,"fried banana,goreng pisang"],
+["Kuih","糕点","1 piece ( assorted )","1 件（综合）",100,1,16,4,"kueh,kuih muih,kuih lapis,kuih talam,seri muka,onde onde,ondeh ondeh,kuih koci"],
+["Keropok Lekor","鱼条","5 pieces","5 条",200,8,25,8,""],
+["Apam Balik","曼煎糕","1 piece","1 块",320,7,48,12,"ban chang kuih,min chiang kueh"],
+["Cendol","煎蕊","1 bowl","1 碗",250,3,50,5,"chendol"],
+["Ais Kacang","红豆冰","1 bowl","1 碗",280,4,60,3,"abc,air batu campur"],
+["Rojak","啰惹","1 plate ( mamak )","1 碟（嘛嘛）",500,15,60,22,"rojak mamak,pasembur"],
+["Fruit Rojak","水果啰惹","1 plate","1 碟",300,5,55,8,"rojak buah"],
+["Char Siu Pau","叉烧包","1 bun","1 个",220,8,35,5,"pau,bao,char siew pau,steamed bun"],
+["Dim Sum","点心","4 pieces siu mai","4 粒烧卖",220,12,12,14,"siu mai,har gow,dimsum"],
+["Chee Cheong Fun","猪肠粉","1 plate","1 碟",300,6,55,6,"chee cheong fan"],
+["Popiah","薄饼","1 roll","1 卷",190,6,28,6,"spring roll"],
+["Big Mac","巨无霸","1 burger","1 个",560,26,45,30,"mcdonalds big mac"],
+["McChicken","麦香鸡","1 burger","1 个",400,14,40,20,"mc chicken,mcchicken burger,chicken burger"],
+["McD Fries","麦当劳薯条","1 medium","1 中份",340,4,44,16,"fries,french fries,mcdonalds fries,kentang goreng"],
+["Ramly Burger","Ramly 汉堡","1 chicken special","1 个（鸡肉特制）",480,22,45,22,"ramly,burger ramly,burger special"],
+["Pizza","披萨","1 regular slice","1 片（普通）",285,12,36,10,"pizza slice,dominos,pizza hut"],
+["Subway Sandwich","赛百味三明治","6 inch chicken","6 寸鸡肉",370,26,58,4,"subway,sub sandwich"],
+["Spaghetti Bolognese","肉酱意大利面","1 plate","1 碟",600,25,75,20,"bolognese,spaghetti"],
+["Carbonara","卡邦尼意面","1 plate","1 碟",750,25,70,40,"spaghetti carbonara"],
+["Aglio Olio","蒜香橄榄油意面","1 plate","1 碟",500,12,65,22,"aglio e olio"],
+["Sushi","寿司","8 pieces maki","8 件卷寿司",350,10,60,6,"maki,sushi roll,california roll"],
+["Ramen","拉面","1 bowl","1 碗",600,25,70,22,""],
+["Bibimbap","韩式拌饭","1 bowl","1 碗",600,22,80,18,""]
+];
+function ffNorm(s){return String(s||'').toLowerCase().replace(/[’'`´]/g,'').replace(/[^a-z0-9一-鿿]+/g,' ').replace(/\s+/g,' ').trim()}
+function ffLocal(q){
+ var n=ffNorm(q);if(!n)return null;var qt=n.split(' ');var best=null,bs=0;
+ AERA_FOODS.forEach(function(r){
+  var names=[r[0]].concat((r[8]||'').split(',')).map(ffNorm).filter(Boolean);var s=0;
+  names.forEach(function(nm){
+   if(nm===n){s=Math.max(s,100);return}
+   if(n.indexOf(nm)>-1)s=Math.max(s,70+20*nm.length/n.length);
+   else if(nm.indexOf(n)>-1&&n.length>=3)s=Math.max(s,60+20*n.length/nm.length);
+   else{var t=nm.split(' ');var hit=0;qt.forEach(function(w){if(w.length>=2&&t.indexOf(w)>-1)hit++});if(hit)s=Math.max(s,55*hit/Math.max(qt.length,t.length)+(hit===t.length?10:0))}
+  });
+  if(r[1]&&(n===r[1]||n.indexOf(r[1])>-1||(r[1].indexOf(n)>-1&&n.length>=2)))s=Math.max(s,95);
+  if(s>bs){bs=s;best=r}
+ });
+ if(!best||bs<45)return null;
+ return{name:best[0],serving:best[2],kcal:best[4],p:best[5],c:best[6],f:best[7],note:'Typical Malaysian serving ( approximate ). Adjust the servings below if yours is bigger or smaller.',zh:{name:best[1],serving:best[3],note:'马来西亚常见份量（约数）。份量不同可在下方调整。'}};
+}
+async function ffOFF(q){
+ var ctl=new AbortController();var to=setTimeout(function(){ctl.abort()},9000);
+ var u='https://world.openfoodfacts.org/cgi/search.pl?search_terms='+encodeURIComponent(q)+'&search_simple=1&action=process&json=1&page_size=12&fields=product_name,brands,serving_size,serving_quantity,nutriments';
+ var j=await fetch(u,{signal:ctl.signal}).then(function(r){return r.json()});clearTimeout(to);
+ var qt=ffNorm(q).split(' ');var best=null,bs=-1;
+ (j&&j.products||[]).forEach(function(p){
+  var nu=p.nutriments||{};var k=+nu['energy-kcal_100g'],pr=+nu.proteins_100g,cb=+nu.carbohydrates_100g,ft=+nu.fat_100g;
+  if(!(k>0)||isNaN(pr)||isNaN(cb)||isNaN(ft))return;
+  var nm=ffNorm((p.product_name||'')+' '+(p.brands||''));var s=0;qt.forEach(function(w){if(w.length>=2&&nm.indexOf(w)>-1)s+=10});
+  var sq=+p.serving_quantity;if(sq>0&&sq<=1000)s+=5;if(p.product_name)s+=1;
+  if(s>bs){bs=s;best={p:p,k:k,pr:pr,cb:cb,ft:ft,sq:(sq>0&&sq<=1000)?sq:0}}
+ });
+ if(!best||bs<10)return{name:null};
+ var m=best.sq?best.sq/100:1;var p=best.p;var nm=(p.product_name||'').trim();var br=(p.brands||'').split(',')[0].trim();
+ if(br&&ffNorm(nm).indexOf(ffNorm(br))<0)nm=br+' '+nm;
+ var sv=best.sq?(String(p.serving_size||'').trim()||(best.sq+' g')):'100 g';
+ return{name:nm,serving:sv,kcal:Math.round(best.k*m),p:Math.round(best.pr*m*10)/10,c:Math.round(best.cb*m*10)/10,f:Math.round(best.ft*m*10)/10,note:'From Open Food Facts ( community data ) — check the numbers before adding.',zh:{name:nm,serving:sv,note:'来源：Open Food Facts（社区数据）— 加入前请核对数字。'}};
+}
+async function foodFind(q){
+ var l=ffLocal(q);if(l)return l;
+ try{return await ffOFF(q)}catch(e){try{return await ffOFF(q)}catch(e2){throw e2}}
+}
+
+async function coachFetch(mode,payload){if(mode==='food')return foodFind((payload&&payload.text)||'');var key='C'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);var ctl=new AbortController();var to=setTimeout(function(){ctl.abort()},60000);await fetch(COACH_URL,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctl.signal,body:JSON.stringify({contactEmail:'sync-coach-'+key.toLowerCase()+'@aera-sync.invalid',data:{mode:mode,key:key,payload:JSON.stringify(payload)}})});clearTimeout(to);var row=null;for(var i=0;i<8&&!row;i++){if(i)await new Promise(function(r){setTimeout(r,1500)});try{var j=await fetch(COACH_READ+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()});(j&&j.data||[]).forEach(function(r){if(r.Key===key)row=r})}catch(e){}}if(!row)throw new Error('timeout');var a=null;try{a=JSON.parse(row.Reply)}catch(e){a=null}if(!a||a.error)throw new Error((a&&a.error)||'bad reply');return a}
 function wikiPics(s){var u='https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrlimit=6&gsrsearch='+encodeURIComponent(s+' food')+'&prop=pageimages&piprop=thumbnail&pithumbsize=320';
  return fetch(u).then(function(r){return r.json()}).then(function(j){var p=[];var q=(j&&j.query&&j.query.pages)||{};for(var k in q)p.push(q[k]);p.sort(function(a,b){return a.index-b.index});return p.filter(function(x){return x.thumbnail&&x.thumbnail.source&&!/\.svg/i.test(x.thumbnail.source)}).slice(0,4).map(function(x){return x.thumbnail.source})}).catch(function(){return []})}
 function ownMac(it){var b=it&&it.b;if(!b)return null;var s=(b.gs>0&&+it.g>0)?(+it.g/b.gs):(+it.q||1);return{kcal:b.k*s,p:b.p*s,c:b.c*s,f:b.f*s}}
