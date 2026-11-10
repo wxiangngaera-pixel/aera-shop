@@ -2976,6 +2976,31 @@ if(window.aeraRetranslate)window.aeraRetranslate();
 })();
 </script>
 
+<script id="aera-legacy-hist">
+/* Peter 10th Nov 2026 : Orders from the old AERA website show in Order History too ( "Old Website" ), Day by Day with each food and its grams.
+   They come from legacy_orders through legacy_my_orders() ( the signed-in customer's own email only ). They count in the History tiles,
+   but never as Orders on this website ( so the First Order voucher and every other rule stays as it is ). */
+(function(){if(window.__aeraLegacyHist)return;window.__aeraLegacyHist=1;
+var LEG=null,BUSY=false;
+function parse(o){var items=[],lines=String(o.items||'').split('\n');
+ lines.forEach(function(l){var m=/^Day\s+(\d+)\s*:\s*(.+)$/.exec(l.trim());if(!m)return;
+  var comps=m[2].split(' · ').map(function(s){var g=/^(.*?)\s+(\d+)g$/.exec(s.trim());return g?{n:g[1],g:+g[2]}:{n:s.trim(),g:0}});
+  items.push({kind:'custom',name:comps.map(function(c){return c.n}).join(' · '),day:+m[1],qty:1,comps:comps})});
+ return {order_no:o.order_no,status:'delivered',date:o.deliver_at||o.placed_at,total:+o.total||0,ap_earned:0,items:items,legacy:1,
+  notes:(String(o.items||'').split('\n')[0]||'')}}
+async function load(){if(BUSY||LEG||typeof sb==='undefined'||!sb||typeof USER==='undefined'||!USER)return;BUSY=true;
+ try{var r=await sb.rpc('legacy_my_orders');if(!r.error)LEG=(r.data||[]).map(parse);else LEG=[]}catch(e){LEG=[]}BUSY=false;
+ if(LEG.length)try{renderHistory()}catch(e){}}
+var orig=window.renderHistory;if(typeof orig!=='function')return;
+window.renderHistory=function(){load();if(!LEG||!LEG.length)return orig.apply(this,arguments);
+ var keep=ORDERS;ORDERS=(keep||[]).concat(LEG);try{return orig.apply(this,arguments)}finally{ORDERS=keep;mark()}};
+/* an Old Website Order carries a small "Old Website" tag */
+function mark(){try{var nos={};LEG.forEach(function(o){nos[o.order_no]=1});
+ [].forEach.call(document.querySelectorAll('#histList .hrow'),function(d){var n=d.querySelector('.hno');if(!n||!nos[n.textContent]||n.querySelector('.hold'))return;
+  var t=document.createElement('span');t.className='hold';t.textContent='Old Website';t.style.cssText='margin-left:8px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:#FDB913;color:#0B0B0B;border-radius:6px;padding:2px 7px;vertical-align:middle';n.appendChild(t)})}catch(e){}}
+var tries=0,iv=setInterval(function(){if(LEG||++tries>60){clearInterval(iv);return}load()},1000);
+})();
+</script>
 <!-- AERA host map : start -->
 <script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){
