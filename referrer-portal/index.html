@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style id="aera-cloak">html.aera-cloak body{opacity:0!important}html.aera-show body{opacity:1;transition:opacity .16s ease-out}</style>
+<script id="aera-cloak-js">/* Peter 11th Nov 2026 : no more Jumps and Flashes when a page opens ( Safari and Chrome ). The page waits a moment, white, while it puts on the new look,
+   the header and the Montserrat font, then shows once, already finished. Never longer than 1.8 s. */
+(function(){if(window.__aeraCloak)return;window.__aeraCloak=1;var D=document,H=D.documentElement,done=0,dcl=0,fon=0,last=0;
+function now(){return (window.performance&&performance.now)?performance.now():Date.now()}
+function show(){if(done)return;done=1;H.classList.add('aera-show');H.classList.remove('aera-cloak');setTimeout(function(){H.classList.remove('aera-show')},300)}
+H.classList.add('aera-cloak');setTimeout(show,1800);
+try{new MutationObserver(function(){last=now()}).observe(H,{childList:true,subtree:true,attributes:true,attributeFilter:['class']})}catch(e){}
+function check(){if(done)return;if(dcl&&fon&&now()-last>=120){requestAnimationFrame(function(){requestAnimationFrame(show)})}else setTimeout(check,40)}
+function fonts(){try{var f=D.fonts;if(!f||!f.load){fon=1;return}Promise.all([f.load('400 16px Montserrat'),f.load('800 16px Montserrat')]).then(function(){fon=1},function(){fon=1});setTimeout(function(){fon=1},1200)}catch(e){fon=1}}
+function go(){dcl=1;last=now();fonts();check()}
+if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',function(){setTimeout(go,0)});else go();
+addEventListener('pageshow',function(e){if(e.persisted)show()});
+})();</script>
+
 <style id="aera-nobar-css">html.aera-nobar #aeraBar,html.aera-nobar .ab-panel{display:none!important}#aeraFootOut{display:none}html.aera-nobar #aeraFootOut.on{display:flex;justify-content:center;padding:26px 16px calc(26px + env(safe-area-inset-bottom))}#aeraFootOut button{background:none;border:0;color:#6B7280;font:600 13px Montserrat,system-ui,sans-serif;text-decoration:underline;cursor:pointer;padding:8px 12px;width:auto;margin:0;text-transform:none}</style>
 <script id="aera-nobar">/* Peter ( 18th Oct 2026 ) : inside the installed App there is no title bar, the same as AERA Order. On the website it stays. */
 (function(){try{var S=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;if(!S)return;var M='referral';
@@ -167,7 +183,7 @@ html.rf-acct #pin-gate,html.rf-login #pin-gate{display:none!important}html.rf-ac
 <meta name="twitter:title" content="Referrer Portal — AERA Meal Prep" />
 <meta name="twitter:description" content="AERA Meal Prep referrer portal — monthly sales, cash-back earned and payment receipts." />
 <!-- End SEO Meta Tags -->
-<meta name="sheet-data-url" content="https://paymegpt.com/api/public/landing-pages/6950/sheet-data">
+<meta name="sheet-data-url" content="https://my.chatbees.io/api/public/landing-pages/6950/sheet-data">
 <script data-lp-token-hydrate>
 (function(){try{
   var slug="lp-mtswk8m9-vu96j";
@@ -192,8 +208,7 @@ html.rf-acct #pin-gate,html.rf-login #pin-gate{display:none!important}html.rf-ac
 <style data-gate>body{visibility:hidden;}</style>
 <script data-gate>
 (function(){
-  var slug='lp-mtswk8m9-vu96j';
-  var apiBase='https://my.chatbees.io';
+  var slug='lp-mtswk8m9-vu96j';var apiBase='https://my.chatbees.io';
   var PIN_TOKEN_KEY='lp_pin_'+slug;var ACCESS_TOKEN_KEY='lp_access_'+slug;var PIN_FRESH_KEY='lp_fresh_'+slug;
   var PIN_SITE_KEY="";var PIN_OWNER="1302";var PIN_MAX_AGE=2592000000;var PIN_PERSIST=true;var pinPassed=false;
   function pinStore(t){try{sessionStorage.setItem(ACCESS_TOKEN_KEY,t);}catch(e){}if(PIN_PERSIST){try{localStorage.setItem(PIN_TOKEN_KEY,t);if(PIN_SITE_KEY)localStorage.setItem(PIN_SITE_KEY,t);}catch(e){}}}
@@ -209,77 +224,15 @@ html.rf-acct #pin-gate,html.rf-login #pin-gate{display:none!important}html.rf-ac
   if(pinToken){var hp=pinParts(pinToken);var hopOk=pinScopeOk(hp)&&isFinite(parseInt(hp[hp.length-1]))&&(Date.now()-parseInt(hp[hp.length-1]))<900000;var url=new URL(window.location.href);url.searchParams.delete('pin_access_token');window.history.replaceState({},'',url.toString());if(hopOk){pinStore(pinToken);pinPassed=true;}}
   if(pinPassed){document.addEventListener('DOMContentLoaded',function(){document.body.style.visibility='visible';});return;}
   document.addEventListener('DOMContentLoaded',function(){
-  var currentMethod='email';
-  var currentIdentifier='';
-  var gateHtml='<div id="pin-gate" style="position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;padding:16px;">' +
-    '<div style="background:white;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.15);width:100%;max-width:420px;padding:32px;text-align:center;">' +
-    '<h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Identity Verification</h2>' +
-    '<p style="margin:0 0 24px;color:#6b7280;font-size:16px;">Please verify your identity to access this page.</p>' +
-    '' +
-    '<form id="pin-request-form">' +
-    '' +
-    '<input type="email" id="pin-identifier" placeholder="Enter your email address" required style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:16px;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" />' +
-    '<div id="pin-req-error" style="display:none;color:#ef4444;font-size:14px;margin-bottom:12px;"></div>' +
-    '<button type="submit" id="pin-send-btn" style="width:100%;height:48px;font-size:16px;font-weight:600;color:white;border:none;border-radius:8px;cursor:pointer;background:#2563eb;">Send Verification Code</button>' +
-    '</form>' +
-    '<form id="pin-verify-form" style="display:none;">' +
-    '<p id="pin-sent-msg" style="font-size:14px;color:#6b7280;margin-bottom:12px;"></p>' +
-    '<input type="text" id="pin-code" placeholder="Enter 6-digit PIN" maxlength="6" style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:20px;text-align:center;letter-spacing:8px;font-family:monospace;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" required />' +
-    '<div id="pin-ver-error" style="display:none;color:#ef4444;font-size:14px;margin-bottom:12px;"></div>' +
-    '<button type="submit" id="pin-verify-btn" style="width:100%;height:48px;font-size:16px;font-weight:600;color:white;border:none;border-radius:8px;cursor:pointer;background:#2563eb;">Verify PIN</button>' +
-    '<button type="button" id="pin-resend-btn" style="width:100%;margin-top:8px;padding:8px;background:none;border:none;color:#6b7280;cursor:pointer;font-size:14px;">Resend PIN</button>' +
-    '<button type="button" id="pin-back-btn" style="width:100%;padding:8px;background:none;border:none;color:#9ca3af;cursor:pointer;font-size:14px;">Use different contact</button>' +
-    '</form></div></div>';
-  document.body.insertAdjacentHTML('beforeend',gateHtml);
-  document.body.style.visibility='visible';
-  var reqForm=document.getElementById('pin-request-form');
-  var verForm=document.getElementById('pin-verify-form');
-  var idInput=document.getElementById('pin-identifier');
-  var codeInput=document.getElementById('pin-code');
-  var sendBtn=document.getElementById('pin-send-btn');
-  var verifyBtn=document.getElementById('pin-verify-btn');
-  var reqError=document.getElementById('pin-req-error');
-  var verError=document.getElementById('pin-ver-error');
-  var sentMsg=document.getElementById('pin-sent-msg');
+  var currentMethod='email';var currentIdentifier='';
+  var gateHtml='<style>#pin-gate input:focus{border-color:#2563eb !important;box-shadow:0 0 0 3px rgba(37,99,235,0.25) !important;outline:none !important;}</style><div id="pin-gate" style="position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;padding:16px;"><div style="background:white;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.15);width:100%;max-width:420px;padding:32px;text-align:center;"><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Identity Verification</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">Please verify your identity to access this page.</p><form id="pin-request-form"><input type="email" id="pin-identifier" placeholder="Enter your email address" required style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:16px;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" /><div id="pin-req-error" style="display:none;color:#ef4444;font-size:14px;margin-bottom:12px;"></div><button type="submit" id="pin-send-btn" style="width:100%;height:48px;font-size:16px;font-weight:600;color:white;border:none;border-radius:8px;cursor:pointer;background:#2563eb;">Send Verification Code</button></form><form id="pin-verify-form" style="display:none;"><p id="pin-sent-msg" style="font-size:14px;color:#6b7280;margin-bottom:12px;"></p><input type="text" id="pin-code" placeholder="Enter 6-digit PIN" maxlength="6" style="width:100%;box-sizing:border-box;height:48px;padding:0 16px;background:#fff;color:#111827;-webkit-text-fill-color:#111827;font-size:20px;text-align:center;letter-spacing:8px;font-family:monospace;border:1px solid #d1d5db;border-radius:8px;outline:none;margin-bottom:12px;" required /><div id="pin-ver-error" style="display:none;color:#ef4444;font-size:14px;margin-bottom:12px;"></div><button type="submit" id="pin-verify-btn" style="width:100%;height:48px;font-size:16px;font-weight:600;color:white;border:none;border-radius:8px;cursor:pointer;background:#2563eb;">Verify PIN</button><button type="button" id="pin-resend-btn" style="width:100%;margin-top:8px;padding:8px;background:none;border:none;color:#6b7280;cursor:pointer;font-size:14px;">Resend PIN</button><button type="button" id="pin-back-btn" style="width:100%;padding:8px;background:none;border:none;color:#9ca3af;cursor:pointer;font-size:14px;">Use different contact</button></form></div></div>';
+  document.body.insertAdjacentHTML('beforeend',gateHtml);document.body.style.visibility='visible';
+  var reqForm=document.getElementById('pin-request-form');var verForm=document.getElementById('pin-verify-form');var idInput=document.getElementById('pin-identifier');var codeInput=document.getElementById('pin-code');var sendBtn=document.getElementById('pin-send-btn');var verifyBtn=document.getElementById('pin-verify-btn');var reqError=document.getElementById('pin-req-error');var verError=document.getElementById('pin-ver-error');var sentMsg=document.getElementById('pin-sent-msg');
   
-  function gateName(){
-    return "";
-  }
-  function sendPin(){
-    var id=idInput.value.trim();if(!id)return;
-    var nm=gateName();
-    
-    sendBtn.disabled=true;sendBtn.textContent='Sending...';reqError.style.display='none';
-    var body=currentMethod==='sms'?{phone:id}:{email:id};
-    if(nm){body.name=nm;}
-    fetch(apiBase+'/api/landing-pages/public/'+slug+'/generate-pin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(d.success){currentIdentifier=id;reqForm.style.display='none';verForm.style.display='block';sentMsg.textContent='We sent a 6-digit PIN to '+id;codeInput.focus();}
-      else{reqError.textContent=d.message||'Failed to send PIN';reqError.style.display='block';}
-    })
-    .catch(function(){reqError.textContent='Failed to send PIN';reqError.style.display='block';})
-    .finally(function(){sendBtn.disabled=false;sendBtn.textContent='Send Verification Code';});
-  }
-  function verifyPin(){
-    var pin=codeInput.value.trim();if(!pin||pin.length!==6){verError.textContent='Please enter the 6-digit PIN';verError.style.display='block';return;}
-    verifyBtn.disabled=true;verifyBtn.textContent='Verifying...';verError.style.display='none';
-    var body=currentMethod==='sms'?{phone:currentIdentifier,pin:pin}:{email:currentIdentifier,pin:pin};
-    fetch(apiBase+'/api/landing-pages/public/'+slug+'/verify-pin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(d.verified){pinOnVerified(d.accessToken);}
-      else{verError.textContent=d.message||'Invalid PIN code';verError.style.display='block';}
-    })
-    .catch(function(){verError.textContent='Failed to verify PIN';verError.style.display='block';})
-    .finally(function(){verifyBtn.disabled=false;verifyBtn.textContent='Verify PIN';});
-  }
-  reqForm.addEventListener('submit',function(e){e.preventDefault();sendPin();});
-  verForm.addEventListener('submit',function(e){e.preventDefault();verifyPin();});
-  document.getElementById('pin-resend-btn').addEventListener('click',sendPin);
-  document.getElementById('pin-back-btn').addEventListener('click',function(){verForm.style.display='none';reqForm.style.display='block';codeInput.value='';verError.style.display='none';});
-  codeInput.addEventListener('input',function(e){e.target.value=e.target.value.replace(/[^0-9]/g,'').slice(0,6);});
-  idInput.focus();
+  
+  function sendPin(){var id=idInput.value.trim();if(!id)return;sendBtn.disabled=true;sendBtn.textContent='Sending...';reqError.style.display='none';var body=currentMethod==='sms'?{phone:id}:{email:id};fetch(apiBase+'/api/landing-pages/public/'+slug+'/generate-pin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(d){if(d.success){currentIdentifier=id;reqForm.style.display='none';verForm.style.display='block';sentMsg.textContent='We sent a 6-digit PIN to '+id;codeInput.focus();}else{reqError.textContent=d.message||'Failed to send PIN';reqError.style.display='block';}}).catch(function(){reqError.textContent='Failed to send PIN';reqError.style.display='block';}).finally(function(){sendBtn.disabled=false;sendBtn.textContent='Send Verification Code';});}
+  function verifyPin(){var pin=codeInput.value.trim();if(!pin||pin.length!==6){verError.textContent='Please enter the 6-digit PIN';verError.style.display='block';return;}verifyBtn.disabled=true;verifyBtn.textContent='Verifying...';verError.style.display='none';var body=currentMethod==='sms'?{phone:currentIdentifier,pin:pin}:{email:currentIdentifier,pin:pin};fetch(apiBase+'/api/landing-pages/public/'+slug+'/verify-pin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(d){if(d.verified){pinOnVerified(d.accessToken);}else{verError.textContent=d.message||'Invalid PIN code';verError.style.display='block';}}).catch(function(){verError.textContent='Failed to verify PIN';verError.style.display='block';}).finally(function(){verifyBtn.disabled=false;verifyBtn.textContent='Verify PIN';});}
+  reqForm.addEventListener('submit',function(e){e.preventDefault();sendPin();});verForm.addEventListener('submit',function(e){e.preventDefault();verifyPin();});document.getElementById('pin-resend-btn').addEventListener('click',sendPin);document.getElementById('pin-back-btn').addEventListener('click',function(){verForm.style.display='none';reqForm.style.display='block';codeInput.value='';verError.style.display='none';});codeInput.addEventListener('input',function(e){e.target.value=e.target.value.replace(/[^0-9]/g,'').slice(0,6);});idInput.focus();
   });
 })();
 </script>
