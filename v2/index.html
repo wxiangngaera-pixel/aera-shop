@@ -541,7 +541,7 @@ function quick(){
  function pick(sel,attr,val){[].forEach.call(W.querySelectorAll('['+attr+']'),function(b){b.classList.toggle('on',b.getAttribute(attr)===val)})}
  function auto(){setTimeout(function(){if(ok()){cur++;paint()}},220)}
  function onClick(e){var b=e.target.closest('button,a');if(!b||!W.contains(b))return;
-  if(b.hasAttribute('data-custom')){e.preventDefault();close();if(window.PLAN){try{(window.__v2G0||window.goStep)(4)}catch(x){}}else{location.href='/'}return}
+  if(b.hasAttribute('data-custom')){e.preventDefault();close();if(window.PLAN){try{(window.__v2G0||window.goStep)(4)}catch(x){}}else{/* Peter 11th Nov 2026 : inside the Homepage ( the Meal Plan sits in a frame ), Close folds the Personalised Meal Plan section away, instead of opening the whole Homepage inside the frame */var emb=false;try{emb=window.top!==window}catch(x){emb=true}if(emb){try{var fe=window.frameElement,it=fe&&fe.closest('.hitem'),hh=it&&it.querySelector('.hhead');if(it&&it.classList.contains('open')&&hh)hh.click();setTimeout(function(){try{window.v2QuickPlan()}catch(x){}},1700)}catch(x){}}else{location.href='/'}}return}
   if(b.hasAttribute('data-edit')){e.preventDefault();editAbout=true;cur=1;paint();return}
   if(b.hasAttribute('data-back')){if(cur>0){cur--;paint()}return}
   if(b.hasAttribute('data-goal')){A.goal=b.getAttribute('data-goal');pick(0,'data-goal',A.goal);setNext();auto();return}
