@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style id="aera-cloak">html.aera-cloak body{opacity:0!important}html.aera-show body{opacity:1;transition:opacity .16s ease-out}</style>
+<script id="aera-cloak-js">/* Peter 11th Nov 2026 : no more Jumps and Flashes when a page opens ( Safari and Chrome ). The page waits a moment, white, while it puts on the new look,
+   the header and the Montserrat font, then shows once, already finished. Never longer than 1.8 s. */
+(function(){if(window.__aeraCloak)return;window.__aeraCloak=1;var D=document,H=D.documentElement,done=0,dcl=0,fon=0,last=0;
+function now(){return (window.performance&&performance.now)?performance.now():Date.now()}
+function show(){if(done)return;done=1;H.classList.add('aera-show');H.classList.remove('aera-cloak');setTimeout(function(){H.classList.remove('aera-show')},300)}
+H.classList.add('aera-cloak');setTimeout(show,1800);
+try{new MutationObserver(function(){last=now()}).observe(H,{childList:true,subtree:true,attributes:true,attributeFilter:['class']})}catch(e){}
+function check(){if(done)return;if(dcl&&fon&&now()-last>=120){requestAnimationFrame(function(){requestAnimationFrame(show)})}else setTimeout(check,40)}
+function fonts(){try{var f=D.fonts;if(!f||!f.load){fon=1;return}Promise.all([f.load('400 16px Montserrat'),f.load('800 16px Montserrat')]).then(function(){fon=1},function(){fon=1});setTimeout(function(){fon=1},1200)}catch(e){fon=1}}
+function go(){dcl=1;last=now();fonts();check()}
+if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',function(){setTimeout(go,0)});else go();
+addEventListener('pageshow',function(e){if(e.persisted)show()});
+})();</script>
+
 <script id="aera-ref-invite">/* a Referrer's app link ( ?ref=CODE ) is remembered on this device, so Checkout fills the Referral Code box */(function(){try{var q=new URLSearchParams(location.search).get("ref");if(!q)return;q=String(q).toUpperCase().replace(/[^A-Z0-9-]/g,"").slice(0,24);if(q)localStorage.setItem("aera.refInvite",q)}catch(e){}})();</script>
 <script id="aera-acct-guard">/* the page shows "signed in" from a saved copy of the account ; when the sign-in itself is gone ( logged out, expired, cleared by the phone ) that copy is dropped too, so no page claims a sign-in that is not there */(function(){try{var t=localStorage.getItem('sb-swpprjvubgcdsojapaad-auth-token'),ok=false;if(t){var o=JSON.parse(t);if(o&&o.currentSession)o=o.currentSession;ok=!!(o&&(o.refresh_token||o.access_token))}if(!ok){['aera.account','aera.refLock'].forEach(function(k){if(localStorage.getItem(k)!==null)localStorage.removeItem(k)})}}catch(e){}})();</script>
 
