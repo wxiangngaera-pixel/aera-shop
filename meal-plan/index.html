@@ -1484,7 +1484,8 @@ function view(){var fe=null;try{fe=W.frameElement}catch(e){}
 function follow(){var v=view(),sy=W.pageYOffset||0;[].forEach.call(D.querySelectorAll('#planCal .mbento'),function(mb){var row=mb.parentElement;if(!row||!mb.offsetHeight){return}
  var cur=+mb.__fy||0,r=mb.getBoundingClientRect(),mt=r.top+sy-cur,mh=mb.offsetHeight,rb=row.getBoundingClientRect().bottom+sy;
  var side=W.getComputedStyle(row).flexDirection==='row',s=side?1:Math.min(1,Math.max(.5,(v.h*.46)/mh)),room=rb-mt-mh*s-12,t=Math.max(0,Math.min(v.top-mt,room));
- if(room<40||t<=0){if(cur||mb.classList.contains('v2stk')){mb.__fy=0;mb.style.transform='';mb.classList.remove('v2stk')}return}
+ /* Peter 11th Nov 2026 : on phones the picture stays in its place ( following, it covered the + buttons and the Macro bars ) */
+ if(!side||room<40||t<=0){if(cur||mb.classList.contains('v2stk')){mb.__fy=0;mb.style.transform='';mb.classList.remove('v2stk')}return}
  var sc=1-(1-s)*Math.min(1,t/160);mb.__fy=t;mb.classList.add('v2fol','v2stk');mb.style.transformOrigin='50% 0';mb.style.transform='translateY('+t.toFixed(1)+'px) scale('+sc.toFixed(3)+')'})}
 var raf=0;function tick(){if(raf)return;raf=requestAnimationFrame(function(){raf=0;try{follow()}catch(e){}})}
 W.addEventListener('scroll',tick,{passive:true});W.addEventListener('resize',tick);
