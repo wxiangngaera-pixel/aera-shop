@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://aeramealprep.net/motion/</loc>
+    <lastmod>2026-11-11T06:10:40.254Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
+    <lastmod>2026-11-11T05:59:16.159Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://aeramealprep.net/company-profile/</loc>
     <lastmod>2026-11-11T03:49:47.233Z</lastmod>
     <changefreq>weekly</changefreq>
@@ -66,11 +76,6 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
-    <lastmod>2026-11-11T03:30:19.784Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
     <loc>https://aeramealprep.net/kitchen-app/</loc>
     <lastmod>2026-11-11T03:16:00.125Z</lastmod>
     <changefreq>weekly</changefreq>
@@ -118,11 +123,6 @@
   <url>
     <loc>https://aeramealprep.net/corporate/</loc>
     <lastmod>2026-11-04T10:10:14.944Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/motion/</loc>
-    <lastmod>2026-10-27T12:04:34.446Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
