@@ -1371,6 +1371,36 @@ if(window.aeraRetranslate)window.aeraRetranslate();
 </script>
 
 
+<script id="aera-meal-del">
+/* Peter 11th Nov 2026 : each Meal's ⚙︎ Adjust and 🗑 Delete Meal sit right on the Meal's picture ( MAP Bento Box or Vacuum Packed ),
+   big and easy to see, instead of small in the heading. Delete Meal : tap once, it asks "Tap Again To Delete" for 3 seconds,
+   tap again and that Meal is gone. A Day keeps at least one Meal ( use ✕ Delete Day for the whole Day ). */
+(function(){if(window.__aeraMealDel)return;window.__aeraMealDel=1;var D=document;
+var st=D.createElement('style');st.textContent=
+ '#s4 .mcard .mh .v2adjb{display:none!important}'+
+ '.v2pact{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;gap:10px;z-index:3;pointer-events:none}'+
+ '.v2pact button{pointer-events:auto;height:44px;padding:0 20px;border-radius:999px;font:800 15px Montserrat,system-ui,sans-serif;cursor:pointer;white-space:nowrap;box-shadow:0 4px 14px rgba(11,28,54,.28)}'+
+ '.v2pact .pa{background:#16479E;color:#FDB913;border:2px solid #16479E}'+
+ '.v2pact .pd{background:#FDB913;color:#0B0B0B;border:2px solid #FDB913}'+
+ '.v2pact .pd.arm{background:#16479E;color:#FDB913;border-color:#FDB913}'+
+ '#s4 .mcard .mbento{padding-bottom:64px}';
+D.head.appendChild(st);
+function zh(){return D.documentElement.getAttribute('data-lang')==='zh'}
+function lab(b){b.textContent=b.classList.contains('arm')?(zh()?'再按一次删除':'Tap Again To Delete'):(zh()?'🗑 删除餐点':'🗑 Delete Meal')}
+function add(){var cs=D.querySelectorAll('#s4 .mcard');for(var i=0;i<cs.length;i++){var card=cs[i],a=card.querySelector('.mh .v2adjb'),mb=card.querySelector('.mbento');
+ if(!a||!mb)continue;var k=a.getAttribute('data-i'),bar=mb.querySelector('.v2pact');
+ if(bar&&bar.getAttribute('data-i')===k)continue;if(bar)bar.remove();
+ bar=D.createElement('div');bar.className='v2pact';bar.setAttribute('data-i',k);
+ var ad=D.createElement('button');ad.type='button';ad.className='pa';ad.textContent='⚙︎ '+(zh()?'调整':'Adjust');
+ ad.onclick=(function(src){return function(e){e.preventDefault();e.stopPropagation();src.click()}})(a);
+ var de=D.createElement('button');de.type='button';de.className='pd';lab(de);
+ de.onclick=(function(n){return function(e){e.preventDefault();e.stopPropagation();var x=this;
+  if(!x.classList.contains('arm')){x.classList.add('arm');lab(x);clearTimeout(x.__t);x.__t=setTimeout(function(){x.classList.remove('arm');lab(x)},3000);return}
+  clearTimeout(x.__t);try{delMeal(n)}catch(err){}}})(+k);
+ bar.appendChild(ad);bar.appendChild(de);mb.appendChild(bar)}}
+var q=0;new MutationObserver(function(){if(q)return;q=1;setTimeout(function(){q=0;add()},0)}).observe(D.documentElement,{childList:true,subtree:true});add();
+})();
+</script>
 <!-- AERA host map : start -->
 <script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){
