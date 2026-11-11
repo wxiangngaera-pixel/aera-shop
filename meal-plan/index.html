@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style id="aera-cloak">html.aera-cloak body{opacity:0!important}html.aera-show body{opacity:1;transition:opacity .16s ease-out}</style>
+<script id="aera-cloak-js">/* Peter 11th Nov 2026 : no more Jumps and Flashes when a page opens ( Safari and Chrome ). The page waits a moment, white, while it puts on the new look,
+   the header and the Montserrat font, then shows once, already finished. Never longer than 1.8 s. */
+(function(){if(window.__aeraCloak)return;window.__aeraCloak=1;var D=document,H=D.documentElement,done=0,dcl=0,fon=0,last=0;
+function now(){return (window.performance&&performance.now)?performance.now():Date.now()}
+function show(){if(done)return;done=1;H.classList.add('aera-show');H.classList.remove('aera-cloak');setTimeout(function(){H.classList.remove('aera-show')},300)}
+H.classList.add('aera-cloak');setTimeout(show,1800);
+try{new MutationObserver(function(){last=now()}).observe(H,{childList:true,subtree:true,attributes:true,attributeFilter:['class']})}catch(e){}
+function check(){if(done)return;if(dcl&&fon&&now()-last>=120){requestAnimationFrame(function(){requestAnimationFrame(show)})}else setTimeout(check,40)}
+function fonts(){try{var f=D.fonts;if(!f||!f.load){fon=1;return}Promise.all([f.load('400 16px Montserrat'),f.load('800 16px Montserrat')]).then(function(){fon=1},function(){fon=1});setTimeout(function(){fon=1},1200)}catch(e){fon=1}}
+function go(){dcl=1;last=now();fonts();check()}
+if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',function(){setTimeout(go,0)});else go();
+addEventListener('pageshow',function(e){if(e.persisted)show()});
+})();</script>
+
 <script id="aera-console-mode">/* Kitchen Console mode : this page opened inside the Console's New Order page ( ?console=1 ).
    It builds a plan for a client, so nothing of the person signed in on this browser is read or written,
    the site's own bars are hidden, and "Add to Cart" hands the plan to the Console instead. */
@@ -1399,6 +1415,61 @@ function add(){var cs=D.querySelectorAll('#s4 .mcard');for(var i=0;i<cs.length;i
   clearTimeout(x.__t);try{delMeal(n)}catch(err){}}})(+k);
  bar.appendChild(ad);bar.appendChild(de);mb.appendChild(bar)}}
 var q=0;new MutationObserver(function(){if(q)return;q=1;setTimeout(function(){q=0;add()},0)}).observe(D.documentElement,{childList:true,subtree:true});add();
+})();
+</script>
+<script id="aera-welcome-mp">
+/* Peter 11th Nov 2026 : a new customer who signs up and goes straight to the Meal Plan ( never opening My Account )
+   is now offered the Welcome Gifts here too : the First Order Voucher and 500 AERA Points, one tap to accept.
+   Asked once per visit ; "Later" brings it back next visit, and Checkout offers it again. Never in Kitchen Console edit. */
+(function(){if(window.__aeraWelcomeMp)return;window.__aeraWelcomeMp=1;var D=document;
+var FO={mode:'pct',pct:10,rm:0,minRm:300,cap:50};
+function zh(){return D.documentElement.getAttribute('data-lang')==='zh'}
+function admin(){return (typeof ADMIN_ID!=='undefined'&&ADMIN_ID)||(typeof ADMIN_EDIT!=='undefined'&&ADMIN_EDIT)||/[?&]edit=/.test(location.search)}
+function later(){try{return sessionStorage.getItem('aera.wgLater')==='1'}catch(e){return false}}
+var API=window.AERA_WGMP={rpc:function(n,b){return sb.rpc(n,b||{}).then(function(r){if(r.error)throw r.error;return r.data})}};
+async function terms(){try{var r=await fetch('/api/public/landing-pages/6938/sheet-data',{cache:'no-store'});var j=await r.json();
+ (j.rows||j.data||[]).forEach(function(row){var k=String(row.Key||'').trim().toLowerCase(),v=row.Value;
+  if(k==='first_order_mode')FO.mode=(+v||0)===1?'pct':'rm';if(k==='first_order_pct')FO.pct=+v||0;if(k==='first_order_rm')FO.rm=+v||0;
+  if(k==='first_order_min_rm')FO.minRm=+v||0;if(k==='first_order_max_rm')FO.cap=+v||0})}catch(e){}}
+function head(){return FO.mode==='pct'?(FO.pct+'% OFF'):('RM '+(+FO.rm||0).toFixed(0)+' OFF')}
+function sub(){var t=[];if(FO.minRm>0)t.push(zh()?'餐点满 RM '+FO.minRm:'Meals of RM '+FO.minRm+' or more');if(FO.mode==='pct'&&FO.cap>0)t.push(zh()?'最多减 RM '+FO.cap:'Up to RM '+FO.cap+' OFF');t.push(zh()?'仅限首单':'First Order Only');return t.join(' · ')}
+var W=null,BUSY=false;
+function close(){if(W){W.remove();W=null}}
+function paint(msg,done){if(!W){W=D.createElement('div');W.id='wgMp';D.body.appendChild(W)}
+ W.innerHTML='<div class="wgmp-v"></div><div class="wgmp-b" role="dialog" aria-modal="true">'+
+  '<div class="wgmp-k">'+(zh()?'欢迎加入 AERA':'Welcome To AERA')+'</div><h3>'+(done?(zh()?'已领取':'All Yours'):(zh()?'您的见面礼':'Your Welcome Gifts'))+'</h3>'+
+  (done?'<p>'+(zh()?'500 AP 已存入您的账户，首单优惠会在结账时自动使用。':'500 AP is in your Account, and your First Order Voucher is applied at Checkout. No code to type.')+'</p>'+
+    '<button type="button" class="wgmp-y" data-x="1">'+(zh()?'继续定制餐单':'Continue My Plan')+'</button>':
+   '<div class="wgmp-r"><div class="wgmp-t"><b>'+head()+'</b><span>'+(zh()?'首单优惠':'First Order Voucher')+'</span><small>'+sub()+'</small></div>'+
+   '<div class="wgmp-t"><b>500 AP</b><span>'+(zh()?'AERA 积分':'AERA Points')+'</span><small>'+(zh()?'6 个月有效':'Valid for 6 Months')+'</small></div></div>'+
+   '<button type="button" class="wgmp-y" data-a="1"'+(BUSY?' disabled':'')+'>'+(BUSY?(zh()?'领取中…':'Adding…'):(zh()?'领取我的见面礼':'Accept My Welcome Gifts'))+'</button>'+
+   '<button type="button" class="wgmp-n" data-l="1">'+(zh()?'稍后':'Later')+'</button>'+(msg?'<div class="wgmp-e">'+msg+'</div>':''))+'</div>'}
+D.addEventListener('click',async function(e){var t=e.target;if(!W||!W.contains(t))return;
+ if(t.closest('[data-x]')){close();return}
+ if(t.closest('[data-l]')){try{sessionStorage.setItem('aera.wgLater','1')}catch(x){}close();return}
+ if(t.closest('[data-a]')&&!BUSY){BUSY=true;paint();var ok=false,m='';
+  try{var j=await API.rpc('claim_welcome_gift',{p_voucher:(FO.mode==='pct'?FO.pct+'%':'RM '+(+FO.rm||0).toFixed(0))+' off first order'});ok=!(j&&j.ok===false);if(!ok)m=(j&&j.error)||''}catch(x){m=(x&&x.message)||''}
+  BUSY=false;if(ok){try{var a=JSON.parse(localStorage.getItem('aera.account')||'null');if(a){a.welcome=true;localStorage.setItem('aera.account',JSON.stringify(a))}}catch(x){}paint('',true)}
+  else paint(zh()?'未能完成，请再试一次。':'That did not go through. Please try again.')}});
+var st=D.createElement('style');st.textContent=
+ '#wgMp{position:fixed;inset:0;z-index:2147480500;display:flex;align-items:center;justify-content:center;padding:16px}'+
+ '#wgMp .wgmp-v{position:absolute;inset:0;background:rgba(11,28,54,.55)}'+
+ '#wgMp .wgmp-b{position:relative;width:100%;max-width:400px;background:#fff;border-radius:18px;padding:22px 18px 16px;font-family:Montserrat,system-ui,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center}'+
+ '#wgMp .wgmp-k{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#16479E}'+
+ '#wgMp h3{margin:6px 0 14px;font-size:22px;font-weight:900;color:#0B1C36}#wgMp p{font-size:14px;line-height:1.5;color:#3A4A66;margin:0 0 16px}'+
+ '#wgMp .wgmp-r{display:flex;gap:8px;margin-bottom:16px}#wgMp .wgmp-t{flex:1;border:2px solid #16479E;border-radius:12px;padding:12px 8px;background:#F4F7FD}'+
+ '#wgMp .wgmp-t b{display:block;font-size:22px;font-weight:900;color:#16479E}#wgMp .wgmp-t span{display:block;font-size:12.5px;font-weight:800;color:#0B1C36;margin-top:2px}'+
+ '#wgMp .wgmp-t small{display:block;font-size:11px;color:#5A6B87;margin-top:4px;line-height:1.35}'+
+ '#wgMp button{display:block;width:100%;height:46px;border-radius:999px;font:800 15px Montserrat,system-ui,sans-serif;cursor:pointer;margin-top:8px}'+
+ '#wgMp .wgmp-y{background:#FDB913;color:#0B0B0B;border:0}#wgMp .wgmp-y[disabled]{opacity:.6}'+
+ '#wgMp .wgmp-n{background:#16479E;color:#FDB913;border:0}#wgMp .wgmp-e{margin-top:10px;color:#C0392B;font-size:12.5px;font-weight:700}';
+D.head.appendChild(st);
+async function check(){if(admin()||later()||W)return;
+ try{if(typeof sb==='undefined'||!sb||!(typeof signedIn==='function'&&signedIn()))return;
+  var j=await API.rpc('my_welcome');if(!j||!j.ok||j.claimed||!j.new)return;await terms();if(admin()||later()||W)return;paint()}catch(e){}}
+API.check=check;
+function go(){setTimeout(check,2500)}
+if(D.readyState==='complete')go();else addEventListener('load',go);
 })();
 </script>
 <!-- AERA host map : start -->
