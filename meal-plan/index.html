@@ -1474,6 +1474,11 @@ function chips(){[].forEach.call(D.querySelectorAll('#planCal .mcard'),function(
  var dlh=(dt?'<div class="dl"><b>'+(dn||'Day')+' '+(Z?'\u5168\u5929':'Total')+'</b><span>'+dt.replace(/[<>&]/g,'')+'</span></div>':''),h=dlh+L.map(function(x,i){if(x[1]==null)return '';var ch=old&&old[i]!==x[1]?' ch':'';return x[0]==='rm'?'<span class="rm'+ch+'">RM <b>'+x[1]+'</b></span>':x[0]==='k'?'<span class="k'+ch+'"><b>'+x[1]+'</b> '+x[2]+'</span>':'<span class="'+x[0]+ch+'">'+x[2]+' <b>'+x[1]+' g</b></span>'}).join('');
  if(!bar){bar=D.createElement('div');bar.className='v2mac';mb.insertBefore(bar,mb.firstChild)}bar.setAttribute('data-k',key);bar.innerHTML=h;
  if(mb.style.paddingTop)mb.style.paddingTop=''})}
+/* Peter 11th Nov 2026 : the sauce bag is placed next to the tray when the Meal is drawn ; the Macro chips above the tray can then grow
+   ( the Day row ) and push the tray down, leaving the bag behind the chips. Put it back beside the tray. */
+function bag(){[].forEach.call(D.querySelectorAll('#planCal .mbento'),function(mb){var sb=mb.querySelector('.sx30-sauce'),tray=mb.querySelector('.bento');if(!sb||!tray||sb.classList.contains('sx30-in'))return;
+ var T=1e9,B=0,L=1e9,R=0;[].forEach.call(tray.querySelectorAll(':scope > b'),function(b){if(!b.offsetWidth)return;var y=tray.offsetTop+b.offsetTop,x=tray.offsetLeft+b.offsetLeft;T=Math.min(T,y);B=Math.max(B,y+b.offsetHeight);L=Math.min(L,x);R=Math.max(R,x+b.offsetWidth)});if(!B)return;
+ var left=parseFloat(sb.style.left)||0,y=left<L-4?T+(B-T)*.06:B+(R-L)*.035+4;if(Math.abs((parseFloat(sb.style.top)||0)-y)>1)sb.style.top=Math.round(y)+'px'})}
 /* follow : the picture slides down with the page ( also inside the Homepage, where the Meal Plan sits in a frame ) */
 function nav(doc){var n=doc.querySelector('body>nav')||doc.getElementById('aeraBar')||doc.querySelector('body>header');if(!n)return 0;var cs=(doc.defaultView||W).getComputedStyle(n);if(cs.position!=='fixed'&&cs.position!=='sticky')return 0;return Math.max(0,n.getBoundingClientRect().bottom)}
 /* the Day Total bar ( #hsBar ) at the top of the screen also covers the picture : start below it */
@@ -1500,10 +1505,15 @@ var raf=0;function tick(){if(raf)return;raf=requestAnimationFrame(function(){raf
 W.addEventListener('scroll',tick,{passive:true});W.addEventListener('resize',tick);
 try{var fe=W.frameElement;if(fe){W.parent.addEventListener('scroll',tick,{passive:true,capture:true});W.parent.addEventListener('resize',tick)}}catch(e){}
 /* redrawn the moment the Meal changes, so the chips and the picture's place never blink */
-new MutationObserver(function(){try{chips();follow()}catch(e){}}).observe(D.documentElement,{childList:true,subtree:true});
+new MutationObserver(function(){try{chips();bag();follow()}catch(e){}}).observe(D.documentElement,{childList:true,subtree:true});
 var hw=setInterval(function(){var b=D.getElementById('hsBar');if(!b)return;clearInterval(hw);new MutationObserver(tick).observe(b,{attributes:true,attributeFilter:['class']})},500);
-try{chips();follow()}catch(e){}
-window.aeraFollow=function(){chips();follow()};
+try{chips();bag();follow()}catch(e){}
+setTimeout(function(){try{bag()}catch(e){}},1500);
+/* the chips can also grow without the Meal being redrawn ( the font arrives late, the phone turns, the Homepage frame resizes ) */
+try{if(D.fonts&&D.fonts.ready)D.fonts.ready.then(function(){try{bag()}catch(e){}})}catch(e){}
+try{var ro=new ResizeObserver(function(){try{bag()}catch(e){}}),rw=setInterval(function(){var pc=D.getElementById('planCal');if(!pc)return;clearInterval(rw);ro.observe(pc)},500)}catch(e){}
+W.addEventListener('resize',function(){try{bag()}catch(e){}});
+window.aeraFollow=function(){chips();bag();follow()};
 })();
 </script>
 <script id="aera-tapedit">
