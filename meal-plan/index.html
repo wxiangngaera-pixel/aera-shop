@@ -1496,6 +1496,85 @@ try{chips();follow()}catch(e){}
 window.aeraFollow=function(){chips();follow()};
 })();
 </script>
+<script id="aera-tapedit">
+/* Peter 11th Nov 2026 : on phones the portion table under each Meal is gone. Tap a compartment of the MAP Bento Box / Vacuum Pack, or the sauce bag,
+   and a sheet opens for that item : its macros, − / + for the weight, Change Item ( the dish list ) and Remove Item.
+   Items that do not show in the picture ( a 2nd Carb, a 3rd Vegetable … ) are listed under the picture as small buttons. Wider screens keep the table. */
+(function(){if(window.__aeraTap)return;window.__aeraTap=1;var D=document,W=window;
+function phone(){return W.innerWidth<760}
+function zh(){return D.documentElement.getAttribute('data-lang')==='zh'}
+function T(en,cn){return zh()?cn:en}
+var st=D.createElement('style');st.id='aera-tapedit-css';st.textContent=
+ '@media (max-width:759px){#s4 .mrow .mmain .tblwrap{display:none!important}'+
+  '#s4 .mrow .mbento .bento > b{cursor:pointer}#s4 .mrow .mbento .sx30-sauce{pointer-events:auto!important;cursor:pointer}'+
+  '#s4 .mrow .mbento .v2tap{display:flex}'+
+  '#planCal .mcard .mh .mtitle i{display:none!important}#planCal .mcard .mh .v2items{display:flex}'+
+  'html:not(.v2tapped) #s4 .mrow .mbento .bento > b:not(.empty){animation:v2tapPulse 1.6s ease-in-out 3}}'+
+ '@keyframes v2tapPulse{0%,100%{box-shadow:inset 0 0 0 0 rgba(253,185,19,0)}50%{box-shadow:inset 0 0 0 3px #FDB913}}'+
+ '.v2tap{display:none;flex-wrap:wrap;justify-content:center;gap:6px;margin:10px 0 0;font-family:Montserrat,system-ui,sans-serif;position:relative;z-index:9;width:0;min-width:100%}'+
+ '.v2items{display:none;flex-direction:column;gap:6px;margin:8px 0 2px;width:100%}'+
+ '.v2items button{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:8px 12px;border-radius:12px;border:2px solid #16479E;background:#fff;color:#0B1C36;font:700 14px/1.3 Montserrat,system-ui,sans-serif;text-align:left;cursor:pointer}'+
+ '.v2items button span{flex:1}.v2items button em{font-style:normal;font-weight:800;color:#16479E;white-space:nowrap}.v2items button i{font-style:normal;flex:0 0 auto;height:26px;line-height:26px;padding:0 10px;border-radius:999px;background:#16479E;color:#FDB913;font-size:12px;font-weight:800}'+
+ '.v2tap .hint{flex-basis:100%;text-align:center;font-size:12px;font-weight:700;color:#16479E}'+
+ '.v2tap button{height:32px;padding:0 12px;border-radius:999px;border:0;background:#16479E;color:#FDB913;font:800 12px Montserrat,system-ui,sans-serif;cursor:pointer}'+
+ '#v2tapS{position:fixed;inset:0;z-index:2147482600;background:rgba(11,28,54,.5);display:none;align-items:flex-end;justify-content:center;font-family:Montserrat,system-ui,sans-serif}'+
+ '#v2tapS.on{display:flex}'+
+ '#v2tapS .in{width:100%;max-width:520px;max-height:86%;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#fff;border-radius:22px 22px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -12px 30px rgba(0,0,0,.2);color:#0B1C36;box-sizing:border-box}'+
+ '#v2tapS .hd{display:flex;align-items:center;gap:12px;margin-bottom:10px}#v2tapS .hd i{flex:0 0 58px;height:58px;border-radius:12px;background:#E9EEF5 50% 50%/cover no-repeat}'+
+ '#v2tapS .hd b{flex:1;font-size:17px;line-height:1.25;font-weight:800}#v2tapS .hd .cz{flex:0 0 auto;height:36px;padding:0 14px;border-radius:999px;border:0;background:#16479E;color:#FDB913;font:800 13px Montserrat,system-ui,sans-serif;cursor:pointer}'+
+ '#v2tapS .mc{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}#v2tapS .mc span{height:30px;line-height:26px;padding:0 10px;border-radius:999px;border:2px solid #16479E;color:#16479E;font-size:12px;font-weight:700;background:#fff}#v2tapS .mc span b{color:#0B1C36;font-size:14px}#v2tapS .mc span.k{background:#16479E;color:#FDB913}#v2tapS .mc span.k b{color:#FDB913}#v2tapS .mc span.rm{background:#FDB913;border-color:#FDB913;color:#0B0B0B}#v2tapS .mc span.rm b{color:#0B0B0B}'+
+ '#v2tapS h4{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#5A6B87;margin:6px 0 8px}'+
+ '#v2tapS .wt{display:flex!important;justify-content:center!important;width:100%!important;margin:0 0 14px}#v2tapS .wt .qbox,#v2tapS .wt .cbox{margin:0 auto;min-width:220px}#v2tapS .wt .qty span{font-size:20px}'+
+ '#v2tapS .chg .swapd{width:100%}#v2tapS .chg .swapd .dl{max-height:none}'+
+ '#v2tapS .ft{display:flex;gap:10px;margin-top:14px}#v2tapS .ft button{flex:1;height:50px;border-radius:999px;border:0;font:800 15px Montserrat,system-ui,sans-serif;cursor:pointer}'+
+ '#v2tapS .ft .rm{background:#16479E;color:#FDB913}#v2tapS .ft .ok{background:#FDB913;color:#0B0B0B}';
+D.head.appendChild(st);
+function nm(s){return String(s||'').replace(/\s+/g,' ').trim().toLowerCase()}
+/* the item's row in that Meal's table : found by its name, its place ( meal , item ) read from the − / + buttons */
+function rowsOf(card){return [].filter.call(card.querySelectorAll('.tblwrap tr'),function(tr){return tr.querySelector('.swapbtn span')})}
+function rowName(tr){var s=tr.querySelector('.swapbtn span');return s?s.textContent:''}
+function rowIdx(tr){var b=tr.querySelector('[onclick^="bump("],[onclick^="delComp("]');var m=b&&/\((\d+)\s*,\s*(\d+)/.exec(b.getAttribute('onclick'));return m?[+m[1],+m[2]]:null}
+function findRow(mi,ci){var hit=null;[].some.call(D.querySelectorAll('#planCal .tblwrap tr'),function(tr){var x=rowIdx(tr);if(x&&x[0]===mi&&x[1]===ci){hit=tr;return true}return false});return hit}
+var S=null,CUR=null,KEY='';
+function chipsHtml(tr){var td=tr.querySelector('td.mac'),t=td?td.textContent.replace(/\s+/g,' '):'',pr=tr.querySelector('td.n'),rm=pr?pr.textContent.replace(/[^\d.,]/g,''):'';
+ var k=(t.match(/([\d,.]+)\s*KCAL/i)||[])[1],p=(t.match(/Protein\s*([\d.]+)/i)||[])[1],c=(t.match(/Carbs\s*([\d.]+)/i)||[])[1],f=(t.match(/Fat\s*([\d.]+)/i)||[])[1];
+ return (k?'<span class="k"><b>'+k+'</b> KCALs</span>':'')+(p?'<span>'+T('Protein','蛋白质')+' <b>'+p+' g</b></span>':'')+(c?'<span>'+T('Carbs','碳水')+' <b>'+c+' g</b></span>':'')+(f?'<span>'+T('Fat','脂肪')+' <b>'+f+' g</b></span>':'')+(rm?'<span class="rm">RM <b>'+rm+'</b></span>':'')}
+function paint(force){if(!S||!CUR)return;var tr=findRow(CUR[0],CUR[1]);if(!tr||nm(rowName(tr))!==CUR[2]&&!CUR[3]){close();return}
+ var name=rowName(tr),wtd=[].filter.call(tr.children,function(td){return td.querySelector('.qbox,.cbox')})[0],key=name+'|'+(wtd?wtd.textContent:'')+'|'+tr.querySelector('td.mac').textContent;if(!force&&key===KEY)return;KEY=key;CUR[2]=nm(name);CUR[3]=0;
+ var th=tr.querySelector('.swapbtn i'),bg=th?th.style.backgroundImage:'',x=tr.querySelector('button.x'),dt=tr.querySelector('details.swapd');
+ S.innerHTML='<div class="in" role="dialog" aria-modal="true"><div class="hd"><i style="background-image:'+String(bg).replace(/"/g,"'")+'"></i><b></b><button type="button" class="cz" data-v2c="1">✕ '+T('Close','关闭')+'</button></div>'+
+  '<div class="mc">'+chipsHtml(tr)+'</div><h4>'+T('Portion','份量')+'</h4><div class="wt etbl">'+(wtd?wtd.innerHTML:'')+'</div>'+
+  '<h4>'+T('Change Item','更换')+'</h4><div class="chg etbl">'+(dt?dt.outerHTML:'')+'</div>'+
+  '<div class="ft">'+(x?'<button type="button" class="rm" data-rm="'+x.getAttribute('onclick').replace(/"/g,'&quot;')+'">'+T('Remove Item','移除')+'</button>':'')+'<button type="button" class="ok" data-v2c="1">'+T('Done','完成')+'</button></div></div>';
+ S.querySelector('.hd b').textContent=name}
+function open(mi,ci,name){if(!S){S=D.createElement('div');S.id='v2tapS';D.body.appendChild(S);
+  S.addEventListener('click',function(e){var t=e.target;if(t===S||(t.closest&&t.closest('[data-v2c]'))){close();return}
+   var r=t.closest&&t.closest('[data-rm]');if(r){var c=r.getAttribute('data-rm');close();try{(new Function(c))()}catch(x){}return}
+  });
+  /* a dish picked in the list : the sheet then shows the new dish ( marked before the list's own tap handler runs ) */
+  S.addEventListener('click',function(e){if(CUR&&e.target.closest&&e.target.closest('.srow')){CUR[3]=1;KEY=''}},true)}
+ CUR=[mi,ci,nm(name),0];KEY='';paint(true);S.classList.add('on');try{D.documentElement.classList.add('v2tapped');localStorage.setItem('aera.v2tapped','1')}catch(e){}}
+function close(){if(S)S.classList.remove('on');CUR=null}
+try{if(localStorage.getItem('aera.v2tapped')==='1')D.documentElement.classList.add('v2tapped')}catch(e){}
+/* tap on the picture */
+D.addEventListener('click',function(e){if(!phone())return;var t=e.target,b=t.closest&&t.closest('#planCal .mbento .bento > b, #planCal .mbento .sx30-sauce, #planCal .mbento .v2tap [data-ci], #planCal .v2items [data-ci]');if(!b||b.classList.contains('empty'))return;
+ var card=b.closest('.mcard');if(!card)return;var name='';
+ if(b.hasAttribute('data-ci')){var mi0=+b.getAttribute('data-mi'),ci0=+b.getAttribute('data-ci'),tr0=findRow(mi0,ci0);if(tr0){e.preventDefault();open(mi0,ci0,rowName(tr0))}return}
+ name=b.classList.contains('sx30-sauce')?(b.getAttribute('title')||''):String(b.getAttribute('title')||'').split(' · ')[0];if(!name)return;
+ var tr=null;rowsOf(card).some(function(r){if(nm(rowName(r))===nm(name)){tr=r;return true}return false});if(!tr)return;var ix=rowIdx(tr);if(!ix)return;e.preventDefault();e.stopPropagation();open(ix[0],ix[1],rowName(tr))},true);
+/* the hint, and buttons for items the picture cannot show */
+function hint(){[].forEach.call(D.querySelectorAll('#planCal .mcard'),function(card){var mb=card.querySelector('.mbento');if(!mb)return;
+ var shown={};[].forEach.call(mb.querySelectorAll('.bento > b:not(.empty)'),function(b){shown[nm(String(b.getAttribute('title')||'').split(' · ')[0])]=1});var sb=mb.querySelector('.sx30-sauce');if(sb)shown[nm(sb.getAttribute('title'))]=1;
+ var h='<span class="hint">'+T('Tap the food, the sauce bag or an item above to change it','点食物、酱料包或上方的项目即可更换')+'</span>';
+ /* the Meal's items as a list in its heading : name · weight ✎ ( every item, also the ones the picture cannot show ) */
+ var mh=card.querySelector('.mh'),lh=rowsOf(card).map(function(r){var ix=rowIdx(r)||[0,0],q=r.querySelector('.qbox .qty span, .cbox .cqty input'),w=q?(q.value!=null&&q.tagName==='INPUT'?q.value+' g':q.textContent):'';
+  return '<button type="button" data-mi="'+ix[0]+'" data-ci="'+ix[1]+'"><span>'+rowName(r).replace(/[<>&]/g,'')+'</span><em>'+String(w).replace(/[<>&]/g,'')+'</em><i>✎ '+T('Edit','更改')+'</i></button>'}).join('');
+ if(mh){var li=mh.querySelector('.v2items');if(!li||li.__h!==lh){if(!li){li=D.createElement('div');li.className='v2items';var mt=mh.querySelector('.mtitle');if(mt&&mt.nextSibling)mh.insertBefore(li,mt.nextSibling);else mh.appendChild(li)}li.__h=lh;li.innerHTML=lh}}
+ var el=mb.querySelector('.v2tap');if(el&&el.__h===h)return;if(!el){el=D.createElement('div');el.className='v2tap';var tray=mb.querySelector('.bento');if(tray&&tray.nextSibling)mb.insertBefore(el,tray.nextSibling);else mb.appendChild(el)}el.__h=h;el.innerHTML=h})}
+new MutationObserver(function(){try{hint();if(S&&S.classList.contains('on'))paint(false)}catch(e){}}).observe(D.documentElement,{childList:true,subtree:true});
+try{hint()}catch(e){}
+})();
+</script>
 <script id="aera-welcome-mp">
 /* Peter 11th Nov 2026 : a new customer who signs up and goes straight to the Meal Plan ( never opening My Account )
    is now offered the Welcome Gifts here too : the First Order Voucher and 500 AERA Points, one tap to accept.
