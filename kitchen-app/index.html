@@ -471,9 +471,12 @@ function KC_SHIM(URL_,ANON_,KEY_){
   want.forEach(function(id){if(out[id]===undefined)nh[id]=undefined});
   try{KIDB.set(key,{m:out,h:nh,at:Date.now()})}catch(e){}
   return out}
- function emit(c){var o=cc(c);if(o.t)return;o.t=setTimeout(function(){o.t=0;
+ /* Peter 11th Nov 2026 : a data refresh keeps the reader's place ( Redmi Pad jumps ) */
+['touchstart','touchmove','wheel','keydown','pointerdown'].forEach(function(t){addEventListener(t,function(){window.__kcIn=Date.now()},{passive:true,capture:true})});
+function emit(c){var o=cc(c);if(o.t)return;o.t=setTimeout(function(){o.t=0;var y0=pageYOffset;
   var s=snapColl(o.m);o.ls.slice().forEach(function(f){try{f(s)}catch(e){console.error(e)}});
-  Object.keys(o.dls).forEach(function(id){(o.dls[id]||[]).slice().forEach(function(f){try{f(snapDoc(id,o.m[id]))}catch(e){console.error(e)}})})},30)}
+  Object.keys(o.dls).forEach(function(id){(o.dls[id]||[]).slice().forEach(function(f){try{f(snapDoc(id,o.m[id]))}catch(e){console.error(e)}})});
+  requestAnimationFrame(function(){if(y0>0&&Math.abs(pageYOffset-y0)>160&&Date.now()-(window.__kcIn||0)>800)scrollTo(0,y0)})},30)}
  function local(c,id,data){var o=cc(c);if(!o.ready&&!o.ls.length&&!Object.keys(o.dls).length)return;if(data==null)delete o.m[id];else o.m[id]=data;emit(c)}
  async function load(c){var o=cc(c);if(o.ready)return o;if(!o.loading)o.loading=fetchColl(c).then(function(m){o.m=m;o.ready=true;o.loading=null;return o},function(e){o.loading=null;throw e});return o.loading}
  async function reloadAll(){Object.keys(C).forEach(function(c){var o=C[c];if(!o.ready)return;fetchColl(c).then(function(m){o.m=m;emit(c)}).catch(function(){})})}
@@ -504,9 +507,9 @@ function KC_SHIM(URL_,ANON_,KEY_){
   sb.from('kc_docs').select('data').eq('coll',row.coll).eq('id',row.id).maybeSingle().then(function(r){if(r.data){o.m[row.id]=r.data.data;emit(row.coll)}})}
  function ensureRT(){if(RT)return;RT=1;
   sb.auth.getSession().then(function(x){var s=x.data.session;if(s){try{sb.realtime.setAuth(s.access_token)}catch(e){}}
-  RT=sb.channel('kc-docs').on('postgres_changes',{event:'*',schema:'public',table:'kc_docs'},onRow)
-   .subscribe(function(st){if(st==='SUBSCRIBED'){if(rtDown){rtDown=false;reloadAll()}}
-    else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'||st==='CLOSED'){rtDown=true;var old=RT;RT=null;setTimeout(function(){try{sb.removeChannel(old)}catch(e){}ensureRT()},3000)}})})}
+  var ch=sb.channel('kc-docs').on('postgres_changes',{event:'*',schema:'public',table:'kc_docs'},onRow);RT=ch;
+   ch.subscribe(function(st){if(RT!==ch)return;if(st==='SUBSCRIBED'){if(rtDown){rtDown=false;reloadAll()}}
+    else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'||st==='CLOSED'){rtDown=true;RT=null;setTimeout(function(){Promise.resolve().then(function(){return sb.removeChannel(ch)}).catch(function(){});ensureRT()},3000)}})})}
  document.addEventListener('visibilitychange',function(){if(document.hidden){hidAt=Date.now()}else if(hidAt&&Date.now()-hidAt>30000){hidAt=0;reloadAll()}});
  sb.auth.onAuthStateChange(function(ev){if(ev==='SIGNED_OUT'){try{indexedDB.deleteDatabase('aera-kc-cache')}catch(e){}location.reload()}});
  var DB={doc:docRef,collection:collRef};
