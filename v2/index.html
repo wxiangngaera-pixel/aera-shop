@@ -490,7 +490,7 @@ function quick(){
  '#v2qp .er{color:#C0392B;font-size:13px;font-weight:700;min-height:18px;margin:4px 0 0}'+
  '#v2qp .qf{padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #E3E8F2}'+
  '#v2qp .qf button{display:block;width:100%;max-width:560px;margin:0 auto;height:54px;border:0;border-radius:999px;background:#FDB913;color:#0B1C36;font:800 16.5px Montserrat,system-ui,sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(253,185,19,.35)}'+
- '#v2qp .qf button[disabled]{background:#E3E8F2;color:#8A97AD;box-shadow:none}'+
+ '#v2qp .qf button[disabled]{background:#E3E8F2;color:#8A97AD;box-shadow:none}'+'html.v2emb #v2qp{position:relative!important;inset:auto!important;z-index:1!important;min-height:0;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(11,28,54,.08)}html.v2emb #v2qp .qb{flex:none!important;overflow:visible!important}html.v2emb body.v2qp-on main>:not(#v2qp){display:none!important}'+
  '#v2qlink{display:flex;align-items:center;gap:10px;width:100%;box-sizing:border-box;margin:0 0 14px;padding:13px 14px;border-radius:14px;border:0;background:#16479E;color:#fff;font:800 14.5px Montserrat,system-ui,sans-serif;text-align:left;cursor:pointer}'+
  '#v2qlink span{flex:1}#v2qlink i{font-style:normal;color:#FDB913}'
  ,'v2-quick');
@@ -507,7 +507,7 @@ function quick(){
   A={goal:q.goal&&q.goal!=='custom'?q.goal:'',gender:q.gender||'',dob:q.dob||'',height:q.height||'',weight:q.weight||'',act:q.activity?String(q.activity):'',days:+q.days||7,mpd:+q.mpd||2,avoid:(q.avoid||[]).slice()};
   cur=0;editAbout=false;
   try{if(window.AERATOUR&&AERATOUR.stop)AERATOUR.stop()}catch(e){}
-  if(!W){W=D.createElement('div');W.id='v2qp';W.setAttribute('role','dialog');W.setAttribute('aria-modal','true');D.body.appendChild(W);
+  if(!W){W=D.createElement('div');W.id='v2qp';W.setAttribute('role','dialog');W.setAttribute('aria-modal','true');/* Peter 11th Nov 2026 : inside the Homepage's Meal Plan frame the Quick Plan sits in the page and is only as tall as its questions, so Next is right under the answers ( it used to fill the whole 5,500 px frame ) */var EMB=(function(){try{return window.top!==window&&!window.__AERA_CONSOLE&&!/[?&]console=1/.test(location.search)}catch(e){return true}})(),MN=EMB&&D.querySelector('main');window.__v2emb=!!MN;if(MN){D.documentElement.classList.add('v2emb');MN.insertBefore(W,MN.firstChild)}else D.body.appendChild(W);
    W.addEventListener('click',onClick);W.addEventListener('input',onInput);W.addEventListener('change',onInput)}
   W.style.display='flex';D.body.classList.add('v2qp-on');paint()}
  function close(){if(W)W.style.display='none';D.body.classList.remove('v2qp-on')}
@@ -535,7 +535,7 @@ function quick(){
   W.innerHTML='<div class="qh"><button type="button" class="bk" data-back="1" aria-label="Back"'+(cur?'':' disabled')+'>←</button><div class="pg"><i style="width:'+((cur+1)/fl.length*100)+'%"></i></div><a class="cz" href="#" data-custom="1">✕ '+t('Close')+'</a></div>'+
    '<div class="qb"><div class="qi"><p class="st">'+t('Quick Plan')+' · '+(cur+1)+' / '+fl.length+'</p>'+h+'</div></div>'+
    '<div class="qf"><button type="button" data-next="1"'+(ok()?'':' disabled')+'>'+(last?t('Build My Plan')+' ✦':t('Next')+' →')+'</button></div>';
-  var qb=W.querySelector('.qb');if(qb)qb.scrollTop=0}
+  var qb=W.querySelector('.qb');if(qb)qb.scrollTop=0;if(window.__v2emb&&W.__pst!==cur){W.__pst=cur;try{window.scrollTo(0,0)}catch(e){}}}
  function setNext(){var b=W.querySelector('[data-next]');if(b)b.disabled=!ok()}
  function onInput(e){var el=e.target;if(el.id==='v2dob')A.dob=el.value;if(el.id==='v2h')A.height=el.value;if(el.id==='v2w')A.weight=el.value;setNext();var er=W.querySelector('#v2er');if(er)er.textContent=''}
  function pick(sel,attr,val){[].forEach.call(W.querySelectorAll('['+attr+']'),function(b){b.classList.toggle('on',b.getAttribute(attr)===val)})}
