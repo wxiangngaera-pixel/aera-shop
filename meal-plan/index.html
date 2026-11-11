@@ -1483,17 +1483,21 @@ function bag(){[].forEach.call(D.querySelectorAll('#planCal .mbento'),function(m
 function nav(doc){var n=doc.querySelector('body>nav')||doc.getElementById('aeraBar')||doc.querySelector('body>header');if(!n)return 0;var cs=(doc.defaultView||W).getComputedStyle(n);if(cs.position!=='fixed'&&cs.position!=='sticky')return 0;return Math.max(0,n.getBoundingClientRect().bottom)}
 /* the Day Total bar ( #hsBar ) at the top of the screen also covers the picture : start below it */
 function hsb(){var b=D.getElementById('hsBar');if(!b||!b.classList.contains('on'))return 0;return (parseFloat(W.getComputedStyle(b).top)||0)+b.offsetHeight}
-/* Peter 11th Nov 2026 : inside the Homepage ( the Meal Plan sits in a frame ) the Day Total bar could not stay at the top of the screen ;
-   here it is placed at the top of what you see, whenever you are inside a Day below its heading */
-function dayBar(fe){var b=D.getElementById('hsBar');if(!b)return 0;var pw=W.parent,fr=fe.getBoundingClientRect(),top=Math.max(0,nav(pw.document)-fr.top),dp=null;
+/* Peter 11th Nov 2026 : inside the Homepage ( the Meal Plan sits in a frame ) the Day Total bar could not stay at the top of the screen.
+   It now lives on the Homepage itself, fixed to the top of the screen like on the Meal Plan page, so it never shivers while scrolling.
+   It shows whenever you are inside a Day below its heading. */
+function dayBar(fe){var pw=W.parent,pd=pw.document,b=pd.getElementById('aeraHubDay');
+ if(!b){var cs=pd.createElement('style');cs.textContent='#aeraHubDay{position:fixed;left:0;right:0;top:0;z-index:2147480000;background:#16479E;color:#fff;font-family:Montserrat,system-ui,sans-serif;padding:8px 14px;padding-top:calc(8px + env(safe-area-inset-top));box-shadow:0 2px 10px rgba(0,0,0,.2);transform:translateY(-110%);transition:transform .2s ease;display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;pointer-events:none}#aeraHubDay.on{transform:none}#aeraHubDay b{color:#FDB913;font-size:13px;letter-spacing:.02em}#aeraHubDay span{font-size:13.5px;font-weight:700}';pd.head.appendChild(cs);b=pd.createElement('div');b.id='aeraHubDay';pd.body.appendChild(b)}
+ var ib=D.getElementById('hsBar');if(ib&&ib.classList.contains('on'))ib.classList.remove('on');
+ var fr=fe.getBoundingClientRect(),hin=fe.closest('.hin'),open=!hin||hin.clientHeight>60,dp=null,bh=b.offsetHeight||50;
  [].some.call(D.querySelectorAll('#planCal .dpanel'),function(p){if(p.offsetHeight){dp=p;return true}return false});
- var dh=dp&&[].filter.call(dp.querySelectorAll('.mh'),function(x){return !x.closest('.mcard')})[0],dm=dh&&dh.querySelector('.mac'),show=!!(dh&&dm&&dh.getBoundingClientRect().bottom<top&&dp.getBoundingClientRect().bottom>top+120);
+ var dh=dp&&[].filter.call(dp.querySelectorAll('.mh'),function(x){return !x.closest('.mcard')})[0],dm=dh&&dh.querySelector('.mac'),show=!!(open&&dh&&dm&&fr.top+dh.getBoundingClientRect().bottom<bh&&fr.top+dp.getBoundingClientRect().bottom>bh+120);
  if(show){var dt='';[].forEach.call(dm.childNodes,function(n){if(n.nodeType===3||n.tagName==='B')dt+=n.textContent});dt=dt.replace(/\s+/g,' ').replace(/\s*·\s*RM\s*[\d,.]+\s*$/,'').replace(/\s*·\s*$/,'').trim();
-  var dn=(dh.textContent||'').replace(dm.textContent||'','').replace(/\s+/g,' ').trim(),h='<b>'+(dn||'Day').replace(/[<>&]/g,'')+' · '+(zh()?'\u5168\u5929':'Total')+'</b><span>'+dt.replace(/[<>&]/g,'')+'</span>';
-  if(b.__fh!==h){b.__fh=h;b.innerHTML=h}var tp=Math.round(top)+'px';if(b.style.top!==tp)b.style.top=tp;if(!b.classList.contains('on'))b.classList.add('on');return b.offsetHeight}
+  var dn=(dh.textContent||'').replace(dm.textContent||'','').replace(/\s+/g,' ').trim(),h='<b>'+(dn||'Day').replace(/[<>&]/g,'')+' · '+(zh()?'全天':'Total')+'</b><span>'+dt.replace(/[<>&]/g,'')+'</span>';
+  if(b.__fh!==h){b.__fh=h;b.innerHTML=h}if(!b.classList.contains('on'))b.classList.add('on');return b.offsetHeight}
  if(b.classList.contains('on'))b.classList.remove('on');return 0}
 function view(){var fe=null;try{fe=W.frameElement}catch(e){}
- if(fe){var pw=W.parent,fr=fe.getBoundingClientRect(),bh=0;try{bh=dayBar(fe)}catch(e){}var top=Math.max(0,nav(pw.document)+bh+8-fr.top)+(W.pageYOffset||0);return {top:top,h:pw.innerHeight-nav(pw.document)-bh-8}}
+ if(fe){var pw=W.parent,fr=fe.getBoundingClientRect(),bh=0;try{bh=dayBar(fe)}catch(e){}var ob=Math.max(nav(pw.document),bh),top=Math.max(0,ob+8-fr.top)+(W.pageYOffset||0);return {top:top,h:pw.innerHeight-ob-8}}
  var ob=Math.max(nav(D),hsb());return {top:(W.pageYOffset||0)+ob+8,h:W.innerHeight-ob-8}}
 function follow(){var v=view(),sy=W.pageYOffset||0;[].forEach.call(D.querySelectorAll('#planCal .mbento'),function(mb){var row=mb.parentElement;if(!row||!mb.offsetHeight){return}
  var cur=+mb.__fy||0,r=mb.getBoundingClientRect(),mt=r.top+sy-cur,mh=mb.offsetHeight,rb=row.getBoundingClientRect().bottom+sy;
