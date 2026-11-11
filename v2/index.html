@@ -501,7 +501,7 @@ function quick(){
  var AV=[['prawn','Prawn'],['seafood','Fish'],['beef','Beef'],['egg','Egg'],['peanut','Peanut & Nuts'],['tofu','Tofu'],['pasta','Pasta'],['toast','Toast']];
  function Qg(){return window.Q||{}}
  function known(){var q=Qg();return !!(q.gender&&q.dob&&+q.height>=120&&+q.weight>=30&&+q.activity>0)}
- function flow(){return (known()&&!editAbout)?['goal','week','avoid']:['goal','about','act','week','avoid']}
+ function flow(){return (known()&&!editAbout)?['goal','week']:['goal','about','act','week']} /* Peter 11th Nov 2026 : I Do Not Want… is asked only on the Meal Preferences page, not in the Quick Plan */
  function esc2(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
  function start(){var q=Qg();
   A={goal:q.goal&&q.goal!=='custom'?q.goal:'',gender:q.gender||'',dob:q.dob||'',height:q.height||'',weight:q.weight||'',act:q.activity?String(q.activity):'',days:+q.days||7,mpd:+q.mpd||2,avoid:(q.avoid||[]).slice()};
@@ -901,7 +901,7 @@ function oneFlow(){
  window.v2PrefsFirst=function(){if(!G0||byop()){(G0||window.goStep)(4);return}FT=true;PRE=true;D.body.classList.add('v2ft-on','v2pre');setBars();try{G0(3)}catch(e){}if(window.STEP!==3){ftOff();G0(4);return}try{window.scrollTo(0,0)}catch(e){}};
  function quickOpen(){ftOff();try{if(typeof window.v2QuickPlan==='function'){window.v2QuickPlan();return}}catch(e){}if(G0)G0(1)}
  function byop(){return !!(window.PLAN&&window.PLAN.byop)}
- function fine(k){FT=true;PRE=false;D.body.classList.add('v2ft-on');D.body.classList.remove('v2pre');setBars();try{G0(k)}catch(e){}try{W.scrollTo(0,0)}catch(e){}}
+ function fine(k){FT=true;PRE=false;D.body.classList.add('v2ft-on');D.body.classList.remove('v2pre');setBars();try{G0(k)}catch(e){}/* Peter 11th Nov 2026 : a plan with no Date of Birth ( a saved plan opened on a new phone ) made Fine-Tune pages 2 and 3 do nothing. Open page 1 at the missing Date of Birth instead */if(k>1&&window.STEP!==k){try{G0(1)}catch(e){}try{var db=D.getElementById('dob'),bx=db&&db.parentElement;if(bx){var wn=D.getElementById('v2dobw');if(!wn){wn=D.createElement('div');wn.id='v2dobw';wn.className='msg warn';wn.style.margin='0 0 10px';bx.insertBefore(wn,bx.firstChild);bx.addEventListener('change',function(){var x=D.getElementById('v2dobw');if(db.value&&x)x.parentNode.removeChild(x)})}wn.textContent=t('Please add your Date of Birth first, then tap ← Back to My Plan and open this page again.');setTimeout(function(){try{bx.scrollIntoView({block:'center',behavior:'smooth'})}catch(e){}},700)}}catch(e){}return}try{W.scrollTo(0,0)}catch(e){}}
  function bar(cls){var b=D.createElement('div');b.className='v2ftbar'+(cls?' '+cls:'');
   b.innerHTML='<button type="button" class="bk" data-ftback="1">'+t('← Back to My Plan')+'</button><span>'+t('Update My Plan rebuilds your Meals to the new Targets.')+'</span><button type="button" class="go" data-ftgo="1">'+t('Update My Plan →')+'</button>';return b}
  function ensure(){
