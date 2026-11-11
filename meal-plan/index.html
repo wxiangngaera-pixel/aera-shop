@@ -1414,7 +1414,7 @@ function add(){var cs=D.querySelectorAll('#s4 .mcard');for(var i=0;i<cs.length;i
   if(!x.classList.contains('arm')){x.classList.add('arm');lab(x);clearTimeout(x.__t);x.__t=setTimeout(function(){x.classList.remove('arm');lab(x)},3000);return}
   clearTimeout(x.__t);try{delMeal(n)}catch(err){}}})(+k);
  bar.appendChild(ad);bar.appendChild(de);mb.appendChild(bar)}}
-var q=0;new MutationObserver(function(){if(q)return;q=1;setTimeout(function(){q=0;add()},0)}).observe(D.documentElement,{childList:true,subtree:true});add();
+/* Peter 11th Nov 2026 : Adjust and Delete Meal are added the moment the Meal is drawn, so they no longer blink out each time a Dish is changed */new MutationObserver(function(){add()}).observe(D.documentElement,{childList:true,subtree:true});add();
 })();
 </script>
 <script id="aera-welcome-mp">
@@ -2659,7 +2659,7 @@ var S=document.createElement('style');S.textContent='#mpDayAct{display:flex;gap:
 function fix(){try{[].forEach.call(document.querySelectorAll('.daytabs'),function(t){var bs=t.querySelectorAll('.adddaybtn');if(!bs.length)return;
  var row=t.nextElementSibling&&t.nextElementSibling.id==='mpDayAct'?t.nextElementSibling:null;if(!row){row=document.createElement('div');row.id='mpDayAct';t.insertAdjacentElement('afterend',row)}
  row.innerHTML='';[].forEach.call(bs,function(b){if(b.classList.contains('deldaybtn')){var d=(typeof SELD!=='undefined'&&SELD)||'';b.textContent='\u2715 Delete Day '+d}row.appendChild(b)})})}catch(e){}}
-var T=0;new MutationObserver(function(){clearTimeout(T);T=setTimeout(fix,40)}).observe(document.body,{childList:true,subtree:true});setTimeout(fix,400);
+/* Peter 11th Nov 2026 : moved straight away after each change ( no 40 ms wait ), so the Plan no longer jumps 44 px each time a Dish is changed */new MutationObserver(function(){fix()}).observe(document.body,{childList:true,subtree:true});setTimeout(fix,400);
 })();</script>
 <script id="aera-ck-keep">/* Peter 2nd Nov 2026 : Console New Order : a Cooked Weight typed is never changed behind your back. If anything else moves an item's
    Raw grams ( Fine-Tune, meal split ), the Raw grams go back to match the Cooked Weight shown. - / + on a Cooked item moves the Cooked grams
