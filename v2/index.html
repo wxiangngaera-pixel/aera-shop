@@ -925,7 +925,7 @@ function oneFlow(){
   ensure();setInterval(ensure,1000);
   if(window.STEP>=1&&window.STEP<=3&&!byop()){if(window.PLAN)G0(4);else quickOpen()}}
  ready(function(){var n=0,iv=setInterval(function(){n++;if(typeof window.goStep!=='function'||!window.Q){if(n>80)clearInterval(iv);return}
-  if(n<8)return;clearInterval(iv);if(window.ADMIN_ID||/[?&](edit|next)=/.test(location.search))return;setup()},150)})}
+  if(n===1)try{ensure()}catch(x){}if(n<8)return;clearInterval(iv);if(window.ADMIN_ID||/[?&](edit|next)=/.test(location.search))return;setup()},150)})}
 
 if(P==='/')home();
 if(P==='/checkout')checkout();
