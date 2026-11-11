@@ -1434,6 +1434,53 @@ var c='';try{c=localStorage.getItem('aera.motion.code')||''}catch(e){}var s=seg(
 if(s)run(s,0);else fetch('/motion/',{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var s2=seg(t);if(s2)run(s2,0)}).catch(function(){});
 })();
 </script>
+<script id="aera-follow">
+/* Peter 11th Nov 2026 : the Meal picture ( bento, sauce bag, pour-in ) with that Meal's Macros follows the scroll while you change portions
+   in the table below it, so you see the food fall in and the KCALs / Protein / Carbs / Fat / RM change as you tap. The Macros are big chips. */
+(function(){if(window.__aeraFollow)return;window.__aeraFollow=1;var D=document,W=window;
+var st=D.createElement('style');st.id='aera-follow-css';st.textContent=
+ '#planCal .mcard .mh .mac{display:none!important}'+
+ '#planCal .mbento.v2fol{z-index:6;will-change:transform}'+
+ '#planCal .mbento.v2stk{box-shadow:0 14px 34px rgba(11,28,54,.30);border-radius:18px}'+
+ '#planCal .mbento.v2stk .v2pact{opacity:0;pointer-events:none}'+
+ '.v2mac{position:absolute;left:12px;right:12px;top:12px;z-index:9;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;pointer-events:none;font-family:Montserrat,system-ui,sans-serif}'+
+ '.v2mac span{display:inline-flex;align-items:baseline;gap:4px;height:34px;padding:0 12px;border-radius:999px;background:#fff;border:2px solid #16479E;color:#16479E;font-size:12px;font-weight:700;line-height:30px;white-space:nowrap;box-shadow:0 2px 8px rgba(11,28,54,.12)}'+
+ '.v2mac span b{font-size:16px;font-weight:800;color:#0B1C36}'+
+ '.v2mac span.k{background:#16479E;color:#FDB913}.v2mac span.k b{color:#FDB913}'+
+ '.v2mac span.rm{background:#FDB913;border-color:#FDB913;color:#0B0B0B}.v2mac span.rm b{color:#0B0B0B}'+
+ '.v2mac span.ch{animation:v2macPop .45s ease}@keyframes v2macPop{0%{transform:scale(1)}35%{transform:scale(1.14)}100%{transform:scale(1)}}'+
+ '@media (max-width:520px){.v2mac{left:8px;right:8px;top:8px;gap:4px}.v2mac span{height:28px;line-height:24px;padding:0 8px;font-size:10.5px}.v2mac span b{font-size:13.5px}}';
+D.head.appendChild(st);
+var LASTK={};function zh(){return D.documentElement.getAttribute('data-lang')==='zh'}
+/* Macros chips, read from the Meal's own figures line */
+function chips(){[].forEach.call(D.querySelectorAll('#planCal .mcard'),function(card){var mac=card.querySelector('.mh .mac'),mb=card.querySelector('.mbento');if(!mac||!mb)return;
+ var t='';[].forEach.call(mac.childNodes,function(n){if(n.nodeType===3||n.tagName==='B')t+=n.textContent});t=t.replace(/\s+/g,' ');
+ var k=(t.match(/([\d,.]+)\s*KCAL/i)||[])[1],p=(t.match(/Protein\s*([\d.]+)\s*g/i)||[])[1],c=(t.match(/Carbs\s*([\d.]+)\s*g/i)||[])[1],f=(t.match(/Fat\s*([\d.]+)\s*g/i)||[])[1],rm=(t.match(/RM\s*([\d,.]+)/i)||[])[1];
+ if(!k)return;var key=[k,p,c,f,rm].join('|'),bar=mb.querySelector('.v2mac');if(bar&&bar.getAttribute('data-k')===key)return;
+ var db=card.querySelector('[onclick^="dupMeal("]'),id=(typeof SELD!=='undefined'?SELD:'')+':'+(db?db.getAttribute('onclick'):''),was=LASTK[id];LASTK[id]=key;
+ var old=bar?bar.getAttribute('data-k').split('|'):(was?was.split('|'):null),Z=zh(),L=[['k',k,'KCALs'],['p',p,Z?'蛋白质':'Protein'],['c',c,Z?'碳水':'Carbs'],['f',f,Z?'脂肪':'Fat'],['rm',rm,'RM']];
+ var h=L.map(function(x,i){if(x[1]==null)return '';var ch=old&&old[i]!==x[1]?' ch':'';return x[0]==='rm'?'<span class="rm'+ch+'">RM <b>'+x[1]+'</b></span>':x[0]==='k'?'<span class="k'+ch+'"><b>'+x[1]+'</b> '+x[2]+'</span>':'<span class="'+x[0]+ch+'">'+x[2]+' <b>'+x[1]+' g</b></span>'}).join('');
+ if(!bar){bar=D.createElement('div');bar.className='v2mac';mb.insertBefore(bar,mb.firstChild)}bar.setAttribute('data-k',key);bar.innerHTML=h;
+ /* room above the tray for the chips ( one or two rows ) */var need=bar.offsetHeight+(W.innerWidth<=520?14:20);if(Math.abs((parseFloat(mb.style.paddingTop)||0)-need)>1)mb.style.paddingTop=need+'px'})}
+/* follow : the picture slides down with the page ( also inside the Homepage, where the Meal Plan sits in a frame ) */
+function nav(doc){var n=doc.querySelector('body>nav')||doc.getElementById('aeraBar')||doc.querySelector('body>header');if(!n)return 0;var cs=(doc.defaultView||W).getComputedStyle(n);if(cs.position!=='fixed'&&cs.position!=='sticky')return 0;return Math.max(0,n.getBoundingClientRect().bottom)}
+function view(){var fe=null;try{fe=W.frameElement}catch(e){}
+ if(fe){var pw=W.parent,fr=fe.getBoundingClientRect(),top=Math.max(0,nav(pw.document)+8-fr.top)+(W.pageYOffset||0);return {top:top,h:pw.innerHeight-nav(pw.document)-8}}
+ return {top:(W.pageYOffset||0)+nav(D)+8,h:W.innerHeight-nav(D)-8}}
+function follow(){var v=view(),sy=W.pageYOffset||0;[].forEach.call(D.querySelectorAll('#planCal .mbento'),function(mb){var row=mb.parentElement;if(!row||!mb.offsetHeight){return}
+ var cur=+mb.__fy||0,r=mb.getBoundingClientRect(),mt=r.top+sy-cur,mh=mb.offsetHeight,rb=row.getBoundingClientRect().bottom+sy;
+ var s=Math.min(1,Math.max(.5,(v.h*.46)/mh)),room=rb-mt-mh*s-12,t=Math.max(0,Math.min(v.top-mt,room));
+ if(room<40||t<=0){if(cur||mb.classList.contains('v2stk')){mb.__fy=0;mb.style.transform='';mb.classList.remove('v2stk')}return}
+ var sc=1-(1-s)*Math.min(1,t/160);mb.__fy=t;mb.classList.add('v2fol','v2stk');mb.style.transformOrigin='50% 0';mb.style.transform='translateY('+t.toFixed(1)+'px) scale('+sc.toFixed(3)+')'})}
+var raf=0;function tick(){if(raf)return;raf=requestAnimationFrame(function(){raf=0;try{follow()}catch(e){}})}
+W.addEventListener('scroll',tick,{passive:true});W.addEventListener('resize',tick);
+try{var fe=W.frameElement;if(fe){W.parent.addEventListener('scroll',tick,{passive:true,capture:true});W.parent.addEventListener('resize',tick)}}catch(e){}
+/* redrawn the moment the Meal changes, so the chips and the picture's place never blink */
+new MutationObserver(function(){try{chips();follow()}catch(e){}}).observe(D.documentElement,{childList:true,subtree:true});
+try{chips();follow()}catch(e){}
+window.aeraFollow=function(){chips();follow()};
+})();
+</script>
 <script id="aera-welcome-mp">
 /* Peter 11th Nov 2026 : a new customer who signs up and goes straight to the Meal Plan ( never opening My Account )
    is now offered the Welcome Gifts here too : the First Order Voucher and 500 AERA Points, one tap to accept.
