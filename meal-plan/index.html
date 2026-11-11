@@ -1417,6 +1417,23 @@ function add(){var cs=D.querySelectorAll('#s4 .mcard');for(var i=0;i<cs.length;i
 /* Peter 11th Nov 2026 : Adjust and Delete Meal are added the moment the Meal is drawn, so they no longer blink out each time a Dish is changed */new MutationObserver(function(){add()}).observe(D.documentElement,{childList:true,subtree:true});add();
 })();
 </script>
+<script id="aera-pour">
+/* Peter 11th Nov 2026 : the AI pour-in is back on the Meal Plan. Each time a Dish, Carb, Vegetable or Sauce changes, its food falls into its compartment.
+   Only this part of the AERA Motion Engine runs ( the rest of the engine stays switched off since 15th Oct 2026 ). The Kitchen Console plays the same code. */
+(function(){if(window.__aeraPour)return;window.__aeraPour=1;
+try{if(window.__AERA_CONSOLE||/[?&]console=1/.test(location.search)||document.documentElement.classList.contains('aera-console'))return;if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return}catch(e){return}
+var A='/* personalised meal plan : each food',B='var started=false;';
+var OBS="scan(true);var q=0;new MutationObserver(function(){if(q)return;q=setTimeout(function(){q=0;try{scan(false)}catch(e){}},30)}).observe(D.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style']})";
+/* the food starts falling the moment the Meal is redrawn ( no 30 ms wait, so the new food never shows first and then vanishes ) */
+var NOW="scan(true);var z=0;new MutationObserver(function(){if(++z>3)return;if(z===1)setTimeout(function(){z=0},0);try{scan(false)}catch(e){}}).observe(D.getElementById('planCal')||D.body,{childList:true,subtree:true})";
+function seg(t){var a=t.indexOf(A),b=t.indexOf(B,a);if(a<0||b<0)return '';var s=t.slice(a,b);if(s.indexOf(OBS)<0)return '';
+ return s.split(OBS).join(NOW).split("scan(first){$$('.mbento')").join("scan(first){$$('#planCal .mbento')").split("pi=panel?$$('.dpanel')").join("pi=panel?$$('#planCal .dpanel')")}
+var pre='var D=document,W=window,H=D.documentElement;function $(s,r){return (r||D).querySelector(s)}function $$(s,r){return [].slice.call((r||D).querySelectorAll(s))}function anim(el,kf,o){try{return el.animate(kf,o)}catch(e){return null}}function safe(f){return function(){try{return f.apply(this,arguments)}catch(e){}}}\n';
+function run(s,n){if(!document.getElementById('planCal')){if(n<120)setTimeout(function(){run(s,n+1)},250);return}if(window.__aeraPourOn)return;window.__aeraPourOn=1;try{(new Function(pre+s+'\nsafe(bentoDrop)();'))()}catch(e){window.__aeraPourOn=0}}
+var c='';try{c=localStorage.getItem('aera.motion.code')||''}catch(e){}var s=seg(c);
+if(s)run(s,0);else fetch('/motion/',{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var s2=seg(t);if(s2)run(s2,0)}).catch(function(){});
+})();
+</script>
 <script id="aera-welcome-mp">
 /* Peter 11th Nov 2026 : a new customer who signs up and goes straight to the Meal Plan ( never opening My Account )
    is now offered the Welcome Gifts here too : the First Order Voucher and 500 AERA Points, one tap to accept.
