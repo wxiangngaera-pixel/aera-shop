@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style id="aera-cloak">html.aera-cloak body{opacity:0!important}html.aera-show body{opacity:1;transition:opacity .16s ease-out}</style>
+<script id="aera-cloak-js">/* Peter 11th Nov 2026 : no more Jumps and Flashes when a page opens ( Safari and Chrome ). The page waits a moment, white, while it puts on the new look,
+   the header and the Montserrat font, then shows once, already finished. Never longer than 1.8 s. */
+(function(){if(window.__aeraCloak)return;window.__aeraCloak=1;var D=document,H=D.documentElement,done=0,dcl=0,fon=0,last=0;
+function now(){return (window.performance&&performance.now)?performance.now():Date.now()}
+function show(){if(done)return;done=1;H.classList.add('aera-show');H.classList.remove('aera-cloak');setTimeout(function(){H.classList.remove('aera-show')},300)}
+H.classList.add('aera-cloak');setTimeout(show,1800);
+try{new MutationObserver(function(){last=now()}).observe(H,{childList:true,subtree:true,attributes:true,attributeFilter:['class']})}catch(e){}
+function check(){if(done)return;if(dcl&&fon&&now()-last>=120){requestAnimationFrame(function(){requestAnimationFrame(show)})}else setTimeout(check,40)}
+function fonts(){try{var f=D.fonts;if(!f||!f.load){fon=1;return}Promise.all([f.load('400 16px Montserrat'),f.load('800 16px Montserrat')]).then(function(){fon=1},function(){fon=1});setTimeout(function(){fon=1},1200)}catch(e){fon=1}}
+function go(){dcl=1;last=now();fonts();check()}
+if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',function(){setTimeout(go,0)});else go();
+addEventListener('pageshow',function(e){if(e.persisted)show()});
+})();</script>
+
 <style id="aera-nobar-css">html.aera-nobar #aeraBar,html.aera-nobar .ab-panel{display:none!important}#aeraFootOut{display:none}html.aera-nobar #aeraFootOut.on{display:flex;justify-content:center;padding:26px 16px calc(26px + env(safe-area-inset-bottom))}#aeraFootOut button{background:none;border:0;color:#6B7280;font:600 13px Montserrat,system-ui,sans-serif;text-decoration:underline;cursor:pointer;padding:8px 12px;width:auto;margin:0;text-transform:none}</style>
 <script id="aera-nobar">/* Peter ( 18th Oct 2026 ) : inside the installed App there is no title bar, the same as AERA Order. On the website it stays. */
 (function(){try{var S=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;if(!S)return;var M='corp';
@@ -2814,6 +2830,69 @@ if(window.aeraRetranslate)window.aeraRetranslate();
 })();
 </script>
 
+<script id="aera-welcome-co">
+/* Peter 11th Nov 2026 : the First Order Voucher and the 500 AP Welcome Gift now work from any phone and any page.
+   Checkout asks the server ( my_welcome ) whether the voucher is still theirs, instead of trusting a copy saved in one browser
+   ( that copy often said "orders not counted yet", so the voucher never showed ). A new customer who never saw the
+   My Account pop-up can accept both gifts right here, and the voucher goes straight onto the Order. */
+(function(){if(window.__aeraWelcomeCo)return;window.__aeraWelcomeCo=1;
+var SB='https://swpprjvubgcdsojapaad.supabase.co',WS=null,BUSY=false,ERR='';
+function lc(s){return String(s||'').trim().toLowerCase()}
+function sess(){try{var s=JSON.parse(localStorage.getItem('sb-swpprjvubgcdsojapaad-auth-token')||'null');if(s&&s.currentSession)s=s.currentSession;return s&&s.access_token?s:null}catch(e){return null}}
+var WG=window.AERA_WG={
+ email:function(){var s=sess();return s&&s.user?lc(s.user.email):''},
+ rpc:async function(n,b){var s=sess();if(!s)throw new Error('Please Log In again');
+  var r=await fetch(SB+'/rest/v1/rpc/'+n,{method:'POST',headers:{apikey:(typeof ORD_ANON!=='undefined'?ORD_ANON:''),Authorization:'Bearer '+s.access_token,'Content-Type':'application/json'},body:JSON.stringify(b||{})});
+  if(r.status===401)throw new Error('401');if(!r.ok)throw new Error('Please try again');return r.json()}};
+function mine(){return WS&&typeof ACCT!=='undefined'&&ACCT&&lc(ACCT.email)===WS.em}
+async function load(n){var em=WG.email();if(!em)return;
+ try{var j=await WG.rpc('my_welcome');if(!j||!j.ok)return;j.em=em;WS=j;
+  try{if(typeof ACCT!=='undefined'&&ACCT&&lc(ACCT.email)===em){ACCT.welcome=!!j.claimed;if(ACCT.orders==null)ACCT.orders=j.orders;
+   var a=JSON.parse(localStorage.getItem('aera.account')||'null');if(a&&lc(a.email)===em){a.welcome=!!j.claimed;if(a.orders==null)a.orders=j.orders;localStorage.setItem('aera.account',JSON.stringify(a))}}}catch(e){}
+  try{renderCart()}catch(e){}}
+ catch(e){/* an old sign-in : the page refreshes it a moment later, so ask again */if(String(e.message)==='401'&&(n||0)<4)setTimeout(function(){load((n||0)+1)},2500)}}
+/* the server decides ; this browser's own "just used it" note still counts so it is never offered twice */
+var oUsed=window.foUsed,oAcc=window.foAccepted,oFo=window.renderFo;
+if(typeof oUsed==='function')window.foUsed=function(){if(!mine())return oUsed.apply(this,arguments);
+ try{if(typeof foKey==='function'&&foKey()&&localStorage.getItem(foKey()))return true}catch(e){}
+ return !!(WS.used||(WS.orders>0&&!WS.carry))};
+if(typeof oAcc==='function')window.foAccepted=function(){if(!mine())return oAcc.apply(this,arguments);return !!WS.claimed};
+function esc2(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function zh(){return document.documentElement.getAttribute('data-lang')==='zh'}
+function card(){var f=(typeof FO!=='undefined')?FO:{mode:'pct',pct:10,rm:0,minRm:0,cap:0};
+ var h=f.mode==='pct'?(f.pct+'% OFF'):('RM '+(+f.rm||0).toFixed(0)+' OFF'),t=[zh()?'首单优惠':'First Order Voucher'];
+ if(f.mode==='pct'&&f.cap>0)t.push(zh()?'最多减 RM '+(+f.cap).toFixed(0):'Up to RM '+(+f.cap).toFixed(0));
+ if(f.minRm>0)t.push(zh()?'餐点满 RM '+(+f.minRm).toFixed(0):'Meals of RM '+(+f.minRm).toFixed(0)+' or more');
+ return '<div class="wgco"><div class="wgco-k">'+(zh()?'新顾客见面礼':'Welcome Gifts For New Customers')+'</div>'+
+  '<div class="wgco-row"><div class="wgco-t"><b>'+esc2(h)+'</b><small>'+esc2(t.join(' · '))+'</small></div>'+
+  '<div class="wgco-t"><b>500 AP</b><small>'+(zh()?'AERA 积分 · 6 个月有效':'AERA Points · Valid for 6 Months')+'</small></div></div>'+
+  '<button type="button" class="wgco-b" onclick="aeraWgAccept()"'+(BUSY?' disabled':'')+'>'+(BUSY?(zh()?'领取中…':'Adding…'):(zh()?'领取我的见面礼':'Accept My Welcome Gifts'))+'</button>'+
+  (ERR?'<div class="wgco-e">'+esc2(ERR)+'</div>':'')+'</div>'}
+if(typeof oFo==='function')window.renderFo=function(){var r=oFo.apply(this,arguments);
+ try{var el=document.getElementById('foBox');if(el&&mine()&&!WS.claimed&&WS.new&&typeof count==='function'&&count()>0&&!(typeof ccOn==='function'&&ccOn())){el.classList.remove('fotap');el.onclick=null;el.innerHTML=card()}}catch(e){}
+ return r};
+window.aeraWgAccept=async function(){if(BUSY)return;BUSY=true;ERR='';try{renderFo()}catch(e){}
+ try{var h=(typeof FO!=='undefined'&&FO.mode==='pct')?(FO.pct+'%'):((typeof FO!=='undefined')?('RM '+(+FO.rm||0).toFixed(0)):'');
+  var j=await WG.rpc('claim_welcome_gift',{p_voucher:h+' off first order'});if(j&&j.ok===false)throw new Error(j.error||'Please try again');
+  WS.claimed=true;WS.eligible=!WS.used&&(WS.orders===0||WS.carry);
+  try{ACCT.welcome=true;var a=JSON.parse(localStorage.getItem('aera.account')||'null');if(a&&lc(a.email)===WS.em){a.welcome=true;localStorage.setItem('aera.account',JSON.stringify(a))}}catch(e){}
+  try{if(typeof FOON!=='undefined')FOON=true}catch(e){}
+  try{if(typeof apLookup==='function'&&ACCT)apLookup(ACCT.email)}catch(e){}}
+ catch(e){ERR=(String(e.message)==='401')?'Please Log In again':(e.message||'Please try again')}
+ BUSY=false;try{renderCart()}catch(e){}};
+var st=document.createElement('style');st.textContent=
+ '.wgco{border:2px solid #FDB913;border-radius:14px;padding:14px;background:#FFF8E1;font-family:Montserrat,system-ui,sans-serif;margin:10px 0}'+
+ '.wgco-k{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#16479E;margin-bottom:8px}'+
+ '.wgco-row{display:flex;gap:8px;margin-bottom:12px}.wgco-t{flex:1;background:#fff;border-radius:10px;padding:10px;border:1.5px solid #16479E}'+
+ '.wgco-t b{display:block;font-size:18px;font-weight:900;color:#16479E}.wgco-t small{display:block;font-size:11.5px;color:#5A6B87;margin-top:2px;line-height:1.35}'+
+ '.wgco-b{width:100%;height:46px;border-radius:999px;border:0;background:#FDB913;color:#0B0B0B;font:800 15px Montserrat,system-ui,sans-serif;cursor:pointer}'+
+ '.wgco-b[disabled]{opacity:.6}.wgco-e{margin-top:8px;color:#C0392B;font-size:12.5px;font-weight:700}';
+document.head.appendChild(st);
+function go(){load(0)}
+if(document.readyState==='complete')setTimeout(go,400);else addEventListener('load',function(){setTimeout(go,400)});
+addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&WG.email())load(0)});
+})();
+</script>
 <!-- AERA host map : start -->
 <script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
 (function(){
