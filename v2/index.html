@@ -460,7 +460,7 @@ function quick(){
  '#v2qp .bk{width:40px;height:40px;border-radius:12px;border:1px solid #CBD9F0;background:#fff;color:#16479E;font:800 18px/1 Montserrat,system-ui,sans-serif;flex:0 0 auto}'+
  '#v2qp .bk[disabled]{opacity:.3}'+
  '#v2qp .pg{flex:1;height:6px;border-radius:6px;background:#E3E8F2;overflow:hidden}#v2qp .pg i{display:block;height:100%;background:#FDB913;border-radius:6px;transition:width .3s ease}'+
- '#v2qp .cz{font-size:12px;font-weight:700;color:#16479E;white-space:nowrap;text-decoration:underline}'+
+ '#v2qp .cz{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 18px;border-radius:999px;background:#16479E;color:#FDB913;font:800 14px Montserrat,system-ui,sans-serif;white-space:nowrap;text-decoration:none;box-shadow:0 3px 10px rgba(11,28,54,.2)}#v2qp .bk{width:40px;height:40px}'+
  '#v2qp .qb{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:22px 16px 24px}'+
  '#v2qp .qi{max-width:560px;margin:0 auto}'+
  '#v2qp .st{font-size:11px;font-weight:800;letter-spacing:.14em;color:#16479E;text-transform:uppercase;margin:0 0 8px}'+
@@ -532,7 +532,7 @@ function quick(){
   else if(s==='avoid'){h='<h2>'+t('Anything you do not eat?')+'</h2><p class="sb">'+t('Tap all that apply. We leave them out of every Meal.')+'</p><div class="chips2"><button type="button" class="all'+(A.avoid.length?'':' on')+'" data-none="1">'+t('I eat everything')+'</button>'+
    AV.map(function(a){return '<button type="button" data-av="'+a[0]+'" class="'+(A.avoid.indexOf(a[0])>=0?'on':'')+'">'+t(a[1])+'</button>'}).join('')+'</div>'}
   var last=cur===fl.length-1;
-  W.innerHTML='<div class="qh"><button type="button" class="bk" data-back="1" aria-label="Back"'+(cur?'':' disabled')+'>←</button><div class="pg"><i style="width:'+((cur+1)/fl.length*100)+'%"></i></div><a class="cz" href="#" data-custom="1">'+t('Close')+'</a></div>'+
+  W.innerHTML='<div class="qh"><button type="button" class="bk" data-back="1" aria-label="Back"'+(cur?'':' disabled')+'>←</button><div class="pg"><i style="width:'+((cur+1)/fl.length*100)+'%"></i></div><a class="cz" href="#" data-custom="1">✕ '+t('Close')+'</a></div>'+
    '<div class="qb"><div class="qi"><p class="st">'+t('Quick Plan')+' · '+(cur+1)+' / '+fl.length+'</p>'+h+'</div></div>'+
    '<div class="qf"><button type="button" data-next="1"'+(ok()?'':' disabled')+'>'+(last?t('Build My Plan')+' ✦':t('Next')+' →')+'</button></div>';
   var qb=W.querySelector('.qb');if(qb)qb.scrollTop=0}
