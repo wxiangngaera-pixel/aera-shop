@@ -295,6 +295,22 @@
 </script></head>
 <body><p>AERA Motion Engine. Used by every AERA page. Do not delete.</p>
 <script type="text/plain" id="aera-motion-src">/*AERA-MOTION-START*/
+/* Peter 11th Nov 2026 : the no-Jump no-Flash cloak for the pages whose own HTML cannot be saved right now
+   ( Track My Order, Referrer Sign Up, Corporate, Privacy ). Same as the cloak in every other page's head :
+   the page waits a moment, white, then shows once, finished. Never longer than 1.8 s. Pages that carry their own cloak skip this. */
+(function(){try{if(window.__aeraCloak)return;if(!/^\/(track|referrer-signup|corporate|privacy)\/?$/.test(location.pathname||''))return;window.__aeraCloak=1;
+var D=document,H=D.documentElement,done=0,dcl=0,fon=0,last=0;
+var st=D.createElement('style');st.id='aera-cloak';st.textContent='html.aera-cloak body{opacity:0!important}html.aera-show body{opacity:1;transition:opacity .16s ease-out}';(D.head||H).appendChild(st);
+function now(){return (window.performance&&performance.now)?performance.now():Date.now()}
+function show(){if(done)return;done=1;H.classList.add('aera-show');H.classList.remove('aera-cloak');setTimeout(function(){H.classList.remove('aera-show')},300)}
+H.classList.add('aera-cloak');setTimeout(show,1800);
+try{new MutationObserver(function(){last=now()}).observe(H,{childList:true,subtree:true,attributes:true,attributeFilter:['class']})}catch(e){}
+function check(){if(done)return;if(dcl&&fon&&now()-last>=120){requestAnimationFrame(function(){requestAnimationFrame(show)})}else setTimeout(check,40)}
+function fonts(){try{var f=D.fonts;if(!f||!f.load){fon=1;return}Promise.all([f.load('400 16px Montserrat'),f.load('800 16px Montserrat')]).then(function(){fon=1},function(){fon=1});setTimeout(function(){fon=1},1200)}catch(e){fon=1}}
+function go(){dcl=1;last=now();fonts();check()}
+if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',function(){setTimeout(go,0)});else go();
+addEventListener('pageshow',function(e){if(e.persisted)show()});}catch(e){}})();
+
 /* AERA photos stay put : when a page redraws a list ( a tick, a count, a refresh ), the photos already on screen are kept and moved
    into the new drawing, so Safari never shows them blank while it decodes them again. That blank was the flashing in the apps. */
 (function(){try{if(window.__AERA_IMGKEEP)return;window.__AERA_IMGKEEP=1;var P=Element.prototype,D=Object.getOwnPropertyDescriptor(P,'innerHTML');if(!D||!D.set)return;
