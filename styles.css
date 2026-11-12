@@ -558,6 +558,8 @@ html[data-lang="zh"] .langsw .l1{background:transparent;color:var(--navy,#16479E
 html[data-lang="zh"] .langsw .l2{background:var(--navy,#16479E);color:#fff}
 @media(max-width:900px){.langsw span{padding:5px 7px;font-size:11px}}
 
+/* Peter 12th Nov 2026 15:00 : the page never jumps when a recipe changes inside the Meal Plan ( no scroll anchoring ) */html,body,*{overflow-anchor:none!important}
+
 #hub{padding:30px 0 56px}
 #hub .hubg+.hubg{margin-top:34px}
 #hub .hubg>.eyebrow{display:block;margin-bottom:14px}
