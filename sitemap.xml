@@ -2,17 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aeramealprep.net/motion/</loc>
-    <lastmod>2026-11-12T06:30:20.604Z</lastmod>
+    <lastmod>2026-11-12T06:49:51.882Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
+    <lastmod>2026-11-12T06:33:44.562Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://aeramealprep.net/meal-plan/</loc>
     <lastmod>2026-11-12T06:22:34.661Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/data/kitchen-list/</loc>
-    <lastmod>2026-11-12T06:13:06.701Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
