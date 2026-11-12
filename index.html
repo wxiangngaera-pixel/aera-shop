@@ -3416,5 +3416,33 @@ addEventListener('pagehide',send,true);document.addEventListener('visibilitychan
 setTimeout(function(){if(!sent){send();sent=false;EV=[];seen={'view|':1}}},45000);
 })();
 </script>
+<script id="aera-diag">/* Peter 12th Nov 2026 : TEMPORARY scroll recorder for the iPhone jump. Runs only after opening the page with ?diag=1. Writes what moved the page ( code place and time, no customer details ) to diag_scroll. Remove once the jump is fixed. */
+(function(){try{if(/[?&]diag=1/.test(location.search))sessionStorage.setItem('aera.diag','1');if(sessionStorage.getItem('aera.diag')!=='1')return}catch(e){return}
+var U='https://swpprjvubgcdsojapaad.supabase.co/rest/v1/rpc/aera_diag',K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0',S=Math.random().toString(36).slice(2,8),T0=Date.now(),Q=[],lastTouch=0,lastY=window.pageYOffset||0,dev=String(navigator.userAgent).replace(/^.*?\(([^)]*)\).*$/,'$1').slice(0,60);
+function st(){try{return String(new Error().stack||'').split('\n').slice(2,7).map(function(l){return l.replace(/https?:\/\/[^\s)]*\//g,'').trim()}).join(' < ').slice(0,320)}catch(e){return ''}}
+function log(w){if(Q.length<400)Q.push(((Date.now()-T0)/1000).toFixed(2)+'s y='+Math.round(window.pageYOffset||0)+' '+w)}
+function flush(){if(!Q.length)return;var b=Q.splice(0,60);try{fetch(U,{method:'POST',keepalive:true,headers:{apikey:K,Authorization:'Bearer '+K,'Content-Type':'application/json'},body:JSON.stringify({p_dev:dev,p_sess:S,p_rows:b})}).catch(function(){})}catch(e){}}
+setInterval(flush,2000);addEventListener('pagehide',flush);document.addEventListener('visibilitychange',function(){if(document.hidden)flush()});
+function nm(el){try{return String(el.id||el.className||el.tagName).slice(0,40)}catch(e){return '?'}}
+function wrap(win,tag){try{var o1=win.scrollTo;win.scrollTo=function(){log(tag+'.scrollTo '+JSON.stringify([].slice.call(arguments)).slice(0,90)+' | '+st());return o1.apply(this,arguments)};
+ var o2=win.scrollBy;win.scrollBy=function(){log(tag+'.scrollBy '+JSON.stringify([].slice.call(arguments)).slice(0,90)+' | '+st());return o2.apply(this,arguments)};
+ var P=win.Element.prototype,o3=P.scrollIntoView;P.scrollIntoView=function(){log(tag+'.scrollIntoView '+nm(this)+' | '+st());return o3.apply(this,arguments)};
+ var H=win.HTMLElement.prototype,o4=H.focus;H.focus=function(){log(tag+'.focus '+nm(this)+' | '+st());return o4.apply(this,arguments)};
+ var d=Object.getOwnPropertyDescriptor(win.Element.prototype,'scrollTop');if(d&&d.set)Object.defineProperty(win.Element.prototype,'scrollTop',{get:d.get,set:function(v){var D=win.document;if(this===D.documentElement||this===D.body||this===D.scrollingElement)log(tag+'.scrollTop='+v+' | '+st());return d.set.call(this,v)},configurable:true});
+}catch(e){log('wrap fail '+tag+' '+e)}}
+wrap(window,'home');
+function fing(){lastTouch=Date.now()}
+addEventListener('touchstart',fing,{passive:true,capture:true});addEventListener('touchmove',fing,{passive:true,capture:true});addEventListener('wheel',fing,{passive:true,capture:true});
+addEventListener('scroll',function(){var y=window.pageYOffset||0;if(Math.abs(y-lastY)>200&&Date.now()-lastTouch>600)log('JUMP '+Math.round(lastY)+' -> '+Math.round(y)+' ( no finger for '+(Date.now()-lastTouch)+' ms )');lastY=y},{passive:true});
+document.addEventListener('click',function(e){var t=e.target,b=(t.closest&&t.closest('button,a,summary,[onclick]'))||t;log('tap home: '+String(b.textContent||'').trim().slice(0,30))},true);
+setInterval(function(){[].forEach.call(document.querySelectorAll('iframe'),function(f){var w;try{w=f.contentWindow;if(!w||!w.document||w.location.href==='about:blank'||w.__diagW)return}catch(e){return}
+ w.__diagW=1;log('frame ready '+f.id+' '+w.location.pathname+' h='+f.style.height+' state='+w.document.readyState);wrap(w,f.id||'frame');
+ try{w.addEventListener('touchstart',fing,{passive:true,capture:true});w.addEventListener('touchmove',fing,{passive:true,capture:true});var iy=0;w.addEventListener('scroll',function(){var y=w.pageYOffset||0;if(Math.abs(y-iy)>80)log(f.id+' INNER scroll '+Math.round(iy)+' -> '+Math.round(y));iy=y},{passive:true});
+  w.document.addEventListener('click',function(e){var t=e.target,b=(t.closest&&t.closest('button,a,summary,[onclick]'))||t;log('tap '+f.id+': '+String(b.textContent||'').trim().slice(0,30))},true);w.addEventListener('error',function(e){log(f.id+' ERROR '+String(e.message).slice(0,120))})}catch(e){}
+ if(!f.__diagRO&&window.ResizeObserver){f.__diagRO=1;var lh=null;new ResizeObserver(function(){if(f.style.height!==lh){log(f.id+' height '+lh+' -> '+f.style.height);lh=f.style.height}}).observe(f)}
+})},120);
+log('start '+location.pathname+location.search+' screen '+innerWidth+'x'+innerHeight);
+})();
+</script>
 </body>
 </html>
