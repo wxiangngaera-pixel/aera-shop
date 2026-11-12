@@ -16,6 +16,8 @@ html[data-lang="zh"] .langsw .l2{background:#fff;color:#16479E}
 
 /* Peter 12th Nov 2026 14:15 : no Day Total card inside each Meal card ( the Day Total stays in the top bar ), so the Bento Box sits right under the Meal's macro numbers ( v2 ) */#planCal .mbento .v2mac > .dl{display:none!important}
 
+/* Peter 12th Nov 2026 15:55 : the − / + buttons beside each Macro bar are removed ( the bars and numbers stay ) */#planCal .brow > button{display:none!important}#planCal .brow{gap:0!important}#planCal .brow .bar{flex:1 1 auto!important;width:100%!important}
+
 /* Peter 12th Nov 2026 15:00 : the page never jumps when a recipe changes ( no scroll anchoring ), and the Edit window has its blue frame here too */html,body,*{overflow-anchor:none!important}#v2tapS{background:rgba(11,28,54,.12)!important}#v2tapS .in{border:2px solid #16479E!important;border-radius:22px!important;margin:0 auto 8px!important;max-width:504px!important;width:calc(100% - 16px)!important;box-shadow:0 -14px 40px rgba(11,28,54,.38),0 -2px 8px rgba(11,28,54,.18)!important}
 
 /* Plan buttons : AERA navy with yellow wording, and a little pop when tapped */
