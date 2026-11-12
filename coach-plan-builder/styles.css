@@ -213,3 +213,5 @@ pre.sheet{margin:0;padding:14px;background:var(--sunk);border:1px solid var(--li
 .foot{margin-top:30px;font-size:13.5px;color:var(--ink3)}
 .foot a{color:var(--ink2)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* Peter 12th Nov 2026 15:05 : the page never jumps when content above changes ( no scroll anchoring ) */html,body,*{overflow-anchor:none!important}
