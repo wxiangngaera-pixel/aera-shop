@@ -1192,7 +1192,7 @@ D.addEventListener('pointerover',pwarm,true);D.addEventListener('touchstart',pwa
 function dropCls(b,tray){try{return tray&&b.offsetTop>tray.offsetHeight*.3?'sx30-dropr':'sx30-drop'}catch(e){return 'sx30-drop'}}
 /* foods without a pour clip : the food photo is broken into bite-size pieces that fall in from above the tray
    ( over any compartment in between, with a shadow ) and land where they belong, then the full photo settles in */
-function ppour(mb,tray,b,u,d){if(!u||!b.offsetWidth||!tray.offsetWidth)return false;
+function ppour(mb,tray,b,u,d){if(!u||!b.offsetWidth||!tray.offsetWidth)return false;/* Peter 12th Nov 2026 : iPhones did not draw the falling pieces ( the compartment went black, then the food just appeared ), so there the food's own picture drops into its compartment instead */try{if((/iP(hone|ad|od)/.test(navigator.userAgent||'')||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)))return false}catch(e){}
  var L=tray.offsetLeft+b.offsetLeft,T=tray.offsetTop+b.offsetTop,w=b.offsetWidth,h=b.offsetHeight,im=new Image(),ok=false,pcs=[];
  if(b._pp){try{b._pp()}catch(e){}}b.style.visibility='hidden';
  function show(drop){b._pp=null;b.style.visibility='';pcs.forEach(function(p){p.style.transition='opacity .2s';p.style.opacity='0';setTimeout(function(){if(p.parentNode)p.parentNode.removeChild(p)},240)});
@@ -1316,7 +1316,7 @@ function bentoDrop(){if(!$('.mbento')&&!$('#planCal'))return;var MEM={};
  function scan(first){$$('.mbento').forEach(function(mb,i){var card=mb.closest('.mcard'),panel=mb.closest('.dpanel'),pi=panel?$$('.dpanel').indexOf(panel):0,ci=card&&panel?$$('.mcard',panel).indexOf(card):i,key=pi+':'+ci,prev=MEM[key],now={},n=0,tray=$('.bento',mb);
   $$('.bento > b',mb).forEach(function(b){var c=dress(b),k=b.className.replace(/\bsx30-(dropr|drop|cut)\b/g,'').trim(),u=url(b);now[k]=u;
    if(!first&&prev&&u&&prev[k]!==u&&!b.classList.contains('empty')){var d=n++*160;
-    if(c&&tray){fall(mb,tray,b,c,d)}
+    if(c&&tray&&!(/iP(hone|ad|od)/.test(navigator.userAgent||'')||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1))){fall(mb,tray,b,c,d)}
     else if(tray&&pour(mb,tray,b,u,d)){}
     else if(tray&&ppour(mb,tray,b,u,d)){}
     else{var dc=dropCls(b,tray);b.classList.remove('sx30-drop','sx30-dropr');void b.offsetWidth;b.style.animationDelay=d+'ms';b.classList.add(dc);setTimeout(function(){b.classList.remove(dc);b.style.animationDelay=''},860+d)}}});
