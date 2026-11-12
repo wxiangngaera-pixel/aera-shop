@@ -805,9 +805,10 @@ function tapDemo(){if(window.__AERA_CONSOLE||/[?&]console=1/.test(location.searc
   b.addEventListener('click',function(){var k=which();if(k)play(k)});D.body.appendChild(b)}
  function quiet(){try{if(window.AERATOUR&&!window.AERATOUR.__v2){window.AERATOUR.__v2=1;window.AERATOUR.stop&&window.AERATOUR.stop(false);window.AERATOUR.seen=function(){return true};window.AERATOUR.auto=function(){};window.AERATOUR.start=function(){var k=which();if(k&&!seen(k))setTimeout(function(){play(k)},300)}}}catch(e){}}
  function busy(){var a=D.activeElement;return !!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))||D.body.classList.contains('v2qp-on')||!!D.querySelector('#v2adj.on,#v2sheet.on,.modal')}
+ /* Peter 12th Nov 2026 : no demo inside a frame ( the Homepage Meal Plan, the Console ) : there its dark cover caught every tap, its Stop button sat far below the screen and each step scrolled the whole Homepage */var FR=false;try{FR=window.top!==window}catch(e){FR=true}
  ready(function(){btn();quiet();var n=0,iv=setInterval(function(){n++;quiet();
-  var b=D.getElementById('v2help');if(b){var k0=which();b.style.display=k0?'':'none'}
-  if(W||busy())return;var k=which();if(!k||seen(k))return;
+  var b=D.getElementById('v2help');if(b){var k0=which();b.style.display=k0&&!FR?'':'none'}
+  if(W||busy()||FR)return;var k=which();if(!k||seen(k))return;
   if(k==='checkout'){var ln=D.getElementById('lines');if(!ln||/empty/i.test(ln.textContent))return}
   if(n>=8)play(k)},500)})}
 
