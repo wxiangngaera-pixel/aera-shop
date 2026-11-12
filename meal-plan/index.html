@@ -100,8 +100,9 @@ if(/(^|\.)my\.chatbees\.io$/i.test(location.hostname))return;
 var v=L.getItem('aera.motion.v')||'',U='https://aeramealprep.net/motion/'+(v?'?v='+v:''),A='/*AERA-MOTION-START*/',B='/*AERA-MOTION-END*/';
 function cut(t){var a=t.indexOf(A),b=t.indexOf(B);return a<0||b<a?'':t.slice(a,b)}
 var c=L.getItem('aera.motion.code')||'',cv=L.getItem('aera.motion.cv');
-if(c&&cv===v){(new Function(c))();setTimeout(function(){try{fetch(U,{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var k=cut(t);if(k&&k!==c)L.setItem('aera.motion.code',k)})}catch(e){}},4000);return}
-var x=new XMLHttpRequest();x.open('GET',U,false);x.send(null);if(x.status!==200)return;var k=cut(x.responseText);if(!k)return;
+/* Peter 12th Nov 2026 14:05 : a link with ?v= ( Peter's test links ) always loads the newest motion code straight away, so a change shows on the first visit */var FRS=false;try{FRS=/[?&]v=/.test(location.search+(window.top!==window?window.top.location.search:''))}catch(e){}
+if(c&&cv===v&&!FRS){(new Function(c))();setTimeout(function(){try{fetch(U,{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var k=cut(t);if(k&&k!==c)L.setItem('aera.motion.code',k)})}catch(e){}},4000);return}
+var x=new XMLHttpRequest();x.open('GET',FRS?U+(U.indexOf('?')<0?'?':'&')+'t='+Date.now():U,false);x.send(null);if(x.status!==200)return;var k=cut(x.responseText);if(!k)return;
 try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 (new Function(k))();}catch(e){}})();</script>
 <!-- AERA host redirect : start -->
