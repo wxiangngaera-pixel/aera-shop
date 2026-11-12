@@ -14,6 +14,8 @@
 html[data-lang="zh"] .langsw .l1{background:transparent;color:inherit}
 html[data-lang="zh"] .langsw .l2{background:#fff;color:#16479E}
 
+/* Peter 12th Nov 2026 14:15 : no Day Total card inside each Meal card ( the Day Total stays in the top bar ), so the Bento Box sits right under the Meal's macro numbers */#planCal .mbento .v2mac > .dl{display:none!important}
+
 /* Plan buttons : AERA navy with yellow wording, and a little pop when tapped */
 .planacts .btn{background:var(--navy)!important;color:var(--y)!important;border-color:var(--navy)!important;box-shadow:none!important;transition:transform .18s ease}
 .planacts .btn:hover{filter:brightness(1.12)}
