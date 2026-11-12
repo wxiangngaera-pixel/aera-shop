@@ -473,12 +473,9 @@ function KC_SHIM(URL_,ANON_,KEY_){
   want.forEach(function(id){if(out[id]===undefined)nh[id]=undefined});
   try{KIDB.set(key,{m:out,h:nh,at:Date.now()})}catch(e){}
   return out}
- /* Peter 11th Nov 2026 : a data refresh keeps the reader's place ( Redmi Pad jumps ) */
-['touchstart','touchmove','wheel','keydown','pointerdown'].forEach(function(t){addEventListener(t,function(){window.__kcIn=Date.now()},{passive:true,capture:true})});
-function emit(c){var o=cc(c);if(o.t)return;o.t=setTimeout(function(){o.t=0;var y0=pageYOffset;
+ function emit(c){var o=cc(c);if(o.t)return;o.t=setTimeout(function(){o.t=0;
   var s=snapColl(o.m);o.ls.slice().forEach(function(f){try{f(s)}catch(e){console.error(e)}});
-  Object.keys(o.dls).forEach(function(id){(o.dls[id]||[]).slice().forEach(function(f){try{f(snapDoc(id,o.m[id]))}catch(e){console.error(e)}})});
-  requestAnimationFrame(function(){if(y0>0&&Math.abs(pageYOffset-y0)>160&&Date.now()-(window.__kcIn||0)>800)scrollTo(0,y0)})},30)}
+  Object.keys(o.dls).forEach(function(id){(o.dls[id]||[]).slice().forEach(function(f){try{f(snapDoc(id,o.m[id]))}catch(e){console.error(e)}})})},30)}
  function local(c,id,data){var o=cc(c);if(!o.ready&&!o.ls.length&&!Object.keys(o.dls).length)return;if(data==null)delete o.m[id];else o.m[id]=data;emit(c)}
  async function load(c){var o=cc(c);if(o.ready)return o;if(!o.loading)o.loading=fetchColl(c).then(function(m){o.m=m;o.ready=true;o.loading=null;return o},function(e){o.loading=null;throw e});return o.loading}
  async function reloadAll(){Object.keys(C).forEach(function(c){var o=C[c];if(!o.ready)return;fetchColl(c).then(function(m){o.m=m;emit(c)}).catch(function(){})})}
