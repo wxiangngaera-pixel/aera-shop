@@ -38,3 +38,5 @@ input:focus,select:focus{outline:2px solid rgba(22,71,158,.25);border-color:var(
 html{background:#16479E}
 .kc-bar{height:8px;background:#EEF1F6;border-radius:99px;overflow:hidden;margin-top:10px}
 .kc-bar i{display:block;height:100%;width:0;background:var(--navy);transition:width .2s}
+
+/* Peter 12th Nov 2026 15:05 : the page never jumps when content above changes ( no scroll anchoring ) */html,body,*{overflow-anchor:none!important}
