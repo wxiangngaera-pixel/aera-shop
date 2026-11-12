@@ -295,6 +295,47 @@
 </script></head>
 <body><p>AERA Motion Engine. Used by every AERA page. Do not delete.</p>
 <script type="text/plain" id="aera-motion-src">/*AERA-MOTION-START*/
+/* Peter 12th Nov 2026 16:40 : AERA house text style, on every AERA page ( the same rules as Furniture Build ) :
+   the first letter of each sentence in Uppercase ; brackets spaced "( xxx )" ; grams "g", kilograms "KG", litres "ℓ", millilitres "mℓ" ;
+   Order, Delivery Address, Email, Calories, Macros, Phone Number, Address, Protein, Carbs, Fat, Cart, Checkout, Meal / Meals, Food, Item,
+   MAP Bento Box, Vacuum Packed and the other everyday nouns and verbs start with an Uppercase letter ; every button starts each word in
+   Uppercase ( small words such as "to", "a", "of", "and" stay lowercase, so "Add to Cart" ). Typed boxes and what customers typed are never touched. */
+(function(){try{if(window.__aeraText)return;window.__aeraText=1;
+var D=document;
+var SMALL={a:1,an:1,the:1,to:1,of:1,and:1,or:1,'for':1,'in':1,on:1,at:1,by:1,'with':1,per:1,from:1,as:1,via:1,vs:1,x:1};
+var WORDS=['delivery address','phone number','map bento box','vacuum packed','order','orders','email','calories','calorie','macros','macro','address','protein','proteins','carbs','carb','fat','cart','checkout','meals','meal','food','foods','item','items',
+ 'plan','plans','day','days','week','weeks','dish','dishes','recipe','recipes','portion','portions','vegetable','vegetables','sauce','sauces','garnish','garnishes','target','targets','goal','goals','price','total','subtotal','payment','pay','delivery','pick-up','pickup','voucher','vouchers','points','account','sign in','sign out','log in','log out','change','edit','remove','add','save','send','choose','select','continue','back','next','done','close','cancel','confirm','update','delete','duplicate','adjust','undo','buy','order now','view','open','share','copy','print','download','search','find','reset','apply','submit','packaging','bundle','bundles','box','boxes','tray','compartment','weight','raw','cooked','name','client','clients','coach','coaches','referrer','fridge','kitchen','menu','preferences','answers','breakfast','lunch','dinner','snack','snacks','time','date','note','notes','bag','bags','picture','photo','list','step','steps','tap','pick','picks','look','check','trim','use','build','fill','keep','start','type','cook','cooks','deliver','eat','drink','assistant','variety','sign up','register','login','password','phone','number','city','postcode','state','discount','fee','fees','shipping','summary','review','reviews','bowl','plate','serving','servings','ingredient','ingredients','body','height','age','gender','activity','results','result','report','report','settings','language','home','shop','store','merchandise','referral','sale','sales','gym','gyms','team','staff','driver','drivers','route','routes','stock','batch','label','labels','docket','prep','pack','packed','ticket','tickets'];
+WORDS.sort(function(a,b){return b.length-a.length});
+var WRE=new RegExp('(^|[^A-Za-z0-9@./_-])('+WORDS.map(function(w){return w.replace(/[-]/g,'\\-').replace(/ /g,'\\s+')}).join('|')+')(?![A-Za-z0-9@_]|\\.[A-Za-z])','gi');
+function cap(w){return w.replace(/(^|\s|-)([a-z])/g,function(m,a,b){return a+b.toUpperCase()})}
+function fixWords(t){return t.replace(WRE,function(m,pre,w){var lw=w.toLowerCase().replace(/\s+/g,' ');if(lw==='map bento box')return pre+'MAP Bento Box';return pre+cap(w)})}
+function fixUnits(t){
+ t=t.replace(/(\d)\s?G\b/g,'$1 g');
+ t=t.replace(/(\d)\s?(kg|Kg|kgs|KGs)\b/g,'$1 KG').replace(/\bkg\b/g,'KG');
+ t=t.replace(/(\d)\s?(ml|mL|ML|millilitres?|milliliters?)\b/g,'$1 mℓ');
+ t=t.replace(/(\d)\s?(l|L|litres?|liters?|Litres?|Liters?)\b(?![\w'])/g,'$1 ℓ');
+ return t}
+function fixBrackets(t){return t.replace(/\(\s*(?=\S)/g,'( ').replace(/(\S)\s*\)/g,'$1 )').replace(/\(\s+\)/g,'()')}
+function fixSentences(t,start){t=t.replace(/([.!?]\s+)([a-z])/g,function(m,a,b){return a+b.toUpperCase()});if(start)t=t.replace(/^(\s*[^A-Za-z0-9]{0,3})([a-z])/,function(m,a,b){return a+b.toUpperCase()});return t}
+function fixDash(t){return t.replace(/(—\s*)([a-z])/g,function(m,a,b){return a+b.toUpperCase()})}
+function btnCase(t){return t.replace(/[A-Za-z][A-Za-z']*/g,function(w,i,s){var lw=w.toLowerCase();if(/\d\s?$/.test(s.slice(Math.max(0,i-3),i))&&/^(g|kcals?|x|pcs?|mm|cm|ft|inch)$/i.test(w))return w;if(i>0&&SMALL[lw])return lw;if(w!==lw)return w;return w.charAt(0).toUpperCase()+w.slice(1)})}
+var SKIP='script,style,textarea,input,code,pre,noscript,svg,[contenteditable],[contenteditable=""],[contenteditable="true"],.notranslate,[data-raw],[data-user],.aera-raw';
+var BTN='button,[role="button"],.btn,a.btn,summary,label.chip,.chip,.pill';
+var BLOCK=/^(P|DIV|LI|TD|TH|H1|H2|H3|H4|H5|H6|BUTTON|LABEL|SUMMARY|DT|DD|SECTION|ARTICLE|SPAN|SMALL|B|STRONG|EM|I|A|OPTION)$/;
+function isStart(n){var p=n.previousSibling;while(p){if(p.nodeType===3&&/\S/.test(p.nodeValue))return false;if(p.nodeType===1&&p.textContent&&/\S/.test(p.textContent)&&!/^(BR)$/.test(p.tagName))return false;p=p.previousSibling}var e=n.parentElement;return !!(e&&BLOCK.test(e.tagName))}
+function one(n){var e=n.parentElement;if(!e)return;try{if(e.closest(SKIP))return}catch(x){return}
+ var t=n.nodeValue;if(!t||!/[A-Za-z(]/.test(t))return;if(/[@]|https?:|www\./.test(t))return;
+ var o=t;t=fixUnits(t);t=fixBrackets(t);t=fixWords(t);t=fixDash(t);t=fixSentences(t,isStart(n));
+ try{if(e.closest(BTN))t=btnCase(t)}catch(x){}
+ if(t!==o){n.__aeraT=1;n.nodeValue=t}}
+function walk(root){if(!root)return;if(root.nodeType===3){one(root);return}if(root.nodeType!==1)return;try{if(root.closest&&root.closest(SKIP))return}catch(x){}
+ var w=D.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),n,l=[];while((n=w.nextNode()))l.push(n);for(var i=0;i<l.length;i++)one(l[i]);
+ [].forEach.call(root.querySelectorAll?root.querySelectorAll('input[type=button],input[type=submit],[placeholder]'):[],function(el){try{if(el.type==='button'||el.type==='submit'){var v=el.value;if(v)el.value=btnCase(fixBrackets(v))}}catch(x){}})}
+var Q=[],T=0;function flush(){T=0;var l=Q;Q=[];for(var i=0;i<l.length;i++)walk(l[i])}
+function start(){walk(D.body);new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){var m=ms[i];if(m.type==='characterData'){if(m.target.__aeraT){m.target.__aeraT=0;continue}Q.push(m.target)}else for(var j=0;j<m.addedNodes.length;j++)Q.push(m.addedNodes[j])}if(Q.length&&!T)T=setTimeout(flush,0)}).observe(D.body,{childList:true,subtree:true,characterData:true})}
+if(D.body)start();else D.addEventListener('DOMContentLoaded',start);
+}catch(e){}})();
+
 /* Peter 11th Nov 2026 : the no-Jump no-Flash cloak for the pages whose own HTML cannot be saved right now
    ( Track My Order, Referrer Sign Up, Corporate, Privacy ). Same as the cloak in every other page's head :
    the page waits a moment, white, then shows once, finished. Never longer than 1.8 s. Pages that carry their own cloak skip this. */
