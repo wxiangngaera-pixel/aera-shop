@@ -1331,6 +1331,82 @@ function ddPlace(){var D=document,old=D.getElementById('ddp');if(old)old.remove(
 function ddOpen(mi,ii,cat){if(DD&&DD.m===mi&&DD.i===ii&&DD.cat===cat){ddClose();return}
  DD={m:mi,i:ii,cat:cat,sub:'',cl:cur().id,day:DAY};ddPlace()}
 function ddClose(){DD=null;ddPlace()}
+/* Peter 12th Nov 2026 15:40 : the Coach Plan edits a dish the same way as the Personalised Meal Plan : tap a food ( in the Bento Box or its row ) and the framed Edit window opens ( Portion, Change Item, Remove Item, Done ) ; the pour-in plays after Done */
+(function(){
+var D=document,ED=null;
+function q(s,r){return (r||D).querySelector(s)}
+function css(){if(q('#cpEditCss'))return;var s=D.createElement('style');s.id='cpEditCss';s.textContent=
+'#v2tapS{position:fixed;inset:0;z-index:2147480000;display:none;align-items:flex-end;justify-content:center;background:rgba(11,28,54,.12)}'+
+'#v2tapS.on{display:flex}'+
+'#v2tapS .in{background:#fff;border:2px solid #16479E;border-radius:22px;margin:0 auto 8px;max-width:504px;width:calc(100% - 16px);max-height:80vh;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;box-shadow:0 -14px 40px rgba(11,28,54,.38),0 -2px 8px rgba(11,28,54,.18);padding:16px 16px 14px;color:#0B1C36;box-sizing:border-box}'+
+'#v2tapS .ceh{display:flex;align-items:center;gap:12px;margin-bottom:10px}'+
+'#v2tapS .cet{width:52px;height:52px;border-radius:12px;background:#eef1f6 center/cover no-repeat;flex:0 0 52px}'+
+'#v2tapS .cen{flex:1;font-weight:800;font-size:17px;line-height:1.25}'+
+'#v2tapS .cex{background:#16479E;color:#fff;border:0;border-radius:999px;padding:7px 14px;font-weight:800;font-size:13px;cursor:pointer}'+
+'#v2tapS .cec{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}'+
+'#v2tapS .cec span{border:2px solid #16479E;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;color:#16479E}'+
+'#v2tapS .cec span b{color:#0B1C36}'+
+'#v2tapS .cec .k{background:#16479E;color:#FDB913}#v2tapS .cec .k b{color:#FDB913}'+
+'#v2tapS .cec .rm{background:#FDB913;border-color:#FDB913;color:#0B1C36}'+
+'#v2tapS .cel{font-size:11px;font-weight:800;letter-spacing:.08em;color:#5b6b85;text-transform:uppercase;margin:6px 0 6px}'+
+'#v2tapS .cep{display:flex;align-items:center;justify-content:center;gap:0;margin:0 auto 12px;max-width:220px;border:2px solid #16479E;border-radius:12px;overflow:hidden}'+
+'#v2tapS .cep button{width:44px;height:42px;border:0;background:#fff;color:#16479E;font-size:22px;font-weight:800;cursor:pointer}'+
+'#v2tapS .cep input{flex:1;min-width:0;height:42px;border:0;text-align:center;font-size:19px;font-weight:800;color:#0B1C36;outline:0}'+
+'#v2tapS .cepl{display:block;text-align:center;font-size:10.5px;font-weight:800;letter-spacing:.06em;color:#16479E;margin-bottom:4px}'+
+'#v2tapS .ceb{display:flex;align-items:center;gap:10px;width:100%;border:2px solid #16479E;border-radius:12px;background:#fff;padding:8px 10px;font-weight:700;font-size:14px;color:#0B1C36;cursor:pointer;text-align:left;margin-bottom:12px}'+
+'#v2tapS .ceb i{width:40px;height:40px;border-radius:8px;background:#eef1f6 center/cover no-repeat;flex:0 0 40px}'+
+'#v2tapS .ceb em{margin-left:auto;font-style:normal;color:#16479E}'+
+'#v2tapS .cef{display:flex;gap:10px}'+
+'#v2tapS .cef button{flex:1;height:46px;border:0;border-radius:999px;font-weight:800;font-size:15px;cursor:pointer}'+
+'#v2tapS .cer{background:#16479E;color:#FDB913}#v2tapS .ced{background:#FDB913;color:#0B1C36}'+
+'#v2tapS .cels{max-height:46vh;overflow:auto;overscroll-behavior:contain;margin:0 0 12px;border-top:1px solid #e3e8f0}'+
+'#v2tapS .celi{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid #eef1f6;cursor:pointer}'+
+'#v2tapS .celi.on{background:#eef3fc}'+
+'#v2tapS .celi i{width:48px;height:40px;border-radius:8px;background:#eef1f6 center/cover no-repeat;flex:0 0 48px}'+
+'#v2tapS .celi b{display:block;font-size:13.5px;color:#16479E}'+
+'#v2tapS .celi small{display:block;font-size:11px;color:#5b6b85}'+
+'#v2tapS .cehd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-weight:800;color:#16479E}';
+D.head.appendChild(s)}
+function sheet(){var s=q('#v2tapS');if(!s){s=D.createElement('div');s.id='v2tapS';s.innerHTML='<div class="in" role="dialog" aria-modal="true"></div>';D.body.appendChild(s);
+ s.addEventListener('click',onClick);s.addEventListener('change',onChange)}return s}
+function cur2(){try{var m=day().meals[ED.m],it=m&&m.items[ED.i];return{m:m,it:it,r:it&&BYCODE[it.code]}}catch(e){return{}}}
+function bg(r){return r&&r.img?'background-image:url('+esc(r.img)+')':''}
+function render(){var s=sheet(),c=cur2();if(!c.it||!c.r){close();return}
+ var r=c.r,it=c.it,x=per(r,rawOf(it).g),h='';
+ if(ED.list){var list=ddList(r.cat,ED.m,ED.i);list=[r].concat(list.filter(function(z){return z.code!==r.code}));
+  h='<div class="cehd"><span>Change This Item</span><button type="button" class="cex" data-ce="back">Done</button></div><div class="cels">'+
+   list.map(function(z){var k=per(z,100);return '<div class="celi'+(z.code===r.code?' on':'')+'" data-code="'+esc(z.code)+'"><i style="'+bg(z)+'"></i><span><b>'+esc(z.name)+'</b><small>'+Math.round(k.kcal)+' KCALs · Protein '+r1(k.p)+' · Carbs '+r1(k.c)+' · Fat '+r1(k.f)+' per 100 g</small></span></div>'}).join('')+'</div>';
+ }else{
+  h='<div class="ceh"><i class="cet" style="'+bg(r)+'"></i><div class="cen">'+esc(r.name)+'</div><button type="button" class="cex" data-ce="close">&times; Close</button></div>'+
+   '<div class="cec"><span class="k"><b>'+Math.round(x.kcal)+'</b> KCALs</span><span>Protein <b>'+r1(x.p)+' g</b></span><span>Carbs <b>'+r1(x.c)+' g</b></span><span>Fat <b>'+r1(x.f)+' g</b></span><span class="rm">'+rm(x.price)+'</span></div>'+
+   '<div class="cel">Portion</div><span class="cepl">'+(bOf(it)==='raw'?'RAW WEIGHT':'COOKED WEIGHT')+'</span>'+
+   '<div class="cep"><button type="button" data-ce="minus" aria-label="Less">&minus;</button><input type="number" inputmode="numeric" min="0" step="10" value="'+(+it.g||0)+'" data-ce="g" aria-label="Weight in grams"><button type="button" data-ce="plus" aria-label="More">+</button></div>'+
+   '<div class="cel">Change Item</div><button type="button" class="ceb" data-ce="list"><i style="'+bg(r)+'"></i>'+esc(r.name)+'<em>&#9662;</em></button>'+
+   '<div class="cef"><button type="button" class="cer" data-ce="remove">Remove Item</button><button type="button" class="ced" data-ce="close">Done</button></div>'}
+ q('.in',s).innerHTML=h;s.classList.add('on');D.documentElement.classList.add('cp-edit-open')}
+function setG(g){var c=cur2();if(!c.it)return;g=Math.max(0,Math.round(+g||0));if(g===(+c.it.g||0))return;mark();c.it.g=g;save();paint();render()}
+function onClick(e){var s=q('#v2tapS');if(e.target===s){close();return}
+ var li=e.target.closest('.celi');if(li){var c=cur2(),code=li.getAttribute('data-code');if(c.it&&code&&code!==c.it.code){mark();c.it.code=code;save();paint()}ED.list=false;render();return}
+ var b=e.target.closest('[data-ce]');if(!b)return;var a=b.getAttribute('data-ce'),c2=cur2();
+ if(a==='close')close();
+ else if(a==='back'){ED.list=false;render()}
+ else if(a==='list'){ED.list=true;render()}
+ else if(a==='minus'&&c2.it)setG((+c2.it.g||0)-10);
+ else if(a==='plus'&&c2.it)setG((+c2.it.g||0)+10);
+ else if(a==='remove'&&c2.m){mark();c2.m.items.splice(ED.i,1);save();paint();close()}}
+function onChange(e){if(e.target.getAttribute('data-ce')==='g')setG(e.target.value)}
+function close(){ED=null;var s=q('#v2tapS');if(s){s.classList.remove('on');q('.in',s).innerHTML=''}D.documentElement.classList.remove('cp-edit-open')}
+function open(mi,ii){css();ED={m:mi,i:ii,list:false};try{if(typeof DD!=='undefined'&&DD)ddClose()}catch(e){}render()}
+/* which item a compartment of the Bento Box is */
+function itemOf(mb,cell){var meal=mb.closest('.meal');if(!meal)return null;var meals=[].slice.call(D.querySelectorAll('#dayPanel .meal')),mi=meals.indexOf(meal);if(mi<0)return null;
+ var m=day().meals[mi];if(!m)return null;var cl=cell.className||'',cat=/\bpro\b/.test(cl)?'p':/\bcrb\b/.test(cl)?'c':/\bveg\b/.test(cl)?'v':'',n=(/\bh2\b|\bw2\b/.test(cl))?1:0;if(!cat)return null;
+ var k=-1;for(var j=0;j<m.items.length;j++){var r=BYCODE[m.items[j].code];if(r&&r.cat===cat){k++;if(k===n)return[mi,j]}}return null}
+D.addEventListener('click',function(e){var t=e.target;if(!t.closest||t.closest('#v2tapS'))return;
+ var row=t.closest('#dayPanel .row');if(row&&t.closest('.thumb, .nm')){var mi=+row.dataset.m,ii=+row.dataset.i,it=day().meals[mi]&&day().meals[mi].items[ii];if(it&&BYCODE[it.code]){e.preventDefault();e.stopPropagation();open(mi,ii)}return}
+ var cell=t.closest('#dayPanel .mbento .bento > *');if(cell){var mb=cell.closest('.mbento'),ix=itemOf(mb,cell);if(ix){e.preventDefault();e.stopPropagation();open(ix[0],ix[1])}}},true);
+D.addEventListener('keydown',function(e){if(e.key==='Escape'&&ED)close()});
+})();
+
 function ddPick(code){var r=BYCODE[code];if(!r||!DD)return;var m=day().meals[DD.m];if(!m)return ddClose();
  mark();
  if(DD.i!=null&&m.items[DD.i])m.items[DD.i].code=r.code;
@@ -2569,6 +2645,23 @@ setTimeout(function(){try{var b=document.body,txt=b?(b.innerText||'').replace(/\
 addEventListener('load',function(){setTimeout(function(){try{var n=performance.getEntriesByType('navigation')[0],s=n?n.loadEventEnd/1000:0;if(s>8)add('slow',s,'loaded in '+Math.round(s)+' s')}catch(e){}},0)});
 addEventListener('pagehide',send,true);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')send()});
 setTimeout(function(){if(!sent){send();sent=false;EV=[];seen={'view|':1}}},45000);
+})();
+</script>
+<script id="aera-coach-pour">
+/* Peter 12th Nov 2026 15:45 : the AI pour-in on the Coach Plan, the same as the Personalised Meal Plan. Each time a Coach changes a Protein, Carb or Vegetable, its food falls into its compartment ( after the Edit window closes ).
+   Only this part of the AERA Motion Engine runs, exactly as on the Meal Plan page. */
+(function(){if(window.__aeraPour)return;window.__aeraPour=1;
+try{if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return}catch(e){return}
+var A='/* personalised meal plan : each food',B='var started=false;';
+var OBS="scan(true);var q=0;new MutationObserver(function(){if(q)return;q=setTimeout(function(){q=0;try{scan(false)}catch(e){}},30)}).observe(D.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style']})";
+var NOW="scan(true);var z=0;new MutationObserver(function(){if(++z>3)return;if(z===1)setTimeout(function(){z=0},0);try{scan(false)}catch(e){}}).observe(D.getElementById('dayPanel')||D.body,{childList:true,subtree:true})";
+function seg(t){var a=t.indexOf(A),b=t.indexOf(B,a);if(a<0||b<0)return '';var s=t.slice(a,b);if(s.indexOf(OBS)<0)return '';
+ return s.split(OBS).join(NOW).split("scan(first){$$('.mbento')").join("scan(first){$$('#dayPanel .mbento')").split("pi=panel?$$('.dpanel')").join("pi=panel?$$('#dayPanel .dpanel')")}
+var pre='var D=document,W=window,H=D.documentElement;function $(s,r){return (r||D).querySelector(s)}function $$(s,r){return [].slice.call((r||D).querySelectorAll(s))}function anim(el,kf,o){try{return el.animate(kf,o)}catch(e){return null}}function safe(f){return function(){try{return f.apply(this,arguments)}catch(e){}}}\n';
+function run(s,n){if(!document.getElementById('dayPanel')){if(n<120)setTimeout(function(){run(s,n+1)},250);return}if(window.__aeraPourOn)return;window.__aeraPourOn=1;try{(new Function(pre+s+'\nsafe(bentoDrop)();'))()}catch(e){window.__aeraPourOn=0}
+ setTimeout(function(){if(!document.getElementById('sx30BentoDrop')){window.__aeraPourOn=0;if(n<120)run(s,n+1)}},500)}
+var c='';try{c=localStorage.getItem('aera.motion.code')||''}catch(e){}var s=seg(c);
+if(s)run(s,0);else fetch('/motion/',{cache:'no-cache'}).then(function(r){return r.text()}).then(function(t){var s2=seg(t);if(s2)run(s2,0)}).catch(function(){});
 })();
 </script>
 </body>
