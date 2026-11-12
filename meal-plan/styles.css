@@ -20,6 +20,8 @@ html[data-lang="zh"] .langsw .l2{background:#fff;color:#16479E}
 
 /* Peter 12th Nov 2026 16:15 : the Fine-Tune My Targets box is removed ( the 1 · Your Answers tab already goes back to the same questions ) */#v2ftPanel,details.v2ft{display:none!important}
 
+/* Peter 12th Nov 2026 16:16 : the Adjust window ( Tune This Meal ) has the same blue frame as the Edit window */#v2adj{background:rgba(11,28,54,.12)!important}#v2adj .in{border:2px solid #16479E!important;border-radius:22px!important;margin:0 auto 8px!important;max-width:504px!important;width:calc(100% - 16px)!important;box-shadow:0 -14px 40px rgba(11,28,54,.38),0 -2px 8px rgba(11,28,54,.18)!important;overscroll-behavior:contain!important}
+
 /* Peter 12th Nov 2026 15:00 : the page never jumps when a recipe changes ( no scroll anchoring ), and the Edit window has its blue frame here too */html,body,*{overflow-anchor:none!important}#v2tapS{background:rgba(11,28,54,.12)!important}#v2tapS .in{border:2px solid #16479E!important;border-radius:22px!important;margin:0 auto 8px!important;max-width:504px!important;width:calc(100% - 16px)!important;box-shadow:0 -14px 40px rgba(11,28,54,.38),0 -2px 8px rgba(11,28,54,.18)!important}
 
 /* Plan buttons : AERA navy with yellow wording, and a little pop when tapped */
