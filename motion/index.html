@@ -317,7 +317,7 @@ function nm(s){return String(s).replace(/\s+/g,' ').trim()}
 var CJK=/[㐀-鿿]/;
 var L={},PH=[],RX=null,FX=null;
 function esc(s){return s.replace(/[.*+?^$\{\}()|[\]\\]/g,'\\$&')}
-function build(){L={};var k;for(k in X)L[nm(k).toLowerCase()]=X[k];
+function build(){/* 13th Nov 2026 10:25 : read the page's own Chinese list as it is now ( the page replaces it after this code loads ) */D=window.AERA_I18N||D;L={};var k;for(k in X)L[nm(k).toLowerCase()]=X[k];
  for(k in D){var v=D[k];if(typeof v==='string')L[nm(k).toLowerCase()]=v}
  PH=[];var seen={};for(k in L){var kk=k;if(kk.length<4||!/[a-z]{2}/.test(kk))continue;if(!/\s/.test(kk)&&kk.length<5)continue;if(seen[kk])continue;seen[kk]=1;PH.push(kk)}
  PH.sort(function(a,b){return b.length-a.length});
