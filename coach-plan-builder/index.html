@@ -153,7 +153,7 @@ try{Object.assign(window.AERA_I18N||{},{'Write the Plan straight into our Kitche
 .wcell.wb-raw .wbd input[type=number],.wcell.wb-raw .wbd em{color:#0B1C36}
 .wcell:focus-within{box-shadow:0 0 0 3px rgba(22,71,158,.18)}
 </style>
-
+<style id="aera-cad-tab">/* Peter 13th Nov 2026 : in the App, Coaches' Plans is the first tab in the row, same size and font as the others */#coachNav .cnav #cadBtn{position:static!important;top:auto!important;left:auto!important;z-index:auto!important;flex:none!important;height:auto!important;min-height:0!important;padding:10px 16px!important;margin:0!important;font-family:Montserrat,system-ui,sans-serif!important;font-size:13.5px!important;font-weight:800!important;line-height:normal!important;border-radius:999px!important;background:#FDB913!important;color:#16479E!important;border:1.5px solid #FDB913!important;box-shadow:none!important;display:inline-flex!important;align-items:center!important;gap:6px!important;white-space:nowrap!important;transform:none!important}#coachNav .cnav #cadBtn *{font:inherit!important;color:inherit!important;letter-spacing:normal!important}</style>
 <!-- SEO Meta Tags -->
 <title>Coach Plan Builder — AERA Meal Prep</title>
 <meta name="description" content="Write a client" />
@@ -2615,7 +2615,7 @@ function vview(){var bar=D.getElementById('cvBar');if(!bar)return;var v=D.getEle
 async function vinit(){if(!A.data)await load();if(A.data){vbar();vview()}}
 /* Peter 2nd Nov 2026 : a Log In button in the title bar whenever nobody is signed in ( or the sign-in has run out ),
    so a Coach can always sign in from the App. It comes straight back to the Coach Plan App. */
-function pin(b){if(D.documentElement.classList.contains('aera-nobar')){b.style.setProperty('position','fixed');b.style.setProperty('top','calc(env(safe-area-inset-top) + 10px)');b.style.setProperty('left','12px');b.style.setProperty('z-index','9998');D.body.appendChild(b);return true}return false}
+function pin(b){if(D.documentElement.classList.contains('aera-nobar')){var mv=function(){var nv=D.querySelector('#coachNav .cnav');if(!nv)return false;['position','top','left','z-index'].forEach(function(p){b.style.removeProperty(p)});if(b.parentNode!==nv||nv.firstChild!==b)nv.insertBefore(b,nv.firstChild);return true};if(mv())return true;var tries=0,iv=setInterval(function(){if(mv()||++tries>40)clearInterval(iv)},250);b.style.setProperty('position','fixed');b.style.setProperty('top','calc(env(safe-area-inset-top) + 10px)');b.style.setProperty('left','12px');b.style.setProperty('z-index','9998');D.body.appendChild(b);return true}return false}
 function loginBtn(){var bar=D.querySelector('.ab-r');if(!bar)return;var b=D.getElementById('cpLogin'),out=!tok()||DEAD;
  if(!out){if(b)b.remove();return}if(b)return;b=D.createElement('a');b.id='cpLogin';b.href='https://aeramealprep.net/account/?next=coach#login';
  b.style.cssText='display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 16px;border-radius:999px;border:1.5px solid #FDB913;background:#FDB913;color:#16479E;font-weight:800;font-size:14px;font-family:inherit;text-decoration:none;white-space:nowrap;flex:none';
