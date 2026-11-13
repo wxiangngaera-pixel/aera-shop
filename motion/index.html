@@ -413,7 +413,7 @@ var BTN='button,[role="button"],.btn,a.btn,summary,label.chip,.chip,.pill';
 var BLOCK=/^(P|DIV|LI|TD|TH|H1|H2|H3|H4|H5|H6|BUTTON|LABEL|SUMMARY|DT|DD|SECTION|ARTICLE|SPAN|SMALL|B|STRONG|EM|I|A|OPTION)$/;
 function isStart(n){var p=n.previousSibling;while(p){if(p.nodeType===3&&/\S/.test(p.nodeValue))return false;if(p.nodeType===1&&p.textContent&&/\S/.test(p.textContent)&&!/^(BR)$/.test(p.tagName))return false;p=p.previousSibling}var e=n.parentElement;return !!(e&&BLOCK.test(e.tagName))}
 function one(n){var e=n.parentElement;if(!e)return;try{if(e.closest(SKIP))return}catch(x){return}
- var t=n.nodeValue;if(!t||!/[A-Za-z(]/.test(t))return;if(/[@]|https?:|www\./.test(t))return;
+ var t=n.nodeValue;if(!t||!/[A-Za-z(]/.test(t))return;if(/[@]|https?:|www\.|\b[a-z0-9-]+\.(net|com|my|io|org)\b/i.test(t))return;
  var o=t;t=fixUnits(t);t=fixBrackets(t);t=fixWords(t);t=fixDash(t);t=fixSentences(t,isStart(n));
  try{if(e.closest(BTN))t=btnCase(t)}catch(x){}
  if(t!==o){n.__aeraT=1;n.nodeValue=t}}
