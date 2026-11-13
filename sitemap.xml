@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://aeramealprep.net/</loc>
+    <lastmod>2026-11-13T03:45:01.604Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://aeramealprep.net/motion/</loc>
-    <lastmod>2026-11-13T03:33:22.032Z</lastmod>
+    <lastmod>2026-11-13T03:44:39.508Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -18,11 +23,6 @@
   <url>
     <loc>https://aeramealprep.net/coach-plan-builder/</loc>
     <lastmod>2026-11-13T01:54:27.487Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/</loc>
-    <lastmod>2026-11-12T21:59:05.660Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
