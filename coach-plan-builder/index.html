@@ -702,7 +702,7 @@ function day(){var c=cur();if(DAY>=c.days.length)DAY=c.days.length-1;if(DAY<0)DA
 
 /* ---- painting ---- */
 function paint(){
- var c=cur();packPaint(c);
+ try{__noCkFix()}catch(e){}setTimeout(__noCkMark,0);var c=cur();packPaint(c);
  try{__sigInit()}catch(e){}$('#clientTabs').innerHTML=ST.clients.map(function(x){
   return '<button class="tab'+(x.id===c.id?' on':'')+'" type="button" data-c="'+x.id+'">'+
    esc(x.name||'Unnamed')+'<small>'+boxCount(x)+' Meal'+(boxCount(x)===1?'':'s')+(x._at?' · Saved '+__when(x._at):'')+(x.sentAt?' · Sent '+__when(Date.parse(x.sentAt)):'')+
@@ -816,9 +816,17 @@ function packPaint(c){var p=packOf(c);[].forEach.call(document.querySelectorAll(
 $('#packSeg').addEventListener('click',function(e){var b=e.target.closest('button[data-p]');if(!b||b.dataset.p===packOf())return;mark();cur().pack=b.dataset.p;save();paint()});
 /* tap an item's RAW WEIGHT / COOKED WEIGHT label : that item flips, and its number is converted so the Kitchen still cooks the same amount */
 (function(){var st=document.createElement('style');st.textContent='.wcell small.wh.wflip{cursor:pointer;user-select:none;-webkit-user-select:none}.wcell small.wh.wflip:after{content:" \\21C4"}.wcell small.wh.wflip:hover{filter:brightness(1.15)}';document.head.appendChild(st)})();
+/* Peter 13th Nov 2026 : an item with no Cooked Weight recorded in the Kitchen is planned in Raw Weight automatically, the Coach is told once, and its label shows Raw only */
+var __NOCK_TOLD={};
+function __noCk(r){try{return !conv(r,100,'cooked').ok}catch(e){return false}}
+function __noCkFix(){var c=cur();if(!c||!c.days)return;var told=[];c.days.forEach(function(d){(d.meals||[]).forEach(function(m){(m.items||[]).forEach(function(it){var r=BYCODE[it.code];if(!r)return;if(bOf(it)==='cooked'&&__noCk(r)){it.wb='raw';if(!__NOCK_TOLD[r.code]){__NOCK_TOLD[r.code]=1;told.push(r.name)}}})})});
+ if(told.length){try{save()}catch(e){}var zh=false;try{zh=localStorage.getItem('aera_lang')==='zh'}catch(e){}
+  say('',zh?(esc(told.join('、'))+' 在厨房没有记录熟重，因此按生重规划。'):(esc(told.join(', '))+(told.length>1?' have':' has')+' no Cooked Weight recorded in the Kitchen, so '+(told.length>1?'they are':'it is')+' planned in Raw Weight.'))}}
+function __noCkMark(){try{[].forEach.call(document.querySelectorAll('.row[data-m]'),function(row){var d=day(),m=d&&d.meals[+row.dataset.m],it=m&&m.items[+row.dataset.i],r=it&&BYCODE[it.code];var lab=row.querySelector('.wcell small.wh');if(!lab||!r)return;var no=__noCk(r);lab.classList.toggle('nock',no);if(no)lab.title='No Cooked Weight recorded in the Kitchen : Raw Weight only'})}catch(e){}}
+(function(){var st=document.createElement('style');st.textContent='.wcell small.wh.nock{opacity:.6;cursor:not-allowed!important}.wcell small.wh.nock:after{content:" · Raw only"!important}';document.head.appendChild(st)})();
 function flipItem(lab){var row=lab.closest('.row');if(!row)return;var d=day(),m=d&&d.meals[+row.dataset.m],it=m&&m.items[+row.dataset.i],r=it&&BYCODE[it.code];if(!r)return;
  var now=bOf(it),raw=rawOf(it).g;
- if(now==='raw'){var t=conv(r,100,'cooked');if(!t.ok){say('',esc(r.name)+' has no Cooked Weight rule yet, so it stays in Raw Weight.');return}
+ if(now==='raw'){var t=conv(r,100,'cooked');if(!t.ok){say('',esc(r.name)+' has no Cooked Weight recorded in the Kitchen, so it stays in Raw Weight.');return}
   var lo=0,hi=Math.max(50,raw*3);for(var k=0;k<40;k++){var mid=(lo+hi)/2;if(conv(r,mid,'cooked').g<raw)lo=mid;else hi=mid}
   mark();it.wb='cooked';it.g=Math.max(0,Math.ceil(hi))}
  else{mark();it.wb='raw';it.g=raw}
