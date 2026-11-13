@@ -355,7 +355,7 @@ function tr0(s){if(s==null)return null;var raw=String(s),k=nm(raw);if(!k||!/[A-Z
  var R=window.AERA_I18N_RE||[];for(var i=0;i<R.length;i++){var re=new RegExp(R[i][0].source,'i');if(re.test(k))return k.replace(re,R[i][1])}
  if(/\uE000/.test(k)){}
  var t=k;if(/\d\s?g( ·|$)/.test(t))t=t.replace(FX,function(m){return FL[m.toLowerCase()]||m});
- t=t.replace(RX,function(m,pre,p){var v=L[p.toLowerCase()];return v?pre+v.replace(/\n/g,' '):m});
+ t=t.replace(/(\d+) Days? x (\d+) Meals? a Day/gi,'$1 天 × 每天 $2 餐');t=t.replace(RX,function(m,pre,p){var v=L[p.toLowerCase()];return v?pre+v.replace(/\n/g,' '):m});
  for(i=0;i<N.length;i++)t=t.replace(N[i][0],N[i][1]);
  if(/[A-Za-z]{2}/.test(t))for(i=0;i<W.length;i++)t=t.replace(W[i][0],W[i][1]);
  t=tidy(t);return t===k?null:t}
