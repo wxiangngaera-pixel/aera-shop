@@ -347,7 +347,8 @@ var SKIP={SCRIPT:1,STYLE:1,TEXTAREA:1,INPUT:1,CODE:1,PRE:1,NOSCRIPT:1,SELECT:0};
 var ATTR=['placeholder','title','aria-label','alt'];
 function okA(p){return p&&!(p.closest&&p.closest('#langSw,.noi18n,[contenteditable],[data-noi18n]'))}
 function okEl(p){return p&&!SKIP[p.tagName]&&!(p.closest&&p.closest('#langSw,.noi18n,[contenteditable],[data-noi18n]'))}
-function doNode(n){var p=n.parentElement;if(!okEl(p))return;var v=n.nodeValue;if(!/[A-Za-z]{2}/.test(v)||CJK.test(v))return;var t=tr(v);if(t==null)return;n.nodeValue=v.replace(/^(\s*)[\s\S]*?(\s*)$/,function(m,a,b){return a+t+b})}
+/* 13th Nov 2026 10:20 : Recipe names in the parts kept English on purpose ( .noi18n ) now show Chinese with English underneath too ( Peter ) */
+function doNode(n){var p=n.parentElement;if(!okEl(p)){try{if(p&&!SKIP[p.tagName]&&p.closest('.noi18n')&&!p.closest('#langSw,[contenteditable]')){var k0=nm(n.nodeValue);if(k0&&!CJK.test(k0)){var v0=Object.prototype.hasOwnProperty.call(D,k0)?D[k0]:L[k0.toLowerCase()];if(typeof v0==='string'&&v0.indexOf('\n')>0){n.nodeValue=v0;if(p.style)p.style.whiteSpace='pre-line'}}}}catch(e){}return;}var v=n.nodeValue;if(!/[A-Za-z]{2}/.test(v)||CJK.test(v))return;var t=tr(v);if(t==null)return;n.nodeValue=v.replace(/^(\s*)[\s\S]*?(\s*)$/,function(m,a,b){return a+t+b})}
 function doEl(el){if(!okA(el))return;for(var i=0;i<ATTR.length;i++){var a=ATTR[i];if(!el.hasAttribute(a))continue;var v=el.getAttribute(a);if(CJK.test(v))continue;var t=tr(v);if(t!=null)el.setAttribute(a,t)}
  if(el.tagName==='INPUT'&&/^(button|submit|reset)$/i.test(el.type)){var t2=tr(el.value);if(t2!=null)el.value=t2}}
 function walk(root){if(!root)return;try{if(root.nodeType===1){doEl(root);root.querySelectorAll('[placeholder],[title],[aria-label],[alt],input[type=button],input[type=submit]').forEach(doEl)}
