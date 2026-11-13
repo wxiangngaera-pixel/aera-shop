@@ -708,5 +708,12 @@ setTimeout(upd,4000);setInterval(upd,60000);document.addEventListener('visibilit
 var st=D.createElement('style');st.textContent='.kcwraw{margin-left:6px;font-size:.85em;font-weight:600;color:#64748B;white-space:nowrap}';(D.head||D.documentElement).appendChild(st);
 function run(){try{D.querySelectorAll('#main .omeal .omealit>div b').forEach(function(b){var ck=b.querySelector('.kcwl.ck');if(!ck||b.querySelector('.kcwraw'))return;var m=/([\d,.]+)\s*g/.exec(String(b.__raw||''));if(!m)return;
  var s=D.createElement('span');s.className='kcwraw';s.textContent='· '+m[1]+' g Raw';ck.insertAdjacentElement('afterend',s);b.__h=b.innerHTML})}catch(e){}}
-setInterval(run,400)})();</script></body>
+setInterval(run,400)})();</script><script id="aera-kc-selfdel">/* Peter 13th Nov 2026 : Self-Delivery. AERA delivers it ourselves : Fulfilment "Delivery · Self-Delivery" ( courier "self" ).
+   No Lalamove booking, no Auto-Book, no rider buttons ( all of them only act on courier "lalamove" ) ; the card says "🚗 Self-Delivery". */
+(function(){if(window.__kcSelfDel)return;window.__kcSelfDel=1;var D=document;
+function self(o){try{var f=(o&&o.fulfil)||{};return f.type!=='pickup'&&f.courier==='self'}catch(e){return false}}
+function hook(){try{if(window.COURIER_NAME&&!COURIER_NAME.self)COURIER_NAME.self='Self-Delivery'}catch(e){}
+ try{var f=window.lmChip;if(typeof f==='function'&&!f.__self){var w=function(o){if(self(o)&&o.status!=='cancelled'){var mm='';try{var c=JSON.parse(JSON.stringify(o));c.fulfil.courier='lalamove';c.lalamove={};var x=/<span class="m">[^<]*<\/span>/.exec(f.call(this,c)||'');if(x)mm='<div class="kcrec noprint">'+x[0]+'</div>'}catch(e){}return mm+'<span class="chip" style="background:#EEF3FC;border-color:#16479E;color:#16479E;font-weight:800">🚗 Self-Delivery</span>'}return f.apply(this,arguments)};for(var k in f)try{w[k]=f[k]}catch(x){}w.__self=1;window.lmChip=w}}catch(e){}
+ try{D.querySelectorAll('select[onchange="setFulfil(this.value)"]').forEach(function(s){if(s.querySelector('option[value="self"]'))return;var o=D.createElement('option');o.value='self';o.textContent='Delivery · Self-Delivery';var pk=s.querySelector('option[value="pickup"]');s.insertBefore(o,pk||null);try{if(window.EO&&EO.fulfil&&EO.fulfil.type!=='pickup'&&EO.fulfil.courier==='self')s.value='self'}catch(e){}})}catch(e){}}
+setInterval(hook,400);hook()})();</script></body>
 </html>
