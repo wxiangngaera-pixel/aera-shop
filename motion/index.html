@@ -343,6 +343,7 @@ function tr0(s){if(s==null)return null;var raw=String(s),k=nm(raw);if(!k||!/[A-Z
  if(/[A-Za-z]{2}/.test(t))for(i=0;i<W.length;i++)t=t.replace(W[i][0],W[i][1]);
  t=tidy(t);return t===k?null:t}
 window.aeraZh=tr;
+/* 13th Nov 2026 10:30 : windows that redraw themselves ( Adjust, Edit ) keep Recipe names on two lines : Chinese on top, English underneath */try{var zs=document.createElement('style');zs.textContent='#v2adj h3,#v2adj .hd b,#v2tapS h3,#v2tapS .cen,#v2tapS .in>div b,#ddp em,#v2tapS .celi b,.swapd .srow em,.swapd summary span{white-space:pre-line}';(document.head||document.documentElement).appendChild(zs)}catch(e){}
 var SKIP={SCRIPT:1,STYLE:1,TEXTAREA:1,INPUT:1,CODE:1,PRE:1,NOSCRIPT:1,SELECT:0};
 var ATTR=['placeholder','title','aria-label','alt'];
 function okA(p){return p&&!(p.closest&&p.closest('#langSw,.noi18n,[contenteditable],[data-noi18n]'))}
