@@ -1303,6 +1303,19 @@ function ddSub(r){var s=r.sub||'';
  if(r.cat==='v')return /oil[\s-]*free/i.test(r.name)?'Oil-Free':'Oil';
  return ''}
 function dr1(v){return Math.round((+v||0)*10)/10}
+/* 13th Nov 2026 09:55 : Change Item lists get a Search bar on top and an All Protein / All Carbs / All Vegetables … button first ( Peter ) */
+var CPALL={p:'All Protein',c:'All Carbs',v:'All Vegetables',g:'All Garnish',s:'All Sauces'};
+try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{'All Protein':'全部蛋白质','All Carbs':'全部碳水','All Vegetables':'全部蔬菜','All Garnish':'全部配菜','All Sauces':'全部酱汁','Search':'搜索'})}catch(e){}
+function cpBar(cat,list,cur){var subs=(DDSUB[cat]||[]).filter(function(s){return list.some(function(r){return ddSub(r)===s})});
+ var ch=subs.length>1?'<div class="ddh cpch"><button type="button" class="ddc'+(cur==='*'?' on':'')+'" data-cs="*">'+esc(CPALL[cat]||'All')+'</button>'+subs.map(function(s){return '<button type="button" class="ddc'+(s===cur?' on':'')+'" data-cs="'+esc(s)+'">'+esc(s)+'</button>'}).join('')+'</div>':'';
+ return '<input class="cpq" type="search" enterkeyhint="search" placeholder="Search" autocomplete="off" autocorrect="off" spellcheck="false">'+ch}
+function cpFilt(box){if(!box)return;var s=box.getAttribute('data-s')||'*',qi=box.querySelector('.cpq'),q=String(qi&&qi.value||'').toLowerCase().trim(),n=0;
+ [].forEach.call(box.querySelectorAll('.cpch [data-cs]'),function(c){c.classList.toggle('on',c.getAttribute('data-cs')===s)});
+ [].forEach.call(box.querySelectorAll('.ddr,.celi'),function(r){var em=r.querySelector('em,b'),nm=((em&&em.firstChild&&em.firstChild.nodeValue)||'').toLowerCase();var v=q?((r.getAttribute('data-n')||'').indexOf(q)>-1||nm.indexOf(q)>-1):(s==='*'||r.getAttribute('data-s')===s);r.style.display=v?'':'none';if(v)n++});
+ var e=box.querySelector('.cpno');if(e)e.hidden=n>0}
+document.addEventListener('input',function(e){var t=e.target;if(t&&t.classList&&t.classList.contains('cpq'))cpFilt(t.closest('.cpbox'))},true);
+document.addEventListener('click',function(e){var c=e.target.closest&&e.target.closest('[data-cs]');if(!c)return;var b=c.closest('.cpbox');if(!b)return;e.stopPropagation();e.preventDefault();b.setAttribute('data-s',c.getAttribute('data-cs'));cpFilt(b)},true);
+(function(){var s=document.createElement('style');s.textContent='.cpbox .cpq{display:block;box-sizing:border-box;width:100%;height:42px;border:1.5px solid #16479E;border-radius:12px;padding:0 12px 0 38px;margin:0 0 8px;font:500 16px Montserrat,system-ui,sans-serif;color:#0B1C36;background:#fff url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2316479E%27 stroke-width=%272.5%27 stroke-linecap=%27round%27%3E%3Ccircle cx=%2711%27 cy=%2711%27 r=%277%27/%3E%3Cpath d=%27M20 20l-4-4%27/%3E%3C/svg%3E") no-repeat 12px center;background-size:17px;outline:none;-webkit-appearance:none;appearance:none}.cpbox .cpq:focus{border-color:#FDB913;box-shadow:0 0 0 3px rgba(253,185,19,.25)}.cpbox .cpch{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}.cpbox .cpno{padding:14px 6px;text-align:center;color:#5b6b85;font-size:12.5px}.cpbox .cpch .ddc{border:0;border-radius:999px;background:#16479E;color:#FDB913;padding:8px 14px;font:700 13px Montserrat,system-ui,sans-serif;cursor:pointer}.cpbox .cpch .ddc.on{background:#FDB913;color:#0B1C36}';document.head.appendChild(s)})();
 function ddList(cat,mi,ii){var m=day().meals[mi],used={};
  if(m)m.items.forEach(function(it,j){if(j!==ii&&it.code)used[it.code]=1});
  return MENU.filter(function(r){return r.cat===cat&&!used[r.code]})}
@@ -1310,13 +1323,13 @@ function ddHtml(){var mi=DD.m,ii=DD.i,cat=DD.cat,m=day().meals[mi];
  var it=(ii!=null&&m)?m.items[ii]:null,cr=it&&BYCODE[it.code];
  var list=ddList(cat,mi,ii);
  var subs=(DDSUB[cat]||[]).filter(function(s){return list.some(function(r){return ddSub(r)===s})});
- var pick=(DD.sub&&subs.indexOf(DD.sub)>=0)?DD.sub:((cr&&subs.indexOf(ddSub(cr))>=0)?ddSub(cr):(subs[0]||''));DD.sub=pick;
- var chips=subs.length>1?'<div class="ddh">'+subs.map(function(s){return '<button type="button" class="ddc'+(s===pick?' on':'')+'" data-dds="'+esc(s)+'">'+esc(s)+'</button>'}).join('')+'</div>':'';
- var rows=list.filter(function(r){return subs.length<2||ddSub(r)===pick}).map(function(r){var g=r.po[0],x=per(r,g),on=!!(cr&&cr.code===r.code);
-  return '<button type="button" class="ddr'+(on?' on':'')+'" data-ddc="'+esc(r.code)+'"><i class="dth"'+(r.img?' style="background-image:url(\''+esc(r.img)+'\')"':'')+'></i><em>'+esc(r.name)+
+ var pick=(DD.sub==='*'&&subs.length>1)?'*':(DD.sub&&subs.indexOf(DD.sub)>=0)?DD.sub:((cr&&subs.indexOf(ddSub(cr))>=0)?ddSub(cr):(subs[0]||''));DD.sub=pick;
+ var chips=cpBar(cat,list,pick);
+ var rows=list.map(function(r){var g=r.po[0],x=per(r,g),on=!!(cr&&cr.code===r.code);
+  return '<button type="button" class="ddr'+(on?' on':'')+'" data-s="'+esc(ddSub(r))+'" data-n="'+esc(String(r.name).toLowerCase())+'"'+((subs.length>1&&pick!=='*'&&ddSub(r)!==pick)?' style="display:none"':'')+' data-ddc="'+esc(r.code)+'"><i class="dth"'+(r.img?' style="background-image:url(\''+esc(r.img)+'\')"':'')+'></i><em>'+esc(r.name)+
    '<small>'+Math.round(x.kcal)+' KCALs · Protein '+dr1(x.p)+' g · Carbs '+dr1(x.c)+' g · Fat '+dr1(x.f)+' g · per '+g+' g</small></em>'+(on?'<b class="ddk" aria-hidden="true">✓</b>':'')+'</button>'}).join('');
- return '<div class="ddp" id="ddp" role="dialog"><div class="ddx"><span>'+(cr?'Change This Item':DDT[cat])+'</span><button type="button" class="ddd">Done</button></div>'+chips+
-  '<div class="ddl">'+(rows||'<div class="dde">Nothing here.</div>')+'</div></div>'}
+ return '<div class="ddp cpbox" id="ddp" role="dialog" data-s="'+esc(subs.length>1?pick:'*')+'"><div class="ddx"><span>'+(cr?'Change This Item':DDT[cat])+'</span><button type="button" class="ddd">Done</button></div>'+chips+
+  '<div class="ddl">'+(rows||'<div class="dde">Nothing here.</div>')+'<div class="cpno" hidden>Nothing here.</div></div></div>'}
 function ddPlace(){var D=document,old=D.getElementById('ddp');if(old)old.remove();
  var sc=D.getElementById('ddScrim');
  if(DD&&(DD.cl!==cur().id||DD.day!==DAY||!day().meals[DD.m]))DD=null;
@@ -1374,8 +1387,8 @@ function bg(r){return r&&r.img?'background-image:url('+esc(r.img)+')':''}
 function render(){var s=sheet(),c=cur2();if(!c.it||!c.r){close();return}
  var r=c.r,it=c.it,x=per(r,rawOf(it).g),h='';
  if(ED.list){var list=ddList(r.cat,ED.m,ED.i);list=[r].concat(list.filter(function(z){return z.code!==r.code}));
-  h='<div class="cehd"><span>Change This Item</span><button type="button" class="cex" data-ce="back">Done</button></div><div class="cels">'+
-   list.map(function(z){var k=per(z,100);return '<div class="celi'+(z.code===r.code?' on':'')+'" data-code="'+esc(z.code)+'"><i style="'+bg(z)+'"></i><span><b>'+esc(z.name)+'</b><small>'+Math.round(k.kcal)+' KCALs · Protein '+r1(k.p)+' · Carbs '+r1(k.c)+' · Fat '+r1(k.f)+' per 100 g</small></span></div>'}).join('')+'</div>';
+  h='<div class="cpbox" data-s="'+esc((DDSUB[r.cat]||[]).length>1?ddSub(r):'*')+'"><div class="cehd"><span>Change This Item</span><button type="button" class="cex" data-ce="back">Done</button></div>'+cpBar(r.cat,list,ddSub(r))+'<div class="cels">'+
+   list.map(function(z){var k=per(z,100);return '<div class="celi'+(z.code===r.code?' on':'')+'" data-s="'+esc(ddSub(z))+'" data-n="'+esc(String(z.name).toLowerCase())+'" data-code="'+esc(z.code)+'"><i style="'+bg(z)+'"></i><span><b>'+esc(z.name)+'</b><small>'+Math.round(k.kcal)+' KCALs · Protein '+r1(k.p)+' · Carbs '+r1(k.c)+' · Fat '+r1(k.f)+' per 100 g</small></span></div>'}).join('')+'</div></div>';
  }else{
   h='<div class="ceh"><i class="cet" style="'+bg(r)+'"></i><div class="cen">'+esc(r.name)+'</div><button type="button" class="cex" data-ce="close">&times; Close</button></div>'+
    '<div class="cec"><span class="k"><b>'+Math.round(x.kcal)+'</b> KCALs</span><span>Protein <b>'+r1(x.p)+' g</b></span><span>Carbs <b>'+r1(x.c)+' g</b></span><span>Fat <b>'+r1(x.f)+' g</b></span><span class="rm">'+rm(x.price)+'</span></div>'+
@@ -1383,7 +1396,7 @@ function render(){var s=sheet(),c=cur2();if(!c.it||!c.r){close();return}
    '<div class="cep"><button type="button" data-ce="minus" aria-label="Less">&minus;</button><input type="number" inputmode="numeric" min="0" step="10" value="'+(+it.g||0)+'" data-ce="g" aria-label="Weight in grams"><button type="button" data-ce="plus" aria-label="More">+</button></div>'+
    '<div class="cel">Change Item</div><button type="button" class="ceb" data-ce="list"><i style="'+bg(r)+'"></i>'+esc(r.name)+'<em>&#9662;</em></button>'+
    '<div class="cef"><button type="button" class="cer" data-ce="remove">Remove Item</button><button type="button" class="ced" data-ce="close">Done</button></div>'}
- q('.in',s).innerHTML=h;s.classList.add('on');D.documentElement.classList.add('cp-edit-open')}
+ q('.in',s).innerHTML=h;if(ED.list){var cb=q('.cpbox',s);if(cb){cb.insertAdjacentHTML('beforeend','<div class="cpno" hidden>Nothing here.</div>');cpFilt(cb)}}s.classList.add('on');D.documentElement.classList.add('cp-edit-open')}
 function setG(g){var c=cur2();if(!c.it)return;g=Math.max(0,Math.round(+g||0));if(g===(+c.it.g||0))return;mark();c.it.g=g;save();paint();render()}
 function onClick(e){var s=q('#v2tapS');if(e.target===s){close();return}
  var li=e.target.closest('.celi');if(li){var c=cur2(),code=li.getAttribute('data-code');if(c.it&&code&&code!==c.it.code){mark();c.it.code=code;save();paint()}ED.list=false;render();return}
