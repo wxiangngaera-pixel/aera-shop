@@ -295,6 +295,18 @@
 </script></head>
 <body><p>AERA Motion Engine. Used by every AERA page. Do not delete.</p>
 <script type="text/plain" id="aera-motion-src">/*AERA-MOTION-START*/
+/* 13th Nov 2026 10:05 : switching between English and 中文 shows a Loading screen until the page is ready in that language ( Peter ) */
+(function(){try{if(window.__aeraLangLoad)return;window.__aeraLangLoad=1;
+var D=document,L='en';try{L=localStorage.getItem('aera_lang')||'en'}catch(e){}
+var CSS='#aeraLangLd{position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#fff;color:#16479E;font:700 16px Montserrat,system-ui,sans-serif;opacity:1;transition:opacity .25s;visibility:visible}#aeraLangLd i{width:40px;height:40px;border-radius:50%;border:4px solid #E4ECFA;border-top-color:#FDB913;animation:aeraLdSpin .8s linear infinite}@keyframes aeraLdSpin{to{transform:rotate(360deg)}}html.aera-zhload body{visibility:hidden}';
+function st(){if(D.getElementById('aeraLangLdCss'))return;var s=D.createElement('style');s.id='aeraLangLdCss';s.textContent=CSS;(D.head||D.documentElement).appendChild(s)}
+function show(t){st();var o=D.getElementById('aeraLangLd');if(!o){o=D.createElement('div');o.id='aeraLangLd';o.setAttribute('data-noi18n','1');o.innerHTML='<i></i><span></span>';D.documentElement.appendChild(o)}o.querySelector('span').textContent=t;o.style.opacity='1'}
+function hide(){D.documentElement.classList.remove('aera-zhload');var o=D.getElementById('aeraLangLd');if(o){o.style.opacity='0';setTimeout(function(){if(o.parentNode)o.parentNode.removeChild(o)},280)}}
+window.aeraLangLoading={show:show,hide:hide};
+D.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#langSw');if(b)show(L==='zh'?'Loading…':'正在加载…')},true);
+if(L==='zh'&&window.top===window){st();D.documentElement.classList.add('aera-zhload');show('正在加载…');setTimeout(hide,3000)}
+}catch(e){}})();
+
 /* AERA zh engine : 中文 mode, every word in Chinese ( 12 Nov 2026 ) */
 (function(){try{
 var lang='en';try{lang=localStorage.getItem('aera_lang')||'en'}catch(e){}
@@ -304,7 +316,7 @@ var D=window.AERA_I18N=window.AERA_I18N||{};
 function nm(s){return String(s).replace(/\s+/g,' ').trim()}
 var CJK=/[㐀-鿿]/;
 var L={},PH=[],RX=null,FX=null;
-function esc(s){return s.replace(/[.*+?^$\{\}()|[\]\\]/g,'\\/*AERA-MOTION-START*/')}
+function esc(s){return s.replace(/[.*+?^$\{\}()|[\]\\]/g,'\\$&')}
 function build(){L={};var k;for(k in X)L[nm(k).toLowerCase()]=X[k];
  for(k in D){var v=D[k];if(typeof v==='string')L[nm(k).toLowerCase()]=v}
  PH=[];var seen={};for(k in L){var kk=k;if(kk.length<4||!/[a-z]{2}/.test(kk))continue;if(!/\s/.test(kk)&&kk.length<5)continue;if(seen[kk])continue;seen[kk]=1;PH.push(kk)}
@@ -343,7 +355,7 @@ function walk(root){if(!root)return;try{if(root.nodeType===1){doEl(root);root.qu
 var q=0;function run(){q=0;walk(document.body);var t=tr(document.title);if(t!=null)document.title=t}
 function queue(){if(q)return;q=1;(window.requestAnimationFrame||setTimeout)(run)}
 ['alert','confirm','prompt'].forEach(function(f){var o=window[f];if(!o)return;window[f]=function(m){var a=[].slice.call(arguments);try{var t=tr(m);if(t!=null)a[0]=t;if(f==='prompt'&&a[1]!=null){}}catch(e){}return o.apply(window,a)}});
-function boot(){build();run();new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){if(ms[i].addedNodes.length||ms[i].type==='characterData'||ms[i].type==='attributes'){queue();return}}}).observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['placeholder','title','aria-label','alt']});setInterval(queue,1000);setTimeout(function(){build();queue()},2500)}
+function boot(){build();run();setTimeout(function(){try{window.aeraLangLoading&&aeraLangLoading.hide()}catch(e){}},150);new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){if(ms[i].addedNodes.length||ms[i].type==='characterData'||ms[i].type==='attributes'){queue();return}}}).observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['placeholder','title','aria-label','alt']});setInterval(queue,1000);setTimeout(function(){build();queue()},2500)}
 if(document.body)boot();else document.addEventListener('DOMContentLoaded',boot);
 }catch(e){}})();
 
