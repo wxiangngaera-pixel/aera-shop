@@ -2700,7 +2700,7 @@ function ckOf(mi,cp){var r=(typeof BYCODE!=='undefined')?BYCODE[cp.r]:null;if(!r
  var ck=null;try{ck=cookedOf(r,cp.g)}catch(e){}if(+cp.ck>0){try{var rw=rawFromCooked(r,cp.ck);if(rw!=null&&clampG(r,rw,1)===cp.g&&Math.abs(rw-cp.g)<((r.po&&r.po[2])||25))ck=cp.ck}catch(e){}}return ck>0?Math.round(ck):0}
 function wrap(){var f=window.planPayload;if(typeof f!=='function'||f.__ck)return;var w=function(){var p=f.apply(this,arguments);try{var ms=(typeof PLAN!=='undefined'&&PLAN&&PLAN.meals)||[];var built=ms.filter(function(m){return m.comps&&m.comps.length});
  if(p&&p.meals&&p.meals.length===built.length){var bi=0;ms.forEach(function(m,mi){if(!(m.comps&&m.comps.length))return;var pm=p.meals[bi++];if(!pm||!pm.comps)return;
-  pm.comps.forEach(function(pc,j){var cp=m.comps[j];if(!cp||String(cp.r)!==String(pc.code))return;var c=ckOf(mi,cp);if(c>0)pc.ck=c;else delete pc.ck})});p.wbx=1}}catch(e){}return p};
+  pm.comps.forEach(function(pc,j){var cp=m.comps[j];if(!cp||String(cp.r)!==String(pc.code))return;var c=ckOf(mi,cp);if(c>0){pc.ck=c;pc.wb='c'}else{delete pc.ck;pc.wb='r'}/* Peter 13th Nov 2026 : every item is saved as Cooked ( c ) or Raw ( r ) ; an item with no Cooked Weight is Raw automatically */})});p.wbx=1}}catch(e){}return p};
  for(var k in f)try{w[k]=f[k]}catch(x){}w.__ck=1;window.planPayload=w}
 setInterval(wrap,700);wrap()})();
 </script>
