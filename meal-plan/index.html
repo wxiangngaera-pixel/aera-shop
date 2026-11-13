@@ -2304,6 +2304,7 @@ D.addEventListener('click',function(e){if(e.target.closest('.swapd .srow')){D.do
 </script>
 <script id="aera-swap-tabs-js">
 (function(){if(window.__aeraSwTabs||typeof window.swapPanel!=='function')return;window.__aeraSwTabs=1;
+/* 13th Nov 2026 09:50 : Search bar on top and an All Protein / All Carbs / All Vegetables … button first ( Peter ). */
 /* Change This Item : four tabs over the dish list.
    Your Preferences = the dishes they selected on the Meal Preferences page.
    Suitable = Compatible Items, every dish that goes with the rest of this Meal.  ❌ Your Preferences = the dishes they did not select in Meal Preferences.
@@ -2311,7 +2312,7 @@ D.addEventListener('click',function(e){if(e.target.closest('.swapd .srow')){D.do
    Dishes they asked to avoid and Out of Stock dishes never show. */
 var TABS=[['p','Your Preferences'],['s','Suitable'],['x','❌ Your Preferences'],['a','All']];
 function T(s){var D=window.AERA_I18N;return (D&&document.documentElement.getAttribute('data-lang')==='zh'&&D[s])||s}
-try{var D0=window.AERA_I18N=window.AERA_I18N||{};D0['Your Preferences']=D0['Your Preferences']||'您的偏好';D0['Suitable']=D0['Suitable']||'合适';D0['❌ Your Preferences']=D0['❌ Your Preferences']||'❌ 偏好以外';D0['All']=D0['All']||'全部';D0['Not usually paired with']=D0['Not usually paired with']||'通常不搭配';D0['Nothing here. Try another tab.']=D0['Nothing here. Try another tab.']||'这里没有，换个分类看看。';D0['Done']=D0['Done']||'完成';D0['Change This Item']=D0['Change This Item']||'更换此项'}catch(e){}
+try{var D0=window.AERA_I18N=window.AERA_I18N||{};D0['Your Preferences']=D0['Your Preferences']||'您的偏好';D0['Suitable']=D0['Suitable']||'合适';D0['❌ Your Preferences']=D0['❌ Your Preferences']||'❌ 偏好以外';D0['All']=D0['All']||'全部';D0['Not usually paired with']=D0['Not usually paired with']||'通常不搭配';D0['Nothing here. Try another tab.']=D0['Nothing here. Try another tab.']||'这里没有，换个分类看看。';D0['Done']=D0['Done']||'完成';D0['All Protein']='全部蛋白质';D0['All Carbs']='全部碳水';D0['All Vegetables']='全部蔬菜';D0['All Garnish']='全部配菜';D0['All Sauces']='全部酱汁';D0['Search']=D0['Search']||'搜索';D0['Change This Item']=D0['Change This Item']||'更换此项'}catch(e){}
 window.swapPanel=function(mi,ci,cur,opts){
  var m=PLAN.meals[mi],cp=m&&m.comps[ci];var w=mealRows(m,cp);var used={};(m&&m.comps||[]).forEach(function(o,j){if(j!==ci)used[o.r]=1});
  var P={};pool(cur.cat).forEach(function(o){P[o.c]=1});
@@ -2321,23 +2322,24 @@ window.swapPanel=function(mi,ci,cur,opts){
  var cnt={p:0,s:0,x:0,a:rows.length};rows.forEach(function(r){if(r.p)cnt.p++;if(r.s)cnt.s++;if(r.x)cnt.x++});
  var subs=[];rows.forEach(function(r){if(subs.indexOf(r.o.sub)<0)subs.push(r.o.sub)});
  var tabs='<div class="swtabs">'+TABS.map(function(t){return '<button type="button" class="swtab'+(t[0]==='p'?' on':'')+'" data-t="'+t[0]+'" onclick="swTab(this)">'+esc(T(t[1]))+'<i>'+cnt[t[0]]+'</i></button>'}).join('')+'</div>';
- var chips=subs.length>1?subs.map(function(x){return '<button class="btn btn-o s'+(x===cur.sub?' on':'')+'" type="button" data-s="'+esc(x)+'" onclick="swFilter(this)">'+esc(SUBN[x]||x)+'</button>'}).join(''):'';
+ var AL={p:'All Protein',c:'All Carbs',v:'All Vegetables',g:'All Garnish',s:'All Sauces'}[cur.cat]||'All';var chips=subs.length>1?'<button class="btn btn-o s swall" type="button" data-s="*" onclick="swFilter(this)">'+esc(T(AL))+'</button>'+subs.map(function(x){return '<button class="btn btn-o s'+(x===cur.sub?' on':'')+'" type="button" data-s="'+esc(x)+'" onclick="swFilter(this)">'+esc(SUBN[x]||x)+'</button>'}).join(''):'';
  var body=rows.map(function(r){var o=r.o,x=per(o,o.po[0]);var bl=r.s?'':w.filter(function(y){return !okPair(o,y)}).map(function(y){return '<span>'+esc(y.n)+'</span>'}).join(', ');
-  return '<button class="srow" type="button" data-s="'+esc(o.sub)+'" data-p="'+(r.p?1:0)+'" data-ok="'+(r.s?1:0)+'" data-x="'+(r.x?1:0)+'" onclick="swapComp('+mi+','+ci+',\''+o.c+'\')"><i class="dth"'+(o.img?' style="background-image:url('+o.img+')"':'')+'></i><em>'+esc(o.n)+'<small>'+Math.round(x.kcal)+' KCALs · Protein '+r1(x.p)+' · Carbs '+r1(x.c)+' · Fat '+r1(x.f)+' per '+o.po[0]+' g</small>'+(bl?'<small class="swno">'+esc(T('Not usually paired with'))+' '+bl+'</small>':'')+'</em></button>'}).join('');
- return '<details class="dishes swapd" data-t="p" data-s="'+esc(subs.length>1?cur.sub:'')+'"><summary class="swapbtn"><i class="dth sm"'+(cur.img?' style="background-image:url('+cur.img+')"':'')+'></i><span>'+esc(cur.n)+'</span></summary><div class="dl"><div class="dhead">'+tabs+chips+'</div><div class="sl">'+body+'</div><div class="swempty" hidden>Nothing here. Try another tab.</div></div></details>'};
+  return '<button class="srow" type="button" data-n="'+esc(String(o.n).toLowerCase())+'" data-s="'+esc(o.sub)+'" data-p="'+(r.p?1:0)+'" data-ok="'+(r.s?1:0)+'" data-x="'+(r.x?1:0)+'" onclick="swapComp('+mi+','+ci+',\''+o.c+'\')"><i class="dth"'+(o.img?' style="background-image:url('+o.img+')"':'')+'></i><em>'+esc(o.n)+'<small>'+Math.round(x.kcal)+' KCALs · Protein '+r1(x.p)+' · Carbs '+r1(x.c)+' · Fat '+r1(x.f)+' per '+o.po[0]+' g</small>'+(bl?'<small class="swno">'+esc(T('Not usually paired with'))+' '+bl+'</small>':'')+'</em></button>'}).join('');
+ return '<details class="dishes swapd" data-t="p" data-s="'+esc(subs.length>1?cur.sub:'')+'"><summary class="swapbtn"><i class="dth sm"'+(cur.img?' style="background-image:url('+cur.img+')"':'')+'></i><span>'+esc(cur.n)+'</span></summary><div class="dl"><div class="dhead"><input class="swq" type="search" enterkeyhint="search" placeholder="'+esc(T('Search'))+'" oninput="swSearch(this)" autocomplete="off" autocorrect="off" spellcheck="false">'+tabs+chips+'</div><div class="sl">'+body+'</div><div class="swempty" hidden>Nothing here. Try another tab.</div></div></details>'};
 function apply(d){if(!d.querySelector('.swtabs'))return;var t=d.getAttribute('data-t')||'p',s=d.getAttribute('data-s')||'';
  var key={p:'data-p',s:'data-ok',x:'data-x'}[t];
  var rows=[].slice.call(d.querySelectorAll('.srow'));var inTab=function(r){return t==='a'||r.getAttribute(key)==='1'};
  var chips=[].slice.call(d.querySelectorAll('.dhead .btn[data-s]'));
- if(chips.length){var has={};rows.forEach(function(r){if(inTab(r))has[r.getAttribute('data-s')]=1});chips.forEach(function(c){c.style.display=has[c.getAttribute('data-s')]?'':'none'});
-  if(!s||!has[s]){s='';for(var i=0;i<chips.length;i++)if(has[chips[i].getAttribute('data-s')]){s=chips[i].getAttribute('data-s');break}d.setAttribute('data-s',s)}
+ if(chips.length){var has={};rows.forEach(function(r){if(inTab(r))has[r.getAttribute('data-s')]=1});chips.forEach(function(c){var k=c.getAttribute('data-s');c.style.display=(k==='*'||has[k])?'':'none'});
+  if(s!=='*'&&(!s||!has[s])){s='';for(var i=0;i<chips.length;i++)if(has[chips[i].getAttribute('data-s')]){s=chips[i].getAttribute('data-s');break}d.setAttribute('data-s',s)}
   chips.forEach(function(c){c.classList.toggle('on',c.getAttribute('data-s')===s)})}
- var n=0;rows.forEach(function(r){var v=inTab(r)&&(!s||r.getAttribute('data-s')===s);r.style.display=v?'':'none';if(v)n++});
+ var q=String(d.__q||'').toLowerCase().trim();var n=0;rows.forEach(function(r){var em=r.querySelector('em'),nm=((em&&em.firstChild&&em.firstChild.nodeValue)||'').toLowerCase();var v=inTab(r)&&(q?((r.getAttribute('data-n')||'').indexOf(q)>-1||nm.indexOf(q)>-1):(s==='*'||!s||r.getAttribute('data-s')===s));r.style.display=v?'':'none';if(v)n++});
  var e=d.querySelector('.swempty');if(e)e.hidden=n>0;
  [].forEach.call(d.querySelectorAll('.swtab'),function(b){b.classList.toggle('on',b.getAttribute('data-t')===t)})}
+window.swSearch=function(i){var d=i.closest('details');if(!d)return;d.__q=i.value;apply(d);var dl=d.querySelector('.dl');if(dl)dl.scrollTop=0};
 window.swTab=function(b){var d=b.closest('details');d.setAttribute('data-t',b.getAttribute('data-t'));apply(d);var dl=d.querySelector('.dl');if(dl)dl.scrollTop=0;try{b.scrollIntoView({block:'nearest',inline:'center'})}catch(e){}};
 var _sf=window.swFilter;window.swFilter=function(b){var d=b.closest('details.swapd');if(!d||!d.querySelector('.swtabs'))return _sf.apply(this,arguments);d.setAttribute('data-s',b.getAttribute('data-s'));apply(d)};
-document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.classList&&d.classList.contains('swapd')&&d.open)apply(d)},true);
+document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.classList&&d.classList.contains('swapd')&&d.open){d.__q='';var qi=d.querySelector('.swq');if(qi)qi.value='';apply(d)}},true);
 var st=document.createElement('style');st.id='aera-swap-tabs';st.textContent=
  '.swapd .swtabs{display:flex;gap:4px;flex:0 0 100%;max-width:100%;overflow-x:auto;background:#EDF3FD;border-radius:10px;padding:3px;margin:0 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}'+
  '.swapd .swtabs::-webkit-scrollbar{display:none}'+
@@ -2345,6 +2347,8 @@ var st=document.createElement('style');st.id='aera-swap-tabs';st.textContent=
  '.swapd .swtab.on{background:#16479E;color:#fff}'+
  '.swapd .swtab i{font-style:normal;display:inline-block;margin-left:6px;min-width:16px;padding:0 5px;border-radius:9px;background:#FDB913;color:#16479E;font-size:10.5px;line-height:16px;text-align:center}'+
  '.swapd .srow small.swno{color:#B45309;font-weight:600}'+
+ '.swapd .swq{flex:0 0 100%;box-sizing:border-box;width:100%;height:42px;border:1.5px solid #16479E;border-radius:12px;padding:0 12px 0 38px;margin:0 0 6px;font:500 16px Montserrat,system-ui,sans-serif;color:#0B1C36;background:#fff url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2316479E%27 stroke-width=%272.5%27 stroke-linecap=%27round%27%3E%3Ccircle cx=%2711%27 cy=%2711%27 r=%277%27/%3E%3Cpath d=%27M20 20l-4-4%27/%3E%3C/svg%3E") no-repeat 12px center;background-size:17px;outline:none;-webkit-appearance:none;appearance:none}'+
+ '.swapd .swq:focus{border-color:#FDB913;box-shadow:0 0 0 3px rgba(253,185,19,.25)}'+
  '.swapd .swempty{padding:16px 8px;color:var(--mute);font-size:12.5px;text-align:center}';
 document.head.appendChild(st);
 try{if(window.PLAN&&PLAN.meals&&PLAN.meals.length&&typeof renderPlan==='function'&&document.querySelector('details.swapd'))renderPlan()}catch(e){}
