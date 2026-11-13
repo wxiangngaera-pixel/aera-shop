@@ -694,5 +694,10 @@ window.__AERAPK_T=setInterval(loop,1500);if(document.readyState!=='loading')loop
 window.AERAPK={offer:offer,login:login};
 })();
 </script>
-</body>
+<script id="aera-kc-bothwt">/* Peter 13th Nov 2026 : on the Order page a Cooked Weight portion shows both weights : "150 g Cooked · 225 g Raw" ( charged and weighed on the Raw ). Raw portions stay "75 g Raw". */
+(function(){if(window.__kcBothWt)return;window.__kcBothWt=1;var D=document;
+var st=D.createElement('style');st.textContent='.kcwraw{margin-left:6px;font-size:.85em;font-weight:600;color:#64748B;white-space:nowrap}';(D.head||D.documentElement).appendChild(st);
+function run(){try{D.querySelectorAll('#main .omeal .omealit>div b').forEach(function(b){var ck=b.querySelector('.kcwl.ck');if(!ck||b.querySelector('.kcwraw'))return;var m=/([\d,.]+)\s*g/.exec(String(b.__raw||''));if(!m)return;
+ var s=D.createElement('span');s.className='kcwraw';s.textContent='· '+m[1]+' g Raw';ck.insertAdjacentElement('afterend',s);b.__h=b.innerHTML})}catch(e){}}
+setInterval(run,400)})();</script></body>
 </html>
