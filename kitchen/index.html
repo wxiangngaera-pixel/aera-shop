@@ -715,5 +715,56 @@ function self(o){try{var f=(o&&o.fulfil)||{};return f.type!=='pickup'&&f.courier
 function hook(){try{if(window.COURIER_NAME&&!COURIER_NAME.self)COURIER_NAME.self='Self-Delivery'}catch(e){}
  try{var f=window.lmChip;if(typeof f==='function'&&!f.__self){var w=function(o){if(self(o)&&o.status!=='cancelled'){var mm='';try{var c=JSON.parse(JSON.stringify(o));c.fulfil.courier='lalamove';c.lalamove={};var x=/<span class="m">[^<]*<\/span>/.exec(f.call(this,c)||'');if(x)mm='<div class="kcrec noprint">'+x[0]+'</div>'}catch(e){}return mm+'<span class="chip" style="background:#EEF3FC;border-color:#16479E;color:#16479E;font-weight:800">🚗 Self-Delivery</span>'}return f.apply(this,arguments)};for(var k in f)try{w[k]=f[k]}catch(x){}w.__self=1;window.lmChip=w}}catch(e){}
  try{D.querySelectorAll('select[onchange="setFulfil(this.value)"]').forEach(function(s){if(s.querySelector('option[value="self"]'))return;var o=D.createElement('option');o.value='self';o.textContent='Delivery · Self-Delivery';var pk=s.querySelector('option[value="pickup"]');s.insertBefore(o,pk||null);try{if(window.EO&&EO.fulfil&&EO.fulfil.type!=='pickup'&&EO.fulfil.courier==='self')s.value='self'}catch(e){}})}catch(e){}}
-setInterval(hook,400);hook()})();</script></body>
+setInterval(hook,400);hook()})();</script><script id="aera-kc-sendcust">/* Peter 13th Nov 2026 : + New Order : send what was built to the customer instead of placing the Order.
+   "Save to [Name]'s Saved Meal Plans" puts the plan in My Account ; "Put into [Name]'s Cart" puts the plan, menu Meals and Bundles in
+   their website Cart ; "Both" does both. Every item keeps Cooked ( c, with its Cooked grams ) or Raw ( r ). Nothing is ordered or charged :
+   the customer checks out and pays themselves. Needs the customer to have an AERA account. */
+(function(){if(window.__kcSendCust)return;window.__kcSendCust=1;var D=document,BUSY=0;
+var st=D.createElement('style');st.textContent='#kcSendCust{margin:14px 0 4px;padding:12px;border:1.5px dashed #16479E;border-radius:14px;background:#F5F8FE}#kcSendCust .h{font-weight:800;color:#16479E;margin-bottom:4px}#kcSendCust .s{font-size:12.5px;color:#64748B;margin-bottom:10px}#kcSendCust .r{display:flex;flex-wrap:wrap;gap:8px}#kcSendCust button{border:1.5px solid #16479E;background:#fff;color:#16479E;border-radius:999px;padding:9px 14px;font:inherit;font-weight:800;cursor:pointer}#kcSendCust button.y{background:#FDB913;border-color:#FDB913;color:#0B0B0B}#kcSendCust button[disabled]{opacity:.45;cursor:not-allowed}';(D.head||D.documentElement).appendChild(st);
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function say(m){try{if(typeof window.toast==='function')window.toast(m)}catch(e){}try{var s=D.querySelector('#kcSendCust .s');if(s){s.textContent=m;s.style.color='#16479E';s.style.fontWeight='700'}}catch(e){}}
+function first(n){n=String(n||'').trim();return n?n.split(/\s+/)[0]:'Customer'}
+function r2(x){return Math.round((+x||0)*100)/100}
+function build(NO){var inv={};try{var b=recipeByCode();Object.keys(b).forEach(function(c){if(!inv[b[c]]||c.length<inv[b[c]].length)inv[b[c]]=c})}catch(e){}
+ var meals=[],cart={},miss=[],bunSeen={};
+ (NO.items||[]).forEach(function(it){var q=Math.max(1,+it.qty||1);
+  if(it.bundle){var key=String(it.bundle);if(!bunSeen[key+'|'+(it.bset||'')]){bunSeen[key+'|'+(it.bset||'')]=1;cart[key]=(cart[key]||0)+q}return}
+  if(it.kind==='meal'&&it.ref){var k='MEAL-'+String(it.ref).replace(/^meal-/,'');cart[k]=(cart[k]||0)+q;return}
+  if(it.kind==='custom'&&Array.isArray(it.comps)&&it.comps.length){var cs=[],bad=0,t={kcal:0,p:0,c:0,f:0};
+   it.comps.forEach(function(c){var r=S.rec[c.recipe]||{},code=inv[c.recipe];if(!code){bad=1;miss.push(r.name||c.recipe);return}var g=Math.round(+c.grams||0),ck=Math.round(+c.ck||0);var x={code:code,id:'',name:String(r.name||'').trim(),grams:g};if(ck>0){x.ck=ck;x.wb='c'}else x.wb='r';cs.push(x);
+    var ca=(r.cache||{}),f=g/100;t.kcal+=(+ca.cal||0)*f;t.p+=(+ca.p||0)*f;t.c+=(+ca.c||0)*f;t.f+=(+ca.f||0)*f});
+   if(bad)return;var price=0;try{price=r2(itemUnitPrice(it))}catch(e){}
+   for(var i=0;i<q;i++)meals.push({day:+it.day||0,comps:cs,kcal:Math.round(t.kcal),t:t,price:price,name:cs.map(function(x){return x.name}).join(' · ')});return}
+  if(it.kind==='recipe')miss.push((S.rec[it.ref]||{}).name||'an À la Carte item')});
+ var plan=null;if(meals.length){var hasDay=meals.every(function(m){return m.day>0});var byDay={};
+  if(hasDay)meals.forEach(function(m){(byDay[m.day]=byDay[m.day]||[]).push(m)});else meals.forEach(function(m,i){(byDay[i+1]=[m])});
+  var dayNos=Object.keys(byDay).map(Number).sort(function(a,b){return a-b}),mpd=0,out=[];dayNos.forEach(function(d,di){byDay[d].forEach(function(m,si){out.push({day:di+1,slot:si+1,name:m.name,comps:m.comps,kcal:m.kcal,price:m.price,t:m.t})});mpd=Math.max(mpd,byDay[d].length)});
+  var days=dayNos.length,tot={kcal:0,p:0,c:0,f:0},nC=0,nA=0;out.forEach(function(m){tot.kcal+=m.t.kcal;tot.p+=m.t.p;tot.c+=m.t.c;tot.f+=m.t.f;m.comps.forEach(function(c){nA++;if(c.wb==='c')nC++})});
+  var price=r2(out.reduce(function(a,m){return a+m.price},0)),seas=NO.seas||'normal',spc=NO.spice||'normal';
+  var id='PL-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase();
+  var prefs={seasoning:seas,spice:spc,src:'kitchen'};if(nC)prefs.wb=nC===nA?'cooked':'mixed';
+  var pmeals=out.map(function(m){return{day:m.day,slot:m.slot,name:m.name,comps:m.comps,kcal:m.kcal,price:m.price}});
+  var pl=out.map(function(m){return m.comps.map(function(c){return c.code+':'+c.grams}).join(',')}).join('|');
+  plan={id:id,days:days,mpd:mpd,boxes:out.length,price:price,prefs:prefs,meals:pmeals,name:'',
+   targets:{kcal:Math.round(tot.kcal/days),p:Math.round(tot.p/days),c:Math.round(tot.c/days),f:Math.round(tot.f/days)},
+   cartPlan:{id:id,name:'Personalised Plan · '+days+' Day'+(days>1?'s':'')+' x '+mpd+' Meal'+(mpd>1?'s':''),boxes:out.length,price:price,pl:pl,prefs:seas+'/'+spc,days:days,mpd:mpd}}}
+ return{plan:plan,cart:cart,miss:miss}}
+window.kcSendCust=function(mode){if(BUSY)return;var NO=null;try{NO=window.noState()}catch(e){}if(!NO)return;var em=String(NO.email||'').trim().toLowerCase();
+ if(!em)return say('Pick a client with an email first.');var x=build(NO);var toPlan=mode==='plan'||mode==='both',toCart=mode==='cart'||mode==='both';
+ if(x.miss.length)return say('Not sent : '+x.miss.join(', ')+' is not on the website, so it cannot go into a Saved Meal Plan or Cart. Remove it, or Save the Order instead.');
+ if(toPlan&&!x.plan)return say('There is no Personalised Meal Plan to save. Build meals by the gram first, or use Put into Cart for Menu Meals and Bundles.');
+ if(toCart&&!x.plan&&!Object.keys(x.cart).length)return say('Nothing to put into the Cart yet.');
+ var sb=window.__KC_SB;if(!sb)return say('The Console is not connected to the website database.');BUSY=1;paint();
+ sb.rpc('kc_send_to_customer',{p_email:em,p_plan:x.plan,p_cart_items:toCart?x.cart:{},p_to_plan:toPlan,p_to_cart:toCart}).then(function(r){BUSY=0;paint();
+  if(r.error)return say(String(r.error.message||r.error));var who=first(NO.name);
+  say(mode==='both'?('Sent to '+who+' : Saved Meal Plan + Cart. Nothing is charged until '+who+' checks out.'):(toPlan?('Saved to '+who+'’s Saved Meal Plans.'):('Put into '+who+'’s Cart. Nothing is charged until '+who+' checks out.')))},
+  function(e){BUSY=0;paint();say(String((e&&e.message)||e))})};
+function paint(){if(!/^#neworder/.test(location.hash||''))return;var save=[].find.call(D.querySelectorAll('#main button'),function(b){return /^Save order$/i.test(b.textContent.trim())});if(!save)return;
+ var NO=null;try{NO=window.noState()}catch(e){}if(!NO)return;var box=D.getElementById('kcSendCust');var who=first(NO.name),ok=!!String(NO.email||'').trim()&&(NO.items||[]).length>0;
+ var sig=who+'|'+ok+'|'+BUSY;if(box&&box.__sig===sig&&box.nextElementSibling===save.parentElement)return;if(box)box.remove();
+ box=D.createElement('div');box.id='kcSendCust';box.__sig=sig;var dis=(!ok||BUSY)?' disabled':'';
+ box.innerHTML='<div class="h">Or send it to '+esc(who)+' instead of placing the Order</div><div class="s">'+(NO.email?'Goes into '+esc(who)+'’s account. Nothing is ordered or charged until '+esc(who)+' checks out.':'Pick a client with an AERA account first.')+'</div>'+
+  '<div class="r"><button type="button"'+dis+' onclick="kcSendCust(\'plan\')">💾 Save to '+esc(who)+'’s Saved Meal Plans</button><button type="button"'+dis+' onclick="kcSendCust(\'cart\')">🛒 Put into '+esc(who)+'’s Cart</button><button type="button" class="y"'+dis+' onclick="kcSendCust(\'both\')">Both</button></div>';
+ save.parentElement.insertAdjacentElement('beforebegin',box)}
+window.__kcSendBuild=build;setInterval(paint,500)})();</script></body>
 </html>
