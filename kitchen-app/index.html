@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><script id="aera-kc-force">/* Peter 14th Nov 2026 : Force Update for the Kitchen. When AERA ships a new build, every Kitchen device drops its cached Orders
+   ( aera-kc-cache ) and old code, then reloads once, so Orders, Prep lists and Kitchen Dockets show the latest plans. Bump B on the next release. */
+(function(){var B='20261114k';try{var k='aera.kcbuild',v=localStorage.getItem(k);if(v===B)return;
+ localStorage.removeItem('aera.motion.code');try{indexedDB.deleteDatabase('aera-kc-cache')}catch(e){}
+ localStorage.setItem(k,B);
+ if(!sessionStorage.getItem('aera.kcReload.'+B)){sessionStorage.setItem('aera.kcReload.'+B,'1');var u=new URL(location.href);u.searchParams.set('v',B);setTimeout(function(){location.replace(u.toString())},300)}
+}catch(e){}})();</script>
 <style id="aera-input-guard-css">
 /* iPhone : a box with text smaller than 16px makes Safari zoom the whole page in when it is tapped */
 @media (hover:none) and (pointer:coarse){input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}}
