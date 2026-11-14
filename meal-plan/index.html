@@ -2,7 +2,7 @@
 <html lang="en">
 <head><script id="aera-force-build">/* Peter 14th Nov 2026 : Force Update. When AERA ships a new build, every phone and browser drops its old cached code and its old
    local copy of a Meal Plan, then reloads once onto the latest version. Bump B on the next release. */
-(function(){var B='20261114a';try{var k='aera.build',v=localStorage.getItem(k);if(v===B)return;
+(function(){var B='20261114b';try{var k='aera.build',v=localStorage.getItem(k);if(v===B)return;
  localStorage.removeItem('aera.motion.code');
  var signed=false;for(var i=0;i<localStorage.length;i++){var n=localStorage.key(i)||'';if(/^sb-.*-auth-token$/.test(n)){signed=true;break}}
  if(signed){localStorage.removeItem('aera.planDraft')}
@@ -2921,5 +2921,9 @@ addEventListener('pagehide',send,true);document.addEventListener('visibilitychan
 setTimeout(function(){if(!sent){send();sent=false;EV=[];seen={'view|':1}}},45000);
 })();
 </script>
-</body>
+<script id="aera-plan-coachlink">/* Peter 14th Nov 2026 : a plan opened from the Coach Plan App keeps its link to that Coach's client ( prefs.coach ),
+   so when the Coach changes the plan, the saved Meal Plan and its Orders follow. */
+(function(){if(window.__aeraCoachLink)return;window.__aeraCoachLink=1;
+function wrap(){var f=window.planPayload;if(typeof f!=='function'||f.__cl)return;var w=function(){var p=f.apply(this,arguments);try{var cc=(typeof PLAN!=='undefined'&&PLAN)?PLAN.coachClient:null;if(p&&cc){p.prefs=p.prefs||{};p.prefs.coach={client:String(cc)}}}catch(e){}return p};for(var k in f)try{w[k]=f[k]}catch(x){}w.__cl=1;window.planPayload=w}
+setInterval(wrap,700);wrap()})();</script></body>
 </html>
