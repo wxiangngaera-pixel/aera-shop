@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><script id="aera-force-build">/* Peter 14th Nov 2026 : Force Update. When AERA ships a new build, every phone and browser drops its old cached code and its old
+   local copy of a Meal Plan, then reloads once onto the latest version. Bump B on the next release. */
+(function(){var B='20261114a';try{var k='aera.build',v=localStorage.getItem(k);if(v===B)return;
+ localStorage.removeItem('aera.motion.code');
+ var signed=false;for(var i=0;i<localStorage.length;i++){var n=localStorage.key(i)||'';if(/^sb-.*-auth-token$/.test(n)){signed=true;break}}
+ if(signed){localStorage.removeItem('aera.planDraft')}
+ localStorage.setItem(k,B);
+ if(v!==null&&!sessionStorage.getItem('aera.buildReload')){sessionStorage.setItem('aera.buildReload','1');var u=new URL(location.href);u.searchParams.set('v',B);location.replace(u.toString())}
+}catch(e){}})();</script>
 <meta name="color-scheme" content="light only">
 <style id="aera-nobar-css">html.aera-nobar #aeraBar{position:static!important;background:transparent!important;box-shadow:none!important}html.aera-nobar #aeraBar .ab-in{height:auto!important;min-height:0!important;padding:10px 0 0!important;justify-content:flex-end!important}html.aera-nobar #aeraBar .ab-in>:not(.ab-r),html.aera-nobar #aeraBar .ab-r>:not(.cpaHb),html.aera-nobar .ab-panel{display:none!important}#aeraFootOut{display:none}html.aera-nobar #aeraFootOut.on{display:flex;justify-content:center;padding:26px 16px calc(26px + env(safe-area-inset-bottom))}#aeraFootOut button{background:none;border:0;color:#6B7280;font:600 13px Montserrat,system-ui,sans-serif;text-decoration:underline;cursor:pointer;padding:8px 12px;width:auto;margin:0;text-transform:none}</style>
 <script id="aera-nobar">/* Peter ( 18th Oct 2026 ) : inside the installed App there is no title bar, the same as AERA Order. On the website it stays. */
