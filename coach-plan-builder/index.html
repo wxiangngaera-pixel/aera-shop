@@ -2,7 +2,7 @@
 <html lang="en">
 <head><script id="aera-force-build">/* Peter 14th Nov 2026 : Force Update. When AERA ships a new build, every phone and browser drops its old cached code and its old
    local copy of a Meal Plan, then reloads once onto the latest version. Bump B on the next release. */
-(function(){var B='20261114a';try{var k='aera.build',v=localStorage.getItem(k);if(v===B)return;
+(function(){var B='20261114b';try{var k='aera.build',v=localStorage.getItem(k);if(v===B)return;
  localStorage.removeItem('aera.motion.code');
  var signed=false;for(var i=0;i<localStorage.length;i++){var n=localStorage.key(i)||'';if(/^sb-.*-auth-token$/.test(n)){signed=true;break}}
  if(signed){localStorage.removeItem('aera.planDraft')}
@@ -1496,6 +1496,15 @@ function sheetText(){
      (u?'  ( '+u+' )':'')+(ownMac(it)?'  ( Home-Sourced · '+Math.round(ownMac(it).kcal)+' KCALs · Protein '+Math.round(ownMac(it).p)+' g · Carbs '+Math.round(ownMac(it).c)+' g · Fat '+Math.round(ownMac(it).f)+' g )':''))})});
   L.push('')});
  return L.join('\n')}
+/* Peter 14th Nov 2026 : the Coach Plan App is the master. After every save, this client's plan is sent to the server, which makes the
+   customer's linked saved Meal Plan and every linked Order not yet being cooked exactly the same ( dishes, days, Raw and Cooked weights ). */
+var __CSYNC={},__CST=0;
+window.__coachSyncNow=function(){try{var c=cur();if(!c||!c.id||!c.days)return;var meals=[],dayN=0;
+ c.days.forEach(function(d){var pend=[];(d.meals||[]).forEach(function(m){var cs=[];(m.items||[]).forEach(function(it){var r=BYCODE[it.code];if(!r)return;var x={code:it.code,name:r.name,grams:rawOf(it).g};if(bOf(it)==='cooked'&&+it.g>0)x.ck=Math.round(+it.g);cs.push(x)});if(cs.length)pend.push(cs)});
+  if(!pend.length)return;dayN++;pend.forEach(function(cs,i){meals.push({day:dayN,slot:i+1,comps:cs,name:cs.map(function(x){return x.name}).join(' · ')})})});
+ if(!meals.length)return;var sig=JSON.stringify(meals);if(__CSYNC[c.id]===sig)return;var A=window.__coachAcct;if(!A||!A.signed||!A.signed())return;
+ A.rest('rpc/coach_sync_client',{method:'POST',body:JSON.stringify({p_client_id:c.id,p_plan:{meals:meals}})}).then(function(r){if(r&&r.ok)__CSYNC[c.id]=sig}).catch(function(){})}catch(e){}};
+(function(){function hook(){var A=window.__coachAcct;if(!A||A.__sync)return;var f=A.push;A.push=function(){var x=f.apply(this,arguments);clearTimeout(__CST);__CST=setTimeout(window.__coachSyncNow,2500);return x};A.__sync=1;setTimeout(window.__coachSyncNow,6000)}setInterval(hook,800);hook()})();
 function draft(){
  var c=cur(),meals=[],off=[],dayN=0,mpd=0,names=[];
  c.days.forEach(function(d){
@@ -1523,7 +1532,7 @@ function draft(){
  var nd=Math.max(1,dayN);
  return{off:off,plan:{
   id:'PL-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase(),
-  days:nd,mpd:mpd,meals:meals,byop:1,src:'coach',dayNames:names,
+  days:nd,mpd:mpd,meals:meals,byop:1,src:'coach',coachClient:c.id,dayNames:names,
   targets:{kcal:Math.round(tot.kcal/nd),p:Math.round(tot.p/nd),
            c:Math.round(tot.c/nd),f:Math.round(tot.f/nd)},
   q:{days:nd,mpd:mpd,total:mpd,plan:'macros',seasoning:(window.__cpSalt?window.__cpSalt(c):'normal'),spice:(window.__cpSpice?window.__cpSpice(c):'normal')},
