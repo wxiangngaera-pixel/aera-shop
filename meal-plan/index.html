@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><script id="aera-force-build">/* Peter 14th Nov 2026 : Force Update. When AERA ships a new build, every phone and browser drops its old cached code and its old
+   local copy of a Meal Plan, then reloads once onto the latest version. Bump B on the next release. */
+(function(){var B='20261114a';try{var k='aera.build',v=localStorage.getItem(k);if(v===B)return;
+ localStorage.removeItem('aera.motion.code');
+ var signed=false;for(var i=0;i<localStorage.length;i++){var n=localStorage.key(i)||'';if(/^sb-.*-auth-token$/.test(n)){signed=true;break}}
+ if(signed){localStorage.removeItem('aera.planDraft')}
+ localStorage.setItem(k,B);
+ if(v!==null&&!sessionStorage.getItem('aera.buildReload')){sessionStorage.setItem('aera.buildReload','1');var u=new URL(location.href);u.searchParams.set('v',B);location.replace(u.toString())}
+}catch(e){}})();</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style id="aera-cloak">html.aera-cloak body{opacity:0!important}html.aera-show body{opacity:1;transition:opacity .16s ease-out}</style>
 <script id="aera-cloak-js">/* Peter 11th Nov 2026 : no more Jumps and Flashes when a page opens ( Safari and Chrome ). The page waits a moment, white, while it puts on the new look,
