@@ -1223,11 +1223,14 @@ async function ffOFF(q){
  var sv=best.sq?(String(p.serving_size||'').trim()||(best.sq+' g')):'100 g';
  return{name:nm,serving:sv,kcal:Math.round(best.k*m),p:Math.round(best.pr*m*10)/10,c:Math.round(best.cb*m*10)/10,f:Math.round(best.ft*m*10)/10,note:'From Open Food Facts ( community data ) — check the numbers before adding.',zh:{name:nm,serving:sv,note:'来源：Open Food Facts（社区数据）— 加入前请核对数字。'}};
 }
-async function foodFind(q){ /* Peter 15th Nov 2026 : the Malaysian list only wins on a confident match ( the name itself, or nearly all of it ). "Nutrilite Green Tea Protein" is no longer "Teh O Kosong" because it shares the word tea : a weak match goes to the product database first, and the list is only the fallback. */
- window.__ffScore=0;var l=ffLocal(q);var sc=l?(window.__ffScore||0):0;var words=ffNorm(q).split(' ').filter(Boolean).length;
+async function foodFind(q){ /* Peter 15th Nov 2026 : the Malaysian list only wins on a confident match. A weak match goes to the product database first — tried as the full name,
+   then brand + last word ( "Nutrilite protein" ), then the last two words — and the list is only the fallback. Nothing confident : the Coach types the macros. */
+ window.__ffScore=0;var l=ffLocal(q);var sc=l?(window.__ffScore||0):0;var W=ffNorm(q).split(' ').filter(Boolean),words=W.length;
  if(l&&(sc>=90||(sc>=70&&words<=2)))return l;
- var o=null;try{o=await ffOFF(q)}catch(e){try{o=await ffOFF(q)}catch(e2){o=null}}
- if(o&&o.name)return o; if(l&&sc>=60)return l; return{name:null} }
+ var tries=[q];if(words>=3){tries.push(W[0]+' '+W[W.length-1]);tries.push(W.slice(-2).join(' '))}
+ for(var i=0;i<tries.length;i++){var o=null;try{o=await ffOFF(tries[i])}catch(e){await new Promise(function(r){setTimeout(r,1200)});try{o=await ffOFF(tries[i])}catch(e2){o=null}}
+  if(o&&o.name)return o;if(i<tries.length-1)await new Promise(function(r){setTimeout(r,900)})}
+ if(l&&sc>=85)return l; return{name:null} }
 
 async function coachFetch(mode,payload){if(mode==='food')return foodFind((payload&&payload.text)||'');var key='C'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);var ctl=new AbortController();var to=setTimeout(function(){ctl.abort()},60000);await fetch(COACH_URL,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctl.signal,body:JSON.stringify({contactEmail:'sync-coach-'+key.toLowerCase()+'@aera-sync.invalid',data:{mode:mode,key:key,payload:JSON.stringify(payload)}})});clearTimeout(to);var row=null;for(var i=0;i<8&&!row;i++){if(i)await new Promise(function(r){setTimeout(r,1500)});try{var j=await fetch(COACH_READ+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()});(j&&j.data||[]).forEach(function(r){if(r.Key===key)row=r})}catch(e){}}if(!row)throw new Error('timeout');var a=null;try{a=JSON.parse(row.Reply)}catch(e){a=null}if(!a||a.error)throw new Error((a&&a.error)||'bad reply');return a}
 function wikiPics(s){var u='https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrlimit=6&gsrsearch='+encodeURIComponent(s+' food')+'&prop=pageimages&piprop=thumbnail&pithumbsize=320';
@@ -1261,8 +1264,9 @@ function addOwn(){
 function ownPaint(){var el=$('#ownFound');if(!el)return;if(!OWNF){el.innerHTML='';return}var F=OWNF,q=OWNQ;
  var pic='<div class="ownf-pic"'+(F.img?' style="background-image:url('+esc(F.img)+')"':'')+'></div>';
  var pics=F.pics.length>1?'<div class="ownf-pics">'+F.pics.map(function(u,i){return '<button type="button" data-pic="'+i+'" class="'+(u===F.img?'on':'')+'" style="background-image:url('+esc(u)+')" aria-label="Picture '+(i+1)+'"></button>'}).join('')+'<button type="button" data-pic="-1" class="nopic'+(F.img?'':' on')+'">No Picture</button></div>':'';
- if(F.none){el.innerHTML='<div class="ownf"><div class="ownf-top">'+pic+'<div><b>'+esc(F.name)+'</b><small>We could not find the Macros for this one. Try naming it more simply, or add it without them.</small></div></div>'+pics+
-  '<div class="ownf-act"><button class="btn s" type="button" data-ownok="1">Add Without Macros</button><button class="btn o s" type="button" data-owncancel="1">Cancel</button></div></div>';return}
+ if(F.none){el.innerHTML='<div class="ownf"><div class="ownf-top">'+pic+'<div><b>'+esc(F.name)+'</b><small>We could not find the Macros for this one. Read them off the pack and type them here, or add it without them.</small></div></div>'+pics+
+ '<label class="lb" style="margin-top:12px">Enter The Macros ( per Serving )</label><div class="ownman"><input id="ownMsv" placeholder="Serving ( e.g. 1 scoop 30 g )"><input id="ownMk" type="number" inputmode="decimal" min="0" placeholder="KCALs"><input id="ownMp" type="number" inputmode="decimal" min="0" placeholder="Protein g"><input id="ownMc" type="number" inputmode="decimal" min="0" placeholder="Carbs g"><input id="ownMf" type="number" inputmode="decimal" min="0" placeholder="Fat g"></div>'+
+ '<div class="ownf-act"><button class="btn s" type="button" data-ownman="1">Add With These Macros</button><button class="btn o s" type="button" data-ownok="1">Add Without Macros</button><button class="btn o s" type="button" data-owncancel="1">Cancel</button></div></div>';return}
  var opts=[[0.5,'Half'],[1,'1 Serving'],[1.5,'1½'],[2,'2 Servings'],[3,'3 Servings']];
  el.innerHTML='<div class="ownf"><div class="ownf-top">'+pic+'<div><b>'+esc(F.name)+'</b><small>Per Serving : '+esc(F.serving)+'</small><small>'+Math.round(F.kcal)+' KCALs · Protein '+r1(F.p)+' g · Carbs '+r1(F.c)+' g · Fat '+r1(F.f)+' g</small></div></div>'+pics+
   '<label class="lb" style="margin-top:12px">How Much?</label><div class="ownf-q">'+opts.map(function(o){return '<button type="button" data-q="'+o[0]+'" class="'+(Math.abs(q-o[0])<0.001?'on':'')+'">'+o[1]+'</button>'}).join('')+
@@ -1280,7 +1284,7 @@ function ownAddNow(){if(!OWNF||PICK==null)return;var F=OWNF,q=OWNQ,it={own:F.nam
 $('#ownFound').addEventListener('click',function(e){var b=e.target.closest('button');if(!b||!OWNF)return;
  if(b.dataset.pic!=null){var i=+b.dataset.pic;OWNF.img=i<0?'':OWNF.pics[i];ownPaint();return}
  if(b.dataset.q!=null){OWNQ=+b.dataset.q;var n=document.getElementById('ownQn');if(n)n.value=OWNQ;ownTot();return}
- if(b.dataset.ownok){ownAddNow();return}
+ if(b.dataset.ownman){var gv=function(id){return +((document.getElementById(id)||{}).value)||0};var sv=String((document.getElementById('ownMsv')||{}).value||'').trim()||'1 Serving';if(gv('ownMk')>0){OWNF.none=false;OWNF.serving=sv;OWNF.kcal=gv('ownMk');OWNF.p=gv('ownMp');OWNF.c=gv('ownMc');OWNF.f=gv('ownMf');OWNQ=1}ownAddNow();return} if(b.dataset.ownok){ownAddNow();return}
  if(b.dataset.owncancel){OWNF=null;ownPaint()}});
 $('#ownFound').addEventListener('input',function(e){if(e.target.id==='ownQn'){OWNQ=Math.max(0.25,Math.min(10,+e.target.value||1));ownTot()}});
 
@@ -3105,3 +3109,4 @@ function tick(){build();paint(false)}setInterval(tick,600);if(D.readyState==='lo
 @media(max-width:1000px){#prefRow{grid-template-columns:repeat(auto-fit,minmax(172px,1fr))!important}#prefRow .pt{white-space:normal}#prefRow .ph{width:auto;min-width:0}}
 </style>
 <style id="aera-coach-ownbtn">/* Peter 15th Nov 2026 : Find the Macros is the same height as its text box */#ownq{height:44px!important;min-height:44px!important}#ownAdd{height:44px!important;min-height:44px!important;padding:0 16px!important;white-space:nowrap;line-height:1!important;flex:none}</style>
+<style id="aera-coach-ownman">/* Peter 15th Nov 2026 : typing the macros yourself when the look-up finds nothing */.ownman{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:8px;margin-top:8px}.ownman input{min-height:42px;border:1.5px solid #CBD5E1;border-radius:10px;padding:0 10px;font:inherit;font-size:15px;width:100%;box-sizing:border-box}@media(max-width:600px){.ownman{grid-template-columns:1fr 1fr}.ownman input:first-child{grid-column:1/-1}}</style>
