@@ -3037,7 +3037,7 @@ build();setInterval(paint,700);new MutationObserver(build).observe(D.documentEle
 <script id="aera-coach-prefidx">/* Peter 15th Nov 2026 : an icon on every option button of the Weights / Packaging / Salt / Spice / Oil row ( icon above the label ).
    "Less" shows the icon faded, "None" shows it struck through, so the level reads at a glance. Line icons in the button's own colour. */
 (function(){if(window.__aeraPrefIcons)return;window.__aeraPrefIcons=1;var D=document;
-var st=D.createElement('style');st.textContent='#prefRow .pc .seg button{flex-direction:column;gap:4px;padding:8px 4px 7px!important;font-size:12.5px!important;line-height:1.1;min-height:60px}#prefRow .pi{display:block;width:22px;height:22px}#prefRow .pi svg{width:22px;height:22px;display:block;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}#prefRow .pi.less svg .ic{opacity:.45}#prefRow .pi.none svg .ic{opacity:.35}#prefRow .pi svg .sl{display:none;stroke-width:2.2}#prefRow .pi.none svg .sl{display:block}#prefRow .pt{display:block}';D.head.appendChild(st);
+var st=D.createElement('style');st.textContent='#prefRow .pc .seg button{flex-direction:column;gap:4px;padding:8px 4px 7px!important;font-size:12.5px!important;line-height:1.1;min-height:60px}#prefRow .pi{display:block;width:22px;height:22px}#prefRow .pi svg{width:22px;height:22px;display:block;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}#prefRow .pi svg .fl .ic{fill:currentColor;stroke:none;opacity:.9}#prefRow .pi.none svg .ic{opacity:.5}#prefRow .pi svg .sl{display:none;stroke-width:2.2}#prefRow .pi.none svg .sl{display:block}#prefRow .pt{display:block}';D.head.appendChild(st);
 var I={leaf:'<path class="ic" d="M20 4C10 4 4 10 4 20c10 0 16-6 16-16z"/><path class="ic" d="M4 20 14 10"/>',
  flame:'<path class="ic" d="M12 3c1 3 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.2 2-4.2.2 2 1 3.2 2 3.2 0-3 0-6 1-9z"/>',
  tray:'<rect class="ic" x="3" y="5" width="18" height="14" rx="2.5"/><path class="ic" d="M11 5v14M11 12h10"/>',
@@ -3045,11 +3045,14 @@ var I={leaf:'<path class="ic" d="M20 4C10 4 4 10 4 20c10 0 16-6 16-16z"/><path c
  salt:'<path class="ic" d="M9.5 3h5l.8 5H8.7zM8.3 8h7.4l1.3 13H7z"/><path class="ic" d="M11 5.3h.01M13 5.3h.01M12 3.8h.01"/>',
  chilli:'<path class="ic" d="M19.5 4.5c-.5 1.5-1.5 2-2.5 2.5M17 7c0 7-5 12-12 13 3-2 5-5 6-8.5C12 8 14 6.5 17 7z"/>',
  drop:'<path class="ic" d="M12 3s6.5 7.2 6.5 12a6.5 6.5 0 0 1-13 0C5.5 10.2 12 3 12 3z"/>'};
-function svg(k){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+I[k]+'<path class="sl" d="M4 20 20 4"/></svg>'}
+var CN=0;function svg(k,lv){var id='pcl'+(++CN),body=I[k];
+ if(lv==='full')return '<svg viewBox="0 0 24 24" aria-hidden="true"><g class="fl">'+body+'</g>'+body+'</svg>';
+ if(lv==='less')return '<svg viewBox="0 0 24 24" aria-hidden="true"><defs><clipPath id="'+id+'"><rect x="0" y="12" width="24" height="12"/></clipPath></defs><g class="fl" clip-path="url(#'+id+')">'+body+'</g>'+body+'</svg>';
+ return '<svg viewBox="0 0 24 24" aria-hidden="true">'+body+'<path class="sl" d="M4 20 20 4"/></svg>'}
 var MAP={basisSeg:{raw:['leaf',''],cooked:['flame','']},packSeg:{bento:['tray',''],vacuum:['pouch','']},
  saltSeg:{normal:['salt',''],less_salt:['salt','less'],no_salt:['salt','none']},
  spiceSeg:{normal:['chilli',''],less_spicy:['chilli','less'],no_spice:['chilli','none']},
  oilSeg:{normal:['drop',''],less_oil:['drop','less'],no_oil:['drop','none']}};
 function deco(){Object.keys(MAP).forEach(function(id){var seg=D.getElementById(id);if(!seg)return;[].forEach.call(seg.querySelectorAll('button'),function(b){if(b.querySelector('.pi'))return;var k=b.getAttribute('data-b')||b.getAttribute('data-p')||b.getAttribute('data-s')||b.getAttribute('data-o');var m=MAP[id][k];if(!m)return;
- var t=D.createElement('span');t.className='pt';while(b.firstChild)t.appendChild(b.firstChild);var i=D.createElement('span');i.className='pi '+m[1];i.innerHTML=svg(m[0]);b.appendChild(i);b.appendChild(t)})})}
+ var t=D.createElement('span');t.className='pt';while(b.firstChild)t.appendChild(b.firstChild);var i=D.createElement('span');i.className='pi '+m[1];i.innerHTML=svg(m[0],m[1]==='less'?'less':m[1]==='none'?'none':'full');b.appendChild(i);b.appendChild(t)})})}
 deco();setInterval(deco,800);})();</script>
