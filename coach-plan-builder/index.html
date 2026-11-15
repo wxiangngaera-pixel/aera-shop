@@ -1050,6 +1050,7 @@ function r1(v){return Math.round((+v||0)*10)/10}
 var AERA_FOODS=[
 /* [ English, 中文, serving, 份量, kcal, protein, carbs, fat, aliases ] — typical Malaysian servings, approximate */
 /* Peter 15th Nov 2026 : branded products Coaches ask for, from the maker's own label ( Amway : Protein with Green Tea = 1.5 scoops 23.5 g, 89 kcal, P 8 g, C 9.75 g, F 2 g ) */
+["BodyKey by Nutrilite Meal Replacement Shake ( Latte )","Nutrilite BodyKey 代餐奶昔（拿铁）","1 pouch ( 51 g ), mixed with water","1 包（51 克），加水冲泡",205,17,23,6,"nutrilite bodykey cafe latte,bodykey cafe latte,bodykey latte,bodykey,body key,nutrilite bodykey,amway bodykey,bodykey meal replacement,bodykey shake"],
 ["Herbalife Formula 1 Shake ( powder only )","康宝莱 Formula 1 营养蛋白混合饮料（粉）","2 tablespoons ( 26 g ) — add the milk separately","2 汤匙（26 克）— 牛奶另计",98,9,9,2.3,"herbalife f1,f1,formula 1,formula one,herbalife formula 1,herbalife shake,herbalife nutritious mixed soy protein drink,f1 shake"],
 ["Nutrilite Protein with Green Tea","Nutrilite 绿茶蛋白粉","1.5 scoops ( 23.5 g )","1.5 勺（23.5 克）",89,8,9.75,2,"nutrilite green tea protein,nutrilite green tea,amway green tea protein,protein with green tea,green tea protein,soy protein drink mix green tea,nutrilite soy protein green tea"],
 ["Nasi Lemak","椰浆饭","1 plate ( sambal, egg, anchovies, peanuts )","1 碟（参巴、蛋、江鱼仔、花生）",500,14,62,22,"nasi lemak biasa,coconut rice"],
@@ -1226,13 +1227,15 @@ async function ffOFF(q){
  var sv=best.sq?(String(p.serving_size||'').trim()||(best.sq+' g')):'100 g';
  return{name:nm,serving:sv,kcal:Math.round(best.k*m),p:Math.round(best.pr*m*10)/10,c:Math.round(best.cb*m*10)/10,f:Math.round(best.ft*m*10)/10,note:'From Open Food Facts ( community data ) — check the numbers before adding.',zh:{name:nm,serving:sv,note:'来源：Open Food Facts（社区数据）— 加入前请核对数字。'}};
 }
-async function foodFind(q){ /* Peter 15th Nov 2026 : the Malaysian list only wins on a confident match. A weak match goes to the product database first — tried as the full name,
-   then brand + last word ( "Nutrilite protein" ), then the last two words — and the list is only the fallback. Nothing confident : the Coach types the macros. */
+async function foodFind(q){ /* Peter 15th Nov 2026 : the Malaysian list only wins on a confident match. Otherwise the product database — the full name, then brand + last word — and an answer must
+   carry the brand word the Coach typed ( "Nutrilite Bodykey Cafe Latte" can never come back as a Starbucks latte ). Nothing confident : the Coach types the macros from the pack. */
  window.__ffScore=0;var l=ffLocal(q);var sc=l?(window.__ffScore||0):0;var W=ffNorm(q).split(' ').filter(Boolean),words=W.length;
  if(l&&(sc>=90||(sc>=70&&words<=2)))return l;
- var tries=[q];if(words>=3){tries.push(W[0]+' '+W[W.length-1]);tries.push(W.slice(-2).join(' '))}
+ var GEN=/^(the|a|of|and|with|cafe|latte|tea|coffee|milk|shake|drink|powder|protein|bar|chocolate|vanilla|strawberry|green|black|white|red|sugar|free|low|fat|light|plain|original|flavour|flavor|mix|pack|packet|sachet|cup|bottle|can|small|large|medium|regular|big|mini)$/;
+ var brand=(words>=2&&!GEN.test(W[0])&&W[0].length>=3)?W[0]:'';
+ var tries=[q];if(words>=3&&brand)tries.push(brand+' '+W[W.length-1]);
  for(var i=0;i<tries.length;i++){var o=null;try{o=await ffOFF(tries[i])}catch(e){await new Promise(function(r){setTimeout(r,1200)});try{o=await ffOFF(tries[i])}catch(e2){o=null}}
-  if(o&&o.name)return o;if(i<tries.length-1)await new Promise(function(r){setTimeout(r,900)})}
+  if(o&&o.name&&(!brand||ffNorm(o.name).indexOf(brand)>-1))return o;if(i<tries.length-1)await new Promise(function(r){setTimeout(r,900)})}
  if(l&&sc>=85)return l; return{name:null} }
 
 async function coachFetch(mode,payload){if(mode==='food')return foodFind((payload&&payload.text)||'');var key='C'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);var ctl=new AbortController();var to=setTimeout(function(){ctl.abort()},60000);await fetch(COACH_URL,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctl.signal,body:JSON.stringify({contactEmail:'sync-coach-'+key.toLowerCase()+'@aera-sync.invalid',data:{mode:mode,key:key,payload:JSON.stringify(payload)}})});clearTimeout(to);var row=null;for(var i=0;i<8&&!row;i++){if(i)await new Promise(function(r){setTimeout(r,1500)});try{var j=await fetch(COACH_READ+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()});(j&&j.data||[]).forEach(function(r){if(r.Key===key)row=r})}catch(e){}}if(!row)throw new Error('timeout');var a=null;try{a=JSON.parse(row.Reply)}catch(e){a=null}if(!a||a.error)throw new Error((a&&a.error)||'bad reply');return a}
