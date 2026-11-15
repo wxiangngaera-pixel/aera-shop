@@ -1211,18 +1211,18 @@ function ffLocal(q){
 }
 async function ffOFF(q){ /* Peter 15th Nov 2026 : returns the best match AND the other close matches ( other flavours, sizes ), so the Coach can tap the right one */
  var ctl=new AbortController();var to=setTimeout(function(){ctl.abort()},9000);
- var u='https://world.openfoodfacts.org/cgi/search.pl?search_terms='+encodeURIComponent(q)+'&search_simple=1&action=process&json=1&page_size=24&fields=product_name,brands,serving_size,serving_quantity,nutriments';
+ var u='https://world.openfoodfacts.org/cgi/search.pl?search_terms='+encodeURIComponent(q)+'&search_simple=1&action=process&json=1&page_size=24&fields=product_name,brands,serving_size,serving_quantity,nutriments,image_front_small_url,image_front_url,image_url';
  var j=await fetch(u,{signal:ctl.signal}).then(function(r){return r.json()});clearTimeout(to);
  var qt=ffNorm(q).split(' ');var C=[];
  (j&&j.products||[]).forEach(function(p){ var nu=p.nutriments||{};var k=+nu['energy-kcal_100g'],pr=+nu.proteins_100g,cb=+nu.carbohydrates_100g,ft=+nu.fat_100g; if(!(k>0)||isNaN(pr)||isNaN(cb)||isNaN(ft))return;
   var nm0=(p.product_name||'').trim();if(!nm0)return;var br=(p.brands||'').split(',')[0].trim();var nm=nm0;if(br&&ffNorm(nm).indexOf(ffNorm(br))<0)nm=br+' '+nm;
   var key=ffNorm(nm+' '+(p.serving_quantity||''));var s=0;var hay=ffNorm(nm);qt.forEach(function(w){if(w.length>=2&&hay.indexOf(w)>-1)s+=10}); var sq=+p.serving_quantity;if(sq>0&&sq<=1000)s+=5;s+=1;
   if(s<10)return;var m=(sq>0&&sq<=1000)?sq/100:1;var sv=(sq>0&&sq<=1000)?(String(p.serving_size||'').trim()||(sq+' g')):'100 g';
-  C.push({s:s,key:key,name:nm,serving:sv,kcal:Math.round(k*m),p:Math.round(pr*m*10)/10,c:Math.round(cb*m*10)/10,f:Math.round(ft*m*10)/10})});
+  C.push({s:s,key:key,name:nm,serving:sv,kcal:Math.round(k*m),p:Math.round(pr*m*10)/10,c:Math.round(cb*m*10)/10,f:Math.round(ft*m*10)/10,img:String(p.image_front_small_url||p.image_front_url||p.image_url||'').replace(/^http:/,'https:')})});
  C.sort(function(a,b){return b.s-a.s});var seen={},L=[];C.forEach(function(x){if(seen[x.key])return;seen[x.key]=1;if(L.length<6)L.push(x)});
  if(!L.length)return{name:null};
  var note='From Open Food Facts ( community data ) — check the numbers before adding.',zn='来源：Open Food Facts（社区数据）— 加入前请核对数字。';
- var alts=L.map(function(x){return{name:x.name,serving:x.serving,kcal:x.kcal,p:x.p,c:x.c,f:x.f,note:note,zh:{name:x.name,serving:x.serving,note:zn}}});
+ var alts=L.map(function(x){return{name:x.name,serving:x.serving,kcal:x.kcal,p:x.p,c:x.c,f:x.f,img:x.img||'',note:note,zh:{name:x.name,serving:x.serving,note:zn}}});
  var b=alts[0];b.alts=alts;return b; }
 async function foodFind(q){ /* Peter 15th Nov 2026 : the Malaysian list only wins on a confident match. Otherwise the product database — the full name, then brand + last word — and an answer must
    carry the brand word the Coach typed ( "Nutrilite Bodykey Cafe Latte" can never come back as a Starbucks latte ). Nothing confident : the Coach types the macros from the pack. */
@@ -1261,7 +1261,7 @@ function addOwn(){
  $('#ownFound').innerHTML='<p class="hint ownbusy"><span class="ownspin"></span>Looking up the Macros…</p>';
  Promise.all([coachFetch('food',{text:nm}).catch(function(){return null}),wikiPics(nm)]).then(function(res){
   OWNBUSY=false;btn.disabled=false;var a=res[0],pics=res[1]||[];
-  if(a&&a.name&&+a.kcal>0)OWNF={name:a.name,serving:a.serving||'1 Serving',kcal:+a.kcal||0,p:+a.p||0,c:+a.c||0,f:+a.f||0,note:a.note||'',pics:pics,img:pics[0]||'',alts:(a.alts&&a.alts.length>1)?a.alts:null};
+  if(a&&a.name&&+a.kcal>0)OWNF={name:a.name,serving:a.serving||'1 Serving',kcal:+a.kcal||0,p:+a.p||0,c:+a.c||0,f:+a.f||0,note:a.note||'',pics:(a.img?[a.img]:[]).concat(pics),img:a.img||pics[0]||'',alts:(a.alts&&a.alts.length>1)?a.alts:null};
   else OWNF={name:nm,none:true,pics:pics,img:pics[0]||''};
   OWNQ=1;ownPaint()})}
 function ownPaint(){var el=$('#ownFound');if(!el)return;if(!OWNF){el.innerHTML='';return}var F=OWNF,q=OWNQ;
@@ -1272,7 +1272,7 @@ function ownPaint(){var el=$('#ownFound');if(!el)return;if(!OWNF){el.innerHTML='
  '<div class="ownf-act"><button class="btn s" type="button" data-ownman="1">Add With These Macros</button><button class="btn o s" type="button" data-ownok="1">Add Without Macros</button><button class="btn o s" type="button" data-owncancel="1">Cancel</button></div></div>';return}
  var opts=[[0.5,'Half'],[1,'1 Serving'],[1.5,'1½'],[2,'2 Servings'],[3,'3 Servings']];
  el.innerHTML='<div class="ownf"><div class="ownf-top">'+pic+'<div><b>'+esc(F.name)+'</b><small>Per Serving : '+esc(F.serving)+'</small><small>'+Math.round(F.kcal)+' KCALs · Protein '+r1(F.p)+' g · Carbs '+r1(F.c)+' g · Fat '+r1(F.f)+' g</small></div></div>'+pics+
-  (F.alts?'<label class="lb" style="margin-top:12px">Other Matches — tap the right one</label><div class="ownalt">'+F.alts.map(function(x,i){return '<button type="button" data-alt="'+i+'" class="'+(x.name===F.name?'on':'')+'"><b>'+esc(x.name)+'</b><small>'+esc(x.serving)+' · '+Math.round(x.kcal)+' kcal · P '+r1(x.p)+' g</small></button>'}).join('')+'</div>':'')+'<label class="lb" style="margin-top:12px">How Much?</label><div class="ownf-q">'+opts.map(function(o){return '<button type="button" data-q="'+o[0]+'" class="'+(Math.abs(q-o[0])<0.001?'on':'')+'">'+o[1]+'</button>'}).join('')+
+  (F.alts?'<label class="lb" style="margin-top:12px">Other Matches — tap the right one</label><div class="ownalt">'+F.alts.map(function(x,i){return '<button type="button" data-alt="'+i+'" class="'+(x.name===F.name?'on':'')+'">'+(x.img?'<i style="background-image:url('+esc(x.img)+')"></i>':'<i></i>')+'<b>'+esc(x.name)+'</b><small>'+esc(x.serving)+' · '+Math.round(x.kcal)+' kcal · P '+r1(x.p)+' g</small></button>'}).join('')+'</div>':'')+'<label class="lb" style="margin-top:12px">How Much?</label><div class="ownf-q">'+opts.map(function(o){return '<button type="button" data-q="'+o[0]+'" class="'+(Math.abs(q-o[0])<0.001?'on':'')+'">'+o[1]+'</button>'}).join('')+
   '<input type="number" step="0.25" min="0.25" max="10" value="'+q+'" id="ownQn" aria-label="Servings"><span class="hint" style="margin:0">Servings</span></div>'+
   '<div class="ownf-tot" id="ownTot"></div>'+(F.note?'<p class="hint" style="margin:6px 0 0">'+esc(F.note)+'</p>':'')+
   '<div class="ownf-act"><button class="btn s" type="button" data-ownok="1">Add to this Meal</button><button class="btn o s" type="button" data-owncancel="1">Cancel</button></div>'+
@@ -1285,7 +1285,7 @@ function ownAddNow(){if(!OWNF||PICK==null)return;var F=OWNF,q=OWNQ,it={own:F.nam
  if(!F.none){var gs=gramsOf(F.serving);it.b={k:F.kcal,p:F.p,c:F.c,f:F.f,gs:gs};it.q=q;it.sv=F.serving;if(gs)it.g=Math.round(gs*q)}
  mark();day().meals[PICK].items.push(it);save();$('#ownq').value='';closePick();paint()}
 $('#ownFound').addEventListener('click',function(e){var b=e.target.closest('button');if(!b||!OWNF)return;
- if(b.dataset.alt!=null){var A=OWNF.alts&&OWNF.alts[+b.dataset.alt];if(A){OWNF=Object.assign({},OWNF,{name:A.name,serving:A.serving,kcal:A.kcal,p:A.p,c:A.c,f:A.f,note:A.note||OWNF.note});OWNQ=1;ownPaint()}return} if(b.dataset.pic!=null){var i=+b.dataset.pic;OWNF.img=i<0?'':OWNF.pics[i];ownPaint();return}
+ if(b.dataset.alt!=null){var A=OWNF.alts&&OWNF.alts[+b.dataset.alt];if(A){var P2=OWNF.pics.filter(function(u){return !(OWNF.alts||[]).some(function(z){return z.img===u})});OWNF=Object.assign({},OWNF,{name:A.name,serving:A.serving,kcal:A.kcal,p:A.p,c:A.c,f:A.f,note:A.note||OWNF.note,pics:(A.img?[A.img]:[]).concat(P2),img:A.img||P2[0]||''});OWNQ=1;ownPaint()}return} if(b.dataset.pic!=null){var i=+b.dataset.pic;OWNF.img=i<0?'':OWNF.pics[i];ownPaint();return}
  if(b.dataset.q!=null){OWNQ=+b.dataset.q;var n=document.getElementById('ownQn');if(n)n.value=OWNQ;ownTot();return}
  if(b.dataset.ownman){var gv=function(id){return +((document.getElementById(id)||{}).value)||0};var sv=String((document.getElementById('ownMsv')||{}).value||'').trim()||'1 Serving';if(gv('ownMk')>0){OWNF.none=false;OWNF.serving=sv;OWNF.kcal=gv('ownMk');OWNF.p=gv('ownMp');OWNF.c=gv('ownMc');OWNF.f=gv('ownMf');OWNQ=1}ownAddNow();return} if(b.dataset.ownok){ownAddNow();return}
  if(b.dataset.owncancel){OWNF=null;ownPaint()}});
@@ -3113,4 +3113,4 @@ function tick(){build();paint(false)}setInterval(tick,600);if(D.readyState==='lo
 </style>
 <style id="aera-coach-ownbtn">/* Peter 15th Nov 2026 : Find the Macros is the same height as its text box */#ownq{height:44px!important;min-height:44px!important}#ownAdd{height:44px!important;min-height:44px!important;padding:0 16px!important;white-space:nowrap;line-height:1!important;flex:none}</style>
 <style id="aera-coach-ownman">/* Peter 15th Nov 2026 : typing the macros yourself when the look-up finds nothing */.ownman{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:8px;margin-top:8px}.ownman input{min-height:42px;border:1.5px solid #CBD5E1;border-radius:10px;padding:0 10px;font:inherit;font-size:15px;width:100%;box-sizing:border-box}@media(max-width:600px){.ownman{grid-template-columns:1fr 1fr}.ownman input:first-child{grid-column:1/-1}}</style>
-<style id="aera-coach-ownalt">/* Peter 15th Nov 2026 : the other close matches ( flavours, sizes ) as tappable rows */.ownalt{display:grid;gap:6px;margin-top:6px}.ownalt button{display:block;width:100%;text-align:left;border:1.5px solid #CBD5E1;border-radius:10px;background:#fff;padding:8px 12px;font:inherit;cursor:pointer;text-transform:none;letter-spacing:0;margin:0;color:#0E2F6B}.ownalt button.on{border-color:#16479E;background:#EDF3FD}.ownalt button b{display:block;font-size:14px}.ownalt button small{color:#6B7280;font-size:12px}</style>
+<style id="aera-coach-ownalt">/* Peter 15th Nov 2026 : the other close matches ( flavours, sizes ) as tappable rows */.ownalt{display:grid;gap:6px;margin-top:6px}.ownalt button{display:block;width:100%;text-align:left;border:1.5px solid #CBD5E1;border-radius:10px;background:#fff;padding:8px 12px;font:inherit;cursor:pointer;text-transform:none;letter-spacing:0;margin:0;color:#0E2F6B}.ownalt button.on{border-color:#16479E;background:#EDF3FD}.ownalt button{display:grid;grid-template-columns:44px 1fr;column-gap:10px;align-items:center}.ownalt button i{grid-row:1/3;width:44px;height:44px;border-radius:8px;background:#F4F6FA center/contain no-repeat;border:1px solid #E3E8F0}.ownalt button b{display:block;font-size:14px}.ownalt button small{color:#6B7280;font-size:12px}</style>
