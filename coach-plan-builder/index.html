@@ -2873,7 +2873,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 (function(){if(window.__aeraDrafts)return;window.__aeraDrafts=1;var D=document;
 var RE=/^[a-z0-9._%+'-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/;
 function norm(e){return String(e||'').trim().toLowerCase()}
-function T(s){try{var m=window.AERA_I18N;return (m&&m[s])||s}catch(e){return s}}
+function T(s){return s}
 var st=D.createElement('style');st.textContent='#cpDrafts{flex-basis:100%;display:flex;gap:7px;flex-wrap:wrap;align-items:center;padding-top:10px;margin-top:4px;border-top:1.5px dashed var(--navy)}#cpDrafts .cpDh{font:700 11px Montserrat,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin-right:4px}#cpDrafts .tab .cpDw{color:#B42318}#cpDrafts .tab.on .cpDw{color:#FDB913}#cname.cv-bad{border-color:#F04438!important}';D.head.appendChild(st);
 function isDraft(c){var e=norm(c&&c.email);if(!e||!RE.test(e))return true;var R=window.__aeraReg||{};return R[e]===false}
 function nameOk(c){var n=String(c&&c.name||'').trim();return !!n&&!/^Client \d+$/.test(n)&&n!=='Unnamed'}
@@ -2887,7 +2887,7 @@ function tick(){if(BUSY)return;BUSY=true;try{var a=window.__coach;if(!a||!a.stat
  drafts.forEach(function(c){var b=btns[c.id];if(!b)return;
   var why=!nameOk(c)?T('Client name needed'):(norm(c.email)?T('Invalid Email Address'):T('Client email needed'));
   if(!nameOk(c)&&b.firstChild&&b.firstChild.nodeType===3)b.firstChild.textContent=T('Unnamed Draft');
-  var s=b.querySelector('small');if(s&&!s.querySelector('.cpDw'))s.insertAdjacentHTML('beforeend','<span class="cpDw"> · '+T('Draft')+' · '+why+'</span>');
+  var s=b.querySelector('small');if(s&&!s.querySelector('.cpDw'))s.insertAdjacentHTML('beforeend','<span class="cpDw"> · <span>'+T('Draft')+'</span> · <span>'+why+'</span></span>');
   if(b.parentNode!==box)box.appendChild(b)});
 }catch(x){}finally{BUSY=false}}
 new MutationObserver(function(){tick()}).observe(D.documentElement,{childList:true,subtree:true});
