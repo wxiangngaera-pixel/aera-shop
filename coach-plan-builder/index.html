@@ -2936,3 +2936,20 @@ new MutationObserver(btn).observe(D.documentElement,{childList:true,subtree:true
 window.__aeraCoachHistoryOpen=function(){list()};
 })();</script>
 <script id="aera-coach-history-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"History":"历史记录","Plan History":"餐单历史记录","Sent":"已发送","Saved":"已保存","Removed by Coach":"教练已移除","Find a Client or a Coach":"搜索客户或教练","Nothing matches.":"没有符合的记录。","No dishes in this version.":"此版本没有菜色。"})}catch(e){}</script>
+
+<style id="aera-coach-solid-css">/* Peter 15th Nov 2026 : nothing shows through. The bottom action bar is solid white, no blur. */
+.finish{background:#fff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:0 -1px 0 #D9E1EC,0 -8px 24px rgba(14,47,107,.08)!important}
+#kbShield{position:fixed;left:0;right:0;background:#F4F6FA;z-index:2147480000;pointer-events:none;display:none}</style>
+<script id="aera-coach-solid">/* Peter 15th Nov 2026 : the phone keyboard ( iOS glass ) lets the page show through it. While a box is being typed in, a solid panel
+   sits behind the keyboard ( from the bottom of the visible page down ), so the keyboard has nothing to show through. */
+(function(){if(window.__aeraSolid)return;window.__aeraSolid=1;var D=document,VV=window.visualViewport;if(!VV||!matchMedia('(pointer:coarse)').matches)return;
+var sh=null,on=false,t=null;
+function el(){if(!sh){sh=D.createElement('div');sh.id='kbShield';D.body.appendChild(sh)}return sh}
+function fit(){if(!on)return;var s=el();var kb=Math.max(0,window.innerHeight-VV.height-VV.offsetTop);if(kb<80){s.style.display='none';return}
+ s.style.top=(VV.offsetTop+VV.height)+'px';s.style.height=(kb+40)+'px';s.style.display='block'}
+function show(){clearTimeout(t);on=true;fit();setTimeout(fit,120);setTimeout(fit,400)}
+function hide(){clearTimeout(t);t=setTimeout(function(){on=false;if(sh)sh.style.display='none'},150)}
+D.addEventListener('focusin',function(e){var x=e.target;if(x&&/^(INPUT|TEXTAREA|SELECT)$/.test(x.tagName)&&!/^(checkbox|radio|button|submit|range)$/i.test(x.type||''))show()},true);
+D.addEventListener('focusout',hide,true);
+VV.addEventListener('resize',fit);VV.addEventListener('scroll',fit);window.addEventListener('scroll',fit,{passive:true});
+})();</script>
