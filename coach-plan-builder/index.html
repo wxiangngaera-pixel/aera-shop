@@ -3009,15 +3009,27 @@ html.aera-who #coachWho{display:inline-flex!important}
 #cpRefHint{font-size:13.5px!important;padding:9px 12px!important}#cvBar{padding:8px 12px!important}.cbento .bento{max-width:300px!important}}
 </style>
 
-<script id="aera-coach-prefrow">/* Peter 15th Nov 2026 : Weights, Packaging, Salt and Spice sit on ONE row, their notes in small print underneath. On a phone they stack two by two. */
-(function(){if(window.__aeraPrefRow)return;window.__aeraPrefRow=1;var D=document;
-var st=D.createElement('style');st.textContent='#prefRow{display:grid;grid-template-columns:repeat(4,max-content);gap:12px 22px;align-items:end;margin-top:14px}#prefRow .seg{white-space:nowrap}#prefRow .ph{font-size:12.5px;line-height:1.45;color:#6B7280;margin:0;max-width:34ch;align-self:start}#prefRow .ph.w2{grid-column:span 2;max-width:none}@media(max-width:1000px){#prefRow{grid-template-columns:1fr 1fr}#prefRow .ph{display:none}#prefRow .ph.w2{display:block;grid-column:span 2}}@media(max-width:560px){#prefRow{grid-template-columns:1fr}#prefRow .ph.w2{grid-column:span 1}#prefRow .seg{display:flex;width:100%}#prefRow .seg button{flex:1}}';D.head.appendChild(st);
-function build(){var b=D.getElementById('basisSeg'),p=D.getElementById('packSeg'),s=D.getElementById('saltSeg'),x=D.getElementById('spiceSeg');if(!b||!p||!s||!x||D.getElementById('prefRow'))return;
- var rb=b.parentElement.parentElement,rp=D.getElementById('packRow'),rs=D.getElementById('seasRow');if(!rb||!rp||!rs)return;
- var hb=rb.querySelector('p.hint'),hp=rp.querySelector('p.hint'),hs=rs.querySelector('p.hint');
- var g=D.createElement('div');g.id='prefRow';rb.parentNode.insertBefore(g,rb);
- [b,p,s,x].forEach(function(seg){g.appendChild(seg.parentElement)});
- [hb,hp].forEach(function(h){if(h){h.className='ph';h.removeAttribute('style');g.appendChild(h)}else{var e=D.createElement('p');e.className='ph';g.appendChild(e)}});
- if(hs){hs.className='ph w2';hs.removeAttribute('style');g.appendChild(hs)}
- [rb,rp,rs].forEach(function(r){r.style.display='none'})}
-build();new MutationObserver(build).observe(D.documentElement,{childList:true,subtree:true});})();</script>
+<script id="aera-coach-prefrow">/* Peter 15th Nov 2026 : Weights, Packaging, Salt, Spice and OIL on one row of equal cells that never leave the card ( they wrap on narrow screens ), each with its note in small print.
+   Oil Level ( Normal / Less Oil / Oil-Free ) is kept with the Client and travels inside the seasoning the Kitchen already reads : "less_salt · less_oil", "no_oil" … */
+(function(){if(window.__aeraPrefRow2)return;window.__aeraPrefRow2=1;var D=document;
+var st=D.createElement('style');st.textContent='#prefRow{display:grid;grid-template-columns:repeat(auto-fit,minmax(172px,1fr));gap:14px 16px;align-items:start;margin-top:14px}#prefRow .pc{min-width:0}#prefRow .pc .seg{display:flex;width:100%;align-items:stretch}#prefRow .pc .seg button{flex:1;padding:9px 4px!important;font-size:13.5px!important;white-space:normal;line-height:1.15;min-height:44px;display:flex;align-items:center;justify-content:center}#prefRow .ph{font-size:12px;line-height:1.4;color:#6B7280;margin:6px 0 0;max-width:none}@media(max-width:560px){#prefRow{grid-template-columns:1fr 1fr}}';D.head.appendChild(st);
+function sv(c){return /^(less_salt|no_salt)$/.test(c&&c.salt||'')?c.salt:'normal'}function ov(c){return /^(less_oil|no_oil)$/.test(c&&c.oil||'')?c.oil:'normal'}
+window.__cpSalt=function(c){var s=sv(c),o=ov(c);if(o==='normal')return s;return (s!=='normal'?s+' \u00b7 ':'')+o};window.__cpOil=ov;
+function C(){return window.__coach}
+function cell(label,seg,hint){var d=D.createElement('div');d.className='pc';if(label)d.appendChild(label);d.appendChild(seg);if(hint){hint.className='ph';hint.removeAttribute('style');d.appendChild(hint)}return d}
+function hintOf(seg,row){var pc=seg.closest('.pc');if(pc){var h=pc.querySelector('.ph');if(h)return h}if(row){var q=row.querySelector('p.hint');if(q)return q}return null}
+function build(){var b=D.getElementById('basisSeg'),p=D.getElementById('packSeg'),s=D.getElementById('saltSeg'),x=D.getElementById('spiceSeg');if(!b||!p||!s||!x)return;var g=D.getElementById('prefRow');if(g&&g.querySelector('#oilSeg'))return;
+ var rb=b.closest('#prefRow')?null:b.parentElement.parentElement,rp=D.getElementById('packRow'),rs=D.getElementById('seasRow');
+ var L=[b,p,s,x].map(function(seg){return seg.parentElement.querySelector('label.lb')});
+ var H=[hintOf(b,rb),hintOf(p,rp),hintOf(s,rs)];
+ var anchor=g||rb||rp;if(!anchor)return;if(!g){g=D.createElement('div');g.id='prefRow';anchor.parentNode.insertBefore(g,anchor)}
+ var cells=[cell(L[0],b,H[0]),cell(L[1],p,H[1]),cell(L[2],s,H[2])];
+ var hx=D.createElement('p');hx.textContent='Chilli stays on the list at 0 g for No Spice.';cells.push(cell(L[3],x,hx));
+ var lo=D.createElement('label');lo.className='lb';lo.textContent='\uD83E\uDED2 Oil Level';var o=D.createElement('div');o.className='seg';o.id='oilSeg';o.innerHTML='<button type="button" data-o="normal">Normal</button><button type="button" data-o="less_oil">Less Oil</button><button type="button" data-o="no_oil">Oil-Free</button>';
+ var ho=D.createElement('p');ho.textContent='Our Kitchen cooks this Plan with less or no oil.';cells.push(cell(lo,o,ho));
+ g.innerHTML='';cells.forEach(function(c){g.appendChild(c)});
+ [rb,rp,rs].forEach(function(r){if(r&&r!==g)r.style.display='none'});paint()}
+function paint(){var c=C()&&C().cur();if(!c)return;var v=ov(c);[].forEach.call(D.querySelectorAll('#oilSeg button'),function(x){x.classList.toggle('on',x.getAttribute('data-o')===v)})}
+D.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#oilSeg button');if(!b)return;var c=C()&&C().cur();if(!c)return;c.oil=b.getAttribute('data-o');try{C().save()}catch(x){}paint()});
+build();setInterval(paint,700);new MutationObserver(build).observe(D.documentElement,{childList:true,subtree:true});})();</script>
+<script id="aera-coach-oil-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"\uD83E\uDED2 Oil Level":"\uD83E\uDED2 \u7528\u6CB9\u91CF","Less Oil":"\u5C11\u6CB9","Oil-Free":"\u65E0\u6CB9","Our Kitchen cooks this Plan with less or no oil.":"\u6211\u4EEC\u7684\u53A8\u623F\u4F1A\u7528\u5C11\u6CB9\u6216\u65E0\u6CB9\u70F9\u8C03\u8FD9\u4EFD\u9910\u5355\u3002","Chilli stays on the list at 0 g for No Spice.":"\u9009\u65E0\u8FA3\u65F6\uFF0C\u8FA3\u6912\u4ECD\u5728\u6E05\u5355\u4E0A\uFF0C\u4F46\u4E3A 0 \u514B\u3002"})}catch(e){}</script>
