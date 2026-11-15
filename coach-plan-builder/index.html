@@ -2450,10 +2450,10 @@ setInterval(paint,700);if(D.readyState==="loading")D.addEventListener("DOMConten
    if it does, it is confirmed straight away ; if not, the Coach sees "Email not found" and cannot send. */
 (function(){if(window.__aeraNoVerify)return;window.__aeraNoVerify=1;var D=document;
 var SBU='https://swpprjvubgcdsojapaad.supabase.co',AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0';
-var NF='Email not found',NFT=' : no AERA Account uses this email. Check the spelling with your Client, or ask them to sign up at aeramealprep.net/account first.';
+var NF='Invalid Email Address',NFT=' : this email is not registered as an AERA Account. The Plan is kept under Saved Drafts until your Client signs up at aeramealprep.net/account.';
 function norm(e){return String(e||'').trim().toLowerCase()}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-var RE=/^[a-z0-9._%+'-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/,REG={};
+var RE=/^[a-z0-9._%+'-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/,REG={};window.__aeraReg=REG;
 var st=D.createElement('style');st.textContent='#cvBox #cvSend,#cvBox #cvCode,#cvBox #cvOk{display:none!important}#nfBox{margin-top:8px;padding:9px 12px;border-radius:10px;background:#FEF3F2;border:1.5px solid #F04438;color:#B42318;font-size:13.5px;line-height:1.45}';D.head.appendChild(st);
 function tok(){try{var o=JSON.parse(localStorage.getItem('sb-swpprjvubgcdsojapaad-auth-token')||'null');if(o&&o.currentSession)o=o.currentSession;return (o&&o.access_token)||''}catch(e){return ''}}
 function look(e){var t=tok();if(!t)return;REG[e]='busy';
@@ -2869,3 +2869,28 @@ var ON=0;function boot(){var p=document.getElementById('dayPanel');put();if(p&&!
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();setTimeout(boot,1500)})();
 </script>
 <!-- build 2026-10-14T12:03:37.929Z -->
+<script id="aera-coach-drafts">/* Peter 15th Nov 2026 : a Client whose email is not an AERA Account shows "Invalid Email Address" ; the Plan is kept under Saved Drafts ( named by the Client ) until they sign up. */
+(function(){if(window.__aeraDrafts)return;window.__aeraDrafts=1;var D=document;
+var RE=/^[a-z0-9._%+'-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/;
+function norm(e){return String(e||'').trim().toLowerCase()}
+function T(s){try{var m=window.AERA_I18N;return (m&&m[s])||s}catch(e){return s}}
+var st=D.createElement('style');st.textContent='#cpDrafts{flex-basis:100%;display:flex;gap:7px;flex-wrap:wrap;align-items:center;padding-top:10px;margin-top:4px;border-top:1.5px dashed var(--navy)}#cpDrafts .cpDh{font:700 11px Montserrat,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin-right:4px}#cpDrafts .tab .cpDw{color:#B42318}#cpDrafts .tab.on .cpDw{color:#FDB913}#cname.cv-bad{border-color:#F04438!important}';D.head.appendChild(st);
+function isDraft(c){var e=norm(c&&c.email);if(!e||!RE.test(e))return true;var R=window.__aeraReg||{};return R[e]===false}
+function nameOk(c){var n=String(c&&c.name||'').trim();return !!n&&!/^Client \d+$/.test(n)&&n!=='Unnamed'}
+var BUSY=false;
+function tick(){if(BUSY)return;BUSY=true;try{var a=window.__coach;if(!a||!a.state)return;var ST=a.state(),tabs=D.getElementById('clientTabs');if(!ST||!tabs)return;
+ var drafts=(ST.clients||[]).filter(isDraft),box=D.getElementById('cpDrafts');
+ var cur=a.cur(),n=D.getElementById('cname');if(n)n.classList.toggle('cv-bad',!!cur&&isDraft(cur)&&!nameOk(cur));
+ if(!drafts.length){if(box)box.remove();return}
+ var btns={};[].forEach.call(tabs.querySelectorAll('.tab[data-c]'),function(b){btns[b.dataset.c]=b});
+ if(!box||box.parentNode!==tabs){if(box)box.remove();box=D.createElement('div');box.id='cpDrafts';box.innerHTML='<span class="cpDh">'+T('Saved Drafts')+'</span>';tabs.appendChild(box)}
+ drafts.forEach(function(c){var b=btns[c.id];if(!b)return;
+  var why=!nameOk(c)?T('Client name needed'):(norm(c.email)?T('Invalid Email Address'):T('Client email needed'));
+  if(!nameOk(c)&&b.firstChild&&b.firstChild.nodeType===3)b.firstChild.textContent=T('Unnamed Draft');
+  var s=b.querySelector('small');if(s&&!s.querySelector('.cpDw'))s.insertAdjacentHTML('beforeend','<span class="cpDw"> · '+T('Draft')+' · '+why+'</span>');
+  if(b.parentNode!==box)box.appendChild(b)});
+}catch(x){}finally{BUSY=false}}
+new MutationObserver(function(){tick()}).observe(D.documentElement,{childList:true,subtree:true});
+setInterval(tick,600);
+})();</script>
+<script id="aera-coach-drafts-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Saved Drafts":"已存草稿","Draft":"草稿","Client name needed":"请填客户姓名","Client email needed":"请填客户电邮","Invalid Email Address":"无效电邮地址","Unnamed Draft":"未命名草稿","Email not found":"无效电邮地址"})}catch(e){}</script>
