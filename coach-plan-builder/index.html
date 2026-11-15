@@ -1049,6 +1049,8 @@ function r1(v){return Math.round((+v||0)*10)/10}
 /* ===== AERA free food look-up ( no AI ) : built-in Malaysian table first, Open Food Facts second ===== */
 var AERA_FOODS=[
 /* [ English, 中文, serving, 份量, kcal, protein, carbs, fat, aliases ] — typical Malaysian servings, approximate */
+/* Peter 15th Nov 2026 : branded products Coaches ask for, from the maker's own label ( Amway : Protein with Green Tea = 1.5 scoops 23.5 g, 89 kcal, P 8 g, C 9.75 g, F 2 g ) */
+["Nutrilite Protein with Green Tea","Nutrilite 绿茶蛋白粉","1.5 scoops ( 23.5 g )","1.5 勺（23.5 克）",89,8,9.75,2,"nutrilite green tea protein,nutrilite green tea,amway green tea protein,protein with green tea,green tea protein,soy protein drink mix green tea,nutrilite soy protein green tea"],
 ["Nasi Lemak","椰浆饭","1 plate ( sambal, egg, anchovies, peanuts )","1 碟（参巴、蛋、江鱼仔、花生）",500,14,62,22,"nasi lemak biasa,coconut rice"],
 ["Nasi Lemak Bungkus","椰浆饭（包装）","1 packet","1 包",400,10,52,17,"nasi lemak packet,nasi lemak bungkus daun"],
 ["Nasi Lemak Ayam Goreng","椰浆饭配炸鸡","1 plate","1 碟",780,32,68,40,"nasi lemak fried chicken,nasi lemak ayam"],
