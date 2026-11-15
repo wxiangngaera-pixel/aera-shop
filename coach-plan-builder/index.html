@@ -1517,7 +1517,7 @@ function ffLocal(q){
    if(nm===n){s=Math.max(s,100);return}
    if(n.indexOf(nm)>-1)s=Math.max(s,70+20*nm.length/n.length);
    else if(nm.indexOf(n)>-1&&n.length>=3)s=Math.max(s,60+20*n.length/nm.length);
-   else{var t=nm.split(' ');var hit=0;qt.forEach(function(w){if(w.length>=2&&t.indexOf(w)>-1)hit++});if(hit)s=Math.max(s,55*hit/Math.max(qt.length,t.length)+(hit===t.length?10:0))}
+   else{var t=nm.split(' ');var hit=0;qt.forEach(function(w){if(w.length>=2&&t.indexOf(w)>-1)hit++});if(hit)s=Math.max(s,55*hit/Math.max(qt.length,t.length)+(hit===t.length?10:0));if(hit===t.length&&t.length>=3)s=Math.max(s,92)}
   });
   if(r[1]&&(n===r[1]||n.indexOf(r[1])>-1||(r[1].indexOf(n)>-1&&n.length>=2)))s=Math.max(s,95);
   if(s>bs){bs=s;best=r}
