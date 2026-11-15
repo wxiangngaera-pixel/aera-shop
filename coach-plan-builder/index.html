@@ -1410,7 +1410,7 @@ var AERA_FOODS=[
 ["Authentic Tea House Pu Erh", "Authentic Tea House Pu Erh", "300 ml", "300 毫升", 12, 0, 0.3, 0, "coca-cola coke soft drink"],
 ["Dasani Drinking Water", "Dasani Drinking Water", "100 ml", "100 毫升", 0, 0, 0, 0, "coca-cola coke soft drink"],
 ["Dasani Natural Mineral Water", "Dasani Natural Mineral Water", "100 ml", "100 毫升", 0, 0, 0, 0, "coca-cola coke soft drink"],
-["100PLUS Zero Sugar", "100PLUS Zero Sugar", "100 ml", "100 毫升", 0, 0, 0, 0, "100 plus zero,100plus zero"],
+["100PLUS Zero Sugar", "100PLUS Zero Sugar", "100 ml", "100 毫升", 0, 0, 0, 0, "100plus zero,hundred plus zero"],
 ["100PLUS Zero Sugar", "100PLUS Zero Sugar", "320 ml can (from per-100 ml label)", "320 毫升罐", 0.0, 0, 0.0, 0, "coca-cola coke soft drink"],
 ["Pokka Ice Peach Tea", "Pokka Ice Peach Tea", "250 ml packet", "250 毫升包", 90, 0, 22.5, 0, "pokka drink"],
 ["Pokka Ice Lemon Tea", "Pokka Ice Lemon Tea", "250 ml packet", "250 毫升包", 100, 0, 25.0, 0, "pokka drink"],
@@ -1604,7 +1604,8 @@ function ffLocal(q){
    if(nm===n){s=Math.max(s,100);return}
    if(n.indexOf(nm)>-1)s=Math.max(s,70+20*nm.length/n.length);
    else if(nm.indexOf(n)>-1&&n.length>=3)s=Math.max(s,60+20*n.length/nm.length);
-   else{var t=nm.split(' ');var hit=0;qt.forEach(function(w){if(w.length>=2&&t.indexOf(w)>-1)hit++});if(hit)s=Math.max(s,55*hit/Math.max(qt.length,t.length)+(hit===t.length?10:0));if(hit===t.length&&t.length>=3)s=Math.max(s,92);var qw=qt.filter(function(w){return w.length>=2}).length;if(qw&&hit===qw&&qw>=2)s=Math.max(s,88+10*hit/t.length)/* Peter 15th Nov 2026 : every word the Coach typed is in the name ( "Vitagen Grape", "Milo Can" ) */}
+   else{var t=nm.split(' ');var hit=0;qt.forEach(function(w){if(w.length>=2&&t.indexOf(w)>-1)hit++});if(hit)s=Math.max(s,55*hit/Math.max(qt.length,t.length)+(hit===t.length?10:0));if(hit===t.length&&t.length>=3)s=Math.max(s,92)}
+   var t2=nm.split(' '),hit2=0,qw=0;qt.forEach(function(w){if(w.length>=2){qw++;if(t2.indexOf(w)>-1)hit2++}});if(qw>=2&&hit2===qw)s=Math.max(s,88+10*hit2/t2.length);/* Peter 15th Nov 2026 : every word the Coach typed is in the name ( "Vitagen Grape", "Milo Can" ) beats a shorter generic name */
   });
   if(r[1]&&(n===r[1]||n.indexOf(r[1])>-1||(r[1].indexOf(n)>-1&&n.length>=2)))s=Math.max(s,95);
   if(s>bs){bs=s;best=r}
@@ -1664,7 +1665,7 @@ function addOwn(){
  $('#ownFound').innerHTML='<p class="hint ownbusy"><span class="ownspin"></span>Looking up the Macros…</p>';
  Promise.all([coachFetch('food',{text:nm}).catch(function(){return null}),wikiPics(nm)]).then(function(res){
   OWNBUSY=false;btn.disabled=false;var a=res[0],pics=res[1]||[];
-  if(a&&a.name&&+a.kcal>0)OWNF={name:a.name,serving:a.serving||'1 Serving',kcal:+a.kcal||0,p:+a.p||0,c:+a.c||0,f:+a.f||0,note:a.note||'',pics:(a.img?[a.img]:pics),img:a.img||pics[0]||'',alts:(a.alts&&a.alts.length>1)?a.alts:null};
+  if(a&&a.name&&a.kcal!=null&&a.kcal!==''&&isFinite(+a.kcal))OWNF={name:a.name,serving:a.serving||'1 Serving',kcal:+a.kcal||0,p:+a.p||0,c:+a.c||0,f:+a.f||0,note:a.note||'',pics:(a.img?[a.img]:pics),img:a.img||pics[0]||'',alts:(a.alts&&a.alts.length>1)?a.alts:null};
   else OWNF={name:nm,none:true,pics:[],img:''};
   OWNQ=1;ownPaint()})}
 function ownPaint(){var el=$('#ownFound');if(!el)return;if(!OWNF){el.innerHTML='';return}var F=OWNF,q=OWNQ;
