@@ -1369,12 +1369,12 @@ var AERA_FOODS=[
 ["Dunkin' Powdered Donut","Dunkin' Powdered Donut","1 donut ( US figures )","1 donut ( US figures )",330,4,34,20,"dunkin powdered,dunkin donuts powdered"],
 ["Dunkin' Strawberry Frosted Donut","Dunkin' Strawberry Frosted Donut","1 donut ( US figures )","1 donut ( US figures )",260,4,35,11,"dunkin strawberry frosted,dunkin donuts strawberry frosted"],
 ["Dunkin' Vanilla Frosted Donut","Dunkin' Vanilla Frosted Donut","1 donut ( US figures )","1 donut ( US figures )",260,4,34,11,"dunkin vanilla frosted,dunkin donuts vanilla frosted"],
-["Coca-Cola Original Taste Less Sugar", "Coca-Cola Original Taste Less Sugar", "100 ml", "100 毫升", 19, 0, 4.6, 0, "coca-cola coke soft drink"],
+["Coca-Cola Original Taste Less Sugar", "Coca-Cola Original Taste Less Sugar", "100 ml", "100 毫升", 19, 0, 4.6, 0, "coke less sugar,coca cola less sugar,coke original taste"],
 ["Coca-Cola Original Taste Less Sugar", "Coca-Cola Original Taste Less Sugar", "320 ml can (from per-100 ml label)", "320 毫升罐", 60.8, 0, 14.7, 0, "coca-cola coke soft drink"],
-["Coca-Cola Zero Sugar", "Coca-Cola Zero Sugar", "100 ml", "100 毫升", 0, 0, 0, 0, "coca-cola coke soft drink"],
+["Coca-Cola Zero Sugar", "Coca-Cola Zero Sugar", "100 ml", "100 毫升", 0, 0, 0, 0, "coke zero,coca cola zero,coke zero sugar"],
 ["Coca-Cola Zero Sugar", "Coca-Cola Zero Sugar", "320 ml can (from per-100 ml label)", "320 毫升罐", 0.0, 0, 0.0, 0, "coca-cola coke soft drink"],
-["Coca-Cola Classic", "Coca-Cola Classic", "100 ml", "100 毫升", 42, 0, 10.6, 0, "coca-cola coke soft drink"],
-["Coca-Cola Classic", "Coca-Cola Classic", "320 ml can (from per-100 ml label)", "320 毫升罐", 134.4, 0, 33.9, 0, "coca-cola coke soft drink"],
+["Coca-Cola Classic", "Coca-Cola Classic", "100 ml", "100 毫升", 42, 0, 10.6, 0, "coke,coca cola,cola,coke classic,coca-cola classic"],
+["Coca-Cola Classic", "Coca-Cola Classic", "320 ml can (from per-100 ml label)", "320 毫升罐", 134.4, 0, 33.9, 0, "coke can,coca cola can,coke classic can"],
 ["Coca-Cola Light", "Coca-Cola Light", "100 ml", "100 毫升", 0, 0, 0, 0, "coca-cola coke soft drink"],
 ["Coca-Cola Light", "Coca-Cola Light", "320 ml can (from per-100 ml label)", "320 毫升罐", 0.0, 0, 0.0, 0, "coca-cola coke soft drink"],
 ["Coca-Cola Vanilla", "Coca-Cola Vanilla", "100 ml", "100 毫升", 19, 0, 4.6, 0, "coca-cola coke soft drink"],
@@ -1410,7 +1410,7 @@ var AERA_FOODS=[
 ["Authentic Tea House Pu Erh", "Authentic Tea House Pu Erh", "300 ml", "300 毫升", 12, 0, 0.3, 0, "coca-cola coke soft drink"],
 ["Dasani Drinking Water", "Dasani Drinking Water", "100 ml", "100 毫升", 0, 0, 0, 0, "coca-cola coke soft drink"],
 ["Dasani Natural Mineral Water", "Dasani Natural Mineral Water", "100 ml", "100 毫升", 0, 0, 0, 0, "coca-cola coke soft drink"],
-["100PLUS Zero Sugar", "100PLUS Zero Sugar", "100 ml", "100 毫升", 0, 0, 0, 0, "coca-cola coke soft drink"],
+["100PLUS Zero Sugar", "100PLUS Zero Sugar", "100 ml", "100 毫升", 0, 0, 0, 0, "100 plus zero,100plus zero"],
 ["100PLUS Zero Sugar", "100PLUS Zero Sugar", "320 ml can (from per-100 ml label)", "320 毫升罐", 0.0, 0, 0.0, 0, "coca-cola coke soft drink"],
 ["Pokka Ice Peach Tea", "Pokka Ice Peach Tea", "250 ml packet", "250 毫升包", 90, 0, 22.5, 0, "pokka drink"],
 ["Pokka Ice Lemon Tea", "Pokka Ice Lemon Tea", "250 ml packet", "250 毫升包", 100, 0, 25.0, 0, "pokka drink"],
@@ -1558,8 +1558,6 @@ var AERA_FOODS=[
 ["Milo","美禄","1 cup hot","1 杯（热）",170,5,28,5,"milo panas,hot milo,milo kosong"],
 ["Milo Ais","冰美禄","1 glass","1 杯",190,5,32,5,"iced milo,milo ice,milo dinosaur"],
 ["Sirap Bandung","玫瑰奶","1 glass","1 杯",180,3,36,3,"bandung,air bandung"],
-["Soft Drink","汽水","1 can ( 325 ml )","1 罐（325 毫升）",140,0,35,0,"coke,coca cola,pepsi,sprite,7up,100 plus,air sirap,sarsi,f&n"],
-["100 Plus","100 号","1 can ( 325 ml )","1 罐（325 毫升）",85,0,21,0,"100plus,isotonic drink"],
 ["Bubble Tea","珍珠奶茶","1 regular cup with pearls","1 杯（中杯，加珍珠）",350,3,65,8,"boba,milk tea with pearls,pearl milk tea,tealive,chatime"],
 ["Orange Juice","橙汁","1 glass","1 杯",110,2,26,0,"fresh orange,jus oren"],
 ["Sugarcane Juice","甘蔗水","1 glass","1 杯",180,0,45,0,"air tebu"],
@@ -1606,7 +1604,7 @@ function ffLocal(q){
    if(nm===n){s=Math.max(s,100);return}
    if(n.indexOf(nm)>-1)s=Math.max(s,70+20*nm.length/n.length);
    else if(nm.indexOf(n)>-1&&n.length>=3)s=Math.max(s,60+20*n.length/nm.length);
-   else{var t=nm.split(' ');var hit=0;qt.forEach(function(w){if(w.length>=2&&t.indexOf(w)>-1)hit++});if(hit)s=Math.max(s,55*hit/Math.max(qt.length,t.length)+(hit===t.length?10:0));if(hit===t.length&&t.length>=3)s=Math.max(s,92)}
+   else{var t=nm.split(' ');var hit=0;qt.forEach(function(w){if(w.length>=2&&t.indexOf(w)>-1)hit++});if(hit)s=Math.max(s,55*hit/Math.max(qt.length,t.length)+(hit===t.length?10:0));if(hit===t.length&&t.length>=3)s=Math.max(s,92);var qw=qt.filter(function(w){return w.length>=2}).length;if(qw&&hit===qw&&qw>=2)s=Math.max(s,88+10*hit/t.length)/* Peter 15th Nov 2026 : every word the Coach typed is in the name ( "Vitagen Grape", "Milo Can" ) */}
   });
   if(r[1]&&(n===r[1]||n.indexOf(r[1])>-1||(r[1].indexOf(n)>-1&&n.length>=2)))s=Math.max(s,95);
   if(s>bs){bs=s;best=r}
