@@ -3008,3 +3008,16 @@ html.aera-who #coachWho{display:inline-flex!important}
 #coachNav button,#coachNav a{padding:8px 10px!important;font-size:13.5px!important;letter-spacing:0!important}#coachNav>*{gap:5px!important;padding:0 12px!important}
 #cpRefHint{font-size:13.5px!important;padding:9px 12px!important}#cvBar{padding:8px 12px!important}.cbento .bento{max-width:300px!important}}
 </style>
+
+<script id="aera-coach-prefrow">/* Peter 15th Nov 2026 : Weights, Packaging, Salt and Spice sit on ONE row, their notes in small print underneath. On a phone they stack two by two. */
+(function(){if(window.__aeraPrefRow)return;window.__aeraPrefRow=1;var D=document;
+var st=D.createElement('style');st.textContent='#prefRow{display:grid;grid-template-columns:repeat(4,max-content);gap:12px 22px;align-items:end;margin-top:14px}#prefRow .seg{white-space:nowrap}#prefRow .ph{font-size:12.5px;line-height:1.45;color:#6B7280;margin:0;max-width:34ch;align-self:start}#prefRow .ph.w2{grid-column:span 2;max-width:none}@media(max-width:1000px){#prefRow{grid-template-columns:1fr 1fr}#prefRow .ph{display:none}#prefRow .ph.w2{display:block;grid-column:span 2}}@media(max-width:560px){#prefRow{grid-template-columns:1fr}#prefRow .ph.w2{grid-column:span 1}#prefRow .seg{display:flex;width:100%}#prefRow .seg button{flex:1}}';D.head.appendChild(st);
+function build(){var b=D.getElementById('basisSeg'),p=D.getElementById('packSeg'),s=D.getElementById('saltSeg'),x=D.getElementById('spiceSeg');if(!b||!p||!s||!x||D.getElementById('prefRow'))return;
+ var rb=b.parentElement.parentElement,rp=D.getElementById('packRow'),rs=D.getElementById('seasRow');if(!rb||!rp||!rs)return;
+ var hb=rb.querySelector('p.hint'),hp=rp.querySelector('p.hint'),hs=rs.querySelector('p.hint');
+ var g=D.createElement('div');g.id='prefRow';rb.parentNode.insertBefore(g,rb);
+ [b,p,s,x].forEach(function(seg){g.appendChild(seg.parentElement)});
+ [hb,hp].forEach(function(h){if(h){h.className='ph';h.removeAttribute('style');g.appendChild(h)}else{var e=D.createElement('p');e.className='ph';g.appendChild(e)}});
+ if(hs){hs.className='ph w2';hs.removeAttribute('style');g.appendChild(hs)}
+ [rb,rp,rs].forEach(function(r){r.style.display='none'})}
+build();new MutationObserver(build).observe(D.documentElement,{childList:true,subtree:true});})();</script>
