@@ -2967,7 +2967,7 @@ function off(){D.documentElement.classList.remove('aera-who')}
 function put(){try{var a=window.__coach,inp=D.getElementById('coachname');if(!a||!inp||!ME)return;var L=label();if(!L)return off();
  var ST=a.state();if(ST.coach!==L){ST.coach=L;inp.value=L;try{a.save()}catch(x){}}
  var w=D.getElementById('coachWho');if(!w){w=D.createElement('div');w.id='coachWho';inp.parentNode.insertBefore(w,inp)}
- var h='<span>🏋️</span><div>Coach · '+e(ME.name||'')+(ME.gym?' · '+e(ME.gym):'')+'<small>'+(ME.code?'Referral Code '+e(ME.code):'Set by AERA when you were assigned as a Coach')+'</small></div>';
+ var h='<span>🏋️</span><div>Coach · '+e(ME.name||'')+(ME.gym?' · '+e(ME.gym):'')+(ME.code?'<small>Referral Code '+e(ME.code)+'</small>':'')+'</div>';
  if(w.innerHTML!==h)w.innerHTML=h;D.documentElement.classList.add('aera-who')}catch(x){}}
 function tick(){var t=tok();if(!t){ME=null;ASKED='';off();return}if(t!==ASKED)ask(t);else if(ME)put()}
 setInterval(tick,1500);if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',tick);else tick();
