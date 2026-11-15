@@ -3033,3 +3033,23 @@ function paint(){var c=C()&&C().cur();if(!c)return;var v=ov(c);[].forEach.call(D
 D.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#oilSeg button');if(!b)return;var c=C()&&C().cur();if(!c)return;c.oil=b.getAttribute('data-o');try{C().save()}catch(x){}paint()});
 build();setInterval(paint,700);new MutationObserver(build).observe(D.documentElement,{childList:true,subtree:true});})();</script>
 <script id="aera-coach-oil-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"\uD83E\uDED2 Oil Level":"\uD83E\uDED2 \u7528\u6CB9\u91CF","Less Oil":"\u5C11\u6CB9","Oil-Free":"\u65E0\u6CB9","Our Kitchen cooks this Plan with less or no oil.":"\u6211\u4EEC\u7684\u53A8\u623F\u4F1A\u7528\u5C11\u6CB9\u6216\u65E0\u6CB9\u70F9\u8C03\u8FD9\u4EFD\u9910\u5355\u3002","Chilli stays on the list at 0 g for No Spice.":"\u9009\u65E0\u8FA3\u65F6\uFF0C\u8FA3\u6912\u4ECD\u5728\u6E05\u5355\u4E0A\uFF0C\u4F46\u4E3A 0 \u514B\u3002"})}catch(e){}</script>
+
+<script id="aera-coach-prefidx">/* Peter 15th Nov 2026 : an icon on every option button of the Weights / Packaging / Salt / Spice / Oil row ( icon above the label ).
+   "Less" shows the icon faded, "None" shows it struck through, so the level reads at a glance. Line icons in the button's own colour. */
+(function(){if(window.__aeraPrefIcons)return;window.__aeraPrefIcons=1;var D=document;
+var st=D.createElement('style');st.textContent='#prefRow .pc .seg button{flex-direction:column;gap:4px;padding:8px 4px 7px!important;font-size:12.5px!important;line-height:1.1;min-height:60px}#prefRow .pi{display:block;width:22px;height:22px}#prefRow .pi svg{width:22px;height:22px;display:block;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}#prefRow .pi.less svg .ic{opacity:.45}#prefRow .pi.none svg .ic{opacity:.35}#prefRow .pi svg .sl{display:none;stroke-width:2.2}#prefRow .pi.none svg .sl{display:block}#prefRow .pt{display:block}';D.head.appendChild(st);
+var I={leaf:'<path class="ic" d="M20 4C10 4 4 10 4 20c10 0 16-6 16-16z"/><path class="ic" d="M4 20 14 10"/>',
+ flame:'<path class="ic" d="M12 3c1 3 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.2 2-4.2.2 2 1 3.2 2 3.2 0-3 0-6 1-9z"/>',
+ tray:'<rect class="ic" x="3" y="5" width="18" height="14" rx="2.5"/><path class="ic" d="M11 5v14M11 12h10"/>',
+ pouch:'<path class="ic" d="M5 8h14v12H5zM5 8V4.5l2 1.3 2-1.3 2 1.3 2-1.3 2 1.3 2-1.3 2 1.3V8"/><path class="ic" d="M8 12h8"/>',
+ salt:'<path class="ic" d="M9.5 3h5l.8 5H8.7zM8.3 8h7.4l1.3 13H7z"/><path class="ic" d="M11 5.3h.01M13 5.3h.01M12 3.8h.01"/>',
+ chilli:'<path class="ic" d="M19.5 4.5c-.5 1.5-1.5 2-2.5 2.5M17 7c0 7-5 12-12 13 3-2 5-5 6-8.5C12 8 14 6.5 17 7z"/>',
+ drop:'<path class="ic" d="M12 3s6.5 7.2 6.5 12a6.5 6.5 0 0 1-13 0C5.5 10.2 12 3 12 3z"/>'};
+function svg(k){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+I[k]+'<path class="sl" d="M4 20 20 4"/></svg>'}
+var MAP={basisSeg:{raw:['leaf',''],cooked:['flame','']},packSeg:{bento:['tray',''],vacuum:['pouch','']},
+ saltSeg:{normal:['salt',''],less_salt:['salt','less'],no_salt:['salt','none']},
+ spiceSeg:{normal:['chilli',''],less_spicy:['chilli','less'],no_spice:['chilli','none']},
+ oilSeg:{normal:['drop',''],less_oil:['drop','less'],no_oil:['drop','none']}};
+function deco(){Object.keys(MAP).forEach(function(id){var seg=D.getElementById(id);if(!seg)return;[].forEach.call(seg.querySelectorAll('button'),function(b){if(b.querySelector('.pi'))return;var k=b.getAttribute('data-b')||b.getAttribute('data-p')||b.getAttribute('data-s')||b.getAttribute('data-o');var m=MAP[id][k];if(!m)return;
+ var t=D.createElement('span');t.className='pt';while(b.firstChild)t.appendChild(b.firstChild);var i=D.createElement('span');i.className='pi '+m[1];i.innerHTML=svg(m[0]);b.appendChild(i);b.appendChild(t)})})}
+deco();setInterval(deco,800);})();</script>
