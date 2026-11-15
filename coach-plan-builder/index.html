@@ -1261,8 +1261,8 @@ function addOwn(){
  $('#ownFound').innerHTML='<p class="hint ownbusy"><span class="ownspin"></span>Looking up the Macros…</p>';
  Promise.all([coachFetch('food',{text:nm}).catch(function(){return null}),wikiPics(nm)]).then(function(res){
   OWNBUSY=false;btn.disabled=false;var a=res[0],pics=res[1]||[];
-  if(a&&a.name&&+a.kcal>0)OWNF={name:a.name,serving:a.serving||'1 Serving',kcal:+a.kcal||0,p:+a.p||0,c:+a.c||0,f:+a.f||0,note:a.note||'',pics:(a.img?[a.img]:[]).concat(pics),img:a.img||pics[0]||'',alts:(a.alts&&a.alts.length>1)?a.alts:null};
-  else OWNF={name:nm,none:true,pics:pics,img:pics[0]||''};
+  if(a&&a.name&&+a.kcal>0)OWNF={name:a.name,serving:a.serving||'1 Serving',kcal:+a.kcal||0,p:+a.p||0,c:+a.c||0,f:+a.f||0,note:a.note||'',pics:(a.img?[a.img]:pics),img:a.img||pics[0]||'',alts:(a.alts&&a.alts.length>1)?a.alts:null};
+  else OWNF={name:nm,none:true,pics:[],img:''};
   OWNQ=1;ownPaint()})}
 function ownPaint(){var el=$('#ownFound');if(!el)return;if(!OWNF){el.innerHTML='';return}var F=OWNF,q=OWNQ;
  var pic='<div class="ownf-pic"'+(F.img?' style="background-image:url('+esc(F.img)+')"':'')+'></div>';
@@ -1285,7 +1285,7 @@ function ownAddNow(){if(!OWNF||PICK==null)return;var F=OWNF,q=OWNQ,it={own:F.nam
  if(!F.none){var gs=gramsOf(F.serving);it.b={k:F.kcal,p:F.p,c:F.c,f:F.f,gs:gs};it.q=q;it.sv=F.serving;if(gs)it.g=Math.round(gs*q)}
  mark();day().meals[PICK].items.push(it);save();$('#ownq').value='';closePick();paint()}
 $('#ownFound').addEventListener('click',function(e){var b=e.target.closest('button');if(!b||!OWNF)return;
- if(b.dataset.alt!=null){var A=OWNF.alts&&OWNF.alts[+b.dataset.alt];if(A){var P2=OWNF.pics.filter(function(u){return !(OWNF.alts||[]).some(function(z){return z.img===u})});OWNF=Object.assign({},OWNF,{name:A.name,serving:A.serving,kcal:A.kcal,p:A.p,c:A.c,f:A.f,note:A.note||OWNF.note,pics:(A.img?[A.img]:[]).concat(P2),img:A.img||P2[0]||''});OWNQ=1;ownPaint()}return} if(b.dataset.pic!=null){var i=+b.dataset.pic;OWNF.img=i<0?'':OWNF.pics[i];ownPaint();return}
+ if(b.dataset.alt!=null){var A=OWNF.alts&&OWNF.alts[+b.dataset.alt];if(A){var P2=OWNF.pics.filter(function(u){return !(OWNF.alts||[]).some(function(z){return z.img===u})});OWNF=Object.assign({},OWNF,{name:A.name,serving:A.serving,kcal:A.kcal,p:A.p,c:A.c,f:A.f,note:A.note||OWNF.note,pics:(A.img?[A.img]:P2),img:A.img||P2[0]||''});OWNQ=1;ownPaint()}return} if(b.dataset.pic!=null){var i=+b.dataset.pic;OWNF.img=i<0?'':OWNF.pics[i];ownPaint();return}
  if(b.dataset.q!=null){OWNQ=+b.dataset.q;var n=document.getElementById('ownQn');if(n)n.value=OWNQ;ownTot();return}
  if(b.dataset.ownman){var gv=function(id){return +((document.getElementById(id)||{}).value)||0};var sv=String((document.getElementById('ownMsv')||{}).value||'').trim()||'1 Serving';if(gv('ownMk')>0){OWNF.none=false;OWNF.serving=sv;OWNF.kcal=gv('ownMk');OWNF.p=gv('ownMp');OWNF.c=gv('ownMc');OWNF.f=gv('ownMf');OWNQ=1}ownAddNow();return} if(b.dataset.ownok){ownAddNow();return}
  if(b.dataset.owncancel){OWNF=null;ownPaint()}});
