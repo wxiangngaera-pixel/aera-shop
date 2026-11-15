@@ -2036,7 +2036,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  var HOOK='https://my.chatbees.io/api/webhooks/flow/dd9ph03i/cfec004a9d020414f13b8a9b2b7a059c01f42a2cc8157bcb890be1f378bbe552';
  var TTL=30*60*1000,WAIT=60,MAXTRY=5,PK='aera.coach.vcode';
  var Z=window.AERA_I18N=window.AERA_I18N||{};
- Object.assign(Z,{'We email your Client a 6-digit code, so we know this email reaches them.':'我们会发 6 位数验证码到客户的电邮，确认这个电邮能收到信。',
+ Object.assign(Z,{'Your Client’s AERA Account email. Not registered yet? The Plan stays under Saved Drafts until they sign up.':'客户 AERA 账户的电邮。还没注册？餐单会先存在已存草稿，待客户注册后再发送。',
   'Send code to Client':'发送验证码给客户','Resend code':'重新发送','Confirm':'确认','Email confirmed':'电邮已确认',
   'This does not look like an email yet.':'这看起来还不是有效的电邮。','Checking this email…':'正在检查这个电邮…',
   'This email’s domain cannot receive mail. Please check the spelling.':'这个电邮的域名收不到邮件，请检查拼写。',
@@ -2076,7 +2076,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  var LK='';function key(){var c=cur(),i=$('#cemail');return (c&&c.id)+'|'+(i?norm(i.value):'')+'|'+verified(c)}
  function render(force){if(!box)return;var c=cur(),inp=$('#cemail');if(!c||!inp)return;var e=norm(inp.value);LK=key();
   inp.classList.remove('cv-good','cv-bad');
-  if(!e){last='';return H('',T('We email your Client a 6-digit code, so we know this email reaches them.'))}
+  if(!e){last='';return H('',T('Your Client’s AERA Account email. Not registered yet? The Plan stays under Saved Drafts until they sign up.'))}
   if(verified(c)){inp.classList.add('cv-good');last=e;return H('ok','&#10003; '+T('Email confirmed'))}
   if(!RE.test(e)){if(force||e.indexOf('@')>0&&/\.[a-z]{2,}$/.test(e))inp.classList.add('cv-bad');return H(force?'bad':'',T('This does not look like an email yet.'))}
   var sg=suggest(e);if(sg){inp.classList.add('cv-bad');return H('warn',T('Did you mean')+' <b>'+esc(sg)+'</b>?','<div class="cv-row"><button type="button" class="yel" id="cvUse">'+T('Use it')+'</button></div>'),bindUse(sg)}
@@ -2090,7 +2090,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
   var w=left(p);
   var html=p?'<div class="cv-row"><input class="cv-code" id="cvCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••"><button type="button" class="pri" id="cvOk">'+T('Confirm')+'</button><button type="button" id="cvSend"'+(w?' disabled':'')+'>'+T('Resend code')+(w?' ( '+w+'s )':'')+'</button></div>'
    :'<div class="cv-row"><button type="button" class="yel" id="cvSend">'+T('Send code to Client')+'</button></div>';
-  H(cls||'',note||(p?T('Code sent. Ask your Client for the 6 digits ( check Spam too ).'):T('We email your Client a 6-digit code, so we know this email reaches them.')),html);
+  H(cls||'',note||(p?T('Code sent. Ask your Client for the 6 digits ( check Spam too ).'):T('Your Client’s AERA Account email. Not registered yet? The Plan stays under Saved Drafts until they sign up.')),html);
   var s=$('#cvSend');if(s)s.onclick=function(){send(c,e)};
   var k=$('#cvOk'),ci=$('#cvCode');if(k)k.onclick=function(){check(c,e)};
   if(ci){ci.addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();check(c,e)}});ci.addEventListener('input',function(){this.value=this.value.replace(/\D/g,'').slice(0,6);if(this.value.length===6)check(c,e)})}
@@ -2113,7 +2113,7 @@ html[data-lang="zh"] #aeraBar .ab-lang .l2{background:#16479E;color:#fff}
  /* Send to AERA waits for a confirmed email */
  document.addEventListener('click',function(ev){var b=ev.target.closest&&ev.target.closest('#doSend');if(!b)return;var c=cur();if(!c)return;
   if(RE.test(norm(c.email))&&!verified(c)){ev.preventDefault();ev.stopImmediatePropagation();
-   var m=$('#msg');if(m)m.innerHTML='<div class="note bad"><b>'+T('Please confirm the Client’s email first.')+'</b> '+T('We email your Client a 6-digit code, so we know this email reaches them.')+'</div>';
+   var m=$('#msg');if(m)m.innerHTML='<div class="note bad"><b>'+T('Please confirm the Client’s email first.')+'</b> '+T('Your Client’s AERA Account email. Not registered yet? The Plan stays under Saved Drafts until they sign up.')+'</div>';
    render(true);var inp=$('#cemail');if(inp)inp.scrollIntoView({behavior:'smooth',block:'center'})}},true);
  function boot(){if(!build())return setTimeout(boot,300);render()}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
