@@ -2894,3 +2894,45 @@ new MutationObserver(function(){tick()}).observe(D.documentElement,{childList:tr
 setInterval(tick,600);
 })();</script>
 <script id="aera-coach-drafts-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"Saved Drafts":"已存草稿","Draft":"草稿","Client name needed":"请填客户姓名","Client email needed":"请填客户电邮","Invalid Email Address":"无效电邮地址","Unnamed Draft":"未命名草稿","Email not found":"无效电邮地址"})}catch(e){}</script>
+
+<script id="aera-coach-history">/* Peter 15th Nov 2026 : every version of every Coach's Meal Plan is kept ( Supabase coach_plan_history, written by a database trigger, never deleted ).
+   "History" in Coaches' Plans lists them all, sent or not ; tap one to read it. Peter's owner accounts only, the same as the Calendar. */
+(function(){if(window.__aeraCoachHist)return;window.__aeraCoachHist=1;var D=document;
+var SBU='https://swpprjvubgcdsojapaad.supabase.co',AK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3cHByanZ1YmdjZHNvamFwYWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODUxNzIsImV4cCI6MjEwNDM2MTE3Mn0.zBvPkzlV5tYSkWiHnF0HB175QMt-u1tXFmR03urcp_0';
+var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],H={rows:null,names:null,q:'',open:null};
+function e(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function tok(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var o=JSON.parse(localStorage.getItem(k)||'null');if(o&&o.currentSession)o=o.currentSession;if(o&&o.access_token)return o.access_token}}}catch(x){}return ''}
+function rpc(fn,args){return fetch(SBU+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'Content-Type':'application/json',apikey:AK,Authorization:'Bearer '+tok()},body:JSON.stringify(args||{})}).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error((j&&(j.message||j.error))||('HTTP '+r.status));return j})})}
+function when(iso){var d=new Date(iso);if(isNaN(d))return '';var n=d.getDate(),v=n%100,sf=(v>10&&v<14)?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th'),hh=d.getHours(),mi=d.getMinutes();return n+sf+' '+MON[d.getMonth()]+' '+d.getFullYear()+', '+(hh%12||12)+':'+(mi<10?'0':'')+mi+' '+(hh>=12?'PM':'AM')}
+function nm(code){return (H.names&&H.names[code])||code}
+function st(){var w=D.getElementById('cadW');var st=w&&w.querySelector('style#cphCss');if(w&&!st){st=D.createElement('style');st.id='cphCss';st.textContent='.cph-ev{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-left:6px;vertical-align:middle}.cph-ev.sent{background:#16479E;color:#FDB913}.cph-ev.saved{background:#FDB913;color:#111}.cph-ev.removed{background:#FEE4E2;color:#B42318}.cph-in{width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid #D0D7DE;border-radius:10px;font:inherit;margin:10px 0 12px}.cph-day{margin:14px 0 6px;font-weight:800;color:#0E2F6B}';w.appendChild(st)}}
+function bd(){var w=D.getElementById('cadW');return w&&w.querySelector('.cad .bd')}
+function head(title,back){var w=D.getElementById('cadW');if(!w)return;var hd=w.querySelector('.cad .hd');if(!hd)return;hd.innerHTML='<button type="button" data-a="back">←</button><b>'+e(title)+'</b><button type="button" data-a="close">Close</button>';hd.querySelector('[data-a=back]').onclick=back;hd.querySelector('[data-a=close]').onclick=function(){w.remove()}}
+function toCal(){try{var w=D.getElementById('cadW');if(w)w.remove();if(window.__aeraCoachAdminOpen)window.__aeraCoachAdminOpen()}catch(x){}}
+function load(){H.rows=null;return Promise.all([rpc('coach_plan_history_list',{p_client_id:null,p_limit:1000}),H.names?Promise.resolve(null):rpc('coach_plans_all').catch(function(){return null})]).then(function(r){H.rows=r[0]||[];if(r[1]&&r[1].names)H.names=r[1].names})}
+function list(){st();head('Plan History',toCal);var b=bd();if(!b)return;
+ if(!H.rows){b.innerHTML='<div class="sub">Reading every saved plan…</div>';load().then(list,function(x){b.innerHTML='<div class="note">'+e(x.message||'Could not read the history')+'</div>'});return}
+ var q=H.q.toLowerCase(),R=H.rows.filter(function(r){if(!q)return true;return ((r.client_name||'')+' '+(r.client_email||'')+' '+(r.coach_name||'')+' '+(r.coach_email||'')).toLowerCase().indexOf(q)>=0});
+ var h='<div class="sub">Every version of every Coach’s plan, sent or not. '+H.rows.length+' record'+(H.rows.length===1?'':'s')+' · nothing here is ever deleted.</div>'+
+  '<input class="cph-in" id="cphQ" placeholder="Find a Client or a Coach" value="'+e(H.q)+'">';
+ var last='';R.forEach(function(r,i){var d=when(r.saved_at),day=d.split(',')[0];if(day!==last){last=day;h+='<div class="cph-day">'+e(day)+'</div>'}
+  h+='<button type="button" class="card" data-h="'+H.rows.indexOf(r)+'"><h4>'+e(r.client_name||'Unnamed')+'<span class="cph-ev '+e(r.event)+'">'+(r.event==='sent'?'Sent':r.event==='removed'?'Removed by Coach':'Saved')+'</span></h4>'+
+   '<div class="sub">Coach '+e(r.coach_name||r.coach_email||'')+' · '+e(d.split(', ')[1]||'')+(r.meals!=null?' · '+r.meals+' Meal'+(r.meals===1?'':'s'):'')+(r.client_email?' · '+e(r.client_email):'')+'</div></button>'});
+ if(!R.length)h+='<div class="note">Nothing matches.</div>';
+ b.innerHTML=h;var inp=b.querySelector('#cphQ');inp.oninput=function(){H.q=inp.value;var p=inp.selectionStart;list();var n=bd().querySelector('#cphQ');n.focus();try{n.setSelectionRange(p,p)}catch(x){}};
+ [].forEach.call(b.querySelectorAll('[data-h]'),function(c){c.onclick=function(){show(H.rows[+c.getAttribute('data-h')])}})}
+function show(r){st();head(r.client_name||'Unnamed',list);var b=bd();if(!b)return;var p=r.plan||{},basis=p.basis||'raw';
+ var lv=function(k,a,bb){var v=p[k]||'';return v===a?'Less':v===bb?'No':'Normal'};
+ var h='<div class="sub">Coach <b>'+e(r.coach_name||r.coach_email||'')+'</b> · '+(r.event==='sent'?'Sent':r.event==='removed'?'Removed by Coach':'Saved')+' '+e(when(r.saved_at))+(r.sent_at?' · Sent to Client '+e(when(r.sent_at)):'')+'</div>'+
+  '<div class="row" style="margin-top:8px"><span class="chip">Written in '+(basis==='cooked'?'Cooked':'Raw')+' Weight</span><span class="chip">Salt : '+lv('salt','less_salt','no_salt')+'</span><span class="chip">Spice : '+lv('spice','less_spicy','no_spice')+'</span>'+(p.pack?'<span class="chip">'+(p.pack==='vac'?'Vacuum Packed':'MAP Bento Box')+'</span>':'')+'</div>'+
+  '<div class="note" style="background:#EDF3FD;color:#16479E">View only — this is the plan exactly as the Coach saved it.</div>';
+ var days=(p.days||[]).filter(function(d){return (d.meals||[]).some(function(m){return (m.items||[]).length})});
+ if(!days.length)h+='<div class="note">No dishes in this version.</div>';
+ days.forEach(function(d,i){h+='<div class="day"><div>Day '+(i+1)+(d.name&&!/^day\s*\d+$/i.test(d.name)?' · '+e(d.name):'')+'</div>'+(d.meals||[]).filter(function(m){return (m.items||[]).length}).map(function(m){return '<div class="ml"><b>'+e(m.name||'Meal')+'</b>'+(m.items||[]).map(function(it){var bb=(it.wb==='raw'||it.wb==='cooked')?it.wb:basis;var g=bb==='cooked'&&it.ck?it.ck:it.g;return '<div class="it"><span>'+e(it.own||nm(it.code))+'</span><span>'+Math.round(+g||0)+' g<small'+(bb==='cooked'?' class="c"':'')+'>'+(bb==='cooked'?'Cooked':'Raw')+'</small></span></div>'}).join('')+'</div>'}).join('')+'</div>'});
+ b.innerHTML=h}
+function btn(){var w=D.getElementById('cadW');if(!w)return;var hd=w.querySelector('.cad .hd');if(!hd||hd.querySelector('[data-a=hist]'))return;var t=hd.querySelector('b');if(!t||!/Coaches/.test(t.textContent))return;
+ var x=D.createElement('button');x.type='button';x.setAttribute('data-a','hist');x.textContent='History';x.style.marginRight='6px';x.onclick=function(){H.q='';list()};var c=hd.querySelector('[data-a=close]');hd.insertBefore(x,c||null)}
+new MutationObserver(btn).observe(D.documentElement,{childList:true,subtree:true});setInterval(btn,800);
+window.__aeraCoachHistoryOpen=function(){list()};
+})();</script>
+<script id="aera-coach-history-zh">try{Object.assign(window.AERA_I18N=window.AERA_I18N||{},{"History":"历史记录","Plan History":"餐单历史记录","Sent":"已发送","Saved":"已保存","Removed by Coach":"教练已移除","Find a Client or a Coach":"搜索客户或教练","Nothing matches.":"没有符合的记录。","No dishes in this version.":"此版本没有菜色。"})}catch(e){}</script>
