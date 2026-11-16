@@ -1529,3 +1529,65 @@ setTimeout(function(){if(!sent){send();sent=false;EV=[];seen={'view|':1}}},45000
 </script>
 </body>
 </html>
+
+<style id="aera-ref-bank-css">/* Peter 16th Nov 2026 : Payout Bank Account card + Generate Report ( all Referrers ) for Peter's accounts */
+.bankcard .bk{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:10px}.bankcard .bk div{background:#F4F7FC;border:1px solid #E3E8F0;border-radius:12px;padding:10px 12px}.bankcard .bk small{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:#6B7280;margin-bottom:4px}.bankcard .bk b{font-size:16px;color:#16479E;word-break:break-all}
+.bankcard form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:12px}.bankcard form input{padding:11px 12px;border:1.5px solid #CBD5E1;border-radius:10px;font:inherit}.bankcard .bkact{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}.bankcard .bkmsg{font-size:13px;color:#16479E;font-weight:700}
+#refReportBtn{margin-left:auto;padding:9px 16px;border-radius:999px;border:0;background:#FDB913;color:#16479E;font:800 13px Montserrat,system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+</style>
+<script id="aera-ref-bank">/* Peter 16th Nov 2026 : every Referrer sees the Bank Account their Cash-Back is paid to, and can update it.
+   Peter's accounts ( ref_viewers ) also get a Generate Report button : one table of every Referrer for the chosen Month and All Time,
+   with Orders, Sales, Cash-Back, Paid / Pending and the Bank Details to pay — printable, with a CSV download. */
+(function(){if(window.__aeraRefBank)return;window.__aeraRefBank=1;
+var BANK=null,BANKS=null,OWNER=false,busy=false;
+function E(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function sb(){return window.__REF_SB||null}
+async function loadBank(){var c=sb();if(!c)return;try{var s=(await c.auth.getSession()).data.session;if(!s)return;
+ var o=await c.rpc('can_view_referrers');OWNER=!o.error&&o.data===true;
+ var r=window.__REF_AS&&OWNER?await c.rpc('ref_bank_get_as',{p_code:window.__REF_AS}):await c.rpc('ref_bank_get');
+ BANK=(r&&!r.error&&r.data)||{};}catch(e){BANK=BANK||{}}paintBank();paintBtn()}
+function bankCard(){if(!BANK)return '';var own=!window.__REF_AS;var has=BANK.bank||BANK.bankAccount;
+ return '<div class="card bankcard" id="bankCard"><h2>Payout Bank Account</h2><p class="hint" style="margin:4px 0 0">Your Cash-Back is paid by Bank Transfer to this account after each Month closes.'+(own?' Keep it up to date.':'')+'</p>'+
+  '<div class="bk"><div><small>Bank</small><b>'+E(BANK.bank||'—')+'</b></div><div><small>Account Holder</small><b>'+E(BANK.bankHolder||'—')+'</b></div><div><small>Account Number</small><b>'+E(BANK.bankAccount||'—')+'</b></div></div>'+
+  (own?'<div class="bkact"><button class="btn btn-y" type="button" onclick="window.__aeraRefBank.edit()">'+(has?'Update Bank Details':'Add Bank Details')+'</button><span class="bkmsg" id="bankMsg"></span></div>'+
+  '<form id="bankForm" style="display:none" onsubmit="return window.__aeraRefBank.save(event)"><input id="bkBank" placeholder="Bank ( e.g. Maybank )" value="'+E(BANK.bank||'')+'" required><input id="bkHolder" placeholder="Account Holder Name" value="'+E(BANK.bankHolder||'')+'" required><input id="bkAcc" placeholder="Account Number" inputmode="numeric" value="'+E(BANK.bankAccount||'')+'" required><div class="bkact" style="grid-column:1/-1"><button class="btn btn-y" type="submit">Save</button><button class="btn" type="button" onclick="document.getElementById(\'bankForm\').style.display=\'none\'">Cancel</button></div></form>':'')+'</div>'}
+function paintBank(){var st=document.getElementById('state');if(!st||!BANK)return;var old=document.getElementById('bankCard');if(old)old.remove();var sc=st.querySelector('.sharecard');var d=document.createElement('div');d.innerHTML=bankCard();var card=d.firstChild;if(!card)return;if(sc)sc.insertAdjacentElement('afterend',card);else st.insertAdjacentElement('afterbegin',card)}
+window.__aeraRefBank.edit=function(){var f=document.getElementById('bankForm');if(f){f.style.display=f.style.display==='none'?'grid':'none';var i=document.getElementById('bkBank');if(i&&f.style.display!=='none')i.focus()}};
+window.__aeraRefBank.save=async function(ev){ev.preventDefault();var c=sb();var m=document.getElementById('bankMsg');if(!c)return false;m.textContent='Saving…';
+ var r=await c.rpc('ref_bank_set',{p_bank:document.getElementById('bkBank').value,p_holder:document.getElementById('bkHolder').value,p_account:document.getElementById('bkAcc').value});
+ if(r.error||!(r.data&&r.data.ok)){m.textContent='Could not save : '+((r.error&&r.error.message)||(r.data&&r.data.error)||'');return false}
+ BANK={bank:document.getElementById('bkBank').value.trim(),bankHolder:document.getElementById('bkHolder').value.trim(),bankAccount:document.getElementById('bkAcc').value.replace(/[^0-9 -]/g,'')};paintBank();var m2=document.getElementById('bankMsg');if(m2)m2.textContent='Saved · '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});return false};
+/* ---- Generate Report ( Peter's accounts only ) ---- */
+function paintBtn(){if(!OWNER)return;var box=document.getElementById('refPick');if(!box||document.getElementById('refReportBtn'))return;var b=document.createElement('button');b.id='refReportBtn';b.type='button';b.textContent='📄 Generate Report';b.onclick=function(){window.__aeraRefBank.report()};box.appendChild(b)}
+function money(n){return 'RM '+(Math.round((+n||0)*100)/100).toFixed(2)}
+function isOrder(r){return !/^(PROFILE|TEAM)-/i.test(String(r.OrderNo||''))}
+function paid(x){try{return isPaid(x)}catch(e){return /^(yes|true|paid|1)$/i.test(String(x||''))}}
+window.__aeraRefBank.report=async function(){if(busy)return;busy=true;var b=document.getElementById('refReportBtn');var c=sb();var month=(window.R&&R.month)||'';var keepAs=window.__REF_AS;
+ try{b.textContent='Building…';var L=await c.rpc('kc_referrer_banks');var list=(L&&L.data)||[];var out=[];
+  for(var i=0;i<list.length;i++){var p=list[i];b.textContent='Building… '+(i+1)+' / '+list.length;var rs=[];try{window.__REF_AS=p.code;var j=await window.aeraRefData();rs=rows(j).filter(isOrder)}catch(e){}
+   var mo=rs.filter(function(r){return String(r.Month||'')===month});
+   function agg(a){var o=a.filter(function(r){return !/^(ADJ|OVR)-/i.test(String(r.OrderNo||''))});return{orders:o.length,sales:sum(o,'Sales'),cb:sum(a,'Cashback'),pend:sum(a.filter(function(r){return !paid(r.Paid)}),'Cashback'),paid:sum(a.filter(function(r){return paid(r.Paid)}),'Cashback')}}
+   out.push({p:p,m:agg(mo),t:agg(rs)})}
+  window.__REF_AS=keepAs;
+  var lbl=month?monthLabel(month):'All Time',now=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  var head=['Referrer','Code','Tier','Rate %','Orders ('+lbl+')','Sales ('+lbl+')','Cash-Back ('+lbl+')','Pending ('+lbl+')','Orders (All Time)','Sales (All Time)','Cash-Back (All Time)','Pending (All Time)','Paid (All Time)','Bank','Account Holder','Account Number','Email','Phone'];
+  var lines=out.map(function(x){var p=x.p,m=x.m,t=x.t;return [p.name,p.code,p.tier,p.rate,m.orders,m.sales,m.cb,m.pend,t.orders,t.sales,t.cb,t.pend,t.paid,p.bank,p.bankHolder,p.bankAccount,p.email,p.phone]});
+  var tot=lines.reduce(function(a,l){[4,5,6,7,8,9,10,11,12].forEach(function(k){a[k]=(a[k]||0)+(+l[k]||0)});return a},[]);
+  var csv=[head].concat(lines).map(function(r){return r.map(function(x){x=String(x==null?'':x);return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x}).join(',')}).join('\n');
+  var w=window.open('','_blank');if(!w){alert('Please allow pop-ups to open the report.');return}
+  var isM=function(k){return k>=5&&k<=12&&k!==8};
+  w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{font:13px Montserrat,system-ui,sans-serif;color:#0E2F6B;margin:24px}h1{margin:0 0 4px;font-size:22px}p{margin:0 0 14px;color:#6B7280}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #CBD5E1;padding:6px 8px;text-align:left;white-space:nowrap}th{background:#16479E;color:#fff;font-size:11px;letter-spacing:.06em;text-transform:uppercase}td.r,th.r{text-align:right}tfoot td{font-weight:800;background:#FFF4D6}.bar{display:flex;gap:8px;margin:0 0 14px}.bar button{padding:9px 14px;border-radius:999px;border:0;background:#FDB913;color:#16479E;font:800 13px Montserrat,system-ui,sans-serif;cursor:pointer}@media print{.bar{display:none}}</style></head><body>'+
+   '<h1>AERA Referral Report · '+E(lbl)+'</h1><p>'+out.length+' Referrers · generated '+E(now)+' · Cash-Back is settled by Bank Transfer after each Month closes.</p>'+
+   '<div class="bar"><button onclick="window.print()">🖨 Print / Save as PDF</button><button id="dl">⬇ Download CSV</button></div>'+
+   '<table><thead><tr>'+head.map(function(h,k){return '<th class="'+(k>=4&&k<=12?'r':'')+'">'+E(h)+'</th>'}).join('')+'</tr></thead><tbody>'+
+   lines.map(function(l){return '<tr>'+l.map(function(x,k){return '<td class="'+(k>=4&&k<=12?'r':'')+'">'+E(isM(k)?money(x):x)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody>'+
+   '<tfoot><tr><td colspan="4">Total</td>'+[4,5,6,7,8,9,10,11,12].map(function(k){return '<td class="r">'+E(isM(k)?money(tot[k]):(tot[k]||0))+'</td>'}).join('')+'<td colspan="5"></td></tr></tfoot></table></body></html>');
+  w.document.close();
+  w.document.getElementById('dl').onclick=function(){var bl=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});var a=w.document.createElement('a');a.href=URL.createObjectURL(bl);a.download='AERA-Referral-Report-'+(month||'all-time')+'.csv';w.document.body.appendChild(a);a.click();a.remove()};
+ }catch(e){alert('Could not build the report : '+(e&&e.message||e))}finally{window.__REF_AS=keepAs;busy=false;if(b)b.textContent='📄 Generate Report'}};
+/* keep the card in place whenever the page re-renders */
+var t0=setInterval(function(){if(typeof window.render==='function'&&!window.__aeraRefBankWrapped){window.__aeraRefBankWrapped=1;var orig=window.render;window.render=function(){var r=orig.apply(this,arguments);try{paintBank();paintBtn()}catch(e){}return r};clearInterval(t0)}},300);
+var t1=setInterval(function(){if(sb()){clearInterval(t1);loadBank()}},500);
+new MutationObserver(function(){paintBtn()}).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
