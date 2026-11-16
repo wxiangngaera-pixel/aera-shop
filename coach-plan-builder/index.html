@@ -1636,6 +1636,8 @@ var AERA_FOODS=[
 ["Samyang Buldak Original Big Bowl", "Samyang Buldak Original Big Bowl", "1 bowl (105 g)", "1 碗 (105 g)", 440.0, 10.0, 64.0, 16.0, "samyang noodles,cup noodles,instant noodles,buldak"],
 ["Samyang Buldak Carbonara Big Bowl", "Samyang Buldak Carbonara Big Bowl", "1 bowl (105 g)", "1 碗 (105 g)", 470.0, 7.0, 63.0, 21.0, "samyang noodles,cup noodles,instant noodles,buldak"],
 ["Ottogi Jin Ramen Cup Mild", "Ottogi Jin Ramen Cup Mild", "1 cup (65 g)", "1 杯 (65 g)", 284.0, 7.2, 41.3, 9.8, "ottogi,jin ramen,ottogi noodles,cup noodles,instant noodles"],
+["BodyKey by Nutrilite Meal Replacement Shake ( Chocolate )","Nutrilite BodyKey 代餐奶昔（巧克力）","1 pouch ( 51 g ), mixed with water","1 包（51 克），加水冲泡",205,17,22,6.5,"bodykey chocolate,bodykey choc,nutrilite bodykey chocolate,amway bodykey chocolate,bodykey"],
+["BodyKey by Nutrilite Meal Replacement Shake ( Berry )","Nutrilite BodyKey 代餐奶昔（莓果）","1 pouch ( 51 g ), mixed with water","1 包（51 克），加水冲泡",205,17,23,6,"bodykey berry,bodykey berries,bodykey mixed berry,nutrilite bodykey berry,amway bodykey berry,bodykey"],
 ["BodyKey by Nutrilite Meal Replacement Shake ( Latte )","Nutrilite BodyKey 代餐奶昔（拿铁）","1 pouch ( 51 g ), mixed with water","1 包（51 克），加水冲泡",205,17,23,6,"nutrilite bodykey cafe latte,bodykey cafe latte,bodykey latte,bodykey,body key,nutrilite bodykey,amway bodykey,bodykey meal replacement,bodykey shake"],
 ["Herbalife Formula 1 Shake ( powder only )","康宝莱 Formula 1 营养蛋白混合饮料（粉）","2 tablespoons ( 26 g ) — add the milk separately","2 汤匙（26 克）— 牛奶另计",98,9,9,2.3,"herbalife f1,f1,formula 1,formula one,herbalife formula 1,herbalife shake,herbalife nutritious mixed soy protein drink,f1 shake"],
 ["Nutrilite Protein with Green Tea","Nutrilite 绿茶蛋白粉","1.5 scoops ( 23.5 g )","1.5 勺（23.5 克）",89,8,9.75,2,"nutrilite green tea protein,nutrilite green tea,amway green tea protein,protein with green tea,green tea protein,soy protein drink mix green tea,nutrilite soy protein green tea"],
@@ -1775,7 +1777,7 @@ var AERA_FOODS=[
 ];
 function ffNorm(s){return String(s||'').toLowerCase().replace(/[’'`´]/g,'').replace(/[^a-z0-9一-鿿]+/g,' ').replace(/\s+/g,' ').trim()}
 function ffLocal(q){
- var n=ffNorm(q);if(!n)return null;var qt=n.split(' ');var best=null,bs=0;
+ var n=ffNorm(q);if(!n)return null;var qt=n.split(' ');var best=null,bs=0,CAND=[];
  AERA_FOODS.forEach(function(r){
   var names=[r[0]].concat((r[8]||'').split(',')).map(ffNorm).filter(Boolean);var s=0;
   names.forEach(function(nm){
@@ -1786,10 +1788,14 @@ function ffLocal(q){
    var t2=nm.split(' '),hit2=0,qw=0;qt.forEach(function(w){if(w.length>=2){qw++;if(t2.indexOf(w)>-1)hit2++}});if(qw>=2&&hit2===qw)s=Math.max(s,88+10*hit2/t2.length);/* Peter 15th Nov 2026 : every word the Coach typed is in the name ( "Vitagen Grape", "Milo Can" ) beats a shorter generic name */
   });
   if(r[1]&&(n===r[1]||n.indexOf(r[1])>-1||(r[1].indexOf(n)>-1&&n.length>=2)))s=Math.max(s,95);
+  if(s>=45)CAND.push({s:s,r:r});
   if(s>bs){bs=s;best=r}
  });
  if(!best||bs<45)return null;window.__ffScore=bs;
- return{name:best[0],serving:best[2],kcal:best[4],p:best[5],c:best[6],f:best[7],note:'Typical Malaysian serving ( approximate ). Adjust the servings below if yours is bigger or smaller.',zh:{name:best[1],serving:best[3],note:'马来西亚常见份量（约数）。份量不同可在下方调整。'}};
+ function mk(r){return{name:r[0],serving:r[2],kcal:r[4],p:r[5],c:r[6],f:r[7],img:'',note:'Typical Malaysian serving ( approximate ). Adjust the servings below if yours is bigger or smaller.',zh:{name:r[1],serving:r[3],note:'马来西亚常见份量（约数）。份量不同可在下方调整。'}}}
+ /* Peter 15th Nov 2026 : the other close matches from the Malaysian list ( other flavours, sizes ) ride along as tappable rows */
+ CAND.sort(function(a,b){return b.s-a.s});var alts=[],seen={};CAND.forEach(function(c){var k=c.r[0]+'|'+c.r[2];if(seen[k]||(c.s<60&&c.r!==best))return;seen[k]=1;alts.push(mk(c.r))});if(alts.length>8)alts.length=8;
+ var out=mk(best);if(alts.length>1)out.alts=alts;return out;
 }
 async function ffOFF(q){ /* Peter 15th Nov 2026 : returns the best match AND the other close matches ( other flavours, sizes ), so the Coach can tap the right one */
  var ctl=new AbortController();var to=setTimeout(function(){ctl.abort()},9000);
