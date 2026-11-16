@@ -1398,7 +1398,7 @@ var AERA_FOODS=[
 ["Minute Maid Refresh Apple", "Minute Maid Refresh Apple", "100 ml", "100 毫升", 20, 0, 4.6, 0, "coca-cola coke soft drink"],
 ["Minute Maid Refresh Orange", "Minute Maid Refresh Orange", "100 ml", "100 毫升", 20, 0, 4.7, 0, "coca-cola coke soft drink"],
 ["Minute Maid Qoo White Grape", "Minute Maid Qoo White Grape", "100 ml", "100 毫升", 46, 0, 11.2, 0, "coca-cola coke soft drink"],
-["Fuze Tea Ice Lemon Tea", "Fuze Tea Ice Lemon Tea", "300 ml", "300 毫升", 51, 0, 12.9, 0, "coca-cola coke soft drink"],
+["Fuze Tea Ice Lemon Tea", "Fuze Tea Ice Lemon Tea", "300 ml", "300 毫升", 51, 0, 12.9, 0, "fuze tea,fuze,fuze tea lemon,coca-cola coke soft drink"],
 ["Fuze Tea Jasmine Green Tea", "Fuze Tea Jasmine Green Tea", "300 ml", "300 毫升", 51, 0, 12.9, 0, "coca-cola coke soft drink"],
 ["Fuze Tea Ice Passionfruit Tea", "Fuze Tea Ice Passionfruit Tea", "300 ml", "300 毫升", 18, 0, 4.3, 0, "coca-cola coke soft drink"],
 ["Fuze Tea Mango Green Tea", "Fuze Tea Mango Green Tea", "300 ml", "300 毫升", 18, 0, 4.3, 0, "coca-cola coke soft drink"],
@@ -1636,9 +1636,9 @@ var AERA_FOODS=[
 ["Samyang Buldak Original Big Bowl", "Samyang Buldak Original Big Bowl", "1 bowl (105 g)", "1 碗 (105 g)", 440.0, 10.0, 64.0, 16.0, "samyang noodles,cup noodles,instant noodles,buldak"],
 ["Samyang Buldak Carbonara Big Bowl", "Samyang Buldak Carbonara Big Bowl", "1 bowl (105 g)", "1 碗 (105 g)", 470.0, 7.0, 63.0, 21.0, "samyang noodles,cup noodles,instant noodles,buldak"],
 ["Ottogi Jin Ramen Cup Mild", "Ottogi Jin Ramen Cup Mild", "1 cup (65 g)", "1 杯 (65 g)", 284.0, 7.2, 41.3, 9.8, "ottogi,jin ramen,ottogi noodles,cup noodles,instant noodles"],
+["BodyKey by Nutrilite Meal Replacement Shake ( Latte )","Nutrilite BodyKey 代餐奶昔（拿铁）","1 pouch ( 51 g ), mixed with water","1 包（51 克），加水冲泡",205,17,23,6,"nutrilite bodykey cafe latte,bodykey cafe latte,bodykey latte,bodykey,body key,nutrilite bodykey,amway bodykey,bodykey meal replacement,bodykey shake"],
 ["BodyKey by Nutrilite Meal Replacement Shake ( Chocolate )","Nutrilite BodyKey 代餐奶昔（巧克力）","1 pouch ( 51 g ), mixed with water","1 包（51 克），加水冲泡",205,17,22,6.5,"bodykey chocolate,bodykey choc,nutrilite bodykey chocolate,amway bodykey chocolate,bodykey"],
 ["BodyKey by Nutrilite Meal Replacement Shake ( Berry )","Nutrilite BodyKey 代餐奶昔（莓果）","1 pouch ( 51 g ), mixed with water","1 包（51 克），加水冲泡",205,17,23,6,"bodykey berry,bodykey berries,bodykey mixed berry,nutrilite bodykey berry,amway bodykey berry,bodykey"],
-["BodyKey by Nutrilite Meal Replacement Shake ( Latte )","Nutrilite BodyKey 代餐奶昔（拿铁）","1 pouch ( 51 g ), mixed with water","1 包（51 克），加水冲泡",205,17,23,6,"nutrilite bodykey cafe latte,bodykey cafe latte,bodykey latte,bodykey,body key,nutrilite bodykey,amway bodykey,bodykey meal replacement,bodykey shake"],
 ["Herbalife Formula 1 Shake ( powder only )","康宝莱 Formula 1 营养蛋白混合饮料（粉）","2 tablespoons ( 26 g ) — add the milk separately","2 汤匙（26 克）— 牛奶另计",98,9,9,2.3,"herbalife f1,f1,formula 1,formula one,herbalife formula 1,herbalife shake,herbalife nutritious mixed soy protein drink,f1 shake"],
 ["Nutrilite Soy Protein Drink ( Green Tea )","Nutrilite 大豆蛋白饮品（绿茶）","2 scoops ( 23.5 g )","2 勺（23.5 克）",95,8,12,2,"nutrilite green tea protein,nutrilite green tea,amway green tea protein,protein with green tea,green tea protein,soy protein drink mix green tea,nutrilite soy protein green tea,nutrilite protein"],
 ["Nutrilite Soy Protein Drink ( Original / All Plant Protein )","Nutrilite 大豆蛋白饮品（原味）","1 scoop ( 10 g )","1 勺（10 克）",40,8,0.3,0.5,"nutrilite protein,nutrilite soy protein,nutrilite all plant protein,all plant protein,nutrilite protein powder,nutrilite original protein,amway protein,amway soy protein"],
@@ -1797,7 +1797,7 @@ function ffLocal(q){
  if(!best||bs<45)return null;window.__ffScore=bs;
  function mk(r){return{name:r[0],serving:r[2],kcal:r[4],p:r[5],c:r[6],f:r[7],img:'',note:'Typical Malaysian serving ( approximate ). Adjust the servings below if yours is bigger or smaller.',zh:{name:r[1],serving:r[3],note:'马来西亚常见份量（约数）。份量不同可在下方调整。'}}}
  /* Peter 15th Nov 2026 : the other close matches from the Malaysian list ( other flavours, sizes ) ride along as tappable rows */
- CAND.sort(function(a,b){return b.s-a.s});var alts=[],seen={};CAND.forEach(function(c){var k=c.r[0]+'|'+c.r[2];if(seen[k]||(c.s<60&&c.r!==best))return;seen[k]=1;alts.push(mk(c.r))});if(alts.length>8)alts.length=8;
+ CAND.sort(function(a,b){return b.s-a.s});var alts=[],seen={};CAND.forEach(function(c){var k=c.r[0]+'|'+c.r[2];if(seen[k]||(c.s<70&&c.r!==best))return;seen[k]=1;alts.push(mk(c.r))});if(alts.length>8)alts.length=8;
  var out=mk(best);if(alts.length>1)out.alts=alts;return out;
 }
 async function ffOFF(q){ /* Peter 15th Nov 2026 : returns the best match AND the other close matches ( other flavours, sizes ), so the Coach can tap the right one */
