@@ -2306,11 +2306,11 @@ async function foodFind(q){ /* Peter 15th Nov 2026 : the Malaysian list only win
 async function coachFetch(mode,payload){if(mode==='food')return foodFind((payload&&payload.text)||'');var key='C'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);var ctl=new AbortController();var to=setTimeout(function(){ctl.abort()},60000);await fetch(COACH_URL,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctl.signal,body:JSON.stringify({contactEmail:'sync-coach-'+key.toLowerCase()+'@aera-sync.invalid',data:{mode:mode,key:key,payload:JSON.stringify(payload)}})});clearTimeout(to);var row=null;for(var i=0;i<8&&!row;i++){if(i)await new Promise(function(r){setTimeout(r,1500)});try{var j=await fetch(COACH_READ+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()});(j&&j.data||[]).forEach(function(r){if(r.Key===key)row=r})}catch(e){}}if(!row)throw new Error('timeout');var a=null;try{a=JSON.parse(row.Reply)}catch(e){a=null}if(!a||a.error)throw new Error((a&&a.error)||'bad reply');return a}
 function wikiPics(s){var u='https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrlimit=6&gsrsearch='+encodeURIComponent(s+' food')+'&prop=pageimages&piprop=thumbnail&pithumbsize=320';
  return fetch(u).then(function(r){return r.json()}).then(function(j){var p=[];var q=(j&&j.query&&j.query.pages)||{};for(var k in q)p.push(q[k]);p.sort(function(a,b){return a.index-b.index});return p.filter(function(x){return x.thumbnail&&x.thumbnail.source&&!/\.svg/i.test(x.thumbnail.source)}).slice(0,4).map(function(x){return x.thumbnail.source})}).catch(function(){return []})}
-function ownMac(it){var b=it&&it.b;if(!b)return null;var s=(b.gs>0&&+it.g>0)?(+it.g/b.gs):(+it.q||1);return{kcal:b.k*s,p:b.p*s,c:b.c*s,f:b.f*s}}
+function ownMac(it){var b=it&&it.b;if(!b)return null;var s=(b.gs>0&&+it.g>0)?(+it.g/b.gs):(+it.q||1);return{kcal:b.k*s,p:(b.p==null?null:b.p*s),c:(b.c==null?null:b.c*s),f:(b.f==null?null:b.f*s)}}
 function ownServ(it){var q=+it.q||1,b=it.b||{};if(b.gs>0&&+it.g>0)return (+it.g)+' g';return (q===1?'1 Serving':(q+' Servings'))+(it.sv?' ( '+it.sv+' )':'')}
 function ownThumb(it){return it&&it.img?'<div class="thumb" role="img" aria-label="'+esc(it.own||'')+'" style="background-image:url('+esc(it.img)+')"></div>':'<div class="thumb none" aria-hidden="true">+</div>'}
 function gramsOf(s){var m=/(\d+(?:\.\d+)?)\s*(?:g|gram|grams)\b/i.exec(s||'');return m?+m[1]:0}
-function ppHtml(it){var r=BYCODE[it.code],x=r?per(r,rawOf(it).g):ownMac(it);if(!x)return '<span class="ppn">&mdash;</span>';return Math.round(x.kcal)+' KCALs<br>Protein '+r1(x.p)+' g<br>Carbs '+r1(x.c)+' g<br>Fat '+r1(x.f)+' g'}
+function ppHtml(it){var r=BYCODE[it.code],x=r?per(r,rawOf(it).g):ownMac(it);if(!x)return '<span class="ppn">&mdash;</span>';return Math.round(x.kcal)+' KCALs<br>Protein '+mg(x.p)+'<br>Carbs '+mg(x.c)+'<br>Fat '+mg(x.f)}
 /* MAP Bento Box picked : each Meal is shown as its Bento Box, the same tray and compartments as the
    Personalised Meal Plan ( Protein left, Carbs top right, Vegetables bottom right ). Home-Sourced
    items are not cooked by AERA, so they are not in the box. */
@@ -2329,7 +2329,7 @@ function addOwn(){
  $('#ownFound').innerHTML='<p class="hint ownbusy"><span class="ownspin"></span>Looking up the Macros…</p>';
  Promise.all([coachFetch('food',{text:nm}).catch(function(){return null}),wikiPics(nm)]).then(function(res){
   OWNBUSY=false;btn.disabled=false;var a=res[0],pics=res[1]||[];
-  if(a&&a.name&&a.kcal!=null&&a.kcal!==''&&isFinite(+a.kcal))OWNF={name:a.name,serving:a.serving||'1 Serving',kcal:+a.kcal||0,p:+a.p||0,c:+a.c||0,f:+a.f||0,note:a.note||'',pics:(a.img?[a.img]:pics),img:a.img||pics[0]||'',alts:(a.alts&&a.alts.length>1)?a.alts:null};
+  if(a&&a.name&&a.kcal!=null&&a.kcal!==''&&isFinite(+a.kcal))OWNF={name:a.name,serving:a.serving||'1 Serving',kcal:+a.kcal||0,p:(a.p==null?null:(+a.p||0)),c:(a.c==null?null:(+a.c||0)),f:(a.f==null?null:(+a.f||0)),note:a.note||'',pics:(a.img?[a.img]:pics),img:a.img||pics[0]||'',alts:(a.alts&&a.alts.length>1)?a.alts:null};
   else OWNF={name:nm,none:true,pics:[],img:''};
   OWNQ=1;ownPaint()})}
 function ownPaint(){var el=$('#ownFound');if(!el)return;if(!OWNF){el.innerHTML='';return}var F=OWNF,q=OWNQ;
