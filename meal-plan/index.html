@@ -3380,7 +3380,7 @@ function dayBar(fe){/* Peter 12th Nov 2026 : while the dish list ( Change Item )
  var ib=D.getElementById('hsBar');if(ib&&ib.classList.contains('on'))ib.classList.remove('on');
  var fr=fe.getBoundingClientRect(),hin=fe.closest('.hin'),open=!hin||hin.clientHeight>60,dp=null,bh=b.offsetHeight||50,nb=nav(pd);if(b.__nb!==nb){b.__nb=nb;b.style.top=nb+'px';b.classList.toggle('top0',!nb)}
  [].some.call(D.querySelectorAll('#planCal .dpanel'),function(p){if(p.offsetHeight){dp=p;return true}return false});
- var dh=dp&&[].filter.call(dp.querySelectorAll('.mh'),function(x){return !x.closest('.mcard')})[0],dm=dh&&dh.querySelector('.mac'),show=!!(open&&dh&&dm&&fr.top+dh.getBoundingClientRect().bottom<nb+4&&fr.top+dp.getBoundingClientRect().bottom>nb+bh+120);
+ var dh=dp&&[].filter.call(dp.querySelectorAll('.mh'),function(x){return !x.closest('.mcard')})[0],dm=dh&&dh.querySelector('.mac'),show=!!(open&&dh&&dm&&fr.top+dh.getBoundingClientRect().bottom<nb+(b.classList.contains('on')?40:4)&&fr.top+dp.getBoundingClientRect().bottom>nb+bh+120);
  if(show){var dt='';[].forEach.call(dm.childNodes,function(n){if(n.nodeType===3||n.tagName==='B')dt+=n.textContent});dt=dt.replace(/\s+/g,' ').replace(/\s*·\s*RM\s*[\d,.]+\s*$/,'').replace(/\s*·\s*$/,'').trim();
   var dn=(dh.textContent||'').replace(dm.textContent||'','').replace(/\s+/g,' ').trim(),h='<b>'+(dn||'Day').replace(/[<>&]/g,'')+' · '+(zh()?'全天':'Total')+'</b><span>'+dt.replace(/[<>&]/g,'')+'</span>';
   if(b.__fh!==h){b.__fh=h;b.innerHTML=h}if(!b.classList.contains('on'))b.classList.add('on');return nb+b.offsetHeight}
@@ -4716,7 +4716,8 @@ function header(dp,T){var mac=dp.querySelector('.mh .mac');if(!mac||!T)return;va
 function bar(T){var b=D.getElementById('hsBar');if(!b){b=D.createElement('div');b.id='hsBar';b.setAttribute('aria-live','polite');D.body.appendChild(b)}
  var dp=D.querySelector('#planCal .dpanel'),mh=dp&&dp.querySelector('.mh');var s4=D.getElementById('s4');
  /* Peter 17th Nov 2026 : the Day Total bar sits right under the Top Bar and shows the moment the Day heading goes under it */var NB=0;try{var nv=D.getElementById('aeraBar')||D.querySelector('body>nav')||D.querySelector('body>header');if(nv){var np=getComputedStyle(nv).position;if(np==='fixed'||np==='sticky')NB=Math.max(0,nv.getBoundingClientRect().bottom)}}catch(e){}if(b.__nb!==NB){b.__nb=NB;b.style.top=NB+'px';b.style.paddingTop=NB?'8px':''}
- var show=!!(T&&mh&&s4&&s4.offsetParent!==null&&mh.getBoundingClientRect().bottom<NB+4&&dp.getBoundingClientRect().bottom>NB+60);
+ var show=!!(T&&mh&&s4&&s4.offsetParent!==null&&mh.getBoundingClientRect().bottom<NB+(b.classList.contains('on')?40:4)&&dp.getBoundingClientRect().bottom>NB+60);
+ /* Peter 17th Nov 2026 : inside the Homepage the Homepage's own Day Total bar is used, so this one never shows there ( the two fought and the bar flashed ) */try{if(window.frameElement)show=false}catch(e){}
  if(show){var dn='';try{dn=(PLAN.dayNames&&PLAN.dayNames[SELD-1])||DOW[(SELD-1)%7]}catch(e){}var h='<b>Day '+SELD+(dn?' ( '+E(dn)+' )':'')+' · Total</b><span>'+macTxt(T)+'</span>';if(b.__h!==h){b.innerHTML=h;b.__h=h}}
  b.classList.toggle('on',show)}
 function inject(){if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return;var dp=D.querySelector('#planCal .dpanel');if(!dp)return;css();
