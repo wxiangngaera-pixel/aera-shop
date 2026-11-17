@@ -4779,7 +4779,7 @@ function imgData(u){return new Promise(function(res){if(!u)return res(null);if(/
 window.mpPdf=async function(){var b=D.getElementById('mpPdf');if(b){b.disabled=true;b.textContent='Preparing PDF …'}
  try{if(!window.jspdf)await pdfLib('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
   var J=window.jspdf.jsPDF;if(!J.API.autoTable)await pdfLib('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js');
-  var NAVY=[14,26,51],GOLD=[184,149,90],IVORY=[250,247,240],INK=[34,34,34],MUTED=[128,122,110],LINE=[231,224,208];
+  /* Peter 17th Nov 2026 : AERA colours — Navy #16479E, Yellow #FDB913, Black #0B0B0B, light Yellow and light Blue panels */var NAVY=[22,71,158],GOLD=[253,185,19],IVORY=[255,244,204],INK=[11,11,11],MUTED=[90,99,120],LINE=[203,217,240],SKY=[238,243,252];
   var N=nMeals(),H=(window.Q&&Q.home)||[],T=PLAN.targets||{},F=T.full||T,today=pdfDate(new Date());
   var urls={};PLAN.meals.forEach(function(m){(m.comps||[]).forEach(function(cp){var r=BYCODE[cp.r];if(r&&r.img)urls[r.img]=1})});H.forEach(function(x){var u=homeImg(x.n);if(u)urls[u]=1});
   var IMG={};await Promise.all(Object.keys(urls).map(function(u){return imgData(u).then(function(d){if(d)IMG[u]=d})}));
@@ -4798,24 +4798,24 @@ window.mpPdf=async function(){var b=D.getElementById('mpPdf');if(b){b.disabled=t
   var doc=new J({unit:'pt',format:'a4'}),W=doc.internal.pageSize.getWidth(),PH=doc.internal.pageSize.getHeight(),L=40,R=W-40;
   /* title */
   doc.setFillColor.apply(doc,NAVY);doc.rect(0,0,W,96,'F');doc.setDrawColor.apply(doc,GOLD);doc.setLineWidth(1.2);doc.line(0,96,W,96);
-  doc.setFont('times','bold');doc.setFontSize(28);doc.setTextColor.apply(doc,GOLD);doc.text('AERA',L,50,{charSpace:4});
+  doc.setFont('helvetica','bolditalic');doc.setFontSize(28);doc.setTextColor.apply(doc,GOLD);doc.text('AERA',L,50,{charSpace:3});
   doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(255,255,255);doc.text('PERSONALISED MEAL PLAN',L,70,{charSpace:2.2});
-  doc.setFontSize(9);doc.setTextColor(214,200,170);doc.text(today,R,50,{align:'right'});doc.text('aeramealprep.net',R,70,{align:'right'});
+  doc.setFontSize(9);doc.setTextColor(203,217,240);doc.text(today,R,50,{align:'right'});doc.text('aeramealprep.net',R,70,{align:'right'});
   var y=128,who='';try{who=pdfTxt((typeof USER!=='undefined'&&USER&&((USER.user_metadata&&USER.user_metadata.full_name)||USER.email))||'')}catch(e){}
-  if(who){doc.setFont('times','bold');doc.setFontSize(16);doc.setTextColor.apply(doc,INK);doc.text(who,L,y);y+=18}
+  if(who){doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor.apply(doc,INK);doc.text(who,L,y);y+=18}
   var aeraN=PLAN.meals.length,hl=[PLAN.days+' Day'+(PLAN.days>1?'s':''),aeraN+' AERA Meal'+(aeraN===1?'':'s')];if(homeOnly)hl.push(homeOnly+' Home-Sourced Meal'+(homeOnly===1?'':'s'));
   doc.setFont('helvetica','normal');doc.setFontSize(10.5);doc.setTextColor.apply(doc,MUTED);doc.text(hl.join('   ·   '),L,y);y+=20;
   /* Daily Target tiles */
   var tw=(R-L-30)/4,tl=[['DAILY KCAL',Math.round(+F.kcal||0)],['PROTEIN',Math.round(+F.p||0)+' g'],['CARBS',Math.round(+F.c||0)+' g'],['FAT',Math.round(+F.f||0)+' g']];
-  tl.forEach(function(t,i){var x=L+i*(tw+10);doc.setFillColor.apply(doc,IVORY);doc.rect(x,y,tw,50,'F');doc.setDrawColor.apply(doc,GOLD);doc.setLineWidth(1.6);doc.line(x,y,x+tw,y);
-   doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor.apply(doc,MUTED);doc.text(t[0],x+10,y+17,{charSpace:1.2});doc.setFont('times','bold');doc.setFontSize(17);doc.setTextColor.apply(doc,NAVY);doc.text(String(t[1]),x+10,y+40)});
+  tl.forEach(function(t,i){var x=L+i*(tw+10);doc.setFillColor.apply(doc,SKY);doc.rect(x,y,tw,50,'F');doc.setDrawColor.apply(doc,GOLD);doc.setLineWidth(1.6);doc.line(x,y,x+tw,y);
+   doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor.apply(doc,MUTED);doc.text(t[0],x+10,y+17,{charSpace:1.2});doc.setFont('helvetica','bold');doc.setFontSize(16);doc.setTextColor.apply(doc,NAVY);doc.text(String(t[1]),x+10,y+40)});
   y+=74;
   DAYS.forEach(function(day){if(y>PH-170){doc.addPage();y=50}
-   doc.setFillColor.apply(doc,NAVY);doc.rect(L,y,R-L,30,'F');doc.setFont('times','bold');doc.setFontSize(13);doc.setTextColor.apply(doc,GOLD);doc.text(('DAY '+day.d+(day.dn?'  ·  '+pdfTxt(day.dn):'')).toUpperCase(),L+12,y+20,{charSpace:1});
+   doc.setFillColor.apply(doc,NAVY);doc.rect(L,y,R-L,30,'F');doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor.apply(doc,GOLD);doc.text(('DAY '+day.d+(day.dn?'  ·  '+pdfTxt(day.dn):'')).toUpperCase(),L+12,y+20,{charSpace:1});
    doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(255,255,255);doc.text(Math.round(day.tot.kcal)+' KCAL  ·  P '+r1(day.tot.p)+' g  ·  C '+r1(day.tot.c)+' g  ·  F '+r1(day.tot.f)+' g',R-12,y+19,{align:'right'});y+=44;
    day.meals.forEach(function(meal){var est=40+(meal.rows.length+1)*44;if(y+est>PH-56&&est<PH-110){doc.addPage();y=50}
-    doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.setTextColor.apply(doc,GOLD);doc.text(pdfTxt(meal.name).toUpperCase(),L,y,{charSpace:1.4});
-    var nw=doc.getTextWidth(pdfTxt(meal.name).toUpperCase())+pdfTxt(meal.name).length*1.4;doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,MUTED);doc.text(meal.home?'Home-Sourced':'AERA Meal Prep',L+nw+10,y);
+    doc.setFillColor.apply(doc,GOLD);doc.rect(L,y-8,3,10,'F');doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.setTextColor.apply(doc,NAVY);doc.text(pdfTxt(meal.name).toUpperCase(),L+8,y,{charSpace:1.4});
+    var nw=8+doc.getTextWidth(pdfTxt(meal.name).toUpperCase())+pdfTxt(meal.name).length*1.4;doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,MUTED);doc.text(meal.home?'Home-Sourced':'AERA Meal Prep',L+nw+10,y);
     var body=meal.rows.map(function(r){return [{content:'',img:r.img},{content:r.n+'\n'+r.sub},r.pt].concat(mac(r.m))});
     var st={fontStyle:'bold',textColor:NAVY,fillColor:IVORY};body.push([{content:'',styles:st},{content:'Meal Total',styles:st},{content:'',styles:st}].concat(mac(meal.sub).map(function(v){return{content:v,styles:st}})));
     doc.autoTable({startY:y+6,head:[['','ITEM','PORTION','KCAL','PROTEIN','CARBS','FAT']],body:body,theme:'plain',margin:{left:L,right:W-R,bottom:56,top:50},rowPageBreak:'avoid',
@@ -4826,7 +4826,7 @@ window.mpPdf=async function(){var b=D.getElementById('mpPdf');if(b){b.disabled=t
      didDrawCell:function(dc){if(dc.section==='body'&&dc.column.index===0&&dc.cell.raw&&dc.cell.raw.img){var s=Math.min(dc.cell.height-8,32);try{doc.addImage(dc.cell.raw.img,'JPEG',dc.cell.x+4,dc.cell.y+(dc.cell.height-s)/2,s,s)}catch(e){}}}});
     y=doc.lastAutoTable.finalY+22})
    y+=6});
-  var pc=doc.internal.getNumberOfPages();for(var p=1;p<=pc;p++){doc.setPage(p);doc.setDrawColor.apply(doc,GOLD);doc.setLineWidth(0.6);doc.line(L,PH-34,R,PH-34);doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor.apply(doc,MUTED);doc.text('AERA MEAL PREP',L,PH-22,{charSpace:1.5});doc.text('Page '+p+' of '+pc,R,PH-22,{align:'right'})}
+  var pc=doc.internal.getNumberOfPages();for(var p=1;p<=pc;p++){doc.setPage(p);doc.setDrawColor.apply(doc,GOLD);doc.setLineWidth(1);doc.line(L,PH-34,R,PH-34);doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor.apply(doc,NAVY);doc.text('AERA MEAL PREP',L,PH-22,{charSpace:1.5});doc.setTextColor.apply(doc,MUTED);doc.text('Page '+p+' of '+pc,R,PH-22,{align:'right'})}
   doc.save('AERA Meal Plan - '+today+'.pdf')}
  catch(e){alert('Could not make the PDF : '+(e.message||e))}
  if(b){b.disabled=false;b.textContent='⬇ Download PDF'}};
