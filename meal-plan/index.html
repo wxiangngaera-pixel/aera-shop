@@ -4091,6 +4091,7 @@ function add(){document.body.appendChild(b);sync()}if(document.body)add();else d
   try{renderStep2()}catch(e){}refit('<b>'+esc(h.n)+'</b> · '+Math.round(h.k)+' KCALs. Your Targets are updated.')};
  window.hmDropDel=function(i){if(!window.Q)return;var x=Q.home[i];if(!x)return;Q.home.splice(i,1);try{renderStep2()}catch(e){}
   refit('Removed <b>'+esc(x.n)+'</b>. Your Targets are updated.')};
+ window.hmRefit=refit;
  ['addHome','addFoundHome'].forEach(function(f){var o=window[f];if(typeof o!=='function')return;
   window[f]=function(){var n0=((window.Q&&Q.home)||[]).length;var r=o.apply(this,arguments);
    if(window.Q&&Q.home.length>n0&&window.STEP===4){var x=Q.home[Q.home.length-1];
@@ -4700,6 +4701,7 @@ function css(){if(D.getElementById('hsDayCss'))return;var s=D.createElement('sty
  '.hsday .hsm{display:block;margin-top:6px;border:1.5px solid #16479E;border-radius:10px;padding:5px 8px;font:700 13px Montserrat,system-ui,sans-serif;color:#16479E;background:#fff;max-width:100%}'+
  '.hsin{margin:10px 12px 12px;padding:8px 12px;border:1.5px dashed #FDB913;border-radius:12px;background:#FFFBEB}.hsl{font-size:13px;color:#0B0B0B;padding:3px 0}.hsl b{color:#16479E}.hsl span{display:block;color:#5a6378;font-size:12px}'+
  '.hsmeal{margin:12px 0;border:1.5px solid #FDB913;border-radius:16px;background:#FFFBEB;padding:10px 14px}.hsmeal .hsmh{font-weight:800;color:#16479E;margin-bottom:4px}'+
+ '.mup{border:1.5px solid #16479E;background:#fff;color:#16479E;border-radius:999px;width:30px;height:30px;font:800 17px/1 system-ui,sans-serif;cursor:pointer;margin-right:6px;vertical-align:middle;padding:0}.mup:active{background:#FDB913}'+
  '.mgrip{font-style:normal;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;color:#7A869A;font-size:20px;line-height:1;padding:4px 6px 4px 0;vertical-align:middle}'+
  '.hsgrip{flex:0 0 auto;font-style:normal;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;color:#7A869A;font-size:20px;line-height:1;padding:6px 6px 6px 0}'+
  '.hsl{display:flex;align-items:flex-start;gap:4px}.hsl>div{flex:1;min-width:0}.mnsel{border:1.5px solid #16479E;border-radius:10px;padding:4px 8px;font:800 14px Montserrat,system-ui,sans-serif;color:#16479E;background:#fff;max-width:100%}'+
@@ -4724,7 +4726,8 @@ function nameSel(s){var cur='';try{cur=(PLAN.mnames&&PLAN.mnames[s])||''}catch(e
 function grip(i){return '<i class="hsgrip" data-i="'+i+'" title="Drag to another Meal" aria-label="Drag to another Meal">⠿</i>'}
 window.hsSetName=function(s,v){try{PLAN.mnames=PLAN.mnames||{};if(v)PLAN.mnames[s]=v;else delete PLAN.mnames[s]}catch(e){return}try{saveDraft()}catch(e){}try{inject()}catch(e){}};
 function card(){var H=(window.Q&&Q.home)||[],N=nMeals();
- var row=function(x,i){var sel='<select class="hsm" aria-label="Which Meal" onchange="hsSetMeal('+i+',this.value)"><option value="">Pick a Meal …</option>';for(var s=1;s<=N;s++)sel+='<option value="'+s+'"'+(+x.m===s?' selected':'')+'>'+E(mName(s))+'</option>';if(N<8)sel+='<option value="new">＋ New Meal ( Home-Sourced only )</option>';sel+='</select>';
+ var row=function(x,i){var sel='<select class="hsm" aria-label="Which Meal" onchange="hsSetMeal('+i+',this.value)"><option value="">Pick a Meal …</option><optgroup label="Move to">';for(var s=1;s<=N;s++)sel+='<option value="'+s+'"'+(+x.m===s?' selected':'')+'>'+E(mName(s))+'</option>';if(N<8)sel+='<option value="new">＋ New Meal ( Home-Sourced only )</option>';
+  /* Peter 17th Nov 2026 : the same Home-Sourced Meal can also go into more Meals ( Lunch, Dinner and Pre Workout … ) — each Meal gets its own copy */sel+='</optgroup><optgroup label="Also add to">';for(var s2=1;s2<=N;s2++)if(+x.m!==s2)sel+='<option value="c'+s2+'">＋ '+E(mName(s2))+'</option>';if(N<8)sel+='<option value="cnew">＋ New Meal</option>';sel+='</optgroup></select>';
   return '<div class="hsr">'+grip(i)+'<div class="hsn"><b>'+E(String(x.n).replace(/ ×\s*\d+(\.\d+)?$/,''))+'</b><small>'+Math.round(+x.k||0)+' KCALs · Protein '+r1(x.p)+' g · Carbs '+r1(x.c)+' g · Fat '+r1(x.f)+' g</small>'+sel+'</div>'+
   '<span class="hsq"><button type="button" onclick="hmDropQty('+i+',-1)" aria-label="Fewer servings">−</button><b>× '+(+x.q||1)+'</b><button type="button" onclick="hmDropQty('+i+',1)" aria-label="More servings">+</button></span>'+
   '<button type="button" class="hsx" onclick="hmDropDel('+i+')" aria-label="Remove">×</button></div>'};
@@ -4733,17 +4736,19 @@ function card(){var H=(window.Q&&Q.home)||[],N=nMeals();
  return '<div class="hsday"><div class="hsh"><span>🏠 Home-Sourced Meals<small>Every Day</small></span></div>'+
   (out||'<div class="hse">No Home-Sourced Meals in your Day yet.</div>')+
   '<div class="hsf"><button type="button" class="btn btn-o s" onclick="hsOpenDrop()">+ Add a Home-Sourced Meal</button></div></div>'}
-window.hsSetMeal=function(i,v){var x=window.Q&&Q.home&&Q.home[i];if(!x)return;v=v==='new'?Math.min(8,nMeals()+1):(parseInt(v,10)||0);if(v)x.m=v;else delete x.m;try{if(PLAN&&PLAN.q&&Array.isArray(PLAN.q.home)&&PLAN.q.home[i]&&PLAN.q.home[i].n===x.n){if(v)PLAN.q.home[i].m=v;else delete PLAN.q.home[i].m}}catch(e){}try{saveDraft()}catch(e){}try{inject()}catch(e){}};
+window.hsSetMeal=function(i,v){var x=window.Q&&Q.home&&Q.home[i];if(!x)return;
+ if(typeof v==='string'&&v.charAt(0)==='c'){var s2=v==='cnew'?Math.min(8,nMeals()+1):(parseInt(v.slice(1),10)||0);if(!s2)return;var cp=JSON.parse(JSON.stringify(x));cp.m=s2;Q.home.splice(i+1,0,cp);try{if(PLAN&&PLAN.q&&Array.isArray(PLAN.q.home))PLAN.q.home=JSON.parse(JSON.stringify(Q.home))}catch(e){}
+  var ok=false;try{if(window.hmRefit){window.hmRefit('Added <b>'+E(String(cp.n))+'</b> to '+E(mName(s2))+' too. Your Targets are updated.');ok=true}}catch(e){}if(!ok){try{saveDraft()}catch(e){}}try{inject()}catch(e){}return}v=v==='new'?Math.min(8,nMeals()+1):(parseInt(v,10)||0);if(v)x.m=v;else delete x.m;try{if(PLAN&&PLAN.q&&Array.isArray(PLAN.q.home)&&PLAN.q.home[i]&&PLAN.q.home[i].n===x.n){if(v)PLAN.q.home[i].m=v;else delete PLAN.q.home[i].m}}catch(e){}try{saveDraft()}catch(e){}try{inject()}catch(e){}};
 function cardsOf(dp){return [].filter.call(dp.querySelectorAll('.mcard'),function(c){return !c.closest('.hsday')&&slotOf(c)>0})}
 function put(dp,e,s){var nx=null;[].some.call(dp.querySelectorAll('.mcard,.hsmeal[data-s]'),function(c){if(c===e||c.closest('.hsday'))return false;var cs=c.classList.contains('mcard')?slotOf(c):+c.getAttribute('data-s');if(cs>s){nx=c;return true}return false});var hd=dp.querySelector('.hsday');if(nx)nx.parentNode.insertBefore(e,nx);else if(hd)hd.parentNode.insertBefore(e,hd);else dp.appendChild(e)}
 function meals(dp){var H=(window.Q&&Q.home)||[],by={};H.forEach(function(x,i){var s=+x.m;if(s>0)(by[s]=by[s]||[]).push([x,i])});
  var line=function(L){return L.map(function(a){var x=a[0];return '<div class="hsl">'+grip(a[1])+'<div>🏠 <b>'+E(String(x.n))+'</b><span>'+Math.round(+x.k||0)+' KCALs · Protein '+r1(x.p)+' g · Carbs '+r1(x.c)+' g · Fat '+r1(x.f)+' g</span></div></div>'}).join('')};
  var cards=cardsOf(dp),have={};
  cards.forEach(function(c){var s=slotOf(c);have[s]=1;
-  var tb=c.querySelector('.mtitle b'),nm=mName(s);if(tb&&(tb.__n!==nm||!tb.querySelector('.mnsel'))){tb.innerHTML='<i class="mgrip" data-s="'+s+'" title="Drag to move this Meal" aria-label="Drag to move this Meal">⠿</i>'+nameSel(s);tb.__n=nm}
+  var tb=c.querySelector('.mtitle b'),nm=mName(s);if(tb&&(tb.__n!==nm||!tb.querySelector('.mnsel'))){tb.innerHTML=(s>1?'<button type="button" class="mup" onclick="hsUp('+s+')" title="Move this Meal up" aria-label="Move this Meal up">↑</button>':'')+nameSel(s);tb.__n=nm}
   var L=by[s]||[],h=L.length?line(L):'',e=c.querySelector(':scope > .hsin');if(!h){if(e)e.remove();return}if(!e){e=D.createElement('div');e.className='hsin';c.appendChild(e)}if(e.__h!==h){e.innerHTML=h;e.__h=h}});
  [].forEach.call(dp.querySelectorAll('.hsmeal:not(.hstmp)'),function(e){var s=+e.getAttribute('data-s');if(have[s]||!by[s])e.remove()});
- Object.keys(by).forEach(function(k){var s=+k;if(have[s])return;var h='<div class="hsmh">'+'<i class="mgrip" data-s="'+s+'" title="Drag to move this Meal" aria-label="Drag to move this Meal">⠿</i>'+nameSel(s)+'<span>🏠 Home-Sourced</span></div>'+line(by[s]),e=dp.querySelector('.hsmeal[data-s="'+s+'"]:not(.hstmp)');
+ Object.keys(by).forEach(function(k){var s=+k;if(have[s])return;var h='<div class="hsmh">'+(s>1?'<button type="button" class="mup" onclick="hsUp('+s+')" title="Move this Meal up" aria-label="Move this Meal up">↑</button>':'')+nameSel(s)+'<span>🏠 Home-Sourced</span></div>'+line(by[s]),e=dp.querySelector('.hsmeal[data-s="'+s+'"]:not(.hstmp)');
   if(!e){e=D.createElement('div');e.className='hsmeal';e.setAttribute('data-s',s);put(dp,e,s)}
   if(e.__h!==h){e.innerHTML=h;e.__h=h}})}
 /* drag ⠿ between Meals ( finger or mouse ) */
@@ -4753,6 +4758,8 @@ function reorder(a,b){if(!a||!b||a===b||typeof PLAN==='undefined'||!PLAN||!PLAN.
  var mv=function(x){if(x&&map[x.m])x.m=map[x.m]};((window.Q&&Q.home)||[]).forEach(mv);try{(PLAN.q.home||[]).forEach(mv)}catch(e){}
  if(PLAN.mnames){var nn={};Object.keys(PLAN.mnames).forEach(function(k){nn[map[k]||k]=PLAN.mnames[k]});PLAN.mnames=nn}
  try{MH={}}catch(e){}try{renderPlan()}catch(e){}try{saveDraft()}catch(e){}try{inject()}catch(e){}}
+/* Peter 17th Nov 2026 : tap ↑ on a Meal ( AERA or Home-Sourced ) to move it up one place */
+window.hsUp=function(s){s=+s;if(s>1)reorder(s,s-1)};
 var DR=null;
 function zones(dp,on){[].forEach.call(D.querySelectorAll('.hstmp'),function(e){e.remove()});if(!on||!dp)return;var N=nMeals(),have={};cardsOf(dp).forEach(function(c){have[slotOf(c)]=1});[].forEach.call(dp.querySelectorAll('.hsmeal[data-s]'),function(e){have[+e.getAttribute('data-s')]=1});
  for(var s=1;s<=Math.min(8,N+1);s++){if(have[s])continue;var e=D.createElement('div');e.className='hsmeal hstmp';e.setAttribute('data-s',s);e.innerHTML='<div class="hsmh"><b>'+(s>N?'＋ New Meal':E(mName(s)))+'</b></div><div class="hsdrop">Drop here</div>';put(dp,e,s)}}
