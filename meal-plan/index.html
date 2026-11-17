@@ -4779,7 +4779,7 @@ function imgData(u){return new Promise(function(res){if(!u)return res(null);if(/
 window.mpPdf=async function(){var b=D.getElementById('mpPdf');if(b){b.disabled=true;b.textContent='Preparing PDF …'}
  try{if(!window.jspdf)await pdfLib('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
   var J=window.jspdf.jsPDF;if(!J.API.autoTable)await pdfLib('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js');
-  /* Peter 17th Nov 2026 : AERA colours — Navy #16479E, Yellow #FDB913, Black #0B0B0B, light Yellow and light Blue panels */var NAVY=[22,71,158],GOLD=[253,185,19],IVORY=[255,244,204],INK=[11,11,11],MUTED=[90,99,120],LINE=[203,217,240],SKY=[238,243,252];
+  /* Peter 17th Nov 2026 : AERA colours — Navy #16479E, Yellow #FDB913, Black #0B0B0B, light Yellow and light Blue panels */var NAVY=[22,71,158],GOLD=[253,185,19],IVORY=[255,244,214],INK=[11,11,11],MUTED=[90,99,120],LINE=[203,217,240],SKY=[238,243,252];
   var N=nMeals(),H=(window.Q&&Q.home)||[],T=PLAN.targets||{},F=T.full||T,today=pdfDate(new Date());
   var urls={};PLAN.meals.forEach(function(m){(m.comps||[]).forEach(function(cp){var r=BYCODE[cp.r];if(r&&r.img)urls[r.img]=1})});H.forEach(function(x){var u=homeImg(x.n);if(u)urls[u]=1});
   var IMG={};await Promise.all(Object.keys(urls).map(function(u){return imgData(u).then(function(d){if(d)IMG[u]=d})}));
@@ -4798,8 +4798,9 @@ window.mpPdf=async function(){var b=D.getElementById('mpPdf');if(b){b.disabled=t
   var doc=new J({unit:'pt',format:'a4'}),W=doc.internal.pageSize.getWidth(),PH=doc.internal.pageSize.getHeight(),L=40,R=W-40;
   /* title */
   doc.setFillColor.apply(doc,NAVY);doc.rect(0,0,W,96,'F');doc.setDrawColor.apply(doc,GOLD);doc.setLineWidth(1.2);doc.line(0,96,W,96);
-  doc.setFont('helvetica','bolditalic');doc.setFontSize(28);doc.setTextColor.apply(doc,GOLD);doc.text('AERA',L,50,{charSpace:3});
-  doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(255,255,255);doc.text('PERSONALISED MEAL PLAN',L,70,{charSpace:2.2});
+  /* Peter 17th Nov 2026 : his ORIGINAL AERA logo ( the site header's mark + wordmark ), never a retyped font */var LOGO=null;try{var li=[].filter.call(D.querySelectorAll('img'),function(x){return /^data:image\/svg/.test(x.src)})[0];if(li){LOGO=await new Promise(function(res){var im=new Image();im.onload=function(){try{var c=D.createElement('canvas');c.width=139*4;c.height=59*4;c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/png'))}catch(e){res(null)}};im.onerror=function(){res(null)};im.src=li.src})}}catch(e){}
+  if(LOGO)doc.addImage(LOGO,'PNG',L,22,112,47.5);else{doc.setFont('helvetica','bolditalic');doc.setFontSize(28);doc.setTextColor.apply(doc,GOLD);doc.text('AERA',L,50,{charSpace:3})}
+  doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(255,255,255);doc.text('PERSONALISED MEAL PLAN',L,84,{charSpace:2.2});
   doc.setFontSize(9);doc.setTextColor(203,217,240);doc.text(today,R,50,{align:'right'});doc.text('aeramealprep.net',R,70,{align:'right'});
   var y=128,who='';try{who=pdfTxt((typeof USER!=='undefined'&&USER&&((USER.user_metadata&&USER.user_metadata.full_name)||USER.email))||'')}catch(e){}
   if(who){doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor.apply(doc,INK);doc.text(who,L,y);y+=18}
