@@ -4813,12 +4813,12 @@ window.mpPdf=async function(){var b=D.getElementById('mpPdf');if(b){b.disabled=t
   DAYS.forEach(function(day){if(y>PH-170){doc.addPage();y=50}
    doc.setFillColor.apply(doc,NAVY);doc.rect(L,y,R-L,30,'F');doc.setFont('times','bold');doc.setFontSize(13);doc.setTextColor.apply(doc,GOLD);doc.text(('DAY '+day.d+(day.dn?'  ·  '+pdfTxt(day.dn):'')).toUpperCase(),L+12,y+20,{charSpace:1});
    doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(255,255,255);doc.text(Math.round(day.tot.kcal)+' KCAL  ·  P '+r1(day.tot.p)+' g  ·  C '+r1(day.tot.c)+' g  ·  F '+r1(day.tot.f)+' g',R-12,y+19,{align:'right'});y+=44;
-   day.meals.forEach(function(meal){if(y>PH-140){doc.addPage();y=50}
+   day.meals.forEach(function(meal){var est=40+(meal.rows.length+1)*44;if(y+est>PH-56&&est<PH-110){doc.addPage();y=50}
     doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.setTextColor.apply(doc,GOLD);doc.text(pdfTxt(meal.name).toUpperCase(),L,y,{charSpace:1.4});
     var nw=doc.getTextWidth(pdfTxt(meal.name).toUpperCase())+pdfTxt(meal.name).length*1.4;doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,MUTED);doc.text(meal.home?'Home-Sourced':'AERA Meal Prep',L+nw+10,y);
     var body=meal.rows.map(function(r){return [{content:'',img:r.img},{content:r.n+'\n'+r.sub},r.pt].concat(mac(r.m))});
     var st={fontStyle:'bold',textColor:NAVY,fillColor:IVORY};body.push([{content:'',styles:st},{content:'Meal Total',styles:st},{content:'',styles:st}].concat(mac(meal.sub).map(function(v){return{content:v,styles:st}})));
-    doc.autoTable({startY:y+6,head:[['','ITEM','PORTION','KCAL','PROTEIN','CARBS','FAT']],body:body,theme:'plain',margin:{left:L,right:W-R},
+    doc.autoTable({startY:y+6,head:[['','ITEM','PORTION','KCAL','PROTEIN','CARBS','FAT']],body:body,theme:'plain',margin:{left:L,right:W-R,bottom:56,top:50},rowPageBreak:'avoid',
      styles:{font:'helvetica',fontSize:8.5,textColor:INK,cellPadding:{top:5,bottom:5,left:5,right:5},valign:'middle',lineColor:LINE,lineWidth:{bottom:0.5}},
      headStyles:{fontSize:6.8,textColor:MUTED,fontStyle:'bold',lineColor:GOLD,lineWidth:{bottom:0.8}},
      columnStyles:{0:{cellWidth:42,minCellHeight:40},1:{cellWidth:'auto'},2:{cellWidth:96,textColor:MUTED},3:{halign:'right',cellWidth:38},4:{halign:'right',cellWidth:46},5:{halign:'right',cellWidth:40},6:{halign:'right',cellWidth:34}},
