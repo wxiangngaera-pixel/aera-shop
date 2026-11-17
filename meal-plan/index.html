@@ -4807,10 +4807,12 @@ function imgData(u){return new Promise(function(res){if(!u)return res(null);if(/
   var aeraN=PLAN.meals.length,hl=[PLAN.days+' Day'+(PLAN.days>1?'s':''),aeraN+' AERA Meal'+(aeraN===1?'':'s')];if(homeOnly)hl.push(homeOnly+' Home-Sourced Meal'+(homeOnly===1?'':'s'));
   doc.setFont('times','normal');doc.setFontSize(10.5);doc.setTextColor.apply(doc,MUTED);doc.text(hl.join('   ·   '),L,y);y+=20;
   /* Daily Target tiles */
-  var tw=(R-L-30)/4,tl=[['DAILY KCAL',Math.round(+F.kcal||0)],['PROTEIN',Math.round(+F.p||0)+' g'],['CARBS',Math.round(+F.c||0)+' g'],['FAT',Math.round(+F.f||0)+' g']];
-  tl.forEach(function(t,i){var x=L+i*(tw+10);doc.setFillColor.apply(doc,SKY);doc.rect(x,y,tw,50,'F');doc.setDrawColor.apply(doc,GOLD);doc.setLineWidth(1.6);doc.line(x,y,x+tw,y);
-   doc.setFont('times','bold');doc.setFontSize(7);doc.setTextColor.apply(doc,MUTED);doc.text(t[0],x+10,y+17,{charSpace:1.2});doc.setFont('times','bold');doc.setFontSize(16);doc.setTextColor.apply(doc,NAVY);doc.text(String(t[1]),x+10,y+40)});
-  y+=74;
+  /* Peter 17th Nov 2026 : the boxes show what the Plan actually adds up to per Day ( AERA + Home-Sourced, same as the app's Day Total ), with his Daily Target underneath */var AV={kcal:0,p:0,c:0,f:0};DAYS.forEach(function(dd){['kcal','p','c','f'].forEach(function(k){AV[k]+=dd.tot[k]/Math.max(1,DAYS.length)})});
+  var tw=(R-L-30)/4,tl=[[DAYS.length>1?'KCAL A DAY':'DAILY KCAL',Math.round(AV.kcal).toLocaleString('en-US'),'Target '+Math.round(+F.kcal||0).toLocaleString('en-US')],['PROTEIN',r1(AV.p)+' g','Target '+Math.round(+F.p||0)+' g'],['CARBS',r1(AV.c)+' g','Target '+Math.round(+F.c||0)+' g'],['FAT',r1(AV.f)+' g','Target '+Math.round(+F.f||0)+' g']];
+  tl.forEach(function(t,i){var x=L+i*(tw+10);doc.setFillColor.apply(doc,SKY);doc.rect(x,y,tw,58,'F');doc.setDrawColor.apply(doc,GOLD);doc.setLineWidth(1.6);doc.line(x,y,x+tw,y);
+   doc.setFont('times','bold');doc.setFontSize(7);doc.setTextColor.apply(doc,MUTED);doc.text(t[0],x+10,y+16,{charSpace:1.2});doc.setFont('times','bold');doc.setFontSize(16);doc.setTextColor.apply(doc,NAVY);doc.text(String(t[1]),x+10,y+36);
+   doc.setFont('times','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,MUTED);doc.text(t[2],x+10,y+50)});
+  y+=82;
   DAYS.forEach(function(day){if(y>PH-170){doc.addPage();y=50}
    doc.setFillColor.apply(doc,NAVY);doc.rect(L,y,R-L,30,'F');doc.setFont('times','bold');doc.setFontSize(12);doc.setTextColor.apply(doc,GOLD);doc.text(('DAY '+day.d+(day.dn?'  ·  '+pdfTxt(day.dn):'')).toUpperCase(),L+12,y+20,{charSpace:1});
    doc.setFont('times','normal');doc.setFontSize(8.5);doc.setTextColor(255,255,255);doc.text(Math.round(day.tot.kcal)+' KCAL  ·  P '+r1(day.tot.p)+' g  ·  C '+r1(day.tot.c)+' g  ·  F '+r1(day.tot.f)+' g',R-12,y+19,{align:'right'});y+=44;
