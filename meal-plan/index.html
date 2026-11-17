@@ -4776,7 +4776,7 @@ var HOME_IMG={milk:'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX
 function homeImg(n){n=String(n||'');if(/bodykey/i.test(n)&&/milk ?tea|boba/i.test(n))return HOME_IMG.milk;if(/nitro.?tech/i.test(n))return HOME_IMG.nitro;if(/scrambled egg/i.test(n)&&!/sandwich|brioche|muffin|wrap/i.test(n))return HOME_IMG.egg;
  try{var b=n.replace(/ ×\s*\d+(\.\d+)?$/,'').trim().toLowerCase();for(var i=0;i<AERA_FOODS.length;i++){var r=AERA_FOODS[i];if(r[9]&&String(r[0]).trim().toLowerCase()===b)return r[9]}}catch(e){}return ''}
 function imgData(u){return new Promise(function(res){if(!u)return res(null);if(/^data:/.test(u))return res(u);var i=new Image();i.crossOrigin='anonymous';var t=setTimeout(function(){res(null)},7000);i.onload=function(){clearTimeout(t);try{var S=140,k=S/Math.max(i.naturalWidth,i.naturalHeight),c=D.createElement('canvas');c.width=Math.max(1,Math.round(i.naturalWidth*k));c.height=Math.max(1,Math.round(i.naturalHeight*k));var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',0.85))}catch(e){res(null)}};i.onerror=function(){clearTimeout(t);res(null)};i.src=u})}
-window.mpPdf=async function(){var b=D.getElementById('mpPdf');if(b){b.disabled=true;b.textContent='Preparing PDF …'}
+/* Peter 17th Nov 2026 : PDF text in Times New Roman */window.mpPdf=async function(){var b=D.getElementById('mpPdf');if(b){b.disabled=true;b.textContent='Preparing PDF …'}
  try{if(!window.jspdf)await pdfLib('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
   var J=window.jspdf.jsPDF;if(!J.API.autoTable)await pdfLib('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js');
   /* Peter 17th Nov 2026 : AERA colours — Navy #16479E, Yellow #FDB913, Black #0B0B0B, light Yellow and light Blue panels */var NAVY=[22,71,158],GOLD=[253,185,19],IVORY=[253,185,19],INK=[11,11,11],MUTED=[90,99,120],LINE=[203,217,240],SKY=[237,243,253];
@@ -4799,35 +4799,35 @@ window.mpPdf=async function(){var b=D.getElementById('mpPdf');if(b){b.disabled=t
   /* title */
   doc.setFillColor.apply(doc,NAVY);doc.rect(0,0,W,96,'F');doc.setDrawColor.apply(doc,GOLD);doc.setLineWidth(1.2);doc.line(0,96,W,96);
   /* Peter 17th Nov 2026 : his ORIGINAL AERA logo ( the site header's mark + wordmark ), never a retyped font */var LOGO=null;try{var li=[].filter.call(D.querySelectorAll('img'),function(x){return /^data:image\/svg/.test(x.src)})[0];if(li){LOGO=await new Promise(function(res){var im=new Image();im.onload=function(){try{var c=D.createElement('canvas');c.width=139*4;c.height=59*4;var g=c.getContext('2d');g.fillStyle='#16479E';g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',0.95))}catch(e){res(null)}};im.onerror=function(){res(null)};im.src=li.src})}}catch(e){}
-  if(LOGO)doc.addImage(LOGO,'JPEG',L,22,112,47.5);else{doc.setFont('helvetica','bolditalic');doc.setFontSize(28);doc.setTextColor.apply(doc,GOLD);doc.text('AERA',L,50,{charSpace:3})}
-  doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(255,255,255);doc.text('PERSONALISED MEAL PLAN',L,84,{charSpace:2.2});
+  if(LOGO)doc.addImage(LOGO,'JPEG',L,22,112,47.5);else{doc.setFont('times','bolditalic');doc.setFontSize(28);doc.setTextColor.apply(doc,GOLD);doc.text('AERA',L,50,{charSpace:3})}
+  doc.setFont('times','normal');doc.setFontSize(8.5);doc.setTextColor(255,255,255);doc.text('PERSONALISED MEAL PLAN',L,84,{charSpace:2.2});
   doc.setFontSize(9);doc.setTextColor(203,217,240);doc.text(today,R,50,{align:'right'});doc.text('aeramealprep.net',R,70,{align:'right'});
   var y=128,who='';try{who=pdfTxt((typeof USER!=='undefined'&&USER&&((USER.user_metadata&&USER.user_metadata.full_name)||USER.email))||'')}catch(e){}
-  if(who){doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor.apply(doc,INK);doc.text(who,L,y);y+=18}
+  if(who){doc.setFont('times','bold');doc.setFontSize(15);doc.setTextColor.apply(doc,INK);doc.text(who,L,y);y+=18}
   var aeraN=PLAN.meals.length,hl=[PLAN.days+' Day'+(PLAN.days>1?'s':''),aeraN+' AERA Meal'+(aeraN===1?'':'s')];if(homeOnly)hl.push(homeOnly+' Home-Sourced Meal'+(homeOnly===1?'':'s'));
-  doc.setFont('helvetica','normal');doc.setFontSize(10.5);doc.setTextColor.apply(doc,MUTED);doc.text(hl.join('   ·   '),L,y);y+=20;
+  doc.setFont('times','normal');doc.setFontSize(10.5);doc.setTextColor.apply(doc,MUTED);doc.text(hl.join('   ·   '),L,y);y+=20;
   /* Daily Target tiles */
   var tw=(R-L-30)/4,tl=[['DAILY KCAL',Math.round(+F.kcal||0)],['PROTEIN',Math.round(+F.p||0)+' g'],['CARBS',Math.round(+F.c||0)+' g'],['FAT',Math.round(+F.f||0)+' g']];
   tl.forEach(function(t,i){var x=L+i*(tw+10);doc.setFillColor.apply(doc,SKY);doc.rect(x,y,tw,50,'F');doc.setDrawColor.apply(doc,GOLD);doc.setLineWidth(1.6);doc.line(x,y,x+tw,y);
-   doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor.apply(doc,MUTED);doc.text(t[0],x+10,y+17,{charSpace:1.2});doc.setFont('helvetica','bold');doc.setFontSize(16);doc.setTextColor.apply(doc,NAVY);doc.text(String(t[1]),x+10,y+40)});
+   doc.setFont('times','bold');doc.setFontSize(7);doc.setTextColor.apply(doc,MUTED);doc.text(t[0],x+10,y+17,{charSpace:1.2});doc.setFont('times','bold');doc.setFontSize(16);doc.setTextColor.apply(doc,NAVY);doc.text(String(t[1]),x+10,y+40)});
   y+=74;
   DAYS.forEach(function(day){if(y>PH-170){doc.addPage();y=50}
-   doc.setFillColor.apply(doc,NAVY);doc.rect(L,y,R-L,30,'F');doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor.apply(doc,GOLD);doc.text(('DAY '+day.d+(day.dn?'  ·  '+pdfTxt(day.dn):'')).toUpperCase(),L+12,y+20,{charSpace:1});
-   doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(255,255,255);doc.text(Math.round(day.tot.kcal)+' KCAL  ·  P '+r1(day.tot.p)+' g  ·  C '+r1(day.tot.c)+' g  ·  F '+r1(day.tot.f)+' g',R-12,y+19,{align:'right'});y+=44;
+   doc.setFillColor.apply(doc,NAVY);doc.rect(L,y,R-L,30,'F');doc.setFont('times','bold');doc.setFontSize(12);doc.setTextColor.apply(doc,GOLD);doc.text(('DAY '+day.d+(day.dn?'  ·  '+pdfTxt(day.dn):'')).toUpperCase(),L+12,y+20,{charSpace:1});
+   doc.setFont('times','normal');doc.setFontSize(8.5);doc.setTextColor(255,255,255);doc.text(Math.round(day.tot.kcal)+' KCAL  ·  P '+r1(day.tot.p)+' g  ·  C '+r1(day.tot.c)+' g  ·  F '+r1(day.tot.f)+' g',R-12,y+19,{align:'right'});y+=44;
    day.meals.forEach(function(meal){var est=40+(meal.rows.length+1)*44;if(y+est>PH-56&&est<PH-110){doc.addPage();y=50}
-    doc.setFillColor.apply(doc,GOLD);doc.rect(L,y-8,3,10,'F');doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.setTextColor.apply(doc,NAVY);doc.text(pdfTxt(meal.name).toUpperCase(),L+8,y,{charSpace:1.4});
-    var nw=8+doc.getTextWidth(pdfTxt(meal.name).toUpperCase())+pdfTxt(meal.name).length*1.4;doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,MUTED);doc.text(meal.home?'Home-Sourced':'AERA Meal Prep',L+nw+10,y);
+    doc.setFillColor.apply(doc,GOLD);doc.rect(L,y-8,3,10,'F');doc.setFont('times','bold');doc.setFontSize(9.5);doc.setTextColor.apply(doc,NAVY);doc.text(pdfTxt(meal.name).toUpperCase(),L+8,y,{charSpace:1.4});
+    var nw=8+doc.getTextWidth(pdfTxt(meal.name).toUpperCase())+pdfTxt(meal.name).length*1.4;doc.setFont('times','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,MUTED);doc.text(meal.home?'Home-Sourced':'AERA Meal Prep',L+nw+10,y);
     var body=meal.rows.map(function(r){return [{content:'',img:r.img},{content:r.n+'\n'+r.sub},r.pt].concat(mac(r.m))});
     /* Peter 17th Nov 2026 : Meal Total rows in AERA Yellow #FDB913 with black wording ( his colour rule ) */var st={fontStyle:'bold',textColor:INK,fillColor:IVORY};body.push([{content:'',styles:st},{content:'Meal Total',styles:st},{content:'',styles:st}].concat(mac(meal.sub).map(function(v){return{content:v,styles:st}})));
     doc.autoTable({startY:y+6,head:[['','ITEM','PORTION','KCAL','PROTEIN','CARBS','FAT']],body:body,theme:'plain',margin:{left:L,right:W-R,bottom:56,top:50},rowPageBreak:'avoid',
-     styles:{font:'helvetica',fontSize:8.5,textColor:INK,cellPadding:{top:5,bottom:5,left:5,right:5},valign:'middle',lineColor:LINE,lineWidth:{bottom:0.5}},
+     styles:{font:'times',fontSize:8.5,textColor:INK,cellPadding:{top:5,bottom:5,left:5,right:5},valign:'middle',lineColor:LINE,lineWidth:{bottom:0.5}},
      headStyles:{fontSize:6.8,textColor:MUTED,fontStyle:'bold',lineColor:GOLD,lineWidth:{bottom:0.8}},
      columnStyles:{0:{cellWidth:42,minCellHeight:40},1:{cellWidth:'auto'},2:{cellWidth:96,textColor:MUTED},3:{halign:'right',cellWidth:38},4:{halign:'right',cellWidth:46},5:{halign:'right',cellWidth:40},6:{halign:'right',cellWidth:34}},
      didParseCell:function(dc){if(dc.section==='head'&&dc.column.index>=3)dc.cell.styles.halign='right'},
      didDrawCell:function(dc){if(dc.section==='body'&&dc.column.index===0&&dc.cell.raw&&dc.cell.raw.img){var s=Math.min(dc.cell.height-8,32);try{doc.addImage(dc.cell.raw.img,'JPEG',dc.cell.x+4,dc.cell.y+(dc.cell.height-s)/2,s,s)}catch(e){}}}});
     y=doc.lastAutoTable.finalY+22})
    y+=6});
-  var pc=doc.internal.getNumberOfPages();for(var p=1;p<=pc;p++){doc.setPage(p);doc.setDrawColor.apply(doc,GOLD);doc.setLineWidth(1);doc.line(L,PH-34,R,PH-34);doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor.apply(doc,NAVY);doc.text('AERA MEAL PREP',L,PH-22,{charSpace:1.5});doc.setTextColor.apply(doc,MUTED);doc.text('Page '+p+' of '+pc,R,PH-22,{align:'right'})}
+  var pc=doc.internal.getNumberOfPages();for(var p=1;p<=pc;p++){doc.setPage(p);doc.setDrawColor.apply(doc,GOLD);doc.setLineWidth(1);doc.line(L,PH-34,R,PH-34);doc.setFont('times','normal');doc.setFontSize(7.5);doc.setTextColor.apply(doc,NAVY);doc.text('AERA MEAL PREP',L,PH-22,{charSpace:1.5});doc.setTextColor.apply(doc,MUTED);doc.text('Page '+p+' of '+pc,R,PH-22,{align:'right'})}
   doc.save('AERA Meal Plan - '+today+'.pdf')}
  catch(e){alert('Could not make the PDF : '+(e.message||e))}
  if(b){b.disabled=false;b.textContent='⬇ Download PDF'}};
