@@ -4779,7 +4779,7 @@ function imgData(u){return new Promise(function(res){if(!u)return res(null);if(/
 window.mpPdf=async function(){var b=D.getElementById('mpPdf');if(b){b.disabled=true;b.textContent='Preparing PDF …'}
  try{if(!window.jspdf)await pdfLib('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
   var J=window.jspdf.jsPDF;if(!J.API.autoTable)await pdfLib('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js');
-  /* Peter 17th Nov 2026 : AERA colours — Navy #16479E, Yellow #FDB913, Black #0B0B0B, light Yellow and light Blue panels */var NAVY=[22,71,158],GOLD=[253,185,19],IVORY=[255,244,214],INK=[11,11,11],MUTED=[90,99,120],LINE=[203,217,240],SKY=[238,243,252];
+  /* Peter 17th Nov 2026 : AERA colours — Navy #16479E, Yellow #FDB913, Black #0B0B0B, light Yellow and light Blue panels */var NAVY=[22,71,158],GOLD=[253,185,19],IVORY=[253,185,19],INK=[11,11,11],MUTED=[90,99,120],LINE=[203,217,240],SKY=[237,243,253];
   var N=nMeals(),H=(window.Q&&Q.home)||[],T=PLAN.targets||{},F=T.full||T,today=pdfDate(new Date());
   var urls={};PLAN.meals.forEach(function(m){(m.comps||[]).forEach(function(cp){var r=BYCODE[cp.r];if(r&&r.img)urls[r.img]=1})});H.forEach(function(x){var u=homeImg(x.n);if(u)urls[u]=1});
   var IMG={};await Promise.all(Object.keys(urls).map(function(u){return imgData(u).then(function(d){if(d)IMG[u]=d})}));
@@ -4818,7 +4818,7 @@ window.mpPdf=async function(){var b=D.getElementById('mpPdf');if(b){b.disabled=t
     doc.setFillColor.apply(doc,GOLD);doc.rect(L,y-8,3,10,'F');doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.setTextColor.apply(doc,NAVY);doc.text(pdfTxt(meal.name).toUpperCase(),L+8,y,{charSpace:1.4});
     var nw=8+doc.getTextWidth(pdfTxt(meal.name).toUpperCase())+pdfTxt(meal.name).length*1.4;doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,MUTED);doc.text(meal.home?'Home-Sourced':'AERA Meal Prep',L+nw+10,y);
     var body=meal.rows.map(function(r){return [{content:'',img:r.img},{content:r.n+'\n'+r.sub},r.pt].concat(mac(r.m))});
-    var st={fontStyle:'bold',textColor:NAVY,fillColor:IVORY};body.push([{content:'',styles:st},{content:'Meal Total',styles:st},{content:'',styles:st}].concat(mac(meal.sub).map(function(v){return{content:v,styles:st}})));
+    /* Peter 17th Nov 2026 : Meal Total rows in AERA Yellow #FDB913 with black wording ( his colour rule ) */var st={fontStyle:'bold',textColor:INK,fillColor:IVORY};body.push([{content:'',styles:st},{content:'Meal Total',styles:st},{content:'',styles:st}].concat(mac(meal.sub).map(function(v){return{content:v,styles:st}})));
     doc.autoTable({startY:y+6,head:[['','ITEM','PORTION','KCAL','PROTEIN','CARBS','FAT']],body:body,theme:'plain',margin:{left:L,right:W-R,bottom:56,top:50},rowPageBreak:'avoid',
      styles:{font:'helvetica',fontSize:8.5,textColor:INK,cellPadding:{top:5,bottom:5,left:5,right:5},valign:'middle',lineColor:LINE,lineWidth:{bottom:0.5}},
      headStyles:{fontSize:6.8,textColor:MUTED,fontStyle:'bold',lineColor:GOLD,lineWidth:{bottom:0.8}},
