@@ -4819,9 +4819,9 @@ function imgData(u){return new Promise(function(res){if(!u)return res(null);if(/
     var nw=8+doc.getTextWidth(pdfTxt(meal.name).toUpperCase())+pdfTxt(meal.name).length*1.4;doc.setFont('times','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,MUTED);doc.text(meal.home?'Home-Sourced':'AERA Meal Prep',L+nw+10,y);
     var body=meal.rows.map(function(r){return [{content:'',img:r.img},{content:r.n+'\n'+r.sub},r.pt].concat(mac(r.m))});
     /* Peter 17th Nov 2026 : Meal Total rows in AERA Yellow #FDB913 with black wording ( his colour rule ) */var st={fontStyle:'bold',textColor:INK,fillColor:IVORY};body.push([{content:'',styles:st},{content:'Meal Total',styles:st},{content:'',styles:st}].concat(mac(meal.sub).map(function(v){return{content:v,styles:st}})));
-    doc.autoTable({startY:y+6,head:[['','ITEM','PORTION','KCAL','PROTEIN','CARBS','FAT']],body:body,theme:'plain',margin:{left:L,right:W-R,bottom:56,top:50},rowPageBreak:'avoid',
-     styles:{font:'times',fontSize:8.5,textColor:INK,cellPadding:{top:5,bottom:5,left:5,right:5},valign:'middle',lineColor:LINE,lineWidth:{bottom:0.5}},
-     headStyles:{fontSize:6.8,textColor:MUTED,fontStyle:'bold',lineColor:GOLD,lineWidth:{bottom:0.8}},
+    doc.autoTable({startY:y+6,head:[['','ITEM','PORTION','KCAL','PROTEIN','CARBS','FAT']],body:body,theme:'grid',margin:{left:L,right:W-R,bottom:56,top:50},rowPageBreak:'avoid',
+     styles:{font:'times',fontSize:8.5,textColor:INK,cellPadding:{top:5,bottom:5,left:5,right:5},valign:'middle',lineColor:NAVY,lineWidth:0.5,fillColor:[255,255,255]},
+     /* Peter 17th Nov 2026 : blue grid lines in AERA Navy #16479E ; header row navy with yellow wording */headStyles:{fontSize:6.8,textColor:GOLD,fillColor:NAVY,fontStyle:'bold',lineColor:NAVY,lineWidth:0.5},
      columnStyles:{0:{cellWidth:42,minCellHeight:40},1:{cellWidth:'auto'},2:{cellWidth:96,textColor:MUTED},3:{halign:'right',cellWidth:38},4:{halign:'right',cellWidth:46},5:{halign:'right',cellWidth:40},6:{halign:'right',cellWidth:34}},
      didParseCell:function(dc){if(dc.section==='head'&&dc.column.index>=3)dc.cell.styles.halign='right'},
      didDrawCell:function(dc){if(dc.section==='body'&&dc.column.index===0&&dc.cell.raw&&dc.cell.raw.img){var s=Math.min(dc.cell.height-8,32);try{doc.addImage(dc.cell.raw.img,'JPEG',dc.cell.x+4,dc.cell.y+(dc.cell.height-s)/2,s,s)}catch(e){}}}});
