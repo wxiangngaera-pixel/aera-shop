@@ -4760,6 +4760,41 @@ function reorder(a,b){if(!a||!b||a===b||typeof PLAN==='undefined'||!PLAN||!PLAN.
  try{MH={}}catch(e){}try{renderPlan()}catch(e){}try{saveDraft()}catch(e){}try{inject()}catch(e){}}
 /* Peter 17th Nov 2026 : tap ↑ on a Meal ( AERA or Home-Sourced ) to move it up one place */
 window.hsUp=function(s){s=+s;if(s>1)reorder(s,s-1)};
+/* Peter 17th Nov 2026 : ⬇ Download PDF — the whole Meal Plan ( every Day, every Meal by its Name, AERA items and Home-Sourced Meals, with KCAL and Macros ) saved as a PDF file */
+function pdfTxt(s){return String(s==null?'':s).replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/[^\x20-\x7E\xA0-\xFF\u2013\u2014\u2122]/g,'').replace(/\s+/g,' ').trim()}
+function pdfDate(d){var n=d.getDate(),s=(n%10===1&&n!==11)?'st':(n%10===2&&n!==12)?'nd':(n%10===3&&n!==13)?'rd':'th';return n+s+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+' '+d.getFullYear()}
+function pdfLib(src){return new Promise(function(res,rej){var s=D.createElement('script');s.src=src;s.onload=res;s.onerror=function(){rej(new Error('Could not load '+src))};D.head.appendChild(s)})}
+window.mpPdf=async function(){var b=D.getElementById('mpPdf');if(b){b.disabled=true;b.textContent='Preparing PDF …'}
+ try{if(!window.jspdf)await pdfLib('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+  var J=window.jspdf.jsPDF;if(!J.API.autoTable)await pdfLib('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js');
+  var doc=new J({unit:'pt',format:'a4'}),W=doc.internal.pageSize.getWidth(),N=nMeals(),H=(window.Q&&Q.home)||[],T=PLAN.targets||{},F=T.full||T,today=pdfDate(new Date());
+  var mac=function(x){return [Math.round(+x.kcal||0),r1(x.p),r1(x.c),r1(x.f)]};
+  doc.setFillColor(22,71,158);doc.rect(0,0,W,64,'F');doc.setTextColor(253,185,19);doc.setFont('helvetica','bold');doc.setFontSize(20);doc.text('AERA Meal Plan',40,40);
+  doc.setTextColor(255,255,255);doc.setFontSize(10);doc.setFont('helvetica','normal');doc.text('Prepared '+today,W-40,40,{align:'right'});
+  var y=88;doc.setTextColor(11,11,11);doc.setFontSize(11);
+  var who='';try{who=pdfTxt((typeof USER!=='undefined'&&USER&&(USER.user_metadata&&USER.user_metadata.full_name||USER.email))||'')}catch(e){}
+  if(who){doc.setFont('helvetica','bold');doc.text(who,40,y);y+=16}
+  doc.setFont('helvetica','normal');doc.text(pdfTxt('Daily Target : '+Math.round(+F.kcal||0)+' KCALs · Protein '+Math.round(+F.p||0)+' g · Carbs '+Math.round(+F.c||0)+' g · Fat '+Math.round(+F.f||0)+' g'),40,y);y+=16;
+  doc.text(pdfTxt(PLAN.days+' Day'+(PLAN.days>1?'s':'')+' · '+PLAN.meals.length+' AERA Meal'+(PLAN.meals.length>1?'s':'')),40,y);y+=14;
+  for(var d=1;d<=PLAN.days;d++){var dn='';try{dn=(PLAN.dayNames&&PLAN.dayNames[d-1])||DOW[(d-1)%7]}catch(e){}
+   var rows=[],tot={kcal:0,p:0,c:0,f:0};
+   for(var s=1;s<=N;s++){var ms=PLAN.meals.filter(function(m){return +m.day===d&&+m.slot===s}),hs=H.filter(function(x){return +x.m===s});if(!ms.length&&!hs.length)continue;
+    var sub={kcal:0,p:0,c:0,f:0},first=true,head=pdfTxt(mName(s));
+    ms.forEach(function(m){m.comps.forEach(function(cp){var r=BYCODE[cp.r];if(!r)return;var x=per(r,cp.g);sub.kcal+=x.kcal;sub.p+=x.p;sub.c+=x.c;sub.f+=x.f;var g='';try{g=pdfTxt(String(gramStr(r,cp.g)).replace(/<[^>]*>/g,''))}catch(e){g=cp.g+' g'}rows.push([first?head:'',pdfTxt(r.n),g].concat(mac(x)));first=false})});
+    hs.forEach(function(x){var k={kcal:+x.k||0,p:+x.p||0,c:+x.c||0,f:+x.f||0};sub.kcal+=k.kcal;sub.p+=k.p;sub.c+=k.c;sub.f+=k.f;rows.push([first?head:'',pdfTxt(x.n)+' (Home-Sourced)','x '+(+x.q||1)].concat(mac(k)));first=false});
+    rows.push([{content:'',styles:{fillColor:[255,244,204]}},{content:'Meal Total',styles:{fontStyle:'bold',fillColor:[255,244,204]}},{content:'',styles:{fillColor:[255,244,204]}}].concat(mac(sub).map(function(v){return{content:String(v),styles:{fontStyle:'bold',fillColor:[255,244,204]}}})));
+    tot.kcal+=sub.kcal;tot.p+=sub.p;tot.c+=sub.c;tot.f+=sub.f}
+   var un=H.filter(function(x){return !(+x.m>=1&&+x.m<=N)});if(un.length){var first2=true;un.forEach(function(x){var k={kcal:+x.k||0,p:+x.p||0,c:+x.c||0,f:+x.f||0};tot.kcal+=k.kcal;tot.p+=k.p;tot.c+=k.c;tot.f+=k.f;rows.push([first2?'Home-Sourced':'',pdfTxt(x.n),'x '+(+x.q||1)].concat(mac(k)));first2=false})}
+   if(y>680){doc.addPage();y=50}
+   doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(22,71,158);doc.text(pdfTxt('Day '+d+(dn?' ( '+dn+' )':'')),40,y+18);
+   doc.setFontSize(10);doc.setTextColor(11,11,11);doc.text(pdfTxt('Day Total : '+Math.round(tot.kcal)+' KCALs · Protein '+r1(tot.p)+' g · Carbs '+r1(tot.c)+' g · Fat '+r1(tot.f)+' g'),W-40,y+18,{align:'right'});
+   doc.autoTable({startY:y+26,head:[['Meal','Item','Portion','KCAL','Protein g','Carbs g','Fat g']],body:rows,theme:'grid',margin:{left:40,right:40},styles:{font:'helvetica',fontSize:9,cellPadding:4,valign:'middle'},headStyles:{fillColor:[22,71,158],textColor:[255,255,255]},columnStyles:{0:{cellWidth:78,fontStyle:'bold',textColor:[22,71,158]},2:{cellWidth:70},3:{halign:'right',cellWidth:40},4:{halign:'right',cellWidth:48},5:{halign:'right',cellWidth:44},6:{halign:'right',cellWidth:36}}});
+   y=doc.lastAutoTable.finalY+12}
+  var pc=doc.internal.getNumberOfPages();for(var p=1;p<=pc;p++){doc.setPage(p);doc.setFontSize(8);doc.setTextColor(120,120,120);doc.text('AERA Meal Prep · aeramealprep.net · Page '+p+' of '+pc,W/2,doc.internal.pageSize.getHeight()-20,{align:'center'})}
+  doc.save('AERA Meal Plan - '+today+'.pdf')}
+ catch(e){alert('Could not make the PDF : '+(e.message||e))}
+ if(b){b.disabled=false;b.textContent='⬇ Download PDF'}};
+function pdfBtn(){if(D.getElementById('mpPdf'))return;var sv=[].filter.call(D.querySelectorAll('#s4 button, #planCal button'),function(x){return /^\s*Save Plan\s*$/.test(x.textContent)})[0];if(!sv)return;var b=D.createElement('button');b.type='button';b.id='mpPdf';b.className=sv.className;b.textContent='⬇ Download PDF';b.style.marginLeft='6px';b.onclick=function(){window.mpPdf()};sv.insertAdjacentElement('afterend',b)}
 var DR=null;
 function zones(dp,on){[].forEach.call(D.querySelectorAll('.hstmp'),function(e){e.remove()});if(!on||!dp)return;var N=nMeals(),have={};cardsOf(dp).forEach(function(c){have[slotOf(c)]=1});[].forEach.call(dp.querySelectorAll('.hsmeal[data-s]'),function(e){have[+e.getAttribute('data-s')]=1});
  for(var s=1;s<=Math.min(8,N+1);s++){if(have[s])continue;var e=D.createElement('div');e.className='hsmeal hstmp';e.setAttribute('data-s',s);e.innerHTML='<div class="hsmh"><b>'+(s>N?'＋ New Meal':E(mName(s)))+'</b></div><div class="hsdrop">Drop here</div>';put(dp,e,s)}}
@@ -4787,7 +4822,7 @@ function bar(T){var b=D.getElementById('hsBar');if(!b){b=D.createElement('div');
 function inject(){if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return;var dp=D.querySelector('#planCal .dpanel');if(!dp)return;css();
  var T=dayTot();header(dp,T);
  var html=card(),old=dp.querySelector('.hsday');if(!old||old.__h!==html){if(old)old.remove();var w=D.createElement('div');w.innerHTML=html;var el=w.firstChild;el.__h=html;var nav=dp.querySelector('.daynav');if(nav&&nav.parentNode===dp)dp.insertBefore(el,nav);else dp.appendChild(el)}
- try{meals(dp)}catch(e){}
+ try{meals(dp)}catch(e){}try{pdfBtn()}catch(e){}
  bar(T)}
 function wrap(){var f=window.renderPlan;if(typeof f!=='function'||f.__hs)return;var g=function(){var r=f.apply(this,arguments);try{inject()}catch(e){}return r};g.__hs=1;window.renderPlan=g}
 wrap();setInterval(function(){try{wrap();inject()}catch(e){}},1000);
