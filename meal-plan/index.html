@@ -4700,6 +4700,7 @@ function css(){if(D.getElementById('hsDayCss'))return;var s=D.createElement('sty
  '.hsday .hsm{display:block;margin-top:6px;border:1.5px solid #16479E;border-radius:10px;padding:5px 8px;font:700 13px Montserrat,system-ui,sans-serif;color:#16479E;background:#fff;max-width:100%}'+
  '.hsin{margin:10px 12px 12px;padding:8px 12px;border:1.5px dashed #FDB913;border-radius:12px;background:#FFFBEB}.hsl{font-size:13px;color:#0B0B0B;padding:3px 0}.hsl b{color:#16479E}.hsl span{display:block;color:#5a6378;font-size:12px}'+
  '.hsmeal{margin:12px 0;border:1.5px solid #FDB913;border-radius:16px;background:#FFFBEB;padding:10px 14px}.hsmeal .hsmh{font-weight:800;color:#16479E;margin-bottom:4px}'+
+ '.mgrip{font-style:normal;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;color:#7A869A;font-size:20px;line-height:1;padding:4px 6px 4px 0;vertical-align:middle}'+
  '.hsgrip{flex:0 0 auto;font-style:normal;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;color:#7A869A;font-size:20px;line-height:1;padding:6px 6px 6px 0}'+
  '.hsl{display:flex;align-items:flex-start;gap:4px}.hsl>div{flex:1;min-width:0}.mnsel{border:1.5px solid #16479E;border-radius:10px;padding:4px 8px;font:800 14px Montserrat,system-ui,sans-serif;color:#16479E;background:#fff;max-width:100%}'+
  '.hsmeal .hsmh{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.hsmeal .hsmh span{font-size:12.5px;color:#5a6378;font-weight:700}.hstmp{border-style:dashed!important;opacity:.95}.hsdrop{color:#5a6378;font-size:13px;padding:10px 0;text-align:center}'+
@@ -4739,26 +4740,32 @@ function meals(dp){var H=(window.Q&&Q.home)||[],by={};H.forEach(function(x,i){va
  var line=function(L){return L.map(function(a){var x=a[0];return '<div class="hsl">'+grip(a[1])+'<div>🏠 <b>'+E(String(x.n))+'</b><span>'+Math.round(+x.k||0)+' KCALs · Protein '+r1(x.p)+' g · Carbs '+r1(x.c)+' g · Fat '+r1(x.f)+' g</span></div></div>'}).join('')};
  var cards=cardsOf(dp),have={};
  cards.forEach(function(c){var s=slotOf(c);have[s]=1;
-  var tb=c.querySelector('.mtitle b'),nm=mName(s);if(tb&&(tb.__n!==nm||!tb.querySelector('.mnsel'))){tb.innerHTML=nameSel(s);tb.__n=nm}
+  var tb=c.querySelector('.mtitle b'),nm=mName(s);if(tb&&(tb.__n!==nm||!tb.querySelector('.mnsel'))){tb.innerHTML='<i class="mgrip" data-s="'+s+'" title="Drag to move this Meal" aria-label="Drag to move this Meal">⠿</i>'+nameSel(s);tb.__n=nm}
   var L=by[s]||[],h=L.length?line(L):'',e=c.querySelector(':scope > .hsin');if(!h){if(e)e.remove();return}if(!e){e=D.createElement('div');e.className='hsin';c.appendChild(e)}if(e.__h!==h){e.innerHTML=h;e.__h=h}});
  [].forEach.call(dp.querySelectorAll('.hsmeal:not(.hstmp)'),function(e){var s=+e.getAttribute('data-s');if(have[s]||!by[s])e.remove()});
- Object.keys(by).forEach(function(k){var s=+k;if(have[s])return;var h='<div class="hsmh">'+nameSel(s)+'<span>🏠 Home-Sourced</span></div>'+line(by[s]),e=dp.querySelector('.hsmeal[data-s="'+s+'"]:not(.hstmp)');
+ Object.keys(by).forEach(function(k){var s=+k;if(have[s])return;var h='<div class="hsmh">'+'<i class="mgrip" data-s="'+s+'" title="Drag to move this Meal" aria-label="Drag to move this Meal">⠿</i>'+nameSel(s)+'<span>🏠 Home-Sourced</span></div>'+line(by[s]),e=dp.querySelector('.hsmeal[data-s="'+s+'"]:not(.hstmp)');
   if(!e){e=D.createElement('div');e.className='hsmeal';e.setAttribute('data-s',s);put(dp,e,s)}
   if(e.__h!==h){e.innerHTML=h;e.__h=h}})}
 /* drag ⠿ between Meals ( finger or mouse ) */
+/* Peter 17th Nov 2026 : drag a Meal's ⠿ onto another Meal to move it there ( Meal 2 above Meal 1 … ). The Meals are renumbered on every Day, with their Names and Home-Sourced Meals */
+function reorder(a,b){if(!a||!b||a===b||typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return;var N=nMeals(),L=[];for(var s=1;s<=N;s++)L.push(s);var ia=L.indexOf(a),ib=L.indexOf(b);if(ia<0||ib<0)return;L.splice(ia,1);L.splice(ib,0,a);var map={};L.forEach(function(o,i){map[o]=i+1});
+ PLAN.meals.forEach(function(m){if(map[m.slot])m.slot=map[m.slot]});PLAN.meals.sort(function(x,y){return((+x.day||0)-(+y.day||0))||((+x.slot||0)-(+y.slot||0))});
+ var mv=function(x){if(x&&map[x.m])x.m=map[x.m]};((window.Q&&Q.home)||[]).forEach(mv);try{(PLAN.q.home||[]).forEach(mv)}catch(e){}
+ if(PLAN.mnames){var nn={};Object.keys(PLAN.mnames).forEach(function(k){nn[map[k]||k]=PLAN.mnames[k]});PLAN.mnames=nn}
+ try{MH={}}catch(e){}try{renderPlan()}catch(e){}try{saveDraft()}catch(e){}try{inject()}catch(e){}}
 var DR=null;
 function zones(dp,on){[].forEach.call(D.querySelectorAll('.hstmp'),function(e){e.remove()});if(!on||!dp)return;var N=nMeals(),have={};cardsOf(dp).forEach(function(c){have[slotOf(c)]=1});[].forEach.call(dp.querySelectorAll('.hsmeal[data-s]'),function(e){have[+e.getAttribute('data-s')]=1});
  for(var s=1;s<=Math.min(8,N+1);s++){if(have[s])continue;var e=D.createElement('div');e.className='hsmeal hstmp';e.setAttribute('data-s',s);e.innerHTML='<div class="hsmh"><b>'+(s>N?'＋ New Meal':E(mName(s)))+'</b></div><div class="hsdrop">Drop here</div>';put(dp,e,s)}}
-function target(x,y){var el=D.elementFromPoint(x,y);if(!el)return null;var t=el.closest('.mcard,.hsmeal[data-s],.hsg[data-s]');if(!t||(t.classList.contains('mcard')&&t.closest('.hsday')))return null;return t}
+function target(x,y){var el=D.elementFromPoint(x,y);if(!el)return null;var t=el.closest(DR&&DR.meal?'.mcard,.hsmeal[data-s]:not(.hstmp)':'.mcard,.hsmeal[data-s],.hsg[data-s]');if(!t||(t.classList.contains('mcard')&&t.closest('.hsday')))return null;return t}
 function slotT(t){return t.classList.contains('mcard')?slotOf(t):+t.getAttribute('data-s')}
-D.addEventListener('pointerdown',function(e){var g=e.target&&e.target.closest&&e.target.closest('.hsgrip');if(!g)return;e.preventDefault();var src=g.closest('.hsl,.hsr')||g,r=src.getBoundingClientRect(),gh=src.cloneNode(true);gh.className='hsghost';gh.style.width=r.width+'px';gh.style.left=r.left+'px';gh.style.top=r.top+'px';D.body.appendChild(gh);
- var dp=null;[].some.call(D.querySelectorAll('#planCal .dpanel'),function(p){if(p.offsetHeight){dp=p;return true}return false});zones(dp,true);
- DR={i:+g.getAttribute('data-i'),g:gh,dx:e.clientX-r.left,dy:e.clientY-r.top,t:null};try{g.setPointerCapture(e.pointerId)}catch(x){}},true);
+D.addEventListener('pointerdown',function(e){var g=e.target&&e.target.closest&&e.target.closest('.hsgrip,.mgrip');if(!g)return;var meal=g.classList.contains('mgrip');e.preventDefault();var src=meal?(g.closest('.mh')||g.closest('.hsmh')||g):(g.closest('.hsl,.hsr')||g),r=src.getBoundingClientRect(),gh=src.cloneNode(true);gh.className='hsghost';gh.style.width=r.width+'px';gh.style.left=r.left+'px';gh.style.top=r.top+'px';D.body.appendChild(gh);
+ var dp=null;[].some.call(D.querySelectorAll('#planCal .dpanel'),function(p){if(p.offsetHeight){dp=p;return true}return false});if(!meal)zones(dp,true);
+ DR={meal:meal,s:+g.getAttribute('data-s'),i:+g.getAttribute('data-i'),g:gh,dx:e.clientX-r.left,dy:e.clientY-r.top,t:null};try{g.setPointerCapture(e.pointerId)}catch(x){}},true);
 D.addEventListener('pointermove',function(e){if(!DR)return;e.preventDefault();DR.g.style.left=(e.clientX-DR.dx)+'px';DR.g.style.top=(e.clientY-DR.dy)+'px';
  var vy=e.clientY,vh=window.innerHeight,fe=null;try{fe=window.frameElement}catch(x){}var outer=fe&&D.documentElement.scrollHeight<=window.innerHeight+5;if(outer){vy=fe.getBoundingClientRect().top+e.clientY;vh=window.parent.innerHeight}
  var sy=vy<110?-16:(vy>vh-130?16:0);if(sy){if(outer)window.parent.scrollBy(0,sy);else window.scrollBy(0,sy)}
  var t=target(e.clientX,e.clientY);if(t!==DR.t){if(DR.t)DR.t.classList.remove('hsover');if(t)t.classList.add('hsover');DR.t=t}},{passive:false});
-function drop(e,ok){if(!DR)return;var d=DR;DR=null;try{d.g.remove()}catch(x){}if(d.t)d.t.classList.remove('hsover');var s=ok&&d.t?slotT(d.t):-1;zones(null,false);
+function drop(e,ok){if(!DR)return;var d=DR;DR=null;try{d.g.remove()}catch(x){}if(d.t)d.t.classList.remove('hsover');var s=ok&&d.t?slotT(d.t):-1;zones(null,false);if(d.meal){if(s>0&&s!==d.s)reorder(d.s,s);return}
  var x=window.Q&&Q.home&&Q.home[d.i];if(x&&s>=0&&s!==(+x.m||0))hsSetMeal(d.i,String(s));else{try{inject()}catch(y){}}}
 D.addEventListener('pointerup',function(e){drop(e,true)});D.addEventListener('pointercancel',function(e){drop(e,false)});
 window.hsOpenDrop=function(){var d=D.querySelector('#sideTargets details.hmdrop')||D.querySelector('details.hmdrop');if(!d)return;d.open=true;try{hmDropToggle(true)}catch(e){}try{d.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}};
