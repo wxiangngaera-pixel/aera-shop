@@ -4696,6 +4696,10 @@ function css(){if(D.getElementById('hsDayCss'))return;var s=D.createElement('sty
  '.hsday .hsn{flex:1;min-width:0}.hsday .hsn b{display:block;color:#0B0B0B;font-size:14.5px;overflow-wrap:anywhere}.hsday .hsn small{color:#5a6378;font-size:12px}'+
  '.hsday .hsq{display:inline-flex;align-items:center;border:1.5px solid #16479E;border-radius:999px;overflow:hidden;flex:0 0 auto;background:#fff}'+
  '.hsday .hsq button{border:0;background:#EEF3FC;color:#16479E;font-weight:800;font-size:18px;width:34px;height:32px;cursor:pointer;line-height:1}.hsday .hsq b{min-width:48px;text-align:center;color:#16479E;font-size:13.5px}'+
+ '.hsday .hsg{padding:8px 14px 6px;font-weight:800;color:#16479E;font-size:13px;background:#FFF4CC;border-top:1px solid #F5DFA0}.hsday .hsg:first-of-type{border-top:0}'+
+ '.hsday .hsm{display:block;margin-top:6px;border:1.5px solid #16479E;border-radius:10px;padding:5px 8px;font:700 13px Montserrat,system-ui,sans-serif;color:#16479E;background:#fff;max-width:100%}'+
+ '.hsin{margin:10px 12px 12px;padding:8px 12px;border:1.5px dashed #FDB913;border-radius:12px;background:#FFFBEB}.hsl{font-size:13px;color:#0B0B0B;padding:3px 0}.hsl b{color:#16479E}.hsl span{display:block;color:#5a6378;font-size:12px}'+
+ '.hsmeal{margin:12px 0;border:1.5px solid #FDB913;border-radius:16px;background:#FFFBEB;padding:10px 14px}.hsmeal .hsmh{font-weight:800;color:#16479E;margin-bottom:4px}'+
  '.hsday .hsx{border:0;background:transparent;color:#9AA3B5;font-size:20px;width:30px;height:32px;cursor:pointer;flex:0 0 auto}'+
  '.hsday .hsf{display:flex;justify-content:flex-end;padding:10px 14px;border-top:1.5px solid #FDB913;background:#fff}.hsday .hse{padding:12px 14px;color:#5a6378;font-size:13px}'+
  '#hsBar{position:fixed;left:0;right:0;top:0;z-index:2147480000;background:#16479E;color:#fff;font-family:Montserrat,system-ui,sans-serif;padding:8px 14px;padding-top:calc(8px + env(safe-area-inset-top));box-shadow:0 2px 10px rgba(0,0,0,.2);display:none;flex-wrap:wrap;align-items:center;gap:2px 10px}'+
@@ -4704,13 +4708,28 @@ function css(){if(D.getElementById('hsDayCss'))return;var s=D.createElement('sty
 function homeTot(){var H=(window.Q&&Q.home)||[],t={k:0,p:0,c:0,f:0};H.forEach(function(x){t.k+=+x.k||0;t.p+=+x.p||0;t.c+=+x.c||0;t.f+=+x.f||0});return t}
 function dayTot(){var dc=null;try{dc=dayCalc(SELD)}catch(e){}if(!dc)return null;var t=homeTot();return{k:dc.kcal+t.k,p:dc.p+t.p,c:dc.c+t.c,f:dc.f+t.f,price:dc.price}}
 function macTxt(T){return n0(T.k)+' KCALs · Protein '+Math.round(T.p)+' g · Carbs '+Math.round(T.c)+' g · Fat '+Math.round(T.f)+' g'}
-function card(){var H=(window.Q&&Q.home)||[];
- var rows=H.map(function(x,i){return '<div class="hsr"><div class="hsn"><b>'+E(String(x.n).replace(/ ×\s*\d+(\.\d+)?$/,''))+'</b><small>'+Math.round(+x.k||0)+' KCALs · Protein '+r1(x.p)+' g · Carbs '+r1(x.c)+' g · Fat '+r1(x.f)+' g</small></div>'+
+/* Peter 17th Nov 2026 : each Home-Sourced Meal is put into a Meal ( Meal 1 / 2 / 3 … ), the same Meal on every Day. It is listed under that Meal here and shows inside that Meal's card */
+function nMeals(){var n=3;try{n=Math.max(PLAN.mpd||0,(PLAN.q&&+PLAN.q.total)||0,3);PLAN.meals.forEach(function(m){if(+m.slot>n)n=+m.slot})}catch(e){}return Math.min(n,8)}
+function slotOf(c){var t=c.querySelector('.mtitle b');return t?parseInt(String(t.textContent).replace(/\D+/g,''),10)||0:0}
+function card(){var H=(window.Q&&Q.home)||[],N=nMeals();
+ var row=function(x,i){var sel='<select class="hsm" aria-label="Which Meal" onchange="hsSetMeal('+i+',this.value)"><option value="">Pick a Meal …</option>';for(var s=1;s<=N;s++)sel+='<option value="'+s+'"'+(+x.m===s?' selected':'')+'>Meal '+s+'</option>';sel+='</select>';
+  return '<div class="hsr"><div class="hsn"><b>'+E(String(x.n).replace(/ ×\s*\d+(\.\d+)?$/,''))+'</b><small>'+Math.round(+x.k||0)+' KCALs · Protein '+r1(x.p)+' g · Carbs '+r1(x.c)+' g · Fat '+r1(x.f)+' g</small>'+sel+'</div>'+
   '<span class="hsq"><button type="button" onclick="hmDropQty('+i+',-1)" aria-label="Fewer servings">−</button><b>× '+(+x.q||1)+'</b><button type="button" onclick="hmDropQty('+i+',1)" aria-label="More servings">+</button></span>'+
-  '<button type="button" class="hsx" onclick="hmDropDel('+i+')" aria-label="Remove">×</button></div>'}).join('');
+  '<button type="button" class="hsx" onclick="hmDropDel('+i+')" aria-label="Remove">×</button></div>'};
+ var out='';for(var s=1;s<=N;s++){var g=[];H.forEach(function(x,i){if(+x.m===s)g.push(row(x,i))});if(g.length)out+='<div class="hsg">Meal '+s+'</div>'+g.join('')}
+ var un=[];H.forEach(function(x,i){if(!(+x.m>=1&&+x.m<=N))un.push(row(x,i))});if(un.length)out+='<div class="hsg">Not in a Meal yet</div>'+un.join('');
  return '<div class="hsday"><div class="hsh"><span>🏠 Home-Sourced Meals<small>Every Day</small></span></div>'+
-  (rows||'<div class="hse">No Home-Sourced Meals in your Day yet.</div>')+
+  (out||'<div class="hse">No Home-Sourced Meals in your Day yet.</div>')+
   '<div class="hsf"><button type="button" class="btn btn-o s" onclick="hsOpenDrop()">+ Add a Home-Sourced Meal</button></div></div>'}
+window.hsSetMeal=function(i,v){var x=window.Q&&Q.home&&Q.home[i];if(!x)return;v=parseInt(v,10)||0;if(v)x.m=v;else delete x.m;try{if(PLAN&&PLAN.q&&Array.isArray(PLAN.q.home)&&PLAN.q.home[i]&&PLAN.q.home[i].n===x.n){if(v)PLAN.q.home[i].m=v;else delete PLAN.q.home[i].m}}catch(e){}try{saveDraft()}catch(e){}try{inject()}catch(e){}};
+function meals(dp){var H=(window.Q&&Q.home)||[],by={};H.forEach(function(x){var s=+x.m;if(s>0)(by[s]=by[s]||[]).push(x)});
+ var line=function(L){return L.map(function(x){return '<div class="hsl">🏠 <b>'+E(String(x.n))+'</b><span>'+Math.round(+x.k||0)+' KCALs · Protein '+r1(x.p)+' g · Carbs '+r1(x.c)+' g · Fat '+r1(x.f)+' g</span></div>'}).join('')};
+ var cards=[].filter.call(dp.querySelectorAll('.mcard'),function(c){return !c.closest('.hsday')&&slotOf(c)>0}),have={};
+ cards.forEach(function(c){var s=slotOf(c);have[s]=1;var L=by[s]||[],h=L.length?line(L):'',e=c.querySelector(':scope > .hsin');if(!h){if(e)e.remove();return}if(!e){e=D.createElement('div');e.className='hsin';c.appendChild(e)}if(e.__h!==h){e.innerHTML=h;e.__h=h}});
+ [].forEach.call(dp.querySelectorAll('.hsmeal'),function(e){var s=+e.getAttribute('data-s');if(have[s]||!by[s])e.remove()});
+ Object.keys(by).forEach(function(k){var s=+k;if(have[s])return;var h='<div class="hsmh">Meal '+s+' · 🏠 Home-Sourced</div>'+line(by[s]),e=dp.querySelector('.hsmeal[data-s="'+s+'"]');
+  if(!e){e=D.createElement('div');e.className='hsmeal';e.setAttribute('data-s',s);var nx=null;cards.some(function(c){if(slotOf(c)>s){nx=c;return true}return false});var hd=dp.querySelector('.hsday');if(nx)nx.parentNode.insertBefore(e,nx);else if(hd)hd.parentNode.insertBefore(e,hd);else dp.appendChild(e)}
+  if(e.__h!==h){e.innerHTML=h;e.__h=h}})}
 window.hsOpenDrop=function(){var d=D.querySelector('#sideTargets details.hmdrop')||D.querySelector('details.hmdrop');if(!d)return;d.open=true;try{hmDropToggle(true)}catch(e){}try{d.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}};
 function header(dp,T){var mac=dp.querySelector('.mh .mac');if(!mac||!T)return;var h=macTxt(T)+' · <b>'+(typeof rm==='function'?rm(T.price):'RM '+(+T.price||0).toFixed(2))+'</b>';if(mac.__hs!==h||mac.innerHTML!==mac.__hh){mac.innerHTML=h;mac.__hs=h;mac.__hh=mac.innerHTML}}
 function bar(T){var b=D.getElementById('hsBar');if(!b){b=D.createElement('div');b.id='hsBar';b.setAttribute('aria-live','polite');D.body.appendChild(b)}
@@ -4723,6 +4742,7 @@ function bar(T){var b=D.getElementById('hsBar');if(!b){b=D.createElement('div');
 function inject(){if(typeof PLAN==='undefined'||!PLAN||!PLAN.meals)return;var dp=D.querySelector('#planCal .dpanel');if(!dp)return;css();
  var T=dayTot();header(dp,T);
  var html=card(),old=dp.querySelector('.hsday');if(!old||old.__h!==html){if(old)old.remove();var w=D.createElement('div');w.innerHTML=html;var el=w.firstChild;el.__h=html;var nav=dp.querySelector('.daynav');if(nav&&nav.parentNode===dp)dp.insertBefore(el,nav);else dp.appendChild(el)}
+ try{meals(dp)}catch(e){}
  bar(T)}
 function wrap(){var f=window.renderPlan;if(typeof f!=='function'||f.__hs)return;var g=function(){var r=f.apply(this,arguments);try{inject()}catch(e){}return r};g.__hs=1;window.renderPlan=g}
 wrap();setInterval(function(){try{wrap();inject()}catch(e){}},1000);
