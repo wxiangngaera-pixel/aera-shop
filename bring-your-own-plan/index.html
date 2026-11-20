@@ -15,6 +15,19 @@ W.aeraTrack=function(name,cd,id){cd=cd||{};id=id||(name+'-'+Date.now().toString(
 aeraTrack('PageView');})();</script>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=37497790966534182&ev=PageView&noscript=1"/></noscript>
 <!-- AERA Meta Pixel : end -->
+<!-- AERA Ads link ( Peter 20th Nov 2026 ) : start -->
+<script id="aera-ad-src">(function(){var W=window;try{if(W.top!==W.self)return}catch(e){return}if(W.__aeraAd)return;W.__aeraAd=1;
+/* Visitors who arrive through the Ads link ( aeramealprep.net/?src=ads ) are remembered for 30 days, so their Orders, Sign Ups and WhatsApp enquiries are counted as From Ads, apart from Organic */
+var K='aera.src',q=new URLSearchParams(location.search),s=(q.get('src')||'').toLowerCase(),med=(q.get('utm_medium')||'').toLowerCase();
+if(s==='ads'||s==='ad'||/^(paid|cpc|ads?|paid_social|paidsocial)$/.test(med)){try{localStorage.setItem(K,JSON.stringify({s:'ads',at:Date.now(),c:(q.get('utm_campaign')||q.get('c')||'').slice(0,80)}))}catch(e){}}
+W.aeraSrc=function(){try{var o=JSON.parse(localStorage.getItem(K)||'null');if(o&&o.s==='ads'&&Date.now()-o.at<30*864e5)return o}catch(e){}return null};
+function hookSb(){var sb=W.sb;if(!sb||!sb.auth||typeof sb.auth.signUp!=='function'||sb.auth.signUp.__ad)return;var F=sb.auth.signUp.bind(sb.auth);
+ sb.auth.signUp=function(a){var ad=aeraSrc();if(ad&&a){a.options=a.options||{};a.options.data=Object.assign({},a.options.data||{},{lead_src:'ads',lead_camp:ad.c||''})}
+  return F(a).then(function(r){try{if(r&&!r.error){if(W.aeraTrack)aeraTrack('CompleteRegistration',{});if(ad&&W.aeraPost)aeraPost({action:'lead',kind:'signup',email:a.email,name:((a.options||{}).data||{}).name||'',camp:ad.c||''})}}catch(e){}return r})};sb.auth.signUp.__ad=1}
+hookSb();W.addEventListener('DOMContentLoaded',hookSb);W.addEventListener('load',hookSb);setTimeout(hookSb,3000);
+document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href*="wa.me/"],a[href*="api.whatsapp.com"]');if(!a)return;var ad=aeraSrc();try{if(W.aeraTrack)aeraTrack('Contact',{content_name:'WhatsApp'})}catch(x){}if(!ad)return;
+ try{var u=new URL(a.href);var t=u.searchParams.get('text')||'';if(!/^\[AD\]/.test(t)){u.searchParams.set('text','[AD] '+(t||'Hi AERA'));a.href=u.toString()}}catch(x){}if(W.aeraPost)aeraPost({action:'lead',kind:'whatsapp',page:location.pathname,camp:ad.c||''})},true);})();</script>
+<!-- AERA Ads link : end -->
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style id="aera-cloak">html.aera-cloak body{opacity:0!important}html.aera-show body{opacity:1;transition:opacity .16s ease-out}</style>
