@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- AERA Meta Pixel + Conversions API ( Peter 20th Nov 2026 ) : start -->
+<script id="aera-meta-pixel">(function(){if(window.__aeraPx)return;var W=window;try{if(W.top!==W.self)return}catch(e){return}W.__aeraPx=1;W.__aeraQS=location.search;
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(W,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+var PX='37497790966534182',FN='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-capi';
+function ck(n){var m=document.cookie.match(new RegExp('(?:^|; )'+n+'=([^;]*)'));return m?decodeURIComponent(m[1]):''}
+function fbc(){var c=ck('_fbc');if(c)return c;try{var q=new URLSearchParams(W.__aeraQS).get('fbclid');if(q){c='fb.1.'+Date.now()+'.'+q;localStorage.setItem('aera.fbc',c);return c}return localStorage.getItem('aera.fbc')||''}catch(e){return ''}}
+fbc();fbq('init',PX);
+W.aeraPost=function(b){try{b.fbp=ck('_fbp');b.fbc=fbc();b.url=location.href;fetch(FN,{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,body:JSON.stringify(b)}).catch(function(){})}catch(e){}};
+/* one event, two copies : the Pixel in the browser and the Conversions API from AERA's server, with the same event ID so Meta counts it once */
+W.aeraTrack=function(name,cd,id){cd=cd||{};id=id||(name+'-'+Date.now().toString(36)+Math.random().toString(36).slice(2,7));try{fbq('track',name,cd,{eventID:id})}catch(e){}
+ if(name==='Purchase')return;setTimeout(function(){aeraPost({event_name:name,event_id:id,custom_data:cd})},1200)};
+aeraTrack('PageView');})();</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=37497790966534182&ev=PageView&noscript=1"/></noscript>
+<!-- AERA Meta Pixel : end -->
+
 <script id="aera-acct-guard">/* the page shows "signed in" from a saved copy of the account ; when the sign-in itself is gone ( logged out, expired, cleared by the phone ) that copy is dropped too, so no page claims a sign-in that is not there */(function(){try{var t=localStorage.getItem('sb-swpprjvubgcdsojapaad-auth-token'),ok=false;if(t){var o=JSON.parse(t);if(o&&o.currentSession)o=o.currentSession;ok=!!(o&&(o.refresh_token||o.access_token))}if(!ok){['aera.account','aera.refLock'].forEach(function(k){if(localStorage.getItem(k)!==null)localStorage.removeItem(k)})}}catch(e){}})();</script>
 
 <style id="aera-input-guard-css">
@@ -96,7 +111,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Track my order · AERA Meal Prep" />
 <!-- End SEO Meta Tags -->
-<meta name="sheet-data-url" content="https://paymegpt.com/api/public/landing-pages/6926/sheet-data">
+<meta name="sheet-data-url" content="https://my.chatbees.io/api/public/landing-pages/6926/sheet-data">
 <script data-lp-token-hydrate>
 (function(){try{
   var slug="lp-mtqti8vd-s7jiz";
