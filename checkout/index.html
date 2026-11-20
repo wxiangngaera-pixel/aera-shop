@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- AERA Meta Pixel + Conversions API ( Peter 20th Nov 2026 ) : start -->
+<script id="aera-meta-pixel">(function(){if(window.__aeraPx)return;var W=window;try{if(W.top!==W.self)return}catch(e){return}W.__aeraPx=1;W.__aeraQS=location.search;
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(W,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+var PX='37497790966534182',FN='https://swpprjvubgcdsojapaad.supabase.co/functions/v1/aera-capi';
+function ck(n){var m=document.cookie.match(new RegExp('(?:^|; )'+n+'=([^;]*)'));return m?decodeURIComponent(m[1]):''}
+function fbc(){var c=ck('_fbc');if(c)return c;try{var q=new URLSearchParams(W.__aeraQS).get('fbclid');if(q){c='fb.1.'+Date.now()+'.'+q;localStorage.setItem('aera.fbc',c);return c}return localStorage.getItem('aera.fbc')||''}catch(e){return ''}}
+fbc();fbq('init',PX);
+W.aeraPost=function(b){try{b.fbp=ck('_fbp');b.fbc=fbc();b.url=location.href;fetch(FN,{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,body:JSON.stringify(b)}).catch(function(){})}catch(e){}};
+/* one event, two copies : the Pixel in the browser and the Conversions API from AERA's server, with the same event ID so Meta counts it once */
+W.aeraTrack=function(name,cd,id){cd=cd||{};id=id||(name+'-'+Date.now().toString(36)+Math.random().toString(36).slice(2,7));try{fbq('track',name,cd,{eventID:id})}catch(e){}
+ if(name==='Purchase')return;setTimeout(function(){aeraPost({event_name:name,event_id:id,custom_data:cd})},1200)};
+aeraTrack('PageView');})();</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=37497790966534182&ev=PageView&noscript=1"/></noscript>
+<!-- AERA Meta Pixel : end -->
+
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style id="aera-cloak">html.aera-cloak body{opacity:0!important}html.aera-show body{opacity:1;transition:opacity .16s ease-out}</style>
 <script id="aera-cloak-js">/* Peter 11th Nov 2026 : no more Jumps and Flashes when a page opens ( Safari and Chrome ). The page waits a moment, white, while it puts on the new look,
@@ -4346,5 +4361,20 @@ addEventListener('pagehide',send,true);document.addEventListener('visibilitychan
 setTimeout(function(){if(!sent){send();sent=false;EV=[];seen={'view|':1}}},45000);
 })();
 </script>
+<!-- AERA Meta Pixel · Checkout events ( Peter 20th Nov 2026 ) : start -->
+<script id="aera-meta-checkout">(function(){var W=window;if(!W.aeraTrack)return;
+function it(sku){var c=(W.CAT||{})[sku]||{};var p=0;try{p=+W.uPrice(sku)||+c.price||0}catch(e){p=+c.price||0}return{n:c.name||sku,p:p}}
+function cartInfo(){var C=W.CART||{},ids=Object.keys(C),n=0;ids.forEach(function(k){n+=+C[k]||0});return{ids:ids,n:n}}
+function hook(){
+ /* Add to Cart : the + buttons here, and the Order buttons on the Homepage ( ?add= ) */
+ if(typeof W.add==='function'&&!W.add.__px){var A=W.add;W.add=function(sku,d){var r=A.apply(this,arguments);try{if(+d>0&&(W.CAT||{})[sku]){var x=it(sku);aeraTrack('AddToCart',{content_ids:[sku],content_name:x.n,content_type:'product',value:Math.round(x.p*d*100)/100,num_items:+d})}}catch(e){}return r};W.add.__px=1}
+if(!W.__pxAdd){W.__pxAdd=1; try{var m=/[?&]add=([A-Z0-9-]+)/i.exec(W.__aeraQS||'');if(m){var s=m[1].toUpperCase();if((W.CAT||{})[s]){var x=it(s);aeraTrack('AddToCart',{content_ids:[s],content_name:x.n,content_type:'product',value:x.p,num_items:1})}}}catch(e){}}
+ /* Initiate Checkout : the moment Pay is pressed ; the browser is remembered against the Order so the Purchase can be matched to the ad */
+ ['payChip','payBillplz'].forEach(function(f){var P=W[f];if(typeof P!=='function'||P.__px)return;W[f]=function(order,msg,total){try{var no=order&&order.orderNo,ci=cartInfo();aeraTrack('InitiateCheckout',{content_ids:ci.ids,content_type:'product',num_items:ci.n,value:+total||0},no?'ic-'+no:null);if(no)aeraPost({action:'ctx',orderNo:no})}catch(e){}return P.apply(this,arguments)};W[f].__px=1});
+ /* Purchase : the Payment Successful screen ; the server copy is sent by aera-capi only for a real paid Order */
+ if(typeof W.aeraRes==='function'&&!W.aeraRes.__px){var R=W.aeraRes;W.aeraRes=function(kind,o){try{if(kind==='ok'&&o&&o.no){var no=String(o.no),k='aera.px.p.'+no;var seen=false;try{seen=!!localStorage.getItem(k);localStorage.setItem(k,'1')}catch(e){}
+   if(!seen){var v=+o.total||0;fbq('track','Purchase',{currency:'MYR',value:v,order_id:no},{eventID:'purchase-'+no});[4000,20000,60000].forEach(function(t){setTimeout(function(){aeraPost({action:'purchase',orderNo:no})},t)})}}}catch(e){}return R.apply(this,arguments)};W.aeraRes.__px=1}}
+hook();W.addEventListener('DOMContentLoaded',hook);W.addEventListener('load',hook);})();</script>
+<!-- AERA Meta Pixel · Checkout events : end -->
 </body>
 </html>
