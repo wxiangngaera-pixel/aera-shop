@@ -26,7 +26,7 @@ function hookSb(){var sb=W.sb;if(!sb||!sb.auth||typeof sb.auth.signUp!=='functio
   return F(a).then(function(r){try{if(r&&!r.error){if(W.aeraTrack)aeraTrack('CompleteRegistration',{});if(ad&&W.aeraPost)aeraPost({action:'lead',kind:'signup',email:a.email,name:((a.options||{}).data||{}).name||'',camp:ad.c||''})}}catch(e){}return r})};sb.auth.signUp.__ad=1}
 hookSb();W.addEventListener('DOMContentLoaded',hookSb);W.addEventListener('load',hookSb);setTimeout(hookSb,3000);
 document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href*="wa.me/"],a[href*="api.whatsapp.com"]');if(!a)return;var ad=aeraSrc();try{if(W.aeraTrack)aeraTrack('Contact',{content_name:'WhatsApp'})}catch(x){}if(!ad)return;
- try{var u=new URL(a.href);var t=u.searchParams.get('text')||'';if(!/^\[AD\]/.test(t)){u.searchParams.set('text','[AD] '+(t||'Hi AERA'));a.href=u.toString()}}catch(x){}if(W.aeraPost)aeraPost({action:'lead',kind:'whatsapp',page:location.pathname,camp:ad.c||''})},true);})();</script>
+ try{var u=new URL(a.href);var t=u.searchParams.get('text')||'';if(!/^\[AD\]/.test(t)){u.searchParams.set('text','[AD] '+(t||'Hi AERA'));a.href=u.toString().replace(/\+/g,'%20')}}catch(x){}if(W.aeraPost)aeraPost({action:'lead',kind:'whatsapp',page:location.pathname,camp:ad.c||''})},true);})();</script>
 <!-- AERA Ads link : end -->
 <script id="aera-force-build">/* Peter 14th Nov 2026 : Force Update. When AERA ships a new build, every phone and browser drops its old cached code and its old
    local copy of a Meal Plan, then reloads once onto the latest version. Bump B on the next release. */
