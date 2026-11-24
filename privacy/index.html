@@ -297,7 +297,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
       overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
       function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
       document.body.appendChild(overlay);
       var pBtn=document.getElementById('lp-pay-success-btn');
       if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
@@ -374,7 +374,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
       overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
       function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var subTxt=successSubtext||'Thank you for your order.';
-      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;background:color-mix(in srgb,'+successBtnColor+' 12%,white);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="'+successBtnColor+'" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Order Confirmed!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-cart-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
       document.body.appendChild(overlay);
       var cBtn=document.getElementById('lp-cart-success-btn');
       if(cBtn){cBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
@@ -388,7 +388,7 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 <div class="top"><div class="in"><b>AERA</b><a href="https://my.chatbees.io/p/ZQr9fS2jA9">← Back to AERA Meal Prep</a></div></div>
 <div class="hero"><div class="in">
  <h1 id="ttl">Privacy Notice</h1>
- <p id="upd">Last updated 21 September 2026</p>
+ <p id="upd">Last updated 24 November 2026</p>
  <div class="sw" role="tablist" aria-label="Language"><button type="button" id="bEN" class="on" onclick="setL('en')">English</button><button type="button" id="bBM" onclick="setL('bm')">Bahasa Malaysia</button><button type="button" id="bZH" onclick="setL('zh')">中文</button></div>
 </div></div>
 
@@ -484,6 +484,13 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 <h2>12. Changes To This Notice</h2>
 <p>We may update this notice. The date at the top shows when it last changed, and we will tell you of any important change by email or on our website.</p>
 <p>This notice is available in English, Bahasa Malaysia and Chinese. If they differ, the English version applies.</p>
+
+<h2 id="chat">13. Chat Messages and Our AI Assistant</h2>
+<p>When you message AERA on Facebook Messenger, Instagram or WhatsApp, we receive your message, the name shown on that app and the account ID that app gives us. An AI assistant ( Claude, made by Anthropic ) may answer your questions about our Meals, Delivery and Orders. It only uses AERA's menu and policies, and never sees your card or bank details. Your messages are processed on Anthropic's and Meta's servers, which may be outside Malaysia. Our team can read your chat and takes over whenever you ask for a person.</p>
+<p>We keep chat history for up to 12 months so we can help you with later questions, then delete it.</p>
+<div class="box" id="delete-chat">
+ <p><b>To delete your chat data :</b> send <b>"Delete my data"</b> in the same chat, or email <a href="mailto:aera.mealprep@gmail.com">aera.mealprep@gmail.com</a> with your name and the app you used. We delete it within 30 days and reply to confirm. You can also remove AERA's access in your Facebook or Instagram settings, under Apps and Websites / Business Integrations.</p>
+</div>
 </article>
 
 <!-- ======================== BAHASA MALAYSIA ======================== -->
@@ -576,6 +583,13 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 <h2>12. Perubahan Kepada Notis Ini</h2>
 <p>Kami mungkin mengemas kini notis ini. Tarikh di bahagian atas menunjukkan bila ia terakhir diubah, dan kami akan memaklumkan sebarang perubahan penting melalui e-mel atau di laman web kami.</p>
 <p>Notis ini tersedia dalam Bahasa Inggeris dan Bahasa Malaysia. Jika terdapat perbezaan, versi Bahasa Inggeris akan diguna pakai.</p>
+
+<h2 id="chat-bm">13. Mesej Chat dan Pembantu AI Kami</h2>
+<p>Apabila anda menghantar mesej kepada AERA melalui Facebook Messenger, Instagram atau WhatsApp, kami menerima mesej anda, nama yang dipaparkan pada aplikasi itu dan ID akaun yang diberikan oleh aplikasi itu. Pembantu AI ( Claude, dibuat oleh Anthropic ) mungkin menjawab soalan anda tentang Hidangan, Penghantaran dan Pesanan kami. Ia hanya menggunakan menu dan polisi AERA, dan tidak pernah melihat butiran kad atau bank anda. Mesej anda diproses di pelayan Anthropic dan Meta, yang mungkin berada di luar Malaysia. Pasukan kami boleh membaca chat anda dan akan mengambil alih apabila anda meminta untuk bercakap dengan seseorang.</p>
+<p>Kami menyimpan sejarah chat sehingga 12 bulan supaya kami boleh membantu soalan anda kemudian, kemudian memadamnya.</p>
+<div class="box" id="delete-chat-bm">
+ <p><b>Untuk memadam data chat anda :</b> hantar <b>"Delete my data"</b> dalam chat yang sama, atau e-mel <a href="mailto:aera.mealprep@gmail.com">aera.mealprep@gmail.com</a> bersama nama anda dan aplikasi yang anda gunakan. Kami akan memadamnya dalam masa 30 hari dan membalas untuk mengesahkan. Anda juga boleh membuang akses AERA dalam tetapan Facebook atau Instagram anda, di bawah Aplikasi dan Laman Web / Integrasi Perniagaan.</p>
+</div>
 </article>
 
 <!-- ============================ 中文 ============================ -->
@@ -668,14 +682,21 @@ try{L.setItem('aera.motion.code',k);L.setItem('aera.motion.cv',v)}catch(e){}
 <h2>12. 本声明的更改</h2>
 <p>我们可能会更新本声明。页首的日期显示最后更改的时间，任何重要更改我们都会通过电邮或在网站上通知您。</p>
 <p>本声明提供英文、马来文和中文版本。中文版本仅供参考，如有差异，以英文版本为准。</p>
+
+<h2 id="chat-zh">13. 聊天信息与我们的 AI 助理</h2>
+<p>当您通过 Facebook Messenger、Instagram 或 WhatsApp 联系 AERA 时，我们会收到您的信息、您在该应用上显示的名字，以及该应用提供给我们的账户 ID。AI 助理（Anthropic 公司的 Claude）可能会回答您关于餐点、配送和订单的问题。它只使用 AERA 的菜单和政策，绝不会看到您的银行卡或银行资料。您的信息会在 Anthropic 和 Meta 的服务器上处理，这些服务器可能位于马来西亚境外。我们的团队可以查看您的聊天内容，当您要求真人服务时会立即接手。</p>
+<p>我们会保存聊天记录最多 12 个月，以便日后为您解答问题，之后便会删除。</p>
+<div class="box" id="delete-chat-zh">
+ <p><b>如何删除您的聊天资料：</b>在同一个聊天中发送 <b>"Delete my data"</b>（或「删除我的资料」），或发电邮到 <a href="mailto:aera.mealprep@gmail.com">aera.mealprep@gmail.com</a>，注明您的名字和所使用的应用。我们会在 30 天内删除并回复确认。您也可以在 Facebook 或 Instagram 设置中的「应用和网站 / 商业整合」里移除 AERA 的访问权限。</p>
+</div>
 </article>
 
 <footer id="ft">© 2026 AERA Meal Preparation Sdn. Bhd. · <a href="https://my.chatbees.io/p/G7mXL4RMz2">Terms &amp; Conditions</a></footer>
 </main>
 <script>(function(){if(window.__AERA_API) return; window.__AERA_API=1;if(/my\.chatbees\.io$/i.test(location.hostname)) return;var API="https://my.chatbees.io";function conv(u){try{if(typeof u!=="string")return u;if(u.indexOf("/api/")===0)return API+u;if(u.indexOf(location.origin+"/api/")===0)return API+u.slice(location.origin.length);}catch(e){}return u}var of=window.fetch;if(of)window.fetch=function(i,o){try{if(typeof i==="string")i=conv(i);else if(typeof Request!=="undefined"&&i instanceof Request){var n=conv(i.url);if(n!==i.url)i=new Request(n,i)}}catch(e){}return of.call(this,i,o)};var XP=window.XMLHttpRequest&&window.XMLHttpRequest.prototype,oo=XP&&XP.open;if(oo)XP.open=function(m,u){var a=[].slice.call(arguments);try{a[1]=conv(u)}catch(e){}return oo.apply(this,a)};})();
-var TX={en:{t:'Privacy Notice',u:'Last updated 21 September 2026',f:'Terms &amp; Conditions'},
- bm:{t:'Notis Privasi',u:'Kemas kini terakhir 21 September 2026',f:'Terma &amp; Syarat'},
- zh:{t:'隐私声明',u:'最后更新：2026年9月21日',f:'条款与条件'}};
+var TX={en:{t:'Privacy Notice',u:'Last updated 24 November 2026',f:'Terms &amp; Conditions'},
+ bm:{t:'Notis Privasi',u:'Kemas kini terakhir 24 November 2026',f:'Terma &amp; Syarat'},
+ zh:{t:'隐私声明',u:'最后更新：2026年11月24日',f:'条款与条件'}};
 function setL(l){if(!TX[l])l='en';
  ['en','bm','zh'].forEach(function(k){var a=document.getElementById(k);if(a)a.hidden=(l!==k)});
  [['bEN','en'],['bBM','bm'],['bZH','zh']].forEach(function(x){var e=document.getElementById(x[0]);if(e)e.className=l===x[1]?'on':''});
