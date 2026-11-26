@@ -776,7 +776,11 @@ window.__kcSendBuild=build;setInterval(paint,500)})();</script>
 <script id="aera-kc-nova">/* Peter 26th Nov 2026 : Nova ( his voice assistant ) drafts a + New Order. Opening /kitchen/?app=no&nova=<draft>#neworder
    fills + New Order with the client, menu Meals and Bundles, date, time slot, Delivery or Pickup, address, packaging, Cooked or Raw
    weight, salt and spice levels, note and payment ( 26th Nov 2026 : packaging, weight, salt and spice added ).
-   Nothing is saved or charged : Peter checks the price, taps "Check with Lalamove" for Delivery and taps Save order himself. */
+   Nothing is saved or charged : Peter checks the price, taps "Check with Lalamove" for Delivery and taps Save order himself.
+   27th Nov 2026 : Nova's 7-step New Order form sends auto:1 after Peter taps "Yes, submit to Kitchen" there. Then this checks the
+   Lalamove fee, saves the order the normal way ( noSave ) and goes back to Nova with the Order Number and price.
+   If the Lalamove fee can't be found, or anything is off, nothing is saved and Peter finishes here by hand.
+   dry:1 does everything except the save ( for testing ). Sponsored = "This Order only", full amount. */
 (function(){if(window.__kcNova)return;window.__kcNova=1;
 var raw=(location.search.match(/[?&]nova=([^&#]+)/)||[])[1];if(!raw)return;
 var d=null;try{var s=decodeURIComponent(raw).replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';d=JSON.parse(decodeURIComponent(escape(atob(s))))}catch(e){return}
@@ -802,11 +806,42 @@ var tries=0;(function go(){
  var wt=d.basis==='raw'?'[Raw Weight] ':d.basis==='cooked'?'[Cooked Weight] ':'';
  if(d.note||wt)set('note',wt+String(d.note||''));
  if(['transfer','cash','credit','myacct','unpaid'].indexOf(d.pay)>=0)set('pay',d.pay);
+ if(d.sp==='order'){set('sp','order');set('spAmtMode','full');if(d.spWhy)set('spWhy',String(d.spWhy))}
  (d.items||[]).forEach(function(it){var q=Math.max(1,Math.min(50,+it.qty||1));
   if(it.kind==='bundle'){if(!S.bun[it.id]){miss.push(it.name||it.id);return}for(var i=0;i<q;i++)window.noBundle(it.id)}
   else{if(!S.meal[it.id]){miss.push(it.name||it.id);return}for(var j=0;j<q;j++)window.noMeal(it.id,1)}});
  window.noSet('note',window.noState().note,true);clean();
+ if(d.auto&&!miss.length)return auto();
  setTimeout(function(){try{if(typeof window.kcStepGo==='function')window.kcStepGo(5)}catch(e){}},300);
  say('Filled by Nova'+(miss.length?' · not on the menu: '+miss.join(', '):'')+' — check it'+(d.fulfil==='pickup'?'':', tap Check with Lalamove')+', then Save order');
-})()})();</script></body>
+})();
+/* ---- auto : Lalamove fee, then save, then back to Nova ---- */
+function stop(m){say(m+' — nothing saved yet, finish it here');try{if(typeof window.kcStepGo==='function')window.kcStepGo(5)}catch(e){}}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+async function auto(){
+ var NO=window.noState();
+ if(NO.fulfil==='delivery'&&!(+NO.fee>0)){
+  var inp=null;for(var n=1;n<=6&&!inp;n++){try{window.kcStepGo(n)}catch(e){}await sleep(250);inp=document.querySelector('#main input[data-kcaddr]')}
+  if(!inp||typeof window.kcAddrCheck!=='function')return stop('Could not find the address box');
+  inp.value=NO.address;try{await window.kcAddrCheck()}catch(e){}
+  for(var w=0;w<60&&!(+window.noState().fee>0);w++)await sleep(500);
+  if(!(+window.noState().fee>0))return stop('Lalamove could not price this address');
+ }
+ var orig=window.saveOrder,got=null;
+ window.saveOrder=async function(){var eo=window.EO||EO;var t=orderTotals(eo);
+  got={no:eo.orderNo,name:eo.customer&&eo.customer.name,date:eo.fulfil&&eo.fulfil.date,slot:eo.fulfil&&eo.fulfil.slot,fulfil:eo.fulfil&&eo.fulfil.type,boxes:t.boxes,
+   meals:Math.round(t.price*100)/100,pack:+eo.packagingFee||0,fee:+eo.deliveryFee||0,disc:+eo.discount||0,waive:+eo.waiveAmt||0,pay:eo.payMethod||''};
+  got.total=Math.round((got.meals+got.pack+got.fee-got.disc-got.waive)*100)/100;
+  if(d.dry){window.saveOrder=orig;window.__novaDry=got;try{window.noState().busy=false}catch(e){}return}
+  window.saveOrder=orig;return orig.apply(this,arguments)};
+ try{await window.noSave()}catch(e){window.saveOrder=orig;return stop('Save failed: '+((e&&e.message)||e))}
+ window.saveOrder=orig;
+ if(!got)return stop('The order was not saved');
+ if(d.dry){say('Dry run · '+got.no+' · RM '+got.total.toFixed(2)+' ( not saved )');return}
+ for(var k=0;k<20;k++){var hit=Object.keys(S.ord||{}).some(function(id){return S.ord[id]&&S.ord[id].orderNo===got.no});if(hit)break;await sleep(300)}
+ say('Saved '+got.no+' · RM '+got.total.toFixed(2));
+ if(d.back){var j=btoa(unescape(encodeURIComponent(JSON.stringify(got)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  setTimeout(function(){location.href=String(d.back).split('#')[0]+(String(d.back).indexOf('?')<0?'?':'&')+'aera_saved='+j},900)}
+}
+})();</script></body>
 </html>
