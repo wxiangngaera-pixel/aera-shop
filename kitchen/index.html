@@ -774,7 +774,8 @@ function paint(){if(!/^#neworder/.test(location.hash||''))return;var save=[].fin
  save.parentElement.insertAdjacentElement('beforebegin',box)}
 window.__kcSendBuild=build;setInterval(paint,500)})();</script>
 <script id="aera-kc-nova">/* Peter 26th Nov 2026 : Nova ( his voice assistant ) drafts a + New Order. Opening /kitchen/?app=no&nova=<draft>#neworder
-   fills + New Order with the client, menu Meals and Bundles, date, time slot, Delivery or Pickup, address, note and payment.
+   fills + New Order with the client, menu Meals and Bundles, date, time slot, Delivery or Pickup, address, packaging, Cooked or Raw
+   weight, salt and spice levels, note and payment ( 26th Nov 2026 : packaging, weight, salt and spice added ).
    Nothing is saved or charged : Peter checks the price, taps "Check with Lalamove" for Delivery and taps Save order himself. */
 (function(){if(window.__kcNova)return;window.__kcNova=1;
 var raw=(location.search.match(/[?&]nova=([^&#]+)/)||[])[1];if(!raw)return;
@@ -794,7 +795,12 @@ var tries=0;(function go(){
  if(/^\d{4}-\d{2}-\d{2}$/.test(d.date||''))set('date',d.date);
  if(d.slot)set('slot',String(d.slot));
  if(d.address)set('address',String(d.address));
- if(d.note)set('note',String(d.note));
+ if(d.pack==='bento'||d.pack==='vacuum')set('pack',d.pack);
+ if(d.basis==='cooked'||d.basis==='raw')set('basis',d.basis);
+ if(['normal','less_salt','no_salt'].indexOf(d.seas)>=0)set('seas',d.seas);
+ if(['normal','less','none'].indexOf(d.spice)>=0)set('spice',d.spice);
+ var wt=d.basis==='raw'?'[Raw Weight] ':d.basis==='cooked'?'[Cooked Weight] ':'';
+ if(d.note||wt)set('note',wt+String(d.note||''));
  if(['transfer','cash','credit','myacct','unpaid'].indexOf(d.pay)>=0)set('pay',d.pay);
  (d.items||[]).forEach(function(it){var q=Math.max(1,Math.min(50,+it.qty||1));
   if(it.kind==='bundle'){if(!S.bun[it.id]){miss.push(it.name||it.id);return}for(var i=0;i<q;i++)window.noBundle(it.id)}
