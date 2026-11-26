@@ -782,7 +782,8 @@ window.__kcSendBuild=build;setInterval(paint,500)})();</script>
    27th Nov 2026 : copy:[order ids] / plans:[Saved Meal Plan ids] / cart:1 load the client's Past Orders, Saved Meal Plans and Cart.
    27th Nov 2026 : draft:1 ( "Save as Draft" in Nova ) keeps the order in Drafts ( kc_docs nova_drafts ) and goes back to Nova.
    Drafts shows at the top of + New Order : Submit ( saves it like Nova does ), Open to edit ( fills the form; the draft goes once
-   the order is saved ) or Delete. */
+   the order is saved ) or Delete.
+   26th Nov 2026 : pl:[[day,"code:grams,…"],…] = a Personalised Meal Plan Nova built; it is added like a Saved Meal Plan and saved with the rest. */
 (function(){if(window.__kcNova)return;window.__kcNova=1;
 function say(m,bad){try{if(typeof window.toast==='function')window.toast(m,bad?1:0)}catch(e){}}
 function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
@@ -824,6 +825,12 @@ async function fill(d){
    if(!row){miss.push('saved plan '+pid);continue}window.postMessage({type:'aera-plan',plan:row},location.origin);
    for(var w=0;w<20&&window.noState().items.length===n0;w++)await sleep(150);if(window.noState().items.length===n0)miss.push('saved plan '+pid)}
   catch(e){miss.push('saved plan '+pid)}}
+ /* a Personalised Meal Plan Nova built ( 26th Nov 2026 ) : pl = [[day,"code:grams,code:grams"],…] */
+ if((d.pl||[]).length){var n2=window.noState().items.length;
+  var pm=d.pl.map(function(x,i){return{day:+x[0]||1,slot:i+1,comps:String(x[1]||'').split(',').map(function(t){var a=t.split(':');return{code:a[0],grams:+a[1]||0}}).filter(function(c){return c.code&&c.grams>0})}});
+  window.postMessage({type:'aera-plan',plan:{id:'',meals:pm,prefs:{spice:d.spice==='none'?'none':d.spice||'',seasoning:d.seas||''}}},location.origin);
+  for(var w2=0;w2<20&&window.noState().items.length===n2;w2++)await sleep(150);
+  var got2=window.noState().items.length-n2;if(got2<pm.length)miss.push('Personalised Meal Plan ('+(pm.length-got2)+' of '+pm.length+' boxes)')}
  if(d.cart){var n1=window.noState().items.length;try{window.noCartRefresh()}catch(e){}
   for(var c=0;c<40&&window.noState().items.length===n1;c++){await sleep(300);try{window.noCartUse()}catch(e){}}
   if(window.noState().items.length===n1)miss.push('their Cart')}
@@ -861,7 +868,7 @@ function stopHere(m){say(m+' — nothing saved yet, finish it here',1);try{if(ty
 var DR={list:null,busy:false};
 function drSummary(d){var n=(d.items||[]).reduce(function(a,i){return a+(+i.qty||1)},0);var bits=[];
  if(n)bits.push(n+' item'+(n>1?'s':''));if((d.copy||[]).length)bits.push((d.copy.length>1?d.copy.length+' past orders':'a past order'));
- if((d.plans||[]).length)bits.push((d.plans.length>1?d.plans.length+' saved plans':'a saved plan'));if(d.cart)bits.push('their Cart');if(d.plan)bits.push('Personalised Meal Plan');
+ if((d.plans||[]).length)bits.push((d.plans.length>1?d.plans.length+' saved plans':'a saved plan'));if(d.cart)bits.push('their Cart');if(d.plan)bits.push('Personalised Meal Plan');if((d.pl||[]).length)bits.push('Personalised Meal Plan · '+d.pl.length+' box'+(d.pl.length>1?'es':''));
  return[(d.fulfil==='pickup'?'Self Pick-Up':'Delivery')+' · '+DAY(d.date)+(SLOT[d.slot]?', '+SLOT[d.slot]:''),bits.join(' + ')||'no meals yet',d.pack==='vacuum'?'Vacuum':'Bento',d.sp==='order'?'Sponsored':(PAYL[d.pay]||'')].filter(Boolean).join(' · ')}
 async function drLoad(){try{var q=await DB.collection('nova_drafts').get();DR.list=(q.docs||[]).map(function(x){var v=x.data();v.id=x.id;return v}).sort(function(a,b){return String(b.at).localeCompare(String(a.at))})}catch(e){DR.list=DR.list||[]}drPaint()}
 async function drSave(d){var id='d'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);var x=JSON.parse(JSON.stringify(d));delete x.draft;delete x.auto;delete x.back;delete x.dry;
