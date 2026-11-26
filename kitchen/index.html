@@ -874,8 +874,8 @@ function drPaint(){var main=document.getElementById('main');if(!main||!/^#neword
  box.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><b style="font-size:16px">Drafts <span style="font-weight:400;color:#667">· '+L.length+' waiting</span></b><span style="font-size:12px;color:#889">Saved from Nova</span></div>'+
   L.map(function(x){var t=new Date(x.at);return'<div style="border-top:1px solid #E4E7EC;padding:10px 0"><div style="font-weight:700">'+esc(x.name||x.email||'No client yet')+'</div><div style="font-size:13px;color:#475467">'+esc(drSummary(x.d||{}))+'</div><div style="font-size:12px;color:#98A2B3">Saved '+esc(DAY(x.at))+', '+t.toLocaleTimeString('en-GB',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:'Asia/Kuala_Lumpur'})+'</div>'+
    '<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button type="button" class="btn p" data-dr="go" data-id="'+x.id+'"'+(DR.busy?' disabled':'')+'>Submit</button><button type="button" class="btn" data-dr="open" data-id="'+x.id+'"'+(DR.busy?' disabled':'')+'>Open to edit</button><button type="button" class="btn" style="color:#B42318" data-dr="del" data-id="'+x.id+'"'+(DR.busy?' disabled':'')+'>Delete</button></div></div>'}).join('')}
-/* on window : the Console rewrites the page after it loads, which drops listeners on the old document */
-window.addEventListener('click',async function(e){var b=e.target.closest&&e.target.closest('[data-dr]');if(!b||DR.busy)return;e.preventDefault();
+/* attached in hook() : the Console rewrites the page after it loads, which erases listeners added before that */
+async function drClick(e){var b=e.target.closest&&e.target.closest('[data-dr]');if(!b||DR.busy)return;e.preventDefault();
  var x=(DR.list||[]).find(function(y){return y.id===b.dataset.id});if(!x)return;var d=x.d||{};
  if(b.dataset.dr==='del'){var ok=typeof window.askConfirm==='function'?await window.askConfirm('Delete the draft for '+(x.name||'this client')+'?'):confirm('Delete this draft?');if(ok){await drDel(x.id);say('Draft deleted')}return}
  DR.busy=true;drPaint();
@@ -885,13 +885,13 @@ window.addEventListener('click',async function(e){var b=e.target.closest&&e.targ
   if(r.miss.length){stopHere('Not found: '+r.miss.join(', '));watchSaved(x.id);return}
   var s=await submit(d);if(s.err){stopHere(s.err);watchSaved(x.id);return}
   await drDel(x.id);say('Saved '+s.got.no+' · RM '+s.got.total.toFixed(2))}
- finally{DR.busy=false;drPaint()}},true);
+ finally{DR.busy=false;drPaint()}}
 /* an opened draft goes once its order is saved ( the builder resets after a save ) */
 function watchSaved(id){var t0=Date.now(),seen=false;(function w(){var st=window.noState&&window.noState();if(st&&st.items&&st.items.length)seen=true;
  if(seen&&!st){drDel(id);return}if(Date.now()-t0<3600e3)setTimeout(w,1000)})()}
 var mo=null;function hook(){var main=document.getElementById('main');if(!main){return setTimeout(hook,500)}
+ if(!document.__kcNovaOn){document.__kcNovaOn=1;window.addEventListener('click',drClick,true);window.addEventListener('hashchange',function(){if(/^#neworder/.test(location.hash||''))drLoad()})}
  if(!mo){mo=new MutationObserver(function(){if(/^#neworder/.test(location.hash||'')&&DR.list&&DR.list.length&&!document.getElementById('kcNovaDrafts'))drPaint()});mo.observe(main,{childList:true})}}
-window.addEventListener('hashchange',function(){if(/^#neworder/.test(location.hash||''))drLoad()});
 
 /* ---- a Nova link in the address ---- */
 var raw=(location.search.match(/[?&]nova=([^&#]+)/)||[])[1];var d=null;
