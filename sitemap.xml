@@ -1,63 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://aeramealprep.net/privacy/</loc>
-    <lastmod>2026-11-24T03:36:37.118Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/account/</loc>
-    <lastmod>2026-11-24T03:33:36.287Z</lastmod>
+    <loc>https://aeramealprep.net/kitchen/</loc>
+    <lastmod>2026-11-26T06:14:17.015Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://aeramealprep.net/data/kitchen-list/</loc>
-    <lastmod>2026-11-24T03:30:23.679Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/</loc>
-    <lastmod>2026-11-24T03:14:39.141Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/terms/</loc>
-    <lastmod>2026-11-24T03:14:38.932Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/merchandise/</loc>
-    <lastmod>2026-11-24T03:14:38.756Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/fridge/</loc>
-    <lastmod>2026-11-24T01:43:32.290Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/track/</loc>
-    <lastmod>2026-11-23T19:38:52.836Z</lastmod>
+    <lastmod>2026-11-26T05:55:28.161Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://aeramealprep.net/bring-your-own-plan/</loc>
-    <lastmod>2026-11-22T19:33:22.814Z</lastmod>
+    <lastmod>2026-11-26T02:12:58.470Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/home-sourced-meals/</loc>
-    <lastmod>2026-11-21T23:46:53.424Z</lastmod>
+    <loc>https://aeramealprep.net/terms/</loc>
+    <lastmod>2026-11-26T01:30:01.256Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/track/</loc>
+    <lastmod>2026-11-25T22:26:50.477Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/fridge/</loc>
+    <lastmod>2026-11-25T22:26:34.448Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://aeramealprep.net/checkout/</loc>
-    <lastmod>2026-11-20T18:11:03.997Z</lastmod>
+    <lastmod>2026-11-25T21:50:43.485Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/home-sourced-meals/</loc>
+    <lastmod>2026-11-25T21:50:42.978Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/</loc>
+    <lastmod>2026-11-25T21:27:07.645Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/account/</loc>
+    <lastmod>2026-11-25T21:27:06.936Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/merchandise/</loc>
+    <lastmod>2026-11-25T21:27:06.505Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/meal-plan/</loc>
+    <lastmod>2026-11-25T21:27:05.796Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://aeramealprep.net/referrer-signup/</loc>
-    <lastmod>2026-11-20T16:34:46.949Z</lastmod>
+    <lastmod>2026-11-25T10:27:21.811Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/privacy/</loc>
+    <lastmod>2026-11-24T17:53:11.981Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -66,18 +76,8 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://aeramealprep.net/meal-plan/</loc>
-    <lastmod>2026-11-20T08:04:31.934Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
     <loc>https://aeramealprep.net/kitchen-app/</loc>
     <lastmod>2026-11-18T07:40:01.781Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/kitchen/</loc>
-    <lastmod>2026-11-18T07:39:52.187Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
