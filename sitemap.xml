@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://aeramealprep.net/meal-plan/</loc>
+    <lastmod>2026-11-27T01:48:04.352Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://aeramealprep.net/coach-plan-builder/</loc>
+    <lastmod>2026-11-27T01:47:46.623Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://aeramealprep.net/data/kitchen-list/</loc>
     <lastmod>2026-11-27T01:46:43.355Z</lastmod>
     <changefreq>weekly</changefreq>
@@ -23,11 +33,6 @@
   <url>
     <loc>https://aeramealprep.net/fridge/</loc>
     <lastmod>2026-11-26T11:53:50.652Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/meal-plan/</loc>
-    <lastmod>2026-11-26T11:50:09.256Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -78,11 +83,6 @@
   <url>
     <loc>https://aeramealprep.net/kitchen-app/</loc>
     <lastmod>2026-11-18T07:40:01.781Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://aeramealprep.net/coach-plan-builder/</loc>
-    <lastmod>2026-11-16T06:21:18.096Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
