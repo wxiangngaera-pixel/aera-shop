@@ -918,5 +918,30 @@ function back(key,obj){if(!d||!d.back)return;var j=b64e(obj);setTimeout(function
  }
  drLoad();
 })();
-})();</script></body>
+})();</script><script id="aera-kc-bento">/* Peter 27th Nov 2026 : Packing page bento picture. Each food goes only in its own compartment : Proteins on the left, Carb top right, Vegetables bottom right.
+   Two Proteins share the left compartment ( top / bottom ), two Vegetables share the bottom right ( side by side ). A compartment with nothing for it stays empty
+   ( e.g. a Vegetable not in Recipes yet ). A dish without a photo shows its name. Undo : delete this script. */
+(function(){
+ function cat(c){c=String(c||'');return c==='protein'?'L':(c==='carbohydrate'||c==='carb')?'UR':(c==='vegetable'||c==='garnish')?'LR':''}
+ function tray(b){
+  var items=(b.comps||[]).map(function(cp){var r=S.rec[cp.recipe];return r?{w:cat(r.category),url:dishPic(r),nm:String(r.name||'').trim()}:null}).filter(Boolean);
+  var W={L:[],UR:[],LR:[]},rest=[];
+  items.forEach(function(x){if(x.w&&W[x.w].length<2)W[x.w].push(x);else rest.push(x)});
+  rest.forEach(function(x){for(var k in W)if(!W[k].length){W[k].push(x);return}});
+  var g=PK_GOAL[(b.item||{}).goal]||['#0B0B0B','#fff','AERA'],cells=[],gap=0.8;
+  ['L','UR','LR'].forEach(function(k){var r=PK_PCT[k],xs=W[k];
+   if(xs.length<2){cells.push({r:r,x:xs[0]});return}
+   if(k==='L'){var h=(r[3]-gap)/2;cells.push({r:[r[0],r[1],r[2],h],x:xs[0]});cells.push({r:[r[0],r[1]+h+gap,r[2],h],x:xs[1]})}
+   else{var w=(r[2]-gap)/2;cells.push({r:[r[0],r[1],w,r[3]],x:xs[0]});cells.push({r:[r[0]+w+gap,r[1],w,r[3]],x:xs[1]})}});
+  return'<figure class="pkshot pktray"><img class="pktrayb" src="'+TRAY_PACK+'" alt="One MAP bento box">'+
+   cells.map(function(c){var r=c.r,x=c.x;
+    return'<div class="pkwell'+(x?' on':'')+'" style="left:'+r[0]+'%;top:'+r[1]+'%;width:'+r[2]+'%;height:'+r[3]+'%">'+
+     (x&&x.url?'<img src="'+esc(x.url)+'" alt="" loading="lazy" onerror="this.remove()">':
+      x?'<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:4%;color:#fff;font:700 11px/1.2 system-ui">'+esc(x.nm)+'</span>':'')+'</div>'}).join('')+
+   '<figcaption class="pkbadge" style="background:'+g[0]+';color:'+g[1]+'"><b>'+esc(g[2])+'</b><span>MEAL PREP</span></figcaption></figure>'}
+ tray.__aeraBento=1;
+ function patch(){try{if(typeof window.pkTrayHtml==='function'&&!window.pkTrayHtml.__aeraBento&&typeof PK_PCT!=='undefined')window.pkTrayHtml=tray}catch(e){}}
+ setInterval(patch,1000);patch();
+})();</script>
+</body>
 </html>
