@@ -659,7 +659,7 @@ function conv(r,g,b){
  if(r.cat==='p'||(r.cat==='g'&&/chicken|beef|tofu|prawn|fish|salmon/.test(n)))
   return{g:g*1.5,why:'Protein, x 1.5',ok:true};
  if(r.cat==='v'||(r.cat==='g'&&/corn|pea|mushroom|cabbage/.test(n))){
-  if(/broccoli/.test(n))return{g:g,why:'Broccoli, same as Cooked Weight',ok:true};
+  if(/broccoli/.test(n))return{g:g,why:'Broccoli, same as Cooked Weight',ok:true};/* Peter 27th Nov 2026 : Chinese Spinach, 100 g Raw = 60 to 70 g Cooked ( x 0.65 ), raw rounded up to 25 g */if(/spinach/.test(n))return{g:Math.ceil(g/0.65/25)*25,why:'Spinach, ÷ 0.65',ok:true};
   return{g:g+25,why:'Vegetable, + 25 g',ok:true}}
  return{g:g,why:'No cooked rule yet, we weigh it',ok:false}}
 /* What the kitchen would actually weigh: converted, then held inside that dish's portion range. */
@@ -4236,7 +4236,7 @@ body.ct-sent #coachBuild,body.ct-dash #coachBuild,body.ct-sent .finish,body.ct-d
   'Pending':'待付','Paid':'已付','Home-Sourced':'自备','1 Extra Packaging':'额外包装 1 个','Copy as a Sheet':'复制为表格','Send to AERA':'发送给 AERA','Save to My Meal Plan':'存到我的餐单'
  });
  var MO={January:'1月',February:'2月',March:'3月',April:'4月',May:'5月',June:'6月',July:'7月',August:'8月',September:'9月',October:'10月',November:'11月',December:'12月'};
- var WHY={'Raw, as you entered it':'生重，按您输入','Protein, x 1.5':'蛋白质，× 1.5','Broccoli, same as Cooked Weight':'西兰花，与熟重相同','Vegetable, + 25 g':'蔬菜，+ 25 克','No cooked rule yet, we weigh it':'暂无熟重规则，按此称量'};
+ var WHY={'Raw, as you entered it':'生重，按您输入','Protein, x 1.5':'蛋白质，× 1.5','Broccoli, same as Cooked Weight':'西兰花，与熟重相同','Spinach, ÷ 0.65':'菠菜，÷ 0.65','Vegetable, + 25 g':'蔬菜，+ 25 克','No cooked rule yet, we weigh it':'暂无熟重规则，按此称量'};
  R.push([/^([\d.]+) g Raw — (.+)$/,function(a,g,w){var x=WHY[w]||(/^Rice, ÷ ([\d.]+)$/.test(w)?w.replace(/^Rice, ÷ ([\d.]+)$/,'米饭，÷ $1'):w);return g+' 克生重 — '+x}]);
  R.push([/^Protein ([\d.]+) g$/,'蛋白质 $1 克']);R.push([/^Carbs ([\d.]+) g$/,'碳水 $1 克']);R.push([/^Fat ([\d.]+) g$/,'脂肪 $1 克']);
  R.push([/^Food RM ([\d.,]+)$/,'餐费 RM $1']);
